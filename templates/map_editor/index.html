@@ -1,105 +1,44 @@
 {% extends "base.html" %}
 
 
-{% block css %}
-<link rel="stylesheet" href="/media/map_editor/index/styles.css"/>
-{% endblock css %}
+    {% block css %}
+        <link rel="stylesheet" href="/media/map_editor/index/styles.css"/>
+    {% endblock css %}
 
 
-{% block js%}
-<script src="/media/vendor/js/bootstrap.file-input.js"></script>
+    {% block js%}
+        <script src="/media/vendor/js/bootstrap.file-input.js"></script>
 
-<script src="/media/map_editor/index/handlers.js"></script>
-<script src="/media/map_editor/index/main.js"></script>
-{% endblock js %}
-
-
-{% block content %}
-
-{% csrf_token %}
-
-<h1>tus lugares</h1>
-
-<div id="places" class="element-box">
-
-    <input type="text" name="place" placeholder="Nombre del lugar..">
-    <button id="add_place">Añadir lugar</button>
-
-    {% for place in places %}
-        <div class="place element-box" data-id="{{place.id}}">
-            <h3>{{place.name}}
-                <div class="action_box">
-                    <i class="icon-edit"></i>
-                    <i class="icon-remove"></i>
-                </div>
-            </h3>
-
-            <br>
-
-            <form action={% url "map_editor.views.maps" 'new' %} method="post">
-                {% csrf_token %}
-                <input type="submit" value="Upload" />
-                <input type="text" name="place" placeholder="Nombre de mapa..">
-                <!-- <input name="map_img" type="file" > -->
-                <input type="file" title="Examinar imágen..">
-                <button class="add_map">Añadir mapa</button>
-            </form>
-
-            <br>
-
-            {% if place.maps %}
-                <div class="map_list">
-                    <h4>Mapas:</h4>
-                    {% for map in place.maps%}
-                        <div class="map element-box">
-                            <span class="map_name">{{map.name}}</span>
-                            <div class="action_box">
-                                <i class="icon-edit"></i>
-                                <i class="icon-remove"></i>
-                            </div>
-                        </div>
-                        <br>
-                    {% endfor %}
-                </div>
-            {% endif %}
-        </div>
-    {% endfor %}
-</div>
+        <script src="/media/map_editor/index/handlers.js"></script>
+        <script src="/media/map_editor/index/main.js"></script>
+    {% endblock js %}
 
 
-<!-- PLANTILLAS -->
-<div id="templates">
+    {% block content %}
+        {% csrf_token %}
 
-    <!-- PLACE -->
-    <div class="place" class="element-box">
-        <h3>
-            [[place.name]]
-            <div class="action_box">
-                <i class="icon-edit"></i>
-                <i class="icon-remove"></i>
+        <h1>Tus lugares</h1>
+
+        <div id="places" class="element-box">
+
+            <div id="place_form">
+                <input type="text" name="place" placeholder="Nombre del lugar..">
+                <button class="btn" id="add_place">Añadir lugar</button>
             </div>
-        </h3>
 
-        <input type="text" name="place" placeholder="Nuevo mapa para [[place.name]]..">
-        <button id="add_map">Añadir</button>
-    </div>
+            {% for place in places %}
 
-    <!-- PLACE -->
-   <!--  <div class="place" class="element-box">
-        <h3>hola</h3>
+                {% include "map_editor/elements/_place.html" %}
 
-        <input type="text" name="place" placeholder="Nuevo mapa para adios..">
-        <button id="add_map">Anadir</button>
-    </div>
-     -->
-</div>
+            {% endfor %}
+        </div>
 
+    <!-- Para no refrescar la página al subir la imágen, la petición irá hacia este iframe escondido en el documento
 
+    -->
+    <iframe id="upload_target" name="upload_target" src=""></iframe>
 
+    <!-- PLANTILLAS -->
+    {% include "map_editor/elements/elements.html" %}
 
-<!-- <div class="new_element">
-        <input type="text" name="place_name" placeholder="Introd. nuevo lugar.."/>
-        <button name="add_place">Añadir lugar</button>
-    </div> -->
-
-{% endblock content %}
+    {% endblock content %}

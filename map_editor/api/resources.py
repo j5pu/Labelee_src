@@ -5,3 +5,4 @@ from tastypie.resources import ModelResource
 class UserResource(ModelResource):
 	class Meta:
 		queryset = User.objects.all()
+		excludes = ['email', 'password', 'is_staff', 'is_superuser']

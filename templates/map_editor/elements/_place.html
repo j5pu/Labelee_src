@@ -1,0 +1,44 @@
+
+<!--
+    PLANTILLA PARA CADA ELEMENTO PLACE
+
+    Contextos:
+        {{place.id|default:"[[place.id]]"}}
+        {{place.name|default:"[[place.name]]"}}
+-->
+
+
+<div class="place element-box" data-id="{{place.id|default:"[[place.id]]"}}">
+    <h3>
+        {{place.name|default:"[[place.name]]"}}
+        <div class="action_box">
+            <i class="icon-edit"></i>
+            <i class="icon-remove"></i>
+        </div>
+    </h3>
+
+
+
+
+
+    <div class="maps">
+        <form action={% url "map_editor.views.maps" 'new' %} method="post" enctype="multipart/form-data" target="upload_target">
+            {% csrf_token %}
+            <input type="text" name="map_name" placeholder="Nombre de mapa..">
+            <input type="file" name="map_img" title="Elegir imágen..">
+            <input type="hidden" name="place_id" value="{{place.id|default:"[[place.id]]"}}">
+            <input class="btn" type="submit" value="Añadir mapa">
+        </form>
+
+        {% if place.maps %}
+            <h4>Mapas:</h4>
+
+            {% for map in place.maps%}
+
+                {% include "map_editor/elements/_map.html" %}
+
+            {% endfor %}
+
+        {% endif %}
+    </div>
+</div>

@@ -28,8 +28,6 @@ class Place(models.Model):
 		return Place.objects.get(name=name)
 
 	def get(self):
-		print 'blabla'
-
 		"""
 		Devuelve todos los datos de un lugar
 		"""
@@ -93,16 +91,25 @@ class Place(models.Model):
 #Se crea el modelo para los productos
 class Map(models.Model):
 	name = models.CharField(max_length=200)
-	img = models.FileField(blank=False, upload_to="/media/img/maps")
+	img = models.FileField(upload_to="img/maps")
 	place = models.ForeignKey(Place)
 
 	def __unicode__(self):
 		return self.name
 
+	def delete(self, *args, **kwargs):
+		"""
+		Elimina un mapa y también su imágen
+		"""
+		# You have to prepare what you need before delete the model
+		storage, path = self.img.storage, self.img.path
+		# Delete the model before the file
+		super(Map, self).delete(*args, **kwargs)
+		# Delete the file after the model
+		print path
+		storage.delete(path)
+
 
 class Grid(models.Model):
 	block_size = models.PositiveIntegerField()
 	map = models.ForeignKey(Map)
-
-
-

@@ -7,6 +7,8 @@ from django.template import RequestContext
 from django.http import HttpResponse
 from django.http import HttpResponseRedirect
 
+from django.core.files.base import ContentFile
+
 import json
 import simplejson
 
@@ -20,6 +22,7 @@ def index(request):
 	# return HttpResponse('index view..')
 	# matadero = Place(name='Matadero')
 	# matadero.save()
+	print 'hola'
 	places = Place.get_all()
 	# print places
 	ctx = {'places': places}
@@ -40,16 +43,24 @@ def places(request, operation):
 	if operation == 'new':
 		form = PlaceForm({'name': request.POST['place_name']})
 		if form.is_valid():
-			form.save()
-			return responseValid()
+			place = form.save()
+			# print place.id
+			return responseJSON(data={'id': place.id})
 		else:
-			return responseError(form.errors)
+			return responseJSON(errors=form.errors)
 
 	elif operation == 'delete':
 		place = Place.objects.get(id=request.POST['place_id'])
-		print place
+
+		# eliminamos todos los mapas relativos a ese lugar, incluídas sus imágenes
+		maps = place.map_set.all()
+		for map in maps:
+			map.delete()
+
 		place.delete()
-		return responseValid()
+
+		return responseJSON()
+
 	elif not operation:
 		place_list = Place.objects.all()
 		return HttpResponse(json.dumps(place_list), content_type="application/json")
@@ -58,8 +69,19 @@ def places(request, operation):
 
 
 def maps(request, operation):
+
 	if operation == 'new':
+		place = Place.objects.get(id=request.POST['place_id'])
+		form = MapForm({'name': request.POST['map_name']})
+		# print form
+
+		map = Map(name='mapa2', place=place)
+
+		file_content = ContentFile(request.FILES['map_img'].read())
+		map.img.save(request.FILES['map_img'].name, file_content)
+		map.save()
 		return HttpResponse('Hola q pasa..')
+
 	else:
 		return HttpResponse('ande vaaa')
 

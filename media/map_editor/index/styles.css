@@ -1,109 +1,106 @@
-body
-{
-	margin: 4em auto;
-	max-width: 35em;
-}
 
-
-h3
-{
-	position: relative;
-	display: inline-block;
+body {
+    margin: 4em auto;
+    max-width: 35em;
 }
-input[type="text"]
-{
-	margin-bottom: 0px;
-	width: 9em;
+h3 {
+    display: inline-block;
+    position: relative;
 }
-
-.file-input-wrapper
-{
-	margin: 5px auto;
+input[type="text"] {
+    margin-bottom: 0;
+    width: 9em;
 }
-
+.file-input-wrapper {
+    margin: 5px auto;
+}
 .file-input-name {
-	margin: 4px auto 8px !important;
-	display: block;
-	padding: 5px;
-	border-radius: 7px;
-	opacity: 0.7;
-	background: whitesmoke;
+    background: none repeat scroll 0 0 whitesmoke;
+    border-radius: 7px 7px 7px 7px;
+    display: block;
+    margin: 4px auto 8px !important;
+    opacity: 0.7;
+    padding: 5px;
+}
+.element-box {
+    border: 1px solid;
+    border-radius: 5px 5px 5px 5px;
+    margin: 7px;
+}
+#places {
+    border: 3px solid grey;
+    padding: 21px 3px 5px;
+}
+.place {
+    background: none repeat scroll 0 0 #C8DCEC;
+    border: 0 none;
+    box-shadow: 1px -2px 5px;
+    margin: 22px 15px;
+    overflow: hidden;
+    padding: 6px 14px 7px;
+}
+.map {
+    background: none repeat scroll 0 0 #E2F6FF;
+    border: 1px none grey;
+    display: inline-block;
+    margin-top: 0.1em;
+    padding: 5px 16px;
+    position: relative;
+    text-align: right;
+    width: 81%;
+}
+.maps .action_box {
+    display: inline-block;
+    position: static;
+}
+.maps {
+    background: none repeat scroll 0 0 #7FADBE;
+    border-radius: 5px 5px 5px 5px;
+    display: inline-block;
+    margin: 0.8em auto;
+    padding: 5px;
+    position: relative;
+    text-align: center;
+    width: 93%;
+}
+.map .map_name {
+    float: left;
+}
+.action_box {
+    position: absolute;
+    right: -51px;
+    top: 8px;
+}
+.action_box i {
+    cursor: pointer;
+    margin-left: 1px;
+}
+#templates {
+	display: none;
+}
+.errorList {
+    display: inline-block;
+}
+.errorList .error {
+    border: 0.1em solid #CD1818;
+    border-radius: 0.3em 0.3em 0.3em 0.3em;
+    margin: 0.6em;
+    padding: 0.7em;
+    text-align: left;
+}
+.error ul {
+    background: none repeat scroll 0 0 #CB9393;
+    border-radius: 0.5em 0.5em 0.5em 0.5em;
+    color: white;
+    margin: 0 0 0 1.1em;
+    padding: 1.0em;
+    text-shadow: none;
+}
+.error ul li {
+    display: inline-block;
 }
 
-.element-box
+iframe
 {
-	border: 1px solid;
-	margin: 7px;
-	border-radius: 5px;
-}
-
-#places
-{
-	padding: 21px 3px 5px;
-	border: 3px solid grey;
-}
-
-.place
-{
-	padding: 6px 14px 7px;
-	background: rgb(200, 220, 236);
-	border: 0px;
-	box-shadow: 1px -2px 5px;
-	overflow: hidden;
-	margin: 22px 15px;
-}
-
-.map
-{
-	background: rgb(226, 246, 255);
-	border: 1px grey;
-	padding: 5px 16px;
-	margin-top: 0.1em;
-	text-align: right;
-	display: inline-block;
-	position: relative;
-	width: 81%;
-}
-
-.map_list .action_box
-{
-	position: static;
-	display: inline-block;
-	margin-right: ∫;
-}
-
-.map_list
-{
-	margin: 0.8em auto;
-	text-align: left;
-	display: inline-block;
-	position: relative;
-	text-align: center;
-	background: rgb(127, 173, 190);
-	padding: 5px;
-	border-radius: 5px;
-	width: 93%;
-}
-
-.map .map_name
-{
-	float: left;
-}
-
-.action_box
-{
-	position: absolute;
-	top: 8px;
-	right: -51px;
-}
-
-.action_box i
-{
-	margin-left: 1px;
-	cursor: pointer;
-}
-
-#templates
-{
-	display: none
+    display: none
 }
