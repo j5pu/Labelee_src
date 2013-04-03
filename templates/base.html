@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang ="es">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <title>
+        Labelee
+    </title>
+
+    <!--
+        CSS
+    -->
+    <!-- Vendor -->
+    <link rel="stylesheet" href="/media/vendor/css/normalize.css"/>
+    <!--<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.1/themes/base/jquery-ui.css" />-->
+    <link rel="stylesheet" href="/media/vendor/bootstrap/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="/media/vendor/bootstrap/css/bootstrap-responsive.min.css" />
+
+    <!-- Nuestro CSS -->
+    <link rel="stylesheet" href="/media/common/common.css"/>
+    {% block css %}{% endblock css %}
+
+
+    <!--
+        JS
+    -->
+    <!-- Vendor -->
+    <script src="/media/vendor/js/prefixfree.min.js"></script>
+
+    <!--
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+    <script>window.jQuery || document.write('<script src="/media/vendor/js/jquery-1.9.1.min.js"><\/script>')</script>
+    -->
+    <script src="/media/vendor/js/jquery-1.9.1.min.js"></script>
+
+    <script src="/media/vendor/bootstrap/js/bootstrap.min.js"></script>
+
+    <!--<script src="http://code.jquery.com/ui/1.10.1/jquery-ui.js"></script>-->
+
+    <script src="/media/vendor/js/shortcut.js"></script>
+
+    <script src="/media/vendor/hammer.js_v1.0.3/dist/hammer.min.js"></script>
+    <script src="/media/vendor/hammer.js_v1.0.3/dist/jquery.hammer.min.js"></script>
+
+
+    <!-- Nuestro JS-->
+    <script src="/media/common/django_ajax.js"></script>
+    {% block js %}{% endblock js %}
+
+</head>
+
+
+<!-- <body onload="window.scrollTo(300,1200);"> -->
+<body>
+    {% block content %}{% endblock content %}
+</body>
+
+{% block footer %}{% endblock footer %}
+
+</html>

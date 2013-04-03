@@ -1,0 +1,109 @@
+body
+{
+	margin: 4em auto;
+	max-width: 35em;
+}
+
+
+h3
+{
+	position: relative;
+	display: inline-block;
+}
+input[type="text"]
+{
+	margin-bottom: 0px;
+	width: 9em;
+}
+
+.file-input-wrapper
+{
+	margin: 5px auto;
+}
+
+.file-input-name {
+	margin: 4px auto 8px !important;
+	display: block;
+	padding: 5px;
+	border-radius: 7px;
+	opacity: 0.7;
+	background: whitesmoke;
+}
+
+.element-box
+{
+	border: 1px solid;
+	margin: 7px;
+	border-radius: 5px;
+}
+
+#places
+{
+	padding: 21px 3px 5px;
+	border: 3px solid grey;
+}
+
+.place
+{
+	padding: 6px 14px 7px;
+	background: rgb(200, 220, 236);
+	border: 0px;
+	box-shadow: 1px -2px 5px;
+	overflow: hidden;
+	margin: 22px 15px;
+}
+
+.map
+{
+	background: rgb(226, 246, 255);
+	border: 1px grey;
+	padding: 5px 16px;
+	margin-top: 0.1em;
+	text-align: right;
+	display: inline-block;
+	position: relative;
+	width: 81%;
+}
+
+.map_list .action_box
+{
+	position: static;
+	display: inline-block;
+	margin-right: ∫;
+}
+
+.map_list
+{
+	margin: 0.8em auto;
+	text-align: left;
+	display: inline-block;
+	position: relative;
+	text-align: center;
+	background: rgb(127, 173, 190);
+	padding: 5px;
+	border-radius: 5px;
+	width: 93%;
+}
+
+.map .map_name
+{
+	float: left;
+}
+
+.action_box
+{
+	position: absolute;
+	top: 8px;
+	right: -51px;
+}
+
+.action_box i
+{
+	margin-left: 1px;
+	cursor: pointer;
+}
+
+#templates
+{
+	display: none
+}

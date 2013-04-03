@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+
+{% block css%}
+<link rel="stylesheet" href="/media/map/styles.css"/>
+{% endblock css%}
+
+
+
+{% block js%}
+<script>
+var POS_X = {{ label.0 }};
+var POS_Y = {{ label.1 }};
+var BLOCK_SIZE = {{ block_size }};
+var MAP_IMG = "{{ map_img }}";
+</script>
+
+<script src="/media/map/logger.js"></script>
+<script src="/media/map/events.js"></script>
+<script src="/media/map/main.js"></script>
+{% endblock js%}
+
+
+
+
+{% block content %}
+
+{% csrf_token %}
+
+<div id="map_wrapper">
+	<div id="zoom-buttons">
+		<div id="zoom-in" class="zoom-button">+</div>
+		<div id="zoom-out" class="zoom-button">-</div>
+	</div>
+
+	<div id="map">
+		<div id="position_block"></div>
+	</div>
+
+	<div id="info"></div>
+</div>
+
+
+<div id="menu">
+	<div class="button"></div>
+	<div class="button"></div>
+</div>
+
+{% endblock content %}
+

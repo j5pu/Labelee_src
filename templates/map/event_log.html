@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+
+{% block css%}
+<link rel="stylesheet" href="/media/map/styles.css"/>
+{% endblock css%}
+
+
+
+{% block js%}
+
+<script src="/media/map/logger.js"></script>
+
+<script>
+$(document).on('ready', showEventLog);
+</script>
+
+{% endblock js%}
+
+
+
+{% block content %}
+
+<div id="log"></div>
+
+{% endblock content %}
+
