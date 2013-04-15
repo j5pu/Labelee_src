@@ -1,0 +1,57 @@
+<!--
+
+PLANTILLAS:
+
+Servirán para crear elementos parametrizados y manejarlos con javascript,
+en lugar de generar estos mismos elementos a base de concatenar strings..
+-->
+
+
+<!-- PLACE -->
+<div id="place">
+    {% include "map_editor/elements/_place.html" %}
+</div>
+
+
+<!-- MAP -->
+<div id="map">
+    {% include "map_editor/elements/_map.html" %}
+</div>
+
+{# AJAX LOADING #}
+
+
+{# {% include "_/ajax_loading.html" with msg="Subiendo imágen.." %} #}
+{% include "_/ajax_loading.html" %}
+
+
+
+{# Prueba de mustache #}
+<script id="personTpl" type="text/template">
+    <h1>[[firstName]] [[lastName]]</h1>
+    <p>Blog URL: <a href="[[blogURL]]">[[blogURL]]</a></p>
+</script>
+
+
+{# Prueba de mustache #}
+<script id="errorList" type="text/template">
+
+    // var errorList = '<div class="errorList alert alert-error">' +
+    // '<a class="close" data-dismiss="alert">×</a>';
+    // for(var key in errors)
+    // {
+    //     errorList += '<div class="error"><span class="field">' + key + ': </span><ul>';
+
+    //     for(var i in errors[key])
+    //         errorList += '<li>' + errors[key][i] + '</li>';
+    //     errorList += '</ul></div>';
+
+    // }
+    // errorList += '</div>';
+
+    <h1>[[firstName]] [[lastName]]</h1>
+    <p>Blog URL: <a href="[[blogURL]]">[[blogURL]]</a></p>
+</script>
+
+
+

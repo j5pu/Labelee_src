@@ -1,3 +1,6 @@
+# -*- coding: utf-8 -*-
+
+
 from django.template import RequestContext
 from django.shortcuts import render_to_response
 from django.http import HttpResponse
@@ -10,8 +13,7 @@ events = []
 
 
 def index(request):
-	# return HttpResponse('index view..')
-	# return render_to_response('map.html', context_instance=RequestContext(request))
+	# No implementado aún
 	return render_to_response('map/index.html', context_instance=RequestContext(request))
 
 

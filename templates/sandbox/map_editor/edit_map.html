@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+
+{% block css %}
+<link rel="stylesheet" href="/media/map_editor/edit_map/css/styles.css"/>
+{% endblock css %}
+
+
+{% block js %}
+<script src="/media/map_editor/edit_map/js/events.js"></script>
+<script src="/media/map_editor/edit_map/js/map.js"></script>
+<script src="/media/map_editor/edit_map/js/paint.js"></script>
+<script src="/media/map_editor/edit_map/js/paint_historial.js"></script>
+
+<script src="/media/map_editor/edit_map/js/main.js"></script>
+{% endblock js %}
+
+
+{% block content %}
+
+    <!-- Imagen del mapa -->
+    <img id="map_img" src="/media/common/map.jpg"/>
+
+    <!-- GRID -->
+    <div id="grid"></div>
+
+
+    <div id="buttons">
+
+        <!--<input type="text" name="block_size" value="10"
+        placeholder="Tamaño de bloque.."/> px-->
+
+        <select name="obj">
+            <option value='1'>Not passable</option>
+            <option value='0'>Passable</option>
+            <option value='x'>QR label</option>
+        </select>
+
+        <button name="save">Guardar</button>
+
+        <select name="grid_selector"></select>
+
+        <button name="clear">Clear</button>
+
+        <button name="delete">Delete all</button>
+    </div>
+
+{% endblock content %}
+</html>

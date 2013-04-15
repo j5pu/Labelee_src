@@ -1,24 +1,20 @@
 # -*- coding: utf-8 -*-
 from django.db import models
 
+from django.core.files.storage import FileSystemStorage
+
 from django.utils import simplejson
+from django.core.files import File
 #Se importa los usuarios para usarlo en Producto
 # from django.contrib.auth.models import User
 
 
 #Se crea el modelo de categoría
 class Place(models.Model):
-	name = models.CharField(max_length=200, unique=True)
+	name = models.CharField(max_length=10, unique=True, blank=False)
 
 	def __unicode__(self):
 		return self.name
-		# return 'no hay na!!!'
-
-	# def list(self):
-	# 	place_list = self.objects.all()
-	# 	for place in place_list:
-
-	# print serializers.serialize('json', Place.objects.all(), indent=4, fields=('name'))
 
 	@staticmethod
 	def find(name):
@@ -31,9 +27,6 @@ class Place(models.Model):
 		"""
 		Devuelve todos los datos de un lugar
 		"""
-		# maps = []
-		# for map in self.map_set.all():
-		# 		{'id': map.id, 'name': map.name, 'img': map.img}
 		return {
 			'id': self.id,
 			'name': self.name,
@@ -92,7 +85,7 @@ class Place(models.Model):
 class Map(models.Model):
 	name = models.CharField(max_length=200)
 	img = models.FileField(upload_to="img/maps")
-	place = models.ForeignKey(Place)
+	place = models.ForeignKey(Place, related_name='maps')
 
 	def __unicode__(self):
 		return self.name
@@ -108,6 +101,18 @@ class Map(models.Model):
 		# Delete the file after the model
 		print path
 		storage.delete(path)
+
+	def add_default_img(self):
+		"""
+		Añade la imágen por defecto al mapa
+		"""
+		fs = FileSystemStorage(location='media/img')
+		file = fs.open('sample_img.jpg')
+		self.img.save('sample_img', File(file))
+
+		# otra forma más 'guarra'..
+		# 	file = open('/media/img/sample_img.jpg')
+		# 	self.img.save('sample_img', File(file))
 
 
 class Grid(models.Model):

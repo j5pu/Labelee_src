@@ -1,0 +1,30 @@
+
+
+<!-- <div id='ajax_loading' ng-include src="'ajax_loading'" onload="msg='Cargando imágen..'"></div> -->
+
+<script id="_/place.html" type="text/ng-template">
+
+	<h3 ng-hide="placeUpdating(place)">[[place.name]]
+        <div class="action_box">
+            <i class="icon-edit" ng-click="updatePlace(place)"></i>
+            <i class="icon-remove" ng-click="deletePlace(place)"></i>
+        </div>
+    </h3>
+
+
+	<h3 >
+		<input type="text" ng-model="place_name_new"
+			placeholder="Nuevo nombre para el lugar..">
+        <div class="action_box">
+            <i class="icon-remove" ng-click="deletePlace(place.id)"></i>
+        </div>
+       	<button ng-click="updatePlace(place.id)">
+    </h3>
+
+
+    <div ng-switch on="placeUpdating(place)" >
+        <div ng-switch-when="true">Settings Div</div>
+        <span ng-switch-when="home">Home Span</span>
+        <span ng-switch-default>default</span>
+    </div>
+</script>

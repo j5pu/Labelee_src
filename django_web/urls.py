@@ -5,12 +5,24 @@ import re
 from django.contrib import admin
 admin.autodiscover()
 
-
 from tastypie.api import Api
-from map_editor.api.resources import UserResource
+from map_editor.api.resources import UserResource, PlaceResource, MapResource
+
+# place_resource = SchoolResource()
+# map_resource = PolicyResource()
+
+# urlpatterns = patterns('',
+#     ...
+#     # Including school resource API urls
+#     (r'^api/', include(school_resource.urls)),
+#     (r'^api/', include(policy_resource.urls)),
+#     ....
+# )
 
 v1_api = Api()
 v1_api.register(UserResource())
+v1_api.register(PlaceResource())
+v1_api.register(MapResource())
 
 urlpatterns = patterns('',
 
@@ -18,8 +30,19 @@ urlpatterns = patterns('',
     # Examples:
     # url(r'^$', 'django_web.views.home', name='home'),
     # url(r'^django_web/', include('django_web.foo.urls')),
-    url(r'^map-editor/', include('map_editor.urls')),
+
+
+    # APP: MAP
     url(r'^map/', include('map.urls')),
+
+
+    # APP: MAP EDITOR
+    url(r'^map-editor/', include('map_editor.urls')),
+
+
+    # UTIL: DYNAMIC VALIDATOR
+    url(r'^dynamic-validator/(?P<resource>.*)/(?P<pk>\d*)$', 'map_editor.views.dynamic_validator', name='map_editor.views.dynamic_validator'),
+
     # url('routesFrom.php?id=' + r'^(\d{1,5})$'
     #     '&row=' + r'^(\d{1,5})$' + '&column=' + r'^(\d{1,5})$',
     #     'map.views.fuera', name='map.views.fuera'),
@@ -40,11 +63,19 @@ urlpatterns = patterns('',
 
     # Uncomment the next line to enable the admin:
     url(r'^admin/', include(admin.site.urls)),
-)
 
+
+    url(r'^sandbox/', include('sandbox.urls')),
+    # url(r'^sandbox/ng_services', 'sandbox.views.ng_services'),
+
+)
 
 if settings.DEBUG:
     # static files (images, css, javascript, etc.)
     urlpatterns += patterns('',
         (r'^media/(?P<path>.*)$', 'django.views.static.serve', {
         'document_root': settings.MEDIA_ROOT}))
+
+    urlpatterns += patterns('',
+        (r'^static/(?P<path>.*)$', 'django.views.static.serve', {
+        'document_root': settings.STATIC_ROOT}))
