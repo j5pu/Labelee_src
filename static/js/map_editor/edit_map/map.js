@@ -3,51 +3,37 @@
 // MAPA
 //
 
-
-// var james = {
-//     job: "programmer",
-//     married: false,
-//     speak: function( msg ) {
-//         console.log("Hello, I am feeling "+msg);
-//     }
-// };
-
-
-// Alto y ancho para cada bloque del grid (en píxeles)
 var block_size;
-
-// número de filas y columnas para el grid
-var num_rows, num_cols;
-
+var num_rows;
 
 function loadMap()
 {
+	// El número de columnas será el proporcional a las filas de manera que
+	// salgan bloques cuadrados
+	num_rows = parseInt(elements.num_rows.val(), 10);
 
-	// Dada la imagen para el mapa establecemos el alto y ancho para el grid
-	map_img = $('#map_img');
+	grid_height = resize(map_img.height, num_rows);
+	block_size = grid_height / num_rows;
+	grid_width = resize(map_img.width, block_size);
+	num_cols = grid_width / block_size;
 
-	// dimensiones para el grid
-	// block_size = $('#buttons input[name=block_size]').val();
-	block_size = 10;
-	var grid_height = resize(map_img.height());
-	var grid_width = resize(map_img.width());
-
-	// Esta variable contendrá todo el DOM para el grid
-	var grid = $('#grid');
 	// Damos propiedades css al grid, de manera que su imagen de fondo sea la del mapa
-	grid.css({
+	elements.grid.css({
 		'height': grid_height,
 		'width': grid_width,
-		'background-image': 'url("' + map_img.attr('src') + '")'
+		'background-image': 'url("' + map_src + '")',
+		'background-size': grid_width + 'px' + ' ' + grid_height + 'px'
 	});
 
-
-	// obtenemos el número de filas (num_rows) y columnas (num_cols)
-	num_rows = getNumBlocks(grid_height);
-	num_cols = getNumBlocks(grid_width);
+	elements.num_blocks.html((num_rows * num_cols) + ' bloques');
 
 	// Crea todo el tablero #grid, donde el mapa es su imagen de fondo (background)
-	for(var row = 0; row <= num_rows; row++)
+	var grid = elements.grid;
+
+	// Limpiamos el grid si estaba creado
+	if(grid) grid.empty();
+
+	for(var row = 0; row < num_rows; row++)
 	{
 		// Crea fila
 		grid.append('<div class="row"></div>');
@@ -56,15 +42,14 @@ function loadMap()
 		current_row.attr('data-row', row);
 		current_row.css({'height': block_size});
 
-		for(var col = 0; col <= num_cols; col++)
+		for(var col = 0; col < num_cols; col++)
 		{
 			// Crea bloque
 			current_row.append('<div class="block"></div>');
 			current_block = current_row.find('.block').last();
 			current_block.attr('data-col', col);
-			current_block.attr('data-obj', 0);
+			// current_block.attr('data-obj', 0);
 			current_block.css({
-				// 'background': backgrounds['0'],
 				'height': block_size,
 				'width': block_size
 			});
@@ -88,22 +73,21 @@ function loadMap()
 	//
 	// Añadimos los eventos
 	//
-	addDocumentEvents();
-	addMapEvents();
+	addEvents();
 }
+
 
 
 function saveGrid()
 {
-	// Guarda los datos para el grid actual en localStorage
 
-	var grid_name = prompt("Nombre para el nuevo grid");
+	// Guarda los datos para el grid actual
 
 	//.. ver si hay algún grid con el mismo nombre ya
 
 	var grid_data = {
-		grid_name: grid_name,
-		block_size: block_size,
+		grid_name: elements.grid_name.val(),
+		num_rows: num_rows,
 		blocks: []
 	};
 
@@ -113,19 +97,22 @@ function saveGrid()
 		//Recorremos cada bloque de la fila
 		$(this).find('.block').each(function(){
 			var col = $(this).attr('data-col');
-			var block_type = $(this).attr('data-obj');
 
-			// row, col, block_type
-			var block_data = [row, col, block_type];
-			grid_data['blocks'].push(block_data);
+			// Sólo guardaremos los bloques con cosas
+			var block_obj = $(this).attr('data-obj');
+			if (block_obj)
+			{
+				var block_data = [row, col, block_obj];
+				grid_data['blocks'].push(block_data);
+			}
 		});
 	});
 
 	// grids = [
 	//			{
-	//				grid_name: "grid uno",
-	//				block_size: 10,
-	//				blocks: [[0,0,1], [0,1,1], [0,2,x] ..]
+	//				grid_name: "grid_uno",
+	//				num_rows: 20,
+	//				blocks: [[5,7,'label'], [10,11,'wall'], [10,12,x] ..]
 	//			},
 	//			...
 	//			{
@@ -268,13 +255,12 @@ function deleteSavedGrids()
 }
 
 
-function resize(size)
+function resize(size, n)
 {
-	// Decrementamos 'size' hasta que sea múltiplo de block_size
-	// y así la suma del tamaño de los bloques sea igual al tamaño total del grid.
+	// Decrementamos 'size' hasta que sea múltiplo de n
 	for(; size > 0; size--)
 	{
-		if(size % block_size === 0)
+		if(size % n === 0)
 			return size;
 	}
 }
@@ -286,3 +272,4 @@ function getNumBlocks(size)
 	// referirse al alto (height) o al ancho (width) del grid que los contiene.
 	return (size / block_size) - 1;
 }
+

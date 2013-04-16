@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+
+{% block css %}
+{% endblock css %}
+
+
+{% block js %}
+<script src="{{ STATIC_URL }}sandbox/angularjs/test.js"></script>
+{% endblock js %}
+
+
+{% block content %}
+
+
+{% csrf_token %}
+<div></div>
+
+
+{% endblock %}
+
+

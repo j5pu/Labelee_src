@@ -118,3 +118,15 @@ class Map(models.Model):
 class Grid(models.Model):
 	block_size = models.PositiveIntegerField()
 	map = models.ForeignKey(Map)
+
+
+class ObjectType(models.Model):
+	type = models.CharField(max_length=200)
+	img = models.FileField(upload_to="img/grid_objects")
+
+
+class Object(models.Model):
+	name = models.CharField(max_length=200)
+	x_coord = models.PositiveIntegerField()
+	y_coord = models.PositiveIntegerField()
+	objectType = models.ForeignKey(ObjectType)

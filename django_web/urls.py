@@ -1,6 +1,5 @@
 from django.conf.urls import patterns, include, url
 import settings
-import re
 # Uncomment the next two lines to enable the admin:
 from django.contrib import admin
 admin.autodiscover()
@@ -8,16 +7,6 @@ admin.autodiscover()
 from tastypie.api import Api
 from map_editor.api.resources import UserResource, PlaceResource, MapResource
 
-# place_resource = SchoolResource()
-# map_resource = PolicyResource()
-
-# urlpatterns = patterns('',
-#     ...
-#     # Including school resource API urls
-#     (r'^api/', include(school_resource.urls)),
-#     (r'^api/', include(policy_resource.urls)),
-#     ....
-# )
 
 v1_api = Api()
 v1_api.register(UserResource())
@@ -32,6 +21,9 @@ urlpatterns = patterns('',
     # url(r'^django_web/', include('django_web.foo.urls')),
 
 
+    url(r'^api_2/', include('map_editor.api_2.urls')),
+
+
     # APP: MAP
     url(r'^map/', include('map.urls')),
 
@@ -41,7 +33,9 @@ urlpatterns = patterns('',
 
 
     # UTIL: DYNAMIC VALIDATOR
-    url(r'^dynamic-validator/(?P<resource>.*)/(?P<pk>\d*)$', 'map_editor.views.dynamic_validator', name='map_editor.views.dynamic_validator'),
+    # url(r'^dyn-validate/(?P<resource>.*)/(?P<pk>\d*)$', 'map_editor.views.dynamic_validator', name='map_editor.views.dynamic_validator'),
+    # url(r'^dyn-validate/', include('map_editor.api.urls')),
+
 
     # url('routesFrom.php?id=' + r'^(\d{1,5})$'
     #     '&row=' + r'^(\d{1,5})$' + '&column=' + r'^(\d{1,5})$',

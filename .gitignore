@@ -162,6 +162,11 @@ pip-log.txt
 # Mac crap
 .DS_Store
 
+# IDE crap
+.idea
+.tags
+.tags_sorted_by_file
+
 
 #############
 ## Sandboxes

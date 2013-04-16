@@ -20,19 +20,21 @@ function getCookie(name) {
 }
 
 
+
 function csrfSafeMethod(method) {
     // these HTTP methods do not require CSRF protection
     return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
 }
 
 
-function ajaxPostJSON(url, data, success)
+
+//
+//
+// DEPRECATED
+//
+//
+function ajaxSetup()
 {
-    // Por defecto django protege el servidor contra ataques CRSF
-    // https://docs.djangoproject.com/en/dev/ref/contrib/csrf/#ajax
-
-    // DEPRECATED: Usaremos el $http.post de angularJS en lugar de esto
-
     var csrftoken = getCookie('csrftoken');
 
     $.ajaxSetup({
@@ -43,6 +45,16 @@ function ajaxPostJSON(url, data, success)
             }
         }
     });
+}
+
+
+
+function ajaxPostJSON(url, data, success)
+{
+    // Por defecto django protege el servidor contra ataques CRSF
+    // https://docs.djangoproject.com/en/dev/ref/contrib/csrf/#ajax
+
+    ajaxSetup();
 
     $.ajax({
         url: url,
@@ -50,6 +62,34 @@ function ajaxPostJSON(url, data, success)
         data: data,
         dataType: 'json',  // esto indica que la respuesta vendrá en formato json
         success: success
+    });
+}
+
+
+function ajaxPutJSON(url, data, success, error)
+{
+    ajaxSetup();
+
+
+    // curl --dump-header - -H "Content-Type: application/json" -X PUT --data '{"name": "matashawerXXX"}' http://mnopi:1aragon1@localhost:8000/api/v1/place/80/
+
+    // url: '/api/v1/place/80/',
+    // type: 'PUT',
+    // data: '{"name": "mataXYY"}',
+    // headers: {'Content-Type': 'application/json'},
+
+    $.ajax({
+        url: '/api/v1/place/80/',
+        type: 'PUT',
+        data: '{"name": "mataXYY"}',
+        headers: {'Content-Type': 'application/json'},
+        dataType: 'json',  // esto indica que la respuesta vendrá en formato json
+        success: function(data){
+            var j = 1;
+        },
+        error: function (respuesta) {
+            var i = 4;
+        }
     });
 }
 

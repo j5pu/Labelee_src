@@ -3,9 +3,9 @@
 
 import os
 
-# PARENT_DIR es el directorio padre de donde tenemos este archivo 'settings.py',
+# PROJECT_PATH es el directorio padre de donde tenemos este archivo 'settings.py',
 # que en este caso sería 'django_web' (no 'django_web/django_web')
-PARENT_DIR = os.path.join(os.path.dirname(__file__), os.pardir)
+PROJECT_PATH = os.path.join(os.path.dirname(__file__), os.pardir)
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
@@ -60,34 +60,40 @@ USE_TZ = True
 # Example: "/var/www/example.com/media/"
 
 # guardamos en la constante MEDIA_ROOT la ruta absoluta de 'django_web/media'
-MEDIA_ROOT = os.path.abspath(os.path.join(PARENT_DIR, 'media/'))
+MEDIA_ROOT = os.path.abspath(os.path.join(PROJECT_PATH, 'media/'))
 # MEDIA_ROOT = '/Users/yomac/Dropbox/proyectos/Labelee/backend/src/django_web/media/'
 
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash.
 # Examples: "http://example.com/media/", "http://media.example.com/"
-MEDIA_URL = 'media/'
+MEDIA_URL = '/media/'
 
 # Absolute path to the directory static files should be collected to.
 # Don't put anything in this directory yourself; store your static files
 # in apps' "static/" subdirectories and in STATICFILES_DIRS.
 # Example: "/var/www/example.com/static/"
-STATIC_ROOT = os.path.abspath(os.path.join(PARENT_DIR, 'static/'))
+
+# STATIC_ROOT = os.path.abspath(os.path.join(PROJECT_PATH, 'static'))
+STATIC_ROOT = PROJECT_PATH
+STATIC_SANDBOX = os.path.abspath(os.path.join(STATIC_ROOT, 'sandbox'))
 
 
 # URL prefix for static files.
 # Example: "http://example.com/static/", "http://static.example.com/"
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
 
 # Additional locations of static files
 STATICFILES_DIRS = (
     # Put strings here, like "/home/html/static" or "C:/www/django/static".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
-    os.path.abspath(os.path.join(STATIC_ROOT, 'static')),
 
-    # SANDBOX
-    os.path.abspath(os.path.join(PARENT_DIR, 'sandbox')),
+    # os.path.abspath(os.path.join(STATIC_ROOT, 'static')),
+
+    os.path.abspath(os.path.join(STATIC_ROOT, 'static')),
+    ('sandbox', STATIC_SANDBOX),
+    # ('another_app', os.path.join(PROJECT_PATH, 'another_app', 'static')),
+
 )
 
 # List of finder classes that know how to find static files in
@@ -129,13 +135,13 @@ TEMPLATE_DIRS = (
     # Don't forget to use absolute paths, not relative paths.
 
     # guardamos en la constante TEMPLATE_DIRS la ruta absoluta de 'django_web/templates'
-    os.path.abspath(os.path.join(PARENT_DIR, 'templates')),
+    os.path.abspath(os.path.join(PROJECT_PATH, 'templates')),
 
-    os.path.abspath(os.path.join(PARENT_DIR, 'static/partials')),
+    os.path.abspath(os.path.join(PROJECT_PATH, 'static/partials')),
 
 
     # SANDBOX
-    os.path.abspath(os.path.join(PARENT_DIR, 'sandbox')),
+    os.path.abspath(os.path.join(PROJECT_PATH, 'sandbox')),
 
     # os.path.join(os.path.dirname(__file__),'templates')
 )

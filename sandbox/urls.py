@@ -9,4 +9,6 @@ urlpatterns = patterns('sandbox.views',
 	# url(r'^angularjs/$', 'sandbox.ramon.views.angular', name='sandbox.views.angular'),
 
 	url(r'^angular/services$', 'ng_services'),
+
+	url(r'^angular/test$', 'test'),
 )

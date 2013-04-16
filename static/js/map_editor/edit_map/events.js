@@ -6,13 +6,13 @@
 //
 // keyCodes (códigos de teclas pulsadas)
 //
-var keyCodes = {
-	// para al tenerla pulsada se dibuje con el ratón pasándolo sobre el mapa
-	pressed_to_draw: 18,	// alt
-	select_qr: 88,			// x
-	select_passable: 48,	// 0
-	select_not_passable: 49	// 1
-};
+// var keyCodes = {
+// 	// para al tenerla pulsada se dibuje con el ratón pasándolo sobre el mapa
+// 	pressed_to_draw: 18,	// alt
+// 	select_qr: 88,			// x
+// 	select_passable: 48,	// 0
+// 	select_not_passable: 49	// 1
+// };
 
 
 // shortcut.add("Ctrl+B",function() {
@@ -23,89 +23,44 @@ var keyCodes = {
 // 	'target':document
 // });
 
-function addButtonsEvents()
-{
-	$('#buttons select[name=grid_selector]').on('change', function(){
+
+
+function addEvents(){
+
+	//
+	// Eventos sobre los botones, selectores..
+	//
+	elements.grid_selector.on('change', function(){
 		loadGrid($(this).val());
 	});
-	$('#buttons button[name=save]').on('click', saveGrid);
-	$('#buttons button[name=clear]').on('click', clearGrid);
-	$('#buttons button[name=delete]').on('click', deleteSavedGrids);
-}
+
+	elements.save.on('click', saveGrid);
+	elements.clear.on('click', clearGrid);
+	elements.delete.on('click', deleteSavedGrids);
+
+	elements.num_rows.on('change', loadMap);
 
 
-function addEvents()
-{
-	addButtonsEvents();
-}
-
-
-function addDocumentEvents()
-{
 	//
-	// Eventos sobre todo el documento
-	//
-	$(document).on('keydown', function(e){
-		var keyCode = e.keyCode || e.which;
-
-		// comprobamos si la tecla pulsada es alguna dentro de keyCodes
-		var exists = false;
-
-		// http://stackoverflow.com/a/1078132
-		$.each(keyCodes, function(key, val) {
-			if(val === keyCode)
-			{
-				exists = true;
-				return;  // se sale del loop
-			}
-		});
-		if(!exists)
-			return;
-
-		e.preventDefault();
-		switch(keyCode)
-		{
-			case keyCodes['pressed_to_draw']:
-			$('.block').on('mouseover', function(){
-				paintBlock($(this));
-			});
-			break;
-
-			case keyCodes['select_qr']:
-			$('select[name=obj]').val(block_types['qr']);
-			break;
-
-			case keyCodes['select_passable']:
-			$('select[name=obj]').val(block_types['passable']);
-			break;
-
-			case keyCodes['select_not_passable']:
-			$('select[name=obj]').val(block_types['not_passable']);
-			break;
-		}
-	});
-
-	$(document).on('keyup', function(e){
-		var keyCode = e.keyCode || e.which;
-		if(keyCode === keyCodes['pressed_to_draw'])
-		{
-			e.preventDefault();
-			$('.block').off('mouseover');
-		}
-	});
-}
-
-
-function addMapEvents()
-{
-	//
-	// Eventos sobre el mapa
+	// Eventos para pintar
 	//
 
 	// Al hacer click sobre un bloque en el mapa éste se pintará
 	$('.block').on('click', function(){
 		paintBlock($(this));
 	});
+
+	// Pintar dejando pulsada alt y pasando el ratón por el mapa
+	shortcut.add("alt", function(){
+		elements.block.on('mouseover', function(){
+			paintBlock($(this));
+		});
+	});
+
+	shortcut.add("alt", function(){
+		$('.block').off('mouseover');
+	},{'type':'keyup'});
+
 
 	// Podemos pintar trazas sobre el mapa dejando pulsado el ratón y moviéndolo sobre él
 	$('#grid').on('mousedown', function(e){
@@ -114,5 +69,32 @@ function addMapEvents()
 	});
 	$('#grid').on('mouseup', function(){
 		$('.block').off('mouseover');
+		painting_trace = false;
+	});
+
+
+	//
+	// Eventos para elegir cosas a pintar
+	//
+	shortcut.add("Ctrl+x", function(){
+		elements.obj_selector.val('label');
+	});
+
+	shortcut.add("Ctrl+0", function(){
+		elements.obj_selector.val('erase');
+	});
+
+	shortcut.add("Ctrl+1", function(){
+		elements.obj_selector.val('wall');
+	});
+}
+
+
+function setBlockShadow()
+{
+	// Cambiamos el evento 'mouseover' del elemento para que haga esto:
+
+	$('.block').on('mouseover', function(){
+		$(this).css({'box-shadow': '1px 1px 7px'});
 	});
 }

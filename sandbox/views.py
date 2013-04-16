@@ -11,3 +11,7 @@ def angular(request):
 
 def ng_services(request):
 	return render_to_response('angularjs/services/services.html', context_instance=RequestContext(request))
+
+
+def test(request):
+	return render_to_response('angularjs/test.html', context_instance=RequestContext(request))

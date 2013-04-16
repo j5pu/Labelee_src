@@ -12,9 +12,9 @@ import json
 events = []
 
 
-def index(request):
-	# No implementado aún
-	return render_to_response('map/index.html', context_instance=RequestContext(request))
+# def index(request):
+# 	# No implementado aún
+# 	return render_to_response('map/index.html', context_instance=RequestContext(request))
 
 
 def your_position(request, label_id):
@@ -32,7 +32,7 @@ def your_position(request, label_id):
 	ctx = {
 		'label': labels[label_id],
 		'block_size': 10,
-		'map_img': '/media/common/map.jpg'
+		'map_img': '/static/img/map.jpg'
 	}
 
 	return render_to_response('map/your_position.html', ctx, context_instance=RequestContext(request))

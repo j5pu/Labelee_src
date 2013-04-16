@@ -123,6 +123,8 @@ function main()
 	drawBlocks();
 
 	addEvents();
+
+	showMenu();
 }
 
 
@@ -417,6 +419,8 @@ function showMenu()
 		map_wrapper.css('height', w_height - menu.height());
 	else
 		map_wrapper.css('width', w_width - menu.width());
+
+	mostrarLista();
 }
 
 

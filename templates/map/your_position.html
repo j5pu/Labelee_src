@@ -2,7 +2,7 @@
 
 
 {% block css%}
-<link rel="stylesheet" href="/media/map/styles.css"/>
+<link rel="stylesheet" href="{{ STATIC_URL }}/css/map/styles.css"/>
 {% endblock css%}
 
 
@@ -15,9 +15,10 @@ var BLOCK_SIZE = {{ block_size }};
 var MAP_IMG = "{{ map_img }}";
 </script>
 
-<script src="/media/map/logger.js"></script>
-<script src="/media/map/events.js"></script>
-<script src="/media/map/main.js"></script>
+<script src="{{ STATIC_URL }}/js/map/logger.js"></script>
+<script src="{{ STATIC_URL }}/js/map/events.js"></script>
+<script src="{{ STATIC_URL }}/js/map/menu.js"></script>
+<script src="{{ STATIC_URL }}/js/map/main.js"></script>
 {% endblock js%}
 
 
@@ -37,19 +38,27 @@ var MAP_IMG = "{{ map_img }}";
 		<div id="position_block"></div>
 	</div>
 
-	{# <div id="info"></div> #}
+	<!-- <div id="info"></div> -->
 </div>
 
 
 <div id="menu">
-	<div class="button"></div>
-	<div class="button"></div>
-	{# <select name="sel">
-		<option value="1">Sitio1</option>
-		<option value="2">Sitio2</option>
-		<option value="3">Sitio3</option>
-		<option value="4">Sitio4</option>
-	</select> #}
+	<form class="ejemplo">
+        <div class="input-append">
+          	<input type="text" placeholder="buscar" id="busqueda">
+          	<div class="btn-group dropup">
+	            <button class="btn btn-info" tabindex="-1" onclick="Buscar()">Ir</button>
+	            <button class="btn btn-info dropdown-toggle" data-toggle="dropdown" tabindex="-1">
+	              <span class="caret"></span>
+	            </button>
+	            <ul class="dropdown-menu" id="listaDrop">
+	            </ul>
+          	</div>
+			<input type="button" onclick="Recordar()" value="Recordar" class="btn btn-info">
+			<input id="desaparece" type="button" onclick="Interes()" value="Ptos. Interés" class="btn btn-info">
+			<!--<button class="btn btn-info" tabindex = "-1" onclick="Recordar()">remember</button>-->
+        </div>
+   </form>
 </div>
 
 {% endblock content %}

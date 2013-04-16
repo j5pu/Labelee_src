@@ -1,33 +1,33 @@
 myApp.factory('UserService', function($rootScope) {
     $rootScope.name = 'anonymous33';
-    return {
-        name: name,
-        sayGoodNight: function(name){
-            return 'good night!, silly ' + name + '!!';
-        }
-    };
+    // return {
+    //     name: name,
+    //     sayGoodNight: function(name){
+    //         return 'good night!, silly ' + name + '!!';
+    //     }
+    // };
 });
 
 
-myApp.factory('UserService2', function() {
+// myApp.factory('UserService2', function() {
 
-    return function(scope, resource){
-        scope.name = resource;
-        // name: 'anon99',
-        // sayGoodNight: function(name){
-        //     return 'good night!, silly ' + name + '!!';
-        // }
-    };
-});
+//     return function(scope, resource){
+//         scope.name = resource;
+//         // name: 'anon99',
+//         // sayGoodNight: function(name){
+//         //     return 'good night!, silly ' + name + '!!';
+//         // }
+//     };
+// });
 
 
-function MyCtrl($scope, UserService2) {
+function MyCtrl($scope) {
 
-    u = new UserService2($scope, 'place');
+    // u = new UserService2($scope, 'place');
 	// $scope.user = UserService2;
 
     // $scope.name = UserService.name;
-    // $scope.name = 'Ramón';
+    $scope.name = 'Ramón';
     // $scope.sayGoodNight = UserService.sayGoodNight('Emilio');
 }
 

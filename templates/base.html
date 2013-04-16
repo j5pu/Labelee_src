@@ -12,13 +12,13 @@
         CSS
     -->
     <!-- Vendor -->
-    <link rel="stylesheet" href="/static/vendor/normalize.css"/>
+    <link rel="stylesheet" href="{{ STATIC_URL }}vendor/normalize.css"/>
     <!--<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.1/themes/base/jquery-ui.css" />-->
-    <link rel="stylesheet" href="/static/vendor/bootstrap/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="/static/vendor/bootstrap/css/bootstrap-responsive.min.css" />
+    <link rel="stylesheet" href="{{ STATIC_URL }}vendor/bootstrap/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="{{ STATIC_URL }}vendor/bootstrap/css/bootstrap-responsive.min.css" />
 
     <!-- Nuestro CSS -->
-    <link rel="stylesheet" href="/static/css/base.css"/>
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/base.css"/>
     {% block css %}{% endblock css %}
 
 
@@ -26,34 +26,38 @@
         JS
     -->
     <!-- Vendor -->
-    <script src="/static/vendor/prefixfree.min.js"></script>
+    <script src="{{ STATIC_URL }}vendor/prefixfree.min.js"></script>
 
     <!--
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
     <script>window.jQuery || document.write('<script src="/static/vendor/js/jquery-1.9.1.min.js"><\/script>')</script>
     -->
-    <script src="/static/vendor/jquery-1.9.1.min.js"></script>
+    <script src="{{ STATIC_URL }}vendor/jquery-1.9.1.min.js"></script>
 
-    <script src="/static/vendor/bootstrap/js/bootstrap.min.js"></script>
+    <script src="{{ STATIC_URL }}vendor/bootstrap/js/bootstrap.min.js"></script>
+    <script src="{{ STATIC_URL }}vendor/bootstrap/bootstrap-filestyle-0.1.0.min.js"></script>
 
     <!--<script src="http://code.jquery.com/ui/1.10.1/jquery-ui.js"></script>-->
 
-    <script src="/static/vendor/shortcut.js"></script>
+    <script src="{{ STATIC_URL }}vendor/shortcut.js"></script>
 
-    <script src="/static/vendor/hammer.js_v1.0.3/dist/hammer.min.js"></script>
-    <script src="/static/vendor/hammer.js_v1.0.3/dist/jquery.hammer.min.js"></script>
+    <script src="{{ STATIC_URL }}vendor/hammer.js_v1.0.3/dist/hammer.min.js"></script>
+    <script src="{{ STATIC_URL }}vendor/hammer.js_v1.0.3/dist/jquery.hammer.min.js"></script>
 
-    <script src="/static/vendor/mustache.js"></script>
+    <script src="{{ STATIC_URL }}vendor/mustache.js"></script>
 
-    <script src="/static/vendor/angularjs/angular.min.js"></script>
-    <script src="/static/vendor/angularjs/angular-sanitize.min.js"></script>
+    <script src="{{ STATIC_URL }}vendor/angularjs/angular.min.js"></script>
+    <script src="{{ STATIC_URL }}vendor/angularjs/angular-sanitize.min.js"></script>
+
+
 
     <!--
     Nuestro JS
     -->
-    <script src="/static/js/angular_config.js"></script>
-    <script src="/static/js/angular_services.js"></script>
-    <script src="/static/js/utils.js"></script>
+    <script src="{{ STATIC_URL }}js/angular_config.js"></script>
+    <script src="{{ STATIC_URL }}js/angular_services.js"></script>
+    <script src="{{ STATIC_URL }}js/utils.js"></script>
+    <script src="{{ STATIC_URL }}js/resource.js"></script>
 
     <script type="text/javascript">
 
