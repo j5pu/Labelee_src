@@ -22,5 +22,6 @@ function setObjSelector()
 
 function showMenu()
 {
-	setObjSelector();
+	// setObjSelector();
+
 }
