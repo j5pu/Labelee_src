@@ -17,7 +17,7 @@ from tastypie.resources import ModelResource, ALL
 # http://obroll.com/django-tastypie-one-to-many-fields-related-models-reverse-backward/
 from tastypie import fields
 
-from map_editor.models import Place, Map
+from map_editor.models import *
 from map_editor.forms import PlaceForm
 
 
@@ -63,12 +63,75 @@ class PlaceResource(ModelResource):
 
 
 class MapResource(ModelResource):
+	grids = fields.ToManyField('map_editor.api.resources.GridResource',
+		'grids', full=True, null=True)
 	place = fields.ToOneField(PlaceResource, 'place')
 
 	class Meta:
-		resource_name = 'maps'
 		queryset = Map.objects.all()
+		authorization = DjangoAuthorization()
+		authentication = BasicAuthentication()
 		include_resource_uri = False
 
 	def determine_format(self, request):
 		return 'application/json'
+
+
+class GridResource(ModelResource):
+	points = fields.ToManyField('map_editor.api.resources.PointResource',
+		'points', full=True, null=True)
+	map = fields.ToOneField(MapResource, 'map')
+
+	class Meta:
+		queryset = Grid.objects.all()
+		authorization = DjangoAuthorization()
+		authentication = BasicAuthentication()
+		include_resource_uri = False
+
+	def determine_format(self, request):
+		return 'application/json'
+
+
+class PointResource(ModelResource):
+	grid = fields.ToOneField(GridResource, 'grid')
+	object = fields.ToOneField('map_editor.api.resources.ObjectResource', 'object')
+
+	class Meta:
+		queryset = Point.objects.all()
+		authorization = DjangoAuthorization()
+		authentication = BasicAuthentication()
+		always_return_data = True
+
+	def determine_format(self, request):
+		return 'application/json'
+
+
+class ObjectResource(ModelResource):
+	category = fields.ToOneField('map_editor.api.resources.ObjectCategoryResource', 'category')
+	points = fields.ToManyField('map_editor.api.resources.PointResource',
+		'points', full=True, null=True)
+
+	class Meta:
+		queryset = Object.objects.all()
+		authorization = DjangoAuthorization()
+		authentication = BasicAuthentication()
+		always_return_data = True
+
+	def determine_format(self, request):
+		return 'application/json'
+
+
+class ObjectCategoryResource(ModelResource):
+	objects = fields.ToManyField('map_editor.api.resources.ObjectResource',
+		'_objects_', full=True, null=True)
+
+	class Meta:
+		resource_name = 'object-category'
+		queryset = ObjectCategory.objects.all()
+		authorization = DjangoAuthorization()
+		authentication = BasicAuthentication()
+		always_return_data = True
+
+	def determine_format(self, request):
+		return 'application/json'
+

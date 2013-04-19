@@ -9,4 +9,7 @@ urlpatterns = patterns('map_editor.views',
 
 	# url(r'^maps/(.*)$', 'maps', name='maps'),
 	url(r'^edit-map/$', 'edit_map'),
+
+
+
 )

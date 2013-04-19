@@ -78,7 +78,7 @@ function loadMap()
 
 
 
-function saveGrid()
+function createGrid()
 {
 
 	// Guarda los datos para el grid actual
@@ -136,6 +136,12 @@ function saveGrid()
 	localStorage.grids = JSON.stringify(grids);
 
 	setMapSelector();
+}
+
+
+function deleteGrid()
+{
+
 }
 
 

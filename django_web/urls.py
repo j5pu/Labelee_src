@@ -5,13 +5,18 @@ from django.contrib import admin
 admin.autodiscover()
 
 from tastypie.api import Api
-from map_editor.api.resources import UserResource, PlaceResource, MapResource
+from map_editor.api.resources import *
 
 
 v1_api = Api()
 v1_api.register(UserResource())
 v1_api.register(PlaceResource())
 v1_api.register(MapResource())
+v1_api.register(GridResource())
+v1_api.register(ObjectCategoryResource())
+v1_api.register(ObjectResource())
+v1_api.register(PointResource())
+
 
 urlpatterns = patterns('',
 
@@ -21,7 +26,7 @@ urlpatterns = patterns('',
     # url(r'^django_web/', include('django_web.foo.urls')),
 
 
-    url(r'^api_2/', include('map_editor.api_2.urls')),
+    url(r'^api-2/', include('map_editor.api_2.urls')),
 
 
     # APP: MAP

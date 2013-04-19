@@ -14,16 +14,43 @@ var elements;
 $(document).on('ready', function(){
 
 	elements = {
+
+		// Form para nuevo object_type
+		form_category: {
+			root_node: $('#category-form'),
+			img_form: $('#category-form form'),
+			img: $('#category-form input[name=img]'),
+			name: $('#category-form input[name=name]'),
+			create: $('#category-form button[name=create]')
+		},
+
+		// Form para nuevo object
+		form_object: {
+			root_node: $('#object-form'),
+			img_form: $('#object-form form'),
+			category: $('#object-form select[name=category]'),
+			name: $('#object-form input[name=name]'),
+			img: $('#object-form input[name=img]'),
+			create: $('#object-form button[name=create]')
+		},
+
+		// Enlaces
+		new_object: $('#new_object'),
+		new_category: $('#new_category'),
+
+		// Para elegir objeto/categoría
+		object_selector: $('#choose-object select[name=object]'),
+		category_selector: $('#choose-object select[name=category]'),
+
+		// Sobre el grid
 		num_rows: $('input[name="num_rows"]'),
-		grid_selector: $('#menu select[name=grid_selector]'),
-		obj_selector: $('#menu select[name=obj]'),
-		save: $('#menu button[name=save]'),
-		clear: $('#menu button[name=clear]'),
-		delete: $('#menu button[name=delete]'),
+		grid_name: $('input[name=grid_name]'),
+		grid_selector: $('select[name=grid_selector]'),
 		block: $('.block'),
 		grid: $('#grid'),
 		num_blocks: $('#num_blocks'),
-		grid_name: $('#menu input[name=grid_name]')
+		delete_grid: $('button[name=delete_grid]'),
+		create_grid: $('button[name=create_grid]')
 	};
 
 

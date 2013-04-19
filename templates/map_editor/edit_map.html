@@ -47,7 +47,7 @@
                 <input type="text" name="grid_name"
                     placeholder="Nombre para nuevo grid.."/>
 
-                <button name="save">Guardar</button>
+                <button name="create_grid">Guardar</button>
             </div>
         </div>
 
@@ -62,20 +62,84 @@
         </div>
 
 
-        <div class="box box-0">
-
+        <div id="choose-object" class="box box-0">
             <span class="title">Objetos:</span><br>
 
-            <select name="obj"></select>
 
-            <div class="box box-2">
-                Nuevo objeto:<br>
-                <input type="text" name="obj_name"
-                    placeholder="Nombre.."/>
-                <button name="new_object">Agregar</button>
+            <div class="box box-1">
+                <span class="title">Elegir objeto:</span><br>
+
+                <div class="box box-2">
+                    Categoría:<br>
+                    <select name="category"></select>
+                    <a id="new_category" href=''>Nueva Categoría</a>
+                </div>
+
+                <div class="box box-2">
+                    Objeto:<br>
+                    <select name="object"></select>
+                    <a id="new_object" href=''>Nuevo Objeto</a>
+                </div>
+            </div>
+
+
+
+            <!--
+                Cajas para crear objeto o categoría
+            -->
+
+
+            <div id="category-form" class="box box-1">
+
+                <span class="title">Crear categoría:</span><br>
+
+                <!-- <form action="/api-2/file-upload/object-type" -->
+
+                <input type="text" name="name"
+                    placeholder="Nombre para la categoría.."/><br>
+
+                <!-- Campo para la imágen -->
+                Imágen de la categoría:
+                <form action=""
+                    method="post" enctype="multipart/form-data"
+                    target="upload_target"
+                >
+                    {% csrf_token %}
+                    <input type="file" name="img" title="Elegir imágen..">
+                </form>
+
+                <button name="create">Crear</button>
+            </div>
+
+
+
+            <div id="object-form" class="box box-1">
+                <span class="title">Crear objeto:</span><br>
+
+                <!-- <form action="/api-2/file-upload/object-type" -->
+
+                <input type="text" name="object_name"
+                    placeholder="Nombre para el objeto.."/><br>
+
+                Para la categoría:
+                <select name="category"></select>
+
+                <!-- Campo para la imágen -->
+                Imágen del objeto:
+                <form action=""
+                    method="post" enctype="multipart/form-data"
+                    target="upload_target"
+                >
+                    {% csrf_token %}
+                    <input type="file" name="img" title="Elegir imágen..">
+                </form>
+
+                <button name="create">Crear</button>
             </div>
         </div>
     </div>
+
+    {% include "_uploading_iframe.html" %}
 
 {% endblock content %}
 

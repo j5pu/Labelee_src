@@ -24,40 +24,65 @@
 // });
 
 
-
 function addEvents(){
 
 	//
-	// Eventos sobre los botones, selectores..
-	//
+	// GRID_SELECTOR
 	elements.grid_selector.on('change', function(){
 		loadGrid($(this).val());
 	});
-
-	elements.save.on('click', saveGrid);
-	elements.clear.on('click', clearGrid);
-	elements.delete.on('click', deleteSavedGrids);
-
+	//
+	// CREATE / DELETE GRID
+	elements.create_grid.on('click', createGrid);
+	elements.delete_grid.on('click', deleteGrid);
+	//
+	// NUM_ROWS para GRID
 	elements.num_rows.on('change', loadMap);
 
 
 	//
-	// Eventos para pintar
-	//
+	// SHOW NEW OBJECT / TYPE FORM
+	elements.new_object.on('click', function(){
+		elements.form_object.root_node.show(400);
+		elements.form_category.root_node.hide(400);
+	});
+	elements.new_category.on('click', function(){
+		elements.form_object.root_node.hide(400);
+		elements.form_category.root_node.show(400);
+	});
+	// CREATE OBJECT / OBJECT_TYPE
+	elements.form_category.create.on('click', createObjectCategory);
+	elements.form_object.create.on('click', createObject);
 
+
+	//
+	// IFRAME
+	//
+	// Se escucha el iframe 'upload_target'. Cada vez que se cambie su contenido
+	// significa que se acaba de subir una imágen al servidor.
+	//
+	listenIframe(function(form_name){
+		clearForm(form_name);
+	});
+
+
+	//
+	// EVENTOS PARA PINTAR EN EL GRID
+	//
 	// Al hacer click sobre un bloque en el mapa éste se pintará
+	//
 	$('.block').on('click', function(){
 		paintBlock($(this));
 	});
 
 	// Pintar dejando pulsada alt y pasando el ratón por el mapa
-	shortcut.add("alt", function(){
+	shortcut.add("alt+shift", function(){
 		elements.block.on('mouseover', function(){
 			paintBlock($(this));
 		});
 	});
 
-	shortcut.add("alt", function(){
+	shortcut.add("alt+shift", function(){
 		$('.block').off('mouseover');
 	},{'type':'keyup'});
 
@@ -65,6 +90,7 @@ function addEvents(){
 	// Podemos pintar trazas sobre el mapa dejando pulsado el ratón y moviéndolo sobre él
 	$('#grid').on('mousedown', function(e){
 		e.preventDefault();
+		paintBlock($(this));
 		paintTrace();
 	});
 	$('#grid').on('mouseup', function(){
@@ -74,7 +100,7 @@ function addEvents(){
 
 
 	//
-	// Eventos para elegir cosas a pintar
+	// Para elegir cosas a pintar
 	//
 	shortcut.add("Ctrl+x", function(){
 		elements.obj_selector.val('label');

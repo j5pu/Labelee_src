@@ -16,7 +16,7 @@ function paintTrace()
 	// en el array 'stroke' junto con los demás que forman la traza
 	$('.block').on('mouseover', function(){
 		// if(painting_trace)
-			paintBlock($(this));
+		paintBlock($(this));
 	});
 
 	paint_actions.push(stroke);
@@ -34,8 +34,10 @@ function paintBlock(block)
 	//		'bar': icons_path + 'bar.png',
 	//		...
 
-	var obj = elements.obj_selector.val();
+
+	var obj = elements.object_selector.val();
 	block.attr('data-obj', obj);
+
 
 	// Damos color de fondo o le adjuntamos una imágen según sea el caso..
 	switch(obj)
@@ -57,7 +59,7 @@ function paintBlock(block)
 
 		// Si es algún icono..
 		default:
-			var icon_src = object_types[elements.obj_selector.val()];
+			var icon_src = object_types[elements.object_selector.val()];
 
 			displayIcon(block, icon_src);
 	}
