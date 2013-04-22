@@ -9,7 +9,7 @@ from tastypie.paginator import Paginator
 from tastypie.validation import FormValidation
 # from tastypie.authentication import Authentication
 
-from tastypie.resources import ModelResource, ALL
+from tastypie.resources import ModelResource, ALL, ALL_WITH_RELATIONS
 
 #
 # Para poder sacar en la api la lista de mapas para el lugar y el lugar al que pertenece el mapa
@@ -116,6 +116,9 @@ class ObjectResource(ModelResource):
 		authorization = DjangoAuthorization()
 		authentication = BasicAuthentication()
 		always_return_data = True
+		filtering = {
+			'category': ALL_WITH_RELATIONS
+		}
 
 	def determine_format(self, request):
 		return 'application/json'
@@ -131,6 +134,9 @@ class ObjectCategoryResource(ModelResource):
 		authorization = DjangoAuthorization()
 		authentication = BasicAuthentication()
 		always_return_data = True
+		filtering = {
+			'id': ALL
+		}
 
 	def determine_format(self, request):
 		return 'application/json'

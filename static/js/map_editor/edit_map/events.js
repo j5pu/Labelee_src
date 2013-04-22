@@ -39,9 +39,11 @@ function addEvents(){
 	// NUM_ROWS para GRID
 	elements.num_rows.on('change', loadMap);
 
-
 	//
-	// SHOW NEW OBJECT / TYPE FORM
+	// SELECT CATEGORY -> OBJECT
+	elements.category_selector.on('change', setObjectSelector)
+	//
+	// SHOW NEW OBJECT / OBJECT_CATEGORY FORM
 	elements.new_object.on('click', function(){
 		elements.form_object.root_node.show(400);
 		elements.form_category.root_node.hide(400);

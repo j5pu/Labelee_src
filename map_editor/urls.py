@@ -11,5 +11,4 @@ urlpatterns = patterns('map_editor.views',
 	url(r'^edit-map/$', 'edit_map'),
 
 
-
 )

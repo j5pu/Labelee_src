@@ -28,6 +28,3 @@ def index(request):
 def edit_map(request):
 	# return HttpResponse('edit map')
 	return render_to_response('map_editor/edit_map.html', context_instance=RequestContext(request))
-
-
-

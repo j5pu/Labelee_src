@@ -11,7 +11,7 @@ from django_web.utils.helpers import *
 
 
 # http://whilefalse.net/2009/10/21/factory-pattern-python-__new__/
-resources = {
+classes = {
 	'place': Place,
 	'map': Map,
 	'grid': Grid,
@@ -31,26 +31,11 @@ class ImgService:
 		- Eliminar imágen: DELETE > api-2/map/16/img
 	"""
 
-
 	def __init__(self, request, resource, id):
 		self.request = request
 		self.resource = resource
 		self.id = id
-
-		# Tomo la clase para el recurso dado. Xej para resource='map':
-		#		self.resource_class = getattr('Map', 'Map')
-		# http://stackoverflow.com/a/4031043
-		# module, modClass = dynamic_importer("django_web.map_editor.models", slug_to_class_name(resource))
-		# self.resource_class = modClass
-
-		# self.resource_class = getattr(slug_to_class_name(resource), slug_to_class_name(resource))
-		module = __import__(map_editor.models)
-		self.resource_class = getattr(module, slug_to_class_name(resource))
-
-		if request.method == 'POST':
-			return self.upload_img()
-		elif request.method == 'DELETE':
-			return self.delete_img()
+		self.resource_class = classes[resource]
 
 	def upload_img(self):
 		"""
@@ -69,12 +54,10 @@ class ImgService:
 		resource_obj.img.save(self.request.FILES['img'].name, file_content)
 		saved_obj = resource_obj.save()
 
-		print simplejson.dumps(saved_obj)
-
 		# respuesta en el iframe
 		data = {
-			'form': self.resource,
-			'obj': saved_obj
+			'form': self.resource
+			# 'obj': saved_obj
 		}
 
 		return responseJSON(data=data)
