@@ -50,16 +50,27 @@
 				        enctype="multipart/form-data"
 				        target="upload_target">
 				        
-				        <input type="file" name="img" title="Elegir imágen..">
-				        <input type="text" ng-model="map_name" placeholder="Nombre de mapa..">
+				        <div class="form_content" ng-hide="sending_img">
+				        	<input type="file" 
+					        	name="img" 
+					        	title="Elegir imágen..">
+					        <input type="text" 
+					       		ng-model="map_name" 
+					        	placeholder="Nombre de mapa..">
+					        
+					        <button class="btn" ng-click="createMap()">Añadir mapa</button>
+				        </div>
 				        
-				        <button class="btn" ng-click="createMap()">Añadir mapa</button>
+				        <div class="ajax_gif" ng-show="sending_img">
+				        	<img src="/static/img/ajax-loader.gif">
+				        </div>
+				        
 				    </form>
 				
 				    <h4 ng-show="place.maps">Mapas:</h4> 
 				
 					<!-- CADA MAPA -->
-				    <div class="map " 
+				    <div class="map" 
 				    	fadey="1000"
 				    	ng-repeat="map in place.maps"
 				    	ng-controller="MapCtrl">

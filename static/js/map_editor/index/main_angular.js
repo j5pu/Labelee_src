@@ -1,12 +1,12 @@
 $(document).on('ready', function() {
-
 });
+
 
 function PlacesCtrl($scope, PartialService) {
 
 	new PartialService();
 
-	$scope.place_resource = new Resource('/api/v1/place/');
+	$scope.place_resource = new Resource('place');
 
 	$scope.places = $scope.place_resource.readAll();
 
@@ -18,6 +18,8 @@ function PlacesCtrl($scope, PartialService) {
 		$scope.place_resource.create(data)
 
 		$scope.places = $scope.place_resource.readAll();
+		
+		$scope.place_name = '';
 	};
 }
 
@@ -59,20 +61,51 @@ function PlaceCtrl($scope) {
 	};
 }
 
-function MapsCtrl($scope) {
+function MapsCtrl($scope, $element) {
 
-	$scope.map_resource = new Resource('/api/v1/map/');
-
+	$scope.sending_img = false;
+	
+	$scope.map_resource = new Resource('map');
+	
 	$scope.createMap = function() {
+		
+		//
+		// 1: Creamos el registro en B.D.
 		var data = {
 			name : $scope.map_name,
 			place : $scope.place.resource_uri
 		};
+		
+		var new_map = $scope.map_resource.create(data)
+		
+		//
+		// 2: Una vez creado subimos la imágen para el nuevo mapa creado	
+		var img_form = $($element).find('form').first();
+		
+		$scope.sending_img = true;
+		
+		$scope.map_resource.addImg(
+			img_form, 
+			new_map.id,
+			function(server_response){
+				// Una vez se sube la imágen se limpia el formulario y se actualiza
+				// la lista de mapas para el lugar
+				$scope.map_name = '';
+				img_form.find('input[name="img"]').val('');
+				$scope.$parent.$parent.place.maps = 
+					$scope.map_resource.readAllFiltered('?place__id=' + $scope.place.id);
+				
+				$scope.sending_img = false;
+				
+				$scope.$apply();
+			}
+		);
+		
+		// $scope.$parent.$parent.place.maps = 
+					// $scope.map_resource.readAllFiltered('?place__id=' + $scope.place.id);
+		
 
-		$scope.map_resource.create(data)
-
-		$scope.$parent.$parent.place.maps = 
-			$scope.map_resource.readAllFiltered('?place__id=' + $scope.place.id);
+		
 	};
 
 }

@@ -78,6 +78,7 @@ class MapResource(ModelResource):
 		filtering = {
 			'place': ALL_WITH_RELATIONS,
 		}
+		always_return_data = True
 
 	def determine_format(self, request):
 		return 'application/json'
