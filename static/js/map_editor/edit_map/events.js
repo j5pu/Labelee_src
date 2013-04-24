@@ -40,13 +40,19 @@ function addEvents(){
 	elements.num_rows.on('change', loadMap);
 
 	//
-	// SELECT CATEGORY -> OBJECT
+	// SELECT CATEGORY
 	elements.category_selector.on('change', setObjectSelector)
+	//
+	// SELECT OBJECT
+	elements.object_selector.on('change', setObject)
 	//
 	// SHOW NEW OBJECT / OBJECT_CATEGORY FORM
 	elements.new_object.on('click', function(){
 		elements.form_object.root_node.show(400);
 		elements.form_category.root_node.hide(400);
+		var category = elements.category_selector.val();
+		if(category)
+			elements.form_object.category.val(category)
 	});
 	elements.new_category.on('click', function(){
 		elements.form_object.root_node.hide(400);
@@ -73,31 +79,37 @@ function addEvents(){
 	//
 	// Al hacer click sobre un bloque en el mapa éste se pintará
 	//
-	$('.block').on('click', function(){
-		paintBlock($(this));
-	});
+	// elements.block.on('click', function(e){
+		// if(painting_trace)
+			// return;
+// 		
+		// e.preventDefault();
+		// paintBlock($(this));
+	// });
 
 	// Pintar dejando pulsada alt y pasando el ratón por el mapa
 	shortcut.add("alt+shift", function(){
-		elements.block.on('mouseover', function(){
+		elements.block.on('mouseover', function(e){
+			e.preventDefault();
 			paintBlock($(this));
 		});
 	});
 
 	shortcut.add("alt+shift", function(){
-		$('.block').off('mouseover');
+		elements.block.off('mouseover');
 	},{'type':'keyup'});
 
 
 	// Podemos pintar trazas sobre el mapa dejando pulsado el ratón y moviéndolo sobre él
-	$('#grid').on('mousedown', function(e){
+	elements.block.on('mousedown', function(e){
 		e.preventDefault();
 		paintBlock($(this));
-		paintTrace();
+		elements.block.on('mouseover', function(){
+			paintBlock($(this));
+		});
 	});
-	$('#grid').on('mouseup', function(){
+	elements.block.on('mouseup', function(){
 		$('.block').off('mouseover');
-		painting_trace = false;
 	});
 
 
@@ -122,7 +134,9 @@ function setBlockShadow()
 {
 	// Cambiamos el evento 'mouseover' del elemento para que haga esto:
 
-	$('.block').on('mouseover', function(){
+	elements.block.on('mouseover', function(){
 		$(this).css({'box-shadow': '1px 1px 7px'});
 	});
+
 }
+

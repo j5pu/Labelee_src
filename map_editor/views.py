@@ -22,7 +22,7 @@ from django_web.utils import *
 
 
 def index(request):
-	return render_to_response('map_editor/index_angular.html', context_instance=RequestContext(request))
+	return render_to_response('map_editor/index.html', context_instance=RequestContext(request))
 
 
 def edit_map(request):

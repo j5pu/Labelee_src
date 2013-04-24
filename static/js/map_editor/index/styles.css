@@ -124,3 +124,7 @@ iframe {
     list-style: none outside none;
     margin-left: 0;
 }
+
+.editable_element {
+position: relative;
+}

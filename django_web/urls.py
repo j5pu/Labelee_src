@@ -31,7 +31,8 @@ urlpatterns = patterns('',
 
     # APP: MAP
     url(r'^map/', include('map.urls')),
-
+    
+    
 
     # APP: MAP EDITOR
     url(r'^map-editor/', include('map_editor.urls')),

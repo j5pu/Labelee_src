@@ -1,29 +1,44 @@
 
+var places;
 
 $(document).on('ready', function(){
 
 	// una vez pulsamos en un botón de clase 'toggable' entonces se ejecuta el function(e)
-	$('.toggable').on('click', function(e){
-		e.preventDefault();
-		toggleTextBox($(this));
-	});
+	// $('.toggable').on('click', function(e){
+		// e.preventDefault();
+		// toggleTextBox($(this));
+	// });
 
-	// prueba de mustache
+	Mustache.tags = ['[[', ']]'];
 
-	// Mustache.tags = ['[[', ']]'];
-
-	// var data = {
-	// 	firstName: 'Rodrigo',
-	// 	lastName: 'Jiménez',
-	// 	blogURL: 'http://marca.es'
-	// };
- //    var template = $('#personTpl').html();
- //    var html = Mustache.to_html(template, data);
- //    $('#sampleArea').html(html);
+	// Obtenemos todos los lugares
+	getPlaces();
+	
+    var template = $('#placesTpl').html();
+    var html = Mustache.to_html(template, places);
+    $('#places').append(html);
 
 	addEvents();
 
 });
+
+
+function getPlaces()
+{	
+	$.ajax({
+        url: '/api/v1/object/' + $(this).val(),
+        type: 'get',
+        headers: {'Content-Type': 'application/json'},
+        dataType: 'json',
+        async: false, // Así se espera a que responda el servidor y se ejecute el callback
+        success: function(response){
+			places = response;
+        },
+        error: function(response){
+			var j = response;
+        }
+    });
+}
 
 
 function addEvents()

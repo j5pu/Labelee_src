@@ -6,112 +6,106 @@
 
 var painting_trace = false;
 
+//
+// Objeto a pintar en el mapa
+	// category: "/api/v1/object-category/1/"
+	// id: 1
+	// img: "/media/img/objects/builders/wall.png"
+	// name: "wall"
+	// points: Array[0]
+	// resource_uri: "/api/v1/object/1/"
+var object;
+
 
 function paintTrace()
 {
 	painting_trace = true;  // indicamos que se está pintando una traza
-	stroke = [];  // traza de momento vacía
-
+	// stroke = [];  // traza de momento vacía
 	// cada vez que se pase el ratón sobre un bloque se dibujará este y se guarda
 	// en el array 'stroke' junto con los demás que forman la traza
-	$('.block').on('mouseover', function(){
-		// if(painting_trace)
-		paintBlock($(this));
-	});
+	elements.block.on('mouseover', paintBlock);
 
-	paint_actions.push(stroke);
+	// paint_actions.push(stroke);
 }
 
 
 function paintBlock(block)
 {
 	// Pinta objeto en un bloque del grid
-
-	// var object_types = {
-	//		"label": '',
-	//		"wall": '',
-	//		"erase": '',
-	//		'bar': icons_path + 'bar.png',
-	//		...
-
-
-	var obj = elements.object_selector.val();
-	block.attr('data-obj', obj);
-
-
-	// Damos color de fondo o le adjuntamos una imágen según sea el caso..
-	switch(obj)
-	{
-		case 'label':
-			block.empty();
-			block.css({'background': 'blue'});
-			block.data('obj', 'label');
-			break;
-		case 'wall':
-			block.empty();
-			block.css({'background': 'red'});
-			block.data('obj', 'wall');
-			break;
-		case 'erase':
-			block.empty();
-			block.css({'background': ''});
-			break;
-
-		// Si es algún icono..
-		default:
-			var icon_src = object_types[elements.object_selector.val()];
-
-			displayIcon(block, icon_src);
-	}
-
-	block.css({
-		'opacity': 0.5
-	});
-
-	// Guardamos el bloque pintado. Si se está pintando un trazo
-	// var block_data = [
-	// block.parent().attr('data-row'),
-	// block.attr('data-col'),
-	// block.attr('data-obj')
-	// ];
-
-	// if(painting_trace)
-	// 	stroke.push(block_coords);
-	// else
-	// 	paint_actions.push(block_coords);
-}
-
-
-function displayIcon(block, icon_src)
-{
-	// Muestra una imágen sobre un bloque
-
-	// Tomamos la medida del icono
+	
+	block.attr('data-object', object.id);
+	
+	
+	// Tomamos la imágen del icono
 	var icon = new Image();
-	icon.src = icon_src;
+	icon.src = object.img;
 	// No hacemos nada mientras no esté la imágen del mapa cargada en el navegador
 	icon.onload = function(){
-
-		// Si el icono es más pequeño que el bloque lo ponemos de fondo
-		if(icon.width <= block_size)
+		
+		if(isBuilder())
 		{
+			// Si el objeto a pintar forma parte de la categoría 'builders' entonces
+			// ocupará exactamente todo el espacio del bloque
 			block.css({
-				'background': 'url(' + icon_src + ') no-repeat center'
-				// 'background-size': icon_width + 'px auto'
+				'background': 'url(' + object.img + ') no-repeat center',
+				'background-size': block.width() + 'px auto'
 			});
 		}
-		// Si el icono es más grande entonces lo añadimos en un <img>
-		// y lo redimensionamos para que conserve su tamaño original
 		else
 		{
-			block.append('<img src="' + icon_src + '"/>');
-
-			var img = block.find('img');
-			var transform_factor = icon.width / block_size;
-
-			img.css({
-				'transform': 'scale(' + transform_factor + ')'
-			});
+			// Si el icono es más pequeño que el bloque lo ponemos de fondo
+			if(icon.width <= block_size)
+			{	
+				block.css({
+					'background': 'url(' + object.img + ') no-repeat center'
+					// 'background-size': icon_width + 'px auto'
+				});
+			}
+			// Si el icono es más grande entonces lo añadimos en un <img>
+			// y lo redimensionamos para que conserve su tamaño original
+			else
+			{
+				block.append('<img src="' + object.img + '"/>');
+	
+				var img = block.find('img');
+				var transform_factor = icon.width / block_size;
+	
+				img.css({
+					'transform': 'scale(' + transform_factor + ')'
+				});
+			}
 		}
+		
+		icon = null;
 	};
 }
+
+
+function isBuilder()
+{
+	// Nos indica si el objeto pertenece a la categoría 'builders'
+	
+	var category = elements.category_selector.find(':selected').text();
+	return category === 'builders';
+	
+	
+	// var is_builder = false;
+// 	
+	// $.ajax({
+        // url: '/api/v1/object/?id=' + object.id + '&category__name=builders',
+        // type: 'get',
+        // headers: {'Content-Type': 'application/json'},
+        // dataType: 'json',  // esto indica que la respuesta vendrá en formato json
+        // async: false,
+        // success: function(response){
+        	// is_builder = response.objects.length > 0 ? true : false;
+        // },
+        // error: function(response){
+			// var j = response;
+        // }
+    // });
+//     
+    // return is_builder;
+	
+}
+

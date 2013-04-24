@@ -18,9 +18,8 @@
 <div class="editable_element" ng-show="editing">
     <form>
 
-        <div ng-include src="[[_form_alert_box]]"></div>
+        <div ng-include src="_form_alert_box"></div>
 
-        {% csrf_token %}
         <input type="text"
             ng-init="$parent.place_name=place.name"
             ng-model="$parent.place_name"

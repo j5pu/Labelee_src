@@ -46,12 +46,13 @@ class PlaceResource(ModelResource):
 	class Meta:
 		# resource_name = 'places'
 		queryset = Place.objects.all()
-		include_resource_uri = False
+		include_resource_uri = True
 		authorization = DjangoAuthorization()
 		authentication = BasicAuthentication()
 		validation = FormValidation(form_class=PlaceForm)
 		filtering = {
 			'name': ALL,
+			'id': ALL
 		}
 		paginator_class = Paginator
 
@@ -66,12 +67,17 @@ class MapResource(ModelResource):
 	grids = fields.ToManyField('map_editor.api.resources.GridResource',
 		'grids', full=True, null=True)
 	place = fields.ToOneField(PlaceResource, 'place')
+	
+	# place = fields.ForeignKey(PlaceResource, 'place')
 
 	class Meta:
 		queryset = Map.objects.all()
 		authorization = DjangoAuthorization()
 		authentication = BasicAuthentication()
 		include_resource_uri = False
+		filtering = {
+			'place': ALL_WITH_RELATIONS,
+		}
 
 	def determine_format(self, request):
 		return 'application/json'
@@ -117,6 +123,7 @@ class ObjectResource(ModelResource):
 		authentication = BasicAuthentication()
 		always_return_data = True
 		filtering = {
+			'id': ALL,
 			'category': ALL_WITH_RELATIONS
 		}
 
@@ -135,7 +142,8 @@ class ObjectCategoryResource(ModelResource):
 		authentication = BasicAuthentication()
 		always_return_data = True
 		filtering = {
-			'id': ALL
+			'id': ALL,
+			'name': ALL
 		}
 
 	def determine_format(self, request):

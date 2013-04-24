@@ -46,7 +46,7 @@ $(document).on('ready', function(){
 		num_rows: $('input[name="num_rows"]'),
 		grid_name: $('input[name=grid_name]'),
 		grid_selector: $('select[name=grid_selector]'),
-		block: $('.block'),
+		block: null,
 		grid: $('#grid'),
 		num_blocks: $('#num_blocks'),
 		delete_grid: $('button[name=delete_grid]'),

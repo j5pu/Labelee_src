@@ -20,7 +20,7 @@ class Map(models.Model):
 	img = models.FileField(upload_to="img/maps", null=True)
 
 	# por defecto, si eliminamos un lugar también se eliminan todos sus mapas
-	place = models.ForeignKey(Place, related_name='maps', null=True, blank=True)
+	place = models.ForeignKey(Place, related_name='maps', blank=True)
 
 	def __unicode__(self):
 		return self.name

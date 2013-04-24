@@ -3,6 +3,7 @@
 
 <div class="editable_element" ng-show="!editing">
 	<h3>[[map.name]]</h3>
+
     <div class="action_box">
         <i class="icon-edit" ng-click="update()"></i>
         <i class="icon-remove" ng-click="del()"></i>
@@ -17,22 +18,20 @@
 -->
 <div class="editable_element" ng-show="editing">
 
-    <form action={% url "map_editor.views.maps" 'new' %}
+    <form action="/api/v1/map/[[map.id]]/img"
         method="post" enctype="multipart/form-data"
-        target="upload_target"
-        ng-controller="MapCtrl"
-    >
-        <div ng-include src="[[_form_alert_box]]"></div>
+        target="upload_target">
+        
+        <div ng-include src="_form_alert_box"></div>
 
-        {% csrf_token %}
         <input type="text"
             ng-init="$parent.map_name=map.name"
             ng-model="$parent.map_name"
             ng-change="validate()"
             placeholder="Nuevo nombre para el mapa.."
-            autofocus
-        >
+            autofocus>
         <input type="file" title="Cambiar imágen..">
+        
         <button class="btn" ng-click="update()">Editar</button>
     </form>
     <div class="action_box">

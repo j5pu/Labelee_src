@@ -1,53 +1,116 @@
+$(document).on('ready', function() {
 
-$(document).on('ready', function(){
 });
 
-
-function PlacesCtrl($scope, ListService, PartialService) {
+function PlacesCtrl($scope, PartialService) {
 
 	new PartialService();
 
-	var placesPromise = new ListService('place').readAll();
+	$scope.place_resource = new Resource('/api/v1/place/');
 
-	placesPromise.then(function(response){
-		$scope.places = response.data.objects;
-	});
+	$scope.places = $scope.place_resource.readAll();
 
+	$scope.createPlace = function() {
+		var data = {
+			name : $scope.place_name
+		};
+
+		$scope.place_resource.create(data)
+
+		$scope.places = $scope.place_resource.readAll();
+	};
+}
+
+function PlaceCtrl($scope) {
+	$scope.editing = false;
+
+	$scope.update = function() {
+		if (!$scope.editing) {
+			$scope.editing = true;
+			return;
+		} else {
+			// Si ya se estaba editando cuando hemos invocado update() entonces
+			// guardamos el nuevo nombre en la BD
+
+			var data = {
+				name : $scope.place_name
+			}
+
+			$scope.place_resource.update(data, $scope.place.id);
+
+			$scope.editing = false;
+
+			$scope.$parent.place.name = $scope.place_resource.read($scope.place.id).name;
+		}
+	};
+
+	$scope.del = function() {
+
+		var confirm_msg = '¿Seguro que desea eliminar el lugar? (también se perderán todos sus mapas)';
+
+		$scope.place_resource.del($scope.place.id, confirm_msg);
+
+		// Al ir en un ng-include el botón que llama a esta función,
+		// tenemos que subir dos niveles para cambiar la lista $scope.places:
+		//	- subir del $scope de la plantilla
+		//	- del $scope del PlaceCtrl (controlador hijo) al $scope de PlacesCtrl (padre)
+		$scope.$parent.$parent.places = $scope.place_resource.readAll();
+
+	};
+}
+
+function MapsCtrl($scope) {
+
+	$scope.map_resource = new Resource('/api/v1/map/');
+
+	$scope.createMap = function() {
+		var data = {
+			name : $scope.map_name,
+			place : $scope.place.resource_uri
+		};
+
+		$scope.map_resource.create(data)
+
+		$scope.$parent.$parent.place.maps = 
+			$scope.map_resource.readAllFiltered('?place__id=' + $scope.place.id);
+	};
 
 }
 
-function PlaceCtrl($scope, CrudService)
-{
+function MapCtrl($scope) {
 
+	$scope.editing = false;
 
-	new CrudService($scope, {
-		resource: 'place',
-		element: $scope.place,
-		element_data: {name: $scope.place_name},
-		list: $scope.places,
-		// scope_fields: {
-		// 	// place_name: ['aloh', 'hola']
-		// 	place_name: [$scope.place.name, $scope.place_name]
-		// },
-		to_clean: $scope.place_name
-	});
+	$scope.update = function() {
+		if (!$scope.editing) {
+			$scope.editing = true;
+			return;
+		} else {
+			// Si ya se estaba editando cuando hemos invocado update() entonces
+			// guardamos el nuevo nombre en la BD
+
+			var data = {
+				name : $scope.map_name
+			}
+
+			$scope.map_resource.update(data, $scope.map.id);
+
+			$scope.editing = false;
+
+			$scope.$parent.map.name = $scope.map_resource.read($scope.map.id).name;
+		}
+	};
+
+	$scope.del = function() {
+
+		var confirm_msg = '¿Seguro que desea eliminar el mapa? (también se perderán todos sus grids)';
+
+		$scope.map_resource.del($scope.map.id, confirm_msg);
+
+		$scope.$parent.$parent.place.maps = 
+			$scope.map_resource.readAllFiltered('?place__id=' + $scope.place.id);
+	};
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 //
 //
@@ -74,7 +137,6 @@ function PlaceCtrl($scope, CrudService)
 
 // 	return $scope.read();
 // }
-
 
 // function ElementCtrl(CrudService, $scope, $http, $element, $q)
 // {
@@ -106,7 +168,6 @@ function PlaceCtrl($scope, CrudService)
 
 // 		return deferred.promise;
 // 	};
-
 
 // 	$scope.create = function()
 // 	{
@@ -186,29 +247,28 @@ function PlaceCtrl($scope, CrudService)
 // 	};
 // }
 
-
-// //
-// // DIRECTIVAS PROPIAS
-// //
+//
+// DIRECTIVAS PROPIAS
+//
 
 // myApp.directive('fadey', function() {
-// 	return {
-// 		restrict: 'A',
-// 		link: function(scope, elm, attrs) {
-// 			var duration = parseInt(attrs.fadey, 10);
-// 			if (isNaN(duration)) {
-// 				duration = 500;
-// 			}
-
-// 			scope.$watch('[create]', function () {
-// 				elm = $(elm);
-// 				elm.hide();
-// 				elm.fadeIn(duration);
-// 			}, true);
-
-// 			scope.del = function(complete) {
-// 				elm.fadeOut(duration);
-// 			};
-// 		}
-// 	};
+// return {
+// restrict: 'A',
+// link: function(scope, elm, attrs) {
+// var duration = parseInt(attrs.fadey, 10);
+// if (isNaN(duration)) {
+// duration = 500;
+// }
+//
+// scope.$watch('[createPlace]', function () {
+// elm = $(elm);
+// elm.hide();
+// elm.fadeIn(duration);
+// }, true);
+//
+// scope.del = function(complete) {
+// elm.fadeOut(duration);
+// };
+// }
+// };
 // });

@@ -25,7 +25,7 @@ myApp.factory('PartialsService', function($rootScope) {
 	// Servicio a aplicar en los controladores donde se quiera hacer referencia
 	// a alguna plantilla usando ng-include
 
-	var PARTIALS_PATH = '/templates/_partials/';
+	var PARTIALS_PATH = '/static/partials/';
 
 	$rootScope._form_alert_box = PARTIALS_PATH + '_form_alert_box.html';
 	$rootScope._editable_place = PARTIALS_PATH + '_editable_place.html';

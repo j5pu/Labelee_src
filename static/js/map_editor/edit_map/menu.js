@@ -13,6 +13,27 @@ var object_types = {
 };
 
 
+function setObject()
+{
+	// Seteamos el objeto a pintar (paint.js -> object)
+	
+	// var i = $(this);
+	$.ajax({
+        url: '/api/v1/object/' + $(this).val(),
+        type: 'get',
+        headers: {'Content-Type': 'application/json'},
+        dataType: 'json',  // esto indica que la respuesta vendrá en formato json
+        success: function(response){
+			object = response;
+        },
+        error: function(response){
+			var j = response;
+        }
+    });
+	
+}
+
+
 function setCategorySelector()
 {
 	// Recogemos de la B.D. todos los object_types

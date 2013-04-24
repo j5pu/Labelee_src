@@ -2,48 +2,76 @@
 
 
     {% block css %}
-        <link rel="stylesheet" href="/media/map_editor/index/styles.css"/>
+        <link rel="stylesheet" href="{{ STATIC_URL }}/css/map_editor/index/styles.css"/>
     {% endblock css %}
 
 
     {% block js%}
-        <script src="/media/vendor/js/bootstrap.file-input.js"></script>
+        <script src="{{ STATIC_URL }}vendor/js/bootstrap.file-input.js"></script>
 
-        <script src="/media/map_editor/index/handlers.js"></script>
-        <script src="/media/map_editor/index/main.js"></script>
+        <script src="{{ STATIC_URL }}js/map_editor/index/main_angular.js"></script>
     {% endblock js %}
 
 
     {% block content %}
 
-        {# Prueba de mustache #}
-        {# <div id="sampleArea"></div> #}
-
         {% csrf_token %}
 
         <h1>Tus lugares</h1>
 
-        <div id="places" class="element-box">
+        <div id="places" class="box box-0" ng-controller="PlacesCtrl">
 
-            <div id="place_form">
-                <input type="text" name="place" placeholder="Nombre del lugar..">
-                <button class="btn" id="add_place">Añadir lugar</button>
+			<!-- PARA AGREGAR LUGAR -->
+			<form>
+                <div ng-include src="_form_alert_box.html"></div>
+
+                <input type="text" 
+                	ng-model="place_name" 
+                	ng-change="validate()"
+                	placeholder="Nombre del lugar..">
+                	
+                <button class="btn" ng-click="createPlace()">Añadir lugar</button>
+            </form>
+
+			<!-- CADA LUGAR -->
+            <div class="place box box-1" 
+            	fadey="1000"
+                ng-repeat="place in places" 
+                ng-controller="PlaceCtrl">
+                
+                <div ng-include src="_editable_place"></div>
+
+				<!-- MAPAS PARA EL LUGAR -->
+				<div class="maps box box-2" ng-controller="MapsCtrl">
+				 
+				    <!-- PARA AGREGAR MAPA -->
+				    <form action=""
+				        method="post" 
+				        enctype="multipart/form-data"
+				        target="upload_target">
+				        
+				        <input type="file" name="img" title="Elegir imágen..">
+				        <input type="text" ng-model="map_name" placeholder="Nombre de mapa..">
+				        
+				        <button class="btn" ng-click="createMap()">Añadir mapa</button>
+				    </form>
+				
+				    <h4 ng-show="place.maps">Mapas:</h4> 
+				
+					<!-- CADA MAPA -->
+				    <div class="map " 
+				    	fadey="1000"
+				    	ng-repeat="map in place.maps"
+				    	ng-controller="MapCtrl">
+				    	
+				        <div ng-include src="_editable_map"></div>
+				    </div>
+				</div>
             </div>
-
-            {% for place in places %}
-
-                {% include "map_editor/elements/_place.html" %}
-
-            {% endfor %}
-
-
         </div>
 
 
-    {% include "_/uploading_iframe.html" %}
+    {% include "_uploading_iframe.html" %}
 
-
-    <!-- PLANTILLAS -->
-    {% include "map_editor/elements/elements.html" %}
 
     {% endblock content %}

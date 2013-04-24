@@ -31,7 +31,8 @@ function loadMap()
 	var grid = elements.grid;
 
 	// Limpiamos el grid si estaba creado
-	if(grid) grid.empty();
+	if(grid)
+		grid.empty();
 
 	for(var row = 0; row < num_rows; row++)
 	{
@@ -56,6 +57,8 @@ function loadMap()
 		}
 	}
 
+	// Cargamos los bloques creados en elements
+	elements.block = $('.block');
 
 	//
 	// Procuramos que los bloques no se desencajen del grid creado

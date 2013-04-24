@@ -1,10 +1,8 @@
 {% extends "base.html" %}
 
-
 {% block css %}
 <link rel="stylesheet" href="{{ STATIC_URL }}css/map_editor/edit_map/styles.css"/>
 {% endblock css %}
-
 
 {% block js %}
 <script src="{{ STATIC_URL }}js/map_editor/edit_map/events.js"></script>
@@ -16,165 +14,170 @@
 <script src="{{ STATIC_URL }}js/map_editor/edit_map/main.js"></script>
 {% endblock js %}
 
-
 {% block content %}
 
-    <!-- Imagen del mapa -->
-    <span id="map_src" style="display: none">{{ STATIC_URL }}img/map.jpg</span>
+<!-- Imagen del mapa -->
+<span id="map_src" style="display: none">{{ STATIC_URL }}img/map.jpg</span>
 
-    <!-- GRID -->
-    <div id="grid"></div>
+<!-- GRID -->
+<div id="grid"> </div>
 
+<div id="menu" >
 
-    <div id="menu" ng-app="myApp">
+	<div class="box box-0">
 
-        <div class="box box-0">
+		<span class="title">Grid:</span>
+		<br>
 
-            <span class="title">Grid:</span><br>
+		<div class="box box-1">
+			Filas:
+			<input type="text"
+			name="num_rows"
+			value="20"
+			/>
 
-            <div class="box box-1">
-                Filas:
-                <input type="text"
-                    name="num_rows"
-                    value="20"
-                />
+			= <span id="num_blocks"> </span>
+		</div>
 
-                = <span id="num_blocks"></span>
-            </div>
+		<div class="box box-1">
 
-            <div class="box box-1">
+			<input type="text" name="grid_name"
+			placeholder="Nombre para nuevo grid.."/>
 
-                <input type="text" name="grid_name"
-                    placeholder="Nombre para nuevo grid.."/>
+			<button name="create_grid">
+				Guardar
+			</button>
+		</div>
+	</div>
 
-                <button name="create_grid">Guardar</button>
-            </div>
-        </div>
+	<div class="box box-0">
 
+		<span class="title">Cargar grid:</span>
+		<br>
 
-        <div class="box box-0">
+		<select name="grid_selector"></select>
 
-            <span class="title">Cargar grid:</span><br>
+		<button name="delete_grid">
+			Eliminar grid
+		</button>
+	</div>
 
-            <select name="grid_selector"></select>
+	<!-- SELECCIONAR OBJETOS -->
+	<div id="choose-object" class="box box-0">
+		<span class="title">Objetos:</span>
+		<br>
 
-            <button name="delete_grid">Eliminar grid</button>
-        </div>
+		<div class="box box-1">
+			<span class="title">Elegir objeto:</span>
+			<br>
 
+			<div class="box box-2">
+				Categoría:
+				<br>
+				<select name="category">
+					<option class="prompt_option" value="">Selecc. categoría</option>
+				</select>
+				<a id="new_category" href=''>Nueva Categoría</a>
+			</div>
 
-        <!-- SELECCIONAR OBJETOS -->
-        <div id="choose-object" class="box box-0">
-            <span class="title">Objetos:</span><br>
+			<div class="box box-2">
+				Objeto:
+				<br>
+				<select name="object">
+					<option class="prompt_option" value="">Selecc. objeto</option>
+				</select>
+				<a id="new_object" href=''>Nuevo Objeto</a>
+			</div>
+		</div>
+	</div>
 
+	<!--
+	Cajas para crear objeto o categoría
+	-->
 
-            <div class="box box-1">
-                <span class="title">Elegir objeto:</span><br>
+	<div id="category-form" class="box box-1">
 
-                <div class="box box-2">
-                    Categoría:<br>
-                    <select name="category">
-                        <option class="prompt_option" value="">Selecc. categoría</option>
-                    </select>
-                    <a id="new_category" href=''>Nueva Categoría</a>
-                </div>
+		<span class="title">Crear categoría:</span>
+		<br>
 
-                <div class="box box-2">
-                    Objeto:<br>
-                    <select name="object">
-                        <option class="prompt_option" value="">Selecc. objeto</option>
-                    </select>
-                    <a id="new_object" href=''>Nuevo Objeto</a>
-                </div>
-            </div>
-        </div>
+		<!-- <form action="/api-2/file-upload/object-type" -->
 
+		<input type="text" name="name"
+		placeholder="Nombre para la categoría.."/>
+		<br>
 
+		<!-- Campo para la imágen -->
+		Imágen de la categoría:
+		<form action=""
+		method="post" enctype="multipart/form-data"
+		target="upload_target"
+		>
+			{% csrf_token %}
+			<input type="file" name="img" title="Elegir imágen..">
+		</form>
 
-        <!--
-            Cajas para crear objeto o categoría
-        -->
+		<button name="create">
+			Crear
+		</button>
+	</div>
 
+	<div id="object-form" class="box box-1">
+		<span class="title">Crear objeto:</span>
+		<br>
 
-        <div id="category-form" class="box box-1">
+		<!-- <form action="/api-2/file-upload/object-type" -->
 
-            <span class="title">Crear categoría:</span><br>
+		<input type="text" name="name"
+		placeholder="Nombre para el objeto.."/>
+		<br>
 
-            <!-- <form action="/api-2/file-upload/object-type" -->
+		Para la categoría:
+		<select name="category">
+			<option class="prompt_option" value="">Selecc. categoría</option>
+		</select>
 
-            <input type="text" name="name"
-                placeholder="Nombre para la categoría.."/><br>
+		<!-- Campo para la imágen -->
+		Imágen del objeto:
+		<form action=""
+		method="post" enctype="multipart/form-data"
+		target="upload_target"
+		>
+			{% csrf_token %}
+			<input type="file" name="img" title="Elegir imágen..">
+		</form>
 
-            <!-- Campo para la imágen -->
-            Imágen de la categoría:
-            <form action=""
-                method="post" enctype="multipart/form-data"
-                target="upload_target"
-            >
-                {% csrf_token %}
-                <input type="file" name="img" title="Elegir imágen..">
-            </form>
+		<button name="create">
+			Crear
+		</button>
+	</div>
+</div>
 
-            <button name="create">Crear</button>
-        </div>
-
-
-
-        <div id="object-form" class="box box-1">
-            <span class="title">Crear objeto:</span><br>
-
-            <!-- <form action="/api-2/file-upload/object-type" -->
-
-            <input type="text" name="name"
-                placeholder="Nombre para el objeto.."/><br>
-
-            Para la categoría:
-            <select name="category">
-                <option class="prompt_option" value="">Selecc. categoría</option>
-            </select>
-
-            <!-- Campo para la imágen -->
-            Imágen del objeto:
-            <form action=""
-                method="post" enctype="multipart/form-data"
-                target="upload_target"
-            >
-                {% csrf_token %}
-                <input type="file" name="img" title="Elegir imágen..">
-            </form>
-
-            <button name="create">Crear</button>
-        </div>
-    </div>
-
-    {% include "_uploading_iframe.html" %}
+{% include "_uploading_iframe.html" %}
 
 {% endblock content %}
 
-
-
-
 <!-- <form class="ejemplo">
-        <div class="input-append">
-            <div class="btn-group dropup">
-                <a class="btn btn-info">
-                    <i class="icon-qrcode"></i> Etiqueta
-                </a>
-                <a class="btn btn-info">
-                    <i class="icon-ban-circle"></i> Pared
-                </a>
-                <a class="btn btn-info">
-                    <i class="icon-remove"></i> Borrar
-                </a>
+<div class="input-append">
+<div class="btn-group dropup">
+<a class="btn btn-info">
+<i class="icon-qrcode"></i> Etiqueta
+</a>
+<a class="btn btn-info">
+<i class="icon-ban-circle"></i> Pared
+</a>
+<a class="btn btn-info">
+<i class="icon-remove"></i> Borrar
+</a>
 
-                <ul class="dropdown-menu" id="listaComunes">
-                    <li class="dropdown-submenu">
-                        <a tabindex="-1" href="#"><i class="icon-star"></i> Puntos de interés</a>
-                        <ul class="dropdown-menu" id="listaCategorias">
-                            <li><a href="JavasCript:addCat()"> Añadir categoría</a></li>
-                            <li class="divider"></li>
-                        </ul>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </form> -->
+<ul class="dropdown-menu" id="listaComunes">
+<li class="dropdown-submenu">
+<a tabindex="-1" href="#"><i class="icon-star"></i> Puntos de interés</a>
+<ul class="dropdown-menu" id="listaCategorias">
+<li><a href="JavasCript:addCat()"> Añadir categoría</a></li>
+<li class="divider"></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+</form> -->
