@@ -10,16 +10,7 @@ from map_editor.forms import *
 from django_web.utils.helpers import *
 
 
-# http://whilefalse.net/2009/10/21/factory-pattern-python-__new__/
-classes = {
-	'place': Place,
-	'map': Map,
-	'grid': Grid,
-	'object-category': ObjectCategory,
-	'object': Object,
-	'point': Point
-}
-
+from classes_factory import CLASSES
 
 class ImgService:
 	"""
@@ -35,7 +26,7 @@ class ImgService:
 		self.request = request
 		self.resource = resource
 		self.id = id
-		self.resource_class = classes[resource]
+		self.resource_class = CLASSES[resource]
 
 	def upload_img(self):
 		"""
@@ -48,7 +39,7 @@ class ImgService:
 
 		# Se elimina la imágen que el recurso tenía antes
 		if resource_obj.img:
-			self.delete_img(self.id)
+			self.delete_img()
 
 		# Guardamos la nueva imágen
 		resource_obj.img.save(self.request.FILES['img'].name, file_content)

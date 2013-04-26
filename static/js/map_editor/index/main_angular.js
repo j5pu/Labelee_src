@@ -110,13 +110,17 @@ function MapsCtrl($scope, $element) {
 
 }
 
-function MapCtrl($scope) {
+function MapCtrl($scope, $element) {
 
 	$scope.editing = false;
-
+	
 	$scope.update = function() {
+		var img = $($element).find('input[name="img"]');
+		var img_val = img.val();
+		
 		if (!$scope.editing) {
 			$scope.editing = true;
+			img.val('');
 			return;
 		} else {
 			// Si ya se estaba editando cuando hemos invocado update() entonces
@@ -127,6 +131,24 @@ function MapCtrl($scope) {
 			}
 
 			$scope.map_resource.update(data, $scope.map.id);
+			
+			// Si se ha puesto una nueva imágen la subimos, eliminando la anterior
+			if(img.val() !== '')
+			{					
+				var img_form = $($element).find('form');
+				
+				$scope.sending_img = true;
+				
+				$scope.map_resource.addImg(
+					img_form, 
+					$scope.map.id,
+					function(server_response){
+						// Una vez se sube la imágen se limpia el formulario y se actualiza
+						// la lista de mapas para el lugar
+						$scope.sending_img = false;						
+					}
+				);
+			}
 
 			$scope.editing = false;
 

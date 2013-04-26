@@ -29,11 +29,16 @@ function paintTrace()
 }
 
 
-function paintBlock(block)
+function paintBlock(block, object)
 {
 	// Pinta objeto en un bloque del grid
 	
-	block.attr('data-object', object.id);
+	// Si el objeto no es cargado desde la base de datos, sino que seleccionado
+	// desde el menú..
+	if(!object.from_db)
+		object = window.object;
+	
+	block.attr('data-object', object.resource_uri);
 	
 	
 	// Tomamos la imágen del icono
@@ -42,7 +47,7 @@ function paintBlock(block)
 	// No hacemos nada mientras no esté la imágen del mapa cargada en el navegador
 	icon.onload = function(){
 		
-		if(isBuilder())
+		if(isBuilder(object))
 		{
 			// Si el objeto a pintar forma parte de la categoría 'builders' entonces
 			// ocupará exactamente todo el espacio del bloque
@@ -54,7 +59,7 @@ function paintBlock(block)
 		else
 		{
 			// Si el icono es más pequeño que el bloque lo ponemos de fondo
-			if(icon.width <= block_size)
+			if(icon.height <= block_height && icon.width <= block_width)
 			{	
 				block.css({
 					'background': 'url(' + object.img + ') no-repeat center'
@@ -68,10 +73,11 @@ function paintBlock(block)
 				block.append('<img src="' + object.img + '"/>');
 	
 				var img = block.find('img');
-				var transform_factor = icon.width / block_size;
+				var transform_factor = icon.width / block_width;
 	
 				img.css({
-					'transform': 'scale(' + transform_factor + ')'
+					'transform': 'scale(' + transform_factor + ')',
+					'z-index': '1'
 				});
 			}
 		}
@@ -81,31 +87,18 @@ function paintBlock(block)
 }
 
 
-function isBuilder()
+function isBuilder(object)
 {
 	// Nos indica si el objeto pertenece a la categoría 'builders'
+	var category;
 	
-	var category = elements.category_selector.find(':selected').text();
+	// Si el objeto viene de cargarlo desde la base de datos..
+	if(object.from_db)
+		category = object.category_name
+	else
+		category = elements.category_selector.find(':selected').text();
+		
 	return category === 'builders';
-	
-	
-	// var is_builder = false;
-// 	
-	// $.ajax({
-        // url: '/api/v1/object/?id=' + object.id + '&category__name=builders',
-        // type: 'get',
-        // headers: {'Content-Type': 'application/json'},
-        // dataType: 'json',  // esto indica que la respuesta vendrá en formato json
-        // async: false,
-        // success: function(response){
-        	// is_builder = response.objects.length > 0 ? true : false;
-        // },
-        // error: function(response){
-			// var j = response;
-        // }
-    // });
-//     
-    // return is_builder;
 	
 }
 

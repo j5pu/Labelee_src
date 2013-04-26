@@ -6,7 +6,7 @@
 var num_rows, num_cols;
 
 
-function loadMap()
+function loadMapaaaa()
 {
 
 	// Dada la imagen para el mapa establecemos el alto y ancho para el grid
@@ -24,7 +24,7 @@ function loadMap()
 	grid.css({
 		'height': grid_height,
 		'width': grid_width,
-		'background-image': 'url("' + map_img.attr('src') + '")'
+		'background-image': 'url("' + map.img + '")'
 	});
 
 
@@ -138,8 +138,10 @@ function saveGrid()
 }
 
 
-function loadGrid(grid_name)
+function loadGridaaaaa()
 {
+	
+	
 	// Carga un grid guardado
 	if (!localStorage.grids)
 	{

@@ -62,3 +62,21 @@ function getCookie(name) {
     }
     return cookieValue;
 }
+
+
+function setSelector(selector, data, prompt_opt)
+{
+	// Vacía el contenido del selector y lo popula poniendo primero
+	// la opción 'prompt_opt' y luego rellenándolo con data
+	// xej: 
+	//		setSelector(elements.category_selector, categories, 'Selecc. categoría')
+	
+	selector.empty();
+	
+	selector.append('<option value="">' + prompt_opt + '</option>');
+	for(var i in data)
+	{
+		var opt = '<option value="' + data[i].id + '">' + data[i].name + '</option>';
+		selector.append(opt);		
+	}
+}

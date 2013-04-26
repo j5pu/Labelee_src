@@ -3,25 +3,42 @@
 // MAPA
 //
 
-var block_size;
-var num_rows;
+var num_rows, num_cols;
+var grid_height, grid_width;
+var block_height, block_width;
 
-function loadMap()
+var block_height_initial, block_width_initial; 
+
+
+function loadEmptyGrid()
 {
 	// El número de columnas será el proporcional a las filas de manera que
 	// salgan bloques cuadrados
 	num_rows = parseInt(elements.num_rows.val(), 10);
 
 	grid_height = resize(map_img.height, num_rows);
-	block_size = grid_height / num_rows;
-	grid_width = resize(map_img.width, block_size);
-	num_cols = grid_width / block_size;
+	block_height = grid_height / num_rows;
 
+	// Crearemos tantas columnas como sean necesarias para que el bloque salga
+	// lo más cuadrado posible
+	grid_width = resize(map_img.width, block_height);
+	num_cols = grid_width / block_height;
+	block_width = grid_width / num_cols;
+
+	drawGrid();
+}
+
+
+function drawGrid()
+{
+	block_height_initial = block_height;
+	block_width_initial = block_width;
+	
 	// Damos propiedades css al grid, de manera que su imagen de fondo sea la del mapa
 	elements.grid.css({
 		'height': grid_height,
 		'width': grid_width,
-		'background-image': 'url("' + map_src + '")',
+		'background-image': 'url("' + map.img + '")',
 		'background-size': grid_width + 'px' + ' ' + grid_height + 'px'
 	});
 
@@ -41,7 +58,7 @@ function loadMap()
 		var current_row = grid.find('.row').last();
 
 		current_row.attr('data-row', row);
-		current_row.css({'height': block_size});
+		current_row.css({'height': block_height});
 
 		for(var col = 0; col < num_cols; col++)
 		{
@@ -51,8 +68,8 @@ function loadMap()
 			current_block.attr('data-col', col);
 			// current_block.attr('data-obj', 0);
 			current_block.css({
-				'height': block_size,
-				'width': block_size
+				'height': block_height,
+				'width': block_width
 			});
 		}
 	}
@@ -72,155 +89,134 @@ function loadMap()
 		grid.find('.block').css({'bottom': diff + 'px'});
 	}
 
-
 	//
 	// Añadimos los eventos
 	//
-	addEvents();
+	addGridEvents();
 }
 
 
 
 function createGrid()
 {
-
-	// Guarda los datos para el grid actual
-
-	//.. ver si hay algún grid con el mismo nombre ya
-
+	//
+	// 1. Creamos el grid
 	var grid_data = {
-		grid_name: elements.grid_name.val(),
+		name: elements.grid_name.val(),
 		num_rows: num_rows,
-		blocks: []
+		num_cols: num_cols,
+		map: map.resource_uri
 	};
 
-	// Recorremos filas del grid
+	var grid_obj = new Resource('grid').create(grid_data);
+
+	//
+	// 2. Creamos cada punto pintado para el grid
+	
+	var point_resource = new Resource('point');
+
 	$('#grid .row').each(function(){
-		var row = $(this).attr('data-row');
+		var row = $(this).data('row');
 		//Recorremos cada bloque de la fila
 		$(this).find('.block').each(function(){
-			var col = $(this).attr('data-col');
+			var col = $(this).data('col');
 
-			// Sólo guardaremos los bloques con cosas
-			var block_obj = $(this).attr('data-obj');
+			// Sólo guardaremos los bloques que aparecen pintados
+			var block_obj = $(this).data('object');
 			if (block_obj)
 			{
-				var block_data = [row, col, block_obj];
-				grid_data['blocks'].push(block_data);
+				var point_data = {
+					row: row,
+					col: col,
+					grid: grid_obj.resource_uri,
+					object: block_obj
+				};
+
+				point_resource.create(point_data);
 			}
 		});
 	});
 
-	// grids = [
-	//			{
-	//				grid_name: "grid_uno",
-	//				num_rows: 20,
-	//				blocks: [[5,7,'label'], [10,11,'wall'], [10,12,x] ..]
-	//			},
-	//			...
-	//			{
-	//				grid_name: "otro",
-	//				block_size: 10,
-	//				blocks: [[0,0,1], [0,1,1], [0,2,x] ..]
-	//			}
-	// ]
-	var grids;
-
-	if (localStorage.grids)
-	{
-		grids = JSON.parse(localStorage.grids);
-		grids.push(grid_data);
-
-	}
-	else
-	{
-		grids = [grid_data];
-	}
-	localStorage.grids = JSON.stringify(grids);
-
-	setMapSelector();
+	//
+	// 3. Seteamos el grid_selector y limpiamos el formulario
+	setGridSelector();
+	elements.grid_name.val('');
 }
 
 
 function deleteGrid()
 {
-
+	var grid_id = elements.grid_selector.val();
+	var confirm_msg = '¿Desea eliminar el grid? (se perderán todos sus points)';
+	new Resource('grid').del(grid_id, confirm_msg);
+	setGridSelector();
 }
 
 
-function loadGrid(grid_name)
+function loadSavedGrid()
 {
-	// Carga un grid guardado
-	if (!localStorage.grids)
-	{
-		return;
-	}
 
-	// grids = {
-	//		grid_name1: {
-	//			block_size: 10,
-	//			blocks: [[0,0,1], [0,1,1], [0,2,x] ..]
-	//		},
-	//		...
-	//		grid_nameN: {
-	//			...
-	//		}
+	var grid_id = elements.grid_selector.val();
+	
+	if(!grid_id)
+	{
+		loadEmptyGrid();
+		return;		
+	}
+	
+	
+	var grid = new Resource('grid').read(grid_id);
+
+	//
+	// 1. Dibujamos el grid vacío
+	num_rows = grid.num_rows;
+	num_cols = grid.num_cols;
+	grid_height = resize(map_img.height, num_rows);
+	block_height = grid_height / num_rows;
+	grid_width = resize(map_img.width, num_cols);
+	block_width = grid_height / num_rows;
+
+	drawGrid();
+
+	//
+	// 2. Pintamos cada punto almacenado para ese grid (muros, POIs, etc)
+	var points = new Resource('point').readAllFiltered('?grid__id=' + grid.id);
+
+
+	// Recogemos todos los objetos que hay en el grid
+	// objects = {
+	// 		'api/v1/object/1': {
+	//			resource_uri: api/v1/object/1
+	// 			category_id: 1
+	//			category_name: builders
+	// 			id: 1
+	// 			img: "/media/img/objects/builders/wall.png"
+	// 			name: "wall"
+	// 			total: 6
+	// 		}
 	// }
+	var objects = new ObjectResource().readFromGrid(grid.id)
 
-	// sacamos el grid guardado
-	var saved_grids = JSON.parse(localStorage.grids);
-	var grid;
-	for (var i in saved_grids) {
-		if (saved_grids[i]['grid_name'] === grid_name)
-		{
-			grid = saved_grids[i];
-		}
-	}
-	block_size = grid['block_size'];
-	blocks = grid['blocks'];
 
-	// volvemos a recontar las filas y columnas por si es un block_size diferente
-	num_rows = (grid_height - factor) / block_size;
-	num_cols = (grid_width - factor) / block_size;
-
-	// vaciamos el grid actual
-	grid = $('#grid');
-	grid.empty();
-
-	// sacamos el valor de la última fila y columna en el grid obtenido
-	var final_row = blocks[blocks.length-1][0];
-	var final_col = blocks[blocks.length-1][1];
-	i = 0;
-	for(var row = 0; row <= final_row; row++)
+	for(var i in points)
 	{
-		// Crea fila
-		grid.append('<div class="row"></div>');
-		var current_row = grid.find('.row').last();
-		current_row.attr('data-row', row);
-		current_row.css({'height': block_size});
+		var point = points[i];
+		var block = elements.grid.find('.row[data-row="' + point.row + '"]')
+			.find('.block[data-col="' + point.col + '"]');
 
-		for(var col = 0; col <= final_col; col++)
-		{
-			// Crea bloque
-			current_row.append('<div class="block"></div>');
-			current_block = current_row.find('.block').last();
-
-			current_block.attr('data-col', col);
-			var block_type = blocks[i][2];  // [[0,0,x], [0,1,0], ..]
-			current_block.attr('data-obj', block_type);
-			current_block.css({
-				'background': backgrounds[block_type],
-				'height': block_size,
-				'opacity': 0.5,
-				'width': block_size
-			});
-
-			i++;  // incrementamos para pasar al siguiente bloque en blocks[]
-		}
+		object = objects[point.object];
+		
+		paintBlock(block, object);
 	}
-
-	addGridEvents();
-	addDocumentEvents();
+	
+	
+	// var point = points[0];
+	// var block = elements.grid.find('.row[data-row="' + point.row + '"]')
+		// .find('.block[data-col="' + point.col + '"]');
+// 
+	// object = objects[point.object];
+// 	
+	// paintBlock(block);
 }
 
 

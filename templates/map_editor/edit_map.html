@@ -12,9 +12,15 @@
 <script src="{{ STATIC_URL }}js/map_editor/edit_map/menu.js"></script>
 
 <script src="{{ STATIC_URL }}js/map_editor/edit_map/main.js"></script>
+
+<script>
+	var map_id = "{{ map_id }}";
+</script>
 {% endblock js %}
 
 {% block content %}
+
+{% csrf_token %}
 
 <!-- Imagen del mapa -->
 <span id="map_src" style="display: none">{{ STATIC_URL }}img/map.jpg</span>
@@ -22,7 +28,11 @@
 <!-- GRID -->
 <div id="grid"> </div>
 
+<!-- MENU -->
 <div id="menu" >
+	
+	<a href="{% url 'map_editor.views.index' %}">Volver al menú</a>
+	<input type="checkbox" name="toggle_border">Ver rejilla
 
 	<div class="box box-0">
 
@@ -39,17 +49,17 @@
 			= <span id="num_blocks"> </span>
 		</div>
 
+		<!-- GUARDAR GRID -->
 		<div class="box box-1">
 
 			<input type="text" name="grid_name"
 			placeholder="Nombre para nuevo grid.."/>
 
-			<button name="create_grid">
-				Guardar
-			</button>
+			<button name="create_grid">Guardar</button>
 		</div>
 	</div>
 
+	<!-- CARGAR GRID -->
 	<div class="box box-0">
 
 		<span class="title">Cargar grid:</span>
@@ -74,9 +84,7 @@
 			<div class="box box-2">
 				Categoría:
 				<br>
-				<select name="category">
-					<option class="prompt_option" value="">Selecc. categoría</option>
-				</select>
+				<select name="category"></select>
 				<a id="new_category" href=''>Nueva Categoría</a>
 			</div>
 
@@ -100,84 +108,51 @@
 		<span class="title">Crear categoría:</span>
 		<br>
 
-		<!-- <form action="/api-2/file-upload/object-type" -->
-
-		<input type="text" name="name"
-		placeholder="Nombre para la categoría.."/>
-		<br>
-
-		<!-- Campo para la imágen -->
-		Imágen de la categoría:
 		<form action=""
-		method="post" enctype="multipart/form-data"
-		target="upload_target"
-		>
-			{% csrf_token %}
-			<input type="file" name="img" title="Elegir imágen..">
+			method="post" enctype="multipart/form-data"
+			target="upload_target">
+			<input type="text" name="name"
+			placeholder="Nombre para la categoría.."/>
+			<br>
+	
+			<!-- Campo para la imágen -->
+			Imágen de la categoría:
+				<input type="file" name="img" title="Elegir imágen..">
+	
+			<button name="create">
+				Crear
+			</button>
 		</form>
-
-		<button name="create">
-			Crear
-		</button>
 	</div>
 
 	<div id="object-form" class="box box-1">
 		<span class="title">Crear objeto:</span>
 		<br>
 
-		<!-- <form action="/api-2/file-upload/object-type" -->
-
-		<input type="text" name="name"
-		placeholder="Nombre para el objeto.."/>
-		<br>
-
-		Para la categoría:
-		<select name="category">
-			<option class="prompt_option" value="">Selecc. categoría</option>
-		</select>
-
-		<!-- Campo para la imágen -->
-		Imágen del objeto:
 		<form action=""
 		method="post" enctype="multipart/form-data"
-		target="upload_target"
-		>
-			{% csrf_token %}
-			<input type="file" name="img" title="Elegir imágen..">
+		target="upload_target">
+			<input type="text" name="name"
+			placeholder="Nombre para el objeto.."/>
+			<br>
+	
+			Para la categoría:
+			<select name="category">
+				<option class="prompt_option" value="">Selecc. categoría</option>
+			</select>
+	
+			<!-- Campo para la imágen -->
+			Imágen del objeto:
+	
+				<input type="file" name="img" title="Elegir imágen..">
+	
+			<button name="create">
+				Crear
+			</button>
 		</form>
-
-		<button name="create">
-			Crear
-		</button>
 	</div>
 </div>
 
 {% include "_uploading_iframe.html" %}
 
 {% endblock content %}
-
-<!-- <form class="ejemplo">
-<div class="input-append">
-<div class="btn-group dropup">
-<a class="btn btn-info">
-<i class="icon-qrcode"></i> Etiqueta
-</a>
-<a class="btn btn-info">
-<i class="icon-ban-circle"></i> Pared
-</a>
-<a class="btn btn-info">
-<i class="icon-remove"></i> Borrar
-</a>
-
-<ul class="dropdown-menu" id="listaComunes">
-<li class="dropdown-submenu">
-<a tabindex="-1" href="#"><i class="icon-star"></i> Puntos de interés</a>
-<ul class="dropdown-menu" id="listaCategorias">
-<li><a href="JavasCript:addCat()"> Añadir categoría</a></li>
-<li class="divider"></li>
-</ul>
-</li>
-</ul>
-</div>
-</div>
-</form> -->

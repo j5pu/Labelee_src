@@ -5,8 +5,10 @@ function Resource(resource_name) {
 	// xej: /api/v1/place/
 	//
 	
-	this.api1_url = '/api/v1/' + resource_name + '/';
-	this.api2_url = '/api-2/' + resource_name + '/';
+	this.resource_name = resource_name;
+	
+	this.api1_url = '/api/v1/' + this.resource_name + '/';
+	this.api2_url = '/api-2/' + this.resource_name + '/';
 
 
 	this.create = function(data) {
@@ -97,6 +99,32 @@ function Resource(resource_name) {
 
 		return elements;
 	};
+	
+	
+	this.readFromUri = function(uri) {
+		
+		// xej: uri = /api/v1/object/1/
+		
+		var element;
+		$.ajax({
+			url : uri,
+			type : 'get',
+			headers : {
+				'Content-Type' : 'application/json'
+			},
+			dataType : 'json', // esto indica que la respuesta vendrá en formato json
+			async : false,
+			success : function(response) {
+				element = response;
+			},
+			error : function(response) {
+				var j = response;
+			}
+		});
+
+		return element;
+	};
+	
 
 	this.update = function(data, element_id) {
 		$.ajax({
@@ -157,3 +185,36 @@ function Resource(resource_name) {
 		listenIframe(form, callback);
 	};
 }
+
+
+function ObjectResource()
+{
+	Resource.call(this, 'object');
+	
+	this.readFromGrid = function(grid_id) {
+		
+		// Para obtener todos los objetos de un grid, agrupados por nombre de objeto:
+		// 		uri = /api-2/object/grid/4
+		
+		var element;
+		$.ajax({
+			url : this.api2_url + 'grid/' + grid_id,
+			type : 'get',
+			headers : {
+				'Content-Type' : 'application/json'
+			},
+			dataType : 'json', // esto indica que la respuesta vendrá en formato json
+			async : false,
+			success : function(response) {
+				element = response;
+			},
+			error : function(response) {
+				var j = response;
+			}
+		});
+
+		return element;
+	};
+}
+
+ObjectResource.prototype = new Resource;

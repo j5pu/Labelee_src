@@ -24,21 +24,28 @@
 // });
 
 
-function addEvents(){
-
+function addMenuEvents()
+{
 	//
 	// GRID_SELECTOR
-	elements.grid_selector.on('change', function(){
-		loadGrid($(this).val());
-	});
 	//
 	// CREATE / DELETE GRID
 	elements.create_grid.on('click', createGrid);
 	elements.delete_grid.on('click', deleteGrid);
 	//
+	// LOAD SAVED GRID
+	elements.grid_selector.on('change', loadSavedGrid);
+	//
 	// NUM_ROWS para GRID
-	elements.num_rows.on('change', loadMap);
+	elements.num_rows.on('change', loadEmptyGrid);
+	
+	elements.toggle_border.on('change', toggleBlockBorders);
 
+
+	//
+	// OBJECT - CATEGORY
+	//
+	
 	//
 	// SELECT CATEGORY
 	elements.category_selector.on('change', setObjectSelector)
@@ -69,50 +76,10 @@ function addEvents(){
 	// Se escucha el iframe 'upload_target'. Cada vez que se cambie su contenido
 	// significa que se acaba de subir una imágen al servidor.
 	//
-	listenIframe(function(form_name){
-		clearForm(form_name);
-	});
-
-
-	//
-	// EVENTOS PARA PINTAR EN EL GRID
-	//
-	// Al hacer click sobre un bloque en el mapa éste se pintará
-	//
-	// elements.block.on('click', function(e){
-		// if(painting_trace)
-			// return;
-// 		
-		// e.preventDefault();
-		// paintBlock($(this));
+	// listenIframe(function(form_name){
+		// clearForm(form_name);
 	// });
-
-	// Pintar dejando pulsada alt y pasando el ratón por el mapa
-	shortcut.add("alt+shift", function(){
-		elements.block.on('mouseover', function(e){
-			e.preventDefault();
-			paintBlock($(this));
-		});
-	});
-
-	shortcut.add("alt+shift", function(){
-		elements.block.off('mouseover');
-	},{'type':'keyup'});
-
-
-	// Podemos pintar trazas sobre el mapa dejando pulsado el ratón y moviéndolo sobre él
-	elements.block.on('mousedown', function(e){
-		e.preventDefault();
-		paintBlock($(this));
-		elements.block.on('mouseover', function(){
-			paintBlock($(this));
-		});
-	});
-	elements.block.on('mouseup', function(){
-		$('.block').off('mouseover');
-	});
-
-
+	
 	//
 	// Para elegir cosas a pintar
 	//
@@ -127,6 +94,48 @@ function addEvents(){
 	shortcut.add("Ctrl+1", function(){
 		elements.obj_selector.val('wall');
 	});
+
+}
+
+
+function addGridEvents()
+{
+	//
+	// PINTAR EN EL GRID
+	//
+	
+	// Pintar dejando pulsada alt y pasando el ratón por el mapa
+	shortcut.add("alt+shift", function(){
+		elements.block.on('mouseover', function(e){
+			e.preventDefault();
+			paintBlock($(this), object);
+		});
+	});
+
+	shortcut.add("alt+shift", function(){
+		elements.block.off('mouseover');
+	},{'type':'keyup'});
+
+
+	// Podemos pintar trazas sobre el mapa dejando pulsado el ratón y moviéndolo sobre él
+	elements.block.on('mousedown', function(e){
+		e.preventDefault();
+		paintBlock($(this), object);
+		elements.block.on('mouseover', function(){
+			paintBlock($(this), object);
+		});
+	});
+	elements.block.on('mouseup', function(){
+		$('.block').off('mouseover');
+	});
+
+}
+
+
+
+function addEvents(){
+	addMenuEvents();
+	addGridEvents();
 }
 
 

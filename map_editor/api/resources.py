@@ -74,9 +74,10 @@ class MapResource(ModelResource):
 		queryset = Map.objects.all()
 		authorization = DjangoAuthorization()
 		authentication = BasicAuthentication()
-		include_resource_uri = False
+		include_resource_uri = True
 		filtering = {
 			'place': ALL_WITH_RELATIONS,
+			'id': ALL
 		}
 		always_return_data = True
 
@@ -93,7 +94,12 @@ class GridResource(ModelResource):
 		queryset = Grid.objects.all()
 		authorization = DjangoAuthorization()
 		authentication = BasicAuthentication()
-		include_resource_uri = False
+		include_resource_uri = True
+		always_return_data = True
+		filtering = {
+			'map': ALL_WITH_RELATIONS,
+			'id': ALL
+		}
 
 	def determine_format(self, request):
 		return 'application/json'
@@ -108,6 +114,10 @@ class PointResource(ModelResource):
 		authorization = DjangoAuthorization()
 		authentication = BasicAuthentication()
 		always_return_data = True
+		filtering = {
+			'grid': ALL_WITH_RELATIONS,
+			'object': ALL_WITH_RELATIONS,
+		}
 
 	def determine_format(self, request):
 		return 'application/json'
@@ -125,7 +135,8 @@ class ObjectResource(ModelResource):
 		always_return_data = True
 		filtering = {
 			'id': ALL,
-			'category': ALL_WITH_RELATIONS
+			'category': ALL_WITH_RELATIONS,
+			'points': ALL_WITH_RELATIONS
 		}
 
 	def determine_format(self, request):

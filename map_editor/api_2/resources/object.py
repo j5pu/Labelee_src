@@ -16,73 +16,63 @@ from django_web.utils.helpers import responseJSON
 import json
 import simplejson
 
-from map_editor.models import *
+from map_editor.models import Object
+from django.db.models import Sum
+
 from map_editor.forms import *
 
 from django_web.utils import *
 
 
-def img(request, pk):
+
+def read_from_grid(request, grid_id):
 	"""
-	Web service para manejar la imágen de un object:
-
-		- Subir imágen: POST > /api-2/object/16/img
-		- Eliminar imágen: DELETE > api-2/object/16/img
+	/api-2/object/grid/1
+	
+	xej para obtener la lista de objetos que pertenecen al grid con id=1: 
+		/api-2/object/points__grid__id=1
 	"""
-	if request.method == 'POST':
-		return upload_img(request, pk)
-	elif request.method == 'DELETE':
-		return delete_img(pk)
-
-
-def upload_img(request, pk):
-	"""
-	Sube la imágen del object_type.
-
-	Si ya hay una imágen ésta se elimina
-
-		POST -> /api-2/object-type/16/img
-	"""
-
-	# Controlador para poder subir una imágen a un recurso 'object_type'
-
-	file_content = ContentFile(request.FILES['img'].read())
-
-	# POST['id'] proviene del <input type=hidden name="id"..
-	object_type = ObjectType.objects.get(id=pk)
-
-	if object_type.img:
-		delete_img(pk)
-
-	object_type.img.save(request.FILES['img'].name, file_content)
-	obj = object_type.save()
-
-	print simplejson.dumps(obj)
-
-	# respuesta en el iframe
-	data = {
-		'form': 'object_type',
-		'obj': obj
-	}
-	return responseJSON(data=data)
-	# return HttpResponse('<span>object_type</span> uploaded!')
-
-
-def delete_img(pk):
-	"""
-	Elimina la imágen del object_type
-
-		DELETE -> /api-2/object-type/16/img
-	"""
-	print 'hola mamaaaaa'
-	print pk
-	obj_type = ObjectType.objects.get(id=pk)
-	# You have to prepare what you need before delete the model
-	storage, path = obj_type.img.storage, obj_type.img.path
-	# Delete the model before the file
-	# super(ObjectType, self).delete(*args, **kwargs)
-	# # Delete the file after the model
-	# print path
-	storage.delete(path)
-
-	return responseJSON(data={'id': pk})
+	# ["point", "object", ..] --> ["object", "point", ..]
+	# related_resources = related_resources.split("/")[:-1].reverse()
+		
+	#arr = filter_query.split('=')
+	#kwargs = {
+	#	arr[0] : arr[1]
+	#}
+		
+	# Object.objects.filter(points__grid__id=4).values('name').annotate(total=Sum('name'))
+	# objs = [
+	# 	{
+	#		"total": 6, 
+	#		"category_id": 1, 
+	#		"id": 1, 
+	#		"img": "img/objects/builders/wall.png", 
+	#		"name": "wall"
+	#	},
+	#	...
+	# ]
+	objs = Object.objects.filter(points__grid__id=grid_id).values().annotate(total=Sum('id'))
+		
+	ret = {}
+	# ret = {
+	#	'api/v1/object/1': {
+	#		category_id: 1
+	#		category_name: builder
+	#		id: 1
+	#		img: "img/objects/builders/wall.png"
+	#		name: "wall"
+	#		total: 6
+	#		resource_uri: api/v1/object/1
+	#		from_db: True
+	# 	}
+	# }
+	for obj in objs:
+		obj['img'] = '/media/' + obj['img']
+		obj['category_name'] = ObjectCategory.objects.get(id=obj['category_id']).name
+		resource_uri = '/api/v1/object/' + str(obj['id']) + '/'
+		obj['resource_uri'] = resource_uri
+		obj['from_db'] = True
+		
+		ret[resource_uri] = obj
+				
+	return HttpResponse(simplejson.dumps(ret));

@@ -36,7 +36,7 @@ class Map(models.Model):
 	
 	def delete(self, *args, **kwargs):
 		"""
-		Sobreescribimos el método delete() para también eliminar la imágen de la categoría
+		Sobreescribimos el método delete() para también eliminar la imágen del mapa
 		"""
 		# You have to prepare what you need before delete the model
 		storage, path = self.img.storage, self.img.path
@@ -112,9 +112,9 @@ class Object(models.Model):
 
 
 class Point(models.Model):
-	description = models.CharField(max_length=200, unique=True, blank=False)
-	x_coord = models.PositiveIntegerField()
-	y_coord = models.PositiveIntegerField()
+	description = models.CharField(max_length=200, null=True, blank=True)
+	row = models.PositiveIntegerField()
+	col = models.PositiveIntegerField()
 	object = models.ForeignKey(Object, related_name='points')
 	grid = models.ForeignKey(Grid, related_name='points')
 

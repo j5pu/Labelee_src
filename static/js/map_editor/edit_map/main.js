@@ -3,7 +3,7 @@
 // MAIN
 
 var map_img = new Image();
-var map_src;
+var map;
 
 //
 // Elementos del DOM
@@ -45,6 +45,7 @@ $(document).on('ready', function(){
 		// Sobre el grid
 		num_rows: $('input[name="num_rows"]'),
 		grid_name: $('input[name=grid_name]'),
+		toggle_border: $('input[name=toggle_border]'),
 		grid_selector: $('select[name=grid_selector]'),
 		block: null,
 		grid: $('#grid'),
@@ -53,9 +54,11 @@ $(document).on('ready', function(){
 		create_grid: $('button[name=create_grid]')
 	};
 
-
-	map_src = $('#map_src').text();
-	map_img.src = map_src;
+	map_resource = new Resource('map');
+	map = map_resource.read(map_id);
+	
+	// map_src = $('#map_src').text();
+	map_img.src = map.img;
 	// No hacemos nada mientras no esté la imágen del mapa cargada en el navegador
 	map_img.onload = function(){
 		main();
@@ -65,10 +68,12 @@ $(document).on('ready', function(){
 
 function main()
 {
-
-	loadMap();
+	
+	loadEmptyGrid();
 
 	showMenu();
+
+	addEvents();
 }
 
 
