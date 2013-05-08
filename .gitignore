@@ -168,8 +168,6 @@ pip-log.txt
 .tags_sorted_by_file
 
 
-#############
-## Sandboxes
-#############
-sandboxes/
-*.sandbox/
+af_log.txt
+
+static/

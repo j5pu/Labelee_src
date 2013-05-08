@@ -22,6 +22,9 @@
 
 {% csrf_token %}
 
+<!-- Por tema de compatibilidad con appfog -->
+{% load url from future %}
+
 <!-- Imagen del mapa -->
 <span id="map_src" style="display: none">{{ STATIC_URL }}img/map.jpg</span>
 
@@ -31,8 +34,9 @@
 <!-- MENU -->
 <div id="menu" >
 	
-	<a href="{% url 'map_editor.views.index' %}">Volver al menú</a>
+	<a href="{% url 'map_editor__index' %}">Volver al menú</a>
 	<input type="checkbox" name="toggle_border">Ver rejilla
+
 
 	<div class="box box-0">
 
@@ -59,6 +63,7 @@
 		</div>
 	</div>
 
+
 	<!-- CARGAR GRID -->
 	<div class="box box-0">
 
@@ -67,12 +72,16 @@
 
 		<select name="grid_selector"></select>
 
+        <button name="update_grid">
+            Editar grid
+        </button>
+
 		<button name="delete_grid">
 			Eliminar grid
 		</button>
 	</div>
 
-	<!-- SELECCIONAR OBJETOS -->
+	<!-- SELECCIONAR CATEGORÍA -> OBJETO -->
 	<div id="choose-object" class="box box-0">
 		<span class="title">Objetos:</span>
 		<br>
@@ -85,7 +94,9 @@
 				Categoría:
 				<br>
 				<select name="category"></select>
-				<a id="new_category" href=''>Nueva Categoría</a>
+				<a id="new_category" href=''>Nueva</a>
+				<a id="edit_category" href=''>Editar</a>
+				<a id="delete_category" href=''>Eliminar</a>
 			</div>
 
 			<div class="box box-2">

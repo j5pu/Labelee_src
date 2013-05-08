@@ -4,10 +4,10 @@
 
 function addPlace()
 {
-	var place_name = $('input[name=place]').val();
+	var place_name = $('input[name=enclosure]').val();
 
 	ajaxPostJSON(
-		'/map-editor/places/new',
+		'/map-editor/enclosures/new',
 		{'place_name': place_name},
 		function(data){
 
@@ -19,18 +19,18 @@ function addPlace()
 			// }
 			if(data.valid)
 			{
-				var template = $('#templates .place');
+				var template = $('#templates .enclosure');
 				var context = {'[[place.name]]': place_name};
 				var component = createComponent(template, context);
-				$('#places').prepend(component).show('slow');
+				$('#enclosures').prepend(component).show('slow');
 
 			}
 			else
-				showErrors($('#places'), data.errors);
+				showErrors($('#enclosures'), data.errors);
 		}
 		);
 
-	$('input[name=place]').val('');
+	$('input[name=enclosure]').val('');
 }
 
 

@@ -23,7 +23,7 @@ myApp.factory('UserService', function($rootScope) {
 
 function MyCtrl($scope) {
 
-    // u = new UserService2($scope, 'place');
+    // u = new UserService2($scope, 'enclosure');
 	// $scope.user = UserService2;
 
     // $scope.name = UserService.name;
@@ -34,7 +34,7 @@ function MyCtrl($scope) {
 
 // function ListCtrl($scope)
 // {
-//     $scope.places = ['place1', 'place2', 'place3'];
+//     $scope.enclosures = ['place1', 'place2', 'place3'];
 // }
 
 
@@ -80,7 +80,7 @@ function MyCtrl($scope) {
 //         deferred.resolve();
 //     }).error(function(data, status, headers, config) {
 //         // $scope.status = status;
-//         // $scope.errors = data.places;
+//         // $scope.errors = data.enclosures;
 // });
 
 // return deferred.promise;

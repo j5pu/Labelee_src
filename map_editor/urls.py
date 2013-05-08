@@ -1,14 +1,8 @@
-from django.conf.urls import patterns, url
-
-
+from django.conf.urls.defaults import *
+ 
+ 
 urlpatterns = patterns('map_editor.views',
-
-	url(r'^$', 'index'),
-
-	# places:
-
-	# url(r'^maps/(.*)$', 'maps', name='maps'),
-	url(r'^edit-map/(\d+)$', 'edit_map'),
-
-
+ 
+	url(r'^$', 'index', name='map_editor__index'),
+	url(r'^edit-map/(\d+)$', 'edit_map', name='map_editor__edit_map'),
 )

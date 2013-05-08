@@ -18,7 +18,7 @@
 	$(':submit').click(function(){
     var formData = new FormData($('form')[0]);
     $.ajax({
-        url: '/map-editor/maps/new',  //server script to process data
+        url: '/map-editor/floors/new',  //server script to process data
         type: 'POST',
         xhr: function() {  // custom xhr
             myXhr = $.ajaxSettings.xhr();

@@ -15,11 +15,11 @@ function ListCtrl($scope, $http, $parse) {
 				// $scope.data = data;
 				switch($scope.resource)
 				{
-					case 'place':
-						$scope.places = data.objects;
+					case 'enclosure':
+						$scope.enclosures = data.objects;
 						break;
 					case 'map':
-						$scope.maps = data.objects;
+						$scope.floors = data.objects;
 						break;
 				}
 				 // Show result from server in our <pre></pre> element
@@ -51,7 +51,7 @@ function ElementCtrl($scope, $http, $element, $q)
 		// http://docs.angularjs.org/api/ng.$q
 		var deferred = $q.defer();
 
-		$http.get('/api/v1/places/?name__iexact=' + $scope.place_name)
+		$http.get('/api/v1/enclosures/?name__iexact=' + $scope.place_name)
 			.success(function(data, status) {
 				deferred.resolve(data.objects[0]);
 		});
@@ -62,13 +62,13 @@ function ElementCtrl($scope, $http, $element, $q)
 
 	$scope.create = function()
 	{
-		$http.post('/api/v1/places/', {name: $scope.place_name})
+		$http.post('/api/v1/enclosures/', {name: $scope.place_name})
 			.success(function(data, status, headers, config) {
 
 				readCreatedPlace().then(function(place){
 					// Hasta que no se haya leído el nuevo lugar creado no podremos
-					// insertarlo en $scope.places y hacer lo demás..
-					$scope.places.push(place);
+					// insertarlo en $scope.enclosures y hacer lo demás..
+					$scope.enclosures.push(place);
 					$scope.alert.errors = false;
 					$scope.alert.success_msg = 'Lugar <b>' + $scope.place_name +
 						'</b> creado correctamente';
@@ -76,7 +76,7 @@ function ElementCtrl($scope, $http, $element, $q)
 				});
 			}).error(function(data, status, headers, config) {
 				// $scope.status = status;
-				$scope.errors = data.places;
+				$scope.errors = data.enclosures;
 		});
 	};
 
@@ -86,11 +86,11 @@ function ElementCtrl($scope, $http, $element, $q)
 		if($scope.editing)
 		{
 			$http.put(
-				'/api/v1/places/' + $scope.place.id,
+				'/api/v1/enclosures/' + $scope.enclosure.id,
 				{name: $scope.place_name}
 			).success(function(data, status) {
 
-				$scope.place.name = $scope.place_name;
+				$scope.enclosure.name = $scope.place_name;
 
 				// Avisamos que hemos dejado de editar..
 				$scope.editing = false;
@@ -105,9 +105,9 @@ function ElementCtrl($scope, $http, $element, $q)
 	{
 		if(confirm("¿Seguro que desea eliminar el lugar? (también se perderán todos sus mapas)"))
 		{
-			$http['delete']('/api/v1/places/' + $scope.place.id).success(function(){
+			$http['delete']('/api/v1/enclosures/' + $scope.enclosure.id).success(function(){
 
-				var idx = $scope.places.indexOf($scope.place);
+				var idx = $scope.enclosures.indexOf($scope.enclosure);
 				if (idx !== -1) {
 					//injected into repeater scope by fadey directive
 					this.del(function() {
@@ -123,8 +123,8 @@ function ElementCtrl($scope, $http, $element, $q)
 
 	$scope.validate = function()
 	{
-		var url = '/dynamic-validator/place/';
-		url += $scope.editing ? $scope.place.id : '';
+		var url = '/dynamic-validator/enclosure/';
+		url += $scope.editing ? $scope.enclosure.id : '';
 
 		$http.post(url, {name: $scope.place_name}
 		).success(function(data, status, headers, config) {
@@ -133,7 +133,7 @@ function ElementCtrl($scope, $http, $element, $q)
 			$scope.alert.success_msg = false;
 		}).error(function(data, status, headers, config) {
 			// $scope.status = status;
-			// $scope.errors = data.places;
+			// $scope.errors = data.enclosures;
 		});
 	};
 }

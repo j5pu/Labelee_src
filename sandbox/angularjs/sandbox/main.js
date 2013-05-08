@@ -30,11 +30,11 @@ function addEvents()
 {
 	// Lugares
 	$('#add_place').on('click', createPlace);
-	$('.place .icon-edit').on('click', updatePlace);
-	$('.place .icon-remove').on('click', deletePlace);
+	$('.enclosure .icon-edit').on('click', updatePlace);
+	$('.enclosure .icon-remove').on('click', deletePlace);
 
 	// Mapas
-	$('.maps button').on('click', createMap);
+	$('.floors button').on('click', createMap);
 	$('.map .icon-edit').on('click', updateMap);
 	$('.map .icon-remove').on('click', deleteMap);
 }
@@ -111,10 +111,10 @@ function createElement(template, context)
 	// el cual se reemplaza cada clave por su respectivo valor en el diccionario 'context'
 
 	// e.g.:
-	//		component = $('#templates #place')
+	//		component = $('#templates #enclosure')
 	//		values = {
-	//			'[[place.name]]': 'Matadero',
-	//			'[[place.owner]]': 'Fapencio'
+	//			'[[enclosure.name]]': 'Matadero',
+	//			'[[enclosure.owner]]': 'Fapencio'
 	//		}
 
 	var component = template.clone();
@@ -126,10 +126,10 @@ function createElement(template, context)
 
 
 	// Queremos sólo el hijo 'children()' del elemento de la plantilla..
-	// Por ejemplo, si la plantilla es #place:
+	// Por ejemplo, si la plantilla es #enclosure:
 	//
-	//		<div id="place">
-	//			<div class="place element-box" data-id="[[place.id]]">
+	//		<div id="enclosure">
+	//			<div class="enclosure element-box" data-id="[[enclosure.id]]">
 
 	return component.children();
 }
@@ -148,18 +148,18 @@ function toggleTextBox(element)
 		text_box_content = '<input type="text" name="place_name" ' +
 		'placeholder="Introd. nombre para el lugar"/>';
 
-		$('#places').prepend(text_box_content);
-		text_box = $('#places input[name=place_name]');
+		$('#enclosures').prepend(text_box_content);
+		text_box = $('#enclosures input[name=place_name]');
 	}
 	else if(id === 'add_map')
 	{
-		text_box_content = '<input type="text" name="map_name" ' +
+		text_box_content = '<input type="text" name="floor_name" ' +
 		'placeholder="Introd. nombre para el mapa"/>';
 
 		var place_block = element.parent();
 		place_block.prepend(text_box_content);
 
-		text_box = place_block.find('input[name=map_name]');
+		text_box = place_block.find('input[name=floor_name]');
 	}
 
 	text_box.hide();
@@ -177,8 +177,8 @@ function save(text_box)
 {
 	// Guardamos el contenido de text box en lugares o mapas según corresponda
 
-	// si es place o map
-	var text_box_type = text_box.attr('name') == 'place_name' ? 'place' : 'map';
+	// si es enclosure o map
+	var text_box_type = text_box.attr('name') == 'place_name' ? 'enclosure' : 'map';
 
 	// nombre nuevo mapa o lugar introducido
 	var text_box_value = text_box.val();
@@ -208,10 +208,10 @@ function save(text_box)
 
 function createPlace()
 {
-	var place_name = $('input[name=place]').val();
+	var place_name = $('input[name=enclosure]').val();
 
 	ajaxPostJSON(
-		'/map-editor/places/new',
+		'/map-editor/enclosures/new',
 		{'place_name': place_name},
 		function(result){
 
@@ -228,9 +228,9 @@ function createPlace()
 				};
 
 				addElement({
-					base_element: '#place',
+					base_element: '#enclosure',
 					context: context,
-					put_after: $('#places #place_form')
+					put_after: $('#enclosures #place_form')
 				});
 
 				// Si está el mensaje de error lo quitamos
@@ -241,11 +241,11 @@ function createPlace()
 				addEvents();
 			}
 			else
-				showErrors($('#places'), result.errors);
+				showErrors($('#enclosures'), result.errors);
 		}
 		);
 
-	$('input[name=place]').val('');
+	$('input[name=enclosure]').val('');
 }
 
 
@@ -261,7 +261,7 @@ function deletePlace()
 	var place = $(this).parents().eq(2);
 
 	ajaxPostJSON(
-		'/map-editor/places/delete',
+		'/map-editor/enclosures/delete',
 		{'place_id': place.data('id')},
 		function()
 		{
@@ -297,13 +297,13 @@ function createMap()
 {
 	var map_form = $(this).closest('.map_form');
 
-	var map_name = $(this).siblings('input[name="map_name"]').val();
-	var place_id = $(this).closest('.place').data('id');
+	var map_name = $(this).siblings('input[name="floor_name"]').val();
+	var place_id = $(this).closest('.enclosure').data('id');
 
 	ajaxPostJSON(
-		'/map-editor/maps/new',
+		'/map-editor/floors/new',
 		{
-			'map_name': map_name,
+			"floor_name": map_name,
 			'place_id': place_id
 		},
 		function(result){

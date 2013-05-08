@@ -1,18 +1,26 @@
-from django.conf.urls import patterns, url
+from django.conf.urls.defaults import *
 
 
 # /api-2/..
 
 urlpatterns = patterns('map_editor.api_2',
 
-	url(r'^place/(?P<pk>\d*)$', 'models.place'),
-	url(r'^map/(?P<pk>\d*)$', 'models.map'),
+# 	url(r'^place/(?P<pk>\d*)$', 'models.place'),
+# 	url(r'^map/(?P<pk>\d*)$', 'models.map'),
 
 	# /api-2/map/16/img
 	url(r'^(?P<resource>.*)/(?P<id>\d*)/img$', 'services.views.img'),
 	
 	# /api-2/object/grid/1
-	url(r'^object/grid/(?P<grid_id>\d+)$', 'resources.object.read_from_grid'),
+	url(r'^object/grid/(?P<grid_id>\d+)$', 'resources.label.read_from_grid'),
+	
+	url(r'^label/read-grouped', 'resources.label.read_grouped'),
+	
+	url(r'^point/create-from-list', 'resources.point.create_from_list'),
+	
+	url(r'^point/delete-from-list', 'resources.point.delete_from_list'),
+	
+
 	
 	
 	

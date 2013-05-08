@@ -1,14 +1,7 @@
 # -*- coding: utf8 -*-
 
-from map_editor.models import *
-from map_editor.forms import *
-
-from django_web.utils import *
-
 import services
-from django.http.response import HttpResponse
-import simplejson
-import json
+
 
 def img(request, resource, id):
 	"""

@@ -1,6 +1,6 @@
 
 
-// var r = new resource('place');
+// var r = new resource('enclosure');
 
 // r.getAll();
 
@@ -13,7 +13,7 @@ var resource = function(resource){
 
     this.create = function(data, callback){
 
-        // Por ejemplo una petición POST a '/api/v1/place'
+        // Por ejemplo una petición POST a '/api/v1/enclosure'
         // data = {name: 'matadero'}
         // myApp.run(function($http)
         // {

@@ -2,7 +2,7 @@
 // {
 // 	myApp.run(function getData($http)
 // 	{
-// 		return $http.get('/api/v1/place/').then(function(response){
+// 		return $http.get('/api/v1/enclosure/').then(function(response){
 // 			return response;
 // 		});
 // 	});
@@ -15,7 +15,7 @@
 // 	this.getAll = function(){
 // 		myApp.run(function($http)
 // 		{
-// 			return $http.get('/api/v1/place/').then(function(response){
+// 			return $http.get('/api/v1/enclosure/').then(function(response){
 // 				return response;
 // 			});
 // 		});
@@ -25,27 +25,27 @@
 
 
 
-// place_resource.readAll();
+// enclosure_resource.readAll();
 
 
 
 
 $(function(){
 
-	var place_resource = new resource('place');
+	var place_resource = new resource('enclosure');
 
-	// place_resource.read(80, function(response){
-	// 	place = response.data;
+	// enclosure_resource.read(80, function(response){
+	// 	enclosure = response.data;
 	// 	var j = 1;
 	// });
 
-	// place_resource.update(80, {name: 'matashawerXXX'}, function(){
+	// enclosure_resource.update(80, {name: 'matashawerXXX'}, function(){
 	// 	var x = response;
 	// 	var i = 1;
 	// });
 
 	// ajaxPutJSON(
- //        '/api/v1/place/80/',
+ //        '/api/v1/enclosure/80/',
  //        // {name: 'matashawerXXX'},
  //        '{"name": "matashawerXXX"}',
  //        function(){
@@ -53,10 +53,10 @@ $(function(){
  //        }
  //    );
 
-	// curl --dump-header - -H "Content-Type: application/json" -X PUT --data '{"name": "matashawerXXX"}' http://mnopi:1aragon1@localhost:8000/api/v1/place/80/
+	// curl --dump-header - -H "Content-Type: application/json" -X PUT --data '{"name": "matashawerXXX"}' http://mnopi:1aragon1@localhost:8000/api/v1/enclosure/80/
 
 	$.ajax({
-        url: '/api/v1/place/80/',
+        url: '/api/v1/enclosure/80/',
         type: 'PUT',
         data: '{"name": "mataXYY"}',
         headers: {'Content-Type': 'application/json'},

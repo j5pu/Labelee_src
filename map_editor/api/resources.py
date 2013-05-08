@@ -2,8 +2,8 @@
 
 from django.contrib.auth.models import User
 
-from tastypie.authorization import DjangoAuthorization
-from tastypie.authentication import BasicAuthentication
+from tastypie.authorization import DjangoAuthorization, Authorization
+from tastypie.authentication import BasicAuthentication, ApiKeyAuthentication
 from tastypie.paginator import Paginator
 # from tastypie.authorization import Authorization
 from tastypie.validation import FormValidation
@@ -18,7 +18,7 @@ from tastypie.resources import ModelResource, ALL, ALL_WITH_RELATIONS
 from tastypie import fields
 
 from map_editor.models import *
-from map_editor.forms import PlaceForm
+from map_editor.forms import EnclosureForm
 
 
 class UserResource(ModelResource):
@@ -39,17 +39,17 @@ class UserResource(ModelResource):
 		return 'application/json'
 
 
-class PlaceResource(ModelResource):
-	maps = fields.ToManyField('map_editor.api.resources.MapResource',
-		'maps', full=True, null=True)
+class EnclosureResource(ModelResource):
+	floors = fields.ToManyField('map_editor.api.resources.FloorResource',
+		'floors', null=True)
 
 	class Meta:
 		# resource_name = 'places'
-		queryset = Place.objects.all()
+		queryset = Enclosure.objects.all()
 		include_resource_uri = True
 		authorization = DjangoAuthorization()
 		authentication = BasicAuthentication()
-		validation = FormValidation(form_class=PlaceForm)
+# 		validation = FormValidation(form_class=EnclosureForm)
 		filtering = {
 			'name': ALL,
 			'id': ALL
@@ -63,73 +63,54 @@ class PlaceResource(ModelResource):
 		return 'application/json'
 
 
-class MapResource(ModelResource):
-	grids = fields.ToManyField('map_editor.api.resources.GridResource',
-		'grids', full=True, null=True)
-	place = fields.ToOneField(PlaceResource, 'place')
+class FloorResource(ModelResource):
+	enclosure = fields.ToOneField(EnclosureResource, 'enclosure')
 	
-	# place = fields.ForeignKey(PlaceResource, 'place')
+	# place = fields.ForeignKey(EnclosureResource, 'place')
 
 	class Meta:
-		queryset = Map.objects.all()
+		queryset = Floor.objects.all()
 		authorization = DjangoAuthorization()
 		authentication = BasicAuthentication()
 		include_resource_uri = True
 		filtering = {
-			'place': ALL_WITH_RELATIONS,
+			'enclosure': ALL_WITH_RELATIONS,
 			'id': ALL
 		}
 		always_return_data = True
-
-	def determine_format(self, request):
-		return 'application/json'
-
-
-class GridResource(ModelResource):
-	points = fields.ToManyField('map_editor.api.resources.PointResource',
-		'points', full=True, null=True)
-	map = fields.ToOneField(MapResource, 'map')
-
-	class Meta:
-		queryset = Grid.objects.all()
-		authorization = DjangoAuthorization()
-		authentication = BasicAuthentication()
-		include_resource_uri = True
-		always_return_data = True
-		filtering = {
-			'map': ALL_WITH_RELATIONS,
-			'id': ALL
-		}
 
 	def determine_format(self, request):
 		return 'application/json'
 
 
 class PointResource(ModelResource):
-	grid = fields.ToOneField(GridResource, 'grid')
-	object = fields.ToOneField('map_editor.api.resources.ObjectResource', 'object')
+	floor = fields.ToOneField(FloorResource, 'floor')
+	label = fields.ToOneField('map_editor.api.resources.LabelResource', 'label')
 
 	class Meta:
 		queryset = Point.objects.all()
 		authorization = DjangoAuthorization()
 		authentication = BasicAuthentication()
+		# usando apikey:
+		# authentication = ApiKeyAuthentication()
 		always_return_data = True
 		filtering = {
-			'grid': ALL_WITH_RELATIONS,
+			'floor': ALL_WITH_RELATIONS,
 			'object': ALL_WITH_RELATIONS,
+			'id': ALL
 		}
+		max_limit = 50000
 
 	def determine_format(self, request):
 		return 'application/json'
 
 
-class ObjectResource(ModelResource):
-	category = fields.ToOneField('map_editor.api.resources.ObjectCategoryResource', 'category')
-	points = fields.ToManyField('map_editor.api.resources.PointResource',
-		'points', full=True, null=True)
+class LabelResource(ModelResource):
+	category = fields.ToOneField('map_editor.api.resources.LabelCategoryResource', 'category')
+	points = fields.ToManyField('map_editor.api.resources.PointResource', 'points', null=True)
 
 	class Meta:
-		queryset = Object.objects.all()
+		queryset = Label.objects.all()
 		authorization = DjangoAuthorization()
 		authentication = BasicAuthentication()
 		always_return_data = True
@@ -143,19 +124,19 @@ class ObjectResource(ModelResource):
 		return 'application/json'
 
 
-class ObjectCategoryResource(ModelResource):
-	objects = fields.ToManyField('map_editor.api.resources.ObjectResource',
-		'_objects_', full=True, null=True)
+class LabelCategoryResource(ModelResource):
+	labels = fields.ToManyField('map_editor.api.resources.LabelResource', 'labels', null=True)
 
 	class Meta:
-		resource_name = 'object-category'
-		queryset = ObjectCategory.objects.all()
+		resource_name = 'label-category'
+		queryset = LabelCategory.objects.all()
 		authorization = DjangoAuthorization()
 		authentication = BasicAuthentication()
 		always_return_data = True
 		filtering = {
 			'id': ALL,
-			'name': ALL
+			'name': ALL,
+			'labels': ALL_WITH_RELATIONS,
 		}
 
 	def determine_format(self, request):

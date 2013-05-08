@@ -2,24 +2,22 @@
 
 from django.core.files.base import ContentFile
 
-from django_web.utils.helpers import responseJSON
+from utils.helpers import *
 
 from map_editor.models import *
 from map_editor.forms import *
 
-from django_web.utils.helpers import *
 
-
-from classes_factory import CLASSES
+from factory import CLASSES
 
 class ImgService:
 	"""
 	Helper para construir web services que manipulen la imágen de un recurso dado:
 		/api-2/[resource]/[id]/img
 
-	Por ejemplo, para el recurso 'map' con id=16:
-		- Subir imágen: POST > /api-2/map/16/img
-		- Eliminar imágen: DELETE > api-2/map/16/img
+	Por ejemplo, para el recurso 'floor' con id=16:
+		- Subir imágen para la planta: 	POST > /api-2/floor/16/img
+		- Eliminar imágen: 				DELETE > api-2/floor/16/img
 	"""
 
 	def __init__(self, request, resource, id):
@@ -34,7 +32,7 @@ class ImgService:
 		"""
 		file_content = ContentFile(self.request.FILES['img'].read())
 
-		# Xej map: resource_obj = Map.objects.get(id=self.id)
+		# Xej floor: resource_obj = Floor.objects.get(id=self.id)
 		resource_obj = self.resource_class.objects.get(id=self.id)
 
 		# Se elimina la imágen que el recurso tenía antes
@@ -57,9 +55,9 @@ class ImgService:
 		"""
 		Elimina la imágen para el recurso
 		"""
-		obj_type = self.resource_class.objects.get(id=self.id)
+		obj = self.resource_class.objects.get(id=self.id)
 		# You have to prepare what you need before delete the model
-		storage, path = obj_type.img.storage, obj_type.img.path
+		storage, path = obj.img.storage, obj.img.path
 		# Delete the model before the file
 		# super(ObjectType, self).delete(*args, **kwargs)
 		# # Delete the file after the model

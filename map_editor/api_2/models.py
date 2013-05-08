@@ -11,7 +11,7 @@ from django.http import HttpResponseRedirect
 from django.core.files.base import ContentFile
 
 
-from django_web.utils.helpers import responseJSON
+from utils.helpers import responseJSON
 
 import json
 import simplejson
@@ -19,7 +19,7 @@ import simplejson
 from map_editor.models import *
 from map_editor.forms import *
 
-from django_web.utils import *
+from utils import *
 
 
 def place(request, operation):
@@ -29,11 +29,11 @@ def place(request, operation):
 		* delete -> elimina lugar de la BD
 	"""
 	# return HttpResponse('index view..')
-	# matadero = Place(name='Matadero')
+	# matadero = Enclosure(name='Matadero')
 	# matadero.save()
 
 	if operation == 'new':
-		form = PlaceForm({'name': request.POST['place_name']})
+		form = EnclosureForm({'name': request.POST['place_name']})
 		if form.is_valid():
 			place = form.save()
 			# print place.id
@@ -42,7 +42,7 @@ def place(request, operation):
 			return responseJSON(errors=form.errors)
 
 	elif operation == 'delete':
-		place = Place.objects.get(id=request.POST['place_id'])
+		place = Enclosure.objects.get(id=request.POST['place_id'])
 
 		# eliminamos todos los mapas relativos a ese lugar, incluídas sus imágenes
 		maps = place.map_set.all()
@@ -54,7 +54,7 @@ def place(request, operation):
 		return responseJSON()
 
 	elif not operation:
-		places = Place.get_all()
+		places = Enclosure.get_all()
 		return HttpResponse(json.dumps(places), content_type="application/json")
 
 	return HttpResponse('places..')
@@ -67,10 +67,10 @@ def map(request, operation):
 		# Si la petición es AJAX creo un mapa sin imágen
 		if request.is_ajax():
 			map_name = request.POST['map_name']
-			form = MapForm({'name': map_name})
+			form = FloorForm({'name': map_name})
 			if form.is_valid:
-				place = Place.objects.get(id=request.POST['place_id'])
-				map = Map(name=map_name, place=place)
+				place = Enclosure.objects.get(id=request.POST['place_id'])
+				map = Floor(name=map_name, place=place)
 				map.add_default_img()
 				map.save()
 				print map.name
@@ -99,10 +99,10 @@ def objectType(request, operation):
 		# Si la petición es AJAX creo un mapa sin imágen
 		if request.is_ajax():
 			map_name = request.POST['map_name']
-			form = MapForm({'name': map_name})
+			form = FloorForm({'name': map_name})
 			if form.is_valid:
-				place = Place.objects.get(id=request.POST['place_id'])
-				map = Map(name=map_name, place=place)
+				place = Enclosure.objects.get(id=request.POST['place_id'])
+				map = Floor(name=map_name, place=place)
 				map.add_default_img()
 				map.save()
 				print map.name
@@ -131,10 +131,10 @@ def object(request, operation):
 		# Si la petición es AJAX creo un mapa sin imágen
 		if request.is_ajax():
 			map_name = request.POST['map_name']
-			form = MapForm({'name': map_name})
+			form = FloorForm({'name': map_name})
 			if form.is_valid:
-				place = Place.objects.get(id=request.POST['place_id'])
-				map = Map(name=map_name, place=place)
+				place = Enclosure.objects.get(id=request.POST['place_id'])
+				map = Floor(name=map_name, place=place)
 				map.add_default_img()
 				map.save()
 				print map.name
@@ -177,23 +177,23 @@ def dynamic_validator(request, resource, pk=None):
 	lugares que coincidan con esa misma pk
 
 
-	Es importante que al pasar el objeto 'obj' a PlaceForm éste tenga en sus claves (keys)
-	los mismos nombres que para los atributos del modelo Place (creado en models.py).
+	Es importante que al pasar el objeto 'obj' a EnclosureForm éste tenga en sus claves (keys)
+	los mismos nombres que para los atributos del modelo Enclosure (creado en models.py).
 	Al caso, si se trata del nombre del lugar, que sea la clave también sea 'name:'
 	"""
 	obj = simplejson.loads(request.body)
 
 	if pk:
-		place = get_object_or_404(Place, pk=pk)
-		form = PlaceForm(obj, instance=place)
+		place = get_object_or_404(Enclosure, pk=pk)
+		form = EnclosureForm(obj, instance=place)
 	else:
-		form = PlaceForm(obj)
+		form = EnclosureForm(obj)
 
 	# 	# obj['pk'] = pk
 	# 	# print obj
-	# 	others = Place.objects.filter(name=obj['name']).exclude(pk=pk)
-	# 	# others = Place.objects.filter(name=obj['name'])
-	# 	# others = Place.objects.filter(name=obj['name']).exclude(name='matadero')
+	# 	others = Enclosure.objects.filter(name=obj['name']).exclude(pk=pk)
+	# 	# others = Enclosure.objects.filter(name=obj['name'])
+	# 	# others = Enclosure.objects.filter(name=obj['name']).exclude(name='matadero')
 	# 	# print others
 	# 	form.fields['name'].queryset = others
 
