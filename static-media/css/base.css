@@ -1,0 +1,33 @@
+@font-face
+{
+	font-family: 'Labelee';
+	src: url('/static/fonts/harabara-webfont.eot');
+	src: url('/static/fonts/harabara-webfont.eot?#iefix') format('embedded-opentype'),
+	     url('/static/fonts/harabara-webfont.woff') format('woff'),
+	     url('/static/fonts/harabara-webfont.ttf') format('truetype'),
+	     url('/static/fonts/harabara-webfont.svg#webfont') format('svg');
+}
+
+body
+{
+	margin-top: 50px;
+	text-align: center;
+}
+
+h1
+{
+	font-family: 'Labelee';
+}
+
+#ajax_loading
+{
+	display: none;
+}
+
+
+
+
+/*.button1
+{
+
+}*/

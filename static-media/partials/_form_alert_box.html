@@ -1,0 +1,71 @@
+
+<!--
+
+	Plantilla para AngularJS que muestra un cuadro de alerta (alert box) tras
+	enviar datos de un formulario.
+
+	- Tipos de alerta:
+		* alert.errors: lista de errores al enviar un formulario.
+		* alert.success_msg: aviso de que la información se ha enviado correctamente.
+
+	- Llamada a la plantilla:
+		<div ng-include src="'_/form_alert_box.html'"></div>
+
+	- Estructura de la variable 'info' que usa la plantilla, la cual la tenemos
+	  'bindada' a $scope.info del controlador:
+		alert = {
+			errors = {
+				name: ['Ya existe Place con este Name.'],
+		        email: ['El email no está bien escrito']
+		        ...
+			},
+
+			success_msg = "El lugar <b>Matadero</b> se creó correctamente";
+		}
+
+	- Ejemplo de salida para la lista de errores:
+		 <ul>
+	    	<li class="error">
+		    	<span class="field">name:</span>
+				<ul>
+					<li>Ya existe Place con este Name</li>
+				</ul>
+			</li>
+			<li class="error">
+		    	<span class="field">email:</span>
+				<ul>
+					<li>El email no está bien escrito</li>
+				</ul>
+			</li>
+		</ul>
+
+-->
+
+<!-- <script id="_/form_alert_box.html" type="text/ng-template"> -->
+
+	<div ng-show="alert.errors" class="alert alert-error">
+	    <a class="close" data-dismiss="alert">×</a>
+	    <ul>
+	    	<li class="error" ng-repeat="(name, msgs) in alert.errors">
+		    	<span class="field">[[name]]:</span>
+				<ul>
+					<li ng-repeat="msg in msgs">[[msg]]</li>
+				</ul>
+			</li>
+		</ul>
+	</div>
+	
+
+	<div ng-show="alert.success_msg" class="alert alert-success">
+	    <a class="close" data-dismiss="alert">×</a>
+
+	    <!--
+	    Para poder incluir código HTML desde la variable 'alert.success_msg' debemos:
+
+	    	1. Incluir el .js de la dependencia 'angular-sanitize.min.js'
+	    	2. Añadir la dependencia a nuestro módulo angularjs:
+	    		var myApp = angular.module('myApp', ['ngSanitize'], ...
+		-->
+	    <div ng-bind-html="alert.success_msg"></div>
+	</div>
+<!-- </script> -->
