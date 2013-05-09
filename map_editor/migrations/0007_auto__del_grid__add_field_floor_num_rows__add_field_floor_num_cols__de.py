@@ -13,12 +13,12 @@ class Migration(SchemaMigration):
 
         # Adding field 'Floor.num_rows'
         db.add_column(u'map_editor_floor', 'num_rows',
-                      self.gf('django.db.models.fields.PositiveIntegerField')(default=0),
+                      self.gf('django.db.models.fields.PositiveIntegerField')(default=1000),
                       keep_default=False)
 
         # Adding field 'Floor.num_cols'
         db.add_column(u'map_editor_floor', 'num_cols',
-                      self.gf('django.db.models.fields.PositiveIntegerField')(default=0),
+                      self.gf('django.db.models.fields.PositiveIntegerField')(default=1000),
                       keep_default=False)
 
         # Deleting field 'Point.grid'
@@ -26,7 +26,7 @@ class Migration(SchemaMigration):
 
         # Adding field 'Point.floor'
         db.add_column(u'map_editor_point', 'floor',
-                      self.gf('django.db.models.fields.related.ForeignKey')(default=0, related_name='points', to=orm['map_editor.Floor']),
+                      self.gf('django.db.models.fields.related.ForeignKey')(default=1000, related_name='points', to=orm['map_editor.Floor']),
                       keep_default=False)
 
 
@@ -49,7 +49,7 @@ class Migration(SchemaMigration):
 
         # Adding field 'Point.grid'
         db.add_column(u'map_editor_point', 'grid',
-                      self.gf('django.db.models.fields.related.ForeignKey')(default=0, related_name='points', to=orm['map_editor.Grid']),
+                      self.gf('django.db.models.fields.related.ForeignKey')(default=1000, related_name='points', to=orm['map_editor.Grid']),
                       keep_default=False)
 
         # Deleting field 'Point.floor'

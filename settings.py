@@ -60,12 +60,16 @@ STATIC_ROOT = os.path.join(PROJECT_ROOT, 'static')
 # Example: "http://media.lawrence.com/static/"
 STATIC_URL = '/static/'
 
+PARTIALS_URL = STATIC_URL + 'partials/'
+
 # Additional locations of static files
 STATICFILES_DIRS = (
     # Put strings here, like "/home/html/static" or "C:/www/django/static".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
     os.path.join(PROJECT_ROOT, 'static-media'),
+
+    os.path.join(PROJECT_ROOT, 'sandbox'),
 )
 
 # List of finder classes that know how to find static files in
@@ -181,17 +185,39 @@ if 'VCAP_SERVICES' in os.environ:
 #     De momento dejamos el debugger activo (DEBUG=True)..
 #     DEBUG = TEMPLATE_DEBUG = False
 
+    # print os.environ['VCAP_SERVICES']
+
 else:
+    # DATABASES = {
+    #     "default": {
+    #         "ENGINE": "django.db.backends.mysql",
+    #         "NAME": "db6ce67ef80534c99820cbe0c4d3370c8",
+    #         "USER": "u9MqeM0rqx6Ai",
+    #         "PASSWORD": "pHirV24N1fsHU",
+    #         "HOST": "127.0.0.1",
+    #         "PORT": "10001",
+    #     }
+    # }
     DATABASES = {
         "default": {
-            "ENGINE": "django.db.backends.sqlite3",
-            "NAME": "dev.db",
-            "USER": "",
+            "ENGINE": "django.db.backends.mysql",
+            "NAME": "labelee_dev",
+            "USER": "root",
             "PASSWORD": "",
-            "HOST": "",
-            "PORT": "",
+            "HOST": "192.168.1.192",
+            "PORT": "3306",
             }
-        }
+    }
+    # DATABASES = {
+    #     "default": {
+    #         "ENGINE": "django.db.backends.sqlite3",
+    #         "NAME": "dev.db",
+    #         "USER": "",
+    #         "PASSWORD": "",
+    #         "HOST": "",
+    #         "PORT": "",
+    #         }
+    #     }
     
 #     Estas aplicaciones sólo se usarán en desarrollo..
     INSTALLED_APPS += ('south', 'sandbox',)

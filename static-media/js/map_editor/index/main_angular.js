@@ -4,10 +4,8 @@ $(function() {
 });
 
 
-function EnclosuresCtrl($scope, PartialService)
+function EnclosuresCtrl($scope)
 {
-	new PartialService();
-
 	$scope.enclosure_resource = new Resource('enclosure');
 
 	$scope.enclosures = $scope.enclosure_resource.readAll();

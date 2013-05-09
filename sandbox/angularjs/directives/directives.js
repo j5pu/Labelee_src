@@ -118,6 +118,9 @@ myApp.directive('profile', function(){
 });
 
 
+//<zippy title="[[greeting]]">
+//    Hello [[name]]!
+//</zippy>
 myApp.directive('zippy', function(){
     return {
         restrict: 'E',

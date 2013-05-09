@@ -58,7 +58,7 @@ class Migration(SchemaMigration):
 
         # Adding field 'Point.label'
         db.add_column(u'map_editor_point', 'label',
-                      self.gf('django.db.models.fields.related.ForeignKey')(default=0, related_name='points', to=orm['map_editor.Label']),
+                      self.gf('django.db.models.fields.related.ForeignKey')(default=1000, related_name='points', to=orm['map_editor.Label']),
                       keep_default=False)
 
 

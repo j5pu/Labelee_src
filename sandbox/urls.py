@@ -1,4 +1,4 @@
-from django.conf.urls import patterns, url
+from django.conf.urls.defaults import *
 
 # /sandbox/..
 
@@ -11,4 +11,9 @@ urlpatterns = patterns('sandbox.views',
 	url(r'^angular/services$', 'ng_services'),
 
 	url(r'^angular/test$', 'test'),
+
+	url(r'^angular/directives$', 'directives'),
+
+	url(r'^vcap-info$', 'show_vinfo'),
+
 )

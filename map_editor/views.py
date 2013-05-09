@@ -3,9 +3,15 @@
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 
+import settings
+
 
 def index(request):
-	return render_to_response('map_editor/index.html', context_instance=RequestContext(request))
+    ctx = {
+        '_enclosure': settings.STATIC_URL + 'partials/_editable_enclosure.html'
+    }
+
+    return render_to_response('map_editor/index.html', ctx, context_instance=RequestContext(request))
 
 
 def edit_map(request, pk):

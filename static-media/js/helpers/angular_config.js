@@ -20,7 +20,7 @@ var myApp = angular.module('myApp', ['ngSanitize'],
 // SERVICIOS
 //
 
-myApp.factory('PartialsService', function($rootScope) {
+/*myApp.factory('PartialsService', function($rootScope) {
 
 	// Servicio a aplicar en los controladores donde se quiera hacer referencia
 	// a alguna plantilla usando ng-include
@@ -31,47 +31,51 @@ myApp.factory('PartialsService', function($rootScope) {
 	$rootScope._editable_enclosure = PARTIALS_PATH + '_editable_enclosure.html';
 	$rootScope._editable_floor = PARTIALS_PATH + '_editable_floor.html';
 	$rootScope._uploading_iframe = PARTIALS_PATH + '_uploading_iframe.html';
+});*/
+
+
+//
+//DIRECTIVAS
+//
+
+//<include src="{{ STATIC_URL }}partials/_editable_enclosure.html">
+myApp.directive('include', function($parse){
+    return {
+        restrict: 'E',
+        scope: {src: '@'},
+        // En este caso fabricamos la plantilla como un string concatenado..
+        template:
+            '<div ng-include src="src"></div>',
+        link: function(scope, element, attrs){
+            scope = scope.$parent.$parent;
+
+            var a = scope.enclosure.name;
+//            scope.floor = scope.$parent.$parent.floor;
+        }
+    };
 });
 
 
-myApp.factory('ListService', function($http) {
+myApp.directive('zippy', function(){
+    return {
+        restrict: 'E',
+        // Esto hace que el contenido Hello [[name]]! vaya a parar donde incluyamos
+        // la directiva ng-transclude, en este caso en el body de nuestra plantilla
+        transclude: true,
+        scope: {title: '@title'},
+        // En este caso fabricamos la plantilla como un string concatenado..
+        template:
+            '<div class="zippy {{state}}">' +
+                '<div class="title" ng-click="toggle()">{{title}}</div>' +
+                '<div class="body" ng-transclude></div>' +
+                '</div>'
 
-	// Devuelve la lista de elementos para un recurso dado
-	return {
-
-		readAll: function(resource, list){
-
-			// Trae toda la lista de elementos de un recurso dado y
-			// la pasa al scope, por ejemplo:
-			//
-			//		resource = 'enclosure'
-			//		list = $scope.enclosures
-
-			$http.get('/api/v1/' + resource)
-				.success(function(data, status) {
-					// $scope.status = status;
-					// $scope.data = data;
-					list = data.objects;
-			});
-		}
-	};
+//        link: function(scope, element, attrs){
+//            scope.leak = 'LEAKING';
+//            scope.state = 'opened';
+//            scope.toogle = function(){
+//                scope.state = scope.state == 'opened' ? 'closed' : 'opened';
+//            };
+//        }
+    };
 });
-
-
-
-function getCookie(name) {
-	var cookieValue = null;
-	if (document.cookie && document.cookie !== '') {
-		var cookies = document.cookie.split(';');
-		for (var i = 0; i < cookies.length; i++) {
-			var cookie = jQuery.trim(cookies[i]);
-			// Does this cookie string begin with the name we want?
-			if (cookie.substring(0, name.length + 1) === (name + '=')) {
-				cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-				break;
-			}
-		}
-	}
-
-	return cookieValue;
-}
