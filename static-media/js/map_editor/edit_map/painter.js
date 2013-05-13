@@ -24,11 +24,11 @@ var Painter = {
     paintTrace: function()
     {
         // POR TERMINAR DE IMPLEMENTAR
-        painting_trace = true;  // indicamos que se está pintando una traza
-        // stroke = [];  // traza de momento vacía
-        // cada vez que se pase el ratón sobre un bloque se dibujará este y se guarda
-        // en el array 'stroke' junto con los demás que forman la traza
-        elements.block.on('mouseover', paintBlock);
+//        painting_trace = true;  // indicamos que se está pintando una traza
+//        // stroke = [];  // traza de momento vacía
+//        // cada vez que se pase el ratón sobre un bloque se dibujará este y se guarda
+//        // en el array 'stroke' junto con los demás que forman la traza
+//        elements.block.on('mouseover', paintBlock);
 
         // paint_actions.push(stroke);
     },
@@ -78,7 +78,7 @@ var Painter = {
         if(Floor.loading)
         {
             block.attr('data-from-db', 'y');
-            block.attr('data-point-id', Painter.label.id);
+            block.attr('data-point-id', Painter.point_id);
 
             // Dejamos el bloque como pintado
             block.attr('data-label', Painter.label.resource_uri);

@@ -182,7 +182,7 @@ var Floor = {
 
         // Obtenemos todas las etiquetas que contiene la planta a cargar, y así evitar
         // llamar a BD cada vez que queramos pedir la etiqueta de cada punto
-        var saved_labels = new LabelResource().readFromFloor(Floor.data.id)
+        var saved_labels = new LabelResource().readFromFloor(Floor.data.id);
 
         for(var i in points)
         {
@@ -190,10 +190,10 @@ var Floor = {
             var block = $e.floor.grid.find('.row[data-row="' + point.row + '"]')
                 .find('.block[data-col="' + point.col + '"]');
 
-            Painter.label = saved_labels[point.object];
-            point_id = point.id;
+            Painter.label = saved_labels[point.label];
+            Painter.point_id = point.id;
 
-            Painter.paintLabel(block, Floor.label);
+            Painter.paintLabel(block);
         }
     },
 
