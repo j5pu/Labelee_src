@@ -1,10 +1,9 @@
 $(function() {
 
-//    alert('hola carajo');
 });
 
 
-function EnclosuresCtrl($scope)
+function EnclosuresCtrl($scope, UrlService)
 {
 	$scope.enclosure_resource = new Resource('enclosure');
 

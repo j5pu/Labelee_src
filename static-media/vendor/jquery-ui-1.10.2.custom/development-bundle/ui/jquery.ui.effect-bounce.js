@@ -46,7 +46,7 @@ $.effects.effect.bounce = function( o, done ) {
 		props.push( "opacity" );
 	}
 
-	$.effects.save( el, props );
+	$.effects.update( el, props );
 	el.show();
 	$.effects.createWrapper( el ); // Create Wrapper
 

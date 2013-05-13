@@ -23,7 +23,7 @@
 
         <!--PARA AGREGAR LUGAR -->
         <form>
-            <div ng-include src="{{ STATIC_URL }}partials/_form_alert_box.html"></div>
+            {#            <div ng-include src="{{ STATIC_URL }}partials/_form_alert_box.html"></div>#}
 
             <input type="text"
                    ng-model="enclosure_name"
@@ -39,11 +39,40 @@
              ng-repeat="enclosure in enclosures"
              ng-controller="EnclosureCtrl">
 
-            <include src="{{ STATIC_URL }}partials/_editable_enclosure.html">
+            <!--<include src="{{ STATIC_URL }}partials/_enclosure.html"></include>-->
 
-            <!--MAPAS PARA EL LUGAR-->
+            <div class="editable_element">
+                <div ng-hide="editing">
+                    <h3>[[enclosure.name]]</h3>
+
+                    <div class="action_box">
+                        <i class="icon-edit" ng-click="update()"></i>
+                        <i class="icon-remove" ng-click="del()"></i>
+                    </div>
+                </div>
+                <div ng-show="editing">
+                    <form>
+                        <input type="text"
+                               ng-init="enclosure_name=enclosure.name"
+                               ng-model="enclosure_name"
+                               ng-change="validate()"
+                               placeholder="Nuevo nombre para el recinto.."
+                               autofocus>
+                        <button ng-click="update()">Editar</button>
+                    </form>
+                    <div class="action_box">
+                        <i class="icon-remove"
+                           ng-click="del('¿Seguro que desea eliminar el recinto [[enclosure_name]]? (se perderá toda su información)')">
+                        </i>
+                    </div>
+                </div>
+            </div>
+
+
+            <!--PLANTAS PARA EL RECINTO-->
             <div class="floors box box-2" ng-controller="FloorsCtrl">
-                <!--PARA AGREGAR MAPA-->
+                <!--PARA AGREGAR PLANTA-->
+                <h4>Nueva planta:</h4>
                 <form action=""
                       method="post"
                       enctype="multipart/form-data"
@@ -63,10 +92,9 @@
                     <div class="ajax_gif" ng-show="sending_img">
                         <img src="{{ STATIC_URL }}img/ajax-loader.gif">
                     </div>
-
                 </form>
 
-                <h4 ng-show="enclosure.floors">Mapas:</h4>
+                <h4 ng-show="floors">Plantas:</h4>
 
                 <!--CADA PLANTA-->
                 <div class="floor"
@@ -74,7 +102,51 @@
                      ng-repeat="floor in floors"
                      ng-controller="FloorCtrl">
 
-                    <include src="{{ STATIC_URL }}partials/_editable_floor.html">
+                    <div class="editable_element">
+                        <div ng-hide="editing">
+                            <h3>
+                                <a href="[[urls.map_editor.edit]]/[[floor.id]]">
+                                    [[floor.name]]
+                                </a>
+                            </h3>
+
+                            <div class="action_box">
+                                <i class="icon-edit" ng-click="update()"></i>
+                                <i class="icon-remove" ng-click="del()"></i>
+                            </div>
+                        </div>
+
+                        <div ng-show="editing">
+                            <div class="form_content" ng-hide="sending_img">
+                                <form action=""
+                                      method="post" enctype="multipart/form-data"
+                                      target="upload_target">
+
+                                    <!--<div ng-include src="_form_alert_box"></div>-->
+
+                                    <input type="text"
+                                           ng-init="floor_name=floor.name"
+                                           ng-model="floor_name"
+                                           ng-change="validate()"
+                                           placeholder="Nuevo nombre para la planta.."
+                                           autofocus>
+                                    <input type="file" name="img" title="Cambiar imágen..">
+
+                                    <button class="btn" ng-click="update()">Editar</button>
+                                </form>
+                            </div>
+
+                            <div class="ajax_gif" ng-show="sending_img">
+                                <!-- Ponemos ng-src en lugar de src para que se procese la interpolación antes
+                                de cargar la imágen -->
+                                <img ng-src="[[urls.static.img]]/ajax-loader.gif">
+                            </div>
+
+                            <div class="action_box">
+                                <i class="icon-remove" ng-click="del()"></i>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -83,9 +155,4 @@
 
     {% include "_uploading_iframe.html" %}
 
-
-
-    <zippy title="un saludo cualquiera..">
-        Hello Ramón!
-    </zippy>
 {% endblock content %}

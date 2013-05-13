@@ -34,7 +34,7 @@ $.effects.effect.shake = function( o, done ) {
 		queue = el.queue(),
 		queuelen = queue.length;
 
-	$.effects.save( el, props );
+	$.effects.update( el, props );
 	el.show();
 	$.effects.createWrapper( el );
 

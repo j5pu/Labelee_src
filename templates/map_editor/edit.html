@@ -1,0 +1,122 @@
+{% extends "base.html" %}
+
+{% block css %}
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/map_editor/edit_map/styles.css"/>
+{% endblock css %}
+
+{% block js %}
+    <script src="{{ STATIC_URL }}js/map_editor/edit_map/menu.js"></script>
+    <script src="{{ STATIC_URL }}js/map_editor/edit_map/events.js"></script>
+    <script src="{{ STATIC_URL }}js/map_editor/edit_map/floor.js"></script>
+    <script src="{{ STATIC_URL }}js/map_editor/edit_map/painter.js"></script>
+    <script src="{{ STATIC_URL }}js/map_editor/edit_map/elements.js"></script>
+    <script src="{{ STATIC_URL }}js/map_editor/edit_map/paint_historial.js"></script>
+
+    <script src="{{ STATIC_URL }}js/map_editor/edit_map/main.js"></script>
+
+    <script>
+        var floor_id = "{{ floor_id }}";
+    </script>
+{% endblock js %}
+
+{% block content %}
+
+    {% csrf_token %}
+
+    <!-- GRID PARA EL PLANO DE LA PLANTA -->
+    <div id="grid"></div>
+
+    <!-- MENU -->
+    <div id="menu" class="box box-0">
+        <a href="{% url 'map_editor.views.index' %}">Volver al menú</a>
+
+        <input type="checkbox" id="toggle_border" checked>Ver rejilla
+
+        Filas:
+            <input type="text"
+                   id="num_rows"
+                   value="20">
+            = <span id="num_blocks"></span>
+
+        <button id="update_floor">Guardar</button>
+        <button id="clear_floor">Limpiar</button>
+
+        <!-- MENU ETIQUETA -->
+        <div class="box box-1">
+            <span class="title">Elegir etiqueta:</span>
+            <br>
+
+            <div id="category" class="box box-2">
+                Categoría:
+                <br>
+                <select></select>
+                <a class="new" href=''>Nueva</a>
+                <a class="edit" href=''>Editar</a>
+                <a class="delete" href=''>Eliminar</a>
+            </div>
+
+            <div id="label" class="box box-2">
+                Etiqueta:
+                <br>
+                <select></select>
+                <a class="new" href=''>Nueva</a>
+                <a class="edit" href=''>Editar</a>
+                <a class="delete" href=''>Eliminar</a>
+            </div>
+        </div>
+
+        <!--
+        Cajas para crear objeto o categoría
+        -->
+
+        <div id="category-form" class="box box-1">
+
+            <span class="title">Crear categoría:</span>
+            <br>
+
+            <form action=""
+                  method="post" enctype="multipart/form-data"
+                  target="upload_target">
+                <input type="text" name="name"
+                       placeholder="Nombre para la categoría.."/>
+                <br>
+
+                <!-- Campo para la imágen -->
+                Icono para la categoría:
+                <input type="file" name="img" title="Elegir imágen..">
+                <br>
+
+                Color de bloque:
+                <input type="text" name="color"
+                       placeholder="Color.."/>
+                <br>
+
+                <button name="create">Crear</button>
+            </form>
+        </div>
+
+        <div id="label-form" class="box box-1">
+            <span class="title">Crear etiqueta:</span>
+            <br>
+
+            <form action=""
+                  method="post" enctype="multipart/form-data"
+                  target="upload_target">
+                <input type="text" name="name"
+                       placeholder="Nombre para la etiqueta.."/>
+                <br>
+
+                Para la categoría:
+                <select></select>
+
+                Imágen del objeto:
+                <input type="file" name="img" title="Elegir imágen..">
+
+                <button name="create">Crear</button>
+            </form>
+        </div>
+    </div>
+
+    {% include "_uploading_iframe.html" %}
+
+{% endblock content %}

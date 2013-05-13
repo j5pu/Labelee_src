@@ -1,7 +1,12 @@
 <!-- <script id="_/editable_text.html" type="text/ng-template"> -->
 
+<!--
+    ponemos $parent.$parent. porque tenemos que subir dos niveles en el scope:
+        - de esta plantilla a la directiva 'include' que la incluye
+        - de directiva 'include' al controlador 'EnclosureCtrl' que contiene enclosure
+-->
 <div class="editable_element" ng-show="!editing">
-    <h3>[[enclosure.name]]</h3>
+    <h3>[[$parent.$parent.enclosure.name]]</h3>
 
     <div class="action_box">
         <i class="icon-edit" ng-click="update()"></i>
@@ -18,12 +23,12 @@
 <div class="editable_element" ng-show="editing">
     <form>
 
-        <div ng-include src="_form_alert_box"></div>
+{#        <div ng-include src="_form_alert_box"></div>#}
 
         <input type="text"
-               ng-init="$parent.enclosure_name=enclosure.name"
-               ng-model="$parent.enclosure_name"
-               ng-change="validate()"
+               ng-init="$parent.$parent.enclosure_name=enclosure.name"
+               ng-model="$parent.$parent.enclosure_name"
+               ng-change="$parent.$parent.validate()"
                placeholder="Nuevo nombre para el recinto.."
                autofocus
                 >

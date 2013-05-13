@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
+
 from django.db import models
-#Se importa los usuarios para usarlo en Producto
-# from django.contrib.auth.models import User
+from django.contrib.auth.models import User
 
 
-#Se crea el modelo de categoría
 class Enclosure(models.Model):
     name = models.CharField(max_length=60, unique=True, blank=False)
+    owner = models.ForeignKey(User, related_name='enclosures', blank=False)
 
     def __unicode__(self):
         return self.name
@@ -16,14 +16,15 @@ def floor_filename(instance, filename):
     """
 	xej: img/floors/matadero/nave16.png
 	"""
-    return 'img/floors/' + instance.enclosure.name + '/' + filename
+    return 'img/enclosures/' + instance.enclosure.name + '/floors/' + filename
+
 
 #Se crea el modelo para los productos
 class Floor(models.Model):
-    name = models.CharField(max_length=200)
+    name = models.CharField(max_length=200, null=False, blank=False)
     img = models.FileField(upload_to=floor_filename, null=True, blank=True)
-    num_rows = models.PositiveIntegerField()
-    num_cols = models.PositiveIntegerField()
+    num_rows = models.PositiveIntegerField(null=True, blank=True)
+    num_cols = models.PositiveIntegerField(null=True, blank=True)
 
 
     # por defecto, si eliminamos un lugar también se eliminan todos sus mapas
@@ -50,7 +51,8 @@ class Floor(models.Model):
 
 
 class LabelCategory(models.Model):
-    name = models.CharField(max_length=200, unique=True, blank=False)
+    name = models.CharField(max_length=200, unique=True, blank=False);
+    color = models.CharField(max_length=50, blank=False);
     img = models.FileField(upload_to="img/label_categories", blank=True, null=True)
 
     class Meta:
@@ -60,15 +62,15 @@ class LabelCategory(models.Model):
         return self.name
 
     def delete(self, *args, **kwargs):
-        """
-		Sobreescribimos el método delete() para también eliminar la imágen de la categoría
-		"""
-        # You have to prepare what you need before delete the model
-        storage, path = self.img.storage, self.img.path
-        # Delete the model before the file
-        super(LabelCategory, self).delete(*args, **kwargs)
-        # Delete the file after the model
-        storage.delete(path)
+        if self.img:
+            # You have to prepare what you need before delete the model
+            storage, path = self.img.storage, self.img.path
+            # Delete the model before the file
+            super(LabelCategory, self).delete(*args, **kwargs)
+            # Delete the file after the model
+            storage.delete(path)
+        else:
+            super(LabelCategory, self).delete(*args, **kwargs)
 
 
 def label_filename(instance, filename):
@@ -90,27 +92,27 @@ class Label(models.Model):
     # ponemos '_objects_' en lugar de 'objects' para no confundirlo con la
     # palabra reservada, ya que si no dará error
     # 	category = models.ForeignKey(LabelCategory)
-    category = models.ForeignKey(LabelCategory, related_name='category', blank=True)
+    category = models.ForeignKey(LabelCategory, related_name='labels', blank=True)
 
     def __unicode__(self):
         return self.name
 
     def delete(self, *args, **kwargs):
-        """
-		Sobreescribimos el método delete() para también eliminar la imágen del objeto
-		"""
-        # You have to prepare what you need before delete the model
-        storage, path = self.img.storage, self.img.path
-        # Delete the model before the file
-        super(Label, self).delete(*args, **kwargs)
-        # Delete the file after the model
-        storage.delete(path)
+        if self.img:
+            # You have to prepare what you need before delete the model
+            storage, path = self.img.storage, self.img.path
+            # Delete the model before the file
+            super(Label, self).delete(*args, **kwargs)
+            # Delete the file after the model
+            storage.delete(path)
+        else:
+            super(Label, self).delete(*args, **kwargs)
 
 
 class Point(models.Model):
     description = models.CharField(max_length=200, null=True, blank=True)
-    row = models.PositiveIntegerField()
-    col = models.PositiveIntegerField()
+    row = models.PositiveIntegerField(null=True, blank=True)
+    col = models.PositiveIntegerField(null=True, blank=True)
     label = models.ForeignKey(Label, related_name='points')
     floor = models.ForeignKey(Floor, related_name='points')
 

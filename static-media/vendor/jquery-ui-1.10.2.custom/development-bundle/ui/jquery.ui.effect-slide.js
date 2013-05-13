@@ -27,7 +27,7 @@ $.effects.effect.slide = function( o, done ) {
 		animation = {};
 
 	// Adjust
-	$.effects.save( el, props );
+	$.effects.update( el, props );
 	el.show();
 	distance = o.distance || el[ ref === "top" ? "outerHeight" : "outerWidth" ]( true );
 

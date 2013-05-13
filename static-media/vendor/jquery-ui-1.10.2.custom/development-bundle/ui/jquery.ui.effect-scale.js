@@ -197,7 +197,7 @@ $.effects.effect.size = function( o, done ) {
 		}
 	}
 
-	$.effects.save( el, props );
+	$.effects.update( el, props );
 	el.show();
 	$.effects.createWrapper( el );
 	el.css( "overflow", "hidden" ).css( el.from );
@@ -229,7 +229,7 @@ $.effects.effect.size = function( o, done ) {
 					outerWidth: child.outerWidth()
 				};
 			if (restore) {
-				$.effects.save(child, props2);
+				$.effects.update(child, props2);
 			}
 
 			child.from = {

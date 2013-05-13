@@ -25,7 +25,7 @@ $.effects.effect.highlight = function( o, done ) {
 		animation.opacity = 0;
 	}
 
-	$.effects.save( elem, props );
+	$.effects.update( elem, props );
 
 	elem
 		.show()

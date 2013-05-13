@@ -31,7 +31,7 @@ $.effects.effect.fold = function( o, done ) {
 		animation1 = {},
 		animation2 = {};
 
-	$.effects.save( el, props );
+	$.effects.update( el, props );
 	el.show();
 
 	// Create Wrapper

@@ -22,123 +22,123 @@ from map_editor.forms import EnclosureForm
 
 
 class UserResource(ModelResource):
-	class Meta:
-		resource_name = 'users'
-		queryset = User.objects.all()
-		# excludes = ['email', 'password', 'is_staff', 'is_superuser']
-		# allowed_methods = ['get']
-		# authorization = DjangoAuthorization()
-		# authentication = BasicAuthentication()
-		# include_resource_uri = False
+    class Meta:
+        resource_name = 'user'
+        queryset = User.objects.all()
+    # excludes = ['email', 'password', 'is_staff', 'is_superuser']
+    # allowed_methods = ['get']
+    # authorization = DjangoAuthorization()
+    # authentication = BasicAuthentication()
+    # include_resource_uri = False
 
-	def determine_format(self, request):
-		"""
-		Sobreescribiendo este método conseguimos quitar el /?format=json de las
-		URLs y dejarlo por defecto
-		"""
-		return 'application/json'
+    def determine_format(self, request):
+        """
+        Sobreescribiendo este método conseguimos quitar el /?format=json de las
+        URLs y dejarlo por defecto
+        """
+        return 'application/json'
 
 
 class EnclosureResource(ModelResource):
-	floors = fields.ToManyField('map_editor.api.resources.FloorResource',
-		'floors', null=True)
+    floors = fields.ToManyField('map_editor.api.resources.FloorResource', 'floors', null=True)
+    owner = fields.ToOneField(UserResource, 'owner', null=False)
 
-	class Meta:
-		# resource_name = 'places'
-		queryset = Enclosure.objects.all()
-		include_resource_uri = True
-		authorization = DjangoAuthorization()
-		authentication = BasicAuthentication()
-# 		validation = FormValidation(form_class=EnclosureForm)
-		filtering = {
-			'name': ALL,
-			'id': ALL
-		}
-		paginator_class = Paginator
+    class Meta:
+        # resource_name = 'places'
+        queryset = Enclosure.objects.all()
+        include_resource_uri = True
+        authorization = DjangoAuthorization()
+        authentication = BasicAuthentication()
+        # 		validation = FormValidation(form_class=EnclosureForm)
+        filtering = {
+            'name': ALL,
+            'id': ALL
+        }
+        paginator_class = Paginator
 
-		# http://stackoverflow.com/questions/10138169/returning-data-on-post-in-django-tastypie
-		always_return_data = True
+        # http://stackoverflow.com/questions/10138169/returning-data-on-post-in-django-tastypie
+        always_return_data = True
 
-	def determine_format(self, request):
-		return 'application/json'
+    def determine_format(self, request):
+        return 'application/json'
 
 
 class FloorResource(ModelResource):
-	enclosure = fields.ToOneField(EnclosureResource, 'enclosure')
-	
-	# place = fields.ForeignKey(EnclosureResource, 'place')
+    enclosure = fields.ToOneField(EnclosureResource, 'enclosure')
 
-	class Meta:
-		queryset = Floor.objects.all()
-		authorization = DjangoAuthorization()
-		authentication = BasicAuthentication()
-		include_resource_uri = True
-		filtering = {
-			'enclosure': ALL_WITH_RELATIONS,
-			'id': ALL
-		}
-		always_return_data = True
+    # place = fields.ForeignKey(EnclosureResource, 'place')
 
-	def determine_format(self, request):
-		return 'application/json'
+    class Meta:
+        queryset = Floor.objects.all()
+        authorization = DjangoAuthorization()
+        authentication = BasicAuthentication()
+        include_resource_uri = True
+        filtering = {
+        'enclosure': ALL_WITH_RELATIONS,
+        'id': ALL
+        }
+        always_return_data = True
+
+    def determine_format(self, request):
+        return 'application/json'
 
 
 class PointResource(ModelResource):
-	floor = fields.ToOneField(FloorResource, 'floor')
-	label = fields.ToOneField('map_editor.api.resources.LabelResource', 'label')
+    floor = fields.ToOneField(FloorResource, 'floor')
+    label = fields.ToOneField('map_editor.api.resources.LabelResource', 'label')
 
-	class Meta:
-		queryset = Point.objects.all()
-		authorization = DjangoAuthorization()
-		authentication = BasicAuthentication()
-		# usando apikey:
-		# authentication = ApiKeyAuthentication()
-		always_return_data = True
-		filtering = {
-			'floor': ALL_WITH_RELATIONS,
-			'object': ALL_WITH_RELATIONS,
-			'id': ALL
-		}
-		max_limit = 50000
+    class Meta:
+        queryset = Point.objects.all()
+        authorization = DjangoAuthorization()
+        authentication = BasicAuthentication()
+        # usando apikey:
+        # authentication = ApiKeyAuthentication()
+        always_return_data = True
+        filtering = {
+        'floor': ALL_WITH_RELATIONS,
+        'object': ALL_WITH_RELATIONS,
+        'id': ALL
+        }
+        max_limit = 50000
 
-	def determine_format(self, request):
-		return 'application/json'
+    def determine_format(self, request):
+        return 'application/json'
 
 
 class LabelResource(ModelResource):
-	category = fields.ToOneField('map_editor.api.resources.LabelCategoryResource', 'category')
-	points = fields.ToManyField('map_editor.api.resources.PointResource', 'points', null=True)
+    category = fields.ToOneField('map_editor.api.resources.LabelCategoryResource', 'category')
+    points = fields.ToManyField('map_editor.api.resources.PointResource', 'points', null=True)
 
-	class Meta:
-		queryset = Label.objects.all()
-		authorization = DjangoAuthorization()
-		authentication = BasicAuthentication()
-		always_return_data = True
-		filtering = {
-			'id': ALL,
-			'category': ALL_WITH_RELATIONS,
-			'points': ALL_WITH_RELATIONS
-		}
+    class Meta:
+        queryset = Label.objects.all()
+        authorization = DjangoAuthorization()
+        authentication = BasicAuthentication()
+        always_return_data = True
+        filtering = {
+        'id': ALL,
+        'category': ALL_WITH_RELATIONS,
+        'points': ALL_WITH_RELATIONS
+        }
 
-	def determine_format(self, request):
-		return 'application/json'
+    def determine_format(self, request):
+        return 'application/json'
 
 
 class LabelCategoryResource(ModelResource):
-	labels = fields.ToManyField('map_editor.api.resources.LabelResource', 'labels', null=True)
+    labels = fields.ToManyField('map_editor.api.resources.LabelResource', 'labels', null=True, blank=True)
 
-	class Meta:
-		resource_name = 'label-category'
-		queryset = LabelCategory.objects.all()
-		authorization = DjangoAuthorization()
-		authentication = BasicAuthentication()
-		always_return_data = True
-		filtering = {
-			'id': ALL,
-			'name': ALL,
-			'labels': ALL_WITH_RELATIONS,
-		}
+    class Meta:
+        resource_name = 'label-category'
+        queryset = LabelCategory.objects.all()
+        authorization = DjangoAuthorization()
+        authentication = BasicAuthentication()
+        always_return_data = True
+        filtering = {
+        'id': ALL,
+        'name': ALL,
+        'labels': ALL_WITH_RELATIONS,
+        }
 
-	def determine_format(self, request):
-		return 'application/json'
+    def determine_format(self, request):
+        return 'application/json'
 

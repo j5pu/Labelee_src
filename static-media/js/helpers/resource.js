@@ -189,11 +189,16 @@ function Resource(resource_name) {
 }
 
 
-function ObjectResource()
+function FloorResource()
 {
-	Resource.call(this, 'object');
+    Resource.call(this, 'floor');
+}
 
-	this.readFromGrid = function(grid_id) {
+function LabelResource()
+{
+	Resource.call(this, 'label');
+
+	this.readFromFloor = function(floor_id) {
 
 		// Para obtener todos los objetos de un grid, agrupados por id:
 		// 		uri = /api-2/object/grid/4
@@ -214,7 +219,7 @@ function ObjectResource()
 
 		var element;
 		$.ajax({
-			url : this.api2_url + 'grid/' + grid_id,
+			url : this.api2_url + 'floor/' + floor_id,
 			type : 'get',
 			headers : {
 				'Content-Type' : 'application/json'
@@ -231,6 +236,12 @@ function ObjectResource()
 
 		return element;
 	};
+}
+
+
+function LabelCategoryResource()
+{
+    Resource.call(this, 'label-category');
 }
 
 
@@ -309,20 +320,7 @@ function PointResource()
     }
 }
 
-ObjectResource.prototype = new Resource;
+
+LabelResource.prototype = new Resource;
+LabelCategoryResource.prototype = new Resource;
 PointResource.prototype = new Resource;
-
-
-var r = new Resource();
-
-var a = {
-    saludo: function(){
-        alert('hola');
-    }
-};
-
-
-
-h = new a();
-
-h.saludo();

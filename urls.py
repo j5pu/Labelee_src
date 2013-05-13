@@ -30,16 +30,16 @@ urlpatterns = patterns('',
     url(r'^map/', include('map.urls')),
     url(r'^map-editor/', include('map_editor.urls')),
 
+    # ADMIN:
     # Uncomment the admin/doc line below to enable admin documentation:
     url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
-
     # Uncomment the next line to enable the admin:
     url(r'^admin/', include(admin.site.urls)),
 
     # Para poder crear un superusuario en appfog
     # Allow for a superuser to be created if one does not exist.
     # You're basically asking to be hacked by leaving this uncommented.
-    url(r'^createuser/', 'views.createuser'),
+    # url(r'^createuser/', 'views.createuser'),
 )
 
 

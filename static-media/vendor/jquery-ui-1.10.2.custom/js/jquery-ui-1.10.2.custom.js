@@ -1480,7 +1480,7 @@ $.widget("ui.draggable", $.ui.mouse, {
 		containment: false,
 		cursor: "auto",
 		cursorAt: false,
-		grid: false,
+		floor_grid: false,
 		handle: false,
 		helper: "original",
 		iframeFix: false,
@@ -1945,13 +1945,13 @@ $.widget("ui.draggable", $.ui.mouse, {
 				}
 			}
 
-			if(o.grid) {
+			if(o.floor_grid) {
 				//Check for grid elements set to 0 to prevent divide by 0 error causing invalid argument errors in IE (see ticket #6950)
-				top = o.grid[1] ? this.originalPageY + Math.round((pageY - this.originalPageY) / o.grid[1]) * o.grid[1] : this.originalPageY;
-				pageY = containment ? ((top - this.offset.click.top >= containment[1] || top - this.offset.click.top > containment[3]) ? top : ((top - this.offset.click.top >= containment[1]) ? top - o.grid[1] : top + o.grid[1])) : top;
+				top = o.floor_grid[1] ? this.originalPageY + Math.round((pageY - this.originalPageY) / o.floor_grid[1]) * o.floor_grid[1] : this.originalPageY;
+				pageY = containment ? ((top - this.offset.click.top >= containment[1] || top - this.offset.click.top > containment[3]) ? top : ((top - this.offset.click.top >= containment[1]) ? top - o.floor_grid[1] : top + o.floor_grid[1])) : top;
 
-				left = o.grid[0] ? this.originalPageX + Math.round((pageX - this.originalPageX) / o.grid[0]) * o.grid[0] : this.originalPageX;
-				pageX = containment ? ((left - this.offset.click.left >= containment[0] || left - this.offset.click.left > containment[2]) ? left : ((left - this.offset.click.left >= containment[0]) ? left - o.grid[0] : left + o.grid[0])) : left;
+				left = o.floor_grid[0] ? this.originalPageX + Math.round((pageX - this.originalPageX) / o.floor_grid[0]) * o.floor_grid[0] : this.originalPageX;
+				pageX = containment ? ((left - this.offset.click.left >= containment[0] || left - this.offset.click.left > containment[2]) ? left : ((left - this.offset.click.left >= containment[0]) ? left - o.floor_grid[0] : left + o.floor_grid[0])) : left;
 			}
 
 		}
@@ -2763,7 +2763,7 @@ $.widget("ui.resizable", $.ui.mouse, {
 		autoHide: false,
 		containment: false,
 		ghost: false,
-		grid: false,
+		floor_grid: false,
 		handles: "e,s,se",
 		helper: false,
 		maxHeight: null,
@@ -2833,7 +2833,7 @@ $.widget("ui.resizable", $.ui.mouse, {
 
 		}
 
-		this.handles = o.handles || (!$(".ui-resizable-handle", this.element).length ? "e,s,se" : { n: ".ui-resizable-n", e: ".ui-resizable-e", s: ".ui-resizable-s", w: ".ui-resizable-w", se: ".ui-resizable-se", sw: ".ui-resizable-sw", ne: ".ui-resizable-ne", nw: ".ui-resizable-nw" });
+		this.handles = o.handles || (!$(".ui-resizable-handle", this.element).length ? "e,s,se" : { n: ".ui-resizable-n", element: ".ui-resizable-e", s: ".ui-resizable-s", w: ".ui-resizable-w", se: ".ui-resizable-se", sw: ".ui-resizable-sw", ne: ".ui-resizable-ne", nw: ".ui-resizable-nw" });
 		if(this.handles.constructor === String) {
 
 			if ( this.handles === "all") {
@@ -3323,7 +3323,7 @@ $.widget("ui.resizable", $.ui.mouse, {
 	},
 
 	_change: {
-		e: function(event, dx) {
+		grid: function(event, dx) {
 			return { width: this.originalSize.width + dx };
 		},
 		w: function(event, dx) {
@@ -3438,7 +3438,7 @@ $.ui.plugin.add("resizable", "containment", {
 			that.containerPosition = { left: 0, top: 0 };
 
 			that.parentData = {
-				element: $(document), left: 0, top: 0,
+				grid: $(document), left: 0, top: 0,
 				width: $(document).width(), height: $(document).height() || document.body.parentNode.scrollHeight
 			};
 		}
@@ -3460,7 +3460,7 @@ $.ui.plugin.add("resizable", "containment", {
 			height = ($.ui.hasScroll(ce) ? ce.scrollHeight : ch);
 
 			that.parentData = {
-				element: ce, left: co.left, top: co.top, width: width, height: height
+				grid: ce, left: co.left, top: co.top, width: width, height: height
 			};
 		}
 	},
@@ -3645,7 +3645,7 @@ $.ui.plugin.add("resizable", "grid", {
 			os = that.originalSize,
 			op = that.originalPosition,
 			a = that.axis,
-			grid = typeof o.grid === "number" ? [o.grid, o.grid] : o.grid,
+			grid = typeof o.floor_grid === "number" ? [o.floor_grid, o.floor_grid] : o.floor_grid,
 			gridX = (grid[0]||1),
 			gridY = (grid[1]||1),
 			ox = Math.round((cs.width - os.width) / gridX) * gridX,
@@ -3657,7 +3657,7 @@ $.ui.plugin.add("resizable", "grid", {
 			isMinWidth = o.minWidth && (o.minWidth > newWidth),
 			isMinHeight = o.minHeight && (o.minHeight > newHeight);
 
-		o.grid = grid;
+		o.floor_grid = grid;
 
 		if (isMinWidth) {
 			newWidth = newWidth + gridX;
@@ -3729,7 +3729,7 @@ $.widget("ui.selectable", $.ui.mouse, {
 				var $this = $(this),
 					pos = $this.offset();
 				$.data(this, "selectable-item", {
-					element: this,
+					grid: this,
 					$element: $this,
 					left: pos.left,
 					top: pos.top,
@@ -3982,7 +3982,7 @@ $.widget("ui.sortable", $.ui.mouse, {
 		dropOnEmpty: true,
 		forcePlaceholderSize: false,
 		forceHelperSize: false,
-		grid: false,
+		floor_grid: false,
 		handle: false,
 		helper: "original",
 		items: "> *",
@@ -4723,7 +4723,7 @@ $.widget("ui.sortable", $.ui.mouse, {
 
 					return element;
 				},
-				update: function(container, p) {
+				updateGrid: function(container, p) {
 
 					// 1. If a className is set as 'placeholder option, we don't force sizes - the class is responsible for that
 					// 2. The option 'forcePlaceholderSize can be enabled to force it even if a class name is specified
@@ -5047,12 +5047,12 @@ $.widget("ui.sortable", $.ui.mouse, {
 				}
 			}
 
-			if(o.grid) {
-				top = this.originalPageY + Math.round((pageY - this.originalPageY) / o.grid[1]) * o.grid[1];
-				pageY = this.containment ? ( (top - this.offset.click.top >= this.containment[1] && top - this.offset.click.top <= this.containment[3]) ? top : ((top - this.offset.click.top >= this.containment[1]) ? top - o.grid[1] : top + o.grid[1])) : top;
+			if(o.floor_grid) {
+				top = this.originalPageY + Math.round((pageY - this.originalPageY) / o.floor_grid[1]) * o.floor_grid[1];
+				pageY = this.containment ? ( (top - this.offset.click.top >= this.containment[1] && top - this.offset.click.top <= this.containment[3]) ? top : ((top - this.offset.click.top >= this.containment[1]) ? top - o.floor_grid[1] : top + o.floor_grid[1])) : top;
 
-				left = this.originalPageX + Math.round((pageX - this.originalPageX) / o.grid[0]) * o.grid[0];
-				pageX = this.containment ? ( (left - this.offset.click.left >= this.containment[0] && left - this.offset.click.left <= this.containment[2]) ? left : ((left - this.offset.click.left >= this.containment[0]) ? left - o.grid[0] : left + o.grid[0])) : left;
+				left = this.originalPageX + Math.round((pageX - this.originalPageX) / o.floor_grid[0]) * o.floor_grid[0];
+				pageX = this.containment ? ( (left - this.offset.click.left >= this.containment[0] && left - this.offset.click.left <= this.containment[2]) ? left : ((left - this.offset.click.left >= this.containment[0]) ? left - o.floor_grid[0] : left + o.floor_grid[0])) : left;
 			}
 
 		}
@@ -12463,7 +12463,7 @@ $.widget( "ui.tooltip", {
 				if ( parent.attr( "title" ) ) {
 					parent.uniqueId();
 					that.parents[ this.id ] = {
-						element: this,
+						grid: this,
 						title: parent.attr( "title" )
 					};
 					parent.attr( "title", "" );
@@ -13585,7 +13585,7 @@ $.extend( $.effects, {
 	version: "1.10.2",
 
 	// Saves a set of properties in a data storage
-	save: function( element, set ) {
+	update: function( element, set ) {
 		for( var i=0; i < set.length; i++ ) {
 			if ( set[ i ] !== null ) {
 				element.data( dataSpace + set[ i ], element[ 0 ].style[ set[ i ] ] );
@@ -13997,9 +13997,9 @@ $.effects.effect.blind = function( o, done ) {
 
 	// if already wrapped, the wrapper's properties are my property. #6245
 	if ( el.parent().is( ".ui-effects-wrapper" ) ) {
-		$.effects.save( el.parent(), props );
+		$.effects.update( el.parent(), props );
 	} else {
-		$.effects.save( el, props );
+		$.effects.update( el, props );
 	}
 	el.show();
 	wrapper = $.effects.createWrapper( el ).css({
@@ -14080,7 +14080,7 @@ $.effects.effect.bounce = function( o, done ) {
 		props.push( "opacity" );
 	}
 
-	$.effects.save( el, props );
+	$.effects.update( el, props );
 	el.show();
 	$.effects.createWrapper( el ); // Create Wrapper
 
@@ -14161,7 +14161,7 @@ $.effects.effect.clip = function( o, done ) {
 		wrapper, animate, distance;
 
 	// Save & Show
-	$.effects.save( el, props );
+	$.effects.update( el, props );
 	el.show();
 
 	// Create Wrapper
@@ -14216,7 +14216,7 @@ $.effects.effect.drop = function( o, done ) {
 		distance;
 
 	// Adjust
-	$.effects.save( el, props );
+	$.effects.update( el, props );
 	el.show();
 	$.effects.createWrapper( el );
 
@@ -14372,7 +14372,7 @@ $.effects.effect.fold = function( o, done ) {
 		animation1 = {},
 		animation2 = {};
 
-	$.effects.save( el, props );
+	$.effects.update( el, props );
 	el.show();
 
 	// Create Wrapper
@@ -14429,7 +14429,7 @@ $.effects.effect.highlight = function( o, done ) {
 		animation.opacity = 0;
 	}
 
-	$.effects.save( elem, props );
+	$.effects.update( elem, props );
 
 	elem
 		.show()
@@ -14688,7 +14688,7 @@ $.effects.effect.size = function( o, done ) {
 		}
 	}
 
-	$.effects.save( el, props );
+	$.effects.update( el, props );
 	el.show();
 	$.effects.createWrapper( el );
 	el.css( "overflow", "hidden" ).css( el.from );
@@ -14720,7 +14720,7 @@ $.effects.effect.size = function( o, done ) {
 					outerWidth: child.outerWidth()
 				};
 			if (restore) {
-				$.effects.save(child, props2);
+				$.effects.update(child, props2);
 			}
 
 			child.from = {
@@ -14830,7 +14830,7 @@ $.effects.effect.shake = function( o, done ) {
 		queue = el.queue(),
 		queuelen = queue.length;
 
-	$.effects.save( el, props );
+	$.effects.update( el, props );
 	el.show();
 	$.effects.createWrapper( el );
 
@@ -14884,7 +14884,7 @@ $.effects.effect.slide = function( o, done ) {
 		animation = {};
 
 	// Adjust
-	$.effects.save( el, props );
+	$.effects.update( el, props );
 	el.show();
 	distance = o.distance || el[ ref === "top" ? "outerHeight" : "outerWidth" ]( true );
 

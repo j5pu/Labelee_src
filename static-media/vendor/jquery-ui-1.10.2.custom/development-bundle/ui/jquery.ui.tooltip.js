@@ -166,7 +166,7 @@ $.widget( "ui.tooltip", {
 				if ( parent.attr( "title" ) ) {
 					parent.uniqueId();
 					that.parents[ this.id ] = {
-						element: this,
+						grid: this,
 						title: parent.attr( "title" )
 					};
 					parent.attr( "title", "" );

@@ -896,7 +896,7 @@ $.extend( $.effects, {
 	version: "1.10.2",
 
 	// Saves a set of properties in a data storage
-	save: function( element, set ) {
+	update: function( element, set ) {
 		for( var i=0; i < set.length; i++ ) {
 			if ( set[ i ] !== null ) {
 				element.data( dataSpace + set[ i ], element[ 0 ].style[ set[ i ] ] );

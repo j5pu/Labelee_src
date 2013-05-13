@@ -20,37 +20,38 @@ var myApp = angular.module('myApp', ['ngSanitize'],
 // SERVICIOS
 //
 
-/*myApp.factory('PartialsService', function($rootScope) {
+myApp.factory('UrlService', function($rootScope) {
 
 	// Servicio a aplicar en los controladores donde se quiera hacer referencia
 	// a alguna plantilla usando ng-include
 
-	var PARTIALS_PATH = '/static/partials/';
+	var MAP_EDITOR_URL = '/map-editor/';
+    var STATIC_URL = '/static/';
 
-	$rootScope._form_alert_box = PARTIALS_PATH + '_form_alert_box.html';
-	$rootScope._editable_enclosure = PARTIALS_PATH + '_editable_enclosure.html';
-	$rootScope._editable_floor = PARTIALS_PATH + '_editable_floor.html';
-	$rootScope._uploading_iframe = PARTIALS_PATH + '_uploading_iframe.html';
-});*/
+    $rootScope.urls = {
+        map_editor: {
+            index: MAP_EDITOR_URL,
+            edit: MAP_EDITOR_URL + 'edit'
+        },
+        static: {
+            img: STATIC_URL + 'img'
+        }
+    };
+});
 
 
 //
 //DIRECTIVAS
 //
 
-//<include src="{{ STATIC_URL }}partials/_editable_enclosure.html">
-myApp.directive('include', function($parse){
+//<include src="{{ STATIC_URL }}partials/_enclosure.html">
+myApp.directive('include', function(){
     return {
         restrict: 'E',
         scope: {src: '@'},
-        // En este caso fabricamos la plantilla como un string concatenado..
-        template:
-            '<div ng-include src="src"></div>',
-        link: function(scope, element, attrs){
-            scope = scope.$parent.$parent;
-
-            var a = scope.enclosure.name;
-//            scope.floor = scope.$parent.$parent.floor;
+        template: '<div ng-include src="src"></div>',
+        link: function(scope){
+           var i = 2;
         }
     };
 });

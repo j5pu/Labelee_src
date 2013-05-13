@@ -266,7 +266,7 @@ $.fn.position = function( options ) {
 							height: targetHeight
 						},
 						element: {
-							element: elem,
+							grid: elem,
 							left: position.left,
 							top: position.top,
 							width: elemWidth,

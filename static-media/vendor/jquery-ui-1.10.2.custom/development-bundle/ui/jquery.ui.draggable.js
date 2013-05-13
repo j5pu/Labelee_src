@@ -26,7 +26,7 @@ $.widget("ui.draggable", $.ui.mouse, {
 		containment: false,
 		cursor: "auto",
 		cursorAt: false,
-		grid: false,
+		floor_grid: false,
 		handle: false,
 		helper: "original",
 		iframeFix: false,
@@ -491,13 +491,13 @@ $.widget("ui.draggable", $.ui.mouse, {
 				}
 			}
 
-			if(o.grid) {
+			if(o.floor_grid) {
 				//Check for grid elements set to 0 to prevent divide by 0 error causing invalid argument errors in IE (see ticket #6950)
-				top = o.grid[1] ? this.originalPageY + Math.round((pageY - this.originalPageY) / o.grid[1]) * o.grid[1] : this.originalPageY;
-				pageY = containment ? ((top - this.offset.click.top >= containment[1] || top - this.offset.click.top > containment[3]) ? top : ((top - this.offset.click.top >= containment[1]) ? top - o.grid[1] : top + o.grid[1])) : top;
+				top = o.floor_grid[1] ? this.originalPageY + Math.round((pageY - this.originalPageY) / o.floor_grid[1]) * o.floor_grid[1] : this.originalPageY;
+				pageY = containment ? ((top - this.offset.click.top >= containment[1] || top - this.offset.click.top > containment[3]) ? top : ((top - this.offset.click.top >= containment[1]) ? top - o.floor_grid[1] : top + o.floor_grid[1])) : top;
 
-				left = o.grid[0] ? this.originalPageX + Math.round((pageX - this.originalPageX) / o.grid[0]) * o.grid[0] : this.originalPageX;
-				pageX = containment ? ((left - this.offset.click.left >= containment[0] || left - this.offset.click.left > containment[2]) ? left : ((left - this.offset.click.left >= containment[0]) ? left - o.grid[0] : left + o.grid[0])) : left;
+				left = o.floor_grid[0] ? this.originalPageX + Math.round((pageX - this.originalPageX) / o.floor_grid[0]) * o.floor_grid[0] : this.originalPageX;
+				pageX = containment ? ((left - this.offset.click.left >= containment[0] || left - this.offset.click.left > containment[2]) ? left : ((left - this.offset.click.left >= containment[0]) ? left - o.floor_grid[0] : left + o.floor_grid[0])) : left;
 			}
 
 		}

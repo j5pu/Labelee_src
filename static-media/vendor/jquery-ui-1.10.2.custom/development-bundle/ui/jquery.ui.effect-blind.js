@@ -32,9 +32,9 @@ $.effects.effect.blind = function( o, done ) {
 
 	// if already wrapped, the wrapper's properties are my property. #6245
 	if ( el.parent().is( ".ui-effects-wrapper" ) ) {
-		$.effects.save( el.parent(), props );
+		$.effects.update( el.parent(), props );
 	} else {
-		$.effects.save( el, props );
+		$.effects.update( el, props );
 	}
 	el.show();
 	wrapper = $.effects.createWrapper( el ).css({

@@ -6,11 +6,6 @@ body
 	/*background: black*/
 }
 
-img#map_img
-{
-	display: none;
-}
-
 input[name="num_rows"]
 {
 	width: 2em
@@ -111,12 +106,7 @@ iframe
 	display: none;
 }
 
-#object-form
-{
-	display:none;
-}
-
-#category-form
+#label-form, #category-form
 {
 	display:none;
 }

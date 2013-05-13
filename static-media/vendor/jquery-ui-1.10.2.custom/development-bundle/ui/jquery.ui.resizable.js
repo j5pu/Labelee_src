@@ -35,7 +35,7 @@ $.widget("ui.resizable", $.ui.mouse, {
 		autoHide: false,
 		containment: false,
 		ghost: false,
-		grid: false,
+		floor_grid: false,
 		handles: "e,s,se",
 		helper: false,
 		maxHeight: null,
@@ -105,7 +105,7 @@ $.widget("ui.resizable", $.ui.mouse, {
 
 		}
 
-		this.handles = o.handles || (!$(".ui-resizable-handle", this.element).length ? "e,s,se" : { n: ".ui-resizable-n", e: ".ui-resizable-e", s: ".ui-resizable-s", w: ".ui-resizable-w", se: ".ui-resizable-se", sw: ".ui-resizable-sw", ne: ".ui-resizable-ne", nw: ".ui-resizable-nw" });
+		this.handles = o.handles || (!$(".ui-resizable-handle", this.element).length ? "e,s,se" : { n: ".ui-resizable-n", grid: ".ui-resizable-e", s: ".ui-resizable-s", w: ".ui-resizable-w", se: ".ui-resizable-se", sw: ".ui-resizable-sw", ne: ".ui-resizable-ne", nw: ".ui-resizable-nw" });
 		if(this.handles.constructor === String) {
 
 			if ( this.handles === "all") {
@@ -595,7 +595,7 @@ $.widget("ui.resizable", $.ui.mouse, {
 	},
 
 	_change: {
-		e: function(event, dx) {
+		element: function(event, dx) {
 			return { width: this.originalSize.width + dx };
 		},
 		w: function(event, dx) {
@@ -917,7 +917,7 @@ $.ui.plugin.add("resizable", "grid", {
 			os = that.originalSize,
 			op = that.originalPosition,
 			a = that.axis,
-			grid = typeof o.grid === "number" ? [o.grid, o.grid] : o.grid,
+			grid = typeof o.floor_grid === "number" ? [o.floor_grid, o.floor_grid] : o.floor_grid,
 			gridX = (grid[0]||1),
 			gridY = (grid[1]||1),
 			ox = Math.round((cs.width - os.width) / gridX) * gridX,
@@ -929,7 +929,7 @@ $.ui.plugin.add("resizable", "grid", {
 			isMinWidth = o.minWidth && (o.minWidth > newWidth),
 			isMinHeight = o.minHeight && (o.minHeight > newHeight);
 
-		o.grid = grid;
+		o.floor_grid = grid;
 
 		if (isMinWidth) {
 			newWidth = newWidth + gridX;

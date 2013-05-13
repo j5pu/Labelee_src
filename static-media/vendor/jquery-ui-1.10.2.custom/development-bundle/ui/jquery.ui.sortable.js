@@ -39,7 +39,7 @@ $.widget("ui.sortable", $.ui.mouse, {
 		dropOnEmpty: true,
 		forcePlaceholderSize: false,
 		forceHelperSize: false,
-		grid: false,
+		floor_grid: false,
 		handle: false,
 		helper: "original",
 		items: "> *",
@@ -758,7 +758,7 @@ $.widget("ui.sortable", $.ui.mouse, {
 		if(!o.placeholder || o.placeholder.constructor === String) {
 			className = o.placeholder;
 			o.placeholder = {
-				element: function() {
+				grid: function() {
 
 					var nodeName = that.currentItem[0].nodeName.toLowerCase(),
 						element = $( that.document[0].createElement( nodeName ) )
@@ -1104,12 +1104,12 @@ $.widget("ui.sortable", $.ui.mouse, {
 				}
 			}
 
-			if(o.grid) {
-				top = this.originalPageY + Math.round((pageY - this.originalPageY) / o.grid[1]) * o.grid[1];
-				pageY = this.containment ? ( (top - this.offset.click.top >= this.containment[1] && top - this.offset.click.top <= this.containment[3]) ? top : ((top - this.offset.click.top >= this.containment[1]) ? top - o.grid[1] : top + o.grid[1])) : top;
+			if(o.floor_grid) {
+				top = this.originalPageY + Math.round((pageY - this.originalPageY) / o.floor_grid[1]) * o.floor_grid[1];
+				pageY = this.containment ? ( (top - this.offset.click.top >= this.containment[1] && top - this.offset.click.top <= this.containment[3]) ? top : ((top - this.offset.click.top >= this.containment[1]) ? top - o.floor_grid[1] : top + o.floor_grid[1])) : top;
 
-				left = this.originalPageX + Math.round((pageX - this.originalPageX) / o.grid[0]) * o.grid[0];
-				pageX = this.containment ? ( (left - this.offset.click.left >= this.containment[0] && left - this.offset.click.left <= this.containment[2]) ? left : ((left - this.offset.click.left >= this.containment[0]) ? left - o.grid[0] : left + o.grid[0])) : left;
+				left = this.originalPageX + Math.round((pageX - this.originalPageX) / o.floor_grid[0]) * o.floor_grid[0];
+				pageX = this.containment ? ( (left - this.offset.click.left >= this.containment[0] && left - this.offset.click.left <= this.containment[2]) ? left : ((left - this.offset.click.left >= this.containment[0]) ? left - o.floor_grid[0] : left + o.floor_grid[0])) : left;
 			}
 
 		}

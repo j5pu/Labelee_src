@@ -28,7 +28,7 @@ $.effects.effect.drop = function( o, done ) {
 		distance;
 
 	// Adjust
-	$.effects.save( el, props );
+	$.effects.update( el, props );
 	el.show();
 	$.effects.createWrapper( el );
 

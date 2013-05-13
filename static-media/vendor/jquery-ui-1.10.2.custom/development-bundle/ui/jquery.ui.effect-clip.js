@@ -27,7 +27,7 @@ $.effects.effect.clip = function( o, done ) {
 		wrapper, animate, distance;
 
 	// Save & Show
-	$.effects.save( el, props );
+	$.effects.update( el, props );
 	el.show();
 
 	// Create Wrapper

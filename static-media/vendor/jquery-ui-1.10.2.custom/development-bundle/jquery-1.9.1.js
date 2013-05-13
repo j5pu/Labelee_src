@@ -7424,7 +7424,7 @@ var
 	rurl = /^([\w.+-]+:)(?:\/\/([^\/?#:]*)(?::(\d+)|)|)/,
 
 	// Keep a copy of the old load method
-	_load = jQuery.fn.load,
+	_load = jQuery.fn.init,
 
 	/* Prefilters
 	 * 1) They are useful to introduce custom dataTypes (see ajax/jsonp.js for an example)
