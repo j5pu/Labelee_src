@@ -34,32 +34,31 @@ var Painter = {
     },
 
 
-    clearBlock: function(block)
+    clear: function(block)
     {
         // Si:
-        //      - no se está cargando el grid desde la BD..
-        //      - el bloque aparece como cargado desde la BD (data-from-db)
+        //      - no se está cargando el plano desde la BD..
+        //      &&
+        //      -
         // Entonces:
-        //      Insertamos el punto en la lista de puntos a eliminar en la BD para el grid
+        //      Insertamos el punto en la
 
+        // Mientras se esté cargando el plano desde BD no se podrá limpiar bloques
+        if(Floor.loading)
+            return;
+
+        // Si el bloque pintado aparece como cargado desde la BD (data-from-db)
+        // entonces insertamos su punto en la lista de puntos a eliminar en BD
         if(block.data('from-db'))
-        {
-            var point_data = {
-                id: block.data('point-id')
-//            row: block.parent().data('row'),
-//            col: block.data('col'),
-//            grid: grid.resource_uri,
-//            object: block.data('object')
-//            resource_uri: '/api/v1/point/' + block.data('point-id') + '/'
-            };
+            Floor.points_to_delete.push(block.data('point-id'));
 
-            points_to_delete.push(point_data);
-        }
-
-        // Si estamos pintando y no cargando entonces limpiamos el bloque..
+        // Limpiamos todo el contenido del bloque..
         block.empty();
-        block.removeAttr('data-object');
+        block.removeData('label');
+        block.removeAttr('data-label');
+        block.removeData('from-db');
         block.removeAttr('data-from-db');
+        block.removeData('point-id');
         block.removeAttr('data-point-id');
         block.css({'background': ''});
     },
@@ -70,7 +69,12 @@ var Painter = {
         //
         // Pinta etiqueta sobre un bloque en el grid para el plano
 
-        // Si el pintor no tiene etiqueta para pintar entonces no hacemos nada
+        // Si:
+        //      - el pintor no tiene etiqueta para pintar
+        //      ||
+        //      - el pintor está pintando puntos que no están viniendo desde la BD,
+        //        sino pintados por el usuario
+        // Entonces: no hacemos nada
         if(!Painter.label)
             return;
 
@@ -86,28 +90,39 @@ var Painter = {
         else
         {
             // Si ya se cargó el grid desde la B.D. entonces vaciamos el bloque
-            Painter.clearBlock(block);
+            Painter.clear(block);
 
             // Dejamos el bloque como pintado
             block.attr('data-label', Painter.label.resource_uri);
         }
 
 
+        //
+        // Carga imágen de la etiqueta:
         // Si:
         //      - aún no se pintó ninguna etiqueta
         //      ||
         //      - no es la misma que se pintó antes
         // Entonces:
         //      cargamos su imágen ..
+        // Si no:
+        //      no hace falta esperar para volver a cargar la misma imágen
         if(!Painter.label_prev || Painter.label !== Painter.label_prev)
         {
-            // Tomamos la imágen del icono
+
+            // Obtenemos la categoría
+            if(Floor.loading)
+                Painter.label_category = new LabelCategoryResource().readFromUri(Painter.label.category_uri);
+            else
+                Painter.label_category = new LabelCategoryResource().readFromUri(Painter.label.category);
+
+            // Obtenemos la imágen del icono
             Painter.icon = new Image();
             Painter.icon.src = Painter.label.img;
 
             // No hacemos nada mientras no esté la imágen del mapa cargada en el navegador
             Painter.icon.onload = function(){
-                Painter.label_category = new LabelCategoryResource().readFromUri(Painter.label.category_uri);
+
                 Painter._draw(block);
 
                 // Seguimos iterando mientras se esté cargando el plano

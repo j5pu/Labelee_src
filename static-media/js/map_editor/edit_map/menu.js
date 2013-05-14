@@ -167,6 +167,7 @@ var Menu = {
     init: function(){
        this._fillSelectors();
        Events.bindMenu();
+       Menu.saved_labels = new LabelResource().readFromFloor(Floor.data.id);
     },
 
 

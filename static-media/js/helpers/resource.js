@@ -262,6 +262,9 @@ function PointResource()
         //
         // points_data = [{point0}, {point1}..]
 
+        if(points_data.length === 0)
+            return;
+
         var groups = divideInGroups(points_data, 500)
 
         //
@@ -293,6 +296,9 @@ function PointResource()
     this.deletePoints = function(points_data){
         // Divido los puntos en grupos de 500 y envío cada grupo
         // vía POST -> /api-2/point/delete-from-list
+
+        if(points_data.length === 0)
+            return;
 
         var groups = divideInGroups(points_data, 500);
 

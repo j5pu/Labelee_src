@@ -176,6 +176,8 @@ var Floor = {
         if(all_points_painted)
         {
             Floor.loading = false;
+            Painter.label = null;
+            Painter.label_prev = null;
             Floor.i = 0;
             return;
         }

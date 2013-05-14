@@ -34,7 +34,7 @@ var Events = {
         Mousetrap.bind(['command', 'ctrl'], function(){
             $e.floor.blocks.off('mouseover');
             $e.floor.blocks.off('mousemove');
-            Events._bind_showLabelImg();
+            Events.bindGrid();
             Painter.painting_trace = false;
         },'keyup');
 
@@ -59,17 +59,18 @@ var Events = {
             e.preventDefault();
             $e.floor.blocks.on('mousemove', function(){
                 $e.floor.blocks.off('mousemove');
-                Painter.clearBlock($(this));
+                Painter.clear($(this));
             });
             $e.floor.blocks.on('mouseover', function(e){
                 e.preventDefault();
-                Painter.clearBlock($(this));
+                Painter.clear($(this));
             });
         });
 
         Mousetrap.bind('alt', function(e){
             e.preventDefault();
             $e.floor.blocks.off('mouseover');
+            Events.bindGrid();
         },'keyup');
     },
 
