@@ -32,7 +32,7 @@ def create_from_list(request):
         bundle = pr.build_bundle(data=point, request=request)
         pr.obj_create(bundle)
 
-    return HttpResponse(simplejson.dumps('ok'));
+    return HttpResponse(simplejson.dumps('ok'))
 
 
 def delete_from_list(request):

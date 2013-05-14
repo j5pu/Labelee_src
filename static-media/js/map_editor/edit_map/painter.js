@@ -128,6 +128,8 @@ var Painter = {
                 // Seguimos iterando mientras se esté cargando el plano
                 if(Floor.loading)
                     Floor.loopPoints();
+                else
+                    Painter.label_prev = Painter.label;
             };
         }
         else

@@ -44,11 +44,14 @@ var Events = {
             e.preventDefault();
             Painter.paint($(this));
             $e.floor.blocks.on('mouseover', function(){
+                Painter.painting_trace = true;
                 Painter.paint($(this));
             });
         });
         $e.floor.blocks.on('mouseup', function(){
             $e.floor.blocks.off('mouseover');
+            Painter.painting_trace = true;
+            Events.bindGrid();
         });
 
         Events._bind_showLabelImg();

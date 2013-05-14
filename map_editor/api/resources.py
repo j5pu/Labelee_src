@@ -78,6 +78,7 @@ class FloorResource(ModelResource):
         'id': ALL
         }
         always_return_data = True
+        max_limit = 5000
 
     def determine_format(self, request):
         return 'application/json'
@@ -99,7 +100,7 @@ class PointResource(ModelResource):
         'object': ALL_WITH_RELATIONS,
         'id': ALL
         }
-        max_limit = 50000
+        max_limit = 5000
 
     def determine_format(self, request):
         return 'application/json'
