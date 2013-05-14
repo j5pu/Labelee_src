@@ -24,11 +24,11 @@ var Events = {
             Painter.painting_trace = true;
             $e.floor.blocks.on('mousemove', function(){
                 $e.floor.blocks.off('mousemove');
-                Painter.paintLabel($(this));
+                Painter.paint($(this));
             });
             $e.floor.blocks.on('mouseover', function(e){
                 e.preventDefault();
-                Painter.paintLabel($(this));
+                Painter.paint($(this));
             });
         });
         Mousetrap.bind(['command', 'ctrl'], function(){
@@ -42,9 +42,9 @@ var Events = {
         // Pintar etiquetas dejando pulsado el botón izquierdo del ratón mientras lo movemos
         $e.floor.blocks.on('mousedown', function(e){
             e.preventDefault();
-            Painter.paintLabel($(this));
+            Painter.paint($(this));
             $e.floor.blocks.on('mouseover', function(){
-                Painter.paintLabel($(this));
+                Painter.paint($(this));
             });
         });
         $e.floor.blocks.on('mouseup', function(){

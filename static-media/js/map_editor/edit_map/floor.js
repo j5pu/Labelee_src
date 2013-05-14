@@ -162,6 +162,47 @@ var Floor = {
     },
 
 
+    loopPoints: function()
+    {
+        // Realiza una iteración para pintar en el plano un punto de la lista
+        // cargada desde BD
+
+        // Si ya no se está cargando el plano..
+        if(!Floor.loading)
+            return;
+
+        // Si ya han sido pintados todos los puntos..
+        var all_points_painted = !Floor.points || Floor.i >= Floor.points.length;
+        if(all_points_painted)
+        {
+            Floor.loading = false;
+            Floor.i = 0;
+            return;
+        }
+
+        // Si venimos de haber pintado ya al menos una etiqueta..
+        if(Painter.label)
+            Painter.label_prev = Painter.label;
+
+        //
+        // Para pintar el punto, el pintor necesita:
+        //      - bloque sobre el que pintar
+        //      - etiqueta del punto a pintar
+        //      - id en BD de dicho punto
+        var point = Floor.points[Floor.i];
+        var block = $e.floor.grid.find('.row[data-row="' + point.row + '"]')
+            .find('.block[data-col="' + point.col + '"]');
+        Painter.label = Floor.saved_labels[point.label];
+        Painter.point_id = point.id;
+
+        // Para la siguiente iteración..
+        Floor.i++;
+
+        // Pintamos..
+        Painter.paint(block);
+    },
+
+
     _loadSaved: function()
     {
         //
@@ -178,23 +219,21 @@ var Floor = {
 
         //
         // 2. Pintamos cada etiqueta almacenada para la planta (muro, POI, etc)
-        var points = new PointResource().readAllFiltered('?floor__id=' + Floor.data.id);
+        Floor.points = new PointResource().readAllFiltered('?floor__id=' + Floor.data.id);
 
         // Obtenemos todas las etiquetas que contiene la planta a cargar, y así evitar
         // llamar a BD cada vez que queramos pedir la etiqueta de cada punto
-        var saved_labels = new LabelResource().readFromFloor(Floor.data.id);
+        Floor.saved_labels = new LabelResource().readFromFloor(Floor.data.id);
 
-        for(var i in points)
-        {
-            var point = points[i];
-            var block = $e.floor.grid.find('.row[data-row="' + point.row + '"]')
-                .find('.block[data-col="' + point.col + '"]');
 
-            Painter.label = saved_labels[point.label];
-            Painter.point_id = point.id;
+        // Iteraremos por cada punto, no pintando el siguiente hasta que se haya cargado
+        // la imágen para la etiqueta del anterior
+        //        http://www.bitstorm.org/weblog/2012-1/Deferred_and_promise_in_jQuery.html
+        //        http://stackoverflow.com/a/14408887/1260374
+        Floor.i = 0;
 
-            Painter.paintLabel(block);
-        }
+
+        Floor.loopPoints();
     },
 
 
@@ -211,6 +250,8 @@ var Floor = {
         Floor.block_width = Floor.grid_width / Floor.num_cols;
 
         Floor._drawGrid();
+
+        Floor.loading = false;
     },
 
 
@@ -224,8 +265,6 @@ var Floor = {
             Floor._loadSaved();
         else
             Floor.loadEmpty();
-
-        Floor.loading = false;
     },
 
 
@@ -263,4 +302,3 @@ function getNumBlocks(size)
 	// referirse al alto (height) o al ancho (width) del grid que los contiene.
 	return (size / block_size) - 1;
 }
-

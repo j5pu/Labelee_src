@@ -65,12 +65,12 @@ var Painter = {
     },
 
 
-    paintLabel: function(block)
+    paint: function(block)
     {
         //
         // Pinta etiqueta sobre un bloque en el grid para el plano
 
-        // Si no hay objeto definido no hacemos nada
+        // Si el pintor no tiene etiqueta para pintar entonces no hacemos nada
         if(!Painter.label)
             return;
 
@@ -99,7 +99,7 @@ var Painter = {
         //      - no es la misma que se pintó antes
         // Entonces:
         //      cargamos su imágen ..
-        if( !Painter.label_prev || Painter.label !== Painter.label_prev)
+        if(!Painter.label_prev || Painter.label !== Painter.label_prev)
         {
             // Tomamos la imágen del icono
             Painter.icon = new Image();
@@ -107,15 +107,23 @@ var Painter = {
 
             // No hacemos nada mientras no esté la imágen del mapa cargada en el navegador
             Painter.icon.onload = function(){
-                Painter.label_category = new LabelCategoryResource().readFromUri(Painter.label.category);
+                Painter.label_category = new LabelCategoryResource().readFromUri(Painter.label.category_uri);
                 Painter._draw(block);
+
+                // Seguimos iterando mientras se esté cargando el plano
+                if(Floor.loading)
+                    Floor.loopPoints();
             };
         }
         else
+        {
+            // Si la etiqueta es igual a la anterior entonces ya se puede pintar
+            // sin tener que volver a cargar su imágen
             Painter._draw(block);
 
-        // Según estemos cargando o pintando bloque el previo tendrá uno u otro
-        Painter.label_prev = Painter.label;
+            if(Floor.loading)
+                Floor.loopPoints();
+        }
     },
 
 

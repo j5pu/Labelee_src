@@ -12,7 +12,7 @@ urlpatterns = patterns('map_editor.api_2',
 	url(r'^(?P<resource>.*)/(?P<id>\d*)/img$', 'services.views.img'),
 	
 	# /api-2/object/grid/1
-	url(r'^object/grid/(?P<grid_id>\d+)$', 'resources.label.read_from_grid'),
+	url(r'^label/floor/(?P<floor_id>\d+)$', 'resources.label.read_from_floor'),
 	
 	url(r'^label/read-grouped', 'resources.label.read_grouped'),
 	
