@@ -2,6 +2,7 @@
 
 {% block css %}
     <link rel="stylesheet" href="{{ STATIC_URL }}css/map_editor/edit_map/styles.css"/>
+    <link rel="stylesheet" media = "print" href="{{ STATIC_URL }}css/map_editor/edit_map/print.css"/>
 {% endblock css %}
 
 {% block js %}
@@ -24,6 +25,7 @@
     {% csrf_token %}
 
     <!-- GRID PARA EL PLANO DE LA PLANTA -->
+    <img src = "http://127.0.0.1:8000/media/img/enclosures/Recinto1/floors/27.jpg" id = "fake">
     <div id="grid"></div>
 
     <!-- MENU -->

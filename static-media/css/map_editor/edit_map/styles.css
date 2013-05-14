@@ -111,14 +111,9 @@ iframe
 	display:none;
 }
 
-
-@media print
+img#fake
 {
-    div#grid
-    {
-        list-style-image: url(http://localhost:8000/media/img/enclosures/Recinto1/floors/27.jpg);
-        background-size: 1020px 700px;
-        display: list-item;
-        list-style-position: inside;
-    }
+    width: 1px;
+    height: 1px;
+    color: transparent;
 }
