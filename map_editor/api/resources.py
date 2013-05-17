@@ -160,6 +160,7 @@ class QRCodeResource(ModelResource):
             'point': ALL_WITH_RELATIONS,
         }
 
+
     def determine_format(self, request):
         return 'application/json'
 
