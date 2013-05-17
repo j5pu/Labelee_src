@@ -10,6 +10,10 @@
     <script src="{{ STATIC_URL }}vendor/bootstrap/bootstrap.file-input.js"></script>
 
     <script src="{{ STATIC_URL }}js/map_editor/index/main_angular.js"></script>
+
+    <script>
+        var constants = {{ constants }};
+    </script>
 {% endblock js %}
 
 
@@ -49,6 +53,8 @@
                         <i class="icon-edit" ng-click="update()"></i>
                         <i class="icon-remove" ng-click="del()"></i>
                     </div>
+
+                    <button ng-click="calculateRoutes()">Calcular rutas</button>
                 </div>
                 <div ng-show="editing">
                     <form>

@@ -284,6 +284,7 @@ function PointResource()
 				async : false,
 				success : function(response) {
 					new_element = response;
+                    alert('puntos creados')
 				},
 				error : function(response) {
 					var j = response;
@@ -327,6 +328,32 @@ function PointResource()
 }
 
 
+function EnclosureResource()
+{
+    Resource.call(this, 'enclosure');
+
+    this.calculateRoutes = function(enclosure_id){
+        $.ajax({
+            url : this.api2_url + 'calculate-routes/' + enclosure_id,
+            type : 'post',
+            headers : {
+                'Content-Type' : 'application/json'
+            },
+            data : JSON.stringify(data),
+            dataType : 'json', // esto indica que la respuesta vendrá en formato json
+            async : false,
+            success : function(response) {
+                new_element = response;
+            },
+            error : function(response) {
+                var j = response;
+            }
+        });
+    };
+}
+
+
 LabelResource.prototype = new Resource;
 LabelCategoryResource.prototype = new Resource;
 PointResource.prototype = new Resource;
+EnclosureResource.prototype = new Resource;
