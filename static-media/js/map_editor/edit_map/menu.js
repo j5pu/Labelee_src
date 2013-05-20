@@ -165,15 +165,47 @@ var Menu = {
     sending_img: false,
 
     init: function(){
-       this._fillSelectors();
-       Events.bindMenu();
+        this._fillSelectors();
+        this.fillQrList();
+        this._fillConnectionsList();
+//        this.toggleBorders();
+        this.toggleQRs();
+        Events.bindMenu();
+        Menu.saved_labels = new LabelResource().readFromFloor(Floor.data.id);
     },
 
 
     _fillSelectors: function()
     {
+        // Rellena el selector de categoría de etiqueta y deja el selector para label
+        // sólo con la opción 'selecc. etiqueta', ya que de momento no se ha
+        // elegido una categoría para la que mostrar sus posibles etiquetas
         this.fillCategorySelector();
         this.fillLabelSelector();
+    },
+
+
+    fillQrList: function()
+    {
+        // Rellena la lista de QRs creados para la planta
+
+        var list = $e.qr.list;
+
+        if(list)
+            list.empty();
+
+        Menu.qr_list = new Resource('qr-code').readAllFiltered('?point__floor__id=' + Floor.data.id);
+        for(var i in Menu.qr_list)
+        {
+            var qr = Menu.qr_list[i];
+            list.append('<li>' + qr.code + '</li>');
+        }
+    },
+
+
+    _fillConnectionsList: function()
+    {
+        // Rellena la lista de aristas para la planta
     },
 
 
@@ -211,7 +243,7 @@ var Menu = {
     },
 
 
-    toggleBlockBorders: function()
+    toggleBorders: function()
     {
         // Muestra o no los bordes del bloque según esté o no marcado el checkbox 'ver rejilla'
         if($e.floor.toggle_border.is(':checked'))
@@ -229,6 +261,19 @@ var Menu = {
                 'height': Floor.block_height_initial + 'px',
                 'width': Floor.block_width_initial + 'px'
             });
+        }
+    },
+
+
+    toggleQRs: function()
+    {
+        if($e.qr.highlight.is(':checked'))
+        {
+            $e.floor.blocks.find('div').show();
+        }
+        else
+        {
+            $e.floor.blocks.find('div').hide();
         }
     }
 };

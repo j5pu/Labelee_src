@@ -162,6 +162,9 @@ INSTALLED_APPS = (
 #     }
 # }
 
+
+API_LIMIT_PER_PAGE = 5000
+
 #
 # Para ver si estamos en desarrollo o producción
 ## Pull in CloudFoundry's production settings
@@ -221,4 +224,5 @@ else:
     
 #     Estas aplicaciones sólo se usarán en desarrollo..
     INSTALLED_APPS += ('south', 'sandbox',)
-    
+
+from utils.constants import *

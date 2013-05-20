@@ -262,6 +262,9 @@ function PointResource()
         //
         // points_data = [{point0}, {point1}..]
 
+        if(points_data.length === 0)
+            return;
+
         var groups = divideInGroups(points_data, 500)
 
         //
@@ -281,6 +284,7 @@ function PointResource()
 				async : false,
 				success : function(response) {
 					new_element = response;
+                    alert('puntos creados')
 				},
 				error : function(response) {
 					var j = response;
@@ -293,6 +297,9 @@ function PointResource()
     this.deletePoints = function(points_data){
         // Divido los puntos en grupos de 500 y envío cada grupo
         // vía POST -> /api-2/point/delete-from-list
+
+        if(points_data.length === 0)
+            return;
 
         var groups = divideInGroups(points_data, 500);
 
@@ -321,6 +328,32 @@ function PointResource()
 }
 
 
+function EnclosureResource()
+{
+    Resource.call(this, 'enclosure');
+
+    this.calculateRoutes = function(enclosure_id){
+        $.ajax({
+            url : this.api2_url + 'calculate-routes/' + enclosure_id,
+            type : 'post',
+            headers : {
+                'Content-Type' : 'application/json'
+            },
+            data : JSON.stringify(data),
+            dataType : 'json', // esto indica que la respuesta vendrá en formato json
+            async : false,
+            success : function(response) {
+                new_element = response;
+            },
+            error : function(response) {
+                var j = response;
+            }
+        });
+    };
+}
+
+
 LabelResource.prototype = new Resource;
 LabelCategoryResource.prototype = new Resource;
 PointResource.prototype = new Resource;
+EnclosureResource.prototype = new Resource;

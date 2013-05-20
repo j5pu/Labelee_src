@@ -36,12 +36,24 @@ input[name="num_rows"]
 	/*margin: 3px;*/
 }
 
-#grid .block img
+#grid .block .label_img
 {
 	position: absolute;
 	left: 0;
 	top: 0;
 }
+
+#grid .block div
+{
+    position: absolute;
+    left: 1em;
+    z-index: 2;
+    background: #f5f5f5;
+    padding: 0.5em;
+    opacity: 0.9;
+}
+
+
 
 #menu
 {
@@ -109,4 +121,28 @@ iframe
 #label-form, #category-form
 {
 	display:none;
+}
+
+@media screen
+{
+    #grid
+    {
+
+        background-size: 100%;
+        box-shadow: 1px 1px 10px;
+        /*height: auto;*/
+        margin: 0 auto;
+        /*width: auto;*/
+    }
+}
+
+@media print
+{
+    div#grid
+    {
+        list-style-image: url(http://localhost:8000/media/img/enclosures/Recinto1/floors/27.jpg);
+        background-size: 1020px 700px;
+        display: list-item;
+        list-style-position: inside;
+    }
 }

@@ -8,25 +8,12 @@ from map_editor.api.resources import LabelResource
 from map_editor.models import Label, LabelCategory
 
 
-def read_grouped(request):
-    """
-    /api-2/object/read-grouped
-
-    ->
-    [
-
-    ]
-    """
-    label_list = LabelResource().get_list(request)
-    return HttpResponse(label_list, content_type="application/json")
-
-
 def read_from_floor(request, floor_id):
     """
-    /api-2/object/grid/1
+    /api-2/qr-code/floor/1
 
-    xej para obtener la lista de objetos que pertenecen al grid con id=1:
-        /api-2/object/points__grid__id=1
+    xej para obtener la lista de QRs que pertenecen al floor con id=1:
+        /api-2/qr-code/points__floor__id=1
     """
     # ["point", "object", ..] --> ["object", "point", ..]
     # related_resources = related_resources.split("/")[:-1].reverse()
