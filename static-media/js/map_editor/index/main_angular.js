@@ -59,6 +59,12 @@ function EnclosureCtrl($scope)
 		$scope.$parent.$parent.enclosures = $scope.enclosure_resource.readAll();
 
 	};
+
+
+    $scope.calculateRoutes = function()
+    {
+        new EnclosureResource().calculateRoutes($scope.enclosure.id);
+    };
 }
 
 function FloorsCtrl($scope, $element)

@@ -4,8 +4,6 @@ from django.conf.urls.defaults import *
 
 urlpatterns = patterns('sandbox.views',
 
-	# /sandbox/ramon/angularjs/..
-
 	# url(r'^angularjs/$', 'sandbox.ramon.views.angular', name='sandbox.views.angular'),
 
 	url(r'^angular/services$', 'ng_services'),
@@ -15,5 +13,9 @@ urlpatterns = patterns('sandbox.views',
 	url(r'^angular/directives$', 'directives'),
 
 	url(r'^vcap-info$', 'show_vinfo'),
+
+
+	url(r'^tlouder$', 'tlouder'),
+	url(r'^multix$', 'multix'),
 
 )

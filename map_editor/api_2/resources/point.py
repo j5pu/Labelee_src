@@ -3,7 +3,7 @@
 from django.http import HttpResponse
 import simplejson
 from map_editor.api.resources import PointResource
-from map_editor.models import Point
+from map_editor.models import Point, Label, Floor
 from django.contrib.auth.models import User
 
 
@@ -26,11 +26,18 @@ def create_from_list(request):
     request.user = user
     json_data = request.body
     point_list = simplejson.loads(json_data)
-    pr = PointResource()
+    # pr = PointResource()
 
     for point in point_list:
-        bundle = pr.build_bundle(data=point, request=request)
-        pr.obj_create(bundle)
+        # bundle = pr.build_bundle(data=point, request=request)
+        # pr.obj_create(bundle)
+        point = Point(
+            row=point['row'],
+            col=point['col'],
+            label=Label.objects.get(id=point['label']),
+            floor=Floor.objects.get(id=point['floor'])
+        )
+        point.save()
 
     return HttpResponse(simplejson.dumps('ok'))
 
@@ -46,5 +53,5 @@ def delete_from_list(request):
         p = Point.objects.get(id=point)
         p.delete()
 
-    return HttpResponse(simplejson.dumps('ok'));
+    return HttpResponse(simplejson.dumps('ok'))
 	

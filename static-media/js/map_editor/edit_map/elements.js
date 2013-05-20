@@ -45,5 +45,10 @@ var $e = {
             update: $('#update_floor'),
             clear: $('#clear_floor')
         };
+
+        this.qr = {
+            list: $('#qr_list ul'),
+            highlight: $('#highlight_qrs')
+        };
     }
 };

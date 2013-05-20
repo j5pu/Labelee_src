@@ -224,4 +224,5 @@ else:
     
 #     Estas aplicaciones sólo se usarán en desarrollo..
     INSTALLED_APPS += ('south', 'sandbox',)
-    
+
+from utils.constants import *

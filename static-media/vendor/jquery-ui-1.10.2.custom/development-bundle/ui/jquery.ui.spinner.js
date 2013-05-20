@@ -58,7 +58,7 @@ $.widget( "ui.spinner", {
 		// format the value, but don't constrain
 		this._value( this.element.val(), true );
 
-		this._draw();
+		this._drawLabel();
 		this._on( this._events );
 		this._refresh();
 
@@ -187,7 +187,7 @@ $.widget( "ui.spinner", {
 		"mouseleave .ui-spinner-button": "_stop"
 	},
 
-	_draw: function() {
+	_drawLabel: function() {
 		var uiSpinner = this.uiSpinner = this.element
 			.addClass( "ui-spinner-input" )
 			.attr( "autocomplete", "off" )

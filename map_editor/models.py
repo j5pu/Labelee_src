@@ -3,6 +3,12 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+CATEGORIAS_FIJAS= {
+    'BLOQUEANTES': 'Bloqueantes',
+    'ARISTAS': 'Aristas',
+    'INTERMEDIAS': 'Intermedias',
+}
+
 
 class Enclosure(models.Model):
     name = models.CharField(max_length=60, unique=True, blank=False)
@@ -122,7 +128,7 @@ class Point(models.Model):
 
 class QR_Code(models.Model):
     code = models.CharField(max_length=200, unique=True, blank=False)
-    point = models.ForeignKey(Point, related_name='qr_code')
+    point = models.OneToOneField(Point, related_name='qr_code')
 
     class Meta:
         verbose_name = 'QR_Code'
