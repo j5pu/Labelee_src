@@ -33,3 +33,11 @@ def show_vinfo(request):
     # }
     # return render_to_response('vcap_info.html', ctx, context_instance=RequestContext(request))
     return HttpResponse(vcap, mimetype='application/json')
+
+
+def tlouder(request):
+    return render_to_response('tlouder/index2.html', context_instance=RequestContext(request))
+
+
+def multix(request):
+    return render_to_response('labelee/multix.html', context_instance=RequestContext(request))
