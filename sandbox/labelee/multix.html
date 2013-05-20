@@ -41,7 +41,11 @@
 	body {
     padding: 0;
     margin: 0;
-    background: #f6f6f6;
+    //background: #f6f6f6;
+
+        background-image: url(http://bradjasper.com/subtle-patterns-bookmarklet/patterns/light_toast.png);
+        background-size: auto;
+        background-repeat: repeat repeat;}
     }
 
     body:before {
@@ -185,7 +189,7 @@
     }
     .mmenu
     {
-        background: #f6f6f6;
+        //background: #f6f6f6;
     }
     .mmenu *
     {
@@ -235,7 +239,6 @@
 function hideAddressBar()
 {
     var android_version = parseFloat(device.version);
-    alert(android_version);
     if (!(android_version >= 2.3)) return;
 
     if(!window.location.hash)
