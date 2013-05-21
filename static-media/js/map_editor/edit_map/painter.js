@@ -117,26 +117,13 @@ var Painter = {
             else
                 Painter.label_category = new LabelCategoryResource().readFromUri(Painter.label.category);
 
-            if(Painter.label.img)
-            {
-                // Obtenemos la imágen del icono
-                Painter.icon = new Image();
-                Painter.icon.src = Painter.label.img;
+            // Obtenemos la imágen del icono
+            Painter.icon = new Image();
+            Painter.icon.src = Painter.label.img;
 
-                // No hacemos nada mientras no esté la imágen del mapa cargada en el navegador
-                Painter.icon.onload = function(){
+            // No hacemos nada mientras no esté la imágen del mapa cargada en el navegador
+            Painter.icon.onload = function(){
 
-                    Painter._drawLabel(block);
-
-                    // Seguimos iterando mientras se esté cargando el plano
-                    if(Floor.loading)
-                        Floor._loopPoints();
-                    else
-                        Painter.label_prev = Painter.label;
-                };
-            }
-            else
-            {
                 Painter._drawLabel(block);
 
                 // Seguimos iterando mientras se esté cargando el plano
@@ -144,7 +131,7 @@ var Painter = {
                     Floor._loopPoints();
                 else
                     Painter.label_prev = Painter.label;
-            }
+            };
         }
         else
         {
@@ -196,32 +183,25 @@ var Painter = {
 
         // Le añadimos la imágen para la etiqueta, escondida para que se muestre
         // sólo cuando se pase el ratón por encima de su bloque
-        if(Painter.label.img)
-        {
-            block.append('<img class="label_img" src="' + Painter.label.img + '"/>');
-
-            var img = block.find('img.label_img');
-            var transform_factor = Painter.icon.width / Floor.block_width;
-            img.css({
-                'margin-top': (Floor.block_height - img.height()) / 2 + 'px',
-                'transform': 'scale(' + transform_factor + ')',
-                'z-index': '1',
-                'display': 'none'
-            });
-        }
+        block.append('<img class="label_img" src="' + Painter.label.img + '"/>');
 
 
         // PROVISIONAL
         //
+        block.append('<div class="point_info">' +
+            Painter.point.row + ', ' +  Painter.point.col +
+            '"</div>');
 
-        if(Floor.loading)
-            block.append('<div class="point_info">' +
-                Painter.point.row + ', ' +  Painter.point.col +
-                '"</div>');
 
-        // Indicar la descripción de la arista..
-        // A IMPLEMENTAR
 
+        var img = block.find('img.label_img');
+        var transform_factor = Painter.icon.width / Floor.block_width;
+        img.css({
+            'margin-top': (Floor.block_height - img.height()) / 2 + 'px',
+            'transform': 'scale(' + transform_factor + ')',
+            'z-index': '1',
+            'display': 'none'
+        });
     },
 
 
