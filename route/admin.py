@@ -2,6 +2,6 @@ from django.contrib import admin
 
 from route.models import *
 
-admin.site.register(route)
-admin.site.register(step)
-admin.site.register(connection)
+admin.site.register(Route)
+admin.site.register(Step)
+admin.site.register(Connection)

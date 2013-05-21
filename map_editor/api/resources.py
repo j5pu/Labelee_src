@@ -122,6 +122,7 @@ class LabelResource(ModelResource):
             'category': ALL_WITH_RELATIONS,
             'points': ALL_WITH_RELATIONS
         }
+        max_limit = 5000
 
     def determine_format(self, request):
         return 'application/json'

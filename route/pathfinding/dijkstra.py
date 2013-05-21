@@ -1,17 +1,17 @@
 import sys
 
 
-class dijkstra():
+class Dijkstra():
     floors = []
     walls = []
     qr = []
-    connections = []
+    mapConnections = {} #Aristas del mapa
 
-    def __init__(self, floors, walls, qr, connections):
+    def __init__(self, floors, walls, qr, mapConnections):
         self.floors = floors
         self.walls = walls
         self.qr = qr
-        self.connections = connections
+        self.mapConnections = mapConnections
 
     def __shortestpath__(self, graph, start, end, visited=[], distances={}, predecessors={}):
         # we've found our end node, now find the path to it, and return
@@ -62,8 +62,8 @@ class dijkstra():
     def __createMap__(self):
         map = {}
         for floor in self.floors:
-            for row in range(1, floor.num_rows + 1):
-                for column in range(1, floor.num_cols + 1):
+            for row in range(0, floor.num_rows):
+                for column in range(0, floor.num_cols):
                     key = "{0}_{1}_{2}".format(row, column, floor.id)
                     if key in self.walls:
                         map[key] = 'W'
@@ -87,20 +87,31 @@ class dijkstra():
         :param column:
         :return:
         """
+
         connection = {}
-        keys = [self.getKey(row - 1, column, numfloor), self.getKey(row, column + 1, numfloor),
-                self.getKey(row + 1, column, numfloor),
-                self.getKey(row, column - 1, numfloor)]
+        keys = [self.getKey(row - 1, column, numfloor), #North 0
+                self.getKey(row, column + 1, numfloor), #East 90
+                self.getKey(row + 1, column, numfloor), #South 180
+                self.getKey(row, column - 1, numfloor), #West 270
+                self.getKey(row-1, column +1, numfloor), #Northeast  45
+                self.getKey(row+1, column +1, numfloor), #Southeast 135
+                self.getKey(row+1, column -1, numfloor), #Southwest 225
+                self.getKey(row-1, column -1, numfloor), #Northwest 315
+        ]
         for key in keys:
             if self.__existConnection__(map, key):
                 connection[key] = 1
+        key = self.getKey(row, column, numfloor)
+        if key in self.mapConnections:
+            connection[self.mapConnections[key]] = 1
+
         return connection
 
     def __createGraph__(self, map):
         graph = {}
         for floor in self.floors:
-            for row in range(1, floor.num_rows + 1):
-                for column in range(1, floor.num_cols + 1):
+            for row in range(0, floor.num_rows):
+                for column in range(0, floor.num_cols):
                     key = self.getKey(row, column, floor.id)
                     if map[key] != 'W':
                         graph[key] = self.__getConnections__(row, column, map, floor.id)
@@ -123,5 +134,5 @@ class dijkstra():
                     result.append([origin, destination, path])
 
         return result
-        #  print shortestpath(test,getKey(1,1,1), getKey(4,5,1))
+
 

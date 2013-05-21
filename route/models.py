@@ -3,15 +3,15 @@ from django.db import models
 # Create your models here.
 
 
-class route(models.Model):
-    origin = models.ForeignKey('map_editor.Point', related_name='+')
-    destiny = models.ForeignKey('map_editor.Point', related_name='+')
+class Route(models.Model):
+    origin = models.ForeignKey('map_editor.Point', related_name='+', on_delete=models.CASCADE)
+    destiny = models.ForeignKey('map_editor.Point', related_name='+', on_delete=models.CASCADE)
 
     def __unicode__(self):
         return self.name
 
 
-class step(models.Model):
+class Step(models.Model):
     NORMAL = 'NOR'
     ESCALERA = 'ESC'
     ASCENSOR = 'ASC'
@@ -24,11 +24,11 @@ class step(models.Model):
     step_number = models.PositiveIntegerField()
     row = models.PositiveIntegerField()
     column = models.PositiveIntegerField()
-    route = models.ForeignKey(route)
-    floor = models.ForeignKey('map_editor.Floor')
+    route = models.ForeignKey(Route, on_delete=models.CASCADE)
+    floor = models.ForeignKey('map_editor.Floor', on_delete=models.CASCADE)
 
 
-class connection(models.Model):
+class Connection(models.Model):
     init = models.ForeignKey('map_editor.Point', related_name='+')
     end = models.ForeignKey('map_editor.Point', related_name='+')
 
