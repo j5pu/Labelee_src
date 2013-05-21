@@ -131,6 +131,7 @@ INSTALLED_APPS = (
     'tastypie',
     'map_editor',
     'map',
+    'route',
 )
 
 # A sample logging configuration. The only tangible logging
@@ -161,9 +162,6 @@ INSTALLED_APPS = (
 #         },
 #     }
 # }
-
-
-API_LIMIT_PER_PAGE = 5000
 
 #
 # Para ver si estamos en desarrollo o producción
@@ -201,26 +199,26 @@ else:
     #         "PORT": "10001",
     #     }
     # }
-    # DATABASES = {
-    #     "default": {
-    #         "ENGINE": "django.db.backends.mysql",
-    #         "NAME": "labelee_dev",
-    #         "USER": "root",
-    #         "PASSWORD": "",
-    #         "HOST": "192.168.1.192",
-    #         "PORT": "3306",
-    #         }
-    # }
     DATABASES = {
         "default": {
-            "ENGINE": "django.db.backends.sqlite3",
-            "NAME": "dev.db",
-            "USER": "",
+            "ENGINE": "django.db.backends.mysql",
+            "NAME": "labelee_dev",
+            "USER": "root",
             "PASSWORD": "",
-            "HOST": "",
-            "PORT": "",
+            "HOST": "127.0.0.1",
+            "PORT": "3306",
             }
-        }
+    }
+    # DATABASES = {
+    #     "default": {
+    #         "ENGINE": "django.db.backends.sqlite3",
+    #         "NAME": "dev.db",
+    #         "USER": "",
+    #         "PASSWORD": "",
+    #         "HOST": "",
+    #         "PORT": "",
+    #         }
+    #     }
     
 #     Estas aplicaciones sólo se usarán en desarrollo..
     INSTALLED_APPS += ('south', 'sandbox',)

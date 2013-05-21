@@ -37,6 +37,9 @@ urlpatterns = patterns('',
     # Uncomment the next line to enable the admin:
     url(r'^admin/', include(admin.site.urls)),
 
+    	# Calculo de rutas
+	url(r'^calculate-routes/(?P<enclosure_id>\d+)', 'route.calculateRoutes.calculate_routes'),
+
     # Para poder crear un superusuario en appfog
     # Allow for a superuser to be created if one does not exist.
     # You're basically asking to be hacked by leaving this uncommented.

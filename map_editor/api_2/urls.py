@@ -20,8 +20,7 @@ urlpatterns = patterns('map_editor.api_2',
 	url(r'^point/create-from-list', 'resources.point.create_from_list'),
 	url(r'^point/delete-from-list', 'resources.point.delete_from_list'),
 
-	# ENCLOSURE
-	url(r'^enclosure/calculate-routes/(?P<enclosure_id>\d+)', 'resources.enclosure.calculate_routes'),
+
 	
 
 	
