@@ -16,6 +16,7 @@
 	<link rel="stylesheet" href="{{ STATIC_URL }}labelee/css/leaflet.rrose.css">
 	<link rel="stylesheet" href="{{ STATIC_URL }}labelee/css/leaflet-search.css">
 	<link rel="stylesheet" href="{{ STATIC_URL }}labelee/css/search-mobile.css">
+    <link rel="stylesheet" href="{{ STATIC_URL }}labelee/css/multix.css">
 
 
     <script src="{{ STATIC_URL }}labelee/js/scale.fix.js"></script>
@@ -31,341 +32,12 @@
     <script src="{{ STATIC_URL }}labelee/js/L.PolylineDecorator.js"></script>
     <script src="{{ STATIC_URL }}labelee/js/rrose-src.js"></script>
     <script src="{{ STATIC_URL }}labelee/js/leaflet-search.js"></script>
+    <script src="{{ STATIC_URL }}labelee/js/jquery.mmenu.js"></script>
+    <script src="{{ STATIC_URL }}labelee/js/main.js"></script>
 
-    <script type="text/javascript" language="javascript" src="{{ STATIC_URL }}tlouder/index2_files/jquery.mmenu.js"></script>
-    <link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}tlouder/index2_files/examples.css" />
-
-    <link type="text/css" media="all" rel="stylesheet" href="{{ STATIC_URL }}tlouder/index2_files/mmenu.css" />
-	<!--[if lte IE 8]><link rel="stylesheet" href="../dist/leaflet.ie.css" /><![endif]-->
-	<style type="text/css">
-	body {
-    padding: 0;
-    margin: 0;
-    //background: #f6f6f6;
-
-        background-image: url(http://bradjasper.com/subtle-patterns-bookmarklet/patterns/light_toast.png);
-        background-size: auto;
-        background-repeat: repeat repeat;}
-    }
-
-    body:before {
-        content: "";
-        position: fixed;
-        top: -10px;
-        left: -5px;
-        width: 110%;
-        height: 10px;
-
-        -webkit-box-shadow: 0 0 10px rgba(0,0,0,.8);
-        box-shadow: 0 0 10px rgba(0,0,0,.8);
-
-        z-index: 100;
-	}
-	html, body, #map {
-	    height: 100%;
-	}
-
-    html{
-        //margin-top:1em;
-    }
-
-    #map{
-        height: 100%;
-        border-left: 3px solid #cfcfcf;
-        -webkit-box-shadow: inset 3px 3px 5px rgba(0,0,0,0.4);
-        box-shadow: inset 3px 3px 5px rgba(0,0,0,0.4);
-
-    }
-
-   .leaflet-control-search .search-button {
- //       background-position: 0 -30px;
-          opacity: .5;
-    }
-
-    .leaflet-control-layers-toggle {
-        width: 32px !important;
-        height: 32px !important;
-        opacity: .85;
-        border: 2px #cfcfcf solid;
-        top: -3px;
-        border-radius: 4px;
-
-    }
-    .leaflet-control-layers {
-        box-shadow: 0 1px 7px rgba(0,0,0,0.4);
-        -webkit-box-shadow: 0 1px 7px rgba(0,0,0,0.4);
-        background: #f8f8f8;
-        top: -2px;
-        opacity: .85;
-
-    }
-
-    .leaflet-top {
-        top: 3.75% !important;
-    }
-
-    .leaflet-control {
-        -webkit-box-shadow: 2px 2px 8px rgba(0,0,0,0.3) !important;
-        box-shadow: 2px 2px 8px rgba(0,0,0,0.3) !important;
-    }
-    .mmenu div.search
-    {
-        background: #eee;
-        border-bottom: 2px solid #cfcfcf;
-        width: 100%;
-        padding: 7% 75px 7% 10px !important;
-        position: fixed;
-        top: 0;
-        z-index: 1;
-
-        -webkit-box-sizing: border-box;
-        -moz-box-sizing: border-box;
-        box-sizing: border-box;
-    }
-    @media all and (min-width: 500px) {
-        .mmenu div.search
-        {
-            width: 500px;
-        }
-    }
-    html.mmenu-right .mmenu div.search
-    {
-        padding: 5px 10px 5px 75px !important;
-    }
-    .mmenu div.search input
-    {
-        background: #;
-        border: 1px solid #ddd;
-        border-radius: 20px;
-        line-height: 30px;
-        color: #999;
-        display: block;
-        width: 100%;
-        height: 30px;
-        margin: 5px 0;
-        padding: 0 0 0 10px;
-
-        -webkit-box-sizing: border-box;
-        -moz-box-sizing: border-box;
-        box-sizing: border-box;
-    }
-    .mmenu div.search ~ ul
-    {
-        padding-top: 13%;
-    }
-
-    .mmenu li.no-results
-    {
-        border: none;
-        font-style: italic;
-        color: #666;
-        display: none;
-    }
-
-    .mmenu li i
-    {
-        border-radius: 4px;
-        background: #cfcfcf;
-    //    box-shadow: 0 0 2px rgba( 0, 0, 0, 0.2 );
-        font-size: 11px;
-        font-weight: bold;
-        font-style: normal;
-        color: #fff;
-        text-indent: 0;
-        text-align: center;
-        text-shadow: none;
-        line-height: 22px;
-        display: block;
-        width: 20px;
-        height: 20px;
-        position: absolute;
-        right: 120px;
-        top: 10px;
-    }
-
-    html.mmenu-opened .mmenu-page
-    {
-        //box-shadow: 0 0 15px rgba( 0, 0, 0, 0.2 );
-    }
-    .mmenu
-    {
-        //background: #f6f6f6;
-    }
-    .mmenu *
-    {
-        text-shadow: none;
-    }
-    .mmenu li
-    {
-        border-top-color: #fff;
-        border-bottom-color: #ddd;
-        position: relative;
-    }
-    .mmenu li > a,
-    .mmenu li > span,
-    .mmenu li > a:hover
-    {
-    //color: #666;
-        }
-    .mmenu li.mmenu-selected > a,
-    .mmenu li.mmenu-selected > span
-    {
-        background: #fff;
-    }
-    .mmenu a.mmenu-subopen
-    {
-        border-left: 1px solid #ddd;
-    }
-    .mmenu a.mmenu-subclose
-    {
-        background: #eee;
-    }
-    .mmenu li.mmenu-label
-    {
-        background: #cfcfcf;
-        color: #999;
-        border-color: #cfcfcf;
-    }
-    .mmenu a.mmenu-subopen:after,
-    .mmenu a.mmenu-subclose:before
-    {
-        border-color: rgba( 0, 0, 0, 0.2 );
-    }
-    </style>
-    <script type="text/javascript">
-//Pantalla completaa
-//new line
-
-function hideAddressBar()
-{
-    var android_version = parseFloat(device.version);
-    if (!(android_version >= 2.3)) return;
-
-    if(!window.location.hash)
-    {
-        if(document.height < window.outerHeight)
-        {
-            document.body.style.height = (window.outerHeight + 50) + 'px';
-        }
-
-        setTimeout( function(){ window.scrollTo(0, 1); }, 50 );
-    }
-}
-
-window.addEventListener("load", function(){ if(!window.pageYOffset){ hideAddressBar(); } } );
-window.addEventListener("orientationchange", hideAddressBar );
-
-
-
-        /*			//	The menu on the left
-         $(function() {
-
-         var $menu = $('nav#menu-left');
-
-         $menu.mmenu();
-
-         //	Search left menu (single level)
-         var $input = $menu.find( 'div.search input' );
-         var $items = $menu.find( 'li' ).not( '.no-results' );
-         var $noresults = $menu.find( 'li.no-results' );
-
-         $input.bind(
-         'keyup.search',
-         function()
-         {
-         var search = $(this).val().toLowerCase();
-         $items.show().each(
-         function()
-         {
-         if ( $(this).text().toLowerCase().indexOf( search ) == -1 )
-         {
-         $(this).hide();
-         }
-         }
-         );
-         $noresults[ $items.filter( ':visible' ).length ? 'hide' : 'show' ]();
-         }
-         );
-         });
-         */
-
-        //	The menu on the right
-        $(function() {
-
-            var $menu = $('nav#menu-right');
-
-            $menu.mmenu({
-                position: 'left',
-                slideDuration    : 300
-            });
-
-            //	Add counters
-            $menu.find( 'i' ).bind(
-                    'count.search',
-                    function()
-                    {
-                        var $t = $(this);
-                        var $li = $t.parents( 'li' );
-                        var length = $( $t.parent().prev().attr( 'href' ) ).children().not( '.mmenu-label' ).not( '.hidden' ).length - 1;
-
-                        $li.show();
-                        $t.text( length );
-                        if ( length == 0 )
-                        {
-                            $li.hide();
-                        }
-                    }
-            ).trigger( 'count.search' );
-
-            //	Search right menu (multiple levels)
-            var $input = $menu.find( 'div.search input' );
-            var $items = $menu.find( '.mmenu-submenu li' ).not( ':first-child' ).not( '.mmenu-label' ).not( '.no-results' );
-            var $labels = $menu.find( 'li.mmenu-label' );
-            var $noresults = $menu.find( 'li.no-results' );
-            var $counters = $menu.find( 'i' );
-
-            $input.bind(
-                    'keyup.search',
-                    function()
-                    {
-                        var search = $(this).val().toLowerCase();
-                        $items.each(
-                                function()
-                                {
-                                    var $t = $(this).show().removeClass( 'hidden' );
-                                    if ( $t.text().toLowerCase().indexOf( search ) == -1 )
-                                    {
-                                        $t.hide().addClass( 'hidden' );
-                                    }
-                                }
-                        );
-                        $labels.hide();
-                        $items.each(
-                                function()
-                                {
-                                    $(this).not( '.hidden' ).prevAll( '.mmenu-label' ).first().show();
-                                }
-                        );
-
-                        $noresults[ $items.not( '.hidden' ).length ? 'hide' : 'show' ]();
-                        $counters.trigger( 'count.search' );
-                    }
-            );
-
-            //	Click a menu-item
-            var $confirm = $('#confirmation');
-            $('#menu-right a').not( '.mmenu-subopen' ).not( '.mmenu-subclose' ).bind(
-                    'click.example',
-                    function( e )
-                    {
-                        e.preventDefault();
-                        $confirm.show().text( 'You clicked "' + $(this).text() + '"' );
-                        $('#menu-right').trigger( 'close' );
-                    }
-            );
-        });
-    </script>
 </head>
+
+
 <body>
     <div id="page">
         <div id="header">
@@ -538,7 +210,9 @@ window.addEventListener("orientationchange", hideAddressBar );
             </ul>
         </nav>
     </div>
-	<script>
+    <!--script src="{{ STATIC_URL }}labelee/js/map.js"></script-->
+
+    <script>
     ;
 
 
@@ -559,7 +233,7 @@ window.addEventListener("orientationchange", hideAddressBar );
             mapJson = STATIC_URL + "plantaB_grid.json",
             rutaJson= STATIC_URL + "plantaB_route.json";
 
-    /*
+/*
 // Crear mapas base
     var base = {
             "Planta2": L.imageOverlay('{{ STATIC_URL }}labelee/34.jpg', bounds),
@@ -573,40 +247,21 @@ window.addEventListener("orientationchange", hideAddressBar );
     var overlays = {
 
         'POIs_1': L.layerGroup([
-            L.cartoDB('http://thematicmapping.cartodb.com/api/v2/sql?q=SELECT * FROM nz_tour', {
-                pointToLayer: function(feature, latlng) {
-                    return L.marker(latlng, {
-                        icon: L.icon({
-                            iconSize: [27, 27],
-                            iconAnchor: [13, 27],
-                            popupAnchor:  [1, -24],
-                            iconUrl: 'icons/' + feature.properties.icon + '.png'
-                        })
-                    })
-                },
-                onEachFeature: function(feature, layer) {
-                    layer.bindPopup('<strong>' + feature.properties.name + '</strong><br>' + (feature.properties.description ? feature.properties.description : ''));
-                }
-            }),
-            L.geoJson(roads, {
-                style: {
-                    color: '#333',
-                    weight: 1.5,
-                    opacity: 1
-                }
-            })
-        ])
+
+        ]),
+
+        'POIs_2': L.layerGroup([
+        ]),
+
 
     };
-
 */
-
 
 		drawMap(mapJson,rutaJson);
 
 	function drawMap (mapJson, rutaJson)  {
 
-		$.getJSON(mapJson,function(data){ 
+		$.getJSON(mapJson,function(data){
 		map_img.src = STATIC_URL + data.map;
 
 			map_img.onload = function(){
@@ -614,7 +269,7 @@ window.addEventListener("orientationchange", hideAddressBar );
 			var	mapH = $(document).height(),
 				mapW = (map_img.width/map_img.height)*mapH,
 
-				
+
 				rows= data.num_rows,
 				scaleX = mapW/data.num_cols,
 				scaleY = mapH/rows,
@@ -627,7 +282,7 @@ window.addEventListener("orientationchange", hideAddressBar );
 		var pois_1 = new L.LayerGroup();
 
 		var	greenMarker = L.AwesomeMarkers.icon({
-						  icon: 'home', 
+						  icon: 'home',
 						  color: 'green'
 						}),
             blueMarker = L.AwesomeMarkers.icon({
@@ -635,24 +290,24 @@ window.addEventListener("orientationchange", hideAddressBar );
                           color: 'blue'
                         }),
 			redMarker = L.AwesomeMarkers.icon({
-						  icon: 'coffee', 
+						  icon: 'coffee',
 						  color: 'red'
 						});
 
-/*				originMarker = L.marker(originPoint, { bounceOnAdd: true, 
+/*				originMarker = L.marker(originPoint, { bounceOnAdd: true,
 					//bounceOnAddHeight: 20,
 					icon: greenMarker})
 				.addTo(map)
 				.bindPopup("¡Estás justo aquí!");
 				//.openPopup();
 
-			
+
 			//map.setView(originPoint, 1);
 
 			var destinyPoint = [(rs-data.destiny.row)*sY-sY, data.destiny.col*sX+sX],
-			
+
 				redMarker = L.AwesomeMarkers.icon({
-				  icon: 'coffee', 
+				  icon: 'coffee',
 				  color: 'red'
 				}),
 
@@ -713,7 +368,7 @@ window.addEventListener("orientationchange", hideAddressBar );
 		      .setContent('Estás justo aquí')
 		      .setLatLng(originMarker.getLatLng())
 		      .openOn(map);
-		
+
 		L.control.layers(baseLayers, overlays).addTo(map);
 
 		parquing.addTo(map);
@@ -793,7 +448,6 @@ window.addEventListener("orientationchange", hideAddressBar );
 
  		}); //getJSon
 	} //drawMap
-
 
 	</script>
 </body>
