@@ -4,9 +4,9 @@ from django.db import models
 from django.contrib.auth.models import User
 
 CATEGORIAS_FIJAS= {
-    'BLOQUEANTES': 'Bloqueantes',
-    'ARISTAS': 'Aristas',
-    'INTERMEDIAS': 'Intermedias',
+    0: 'Bloqueantes',
+    1: 'Aristas',
+    2: 'Intermedias',
 }
 
 
