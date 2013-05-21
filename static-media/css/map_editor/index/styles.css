@@ -43,7 +43,7 @@ input[type="text"] {
 .floor {
     background: none repeat scroll 0 0 #E2F6FF;
     border: 1px none grey;
-    display: inline-block;
+    display: block;
     margin-top: 0.1em;
     padding: 5px 16px;
     position: relative;

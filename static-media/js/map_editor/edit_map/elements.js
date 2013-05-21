@@ -17,7 +17,7 @@ var $e = {
                 img: $('#category-form input[name=img]'),
                 name: $('#category-form input[name=name]'),
                 color: $('#category-form input[name=color]'),
-                create: $('#category-form button[name=create]'),
+                create: $('#category-form button[name=create]')
             }
         };
 
@@ -32,7 +32,7 @@ var $e = {
                 img: $('#label-form input[name=img]'),
                 name: $('#label-form input[name=name]'),
                 category: $('#label-form select'),
-                create: $('#label-form button[name=create]'),
+                create: $('#label-form button[name=create]')
             }
         };
 
@@ -48,7 +48,7 @@ var $e = {
 
         this.qr = {
             list: $('#qr_list ul'),
-            highlight: $('#highlight_qrs')
+            toggle: $('#toggle_qrs')
         };
     }
 };

@@ -284,14 +284,13 @@ function PointResource()
 				async : false,
 				success : function(response) {
 					new_element = response;
-                    alert('puntos creados')
 				},
 				error : function(response) {
 					var j = response;
 				}
 			});
 		}
-	}
+	};
 
 
     this.deletePoints = function(points_data){

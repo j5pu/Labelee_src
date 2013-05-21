@@ -1,382 +1,201 @@
-
-var places;
-
-$(document).on('ready', function(){
-
-	// una vez pulsamos en un botón de clase 'toggable' entonces se ejecuta el function(e)
-	// $('.toggable').on('click', function(e){
-		// e.preventDefault();
-		// toggleTextBox($(this));
-	// });
-
-	Mustache.tags = ['[[', ']]'];
-
-	// Obtenemos todos los lugares
-	getPlaces();
-	
-    var template = $('#placesTpl').html();
-    var html = Mustache.to_html(template, places);
-    $('#enclosures').append(html);
-
-	addEvents();
+$(function() {
 
 });
 
 
-function getPlaces()
-{	
-	$.ajax({
-        url: '/api/v1/object/' + $(this).val(),
-        type: 'get',
-        headers: {'Content-Type': 'application/json'},
-        dataType: 'json',
-        async: false, // Así se espera a que responda el servidor y se ejecute el callback
-        success: function(response){
-			places = response;
-        },
-        error: function(response){
-			var j = response;
-        }
-    });
-}
-
-
-function addEvents()
+function EnclosuresCtrl($scope, UrlService)
 {
-	// Lugares
-	$('#add_place').on('click', createPlace);
-	$('.enclosure .icon-edit').on('click', updatePlace);
-	$('.enclosure .icon-remove').on('click', deletePlace);
+	$scope.enclosure_resource = new Resource('enclosure');
 
-	// Mapas
-	$('.floors button').on('click', createMap);
-	$('.map .icon-edit').on('click', updateMap);
-	$('.map .icon-remove').on('click', deleteMap);
+	$scope.enclosures = $scope.enclosure_resource.readAll();
+
+	$scope.createEnclosure = function() {
+		var data = {
+			name: $scope.enclosure_name,
+            owner: '/api/v1/user/1/'
+		};
+
+		$scope.enclosure_resource.create(data);
+
+		$scope.enclosures = $scope.enclosure_resource.readAll();
+		
+		$scope.enclosure_name = '';
+	};
 }
 
 
-function progressHandlingFunction(e){
-    if(e.lengthComputable){
-        $('progress').attr({value:e.loaded,max:e.total});
-    }
-}
-
-function addCRSFToken(component)
+function EnclosureCtrl($scope)
 {
-	var token = $('input name=[csrfmiddlewaretoken]').clone();
-	component.prepend(token);
-}
+	$scope.editing = false;
 
+	$scope.update = function() {
+		if (!$scope.editing) {
+			$scope.editing = true;
+		} else {
+			// Si ya se estaba editando cuando hemos invocado update() entonces
+			// guardamos el nuevo nombre en la BD
 
-function showErrors(component, errors)
-{
-	// Muestra los errores sobre en el componente elegido
+			var data = {
+				name : $scope.enclosure_name
+			};
 
-	// errors = {
-	//		name: ['Ya existe Place con este Name.']
-	// }
+			$scope.enclosure_resource.update(data, $scope.enclosure.id);
 
-	// Lo anterior generaría un div errorList:
-	//
-	//				<div class="errorList">
-	//					<div class="error">
-	//						name:
-	//						<ul>
-	//							<li>name</li>
-	//						</ul>
-	//					</div>
-	//				</div>
+			$scope.editing = false;
 
-	var errorList = '<div class="errorList alert alert-error">' +
-	'<a class="close" data-dismiss="alert">×</a>';
-	for(var key in errors)
-	{
-		errorList += '<div class="error"><span class="field">' + key + ': </span><ul>';
-
-		for(var i in errors[key])
-			errorList += '<li>' + errors[key][i] + '</li>';
-		errorList += '</ul></div>';
-
-	}
-	errorList += '</div>';
-
-	// Limpiamos la lista de errores del componente por si ya tiene algo
-	var el = component.find('.errorList');
-
-	if(el.length)
-		el.remove();
-
-	component.prepend(errorList);
-
-	component.find('.errorList').hide().fadeIn(1000);
-}
-
-
-function replaceAll(string, token, newtoken) {
-	while(string.indexOf(token) != -1) {
-		string = string.replace(token, newtoken);
-	}
-	return(string);
-}
-
-
-function createElement(template, context)
-{
-	// Crea un componente a partir de otro que actúa como plantilla, sobre
-	// el cual se reemplaza cada clave por su respectivo valor en el diccionario 'context'
-
-	// e.g.:
-	//		component = $('#templates #enclosure')
-	//		values = {
-	//			'[[enclosure.name]]': 'Matadero',
-	//			'[[enclosure.owner]]': 'Fapencio'
-	//		}
-
-	var component = template.clone();
-
-	var html_content = component.html();
-	for(var key in context)
-		html_content = replaceAll(html_content, key, context[key]);
-	component.html(html_content);
-
-
-	// Queremos sólo el hijo 'children()' del elemento de la plantilla..
-	// Por ejemplo, si la plantilla es #enclosure:
-	//
-	//		<div id="enclosure">
-	//			<div class="enclosure element-box" data-id="[[enclosure.id]]">
-
-	return component.children();
-}
-
-
-function toggleTextBox(element)
-{
-	// Mostramos el text box correspondiente con el botón a la derecha.
-	// Una vez rellenamos el text box y volvemos a pulsar se añadirá a la base de datos
-
-	var id = element.attr('id');
-	var text_box;
-
-	if(id === 'add_place')
-	{
-		text_box_content = '<input type="text" name="place_name" ' +
-		'placeholder="Introd. nombre para el lugar"/>';
-
-		$('#enclosures').prepend(text_box_content);
-		text_box = $('#enclosures input[name=place_name]');
-	}
-	else if(id === 'add_map')
-	{
-		text_box_content = '<input type="text" name="floor_name" ' +
-		'placeholder="Introd. nombre para el mapa"/>';
-
-		var place_block = element.parent();
-		place_block.prepend(text_box_content);
-
-		text_box = place_block.find('input[name=floor_name]');
-	}
-
-	text_box.hide();
-	text_box.show('slow');
-
-	element.on('click', function(){
-		save($(this).before());
-	});
-
-	// element.hide('slow', function(){});
-}
-
-
-function save(text_box)
-{
-	// Guardamos el contenido de text box en lugares o mapas según corresponda
-
-	// si es enclosure o map
-	var text_box_type = text_box.attr('name') == 'place_name' ? 'enclosure' : 'map';
-
-	// nombre nuevo mapa o lugar introducido
-	var text_box_value = text_box.val();
-
-	$.ajax({
-		url: 'map-editor/' + text_box_type + 's',
-		type:  'post',
-		// data:  { 'chart': chart },
-		data: {'data': JSON.stringify(text_box_value) },
-		dataType: 'json',  // esto indica que la respuesta vendrá en formato json
-		// cache: false,
-		// beforeSend: function () {
-		// $("#chart_div").html("Procesando, espere por favor...");
-		// },
-		success: function(result) {
-			refreshTable(result);
+			$scope.$parent.enclosure.name = $scope.enclosure_resource.read($scope.enclosure.id).name;
 		}
-	});
+	};
+
+	$scope.del = function() {
+
+		var confirm_msg = '¿Seguro que desea eliminar el recinto? (también se perderán todas sus plantas)';
+
+		$scope.enclosure_resource.del($scope.enclosure.id, confirm_msg);
+
+		// Al ir en un ng-include el botón que llama a esta función,
+		// tenemos que subir dos niveles para cambiar la lista $scope.enclosures:
+		//	- subir del $scope de la plantilla
+		//	- del $scope del EnclosureCtrl (controlador hijo) al $scope de EnclosuresCtrl (padre)
+		$scope.$parent.$parent.enclosures = $scope.enclosure_resource.readAll();
+
+	};
+
+
+    $scope.calculateRoutes = function()
+    {
+        new EnclosureResource().calculateRoutes($scope.enclosure.id);
+    };
 }
 
-
-
-
-//
-// PLACE
-//
-
-function createPlace()
+function FloorsCtrl($scope, $element)
 {
-	var place_name = $('input[name=enclosure]').val();
+	$scope.sending_img = false;
 
-	ajaxPostJSON(
-		'/map-editor/enclosures/new',
-		{'place_name': place_name},
-		function(result){
+    $scope.floor_resource = new Resource('floor');
+	
+	$scope.floors = $scope.floor_resource.readAllFiltered('?enclosure__id=' + $scope.enclosure.id);
 
-			// result = {
-			//		errors: <errores>,
-			//		data: <datos>
-			// }
 
-			if(!result.errors)
-			{
-				var context = {
-					'[[place.name]]': place_name,
-					'[[place.id]]': result.data.id.toString()
-				};
-
-				addElement({
-					base_element: '#enclosure',
-					context: context,
-					put_after: $('#enclosures #place_form')
-				});
-
-				// Si está el mensaje de error lo quitamos
-				$('.errorList').hide();
-
-				// Volvemos a asignar eventos sobre todo el documento, de manera que
-				// también se pueda interactuar con el componente creado
-				addEvents();
+	$scope.createFloor = function() {
+		
+		//
+		// 1: Creamos el registro en B.D.
+		var floor_data = {
+			name : $scope.floor_name,
+			enclosure : $scope.enclosure.resource_uri
+		};
+		
+		var new_floor = $scope.floor_resource.create(floor_data);
+		
+		//
+		// 2: Una vez creado subimos la imágen para el nuevo mapa creado	
+		var img_form = $($element).find('form').first();
+		
+		$scope.sending_img = true;
+		
+		$scope.floor_resource.addImg(
+			img_form, 
+			new_floor.id,
+			function(server_response){
+				// Una vez se sube la imágen se limpia el formulario y se actualiza
+				// la lista de mapas para el lugar
+				$scope.floor_name = '';
+				img_form.find('input[name="img"]').val('');
+				$scope.floors =
+					$scope.floor_resource.readAllFiltered('?enclosure__id=' + $scope.enclosure.id);
+				
+				$scope.sending_img = false;
+				
+				$scope.$apply();
 			}
-			else
-				showErrors($('#enclosures'), result.errors);
-		}
 		);
-
-	$('input[name=enclosure]').val('');
+	};
 }
 
-
-function updatePlace()
+function FloorCtrl($scope, $element)
 {
-
-}
-
-
-function deletePlace()
-{
-	// Elimina un lugar de la BD
-	var place = $(this).parents().eq(2);
-
-	ajaxPostJSON(
-		'/map-editor/enclosures/delete',
-		{'place_id': place.data('id')},
-		function()
-		{
-			place.fadeOut(300, function() { $(this).remove(); });
+	$scope.editing = false;
+	
+	$scope.update = function() {
+		var img = $($element).find('input[name="img"]');
+		var img_val = img.val();
+		
+		if (!$scope.editing)
+        {
+			$scope.editing = true;
+			img.val('');
 		}
-		);
-}
+        else
+        {
+			// Si ya se estaba editando cuando hemos invocado update() entonces
+			// guardamos el nuevo nombre en la BD
 
-
-
-function addElement(args)
-{
-	// Añade un elemento al DOM a partir de una plantilla y un contexto,
-	// colocándolo justo después de 'element_before'
-
-	var element_template = $('#templates ' + args['base_element']);
-
-	var element = createElement(element_template, args['context']);
-
-	args['put_after'].after(element);
-
-	// escondemos y mostramos con un efecto chulo..
-	element.hide().fadeIn(500);
-}
-
-
-
-
-//
-// MAP
-//
-function createMap()
-{
-	var map_form = $(this).closest('.map_form');
-
-	var map_name = $(this).siblings('input[name="floor_name"]').val();
-	var place_id = $(this).closest('.enclosure').data('id');
-
-	ajaxPostJSON(
-		'/map-editor/floors/new',
-		{
-			"floor_name": map_name,
-			'place_id': place_id
-		},
-		function(result){
-
-			// Una vez que el mapa se crea correctamente subimos su imágen
-			if(!result.errors)
-			{
-				// Creamos el elemento mapa con el id devuelto en result.id
-				var map_id = result.data.map_id;
-
-
-				var file = map_form.find('input[name="map_img"]');
-
-				uploadFile(file, map_form.siblings('.loading_wrapper'));
+			var floor_data = {
+				name : $scope.floor_name
 			}
 
+			$scope.floor_resource.update(floor_data, $scope.floor.id);
+			
+			// Si se ha puesto una nueva imágen la subimos, eliminando la anterior
+			if(img.val() !== '')
+			{					
+				var img_form = $($element).find('form');
+				
+				$scope.sending_img = true;
+				
+				$scope.floor_resource.addImg(
+					img_form, 
+					$scope.floor.id,
+					function(server_response){
+						// Una vez se sube la imágen se limpia el formulario y se actualiza
+						// la lista de plantas para el recinto
+						$scope.sending_img = false;						
+					}
+				);
+			}
+
+			$scope.editing = false;
+
+			$scope.$parent.floor.name = $scope.floor_resource.read($scope.floor.id).name;
 		}
-	);
+	};
 
+	$scope.del = function() {
+
+		var confirm_msg = '¿Seguro que desea eliminar la planta? (también se perderá toda la información relativa a ella)';
+
+		$scope.floor_resource.del($scope.floor.id, confirm_msg);
+
+		$scope.$parent.$parent.floors =
+			$scope.floor_resource.readAllFiltered('?enclosure__id=' + $scope.enclosure.id);
+	};
 }
 
 
-function uploadFile(file, loading_wrapper)
-{
-	// Manda un archivo al servidor y coloca el mensaje de espera/confirmación
-	// dentro del elemento del DOM dado (loading_wrapper)
 
-	// Si el archivo no está cargado no se sube nada
-	if(!file.val())
-		return;
+//
+// DIRECTIVAS PROPIAS
+//
 
-	var file_form = file.closest('form');
-
-	file_form.submit();
-
-	// Colocamos el mensaje de espera..
-	loading_wrapper.append($('#ajax_loading')).show();
-	// $('#ajax_loading').show();
-
-	var iframe_content = $('#iframe_content').html();
-
-	// Si hay un cambio en el iframe es que se terminó de subir,
-	// ya que el HttpResponse le añadiría 'uploaded!' en el <body>
-	$('#iframe_content').on('change', function(){
-		loading_wrapper.empty().hide();
-
-		// Volvemos a dejar el iframe como estaba antes de subir la imágen
-		$('#iframe_content').empty();
-	});
-}
-
-
-function updateMap()
-{
-
-}
-
-function deleteMap()
-{
-
-}
+// myApp.directive('fadey', function() {
+// return {
+// restrict: 'A',
+// link: function(scope, elm, attrs) {
+// var duration = parseInt(attrs.fadey, 10);
+// if (isNaN(duration)) {
+// duration = 500;
+// }
+//
+// scope.$watch('[createEnclosure]', function () {
+// elm = $(elm);
+// elm.hide();
+// elm.fadeIn(duration);
+// }, true);
+//
+// scope.del = function(complete) {
+// elm.fadeOut(duration);
+// };
+// }
+// };
+// });

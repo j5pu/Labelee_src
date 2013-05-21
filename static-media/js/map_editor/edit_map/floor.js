@@ -5,6 +5,7 @@ var Floor = {
     img: new Image(),
 
     loading: false,
+    updating: false,
     points_to_delete: [],
 
 
@@ -19,6 +20,9 @@ var Floor = {
             Floor.loadGrid();
 
             Menu.init();
+
+            // Cargamos los atajos
+            Events.shortcuts.bind();
         };
     },
 
@@ -91,8 +95,8 @@ var Floor = {
         Menu.toggleBorders();
 
         //
-        // Añadimos los eventos
-        Events.bindGrid();
+        // Añadimos los eventos al grid
+        Events.grid.bind();
 
         //
         // Vaciamos la lista de puntos a eliminar
@@ -106,6 +110,8 @@ var Floor = {
 
     update: function()
     {
+        loadingMsg.show('Actualizando planta..');
+
         // Tomamos todas las etiquetas pintadas sobre el plano hasta el momento
         Floor._getPaintedLabels();
 
@@ -134,13 +140,7 @@ var Floor = {
 
                 // Guardaremos los bloques que aparecen pintados y no han sido cargados desde la BD
                 if(block_label && !from_db)
-                {
                     new_points.push(point_data);
-
-                    // Ponemos el bloque como pintado desde la BD para no tener que volver
-                    // a cargar todo el grid cada vez que guardemos
-                    $(this).attr('data-from-db', 'y');
-                }
             });
         });
 
@@ -156,10 +156,16 @@ var Floor = {
 
         // Vaciamos la lista de puntos eliminados
         Floor.points_to_delete = [];
+
+        // Recargamos el grid
+        Floor.reloading = true;
+        Floor.loadGrid();
+
+        loadingMsg.hide();
     },
 
 
-    _findBlock: function(row, col)
+    findBlock: function(row, col)
     {
         return $e.floor.grid.find('.row[data-row="' + row + '"]')
             .find('.block[data-col="' + col + '"]');
@@ -179,9 +185,14 @@ var Floor = {
         var all_points_painted = !Floor.points || Floor.i >= Floor.points.length;
         if(all_points_painted)
         {
-            Painter.label = null;
-            Painter.label_prev = null;
-            Painter.icon = null;
+            if(!Floor.reloading)
+            {
+                // Si no se está recargando la planta de haberle dado a guardar entonces conservamos
+                // los valores
+                Painter.label = null;
+                Painter.label_prev = null;
+                Painter.icon = null;
+            }
             Floor.i = 0;
             Floor.dfd.resolve();
             return;
@@ -202,6 +213,10 @@ var Floor = {
         Painter.label = Floor.saved_labels[point.label];
         Painter.point_id = point.id;
 
+
+        //PROVISI..
+        Painter.point = point;
+
         // Para la siguiente iteración..
         Floor.i++;
 
@@ -212,11 +227,17 @@ var Floor = {
 
     _loopQRs: function()
     {
-        // Si ya se pintaron todas las etiquetas
+        // Itera por toda la lista de QRs
+
         if(Painter.i >= Menu.qr_list.length)
         {
             Floor.loading = false;
             Painter.icon = null;
+            if(Floor.reloading)
+            {
+                alert('Plano actualizado');
+                Floor.reloading = false;
+            }
             return;
         }
 
@@ -236,7 +257,7 @@ var Floor = {
             //
             // Cuerpo
             Painter.qr = Menu.qr_list[Painter.i];
-            Painter.block = Floor._findBlock(Painter.qr.point.row, Painter.qr.point.col);
+            Painter.block = Floor.findBlock(Painter.qr.point.row, Painter.qr.point.col);
 
             Painter.paintQR();
 

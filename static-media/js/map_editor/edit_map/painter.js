@@ -1,6 +1,7 @@
 
 var Painter = {
     painting_trace: false,
+    point: null,
 
     //
     // Objeto a pintar en el mapa
@@ -157,15 +158,20 @@ var Painter = {
         }
         else
         {
-            Painter.block.append(
-                '<div>' +
-                    '<img class="qr_img" src="' + Painter.icon.src + '"/>' +
+            // Según estemos pintando directamente o cargando desde BD
+            var block = Painter.current_hovered_block || Painter.block;
+            block.attr('data-qr', Painter.qr.id);
+            block.append(
+                '<div style="background:white; padding:4px">' +
+//                    '<img class="qr_img" src="' + Painter.icon.src + '"/>' +
                     '<span class="qr_info">' + Painter.qr.code + '</span>' +
                     '</div>'
             );
-            var div = Painter.block.find('div');
+            var div = block.find('div');
+//            div.hide();
 
-            div.hide();
+            // Le damos un sombreado para saber que es QR
+            block.css({'box-shadow': 'inset 0px 0px 19px blue'});
         }
     },
 
@@ -178,6 +184,16 @@ var Painter = {
         // Le añadimos la imágen para la etiqueta, escondida para que se muestre
         // sólo cuando se pase el ratón por encima de su bloque
         block.append('<img class="label_img" src="' + Painter.label.img + '"/>');
+
+
+        // PROVISIONAL
+        //
+        block.append('<div class="point_info">' +
+            Painter.point.row + ', ' +  Painter.point.col +
+            '"</div>');
+
+
+
         var img = block.find('img.label_img');
         var transform_factor = Painter.icon.width / Floor.block_width;
         img.css({
@@ -205,11 +221,25 @@ var Painter = {
 
     showLabelInfo: function()
     {
-        if(Painter.painting_trace)
-            return;
         Painter.current_hovered_block = $(this);
-        Painter.current_hovered_block.find('img').show();
-        Painter.current_hovered_block.find('div').show();
+
+        // Si:
+        //      - se está pintando un trazo
+        //      - se están pintando etiquetas bloqueantes
+        //      - el bloque no tiene etiqueta
+        if(Painter.painting_trace
+            || (Painter.painting_trace && Painter.label_category.id === 1)
+            || !Painter.current_hovered_block.data('label'))
+        {
+            Painter.current_hovered_block = null;
+            return;
+        }
+//        Painter.current_hovered_block.find('img').show();
+//        Painter.current_hovered_block.find('div').show();
+
+        Painter.current_hovered_block.find('.point_info').show();
+
+
     },
 
 
@@ -218,6 +248,8 @@ var Painter = {
             return;
         Painter.current_hovered_block.find('img').hide();
         Painter.current_hovered_block.find('div').hide();
+
+        Painter.current_hovered_block.find('.point_info').hide();
         Painter.current_hovered_block = null;
     },
 
@@ -270,5 +302,7 @@ var Painter = {
         //
         // Pintamos el Qr encima de la etiqueta..
         Painter.paintQR();
+
+        Painter.current_hovered_block = null;
     }
 };

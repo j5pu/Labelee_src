@@ -14417,7 +14417,7 @@ $.effects.effect.fold = function( o, done ) {
 })(jQuery);
 (function( $, undefined ) {
 
-$.effects.effect.highlight = function( o, done ) {
+$.effects.effect.toggle = function( o, done ) {
 	var elem = $( this ),
 		props = [ "backgroundImage", "backgroundColor", "opacity" ],
 		mode = $.effects.setMode( elem, o.mode || "show" ),

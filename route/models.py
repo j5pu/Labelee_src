@@ -4,8 +4,8 @@ from django.db import models
 
 
 class route(models.Model):
-    origin = models.ForeignKey('map_editor.point', related_name='+')
-    destiny = models.ForeignKey('map_editor.point', related_name='+')
+    origin = models.ForeignKey('map_editor.Point', related_name='+')
+    destiny = models.ForeignKey('map_editor.Point', related_name='+')
 
     def __unicode__(self):
         return self.name
@@ -29,8 +29,8 @@ class step(models.Model):
 
 
 class connection(models.Model):
-    init = models.ForeignKey('map_editor.point', related_name='+')
-    end = models.ForeignKey('map_editor.point', related_name='+')
+    init = models.ForeignKey('map_editor.Point', related_name='+')
+    end = models.ForeignKey('map_editor.Point', related_name='+')
 
 
 
