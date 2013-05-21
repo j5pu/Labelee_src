@@ -172,8 +172,8 @@ function Resource(resource_name) {
 	this.addImg = function(form, element_id, callback){
 
 		// definimos la URL donde se mandará el formulario con la imágen,
-		// xej para el mapa con id 16:
-		//		POST -> /api-2/map/16/img
+		// xej para la planta con id 16:
+		//		POST -> /api-2/floor/16/img
 
 		var action_url = this.api2_url + element_id + '/img';
 		form.attr('action', action_url);
@@ -323,6 +323,33 @@ function PointResource()
                 }
             });
         }
+    };
+
+
+    this.readOnlyPois = function(floor_id)
+    {
+        // Lee todas las etiquetas que sean consideradas POIs, es decir, que
+        // no sean bloqueantes ni intermedias
+
+        // api-2/point/pois/1
+        var element;
+        $.ajax({
+            url : this.api2_url + 'pois/' + floor_id,
+            type : 'get',
+            headers : {
+                'Content-Type' : 'application/json'
+            },
+            dataType : 'json', // esto indica que la respuesta vendrá en formato json
+            async : false,
+            success : function(response) {
+                element = response;
+            },
+            error : function(response) {
+                var j = response;
+            }
+        });
+
+        return element;
     }
 }
 
@@ -352,7 +379,9 @@ function EnclosureResource()
 }
 
 
+FloorResource.prototype = new Resource;
 LabelResource.prototype = new Resource;
 LabelCategoryResource.prototype = new Resource;
 PointResource.prototype = new Resource;
 EnclosureResource.prototype = new Resource;
+//RouteResource.prototype = new Resource;

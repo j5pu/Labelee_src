@@ -8,7 +8,7 @@ class route(models.Model):
     destiny = models.ForeignKey('map_editor.Point', related_name='+')
 
     def __unicode__(self):
-        return self.name
+        return 'tabla ruta'
 
 
 class step(models.Model):
