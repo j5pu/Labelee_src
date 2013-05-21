@@ -9,6 +9,20 @@ from django.http import HttpResponseRedirect
 
 import json
 
+
+def origin(request, enclosure_id, floor_id, point_id):
+    """
+        map/origin/1_25_91234
+    """
+    ctx = {
+        'enclosure_id': enclosure_id,
+        'floor_id': floor_id,
+        'point_id': point_id
+    }
+    return render_to_response('map/index.html', ctx, context_instance=RequestContext(request))
+
+
+
 events = []
 
 
@@ -70,3 +84,7 @@ def fuera(request, id, row, column):
 	url = 'http://inmap.eu01.aws.af.cm/routesFrom.php?id=' + id + \
 	'&row=' + row + '&column=' + column
 	return HttpResponseRedirect(url)
+
+
+
+

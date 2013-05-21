@@ -1,6 +1,9 @@
 # -*- coding: utf8 -*-
+from django.core import serializers
 
 from django.http import HttpResponse
+from django.db.models import Q
+
 import simplejson
 from map_editor.api.resources import PointResource
 from map_editor.models import Point, Label, Floor
@@ -54,4 +57,17 @@ def delete_from_list(request):
         p.delete()
 
     return HttpResponse(simplejson.dumps('ok'))
-	
+
+
+def readOnlyPois(request, floor_id):
+    pois = Point.objects.filter(
+        floor = floor_id
+    ).exclude(
+        label__category = 1
+    ).exclude(
+        label__category__name = 'Intermedias'
+    )
+
+    # return HttpResponse(simplejson.dumps(pois), mimetype='application/json')
+    return HttpResponse(serializers.serialize('json', pois), mimetype='application/json')
+

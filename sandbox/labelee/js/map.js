@@ -3,7 +3,7 @@
 
 //Obtener variables de la URL
 var variableArray = window.location.search.substring(1).split('-'), //quita el '&' y divide params separados por '-'
-    enclosure=variableArray[0],
+    building=variableArray[0],
     floor=variableArray[1],
     point=parseInt(variableArray[2]);
 
