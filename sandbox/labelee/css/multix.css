@@ -553,7 +553,7 @@ html{
     background: #eee;
     border-bottom: 2px solid #cfcfcf;
     width: 100%;
-    padding: 7% 75px 7% 10px !important;
+    padding: 20px 75px 20px 10px !important;
     position: fixed;
     top: 0;
     z-index: 1;
