@@ -119,7 +119,7 @@ class Dijkstra():
 
         return graph
 
-    def calculateDijkstra(self):
+    def calculateDijkstra(self, errors=[]):
         map = self.__createMap__()
         graph = self.__createGraph__(map)
         result = []
@@ -127,12 +127,17 @@ class Dijkstra():
         for origin in self.qr:
             for destination in self.qr:
                 if origin.point.id != destination.point.id:
-                    path = self.__shortestpath__(graph, self.getKey(origin.point.row, origin.point.col,
-                                                                    origin.point.floor.id),
-                                                 self.getKey(destination.point.row, destination.point.col,
-                                                             destination.point.floor.id), visited=[], distances={}
-                        , predecessors={})
-                    result.append([origin, destination, path])
+                    try:
+                        keyorigin = self.getKey(origin.point.row, origin.point.col, origin.point.floor.id)
+                        keydestination =  self.getKey(destination.point.row, destination.point.col,
+                                                      destination.point.floor.id)
+                        path = self.__shortestpath__(graph,keyorigin, keydestination
+                                                    , visited=[], distances={}
+                            , predecessors={})
+                    except Exception as ex:
+                        errors.append('Imposible encontrar camino entre camino entre {0} y {1}'.format(keyorigin, keydestination))
+                    else:
+                        result.append([origin, destination, path])
 
         return result
 

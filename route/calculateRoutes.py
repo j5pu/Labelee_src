@@ -1,20 +1,29 @@
 # coding=utf-8
 import threading
+
+from django.core.mail import EmailMessage
 from django.db import transaction
-from map_editor.models import *
 from django.http import *
+
+from map_editor.models import *
 from route.models import *
-from route.pathfinding.dijkstra import *
-from django.db import connection
-from threading import Thread
+from route.pathfinding.Dijkstra import *
+
 #from django.core import serializers
 
 
+
 def calculate_routes(request, enclosure_id):
-# t1 = threading.Thread(target=threadCalculateRoute, args=[enclosure_id])
-# t1.start()
-    threadCalculateRoute(enclosure_id)
-    return HttpResponse('La operación se ha realizado correctamente')
+    # t1 = threading.Thread(target=threadCalculateRoute, args=[enclosure_id])
+    # t1.start()
+    try:
+        t1 = threading.Thread(target=threadCalculateRoute, args=[enclosure_id])
+        t1.start()
+    except Exception as ex:
+        print type(ex)
+        print ex.args
+
+    return HttpResponse('Se están calculando las rutas')
 
 
 def threadCalculateRoute(enclosure_id):
@@ -54,26 +63,41 @@ def threadCalculateRoute(enclosure_id):
                 mapConnections[keyinit] = [keyend]
 
     pathfinder = Dijkstra(floors, walls, qrlist, mapConnections)
-    paths = pathfinder.calculateDijkstra()
+    errors = []
+    paths = pathfinder.calculateDijkstra(errors)
+    try:
+        with transaction.commit_on_success():
+            for path in paths:
+                origin = path[0]
+                destination = path[1]
+                steps = path[2][1]
+                calculatedRoute = Route()
+                calculatedRoute.origin = origin.point
+                calculatedRoute.destiny = destination.point
+                calculatedRoute.save()
+                for index in range(1, len(steps)):
+                    routeStep = Step()
+                    stepElements = steps[index].split('_')
+                    routeStep.row = stepElements[0]
+                    routeStep.column = stepElements[1]
+                    routeStep.step_number = index
+                    routeStep.step_category = routeStep.NORMAL
+                    routeStep.floor = floors.filter(id=stepElements[2])[0]
+                    routeStep.route = calculatedRoute
+                    routeStep.save()
+    except Exception as ex:
+        errors.append('Se ha producido un error al insertar los datos en la BBDD')
+    mensaje='Se ha realizado la operación correctamente'
+    if len(errors) > 0:
+        mensaje = 'Se han producido los siguientes errores: '
+        for error in errors:
+            mensaje += error + '--'
 
-    with transaction.commit_on_success():
-        for path in paths:
-            origin = path[0]
-            destination = path[1]
-            steps = path[2][1]
-            calculatedRoute = Route()
-            calculatedRoute.origin = origin.point
-            calculatedRoute.destiny = destination.point
-            calculatedRoute.save()
-            for index in range(1, len(steps)):
-                routeStep = Step()
-                stepElements = steps[index].split('_')
-                routeStep.row = stepElements[0]
-                routeStep.column = stepElements[1]
-                routeStep.step_number = index
-                routeStep.step_category = routeStep.NORMAL
-                routeStep.floor = floors.filter(id=stepElements[2])[0]
-                routeStep.route = calculatedRoute
-                routeStep.save()
+    try:
+        email = EmailMessage('Informe cálculo de rutas',mensaje, to=['alvaro.gutierrez@mnopi.com'])
+        email.send()
+    except:
+        pass
 
-    print paths
+
+
