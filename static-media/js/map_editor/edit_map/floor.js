@@ -1,8 +1,3 @@
-
-
-
-
-
 var Floor = {
 
     // Imágen del plano para la planta
