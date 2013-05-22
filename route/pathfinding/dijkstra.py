@@ -103,7 +103,8 @@ class Dijkstra():
                 connection[key] = 1
         key = self.getKey(row, column, numfloor)
         if key in self.mapConnections:
-            connection[self.mapConnections[key]] = 1
+            for mapConnection in self.mapConnections[key]:
+                connection[mapConnection] = 1
 
         return connection
 
