@@ -166,6 +166,8 @@ var Painter = {
             var div = Painter.block.find('div');
 
             div.hide();
+
+            Painter.block.append('<div style="position: absolute;top: 0.4em;">' + Painter.qr.code + '</div>');
         }
     },
 
