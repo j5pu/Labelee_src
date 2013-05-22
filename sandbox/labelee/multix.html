@@ -1,0 +1,216 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+	<title>labelee multix</title>
+	<meta charset="utf-8" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+
+	<link rel="stylesheet" href="{{ STATIC_URL }}labelee/dist/leaflet.css" />
+	<link rel="stylesheet" href="{{ STATIC_URL }}labelee/css/font-awesome.min.css">
+	<link rel="stylesheet" href="{{ STATIC_URL }}labelee/css/leaflet.awesome-markers.css">
+	<link rel="stylesheet" href="{{ STATIC_URL }}labelee/css/leaflet.rrose.css">
+	<link rel="stylesheet" href="{{ STATIC_URL }}labelee/css/leaflet-search.css">
+	<link rel="stylesheet" href="{{ STATIC_URL }}labelee/css/search-mobile.css">
+    <link rel="stylesheet" href="{{ STATIC_URL }}labelee/css/multix.css">
+
+
+    <script src="{{ STATIC_URL }}labelee/js/scale.fix.js"></script>
+		
+	<script type="text/javascript" src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+	<!--script src="http://cdn.leafletjs.com/leaflet-0.5.1/leaflet.js"></script-->
+	<script src="{{ STATIC_URL }}labelee/dist/leaflet.js"></script>
+	<script src="{{ STATIC_URL }}labelee/js/bouncemarker.js"></script>
+	<script src="{{ STATIC_URL }}labelee/js/leaflet.awesome-markers.js"></script>
+	<script src="{{ STATIC_URL }}labelee/js/L.GeometryUtil.js"></script>
+	<script src="{{ STATIC_URL }}labelee/js/L.RotatedMarker.js"></script>
+    <script src="{{ STATIC_URL }}labelee/js/L.Symbol.js"></script>
+    <script src="{{ STATIC_URL }}labelee/js/L.PolylineDecorator.js"></script>
+    <script src="{{ STATIC_URL }}labelee/js/rrose-src.js"></script>
+    <script src="{{ STATIC_URL }}labelee/js/leaflet-search.js"></script>
+    <script src="{{ STATIC_URL }}labelee/js/jquery.mmenu.js"></script>
+    <script src="{{ STATIC_URL }}labelee/js/main.js"></script>
+
+</head>
+
+
+<body>
+    <div id="page">
+        <div id="header">
+            <a href="#menu-right"></a>
+            <span id="fake"></span>
+            labelee
+        </div>
+        <div id="content">
+            <div id="map"></div>
+        </div>
+        <nav id="menu-right">
+            <div class="search">
+                <input type="text" name="search" placeholder="Buscar..." autocomplete="off" />
+            </div>
+            <ul>
+                <li class="Label">Mapa actual: Matadero</li>
+
+                <li>
+                    <span>Sitios <i></i></span>
+                    <ul>
+                        <li class="Label">A</li>
+                        <li><a href="#">Alexa</a></li>
+                        <li><a href="#">Alexander</a></li>
+
+                        <li class="Label">F</li>
+                        <li><a href="#">Fred</a></li>
+
+                        <li class="Label">J</li>
+                        <li><a href="#">James</a></li>
+                        <li><a href="#">Jefferson</a></li>
+                        <li><a href="#">Jordan</a></li>
+
+                        <li class="Label">K</li>
+                        <li><a href="#">Kim</a></li>
+
+                        <li class="Label">M</li>
+                        <li><a href="#">Meagan</a></li>
+                        <li><a href="#">Melissa</a></li>
+
+                        <li class="Label">N</li>
+                        <li><a href="#">Nicole</a></li>
+
+                        <li class="Label">S</li>
+                        <li><a href="#">Samantha</a></li>
+                        <li><a href="#">Scott</a></li>
+                    </ul>
+                </li>
+
+                <li>
+                    <span>Categorías <i></i></span>
+                    <ul>
+                        <li class="Label">A</li>
+                        <li><a href="#">Adam</a></li>
+
+                        <li class="Label">B</li>
+                        <li><a href="#">Ben</a></li>
+                        <li><a href="#">Bruce</a></li>
+
+                        <li class="Label">E</li>
+                        <li><a href="#">Eddie</a></li>
+
+                        <li class="Label">J</li>
+                        <li><a href="#">Jack</a></li>
+                        <li><a href="#">John</a></li>
+
+                        <li class="Label">M</li>
+                        <li><a href="#">Martina</a></li>
+                        <li><a href="#">Matthew</a></li>
+
+                        <li class="Label">O</li>
+                        <li><a href="#">Olivia</a></li>
+                        <li><a href="#">Owen</a></li>
+                    </ul>
+                </li>
+
+
+                <li>
+                    <span><a href="#">Compartir</a><i></i></span>
+                    <ul>
+                        <li><a href="#">Facebook</a></li>
+                        <li><a href="#">Twitter</a></li>
+                        <li><a href="#">G+</a></li>
+                        <li><a href="#">Instagram</a></li>
+                        <li><a href="#">Pinterest</a></li>
+
+                    </ul>
+                </li>
+
+                <li class="Label">&#160;&#160;&#160;</li>
+
+                <li>
+
+                    <span><a href="#">Otros mapas</a><i></i></span>
+                    <ul>
+                        <li>
+                            <span><a href="#">La Vaguada</a></span>
+                            <ul>
+                                <li>
+                                    <span>Categorías <i></i></span>
+                                    <ul>
+                                        <li class="Label">A</li>
+                                        <li><a href="#">Adam</a></li>
+
+                                        <li class="Label">B</li>
+                                        <li><a href="#">Ben</a></li>
+                                        <li><a href="#">Bruce</a></li>
+
+                                        <li class="Label">E</li>
+                                        <li><a href="#">Eddie</a></li>
+
+                                        <li class="Label">J</li>
+                                        <li><a href="#">Jack</a></li>
+                                        <li><a href="#">John</a></li>
+
+                                        <li class="Label">M</li>
+                                        <li><a href="#">Martina</a></li>
+                                        <li><a href="#">Matthew</a></li>
+
+                                        <li class="Label">O</li>
+                                        <li><a href="#">Olivia</a></li>
+                                        <li><a href="#">Owen</a></li>
+                                    </ul>
+                                </li>
+
+                                <li>
+                                    <span>Sitios <i></i></span>
+                                    <ul>
+                                        <li class="Label">D</li>
+                                        <li><a href="#">David</a></li>
+                                        <li><a href="#">Dennis</a></li>
+
+                                        <li class="Label">E</li>
+                                        <li><a href="#">Eliza</a></li>
+
+                                        <li class="Label">L</li>
+                                        <li><a href="#">Larry</a></li>
+                                        <li><a href="#">Lisa</a></li>
+
+                                        <li class="Label">M</li>
+                                        <li><a href="#">Michael</a></li>
+
+                                        <li class="Label">R</li>
+                                        <li><a href="#">Rachelle</a></li>
+                                        <li><a href="#">Rick</a></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+                        <li><a href="#">Parquing Pepe</a></li>
+                        <li><a href="#">Metrovacesa</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <span><a href="#">Ayuda</a></span>
+                    <ul>
+                        <li></li>
+                    </ul>
+                </li>
+                <li>
+                    <span><a href="#">Info</a></span>
+                    <ul>
+                        <li></li>
+                    </ul>
+                </li>
+
+
+
+
+                <li class="no-results"><span>Lo sentimos, no se ha encontrado ningún resultado.</span></li>
+            </ul>
+        </nav>
+    </div>
+    <script src="{{ STATIC_URL }}labelee/js/map.js"></script>
+
+</body>
+</html>

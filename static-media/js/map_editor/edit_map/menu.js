@@ -118,7 +118,7 @@ var Label = {
             label.id,
             function(server_response){
                 // Una vez que se sube la imágen al servidor..
-                Label._post_create();
+                Label._post_create(label);
                 Menu.sending_img = false;
             }
         );
@@ -133,7 +133,7 @@ var Label = {
 
         // Recargamos selector de etiqueta y dejamos elegida la nueva
         Menu.fillLabelSelector();
-        $e.label.selector.val(label);
+        $e.label.selector.val(label.id);
 
         // Escondemos el formulario para crear la etiqueta
         $e.label.form.root_node.hide(400);
@@ -170,7 +170,7 @@ var Menu = {
         this._fillConnectionsList();
 //        this.toggleBorders();
         this.toggleQRs();
-        Events.bindMenu();
+        Events.menu.bind();
         Menu.saved_labels = new LabelResource().readFromFloor(Floor.data.id);
     },
 
@@ -228,6 +228,14 @@ var Menu = {
             var labels = new LabelResource().readAllFiltered('?category__id=' + category_id);
 
         setSelector($e.label.selector, labels, 'Selecc. etiqueta');
+
+        // Si la categoría es bloqueantes por defecto se selecciona el muro
+        if(category_id === '1'){
+            $e.label.selector.val('1');
+            Painter.setLabel();
+            $e.category.selector.blur();
+        }
+
     },
 
 
@@ -267,7 +275,7 @@ var Menu = {
 
     toggleQRs: function()
     {
-        if($e.qr.highlight.is(':checked'))
+        if($e.qr.toggle.is(':checked'))
         {
             $e.floor.blocks.find('div').show();
         }

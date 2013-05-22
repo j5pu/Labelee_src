@@ -53,7 +53,8 @@ class EnclosureResource(ModelResource):
         # 		validation = FormValidation(form_class=EnclosureForm)
         filtering = {
             'name': ALL,
-            'id': ALL
+            'id': ALL,
+            'floors': ALL_WITH_RELATIONS
         }
         paginator_class = Paginator
 
@@ -100,7 +101,9 @@ class PointResource(ModelResource):
         filtering = {
             'floor': ALL_WITH_RELATIONS,
             'label': ALL_WITH_RELATIONS,
-            'id': ALL
+            'id': ALL,
+            'row': ALL,
+            'col': ALL
         }
         max_limit = 5000
 
@@ -110,7 +113,7 @@ class PointResource(ModelResource):
 
 class LabelResource(ModelResource):
     category = fields.ToOneField('map_editor.api.resources.LabelCategoryResource', 'category')
-    points = fields.ToManyField('map_editor.api.resources.PointResource', 'points', null=True)
+    # points = fields.ToManyField('map_editor.api.resources.PointResource', 'points', null=True)
 
     class Meta:
         queryset = Label.objects.all()
@@ -122,6 +125,7 @@ class LabelResource(ModelResource):
             'category': ALL_WITH_RELATIONS,
             'points': ALL_WITH_RELATIONS
         }
+        max_limit = 5000
 
     def determine_format(self, request):
         return 'application/json'
@@ -139,6 +143,7 @@ class LabelCategoryResource(ModelResource):
         filtering = {
             'id': ALL,
             'name': ALL,
+            'color': ALL,
             'labels': ALL_WITH_RELATIONS,
         }
 
@@ -160,7 +165,25 @@ class QRCodeResource(ModelResource):
             'point': ALL_WITH_RELATIONS,
         }
 
-
     def determine_format(self, request):
         return 'application/json'
 
+
+# class ConnectionResource(ModelResource):
+#     init = fields.ToOneField('map_editor.api.resources.PointResource', 'init', full=True)
+#     init = fields.ToOneField('map_editor.api.resources.PointResource', 'init', full=True)
+#
+#     class Meta:
+#         resource_name = 'qr-code'
+#         queryset = QR_Code.objects.all()
+#         authorization = DjangoAuthorization()
+#         authentication = BasicAuthentication()
+#         always_return_data = True
+#         filtering = {
+#             'id': ALL,
+#             'point': ALL_WITH_RELATIONS,
+#             }
+#
+#     def determine_format(self, request):
+#         return 'application/json'
+#

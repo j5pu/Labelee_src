@@ -29,7 +29,3 @@ def edit(request, pk):
     return render_to_response('map_editor/edit.html', ctx, context_instance=RequestContext(request))
 
 
-def calcule_routes(request, enclosure_id):
-    pass
-
-

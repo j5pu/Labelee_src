@@ -117,3 +117,20 @@ img#fake
     height: 1px;
     color: transparent;
 }
+
+
+.qr_info
+{
+    position: absolute;
+    z-index: 2;
+    background: #ffffff;
+    display: visible;
+}
+
+.point_info
+{
+    background:white;
+    position:absolute;
+    z-index:2;
+    display:none
+}

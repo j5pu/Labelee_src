@@ -4,9 +4,9 @@ from django.db import models
 from django.contrib.auth.models import User
 
 CATEGORIAS_FIJAS= {
-    'BLOQUEANTES': 'Bloqueantes',
-    'ARISTAS': 'Aristas',
-    'INTERMEDIAS': 'Intermedias',
+    0: 'Bloqueantes',
+    1: 'Aristas',
+    2: 'Intermedias',
 }
 
 
@@ -98,7 +98,7 @@ class Label(models.Model):
     # ponemos '_objects_' en lugar de 'objects' para no confundirlo con la
     # palabra reservada, ya que si no dará error
     # 	category = models.ForeignKey(LabelCategory)
-    category = models.ForeignKey(LabelCategory, related_name='labels', blank=True)
+    category = models.ForeignKey(LabelCategory, related_name='labels', blank=True, on_delete=models.CASCADE)
 
     def __unicode__(self):
         return self.name
@@ -119,8 +119,8 @@ class Point(models.Model):
     description = models.CharField(max_length=200, null=True, blank=True)
     row = models.PositiveIntegerField(null=True, blank=True)
     col = models.PositiveIntegerField(null=True, blank=True)
-    label = models.ForeignKey(Label, related_name='points')
-    floor = models.ForeignKey(Floor, related_name='points')
+    label = models.ForeignKey(Label, related_name='points', on_delete=models.CASCADE)
+    floor = models.ForeignKey(Floor, related_name='points', on_delete=models.CASCADE)
 
     def __unicode__(self):
         return self.floor.name + ' (' + str(self.row) + ', ' + str(self.col) + ')'
@@ -128,7 +128,7 @@ class Point(models.Model):
 
 class QR_Code(models.Model):
     code = models.CharField(max_length=200, unique=True, blank=False)
-    point = models.OneToOneField(Point, related_name='qr_code')
+    point = models.OneToOneField(Point, related_name='qr_code', on_delete=models.CASCADE)
 
     class Meta:
         verbose_name = 'QR_Code'

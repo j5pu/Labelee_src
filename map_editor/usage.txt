@@ -1,0 +1,9 @@
+
+
+Cuidado con subir imágenes con espacios, por ejemplo "boceto mapa matadero.jpg"
+
+Dar de alta etiquetas con QRs:
+	- Pintamos las etiquetas
+	- Guardamos el plano
+	- Click con botón derecho sobre etiqueta
+	- Se verá
