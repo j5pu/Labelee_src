@@ -18,11 +18,9 @@ def calculate_routes(request, enclosure_id):
 
 
 def threadCalculateRoute(enclosure_id):
-
     sql = "select * from route_route where origin_id in  " \
           "( SELECT id FROM map_editor_point where floor_id in " \
           "(select id from map_editor_floor where map_editor_floor.enclosure_id = %s))" % enclosure_id
-
 
     currentroutes = Route.objects.raw(sql)
     for route in currentroutes:
@@ -46,11 +44,14 @@ def threadCalculateRoute(enclosure_id):
         if point.label.category.name.upper() in CATEGORIAS_FIJAS[0].upper():
             walls.append(Dijkstra.getKey(point.row, point.col, point.floor.id))
 
-        if hasattr(point, 'map_connection'):
+        pmapconnections = Connection.objects.filter(init__id=point.id)
+        for pmapconnection in pmapconnections:
             keyinit = Dijkstra.getKey(point.row, point.col, point.floor.id)
-            keyend = Dijkstra.getKey(point.map_connection.end.row, point.map_connection.end.col,
-                                     point.map_connection.end.floor.id)
-            mapConnections[keyinit] = keyend
+            keyend = Dijkstra.getKey(pmapconnection.end.row, pmapconnection.end.col, pmapconnection.end.floor.id)
+            if keyinit in mapConnections:
+                mapConnections[keyinit].append(keyend)
+            else:
+                mapConnections[keyinit] = [keyend]
 
     pathfinder = Dijkstra(floors, walls, qrlist, mapConnections)
     paths = pathfinder.calculateDijkstra()
@@ -74,6 +75,5 @@ def threadCalculateRoute(enclosure_id):
                 routeStep.floor = floors.filter(id=stepElements[2])[0]
                 routeStep.route = calculatedRoute
                 routeStep.save()
-
 
     print paths
