@@ -29,8 +29,8 @@ class Step(models.Model):
 
 
 class Connection(models.Model):
-    init = models.ForeignKey('map_editor.Point', related_name='+')
-    end = models.ForeignKey('map_editor.Point', related_name='+')
+    init = models.OneToOneField('map_editor.Point', related_name='map_connection', on_delete=models.CASCADE)
+    end = models.ForeignKey('map_editor.Point', related_name='+', on_delete=models.CASCADE)
 
 
 

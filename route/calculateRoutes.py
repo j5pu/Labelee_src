@@ -4,7 +4,7 @@ from django.db import transaction
 from map_editor.models import *
 from django.http import *
 from route.models import *
-from route.pathfinding.Dijkstra import *
+from route.pathfinding.dijkstra import *
 from django.db import connection
 from threading import Thread
 #from django.core import serializers

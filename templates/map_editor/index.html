@@ -10,10 +10,6 @@
     <script src="{{ STATIC_URL }}vendor/bootstrap/bootstrap.file-input.js"></script>
 
     <script src="{{ STATIC_URL }}js/map_editor/index/main.js"></script>
-
-    <script>
-        var constants = {{ constants }};
-    </script>
 {% endblock js %}
 
 
@@ -22,6 +18,8 @@
     {% csrf_token %}
 
     <h1>Administración de recintos</h1>
+
+    <div class="box box-0 alert">No subir imágenes con espacios, por ejemplo "boceto mapa matadero.jpg"</div>
 
     <div id="enclosures" class="box box-0" ng-controller="EnclosuresCtrl">
 
@@ -45,7 +43,7 @@
 
             <!--<include src="{{ STATIC_URL }}partials/_enclosure.html"></include>-->
 
-            <div class="editable_element">
+               <div class="editable_element">
                 <div ng-hide="editing">
                     <h3>[[enclosure.name]]</h3>
 

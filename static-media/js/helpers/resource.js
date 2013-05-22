@@ -360,12 +360,11 @@ function EnclosureResource()
 
     this.calculateRoutes = function(enclosure_id){
         $.ajax({
-            url : this.api2_url + 'calculate-routes/' + enclosure_id,
-            type : 'post',
+            url : '/calculate-routes/' + enclosure_id,
+            type : 'get',
             headers : {
                 'Content-Type' : 'application/json'
             },
-            data : JSON.stringify(data),
             dataType : 'json', // esto indica que la respuesta vendrá en formato json
             async : false,
             success : function(response) {
