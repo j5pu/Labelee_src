@@ -134,3 +134,9 @@ img#fake
     z-index:2;
     display:none
 }
+
+
+.label_img
+{
+    display: none;
+}

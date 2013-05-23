@@ -5,8 +5,15 @@ var Floor = {
 
     loading: false,
     updating: false,
-    points_to_delete: [],
 
+    point_count: {
+        to_save: 0,
+        saved: 0,
+        to_delete: 0,
+        total: 0
+    },
+
+    points_to_delete: [],
 
     init: function()
     {
@@ -109,6 +116,7 @@ var Floor = {
 
     update: function()
     {
+        Floor.point_count.saved = 0;
         loadingMsg.show('Actualizando planta..');
 
         // Tomamos todas las etiquetas pintadas sobre el plano hasta el momento
@@ -158,6 +166,7 @@ var Floor = {
 
         // Recargamos el grid
         Floor.reloading = true;
+        Floor.point_count.to_save = 0;
         Floor.loadGrid();
 
         loadingMsg.hide();
@@ -234,8 +243,9 @@ var Floor = {
             Painter.icon = null;
             if(Floor.reloading)
             {
-                alert('Plano actualizado');
+                Menu.setPointStats();
                 Floor.reloading = false;
+                alert('Plano actualizado');
             }
             return;
         }

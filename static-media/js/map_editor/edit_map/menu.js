@@ -194,8 +194,18 @@ var Menu = {
         this._fillConnectionsList();
 //        this.toggleBorders();
         this.toggleQRs();
+        this.setPointStats();
         Events.menu.bind();
         Menu.saved_labels = new LabelResource().readFromFloor(Floor.data.id);
+    },
+
+
+    setPointStats: function()
+    {
+        $e.point_count.to_save.html(Floor.point_count.to_save);
+        $e.point_count.saved.html(Floor.point_count.saved);
+        $e.point_count.to_delete.html(Floor.point_count.to_delete);
+        $e.point_count.total.html(Floor.point_count.total);
     },
 
 

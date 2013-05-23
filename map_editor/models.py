@@ -20,9 +20,9 @@ class Enclosure(models.Model):
 
 def floor_filename(instance, filename):
     """
-	xej: img/floors/matadero/nave16.png
+	xej: img/enclosures/matadero_prueba/floors/nave16.png
 	"""
-    return 'img/enclosures/' + instance.enclosure.name + '/floors/' + filename
+    return 'img/enclosures/' + instance.enclosure.name.replace(" ", "_") + '/floors/' + filename
 
 
 #Se crea el modelo para los productos

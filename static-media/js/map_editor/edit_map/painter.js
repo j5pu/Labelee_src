@@ -55,6 +55,9 @@ var Painter = {
         if(block.data('from-db'))
             Floor.points_to_delete.push(block.data('point-id'));
 
+        if(block.data('label'))
+            Floor.point_count.to_save--;
+
         // Limpiamos todo el contenido del bloque..
         block.empty();
         block.removeData('label');
@@ -64,6 +67,8 @@ var Painter = {
         block.removeData('point-id');
         block.removeAttr('data-point-id');
         block.css({'background': ''});
+
+        Menu.setPointStats();
     },
 
 
@@ -89,6 +94,8 @@ var Painter = {
 
             // Dejamos el bloque como pintado
             block.attr('data-label', Painter.label.resource_uri);
+
+            Floor.point_count.saved++;
         }
         else
         {
@@ -97,7 +104,11 @@ var Painter = {
 
             // Dejamos el bloque como pintado
             block.attr('data-label', Painter.label.resource_uri);
+
+            Floor.point_count.to_save++;
         }
+
+        Menu.setPointStats();
 
 
         //
@@ -185,7 +196,10 @@ var Painter = {
     _drawLabel: function(block)
     {
         // Ponemos el bloque de un color según la categoría de la etiqueta..
-        block.css({'background': Painter.label_category.color});
+        block.css({
+            'background': Painter.label_category.color
+//            'opacity': '0.5'
+        });
 
         // Le añadimos la imágen para la etiqueta, escondida para que se muestre
         // sólo cuando se pase el ratón por encima de su bloque

@@ -50,5 +50,12 @@ $e.map_editor = {
             list: $('#qr_list ul'),
             toggle: $('#toggle_qrs')
         };
+
+        this.point_count = {
+            saved: $('#num_saved_points'),
+            to_save: $('#num_points_to_save'),
+            to_delete: $('#num_points_to_delete'),
+            total: $('#num_total_points')
+        }
     }
 };
