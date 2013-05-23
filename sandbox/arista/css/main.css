@@ -1,0 +1,24 @@
+#caja {
+    height: 250px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 1em;
+    background: grey;
+    display: inline-block;
+    border-radius: 1em;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

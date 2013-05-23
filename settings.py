@@ -206,10 +206,10 @@ else:
         "default": {
             "ENGINE": "django.db.backends.mysql",
             "NAME": "labelee_dev",
-            "USER": "root",
-            "PASSWORD": "",
-            "HOST": "",
-            "PORT": "",
+            "USER": "josko",
+            "PASSWORD": "1234",
+            "HOST": "192.168.1.18",
+            "PORT": "3306",
             }
     }
     # DATABASES = {
