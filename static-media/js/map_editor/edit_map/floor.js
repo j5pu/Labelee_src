@@ -1,4 +1,3 @@
-
 var Floor = {
 
     // Imágen del plano para la planta
@@ -53,7 +52,7 @@ var Floor = {
         // Limpiamos el grid si estaba creado
         $grid.empty();
 
-        for(var row = 0; row < Floor.num_rows; row++)
+        for(var row = Floor.num_rows-1; row >= 0; row--)
         {
             // Crea fila
             $grid.append('<div class="row"></div>');
@@ -327,7 +326,7 @@ var Floor = {
         // Pintamos los QRs de las etiquetas que lo contengan
 
         if(!Menu.qr_list)
-            Menu.fillQrList();
+            Menu.setQrList();
 
         Painter.i = 0;
 

@@ -91,6 +91,11 @@ var Events = {
             //
             // Pintar etiquetas dejando pulsado cmd o ctrl y pasando el ratón por el grid
             Mousetrap.bind(['command', 'ctrl'], function(){
+
+                // Si se está cargando la imágen de un icono salimos..
+                if(Painter.loading_icon)
+                    return;
+
                 Painter.painting_trace = true;
                 $e.floor.blocks.on('mousemove', function(){
                     $e.floor.blocks.off('mousemove');
@@ -155,7 +160,7 @@ var Events = {
 
         _selectLabelCategory: function()
         {
-            $e.category.selector.on('change', Menu.fillLabelSelector);
+            $e.category.selector.on('change', Menu.setLabelSelector);
         },
 
 

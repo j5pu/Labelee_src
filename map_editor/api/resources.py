@@ -18,6 +18,7 @@ from tastypie.resources import ModelResource, ALL, ALL_WITH_RELATIONS
 from tastypie import fields
 
 from map_editor.models import *
+from route.models import *
 from map_editor.forms import EnclosureForm
 
 
@@ -90,6 +91,9 @@ class PointResource(ModelResource):
     floor = fields.ToOneField(FloorResource, 'floor')
     label = fields.ToOneField('map_editor.api.resources.LabelResource', 'label')
     qr_code = fields.ToOneField('map_editor.api.resources.QRCodeResource', 'qr_code', null=True)
+    # connections = fields.ToManyField('map_editor.api.resources.ConnectionResource', 'connections', null=True)
+    # connections2 = fields.ToManyField('map_editor.api.resources.ConnectionResource', 'connections2', null=True)
+
 
     class Meta:
         queryset = Point.objects.all()
@@ -169,21 +173,20 @@ class QRCodeResource(ModelResource):
         return 'application/json'
 
 
-# class ConnectionResource(ModelResource):
-#     init = fields.ToOneField('map_editor.api.resources.PointResource', 'init', full=True)
-#     init = fields.ToOneField('map_editor.api.resources.PointResource', 'init', full=True)
-#
-#     class Meta:
-#         resource_name = 'qr-code'
-#         queryset = QR_Code.objects.all()
-#         authorization = DjangoAuthorization()
-#         authentication = BasicAuthentication()
-#         always_return_data = True
-#         filtering = {
-#             'id': ALL,
-#             'point': ALL_WITH_RELATIONS,
-#             }
-#
-#     def determine_format(self, request):
-#         return 'application/json'
-#
+class ConnectionResource(ModelResource):
+    init = fields.ToOneField('map_editor.api.resources.PointResource', 'init', full=True)
+    end = fields.ToOneField('map_editor.api.resources.PointResource', 'end', full=True)
+
+    class Meta:
+        resource_name = 'connection'
+        queryset = Connection.objects.all()
+        authorization = DjangoAuthorization()
+        authentication = BasicAuthentication()
+        always_return_data = True
+        filtering = {
+            'id': ALL,
+            }
+
+    def determine_format(self, request):
+        return 'application/json'
+

@@ -1,4 +1,6 @@
 
+var $e = {};
+var Events = {};
 
 function listenIframe(form, callback)
 {
@@ -113,19 +115,3 @@ function divideInGroups(arr, group_size)
 
     return groups;
 }
-
-
-var loadingMsg = {
-    // Se muestra un mensaje mientras se está haciendo algo
-
-    show: function(msg)
-    {
-        var background =
-        $('body').append
-    },
-
-    hide: function()
-    {
-
-    }
-};

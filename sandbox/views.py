@@ -35,6 +35,19 @@ def show_vinfo(request):
     return HttpResponse(vcap, mimetype='application/json')
 
 
+def arista(request):
+
+    from map_editor.models import *
+    aristas = Point.objects.filter(label__category__name__icontains='arista')
+    ctx = {
+        'aristas': aristas
+    }
+
+    return render_to_response('arista/Prototipo Aristas.html', ctx, context_instance=RequestContext(request))
+
+
+
+
 def tlouder(request):
     return render_to_response('tlouder/index2.html', context_instance=RequestContext(request))
 

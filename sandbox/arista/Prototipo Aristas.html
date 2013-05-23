@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block css %}
+
+    <link rel="stylesheet" href="{{ STATIC_URL }}arista/css/main.css">
+{% endblock %}
+
+{% block js %}
+    <script src="{{ STATIC_URL }}arista/js/main.js"></script>
+{#    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script>#}
+{% endblock %}
+
+{% block content %}
+
+    <form name="formul">
+        <input id="textbox1" type="text">
+        <br>
+        <select id="select1" name="miSelect1" multiple=""></select>
+        <br>
+        <br>
+        <input id="textbox2" type="text">
+        <br>
+        <select id="select2" name="miSelect2" multiple=""></select>
+
+        <br>
+        <br>
+        <input type="button" value="Guardar connection">
+{#               onclick="javascript:agregaArista(document.formul.miSelect1,document.formul.miSelect2)">#}
+    </form>
+
+    <div name="caja1">
+        <p> Lista de connections </p>
+
+        <div id="caja" name="caja2">
+            <ul>
+            <div id="lista_connections">
+
+             </div>
+            </ul>
+        </div>
+    </div>
+
+{% endblock %}
+
+
