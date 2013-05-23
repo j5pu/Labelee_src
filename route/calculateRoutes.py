@@ -27,6 +27,8 @@ def calculate_routes(request, enclosure_id):
 
 
 def threadCalculateRoute(enclosure_id):
+    email = EmailMessage('Cálculo de rutas','Se están calculando rutas', to=['alvaro.gutierrez@mnopi.com'])
+    email.send()
     sql = "select * from route_route where origin_id in  " \
           "( SELECT id FROM map_editor_point where floor_id in " \
           "(select id from map_editor_floor where map_editor_floor.enclosure_id = %s))" % enclosure_id
