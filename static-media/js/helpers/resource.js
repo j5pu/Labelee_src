@@ -188,7 +188,6 @@ function Resource(resource_name) {
 	};
 }
 
-
 function FloorResource()
 {
     Resource.call(this, 'floor');
