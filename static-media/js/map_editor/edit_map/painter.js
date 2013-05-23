@@ -2,6 +2,8 @@
 var Painter = {
     painting_trace: false,
     point: null,
+    loading_icon: false,
+
 
     //
     // Objeto a pintar en el mapa
@@ -121,6 +123,8 @@ var Painter = {
             Painter.icon = new Image();
             Painter.icon.src = Painter.label.img;
 
+            Painter.loading_icon = true;
+
             // No hacemos nada mientras no esté la imágen del mapa cargada en el navegador
             Painter.icon.onload = function(){
 
@@ -131,6 +135,8 @@ var Painter = {
                     Floor._loopPoints();
                 else
                     Painter.label_prev = Painter.label;
+
+                Painter.loading_icon = false;
             };
         }
         else
@@ -188,9 +194,13 @@ var Painter = {
 
         // PROVISIONAL
         //
-        block.append('<div class="point_info">' +
-            Painter.point.row + ', ' +  Painter.point.col +
-            '"</div>');
+
+        if(Floor.loading)
+        {
+            block.append('<div class="point_info">' +
+                Painter.point.row + ', ' +  Painter.point.col +
+                '"</div>');
+        }
 
 
 
@@ -262,7 +272,9 @@ var Painter = {
         // Setea la etiqueta a pintar con la elegida en el selector
 
         Painter.label = new LabelResource().read($e.label.selector.val());
+
         $e.label.selector.blur();
+        $e.category.selector.blur();
     },
 
 
@@ -297,7 +309,7 @@ var Painter = {
 
         //
         // Una vez que se crea actualizamos la lista de QRs..
-        Menu.fillQrList();
+        Menu.setQrList();
 
         //
         // Pintamos el Qr encima de la etiqueta..

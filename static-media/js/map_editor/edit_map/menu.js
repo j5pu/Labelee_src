@@ -22,7 +22,7 @@ var LabelCategory = {
             'color': $e.category.form.color.val()
         };
 
-        var labelCateg = new LabelCategoryResource().create(data);
+        Menu.category_created = new LabelCategoryResource().create(data);
 
         // 2. Si se ha elegido una imágen la subimos
         var img_form = $(this).closest('form');
@@ -37,21 +37,27 @@ var LabelCategory = {
 
         new LabelCategoryResource().addImg(
             img_form,
-            labelCateg.id,
+            Menu.category_created.id,
             function(server_response){
                 LabelCategory._post_create();
                 Menu.sending_img = false;
             }
         );
-
-        $e.category.selector.val(labelCateg.id);
     },
 
 
     // Una vez la categoría está creada se hace esto también:
     _post_create: function()
     {
-        Menu.clearFormCateg();
+        $e.category.form.name.val('');
+        $e.category.form.img.val('');
+        $e.category.form.color.val('');
+        $e.category.form.root_node.hide(400);
+
+        // volvemos a rellenar el selector con el nuevo dato
+        Menu.setCategorySelector();
+
+        Menu.category_created = null;
     },
 
 
@@ -66,13 +72,23 @@ var LabelCategory = {
         var category_id = $e.category.selector.val();
         var confirm_msg = '¿Eliminar categoría? (se eliminarán todas sus etiquetas)';
         new LabelCategoryResource().del(category_id, confirm_msg);
-        Menu.fillCategorySelector();
+        Menu.setCategorySelector();
+    },
+
+
+    isBlocker: function(label_category)
+    {
+        // Nos indica si la categoría es bloqueante
+        return label_category.name.toUpperCase() === 'BLOQUEANTES';
     }
 };
 
 
 
 var Label = {
+
+    // Para indicar que por defecto no se seleccione el muro al seleccionar la categoría 'Bloqueantes'
+    skip_wall_by_default: false,
 
     show_form_new: function(){
         $e.label.form.root_node.show(400);
@@ -99,7 +115,7 @@ var Label = {
         };
 
         var label_resource = new Resource('label');
-        var label = label_resource.create(data);
+        Menu.label_created = label_resource.create(data);
 
         //
         // 2. Subimos su imágen
@@ -115,28 +131,29 @@ var Label = {
 
         label_resource.addImg(
             img_form,
-            label.id,
+            Menu.label_created.id,
             function(server_response){
                 // Una vez que se sube la imágen al servidor..
-                Label._post_create(label);
+                Label._post_create();
                 Menu.sending_img = false;
             }
         );
     },
 
 
-    _post_create: function(label)
+    _post_create: function()
     {
         // Limpiamos formulario
         $e.label.form.name.val('');
         $e.label.form.img.val('');
 
         // Recargamos selector de etiqueta y dejamos elegida la nueva
-        Menu.fillLabelSelector();
-        $e.label.selector.val(label.id);
+        Menu.setLabelSelector();
 
         // Escondemos el formulario para crear la etiqueta
         $e.label.form.root_node.hide(400);
+
+        Menu.label_created = null;
     },
 
 
@@ -151,7 +168,14 @@ var Label = {
         var label_id = $e.label.selector.val();
         var confirm_msg = '¿Eliminar etiqueta?';
         new LabelResource().del(label_id, confirm_msg);
-        Menu.fillLabelSelector();
+        Menu.setLabelSelector();
+    },
+
+
+    isWall: function(label)
+    {
+        return label.name.toUpperCase() === 'MURO'
+            || label.name.toUpperCase() === 'WALL';
     }
 };
 
@@ -165,8 +189,8 @@ var Menu = {
     sending_img: false,
 
     init: function(){
-        this._fillSelectors();
-        this.fillQrList();
+        this._setSelectors();
+        this.setQrList();
         this._fillConnectionsList();
 //        this.toggleBorders();
         this.toggleQRs();
@@ -175,17 +199,17 @@ var Menu = {
     },
 
 
-    _fillSelectors: function()
+    _setSelectors: function()
     {
         // Rellena el selector de categoría de etiqueta y deja el selector para label
         // sólo con la opción 'selecc. etiqueta', ya que de momento no se ha
         // elegido una categoría para la que mostrar sus posibles etiquetas
-        this.fillCategorySelector();
-        this.fillLabelSelector();
+        this.setCategorySelector();
+        this.setLabelSelector();
     },
 
 
-    fillQrList: function()
+    setQrList: function()
     {
         // Rellena la lista de QRs creados para la planta
 
@@ -209,45 +233,58 @@ var Menu = {
     },
 
 
-    fillCategorySelector: function()
+    setCategorySelector: function()
     {
         // Recogemos de la B.D. todos los LabelCategory y los metemos en el selector
 
-        var categories = new LabelCategoryResource().readAll();
+        Menu.categories = new LabelCategoryResource().readAll();
         var prompt_opt = 'Selecc. categoría';
-        setSelector($e.category.selector, categories, prompt_opt);
-        setSelector($e.label.form.category, categories, prompt_opt);
+        setSelector($e.category.selector, Menu.categories, prompt_opt);
+        setSelector($e.label.form.category, Menu.categories, prompt_opt);
+
+        // Si se viene de crear una categoría se elije esa
+        if(Menu.category_created)
+        {
+            $e.category.selector.val(Menu.category_created.id);
+            $e.label.form.category.val(Menu.category_created.id);
+        }
+
+        Menu.setLabelSelector();
     },
 
 
-    fillLabelSelector: function()
+    setLabelSelector: function()
     {
         var category_id = $e.category.selector.val();
 
-        if(category_id)
-            var labels = new LabelResource().readAllFiltered('?category__id=' + category_id);
-
-        setSelector($e.label.selector, labels, 'Selecc. etiqueta');
-
-        // Si la categoría es bloqueantes por defecto se selecciona el muro
-        if(category_id === '1'){
-            $e.label.selector.val('1');
-            Painter.setLabel();
-            $e.category.selector.blur();
+        if(!category_id)
+        {
+            setSelector($e.label.selector, null, 'Selecc. etiqueta');
+            return;
         }
 
-    },
+        Menu.selected_category = new LabelCategoryResource().read(category_id);
+        Menu.labels = new LabelResource().readAllFiltered('?category__id=' + category_id);
 
+        setSelector($e.label.selector, Menu.labels, 'Selecc. etiqueta');
 
-    clearFormCateg: function()
-    {
-        $e.category.form.name.val('');
-        $e.category.form.img.val('');
+        // Si se viene de crear una etiqueta se elije esa
+        if(Menu.label_created)
+            $e.label.selector.val(Menu.label_created.id);
 
-        $e.category.form.root_node.hide(400);
+        // Si no, en caso de haber elegido la categoría 'Bloqueantes' se selecciona muro
+        else if(LabelCategory.isBlocker(Menu.selected_category))
+            for(var i in Menu.labels)
+            {
+                var label = Menu.labels[i];
+                if(Label.isWall(label))
+                {
+                    $e.label.selector.val(label.id);
+                    break;
+                }
+            }
 
-        // volvemos a rellenar el selector con el nuevo dato
-        Menu.fillCategorySelector();
+        Painter.setLabel();
     },
 
 
