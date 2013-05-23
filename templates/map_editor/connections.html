@@ -2,11 +2,15 @@
 
 {% block css %}
 
-    <link rel="stylesheet" href="{{ STATIC_URL }}arista/css/main.css">
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/map_editor/connections/main.css">
 {% endblock %}
 
 {% block js %}
-    <script src="{{ STATIC_URL }}arista/js/main.js"></script>
+
+    <script src="{{ STATIC_URL }}js/map_editor/connections/main.js"></script>
+    <script>
+        Connections.enclosure_id = {{ enclosure_id }}
+    </script>
 {#    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script>#}
 {% endblock %}
 
@@ -32,10 +36,10 @@
         <p> Lista de connections </p>
 
         <div id="caja" name="caja2">
-            <ul>
+            <ul id="ul">
             <div id="lista_connections">
-
-             </div>
+              <li>hola <button>X</button></li>
+            </div>
             </ul>
         </div>
     </div>

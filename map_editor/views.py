@@ -29,3 +29,10 @@ def edit(request, pk):
     return render_to_response('map_editor/edit.html', ctx, context_instance=RequestContext(request))
 
 
+def connections(request, enclosure_id):
+    ctx = {
+    'enclosure_id': enclosure_id
+    }
+    return render_to_response('map_editor/connections.html', ctx, context_instance=RequestContext(request))
+
+

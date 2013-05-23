@@ -66,6 +66,11 @@ function EnclosureCtrl($scope)
     {
         new EnclosureResource().calculateRoutes($scope.enclosure.id);
     };
+
+//    $scope.calculateConnections = function()
+//    {
+//        new ConnectionResource().calculateConnections($scope.enclosure.id);
+//    };
 }
 
 function FloorsCtrl($scope, $element)

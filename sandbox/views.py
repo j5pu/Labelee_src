@@ -35,15 +35,15 @@ def show_vinfo(request):
     return HttpResponse(vcap, mimetype='application/json')
 
 
-def arista(request):
-
-    from map_editor.models import *
-    aristas = Point.objects.filter(label__category__name__icontains='arista')
-    ctx = {
-        'aristas': aristas
-    }
-
-    return render_to_response('arista/Prototipo Aristas.html', ctx, context_instance=RequestContext(request))
+# def arista(request):
+#
+#     from map_editor.models import *
+#     aristas = Point.objects.filter(label__category__name__icontains='arista')
+#     ctx = {
+#         'aristas': aristas
+#     }
+#
+#     return render_to_response('map_editor/Prototipo Aristas.html', ctx, context_instance=RequestContext(request))
 
 
 

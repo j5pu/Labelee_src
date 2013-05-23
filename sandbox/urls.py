@@ -17,10 +17,10 @@ urlpatterns = patterns('sandbox.views',
 	url(r'^vcap-info$', 'show_vinfo'),
 
 
-	url(r'^tlouder$', 'tlouder'),
-	url(r'^multix$', 'multix'),
+	# url(r'^tlouder$', 'tlouder'),
+	# url(r'^multix$', 'multix'),
 
-	url(r'^arista$', 'arista'),
+	# url(r'^arista$', 'arista'),
 
 
 

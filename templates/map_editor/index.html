@@ -8,7 +8,6 @@
 
 {% block js %}
     <script src="{{ STATIC_URL }}vendor/bootstrap/bootstrap.file-input.js"></script>
-
     <script src="{{ STATIC_URL }}js/map_editor/index/main.js"></script>
 {% endblock js %}
 
@@ -53,6 +52,9 @@
                     </div>
 
                     <button ng-click="calculateRoutes()">Calcular rutas</button>
+
+                    <a href="edit/connections/[[enclosure.id]]">Gestión de aristas</a>
+
                 </div>
                 <div ng-show="editing">
                     <form>

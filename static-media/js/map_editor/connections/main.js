@@ -26,7 +26,7 @@ var Connections = {
     cargarAristas: function()
     {
         // Carga todas las etiquetas de categoría 'aristas' de todos los sitios
-        Connections.listaAristas = new PointResource().readAllFiltered('?label__category__name__icontains=arista');
+        Connections.listaAristas = new PointResource().readConnectionsFromEnclosure(Connections.enclosure_id)
 
 //        col: 1
 //        description: A0-P0
@@ -50,7 +50,7 @@ var Connections = {
     cargarConnections: function()
     {
         // Traemos todas las connections que hay en BD
-        var connections = new ConnectionResource().readAll();
+        var connections = new ConnectionResource().readFromEnclosure(Connections.enclosure_id);
 
         // Vaciamos lo que haya dentro de <div id="lista_connections">
         Connections.$e.lista_connections[0].innerHTML = '';
@@ -65,7 +65,7 @@ var Connections = {
 
             //create new li element
             var elementoli = document.createElement("li");
-            elementoli.innerHTML = text + '<button class="eliminar_connection" ' +
+            elementoli.innerHTML = text + '<button id="x" class="eliminar_connection" ' +
                 'data-connection-id="' + connection.id + '">X</button>';
             Connections.$e.lista_connections[0].appendChild(elementoli);
         }

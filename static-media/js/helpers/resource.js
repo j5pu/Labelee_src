@@ -349,6 +349,11 @@ function PointResource()
         });
 
         return element;
+    },
+
+    this.readConnectionsFromEnclosure = function(enclosure_id)
+    {
+        return this.readAllFiltered('?label__category__name__icontains=arista&floor__enclosure__id=' + enclosure_id);
     }
 }
 
@@ -380,6 +385,11 @@ function EnclosureResource()
 function ConnectionResource()
 {
     Resource.call(this, 'connection');
+
+    this.readFromEnclosure = function(enclosure_id)
+    {
+        return this.readAllFiltered('?init__floor__enclosure__id=' + enclosure_id);
+    };
 }
 
 FloorResource.prototype = new Resource;
