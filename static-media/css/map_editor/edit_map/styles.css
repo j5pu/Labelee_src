@@ -140,3 +140,12 @@ img#fake
 {
     display: none;
 }
+
+.connector_descr
+{
+    position: absolute;
+    display: none;
+    background: #ffffff;
+    padding: 1em;
+    z-index: 2;
+}

@@ -2,6 +2,7 @@
 var Painter = {
     painting_trace: false,
     point: null,
+    label_category: null,
     loading_icon: false,
 
 
@@ -58,6 +59,9 @@ var Painter = {
         if(block.data('label'))
             Floor.point_count.to_save--;
 
+        if(block.data('connector-descr'))
+            Floor.point_count.connectors--;
+
         // Limpiamos todo el contenido del bloque..
         block.empty();
         block.removeData('label');
@@ -66,69 +70,26 @@ var Painter = {
         block.removeAttr('data-from-db');
         block.removeData('point-id');
         block.removeAttr('data-point-id');
+        block.removeData('connector-descr');
+        block.removeAttr('data-connector-descr');
         block.css({'background': ''});
 
         Menu.setPointStats();
     },
 
 
-    paintLabel: function(block)
+    _prepareLabelIcon: function()
     {
-        //
-        // Pinta etiqueta sobre un bloque en el grid para el plano
+        var dfd= $.Deferred();
 
-        // Si:
-        //      - el pintor no tiene etiqueta para pintar
-        //      ||
-        //      - el pintor está pintando puntos que no están viniendo desde la BD,
-        //        sino pintados por el usuario
-        // Entonces: no hacemos nada
-        if(!Painter.label)
-            return;
 
-        // Si se está cargando el plano se pinta marcándola como cargada desde la BD
-        if(Floor.loading)
+        // Si hay que cargar el icono para la nueva etiqueta seleccionada..
+        var iconMustLoad = !Painter.label_prev || Painter.label !== Painter.label_prev;
+        if(iconMustLoad)
         {
-            block.attr('data-from-db', 'y');
-            block.attr('data-point-id', Painter.point_id);
-
-            // Dejamos el bloque como pintado
-            block.attr('data-label', Painter.label.resource_uri);
-
-            Floor.point_count.saved++;
-        }
-        else
-        {
-            // Si ya se cargó el grid desde la B.D. entonces vaciamos el bloque
-            Painter.clear(block);
-
-            // Dejamos el bloque como pintado
-            block.attr('data-label', Painter.label.resource_uri);
-
-            Floor.point_count.to_save++;
-        }
-
-        Menu.setPointStats();
-
-
-        //
-        // Carga imágen de la etiqueta:
-        // Si:
-        //      - aún no se pintó ninguna etiqueta
-        //      ||
-        //      - no es la misma que se pintó antes
-        // Entonces:
-        //      cargamos su imágen ..
-        // Si no:
-        //      no hace falta esperar para volver a cargar la misma imágen
-        if(!Painter.label_prev || Painter.label !== Painter.label_prev)
-        {
-
             // Obtenemos la categoría
             if(Floor.loading)
                 Painter.label_category = new LabelCategoryResource().readFromUri(Painter.label.category_uri);
-            else
-                Painter.label_category = new LabelCategoryResource().readFromUri(Painter.label.category);
 
             // Obtenemos la imágen del icono
             Painter.icon = new Image();
@@ -139,26 +100,91 @@ var Painter = {
             // No hacemos nada mientras no esté la imágen del mapa cargada en el navegador
             Painter.icon.onload = function(){
 
-                Painter._drawLabel(block);
+                Painter.loading_icon = false;
 
-                // Seguimos iterando mientras se esté cargando el plano
-                if(Floor.loading)
-                    Floor._loopPoints();
-                else
+                if(!Floor.loading)
                     Painter.label_prev = Painter.label;
 
-                Painter.loading_icon = false;
+                dfd.resolve();
             };
         }
         else
         {
-            // Si la etiqueta es igual a la anterior entonces ya se puede pintar
-            // sin tener que volver a cargar su imágen
-            Painter._drawLabel(block);
+            dfd.resolve();
+        }
 
+        return dfd.promise();
+    },
+
+
+    paintLabel: function(block)
+    {
+        //
+        // Pinta etiqueta sobre un bloque en el grid para el plano
+
+//        if(!Painter.label || Painter.loading_icon)
+//            return;
+
+        $.when(Painter._prepareLabelIcon()).then(function(){
+            // Si se está cargando el plano se pinta marcándola como cargada desde la BD
+            if(Floor.loading)
+            {
+                block.attr('data-from-db', 'y');
+                block.attr('data-point-id', Painter.point_id);
+//            block.append(
+//                '<div class="point_info">' +
+//                    Painter.point.row + ', ' +  Painter.point.col +
+//                '"</div>'
+//            );
+
+                Floor.point_count.saved++;
+            }
+            else
+            {
+                Painter.clear(block);
+                Floor.point_count.to_save++;
+            }
+
+            // Dejamos el bloque como pintado
+            block.attr('data-label', Painter.label.resource_uri);
+
+            // Si lo que se está pintando es una arista, añadimos al bloque la descripción para el punto:
+            //      xej: Parquing_Escalera_4
+            if(LabelCategory.isConnector(Painter.label_category))
+            {
+                var connector_descr = Floor.data.name + '_' + Painter.label.name + '_' + ++Floor.point_count.connectors;
+                block.attr('data-connector-descr', connector_descr);
+                block.append(
+                    '<div class="connector_descr">' + connector_descr + '</div>'
+                );
+            }
+
+            // Ponemos el bloque de un color según la categoría de la etiqueta..
+            block.css({
+                'background': Painter.label_category.color
+//            'opacity': '0.5'
+            });
+
+
+            // Le añadimos la imágen para la etiqueta, escondida para que se muestre
+            // sólo cuando se pase el ratón por encima de su bloque
+            block.append('<img class="label_img" src="' + Painter.label.img + '"/>');
+
+            var img = block.find('img.label_img');
+            var transform_factor = Painter.icon.width / Floor.block_width;
+            img.css({
+                'margin-top': (Floor.block_height - img.height()) / 2 + 'px',
+                'transform': 'scale(' + transform_factor + ')',
+                'z-index': '1',
+                'display': 'none'
+            });
+
+            Menu.setPointStats();
+
+            // Seguimos iterando mientras se esté cargando el plano
             if(Floor.loading)
                 Floor._loopPoints();
-        }
+        });
     },
 
 
@@ -190,42 +216,6 @@ var Painter = {
             // Le damos un sombreado para saber que es QR
             block.css({'box-shadow': 'inset 0px 0px 19px blue'});
         }
-    },
-
-
-    _drawLabel: function(block)
-    {
-        // Ponemos el bloque de un color según la categoría de la etiqueta..
-        block.css({
-            'background': Painter.label_category.color
-//            'opacity': '0.5'
-        });
-
-        // Le añadimos la imágen para la etiqueta, escondida para que se muestre
-        // sólo cuando se pase el ratón por encima de su bloque
-        block.append('<img class="label_img" src="' + Painter.label.img + '"/>');
-
-
-        // PROVISIONAL
-        //
-
-        if(Floor.loading)
-        {
-            block.append('<div class="point_info">' +
-                Painter.point.row + ', ' +  Painter.point.col +
-                '"</div>');
-        }
-
-
-
-        var img = block.find('img.label_img');
-        var transform_factor = Painter.icon.width / Floor.block_width;
-        img.css({
-            'margin-top': (Floor.block_height - img.height()) / 2 + 'px',
-            'transform': 'scale(' + transform_factor + ')',
-            'z-index': '1',
-            'display': 'none'
-        });
     },
 
 
@@ -263,7 +253,7 @@ var Painter = {
 
         Painter.current_hovered_block.find('.point_info').show();
 
-
+        Painter.current_hovered_block.find('.connector_descr').show();
     },
 
 
@@ -274,6 +264,7 @@ var Painter = {
         Painter.current_hovered_block.find('div').hide();
 
         Painter.current_hovered_block.find('.point_info').hide();
+        Painter.current_hovered_block.find('.connector_descr').hide();
         Painter.current_hovered_block = null;
     },
 

@@ -2,7 +2,7 @@
 // Elementos del DOM
 //
 
-$e.map_editor = {
+$e = {
 
     init: function()
     {

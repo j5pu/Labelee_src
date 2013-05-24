@@ -147,7 +147,7 @@ var Events = {
         _changeNumRows: function()
         {
             // Campo para nro. de filas
-            $e.floor.num_rows.on('change', Floor.drawEmpty);
+            $e.floor.num_rows.on('change', Floor.loadEmpty);
         },
 
 

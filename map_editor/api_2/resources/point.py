@@ -35,6 +35,7 @@ def create_from_list(request):
         # bundle = pr.build_bundle(data=point, request=request)
         # pr.obj_create(bundle)
         point = Point(
+            description=point['description'],
             row=point['row'],
             col=point['col'],
             label=Label.objects.get(id=point['label']),

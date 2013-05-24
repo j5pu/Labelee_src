@@ -80,6 +80,13 @@ var LabelCategory = {
     {
         // Nos indica si la categoría es bloqueante
         return label_category.name.toUpperCase() === 'BLOQUEANTES';
+    },
+
+
+    isConnector: function(label_category)
+    {
+        // Nos indica si la categoría es arista
+        return label_category.name.toUpperCase() === 'ARISTAS';
     }
 };
 
@@ -273,7 +280,7 @@ var Menu = {
             return;
         }
 
-        Menu.selected_category = new LabelCategoryResource().read(category_id);
+        Painter.label_category = new LabelCategoryResource().read(category_id);
         Menu.labels = new LabelResource().readAllFiltered('?category__id=' + category_id);
 
         setSelector($e.label.selector, Menu.labels, 'Selecc. etiqueta');
@@ -283,7 +290,7 @@ var Menu = {
             $e.label.selector.val(Menu.label_created.id);
 
         // Si no, en caso de haber elegido la categoría 'Bloqueantes' se selecciona muro
-        else if(LabelCategory.isBlocker(Menu.selected_category))
+        else if(LabelCategory.isBlocker(Painter.label_category))
             for(var i in Menu.labels)
             {
                 var label = Menu.labels[i];

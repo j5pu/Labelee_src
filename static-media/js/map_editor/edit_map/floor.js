@@ -10,10 +10,12 @@ var Floor = {
         to_save: 0,
         saved: 0,
         to_delete: 0,
+        connectors: 0,
         total: 0
     },
 
     points_to_delete: [],
+
 
     init: function()
     {
@@ -117,7 +119,7 @@ var Floor = {
     update: function()
     {
         Floor.point_count.saved = 0;
-        loadingMsg.show('Actualizando planta..');
+//        loadingMsg.show('Actualizando planta..');
 
         // Tomamos todas las etiquetas pintadas sobre el plano hasta el momento
         Floor._getPaintedLabels();
@@ -139,11 +141,17 @@ var Floor = {
                 var col = $(this).data('col');
 
                 var point_data = {
+                    description: null,
                     row: row,
                     col: col,
                     floor: Floor.data.id,
                     label: Floor.painted_labels[block_label].id
                 };
+
+                // Si es una arista (connection) guardamos la descripción
+                var connection = $(this).data('connector-descr');
+                if(!from_db && connection)
+                    point_data.description = connection;
 
                 // Guardaremos los bloques que aparecen pintados y no han sido cargados desde la BD
                 if(block_label && !from_db)
@@ -169,7 +177,7 @@ var Floor = {
         Floor.point_count.to_save = 0;
         Floor.loadGrid();
 
-        loadingMsg.hide();
+//        loadingMsg.hide();
     },
 
 
@@ -344,7 +352,7 @@ var Floor = {
     },
 
 
-    drawSaved: function()
+    loadSaved: function()
     {
         //
         //  1. Dibujamos el grid vacío con el nro. de filas y columnas almacenado en BD
@@ -364,7 +372,7 @@ var Floor = {
     },
 
 
-    drawEmpty: function()
+    loadEmpty: function()
     {
         Floor.num_rows = parseInt($e.floor.num_rows.val(), 10);
         Floor.grid_height = resize(Floor.img.height, Floor.num_rows);
@@ -385,13 +393,14 @@ var Floor = {
     loadGrid: function()
     {
         Floor.loading = true;
+        Floor.point_count.connectors = 0;
 
         // Si la planta no tiene todavía un número de filas entonces
         // 'tirará' de lo indicado en el formulario de la página
         if(Floor.data.num_rows)
-            Floor.drawSaved();
+            Floor.loadSaved();
         else
-            Floor.drawEmpty();
+            Floor.loadEmpty();
     },
 
 
