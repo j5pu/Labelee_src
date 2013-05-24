@@ -26,7 +26,7 @@ var Connections = {
     cargarAristas: function()
     {
         // Carga todas las etiquetas de categoría 'aristas' de todos los sitios
-        Connections.listaAristas = new PointResource().readConnectionsFromEnclosure(Connections.enclosure_id)
+        Connections.listaAristas = new PointResource().readConnectionsFromEnclosure(Connections.enclosure_id);
 
 //        col: 1
 //        description: A0-P0
@@ -40,8 +40,8 @@ var Connections = {
         {
             var arista = Connections.listaAristas[i];
             var descripcion = arista.description || arista.resource_uri;
-            Connections.$e.aristas.select1.append('<option value="' + arista.resource_uri + '">' + descripcion + '</option>');
-            Connections.$e.aristas.select2.append('<option value="' + arista.resource_uri + '">' + descripcion + '</option>');
+            Connections.$e.aristas.select1.append('<option class="opciones" value="' + arista.resource_uri + '">' + descripcion + '</option>');
+            Connections.$e.aristas.select2.append('<option class="opciones" value="' + arista.resource_uri + '">' + descripcion + '</option>');
 
         }
     },
@@ -65,8 +65,10 @@ var Connections = {
 
             //create new li element
             var elementoli = document.createElement("li");
-            elementoli.innerHTML = text + '<button id="x" class="eliminar_connection" ' +
-                'data-connection-id="' + connection.id + '">X</button>';
+            elementoli.setAttribute("class", "li");
+            elementoli.innerHTML = '<button class="eliminar_connection" ' +
+                'data-connection-id="' + connection.id + '">X</button>' + text;
+
             Connections.$e.lista_connections[0].appendChild(elementoli);
         }
 
