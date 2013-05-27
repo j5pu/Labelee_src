@@ -1,24 +1,72 @@
 #caja {
-    background: none repeat scroll 0 0 #F0FFF0;
+    background: none repeat scroll 0 0 #7FADBE;
     border-radius: 1em 1em 1em 1em;
     display: inline-block;
-    height: 200px;
-    width: 200px;
-    overflow-x: hidden;
-    overflow-y: auto;
+    height: 250px;
+    width: auto;
     padding: 1em;
-    list-style:none
+    border: 3px solid #808080;
+}
+
+#caja1 {
+
+    border-radius: 1em 1em 1em 1em;
+    display: inline-block;
+    height: 400px;
+    width: auto;
+    padding: 1em;
 
 }
+
+#select1 {
+    height: 150px;
+}
+#select2 {
+    height: 150px;
+}
+
+body{
+    background-color: #C8DCEC;
+}
+
+#lista_connections{
+
+    background: none repeat scroll 0 0 #7FADBE;
+    border-radius: 1em 1em 1em 1em;
+    display: inline-block;
+    height: auto;
+    width: 350px;
+    padding: 1em;
+    list-style:none;
+
+}
+
+.opciones{
+ color: inherit;
+    font-family: inherit;
+    font-weight: bold;
+    margin: 10px 0;
+    text-rendering: optimizelegibility;
+
+}
+
+li{
+     /*background-color: #7FADBE;*/
+    text-align: left;
+    width: auto;
+
+}
+
 
 #ul {
-    list-style:none
+    list-style: none;
+    width: auto;
+    height: 250px;
+    overflow-x: hidden;
+    overflow-y: auto;
+
 }
 
-#x {
-
-
-}
 
 
 

@@ -16,6 +16,10 @@
 
 {% block content %}
 
+
+    <h1>Gestión de aristas</h1>
+
+
     <form name="formul">
         <input id="textbox1" type="text">
         <br>
@@ -32,13 +36,12 @@
 {#               onclick="javascript:agregaArista(document.formul.miSelect1,document.formul.miSelect2)">#}
     </form>
 
-    <div name="caja1">
-        <p> Lista de connections </p>
+    <div id= caja1 name="caja1">
+        <h4> Lista de connections </h4>
 
         <div id="caja" name="caja2">
             <ul id="ul">
             <div id="lista_connections">
-              <li>hola <button>X</button></li>
             </div>
             </ul>
         </div>
