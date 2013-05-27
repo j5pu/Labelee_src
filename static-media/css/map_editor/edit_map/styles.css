@@ -124,7 +124,9 @@ img#fake
     position: absolute;
     z-index: 2;
     background: #ffffff;
-    display: visible;
+    display: none;
+    background: #ffffff;
+    padding: 1em;
 }
 
 .point_info

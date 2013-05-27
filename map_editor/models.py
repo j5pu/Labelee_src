@@ -116,7 +116,7 @@ class Label(models.Model):
 
 
 class Point(models.Model):
-    description = models.CharField(max_length=200, null=True, blank=True)
+    description = models.CharField(max_length=2000, null=True, blank=True)
     row = models.PositiveIntegerField(null=True, blank=True)
     col = models.PositiveIntegerField(null=True, blank=True)
     label = models.ForeignKey(Label, related_name='points', on_delete=models.CASCADE)

@@ -115,3 +115,13 @@ function divideInGroups(arr, group_size)
 
     return groups;
 }
+
+
+// http://stackoverflow.com/a/6700/1260374
+Object.size = function(obj) {
+    var size = 0, key;
+    for (key in obj) {
+        if (obj.hasOwnProperty(key)) size++;
+    }
+    return size;
+};

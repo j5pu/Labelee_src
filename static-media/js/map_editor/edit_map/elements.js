@@ -43,7 +43,8 @@ $e = {
             toggle_border: $('#toggle_border'),
             blocks: null,
             update: $('#update_floor'),
-            clear: $('#clear_floor')
+            clear: $('#clear_floor'),
+            labeled_blocks: null
         };
 
         this.qr = {

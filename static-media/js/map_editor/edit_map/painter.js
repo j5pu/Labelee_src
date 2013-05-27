@@ -25,6 +25,7 @@ var Painter = {
 //    var label_category;
 
 
+
     paintTrace: function()
     {
         // POR TERMINAR DE IMPLEMENTAR
@@ -78,45 +79,6 @@ var Painter = {
     },
 
 
-    _prepareLabelIcon: function()
-    {
-        var dfd= $.Deferred();
-
-
-        // Si hay que cargar el icono para la nueva etiqueta seleccionada..
-        var iconMustLoad = !Painter.label_prev || Painter.label !== Painter.label_prev;
-        if(iconMustLoad)
-        {
-            // Obtenemos la categoría
-            if(Floor.loading)
-                Painter.label_category = new LabelCategoryResource().readFromUri(Painter.label.category_uri);
-
-            // Obtenemos la imágen del icono
-            Painter.icon = new Image();
-            Painter.icon.src = Painter.label.img;
-
-            Painter.loading_icon = true;
-
-            // No hacemos nada mientras no esté la imágen del mapa cargada en el navegador
-            Painter.icon.onload = function(){
-
-                Painter.loading_icon = false;
-
-                if(!Floor.loading)
-                    Painter.label_prev = Painter.label;
-
-                dfd.resolve();
-            };
-        }
-        else
-        {
-            dfd.resolve();
-        }
-
-        return dfd.promise();
-    },
-
-
     paintLabel: function(block)
     {
         //
@@ -125,79 +87,78 @@ var Painter = {
 //        if(!Painter.label || Painter.loading_icon)
 //            return;
 
-        $.when(Painter._prepareLabelIcon()).then(function(){
-            // Si se está cargando el plano se pinta marcándola como cargada desde la BD
-            if(Floor.loading)
-            {
-                block.attr('data-from-db', 'y');
-                block.attr('data-point-id', Painter.point_id);
+
+        // Si se está cargando el plano se pinta marcándola como cargada desde la BD
+        if(Floor.loading)
+        {
+            block.attr('data-from-db', 'y');
+            block.attr('data-point-id', Painter.point_id);
 //            block.append(
 //                '<div class="point_info">' +
 //                    Painter.point.row + ', ' +  Painter.point.col +
 //                '"</div>'
 //            );
 
-                Floor.point_count.saved++;
-            }
-            else
-            {
-                Painter.clear(block);
-                Floor.point_count.to_save++;
-            }
+            Floor.point_count.saved++;
+        }
+        else
+        {
+            Painter.clear(block);
+            Floor.point_count.to_save++;
+        }
 
-            // Dejamos el bloque como pintado
-            block.attr('data-label', Painter.label.resource_uri);
+        // Dejamos el bloque como pintado
+        block.attr('data-label', Painter.label.resource_uri);
 
-            // Si lo que se está pintando es una arista, añadimos al bloque la descripción para el punto:
-            //      xej: Parquing_Escalera_4
-            if(LabelCategory.isConnector(Painter.label_category))
-            {
-                var connector_descr = Floor.data.name + '_' + Painter.label.name + '_' + ++Floor.point_count.connectors;
-                block.attr('data-connector-descr', connector_descr);
-                block.append(
-                    '<div class="connector_descr">' + connector_descr + '</div>'
-                );
-            }
+        // Si lo que se está pintando es una arista, añadimos al bloque la descripción para el punto:
+        //      xej: Parquing_Escalera_4
+        if(LabelCategory.isConnector(Painter.label.category))
+        {
+            var connector_descr = Floor.data.name + '_' + Painter.label.name + '_' + ++Floor.point_count.connectors;
+            block.attr('data-connector-descr', connector_descr);
+            block.append(
+                '<div class="connector_descr">' + connector_descr + '</div>'
+            );
+        }
 
-            // Ponemos el bloque de un color según la categoría de la etiqueta..
-            block.css({
-                'background': Painter.label_category.color
+        // Ponemos el bloque de un color según la categoría de la etiqueta..
+        block.css({
+            'background': Painter.label.category.color
 //            'opacity': '0.5'
-            });
-
-
-            // Le añadimos la imágen para la etiqueta, escondida para que se muestre
-            // sólo cuando se pase el ratón por encima de su bloque
-            block.append('<img class="label_img" src="' + Painter.label.img + '"/>');
-
-            var img = block.find('img.label_img');
-            var transform_factor = Painter.icon.width / Floor.block_width;
-            img.css({
-                'margin-top': (Floor.block_height - img.height()) / 2 + 'px',
-                'transform': 'scale(' + transform_factor + ')',
-                'z-index': '1',
-                'display': 'none'
-            });
-
-            Menu.setPointStats();
-
-            // Seguimos iterando mientras se esté cargando el plano
-            if(Floor.loading)
-                Floor._loopPoints();
         });
+
+
+        // Le añadimos la imágen para la etiqueta, escondida para que se muestre
+        // sólo cuando se pase el ratón por encima de su bloque
+        block.append('<img class="label_img" src="' + Painter.label.img + '"/>');
+
+        var img = block.find('img.label_img');
+        var transform_factor = Painter.label.loaded_img.width / Floor.block_width;
+        img.css({
+            'margin-top': (Floor.block_height - img.height()) / 2 + 'px',
+            'transform': 'scale(' + transform_factor + ')',
+            'z-index': '1',
+            'display': 'none'
+        });
+
+        Menu.setPointStats();
+
+        // Seguimos iterando mientras se esté cargando el plano
+        if(Floor.loading)
+            Floor._loopPoints();
     },
 
 
     paintQR: function()
     {
         // No hacemos lo demás hasta que se haya cargado el icono del QR
-        if(!Painter.icon)
+        if(!Painter.qr_icon)
         {
-            $.when(Painter._loadIcon('/static/img/qr_code.png'))
-                .then(function(){
-                    Painter.paintQR();
-                }
-            );
+            Painter.qr_icon = new Image();
+            Painter.qr_icon.src = '/static/img/qr_code.png'
+            Painter.qr_icon.onload = function(){
+                Painter.paintQR();
+            };
         }
         else
         {
@@ -205,31 +166,12 @@ var Painter = {
             var block = Painter.current_hovered_block || Painter.block;
             block.attr('data-qr', Painter.qr.id);
             block.append(
-                '<div style="background:white; padding:4px">' +
-//                    '<img class="qr_img" src="' + Painter.icon.src + '"/>' +
-                    '<span class="qr_info">' + Painter.qr.code + '</span>' +
-                    '</div>'
+                '<div class="qr_info">' + Painter.qr.code + '</div>'
             );
-            var div = block.find('div');
-//            div.hide();
 
             // Le damos un sombreado para saber que es QR
             block.css({'box-shadow': 'inset 0px 0px 19px blue'});
         }
-    },
-
-
-    _loadIcon: function(src)
-    {
-        var dfd= $.Deferred();
-
-        Painter.icon = new Image();
-        Painter.icon.src = src;
-        Painter.icon.onload = function(){
-            dfd.resolve();
-        };
-
-        return dfd.promise();
     },
 
 
@@ -261,9 +203,6 @@ var Painter = {
         if(Painter.painting_trace || !Painter.current_hovered_block)
             return;
         Painter.current_hovered_block.find('img').hide();
-        Painter.current_hovered_block.find('div').hide();
-
-        Painter.current_hovered_block.find('.point_info').hide();
         Painter.current_hovered_block.find('.connector_descr').hide();
         Painter.current_hovered_block = null;
     },
@@ -313,13 +252,13 @@ var Painter = {
         new Resource('qr-code').create(data);
 
         //
+        // Pintamos el Qr encima de la etiqueta..
+        Painter.paintQR();
+        Painter.current_hovered_block = null;
+
+        //
         // Una vez que se crea actualizamos la lista de QRs..
         Menu.setQrList();
 
-        //
-        // Pintamos el Qr encima de la etiqueta..
-        Painter.paintQR();
-
-        Painter.current_hovered_block = null;
     }
 };

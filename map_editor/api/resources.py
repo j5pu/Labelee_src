@@ -107,7 +107,8 @@ class PointResource(ModelResource):
             'label': ALL_WITH_RELATIONS,
             'id': ALL,
             'row': ALL,
-            'col': ALL
+            'col': ALL,
+            'description': ALL
         }
         max_limit = 5000
 

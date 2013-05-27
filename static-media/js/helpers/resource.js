@@ -199,22 +199,6 @@ function LabelResource()
 
 	this.readFromFloor = function(floor_id) {
 
-		// Para obtener todos los objetos de un grid, agrupados por id:
-		// 		uri = /api-2/object/grid/4
-        //
-        // -> objects = {
-        // 		'api/v1/object/1': {
-        //			category_id: 1
-        //			category_name: builder
-	    //			id: 1
-	    //			img: "img/objects/builders/wall.png"
-	    //			name: "wall"
-	    //			total: 6
-	    //			resource_uri: api/v1/object/1
-	    //			from_db: True
-        // 		},
-        //      ..
-        //   }
 
 		var element;
 		$.ajax({
@@ -349,12 +333,23 @@ function PointResource()
         });
 
         return element;
-    },
+    };
 
     this.readConnectionsFromEnclosure = function(enclosure_id)
     {
         return this.readAllFiltered('?label__category__name__icontains=arista&floor__enclosure__id=' + enclosure_id);
-    }
+    };
+
+    this.readQRsFromFloor = function(floor_id)
+    {
+        qr_codes = new Resource('qr-code').readAllFiltered('?point__floor__id=' + floor_id);
+
+        points = [];
+        for(i in qr_codes)
+            points.push(qr_codes[i].point);
+
+        return points;
+    };
 }
 
 

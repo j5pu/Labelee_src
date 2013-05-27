@@ -33,7 +33,8 @@ var Events = {
 
         _assign_qr_by_right_click: function()
         {
-            $e.floor.blocks.on('contextmenu', function(e){
+            // No vamos a asignar un QR a un bloque que no tenga etiqueta..
+            $e.floor.labeled_blocks.on('contextmenu', function(e){
                 e.preventDefault();
                 Painter.assignQR();
                 $e.floor.blocks.off('mouseover');

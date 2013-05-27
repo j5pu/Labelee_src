@@ -196,12 +196,6 @@ var Menu = {
     sending_img: false,
 
     init: function(){
-        this._setSelectors();
-        this.setQrList();
-        this._fillConnectionsList();
-//        this.toggleBorders();
-        this.toggleQRs();
-        this.setPointStats();
         Events.menu.bind();
         Menu.saved_labels = new LabelResource().readFromFloor(Floor.data.id);
     },
@@ -239,8 +233,10 @@ var Menu = {
         for(var i in Menu.qr_list)
         {
             var qr = Menu.qr_list[i];
-            list.append('<li>' + qr.code + '</li>');
+            list.append('<li><a href="#">' + qr.code + '</a></li>');
         }
+
+        Menu.toggleQRs();
     },
 
 
@@ -329,13 +325,42 @@ var Menu = {
 
     toggleQRs: function()
     {
-        if($e.qr.toggle.is(':checked'))
+
+//        var not_qr_blocks = $e.floor.blocks.find(':not(.qr_info)').parent();
+//        var qr_infos = $e.floor.blocks.find('.qr_info');
+
+        if(Floor.loading)
+            return;
+
+        var checkbox = $e.qr.toggle;
+        var is_checked = $e.qr.toggle.is(':checked');
+
+        if(!confirm('Se perderán los puntos que no se han guardado. ¿Desea continuar?'))
         {
-            $e.floor.blocks.find('div').show();
+            checkbox.attr('checked', !is_checked);
+            return;
+        }
+
+
+        if(is_checked)
+        {
+            Floor.show_only_qrs = true;
+
+
+
+//            // Esconde los bloques que no tengan QR
+//            not_qr_blocks.hide();
+//            // Muestra código de QR
+//            qr_infos.show();
         }
         else
         {
-            $e.floor.blocks.find('div').hide();
+
+            Floor.show_only_qrs = false;
+//            not_qr_blocks.show();
+//            qr_infos.hide();
         }
+
+        Floor.loadGrid();
     }
 };

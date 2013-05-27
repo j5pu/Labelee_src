@@ -5,7 +5,7 @@ var Floor = {
 
     loading: false,
     updating: false,
-
+    show_only_qrs: false,
     point_count: {
         to_save: 0,
         saved: 0,
@@ -13,7 +13,6 @@ var Floor = {
         connectors: 0,
         total: 0
     },
-
     points_to_delete: [],
 
 
@@ -26,11 +25,6 @@ var Floor = {
             //
             // Una vez cargada la imágen de su plano cargamos el grid y hacemos lo demás
             Floor.loadGrid();
-
-            Menu.init();
-
-            // Cargamos los atajos
-            Events.shortcuts.bind();
         };
     },
 
@@ -102,9 +96,6 @@ var Floor = {
         // Vemos si el checkbox para ver la rejilla está activado
         Menu.toggleBorders();
 
-        //
-        // Añadimos los eventos al grid
-        Events.grid.bind();
 
         //
         // Vaciamos la lista de puntos a eliminar
@@ -188,6 +179,23 @@ var Floor = {
     },
 
 
+    _loopPointsEnd: function()
+    {
+        if(!Floor.reloading)
+        {
+            // Si no se está recargando la planta de haberle dado a guardar entonces conservamos
+            // los valores
+            Painter.label = null;
+            Painter.label_prev = null;
+            Painter.icon = null;
+        }
+        Floor.i = 0;
+
+        //
+        // Una vez cargados todos los puntos vamos con los QRs..
+        Floor._loadQRs();
+    },
+
     _loopPoints: function()
     {
         // Realiza una iteración para pintar en el plano un punto de la lista
@@ -201,22 +209,10 @@ var Floor = {
         var all_points_painted = !Floor.points || Floor.i >= Floor.points.length;
         if(all_points_painted)
         {
-            if(!Floor.reloading)
-            {
-                // Si no se está recargando la planta de haberle dado a guardar entonces conservamos
-                // los valores
-                Painter.label = null;
-                Painter.label_prev = null;
-                Painter.icon = null;
-            }
-            Floor.i = 0;
-            Floor.dfd.resolve();
+            Floor._loopPointsEnd();
             return;
         }
 
-        // Si venimos de haber pintado ya al menos una etiqueta..
-        if(Painter.label)
-            Painter.label_prev = Painter.label;
 
         //
         // Para pintar el punto, el pintor necesita:
@@ -241,33 +237,51 @@ var Floor = {
     },
 
 
+    _loopQRsEnd: function()
+    {
+        // Esto es lo que se hace una vez cargado completamente el plano, con sus etiquetas
+        // y sus QRs
+
+        if(Floor.reloading)
+        {
+            Menu.setPointStats();
+            Floor.reloading = false;
+            alert('Plano actualizado');
+        }
+
+        $e.floor.labeled_blocks = $e.floor.grid.find('[data-label]');
+
+        // Cargamos todos eventos
+        Events.bindAll();
+
+        if(!Menu.qr_list)
+            Menu.setQrList();
+
+        Floor.loading = false;
+    },
+
+
     _loopQRs: function()
     {
         // Itera por toda la lista de QRs
 
         if(Painter.i >= Menu.qr_list.length)
         {
-            Floor.loading = false;
-            Painter.icon = null;
-            if(Floor.reloading)
-            {
-                Menu.setPointStats();
-                Floor.reloading = false;
-                alert('Plano actualizado');
-            }
+            Floor._loopQRsEnd();
             return;
         }
 
 
         // Si no se cargó el icono del qr..
-        if(!Painter.icon)
+        if(!Painter.qr_icon)
         {
             // No hacemos lo demás hasta que se haya cargado el QR
-            $.when(Painter._loadIcon('/static/img/qr_code.png'))
-                .then(function(){
-                    Floor._loopQRs();
-                }
-            );
+            Painter.qr_icon = new Image();
+            Painter.qr_icon.src = '/static/img/qr_code.png';
+            Painter.qr_icon.onload = function()
+            {
+                Floor._loopQRs();
+            };
         }
         else
         {
@@ -284,24 +298,55 @@ var Floor = {
     },
 
 
-    _loadLabels: function()
+    _loopLabelsEnd: function()
     {
-        // Pintamos cada etiqueta almacenada para la planta (muro, POI, etc)
-
-        Floor.points = new PointResource().readAllFiltered('?floor__id=' + Floor.data.id);
-
-        // Obtenemos todas las etiquetas que contiene la planta a cargar, y así evitar
-        // llamar a BD cada vez que queramos pedir la etiqueta de cada punto
-        Floor.saved_labels = new LabelResource().readFromFloor(Floor.data.id);
-
         // Iteraremos por cada punto, no pintando el siguiente hasta que se haya cargado
         // la imágen para la etiqueta del anterior
         //        http://www.bitstorm.org/weblog/2012-1/Deferred_and_promise_in_jQuery.html
         //        http://stackoverflow.com/a/14408887/1260374
         Floor.i = 0;
-        Floor.dfd = $.Deferred();
         Floor._loopPoints();
-        return Floor.dfd.promise();
+    },
+
+
+    _loopLabels: function()
+    {
+        if(Label.i == Label.keys.length)
+        {
+            Floor._loopLabelsEnd();
+            Label.i = 0;
+            return;
+        }
+
+        var label = Floor.saved_labels[Label.keys[Label.i]];
+        var img = new Image();
+        img.src = label.img;
+        img.onload = function(){
+            Floor.saved_labels[Label.keys[Label.i]].loaded_img = null;
+            Floor.saved_labels[Label.keys[Label.i]].loaded_img = img;
+            Label.i++;
+            Floor._loopLabels();
+        };
+    },
+
+
+    _loadLabels: function()
+    {
+        // Cargamos cada etiqueta almacenada para la planta (muro, POI, etc)
+
+        if(Floor.show_only_qrs)
+            Floor.points = new PointResource().readQRsFromFloor(Floor.data.id);
+        else
+            Floor.points = new PointResource().readAllFiltered('?floor__id=' + Floor.data.id);
+
+        // Obtenemos todas las etiquetas que contiene la planta a cargar, y así evitar
+        // llamar a BD cada vez que queramos pedir la etiqueta de cada punto
+        Floor.saved_labels = new LabelResource().readFromFloor(Floor.data.id);
+
+        // Carga todas las imágenes para
+        Label.i = 0;
+        Label.keys = Object.keys(Floor.saved_labels);
+        Floor._loopLabels();
     },
 
 
@@ -343,10 +388,8 @@ var Floor = {
     {
         // Pintamos los QRs de las etiquetas que lo contengan
 
-        if(!Menu.qr_list)
-            Menu.setQrList();
-
         Painter.i = 0;
+        Menu.qr_list = new Resource('qr-code').readAllFiltered('?point__floor__id=' + Floor.data.id);
 
         Floor._loopQRs();
     },
@@ -368,7 +411,7 @@ var Floor = {
 
         Floor._drawGrid();
 
-        $.when(Floor._loadLabels()).then(Floor._loadQRs);
+        Floor._loadLabels();
     },
 
 
@@ -385,6 +428,8 @@ var Floor = {
         Floor.block_width = Floor.grid_width / Floor.num_cols;
 
         Floor._drawGrid();
+
+        Events.bindAll();
 
         Floor.loading = false;
     },
