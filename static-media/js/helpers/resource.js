@@ -188,6 +188,7 @@ function Resource(resource_name) {
 	};
 }
 
+
 function FloorResource()
 {
     Resource.call(this, 'floor');
@@ -199,6 +200,22 @@ function LabelResource()
 
 	this.readFromFloor = function(floor_id) {
 
+		// Para obtener todos los objetos de un grid, agrupados por id:
+		// 		uri = /api-2/object/grid/4
+        //
+        // -> objects = {
+        // 		'api/v1/object/1': {
+        //			category_id: 1
+        //			category_name: builder
+	    //			id: 1
+	    //			img: "img/objects/builders/wall.png"
+	    //			name: "wall"
+	    //			total: 6
+	    //			resource_uri: api/v1/object/1
+	    //			from_db: True
+        // 		},
+        //      ..
+        //   }
 
 		var element;
 		$.ajax({
@@ -333,23 +350,7 @@ function PointResource()
         });
 
         return element;
-    };
-
-    this.readConnectionsFromEnclosure = function(enclosure_id)
-    {
-        return this.readAllFiltered('?label__category__name__icontains=arista&floor__enclosure__id=' + enclosure_id);
-    };
-
-    this.readQRsFromFloor = function(floor_id)
-    {
-        qr_codes = new Resource('qr-code').readAllFiltered('?point__floor__id=' + floor_id);
-
-        points = [];
-        for(i in qr_codes)
-            points.push(qr_codes[i].point);
-
-        return points;
-    };
+    }
 }
 
 
@@ -359,11 +360,12 @@ function EnclosureResource()
 
     this.calculateRoutes = function(enclosure_id){
         $.ajax({
-            url : '/calculate-routes/' + enclosure_id,
-            type : 'get',
+            url : this.api2_url + 'calculate-routes/' + enclosure_id,
+            type : 'post',
             headers : {
                 'Content-Type' : 'application/json'
             },
+            data : JSON.stringify(data),
             dataType : 'json', // esto indica que la respuesta vendrá en formato json
             async : false,
             success : function(response) {
@@ -377,14 +379,9 @@ function EnclosureResource()
 }
 
 
-function ConnectionResource()
+function QRCodeResource()
 {
-    Resource.call(this, 'connection');
-
-    this.readFromEnclosure = function(enclosure_id)
-    {
-        return this.readAllFiltered('?init__floor__enclosure__id=' + enclosure_id);
-    };
+    Resource.call(this, 'qr-code');
 }
 
 FloorResource.prototype = new Resource;
@@ -392,5 +389,5 @@ LabelResource.prototype = new Resource;
 LabelCategoryResource.prototype = new Resource;
 PointResource.prototype = new Resource;
 EnclosureResource.prototype = new Resource;
-ConnectionResource.prototype = new Resource;
+QRCodeResource.prototype = new Resource;
 //RouteResource.prototype = new Resource;

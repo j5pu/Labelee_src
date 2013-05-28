@@ -1,227 +1,273 @@
-;
+//Configuración de iconos
+var	greenMarker = L.AwesomeMarkers.icon({
+        icon: 'home',
+        color: 'green'
+    }),
+    blueMarker = L.AwesomeMarkers.icon({
+        icon: 'star',
+        color: 'blue',
+        spin: true
 
-var map_img = new Image(),
-    floorJson = new FloorResource().read(floor_id),
-    poisJson = new PointResource().readOnlyPois(floor_id);
+    }),
+    redMarker = L.AwesomeMarkers.icon({
+        icon: 'coffee',
+        color: 'red'
+    });
 
-    // Para segunda parte:
-    //  - click sobre poi
-    //  - buscar destino
-    //    routeJson= RouteResource().read() + plantaB_route.json";
+
+
+//Configuración de los resultados de búsqueda en la lupa
+function customTip(text)
+{
+    var tip = L.DomUtil.create('a', 'colortip');
+
+    tip.href = "#"+text;
+    tip.innerHTML = text;
+
+    var subtip = L.DomUtil.create('em', 'subtip', tip);
+    subtip.style.display = 'inline-block';
+    subtip.style.float = 'right';
+    subtip.style.width = '18px';
+    subtip.style.height = '18px';
+    //subtip.style.backgroundColor = text;
+    subtip.style.backgroundColor = 'red';
+    return tip;
+}
+
+//Configuración de la lupa
+var mobileOpts = {
+    //url: jsonpurl,
+    //jsonpParam: jsonpName,
+    //filterJSON: filterJSONCall,
+    text: 'Destino...',
+    autoType: true,
+    autoCollapse: true,
+    autoCollapseTime: 6000,
+    animateLocation: true,
+    tipAutoSubmit: true,  		//auto map panTo when click on tooltip
+    autoResize: true,			//autoresize on input change
+
+    markerLocation: false,
+    minLength: 1,				//minimal text length for autocomplete
+
+    textErr: 'No hay ningún sitio',
+    //layer: markersLayer,
+    callTip: customTip,
+    tooltipLimit: -1,			//limit max results to show in tooltip. -1 for no limit.
+    delayType: 800	//with mobile device typing is more slow
+};
+
+
+var originFloor;
+//Configuración del mapa
+var map = L.map('map', {
+    crs: L.CRS.Simple,
+    zoom: 0,
+    zoomControl:false
+});
+
+
+//Carga de datos globales
+var origin = {
+    point:new QRCodeResource().read(qr_code_id).point,
+    floor:new FloorResource().read(floor_id),
+    enclosure:new EnclosureResource().read(enclosure_id)
+}
+
+
+var    mapH = $(document).height();
+
+///////////////////////////////////////////////
+//pinta en el mapa la posición inicial Origin
+
+//Cálculos restantes
+//Plantas del enclosure asociado al QR
+var floorsUris=[];
+for (f=0; f<origin.enclosure.floors.length; f++){
+    floorsUris.push(origin.enclosure.floors[f]);
+}
+
+var floors = [],
+    uris=origin.enclosure.floors;
+for (var i in uris) {
+    floors.push(new FloorResource().readFromUri(uris[i]));
+}
+
+//POIs de cada floor, separados para pintarlos por capas
+for (var i in floors){
+    floors[i].pois = new PointResource().readOnlyPois(floors[i].id);
+}
 
 /*
- // Crear mapas base
- var base = {
- "Planta2": L.imageOverlay('{{ STATIC_URL }}labelee/34.jpg', bounds),
- "Planta1": L.imageOverlay('{{ STATIC_URL }}labelee/28.jpg', bounds),
- "Planta0": L.imageOverlay('{{ STATIC_URL }}labelee/29.jpg', bounds),
- "Parquing":L.imageOverlay('{{ STATIC_URL }}labelee/27.jpg', bounds),
- };
-
-
- // Crear map overlays
- var overlays = {
-
- 'POIs_1': L.layerGroup([
-
- ]),
-
- 'POIs_2': L.layerGroup([
- ]),
-
-
- };
- */
-
-drawMap(floorJson,routeJson);
-
-function drawMap (mapJson, rutaJson)  {
-
-    $.getJSON(mapJson,function(data){
-        map_img.src = STATIC_URL + data.map;
-
-        map_img.onload = function(){
-
-            var	mapH = $(document).height(),
-                mapW = (map_img.width/map_img.height)*mapH,
-
-
-                rows= data.num_rows,
-                scaleX = mapW/data.num_cols,
-                scaleY = mapH/rows,
-                offsetX = scaleX/2,
-                offsetY = scaleY/2,
-
-
-                bounds = new L.LatLngBounds(new L.LatLng(0, 0), new L.LatLng(mapH, mapW));
-
-            var pois_1 = new L.LayerGroup();
-
-            var	greenMarker = L.AwesomeMarkers.icon({
-                    icon: 'home',
-                    color: 'green'
-                }),
-                blueMarker = L.AwesomeMarkers.icon({
-                    icon: 'star',
-                    color: 'blue'
-                }),
-                redMarker = L.AwesomeMarkers.icon({
-                    icon: 'coffee',
-                    color: 'red'
-                });
-
-            /*				originMarker = L.marker(originPoint, { bounceOnAdd: true,
-             //bounceOnAddHeight: 20,
-             icon: greenMarker})
-             .addTo(map)
-             .bindPopup("¡Estás justo aquí!");
-             //.openPopup();
-
-
-             //map.setView(originPoint, 1);
-
-             var destinyPoint = [(rs-data.destiny.row)*sY-sY, data.destiny.col*sX+sX],
-
-             redMarker = L.AwesomeMarkers.icon({
-             icon: 'coffee',
-             color: 'red'
-             }),
-
-             destinyMarker= L.marker(destinyPoint, { bounceOnAdd: false,bounceOnAddHeight: 4,  icon: redMarker})
-             .addTo(map)
-             //.bindPopup("Cineteca")
-             .on('click', function () {
-             drawRoute(originPoint, destinyPoint, data);
-             //this.openPopup();
-             this.bounce(1000, -10);
-             });
-             */
+//POIs de todas las floors, para la búsqueda de la LUPA
+var poisTot = [];
+for (p=0; p<poisFloors.length; p++){
+    for (j=0; j<poisFloors[p].length; j++){
+    poisTot.push(poisFloors[p][j].fields);
+    }
+}
+*/
 
 
 
-            L.marker([75, 100], {icon:redMarker}).bindPopup('POI_1.2').addTo(pois_1);
-            L.marker([150, 300],{icon:redMarker}).bindPopup('Hola').openPopup().addTo(pois_1);
-            L.marker([50, 150],{icon:redMarker}).bindPopup('POI_1.4').addTo(pois_1);
+
+var baseLayers={};
+var overlays = {};
+var floor_index = 0;
 
 
-            var planta0 = new L.imageOverlay('{{ STATIC_URL }}labelee/34.jpg', bounds),
-                parquing = new L.imageOverlay('{{ STATIC_URL }}labelee/28.jpg',bounds),
-                planta1 = new L.imageOverlay('{{ STATIC_URL }}labelee/29.jpg',bounds),
-                planta2 = new L.imageOverlay('{{ STATIC_URL }}labelee/27.jpg',bounds);
+//Carga de planos
+loopFloors(floor_index);
 
 
-            var map = L.map('map', {
-                center: bounds.getCenter(),
-                crs: L.CRS.Simple,
-                zoom: 0,
-                zoomControl:false,
-                maxBounds: bounds,
-                layers: [planta2, planta1,planta0,pois_1]
-            });
+var name, img;
+function loopFloors ()
+{
+    if(floor_index == floors.length)
+    {
+        loadPOIs();
+        drawOrigin(origin);
+        return;
+    }
 
-            var baseLayers = {
-                "Planta2": planta2,
-                "Planta1": planta1,
-                "Planta0": planta0,
-                "Parquing":parquing
-            };
+    name=floors[floor_index].name;
+    img=floors[floor_index].img;
+    var floorImg = new Image();
+    floorImg.src = img;
+    floorImg.onload = function () {
+        var mapW = (floorImg.width / floorImg.height) * mapH;
+        var bounds = new L.LatLngBounds(new L.LatLng(0, 0), new L.LatLng(mapH, mapW));
 
-            var overlays = {
-                "POIs1": pois_1
-            };
+        floors[floor_index].scaleX= mapW/floors[floor_index].num_cols;
+        floors[floor_index].scaleY= mapH/floors[floor_index].num_rows;
+        floors[floor_index].bounds=bounds;
+        floors[floor_index].photo = new L.imageOverlay(img, bounds);
 
+        baseLayers[name] = new L.imageOverlay(img, bounds);
 
-            var originMarker = L.marker([200, 400], { bounceOnAdd:false, icon: greenMarker})
-                .addTo(map);
-            //.bindPopup('¡Hola!')
-            //.openPopup()
-            //.addTo(pois_1)
-            //    .on('click', function () {
-            //this.openPopup();
-            //this.bounce(1000, -10);
-            //    });
-            var hover_bubble = new L.Rrose({ offset: new L.Point(0,-25), closeButton: false, autoPan: false })
-                .setContent('Estás justo aquí')
-                .setLatLng(originMarker.getLatLng())
-                .openOn(map);
-
-            L.control.layers(baseLayers, overlays).addTo(map);
-
-            parquing.addTo(map);
+        floor_index++;
+        loopFloors();
+    };
+}
 
 
 
-//pois de muestra para rellenar el mapa
-            var pois = [
-                {"col":600, "row": 50, "description":"ocio1"},
-                {"col":500, "row": 100, "description":"acceso1"},
-                {"col":500, "row": 150, "description":"ocio2"},
-                {"col":400, "row": 150, "description":"comida"},
-                {"col":600, "row": 50, "description":"aseos"},
-                {"col":500, "row": 100, "description":"ocio3"},
-                {"col":400, "row": 150, "description":"acceso2"},
-                {"col":300, "row": 200, "description":"tienda1"},
-                {"col":200, "row": 150, "description":"tienda2"},
-                {"col":100, "row": 200, "description":"aseos"},
-            ];
+//Carga de POIs
+
+function loadPOIs()
+{
+
+    for (var fl in floors){
+        floors[fl].layer=new L.LayerGroup();
+
+            for (j=0; j<floors[fl].pois.length; j++) {
+                var loc = [(floors[fl].pois[j].row)*floors[fl].scaleY+(floors[fl].scaleY/2),
+                            floors[fl].pois[j].col*floors[fl].scaleX+(floors[fl].scaleY/2)],	//posición de los marcadores
+                    colorIcon = floors[fl].pois[j].label.category.color,
+                    catIcon = floors[fl].pois[j].label.category.name;
+                floors[fl].pois[j].marker = new L.Marker(new L.latLng(loc), {icon:blueMarker});
+                //floors[fl].pois[j].marker.options.icon.options.className='awesome-marker';
+                floors[fl].pois[j].marker.options.icon.options.color=colorIcon;
+
+                floors[fl].pois[j].marker.options.icon.options.icon='star';
+                //
+                        //cambiar {icon: por categoría, sacar Cat y Color de pois[j].label}
+                floors[fl].pois[j].marker.bindPopup('descripción: ' + floors[fl].pois[j].description +" " + floors[fl].pois[j].label.category.name);
+                floors[fl].layer.addLayer(floors[fl].pois[j].marker);
 
 
-            var markersLayer = new L.LayerGroup();	//esta capa contiene los pois buscados
-            map.addLayer(markersLayer);
+        }
+        overlays["POIs de "+ floors[fl].name]=floors[fl].layer;
+    }
+    floors[1].layer.eachLayer(function (layer) {
+//        layer.on({
+//           click: function(e){
+                layer.setIcon(redMarker);
+//                alert('Lat: '+layer._latlng.lat+', Lng: '+layer._latlng.lng);
+//            }
+//        });
+    });
 
-            function customTip(text)
-            {
-                var tip = L.DomUtil.create('a', 'colortip');
+        layersControl= new L.control.layers(baseLayers, overlays, {collapsed:false});
 
-                tip.href = "#"+text;
-                tip.innerHTML = text;
-
-                var subtip = L.DomUtil.create('em', 'subtip', tip);
-                subtip.style.display = 'inline-block';
-                subtip.style.float = 'right';
-                subtip.style.width = '18px';
-                subtip.style.height = '18px';
-                //subtip.style.backgroundColor = text;
-                subtip.style.backgroundColor = 'red';
-                return tip;
-            }
+}
 
 
+function drawOrigin(origin)
+{
+    for(i in floors){
+        layersControl.removeLayer(floors[i].layer);
+        layersControl.removeLayer(floors[i].photo);
+    }
 
-            var mobileOpts = {
-                //url: jsonpurl,
-                //jsonpParam: jsonpName,
-                //filterJSON: filterJSONCall,
-                text: 'Destino...',
-                autoType: false,
-                tipAutoSubmit: true,
-                autoCollapse: true,
-                autoCollapseTime: 6000,
-                animateLocation: true,
-                markerLocation: true,
-                textErr: 'No hay ningún sitio',
-                layer: markersLayer,
-                callTip: customTip,
-                delayType: 800	//with mobile device typing is more slow
-            };
+    for(i in floors)
+        if(origin.floor.id == floors[i].id)
+        {
+            originFloor = floors[i];
+            break;
+         }
 
-            //map.addControl( new L.Control.Search({layer: markersLayer}) );  //inizializa el control 'search' lupa
-
-            ////////////rellena el mapa con marcadores de los pois de muestra
-            for(i in pois) {
-                var description = pois[i].description,	//valor buscado
-                    loc = [pois[i].col,	pois[i].row],	//posición encontrada
-                    marker = new L.Marker(new L.latLng(loc), {title: description, icon: blueMarker} );//propiedad buscada
-                marker.bindPopup('descripción: '+ description );
-                markersLayer.addLayer(marker);
-            }
+    map.setMaxBounds(originFloor.bounds);
+    map.setView(originFloor.bounds.getCenter(),0);
+    //map.setView(originPoint, 0);
 
 
+    map.addControl( new L.Control.Search(mobileOpts) );
+    map.addControl(new L.Control.Zoom());
 
-            map.addControl( new L.Control.Search(mobileOpts) );
-            map.addControl(new L.Control.Zoom());
-        }//image.onload
 
-    }); //getJSon
-} //drawMap
+    map.addLayer(originFloor.photo);
+    map.addLayer(originFloor.layer);
+    var originPoint = [(origin.point.row)*originFloor.scaleY,
+            origin.point.col*originFloor.scaleX],
+        originMarker = new L.marker(originPoint, { bounceOnAdd: false,
+            //bounceOnAddHeight: 20,
+            icon: greenMarker}).bindPopup("Estás justo aquí: "+ origin.point.description+ ","+"</br>"+"en " + originFloor.name +" de " + origin.enclosure.name);
+    originMarker.addTo(map).openPopup();
+
+   /*for (i in floors[0].layer._layers){
+        floors[0].layer._layers[i].options.icon.options.color ="red";
+        floors[0].layer._layers[i].options.icon.options.icon ="coffee";
+    }
+   */
+
+
+    layersControl.addBaseLayer(originFloor.photo, "Bienvenido a "+ origin.enclosure.name+","+"</br>"+ "estás en " + originFloor.name);
+    layersControl.addOverlay(originFloor.layer, "POIs de "+ originFloor.name);
+    layersControl.addOverlay(originMarker,"<img src='/static/css/map/index/images/logo.png' /> <span class='my-layer-item'>Estás en </span>" + originFloor.name+","+"<br>"+"localizado vía QR en "+origin.point.description);
+
+    layersControl.addTo(map);
+
+}
+
+
+// Para segunda parte:
+//  - click sobre poi
+//  - buscar destino
+//    routeJson= RouteResource().read() + plantaB_route.json";
+
+
+
+map.on('baselayerchange', function (e) {
+    if(map.hasLayer(originFloor.layer)){
+        map.removeLayer(originFloor.layer);
+        layersControl.removeLayer(originFloor.layer, "POIs de "+ originFloor.name);
+        layersControl.removeLayer(originFloor.photo, originFloor.name);
+    }
+    for (var i=0; i<floors.length; i++){
+
+        if (e.layer._url === floors[i].photo._url) {
+            map.addLayer(floors[i].layer);
+            layersControl.addOverlay(floors[i].layer, "POIs de " + floors[i].name);
+            map.setView(floors[i].bounds.getCenter(), 0);
+            map.setMaxBounds(floors[i].bounds);
+
+        } else {
+            layersControl.removeLayer(floors[i].layer, "POIs de " + floors[i].name);
+            if (map.hasLayer(floors[i].layer))
+                map.removeLayer(floors[i].layer);
+        }
+
+    }
+});
 
