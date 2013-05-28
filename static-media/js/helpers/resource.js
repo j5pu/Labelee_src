@@ -199,8 +199,7 @@ function LabelResource()
 
 	this.readFromFloor = function(floor_id) {
 
-
-		var element;
+		var elements;
 		$.ajax({
 			url : this.api2_url + 'floor/' + floor_id,
 			type : 'get',
@@ -210,15 +209,36 @@ function LabelResource()
 			dataType : 'json', // esto indica que la respuesta vendrá en formato json
 			async : false,
 			success : function(response) {
-				element = response;
+				elements = response;
 			},
 			error : function(response) {
 				var j = response;
 			}
 		});
 
-		return element;
+		return elements;
 	};
+
+    this.readGrouped = function() {
+        var elements;
+        $.ajax({
+            url : this.api2_url + 'read-grouped',
+            type : 'get',
+            headers : {
+                'Content-Type' : 'application/json'
+            },
+            dataType : 'json', // esto indica que la respuesta vendrá en formato json
+            async : false,
+            success : function(response) {
+                elements = response.objects;
+            },
+            error : function(response) {
+                var j = response;
+            }
+        });
+
+        return elements;
+    }
 }
 
 

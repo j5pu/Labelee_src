@@ -197,7 +197,10 @@ var Menu = {
 
     init: function(){
         Events.menu.bind();
-        Menu.saved_labels = new LabelResource().readFromFloor(Floor.data.id);
+        Menu.labels = new LabelResource().readGrouped();
+        Menu._setSelectors();
+        Menu.setQrList();
+        Menu.setPointStats();
     },
 
 

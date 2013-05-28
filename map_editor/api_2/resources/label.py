@@ -10,12 +10,7 @@ from map_editor.models import Label, LabelCategory
 
 def read_grouped(request):
     """
-    /api-2/object/read-grouped
-
-    ->
-    [
-
-    ]
+    /api-2/label/read-grouped
     """
     label_list = LabelResource().get_list(request)
     return HttpResponse(label_list, content_type="application/json")
@@ -26,7 +21,6 @@ def read_from_floor(request, floor_id):
     /api-2/label/floor/1
 
     """
-
     labels = Label.objects.filter(points__floor__id=floor_id).values().annotate(total=Sum('id'))
 
     resp = {}

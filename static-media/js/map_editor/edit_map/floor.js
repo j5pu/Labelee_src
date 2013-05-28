@@ -254,8 +254,7 @@ var Floor = {
         // Cargamos todos eventos
         Events.bindAll();
 
-        if(!Menu.qr_list)
-            Menu.setQrList();
+        Menu.init();
 
         Floor.loading = false;
     },

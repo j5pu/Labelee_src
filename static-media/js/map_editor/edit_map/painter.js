@@ -84,10 +84,6 @@ var Painter = {
         //
         // Pinta etiqueta sobre un bloque en el grid para el plano
 
-//        if(!Painter.label || Painter.loading_icon)
-//            return;
-
-
         // Si se está cargando el plano se pinta marcándola como cargada desde la BD
         if(Floor.loading)
         {
@@ -169,8 +165,18 @@ var Painter = {
                 '<div class="qr_info">' + Painter.qr.code + '</div>'
             );
 
+            var qr_info = block.find('.qr_info');
+            if(Floor.show_only_qrs)
+            {
+                block.css({'background': 'black'})
+                qr_info.css({'opacity': '0.8'});
+                qr_info.show();
+            }
+            else
+                qr_info.hide();
+
             // Le damos un sombreado para saber que es QR
-            block.css({'box-shadow': 'inset 0px 0px 19px blue'});
+//            block.css({'box-shadow': 'inset 0px 0px 19px blue'});
         }
     },
 
@@ -210,12 +216,24 @@ var Painter = {
 
 
 
-
     setLabel: function()
     {
         // Setea la etiqueta a pintar con la elegida en el selector
 
-        Painter.label = new LabelResource().read($e.label.selector.val());
+        var label_id = $e.label.selector.val();
+        for(var i in Menu.labels)
+        {
+            var label = Menu.labels[i];
+            if(label.id == label_id)
+            {
+                Painter.label = label;
+                Painter.label.loaded_img = new Image();
+                Painter.label.loaded_img.src = Painter.label.img;
+                Painter.label.category = null;
+                Painter.label.category = Painter.label_category;
+                break;
+            }
+        }
 
         $e.label.selector.blur();
         $e.category.selector.blur();
