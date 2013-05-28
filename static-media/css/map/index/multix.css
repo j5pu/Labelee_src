@@ -523,7 +523,7 @@ html{
 
 .leaflet-control-search .search-button {
 //       background-position: 0 -30px;
-    opacity: .5;
+    opacity: .4;
 }
 
 .leaflet-control-search .search-input {
@@ -546,6 +546,7 @@ html{
     background: #f8f8f8;
     top: -2px;
     opacity: .85;
+    max-width: 80px;
 
 }
 
