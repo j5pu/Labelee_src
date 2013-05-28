@@ -19,11 +19,6 @@ var	greenMarker = L.AwesomeMarkers.icon({
 
 var originFloor;
 //Configuración del mapa
-var map = L.map('map', {
-    crs: L.CRS.Simple,
-    zoom: 0,
-    zoomControl:false
-});
 
 
 //Carga de datos globales
@@ -68,7 +63,7 @@ var baseLayers={},
 
 //Configuración de la lupa
 var mobileOpts = {
-    text: 'Destino...',
+    text: 'Destino',
     autoType: true,
     autoCollapse: false,
     autoCollapseTime: 6000,
@@ -161,16 +156,16 @@ function loadPOIs()
                 floors[fl].pois[j].marker.options.icon.options.icon='star';
                 //
                         //cambiar {icon: por categoría, sacar Cat y Color de pois[j].label}
-                floors[fl].pois[j].marker.bindPopup('descripción: ' + floors[fl].pois[j].description +" " + catIcon);
+                floors[fl].pois[j].marker.bindPopup(floors[fl].pois[j].description +": " + catIcon);
                 floors[fl].layer.addLayer(floors[fl].pois[j].marker);
-                totalPois.addLayer(floors[fl].pois[j].marker);
+                //totalPois.addLayer(floors[fl].pois[j].marker);
 
 
         }
         overlays["POIs de "+ floors[fl].name]=floors[fl].layer;
     }
 
-    /*
+
     floors[1].layer.eachLayer(function (layer) {
 //        layer.on({
 //           click: function(e){
@@ -179,7 +174,7 @@ function loadPOIs()
 //            }
 //        });
     });
-    */
+
 
     for(i in totalPois._layers) {
         var title = totalPois._layers[i].title;	//value searched
@@ -188,11 +183,18 @@ function loadPOIs()
         //marker.bindPopup('title: '+ title );
         //markersLayer.addLayer(marker);
     }
-        layersControl= new L.control.layers(baseLayers, overlays, {collapsed:false});
+        layersControl= new L.control.layers(baseLayers, null, {collapsed:false});
 
 }
 
+var map = L.map('map', {
+    crs: L.CRS.Simple,
+    zoom: 0,
+    zoomControl:false
+    //layer: originFloor.layer
+});
 
+var originPoint;
 function drawOrigin(origin)
 {
     for(i in floors){
@@ -220,8 +222,8 @@ function drawOrigin(origin)
 
     map.addLayer(originFloor.photo);
     map.addLayer(originFloor.layer);
-    var originPoint = [(origin.point.row)*originFloor.scaleY,
-            origin.point.col*originFloor.scaleX],
+    originPoint = [(origin.point.row)*originFloor.scaleY,
+            origin.point.col*originFloor.scaleX];
         originMarker = new L.marker(originPoint, { bounceOnAdd: false,
             //bounceOnAddHeight: 20,
             icon: greenMarker}).bindPopup("Estás justo aquí: "+ origin.point.description+ ","+"</br>"+"en " + originFloor.name +" de " + origin.enclosure.name);
@@ -234,7 +236,7 @@ function drawOrigin(origin)
    */
 
 
-    //layersControl.addBaseLayer(originFloor.photo, "Bienvenido a "+ origin.enclosure.name+","+"</br>"+ "estás en " + originFloor.name);
+    layersControl.addBaseLayer(originFloor.photo, origin.enclosure.name+" - "+originFloor.name);
     layersControl.addOverlay(originFloor.layer, "Destinos - "+ originFloor.name);
     //layersControl.addOverlay(originMarker,"<img src='/static/css/map/index/images/logo.png' /> <span class='my-layer-item'>Estás en </span>" + originFloor.name+","+"<br>"+"localizado vía QR en "+origin.point.description);
     layersControl.addOverlay(originMarker,"Estás aquí");
@@ -252,25 +254,29 @@ function drawOrigin(origin)
 
 
 map.on('baselayerchange', function (e) {
+    console.log(e);
     if(map.hasLayer(originFloor.layer)){
         map.removeLayer(originFloor.layer);
+        map.removeLayer(originFloor.photo);
         layersControl.removeLayer(originFloor.layer, "POIs de "+ originFloor.name);
         layersControl.removeLayer(originFloor.photo, originFloor.name);
     }
-    for (var i=0; i<floors.length; i++){
+    //$('input[type=checkbox]').attr('checked', false);
+    var floor_x;
+    for (var i in floors){
 
         if (e.layer._url === floors[i].photo._url) {
-            map.addLayer(floors[i].layer);
-            layersControl.addOverlay(floors[i].layer, "POIs de " + floors[i].name);
-            map.setView(floors[i].bounds.getCenter(), 0);
-            map.setMaxBounds(floors[i].bounds);
+            floor_x = floors[i];
 
         } else {
             layersControl.removeLayer(floors[i].layer, "POIs de " + floors[i].name);
-            if (map.hasLayer(floors[i].layer))
-                map.removeLayer(floors[i].layer);
+            map.removeLayer(floors[i].layer);
         }
 
     }
+    map.setView(floor_x.bounds.getCenter(), 0);
+    map.addLayer(floor_x.layer);
+    layersControl.addOverlay(floor_x.layer, "POIs de " + floor_x.name);
+    map.setMaxBounds(floor_x.bounds);
 });
 
