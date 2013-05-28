@@ -196,11 +196,28 @@ var Menu = {
     sending_img: false,
 
     init: function(){
-        Events.menu.bind();
         Menu.labels = new LabelResource().readGrouped();
         Menu._setSelectors();
         Menu.setQrList();
         Menu.setPointStats();
+        Events.menu.bind();
+    },
+
+
+    showQR: function(ev)
+    {
+        ev.preventDefault();
+        var item = $(this);
+        var row = item.data('point-row');
+        var col = item.data('point-col');
+
+        var block = Floor.findBlock(row, col);
+        block.find('.qr_info').show();
+        block.find('.label_pos').show();
+
+        var offset_x = Floor.block_width * row;
+        var offset_y = Floor.block_height * col;
+        window.scrollTo(offset_x, offset_y);
     },
 
 
@@ -236,7 +253,13 @@ var Menu = {
         for(var i in Menu.qr_list)
         {
             var qr = Menu.qr_list[i];
-            list.append('<li><a href="#">' + qr.code + '</a></li>');
+            list.append(
+                '<li>' +
+                    '<a href="#" ' +
+                    'data-point-row="' + qr.point.row + '"' +
+                    'data-point-col="' + qr.point.col + '">' + qr.code + '</a>' +
+                '</li>'
+            );
         }
 
         Menu.toggleQRs();
@@ -332,37 +355,20 @@ var Menu = {
 //        var not_qr_blocks = $e.floor.blocks.find(':not(.qr_info)').parent();
 //        var qr_infos = $e.floor.blocks.find('.qr_info');
 
+
         if(Floor.loading)
             return;
 
         var checkbox = $e.qr.toggle;
-        var is_checked = $e.qr.toggle.is(':checked');
+        var checkbox_is_checked = $e.qr.toggle.is(':checked');
 
-        if(!confirm('Se perderán los puntos que no se han guardado. ¿Desea continuar?'))
-        {
-            checkbox.attr('checked', !is_checked);
+        checkbox.attr('checked', checkbox_is_checked);
+
+        if(checkbox_is_checked &&
+            !confirm('Se perderán los puntos que no se han guardado. ¿Desea continuar?'))
             return;
-        }
 
-
-        if(is_checked)
-        {
-            Floor.show_only_qrs = true;
-
-
-
-//            // Esconde los bloques que no tengan QR
-//            not_qr_blocks.hide();
-//            // Muestra código de QR
-//            qr_infos.show();
-        }
-        else
-        {
-
-            Floor.show_only_qrs = false;
-//            not_qr_blocks.show();
-//            qr_infos.hide();
-        }
+        Floor.show_only_qrs = checkbox_is_checked;
 
         Floor.loadGrid();
     }

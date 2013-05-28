@@ -84,16 +84,21 @@ var Painter = {
         //
         // Pinta etiqueta sobre un bloque en el grid para el plano
 
+        if(!Painter.label)
+            return;
+
         // Si se está cargando el plano se pinta marcándola como cargada desde la BD
         if(Floor.loading)
         {
             block.attr('data-from-db', 'y');
             block.attr('data-point-id', Painter.point_id);
-//            block.append(
-//                '<div class="point_info">' +
-//                    Painter.point.row + ', ' +  Painter.point.col +
-//                '"</div>'
-//            );
+
+            // Posición en el grid
+            block.append(
+                '<div class="label_pos">' +
+                    Painter.point.row + ', ' +  Painter.point.col +
+                '</div>'
+            );
 
             Floor.point_count.saved++;
         }
@@ -166,14 +171,19 @@ var Painter = {
             );
 
             var qr_info = block.find('.qr_info');
+            var label_pos = block.find('.label_pos');
             if(Floor.show_only_qrs)
             {
                 block.css({'background': 'black'})
                 qr_info.css({'opacity': '0.8'});
                 qr_info.show();
+                label_pos.show();
             }
             else
+            {
                 qr_info.hide();
+                label_pos.hide();
+            }
 
             // Le damos un sombreado para saber que es QR
 //            block.css({'box-shadow': 'inset 0px 0px 19px blue'});
@@ -199,8 +209,9 @@ var Painter = {
 //        Painter.current_hovered_block.find('img').show();
 //        Painter.current_hovered_block.find('div').show();
 
-        Painter.current_hovered_block.find('.point_info').show();
-
+        Painter.current_hovered_block.find('.label_img').show();
+        Painter.current_hovered_block.find('.qr_info').show();
+        Painter.current_hovered_block.find('.label_pos').show();
         Painter.current_hovered_block.find('.connector_descr').show();
     },
 
@@ -208,7 +219,9 @@ var Painter = {
     hideLabelInfo: function(){
         if(Painter.painting_trace || !Painter.current_hovered_block)
             return;
-        Painter.current_hovered_block.find('img').hide();
+        Painter.current_hovered_block.find('.label_img').hide();
+        Painter.current_hovered_block.find('.qr_info').hide();
+        Painter.current_hovered_block.find('.label_pos').hide();
         Painter.current_hovered_block.find('.connector_descr').hide();
         Painter.current_hovered_block = null;
     },
