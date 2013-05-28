@@ -23,7 +23,8 @@ var Events = {
         {
             // Mostrar imágen de la etiqueta al sólo pasar el ratón sobre el bloque
 
-            if(Painter.current_hovered_block && Painter.current_hovered_block.data('qr'))
+            var block_is_qr = Painter.current_hovered_block && Painter.current_hovered_block.data('qr');
+            if(block_is_qr || Floor.show_only_qrs)
                 return;
 
             $e.floor.blocks.on('mouseover', Painter.showLabelInfo);
@@ -49,6 +50,7 @@ var Events = {
             // Borrar etiquetas pulsando ALT
             Mousetrap.bind('alt', function(e){
                 e.preventDefault();
+                Painter.hideLabelInfo();
                 $e.floor.blocks.on('mousemove', function(){
                     $e.floor.blocks.off('mousemove');
                     Painter.clear($(this));
@@ -97,6 +99,9 @@ var Events = {
                 if(Painter.loading_icon)
                     return;
 
+                // Para que no se muestren iconos de las etiquetas mientras pintamos..
+                Painter.hideLabelInfo();
+
                 Painter.painting_trace = true;
                 $e.floor.blocks.on('mousemove', function(){
                     $e.floor.blocks.off('mousemove');
@@ -119,6 +124,7 @@ var Events = {
         bind: function()
         {
             var self = this;
+            $('#grid *').off();
             self._assign_qr_by_right_click();
             self._paint_with_key_pressed();
 //            self._paint_with_mouse_pressed();
@@ -134,6 +140,15 @@ var Events = {
         {
             // Mostrar o no los QRs
             $e.qr.toggle.on('change', Menu.toggleQRs);
+        },
+
+
+        _showQR: function()
+        {
+            // Muestra en el plano el QR sobre el que hacemos click en la lista
+
+            var a = $e.qr.list.find('a');
+            a.on('click', Menu.showQR)
         },
 
 
@@ -192,6 +207,7 @@ var Events = {
         bind: function()
         {
             var self = this;
+            $('#menu *').off();
             self._changeNumRows();
             self._manageLabel();
             self._manageLabelCategory();
@@ -200,6 +216,7 @@ var Events = {
             self._toggleBlockBorders();
             self._toggleQRs();
             self._updateFloor();
+            self._showQR();
         }
     },
 

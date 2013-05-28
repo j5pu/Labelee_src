@@ -251,10 +251,10 @@ var Floor = {
 
         $e.floor.labeled_blocks = $e.floor.grid.find('[data-label]');
 
+        Menu.init();
+
         // Cargamos todos eventos
         Events.bindAll();
-
-        Menu.init();
 
         Floor.loading = false;
     },
