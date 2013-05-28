@@ -1,5 +1,5 @@
 //Configuración de iconos
-var	greenMarker = L.AwesomeMarkers.icon({
+var	OriginIcon = L.AwesomeMarkers.icon({
         icon: 'home',
         color: 'green'
     }),
@@ -56,14 +56,14 @@ for (var i in floors){
 //Variables globales
 
 var baseLayers={},
-    overlays = {},
+    //overlays = {},
     floor_index = 0,
     totalPois=new L.LayerGroup();
 
 
 //Configuración de la lupa
 var mobileOpts = {
-    text: 'Destino',
+    text: 'Buscar',
     autoType: true,
     autoCollapse: false,
     autoCollapseTime: 6000,
@@ -148,21 +148,22 @@ function loadPOIs()
                 var loc = [(floors[fl].pois[j].row)*floors[fl].scaleY+(floors[fl].scaleY/2),
                             floors[fl].pois[j].col*floors[fl].scaleX+(floors[fl].scaleY/2)],	//posición de los marcadores
                     colorIcon = floors[fl].pois[j].label.category.color,
-                    catIcon = floors[fl].pois[j].label.category.name;
-                floors[fl].pois[j].marker = new L.Marker(new L.latLng(loc), {icon:blueMarker, title:catIcon});
+                    nameIcon =floors[fl].pois[j].label.name,
+                    category = floors[fl].pois[j].label.category.name;
+                floors[fl].pois[j].marker = new L.Marker(new L.latLng(loc), {icon:blueMarker, title:nameIcon});
                 //floors[fl].pois[j].marker.options.icon.options.className='awesome-marker';
                 floors[fl].pois[j].marker.options.icon.options.color=colorIcon;
 
                 floors[fl].pois[j].marker.options.icon.options.icon='star';
                 //
                         //cambiar {icon: por categoría, sacar Cat y Color de pois[j].label}
-                floors[fl].pois[j].marker.bindPopup(floors[fl].pois[j].description +": " + catIcon);
+                floors[fl].pois[j].marker.bindPopup(nameIcon +": " + category);
                 floors[fl].layer.addLayer(floors[fl].pois[j].marker);
                 //totalPois.addLayer(floors[fl].pois[j].marker);
 
 
         }
-        overlays["POIs de "+ floors[fl].name]=floors[fl].layer;
+        //overlays["POIs de "+ floors[fl].name]=floors[fl].layer;
     }
 
 
@@ -183,7 +184,7 @@ function loadPOIs()
         //marker.bindPopup('title: '+ title );
         //markersLayer.addLayer(marker);
     }
-        layersControl= new L.control.layers(baseLayers, null, {collapsed:false});
+        layersControl= new L.control.layers(baseLayers, null, {collapsed:true});
 
 }
 
@@ -226,7 +227,7 @@ function drawOrigin(origin)
             origin.point.col*originFloor.scaleX];
         originMarker = new L.marker(originPoint, { bounceOnAdd: false,
             //bounceOnAddHeight: 20,
-            icon: greenMarker}).bindPopup("Estás justo aquí: "+ origin.point.description+ ","+"</br>"+"en " + originFloor.name +" de " + origin.enclosure.name);
+            icon: OriginIcon}).bindPopup(origin.point.description+ "-"+originFloor.name +"-" + origin.enclosure.name);
     originMarker.addTo(map).openPopup();
 
    /*for (i in floors[0].layer._layers){
@@ -237,9 +238,9 @@ function drawOrigin(origin)
 
 
     layersControl.addBaseLayer(originFloor.photo, origin.enclosure.name+" - "+originFloor.name);
-    layersControl.addOverlay(originFloor.layer, "Destinos - "+ originFloor.name);
+    //layersControl.addOverlay(originFloor.layer, "Destinos - "+ originFloor.name);
     //layersControl.addOverlay(originMarker,"<img src='/static/css/map/index/images/logo.png' /> <span class='my-layer-item'>Estás en </span>" + originFloor.name+","+"<br>"+"localizado vía QR en "+origin.point.description);
-    layersControl.addOverlay(originMarker,"Estás aquí");
+    //layersControl.addOverlay(originMarker,"Estás aquí");
 
     layersControl.addTo(map);
 
@@ -254,14 +255,12 @@ function drawOrigin(origin)
 
 
 map.on('baselayerchange', function (e) {
-    console.log(e);
     if(map.hasLayer(originFloor.layer)){
         map.removeLayer(originFloor.layer);
         map.removeLayer(originFloor.photo);
-        layersControl.removeLayer(originFloor.layer, "POIs de "+ originFloor.name);
+        //layersControl.removeLayer(originFloor.layer, "POIs de "+ originFloor.name);
         layersControl.removeLayer(originFloor.photo, originFloor.name);
     }
-    //$('input[type=checkbox]').attr('checked', false);
     var floor_x;
     for (var i in floors){
 
@@ -269,14 +268,15 @@ map.on('baselayerchange', function (e) {
             floor_x = floors[i];
 
         } else {
-            layersControl.removeLayer(floors[i].layer, "POIs de " + floors[i].name);
+            //layersControl.removeLayer(floors[i].layer, "POIs de " + floors[i].name);
             map.removeLayer(floors[i].layer);
         }
 
     }
-    map.setView(floor_x.bounds.getCenter(), 0);
+    //map.setView(floor_x.bounds.getCenter(), 0);
+    map.setView(originPoint, 0);
     map.addLayer(floor_x.layer);
-    layersControl.addOverlay(floor_x.layer, "POIs de " + floor_x.name);
+    //layersControl.addOverlay(floor_x.layer, "POIs de " + floor_x.name);
     map.setMaxBounds(floor_x.bounds);
 });
 

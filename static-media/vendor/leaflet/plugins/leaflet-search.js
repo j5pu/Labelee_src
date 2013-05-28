@@ -66,10 +66,11 @@ L.Control.Search = L.Control.extend({
 	onAdd: function (map) {
 		this._map = map;
 		this._container = L.DomUtil.create('div', 'leaflet-control-search');
-		this._input = this._createInput(this.options.text, 'search-input');
+        this._button = this._createButton(this.options.text, 'search-button');
+
+        this._input = this._createInput(this.options.text, 'search-input');
 		this._tooltip = this._createTooltip('search-tooltip');		
 		this._cancel = this._createCancel(this.options.textCancel, 'search-cancel');
-		this._button = this._createButton(this.options.text, 'search-button');
 		this._alert = this._createAlert('search-alert');
 		this._markerLoc = new SearchMarker([0,0], {marker: this.options.markerLocation});//see below
 		this.setLayer( this._layer );

@@ -28,7 +28,7 @@ window.addEventListener("orientationchange", hideAddressBar );
 
 ////
 
-
+/*
 ///	Activación y configuración del menú
 $(function() {
 
@@ -105,3 +105,4 @@ $(function() {
     );
 });
 
+*/
