@@ -9,7 +9,7 @@ DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
-# ('Your Name', 'your_email@example.com'),
+    # ('Your Name', 'your_email@example.com'),
 )
 
 MANAGERS = ADMINS
@@ -77,7 +77,7 @@ STATICFILES_DIRS = (
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-    #    'django.contrib.staticfiles.finders.DefaultStorageFinder',
+#    'django.contrib.staticfiles.finders.DefaultStorageFinder',
 )
 
 # Make this unique, and don't share it with anybody.
@@ -87,7 +87,7 @@ SECRET_KEY = '0tc6gk^8x=lfzyh0&amp;%1u^7tu0wb(aho7o6+6!*yr!=#c#b4c$@'
 TEMPLATE_LOADERS = (
     'django.template.loaders.filesystem.Loader',
     'django.template.loaders.app_directories.Loader',
-    #     'django.template.loaders.eggs.Loader',
+#     'django.template.loaders.eggs.Loader',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -106,6 +106,7 @@ ROOT_URLCONF = 'urls'
 
 # Python dotted path to the WSGI application used by Django's runserver.
 WSGI_APPLICATION = 'wsgi.application'
+
 
 TEMPLATE_DIRS = (
     os.path.join(PROJECT_ROOT, "templates"),
@@ -170,7 +171,6 @@ API_LIMIT_PER_PAGE = 5000
 ## Pull in CloudFoundry's production settings
 if 'VCAP_SERVICES' in os.environ:
     import json
-
     vcap_services = json.loads(os.environ['VCAP_SERVICES'])
     # XXX: avoid hardcoding here
     mysql_srv = vcap_services['mysql-5.1'][0]
@@ -183,13 +183,13 @@ if 'VCAP_SERVICES' in os.environ:
             'PASSWORD': cred['password'],
             'HOST': cred['hostname'],
             'PORT': cred['port'],
+            }
         }
-    }
-
+    
 #     De momento dejamos el debugger activo (DEBUG=True)..
 #     DEBUG = TEMPLATE_DEBUG = False
 
-# print os.environ['VCAP_SERVICES']
+    # print os.environ['VCAP_SERVICES']
 
 else:
     # DATABASES = {
@@ -210,7 +210,7 @@ else:
             "PASSWORD": "",
             "HOST": "",
             "PORT": "3306",
-        }
+            }
     }
     # DATABASES = {
     #     "default": {
@@ -222,14 +222,13 @@ else:
     #         "PORT": "",
     #         }
     #     }
-
-    #     Estas aplicaciones sólo se usarán en desarrollo..
+    #
+#     Estas aplicaciones sólo se usarán en desarrollo..
     INSTALLED_APPS += ('south', 'sandbox',)
 
 
-EMAIL_USE_TLS = True
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = 'alvaro.gutierrez@mnopi.com'
-EMAIL_HOST_PASSWORD = '1aragon1'
-EMAIL_PORT = 587
+SERIALIZATION_MODULES = {
+    'json': 'wadofstuff.django.serializers.json'
+}
+
 from utils.constants import *
