@@ -16,47 +16,6 @@ var	greenMarker = L.AwesomeMarkers.icon({
 
 
 
-//Configuración de los resultados de búsqueda en la lupa
-function customTip(text)
-{
-    var tip = L.DomUtil.create('a', 'colortip');
-
-    tip.href = "#"+text;
-    tip.innerHTML = text;
-
-    var subtip = L.DomUtil.create('em', 'subtip', tip);
-    subtip.style.display = 'inline-block';
-    subtip.style.float = 'right';
-    subtip.style.width = '18px';
-    subtip.style.height = '18px';
-    //subtip.style.backgroundColor = text;
-    subtip.style.backgroundColor = 'red';
-    return tip;
-}
-
-//Configuración de la lupa
-var mobileOpts = {
-    //url: jsonpurl,
-    //jsonpParam: jsonpName,
-    //filterJSON: filterJSONCall,
-    text: 'Destino...',
-    autoType: true,
-    autoCollapse: true,
-    autoCollapseTime: 6000,
-    animateLocation: true,
-    tipAutoSubmit: true,  		//auto map panTo when click on tooltip
-    autoResize: true,			//autoresize on input change
-
-    markerLocation: false,
-    minLength: 1,				//minimal text length for autocomplete
-
-    textErr: 'No hay ningún sitio',
-    //layer: markersLayer,
-    callTip: customTip,
-    tooltipLimit: -1,			//limit max results to show in tooltip. -1 for no limit.
-    delayType: 800	//with mobile device typing is more slow
-};
-
 
 var originFloor;
 //Configuración del mapa
@@ -69,7 +28,7 @@ var map = L.map('map', {
 
 //Carga de datos globales
 var origin = {
-    point:new QRCodeResource().read(qr_code_id).point,
+    point:new PointResource().read(poi_id),
     floor:new FloorResource().read(floor_id),
     enclosure:new EnclosureResource().read(enclosure_id)
 }
@@ -98,22 +57,51 @@ for (var i in floors){
     floors[i].pois = new PointResource().readOnlyPois(floors[i].id);
 }
 
-/*
-//POIs de todas las floors, para la búsqueda de la LUPA
-var poisTot = [];
-for (p=0; p<poisFloors.length; p++){
-    for (j=0; j<poisFloors[p].length; j++){
-    poisTot.push(poisFloors[p][j].fields);
-    }
+
+//Variables globales
+
+var baseLayers={},
+    overlays = {},
+    floor_index = 0,
+    totalPois=new L.LayerGroup();
+
+
+//Configuración de la lupa
+var mobileOpts = {
+    text: 'Destino...',
+    autoType: true,
+    autoCollapse: false,
+    autoCollapseTime: 6000,
+    animateLocation: true,
+    tipAutoSubmit: true,  		//auto map panTo when click on tooltip
+    autoResize: true,			//autoresize on input change
+    markerLocation:true,
+    minLength: 1,				//minimal text length for autocomplete
+    textErr: 'No hay ningún sitio',
+    layer: totalPois,
+    //title: title,
+    callTip: customTip,
+    tooltipLimit: -1,			//limit max results to show in tooltip. -1 for no limit.
+    delayType: 800	//with mobile device typing is more slow
+};
+
+//Configuración de los resultados de búsqueda en la lupa
+function customTip(text)
+{
+    var tip = L.DomUtil.create('a', 'colortip');
+
+    tip.href = "#"+text;
+    tip.innerHTML = text;
+
+    var subtip = L.DomUtil.create('em', 'subtip', tip);
+    subtip.style.display = 'inline-block';
+    subtip.style.float = 'right';
+    subtip.style.width = '18px';
+    subtip.style.height = '18px';
+    //subtip.style.backgroundColor = text;
+    subtip.style.backgroundColor = 'red';
+    return tip;
 }
-*/
-
-
-
-
-var baseLayers={};
-var overlays = {};
-var floor_index = 0;
 
 
 //Carga de planos
@@ -160,25 +148,29 @@ function loadPOIs()
     for (var fl in floors){
         floors[fl].layer=new L.LayerGroup();
 
-            for (j=0; j<floors[fl].pois.length; j++) {
+
+        for (j=0; j<floors[fl].pois.length; j++) {
                 var loc = [(floors[fl].pois[j].row)*floors[fl].scaleY+(floors[fl].scaleY/2),
                             floors[fl].pois[j].col*floors[fl].scaleX+(floors[fl].scaleY/2)],	//posición de los marcadores
                     colorIcon = floors[fl].pois[j].label.category.color,
                     catIcon = floors[fl].pois[j].label.category.name;
-                floors[fl].pois[j].marker = new L.Marker(new L.latLng(loc), {icon:blueMarker});
+                floors[fl].pois[j].marker = new L.Marker(new L.latLng(loc), {icon:blueMarker, title:catIcon});
                 //floors[fl].pois[j].marker.options.icon.options.className='awesome-marker';
                 floors[fl].pois[j].marker.options.icon.options.color=colorIcon;
 
                 floors[fl].pois[j].marker.options.icon.options.icon='star';
                 //
                         //cambiar {icon: por categoría, sacar Cat y Color de pois[j].label}
-                floors[fl].pois[j].marker.bindPopup('descripción: ' + floors[fl].pois[j].description +" " + floors[fl].pois[j].label.category.name);
+                floors[fl].pois[j].marker.bindPopup('descripción: ' + floors[fl].pois[j].description +" " + catIcon);
                 floors[fl].layer.addLayer(floors[fl].pois[j].marker);
+                totalPois.addLayer(floors[fl].pois[j].marker);
 
 
         }
         overlays["POIs de "+ floors[fl].name]=floors[fl].layer;
     }
+
+    /*
     floors[1].layer.eachLayer(function (layer) {
 //        layer.on({
 //           click: function(e){
@@ -187,7 +179,15 @@ function loadPOIs()
 //            }
 //        });
     });
+    */
 
+    for(i in totalPois._layers) {
+        var title = totalPois._layers[i].title;	//value searched
+        //    loc = data[i].loc,		//position found
+        //    marker = new L.Marker(new L.latLng(loc), {title: title} );//se property searched
+        //marker.bindPopup('title: '+ title );
+        //markersLayer.addLayer(marker);
+    }
         layersControl= new L.control.layers(baseLayers, overlays, {collapsed:false});
 
 }
@@ -212,6 +212,8 @@ function drawOrigin(origin)
     //map.setView(originPoint, 0);
 
 
+
+
     map.addControl( new L.Control.Search(mobileOpts) );
     map.addControl(new L.Control.Zoom());
 
@@ -232,9 +234,10 @@ function drawOrigin(origin)
    */
 
 
-    layersControl.addBaseLayer(originFloor.photo, "Bienvenido a "+ origin.enclosure.name+","+"</br>"+ "estás en " + originFloor.name);
-    layersControl.addOverlay(originFloor.layer, "POIs de "+ originFloor.name);
-    layersControl.addOverlay(originMarker,"<img src='/static/css/map/index/images/logo.png' /> <span class='my-layer-item'>Estás en </span>" + originFloor.name+","+"<br>"+"localizado vía QR en "+origin.point.description);
+    //layersControl.addBaseLayer(originFloor.photo, "Bienvenido a "+ origin.enclosure.name+","+"</br>"+ "estás en " + originFloor.name);
+    layersControl.addOverlay(originFloor.layer, "Destinos - "+ originFloor.name);
+    //layersControl.addOverlay(originMarker,"<img src='/static/css/map/index/images/logo.png' /> <span class='my-layer-item'>Estás en </span>" + originFloor.name+","+"<br>"+"localizado vía QR en "+origin.point.description);
+    layersControl.addOverlay(originMarker,"Estás aquí");
 
     layersControl.addTo(map);
 

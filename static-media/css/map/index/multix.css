@@ -430,15 +430,16 @@ pre
 }
 
 #header a {
-//background: center center no-repeat #f6f6f6;
+/*background: center center no-repeat #f6f6f6;*/
 
 background-image: url(http://bradjasper.com/subtle-patterns-bookmarklet/patterns/squairy_light.png);
 background-size: auto;
 background-repeat: repeat repeat;
-//background-image: url(logo.png);
+/*background-image: url(logo.png);*/
 display: block;
 width: 55px;
 height: 35px;
+line-height: 35px;
 position: absolute;
 bottom: 40px;
 left: 0;
@@ -451,6 +452,9 @@ border-left: none;
 border-radius: 0 6px 6px 0;
     }
 
+#header a img {
+    margin-top: 9px;
+}
 span#fake{
     bottom:0;
     position: absolute;
@@ -458,8 +462,8 @@ span#fake{
     width: 1px;
     display: block;
     left: 2px;
-    -webkit-box-shadow: 2px 3px 3px rgba(0,0,0,0.8);
-    box-shadow: 2px 3px 3px rgba(0,0,0,0.8);
+    -webkit-box-shadow: 2px 3px 3px rgba(0,0,0,0.5);
+    box-shadow: 2px 3px 3px rgba(0,0,0,0.5);
     z-index: 99;
     opacity: 1;
 }
@@ -520,6 +524,11 @@ html{
 .leaflet-control-search .search-button {
 //       background-position: 0 -30px;
     opacity: .5;
+}
+
+.leaflet-control-search .search-input {
+    display: block !important;
+    max-width:65px !important;
 }
 
 .leaflet-control-layers-toggle {
