@@ -2,3 +2,4 @@ django
 mysql-python
 django-tastypie
 simplejson
+wadofstuff-django-serializers

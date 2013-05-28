@@ -61,6 +61,11 @@ def delete_from_list(request):
 
 
 def readOnlyPois(request, floor_id):
+#     col: 1
+# description: "Parquing_Escalera_1"
+# floor: 15
+# label: 8
+# row: 17
     pois = Point.objects.filter(
         floor = floor_id
     ).exclude(
@@ -69,6 +74,34 @@ def readOnlyPois(request, floor_id):
         label__category__name = 'Intermedias'
     )
 
+    json_pois = []
+
+    for poi in pois:
+        categ = poi.label.category
+        category_json = {
+            'id': categ.id,
+            'color': categ.color,
+            'img': categ.img.name,
+            'name': categ.name,
+        }
+        label = poi.label
+        label_json = {
+            'id': label.id,
+            'category': category_json,
+            'img': label.img.name,
+            'name': label.name,
+        }
+        json_poi = {
+            'row': poi.row,
+            'col': poi.col,
+            'description': poi.description,
+            'label': label_json,
+            'floor': poi.floor.id
+        }
+        json_pois.append(json_poi)
+
+
+
     # return HttpResponse(simplejson.dumps(pois), mimetype='application/json')
-    return HttpResponse(serializers.serialize('json', pois), mimetype='application/json')
+    return HttpResponse(simplejson.dumps(json_pois), mimetype='application/json')
 

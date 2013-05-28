@@ -49,8 +49,8 @@ class EnclosureResource(ModelResource):
         # resource_name = 'places'
         queryset = Enclosure.objects.all()
         include_resource_uri = True
-        authorization = DjangoAuthorization()
-        authentication = BasicAuthentication()
+        # authorization = DjangoAuthorization()
+        # authentication = BasicAuthentication()
         # 		validation = FormValidation(form_class=EnclosureForm)
         filtering = {
             'name': ALL,
@@ -73,8 +73,8 @@ class FloorResource(ModelResource):
 
     class Meta:
         queryset = Floor.objects.all()
-        authorization = DjangoAuthorization()
-        authentication = BasicAuthentication()
+        # authorization = DjangoAuthorization()
+        # authentication = BasicAuthentication()
         include_resource_uri = True
         filtering = {
             'enclosure': ALL_WITH_RELATIONS,
@@ -97,8 +97,8 @@ class PointResource(ModelResource):
 
     class Meta:
         queryset = Point.objects.all()
-        authorization = DjangoAuthorization()
-        authentication = BasicAuthentication()
+        # authorization = DjangoAuthorization()
+        # authentication = BasicAuthentication()
         # usando apikey:
         # authentication = ApiKeyAuthentication()
         always_return_data = True
@@ -122,8 +122,8 @@ class LabelResource(ModelResource):
 
     class Meta:
         queryset = Label.objects.all()
-        authorization = DjangoAuthorization()
-        authentication = BasicAuthentication()
+        # authorization = DjangoAuthorization()
+        # authentication = BasicAuthentication()
         always_return_data = True
         filtering = {
             'id': ALL,
@@ -142,8 +142,8 @@ class LabelCategoryResource(ModelResource):
     class Meta:
         resource_name = 'label-category'
         queryset = LabelCategory.objects.all()
-        authorization = DjangoAuthorization()
-        authentication = BasicAuthentication()
+        # authorization = DjangoAuthorization()
+        # authentication = BasicAuthentication()
         always_return_data = True
         filtering = {
             'id': ALL,
@@ -162,8 +162,8 @@ class QRCodeResource(ModelResource):
     class Meta:
         resource_name = 'qr-code'
         queryset = QR_Code.objects.all()
-        authorization = DjangoAuthorization()
-        authentication = BasicAuthentication()
+        # authorization = DjangoAuthorization()
+        # authentication = BasicAuthentication()
         always_return_data = True
         filtering = {
             'id': ALL,
