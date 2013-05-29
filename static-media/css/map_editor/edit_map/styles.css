@@ -4,7 +4,6 @@ body
 	margin: 50px auto;
 	text-align: center;
 	/*background: black*/
-    background-color: #8C8C87;
 }
 
 input[name="num_rows"]
@@ -88,7 +87,7 @@ input[name="num_rows"]
 .box-1
 {
 	display: inline-block;
-	background: #D9D4C7;
+	background: darkgray;
 	padding: 0.6em;
 	border-radius: 0.4em;
 	margin: 0.3em 0.4em;
@@ -96,7 +95,7 @@ input[name="num_rows"]
 
 .box-2
 {
-	background: #F2EFE4;
+	background: antiquewhite;
 	padding: 1em;
 	border: 1px solid grey;
 }
@@ -127,19 +126,25 @@ img#fake
     background: #ffffff;
     display: none;
     background: #ffffff;
-    padding: 1em;
-    top: 42px;
+    padding: 0.4em;
+    border: 6px solid;
 }
 
 .label_pos
 {
-    background:white;
-    position:absolute;
-    z-index:2;
-    display:none;
-    bottom: 45px;
-    padding: 1em;
+    background: #ffffff;
+    position: absolute;
+    z-index: 2;
+    display: none;
+    padding: 0.5em;
     width: 4em;
+    border: 0.2em solid grey;
+}
+
+.hovered
+{
+    background: rgb(196, 223, 233);
+    border: 0.4em solid;
 }
 
 
@@ -155,9 +160,4 @@ img#fake
     background: #ffffff;
     padding: 1em;
     z-index: 2;
-}
-
-h4{
-   color: #FEFAF1;
-   font-family: 'raleway';
 }
