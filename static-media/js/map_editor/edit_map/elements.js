@@ -41,6 +41,7 @@ $e = {
             num_rows: $('#num_rows'),
             num_blocks: $('#num_blocks'),
             toggle_border: $('#toggle_border'),
+            toggle_erase_mode: $('#toggle_erase_mode'),
             blocks: null,
             update: $('#update_floor'),
             clear: $('#clear_floor'),

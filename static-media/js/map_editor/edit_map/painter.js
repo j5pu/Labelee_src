@@ -4,6 +4,7 @@ var Painter = {
     point: null,
     label_category: null,
     loading_icon: false,
+    erase_mode: false,
 
 
     //
@@ -84,8 +85,12 @@ var Painter = {
         //
         // Pinta etiqueta sobre un bloque en el grid para el plano
 
-        if(!Painter.label)
+        if(!Painter.label || Painter.erase_mode)
+        {
+            if(Painter.erase_mode)
+                Painter.clear(block);
             return;
+        }
 
         // Si se está cargando el plano se pinta marcándola como cargada desde la BD
         if(Floor.loading)

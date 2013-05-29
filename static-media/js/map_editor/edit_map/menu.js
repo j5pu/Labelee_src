@@ -372,6 +372,12 @@ var Menu = {
     },
 
 
+    toggleEraseMode: function()
+    {
+        Painter.erase_mode = $e.floor.toggle_erase_mode.is(':checked');
+    },
+
+
     toggleQRs: function()
     {
 

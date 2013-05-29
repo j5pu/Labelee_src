@@ -245,6 +245,7 @@ var Floor = {
         if(Floor.reloading)
         {
             Menu.setPointStats();
+            Menu.toggleEraseMode();
             Floor.reloading = false;
             alert('Plano actualizado');
         }
@@ -409,6 +410,8 @@ var Floor = {
         Floor.block_width = Floor.grid_height / Floor.num_rows;
 
         Floor._drawGrid();
+
+        Painter.erase_mode = false;
 
         Floor._loadLabels();
     },
