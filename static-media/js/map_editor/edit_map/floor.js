@@ -428,6 +428,8 @@ var Floor = {
 
         Floor._drawGrid();
 
+        Menu.init();
+
         Events.bindAll();
 
         Floor.loading = false;
