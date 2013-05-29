@@ -546,7 +546,7 @@ html{
     background: #f8f8f8;
     top: -2px;
     opacity: .85;
-    max-width: 80px;
+    max-width: 90px;
 
 }
 
@@ -558,6 +558,62 @@ html{
     -webkit-box-shadow: 2px 2px 8px rgba(0,0,0,0.3) !important;
     box-shadow: 2px 2px 8px rgba(0,0,0,0.3) !important;
 }
+
+.leaflet-control-layers-expanded {
+    padding: 6px 6px 0 6px;
+    color: #333;
+    background: #fff;
+    width: 36px;
+
+}
+
+.leaflet-control-layers label {
+    display: block;
+    /*background:#ccc;*/
+    margin-bottom:6px;
+    height:34px;
+    position:relative;
+    color: white;
+//    text-align: center;
+
+}
+
+
+.leaflet-control-layers-selector {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance:      none;
+    background:#bbb;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    border: none;
+}
+
+.leaflet-control-layers-selector:active, .leaflet-control-layers-selector:checked {
+    background:#111;
+    color:blue;
+
+}
+label > span {
+    position:absolute;
+    top:0;
+    line-height:34px;
+    left: 13px;
+}
+
+span>span{
+    color: green;
+    font: 20px bolder;
+    font-style: ;
+    line-height:34px;
+    margin-left:-7px;
+
+}
+/*ESTILOS DEL MENU LATERAL
+///////////////////////////*/
 .mmenu div.search
 {
     background: #eee;

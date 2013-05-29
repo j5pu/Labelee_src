@@ -184,7 +184,7 @@ function loadPOIs()
         //marker.bindPopup('title: '+ title );
         //markersLayer.addLayer(marker);
     }
-        layersControl= new L.control.layers(baseLayers, null, {collapsed:true});
+        layersControl= new L.control.layers(baseLayers, null, {collapsed:false});
 
 }
 
@@ -237,7 +237,9 @@ function drawOrigin(origin)
    */
 
 
-    layersControl.addBaseLayer(originFloor.photo, origin.enclosure.name+" - "+originFloor.name);
+    //layersControl.addBaseLayer(originFloor.photo, origin.enclosure.name+" - "+originFloor.name);
+    layersControl.addBaseLayer(originFloor.photo, "<span>TÚ</span>");
+
     //layersControl.addOverlay(originFloor.layer, "Destinos - "+ originFloor.name);
     //layersControl.addOverlay(originMarker,"<img src='/static/css/map/index/images/logo.png' /> <span class='my-layer-item'>Estás en </span>" + originFloor.name+","+"<br>"+"localizado vía QR en "+origin.point.description);
     //layersControl.addOverlay(originMarker,"Estás aquí");
@@ -279,4 +281,81 @@ map.on('baselayerchange', function (e) {
     //layersControl.addOverlay(floor_x.layer, "POIs de " + floor_x.name);
     map.setMaxBounds(floor_x.bounds);
 });
+
+
+/*function getRoute(route, rs, sX, sY, oX, oY) {
+    $.getJSON (route,function(data){
+        //parquing
+
+
+        var originPoint = [(rs-data.origin.row)*sY-sY, data.origin.col*sX+sX],
+
+            greenMarker = L.AwesomeMarkers.icon({
+                icon: 'home',
+                color: 'green'
+            }),
+
+            originMarker = L.marker(originPoint, { bounceOnAdd: true,
+                //bounceOnAddHeight: 20,
+                icon: greenMarker})
+                .addTo(map)
+                .bindPopup("<b>¡Estás justo aquí!</b>");
+        //.openPopup();
+
+
+        //map.setView(originPoint, 1);
+
+        var destinyPoint = [(rs-data.destiny.row)*sY-sY, data.destiny.col*sX+sX],
+
+            redMarker = L.AwesomeMarkers.icon({
+                icon: 'coffee',
+                color: 'red'
+            }),
+*/
+
+// Flecha con animación para indicar el sentido de la ruta
+var path=[];
+var arrow = L.polyline(path,{color: 'orange'});
+var arrowHead = L.polylineDecorator(arrow);
+var arrowOffset = 0;
+var anim = window.setInterval(function() {
+    arrowHead.setPatterns([
+        {offset: arrowOffset+'%', repeat: 0, symbol: new L.Symbol.ArrowHead({pixelSize: 13, polygon: false, pathOptions: {stroke: true, color: 'orange'}})}
+    ])
+    if(++arrowOffset > 100)
+        arrowOffset = 0;
+}, 100);
+
+var route=new RouteResource().getRoute(originPoint, destinyPoint);
+
+            destinyMarker= L.marker(destinyPoint, { bounceOnAdd: false,bounceOnAddHeight: 4,  icon: redMarker})
+                .addTo(map)
+                //.bindPopup("Cineteca")
+                .on('click', function () {
+                    drawRoute(originPoint, destinyPoint, route);
+                    //this.openPopup();
+                    this.bounce(1000, -10);
+                });
+
+//Creamos la ruta uniendo los puntos del array "path"
+
+function drawRoute(org, dst, route) {
+            path.push(org);
+
+            for (var i in route.steps ) {
+                path.push([(rs-route.steps[i].row)*sY-sY, route.steps[i].col*sX+sX]);
+            }
+            path.push(dst);
+
+            //Quizá haya que cambiar los segundos sY/sX de los puntos por oY/oX
+
+            arrow.addTo(map);
+            arrowHead.addTo(map);
+
+            // Aplicamos zoom y centramos el mapa con respecto a la ruta
+
+            map.fitBounds(arrow.getBounds());
+            //map.setView(centro, zoom);
+
+        }
 
