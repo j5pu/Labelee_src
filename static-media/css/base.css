@@ -12,11 +12,32 @@ body
 {
 	margin-top: 50px;
 	text-align: center;
+    background-color: #8C8C87;
+
+
 }
+
+a{
+    color: #8C8C87;
+    font-family: 'raleway';
+    text-align: center;
+}
+
 
 h1
 {
-	font-family: 'Labelee';
+	font-family: 'raleway';
+    color: #FEFAF1;
+}
+
+h2, h3 {
+    color: #8C8C87;
+    font-family: 'raleway';
+}
+
+h4{
+    color: #FCF8E3;
+    font-family: 'raleway';
 }
 
 #ajax_loading
