@@ -67,11 +67,12 @@ var Events = {
             // Borrar etiquetas pulsando ALT
             Mousetrap.bind('alt', function(e){
                 e.preventDefault();
-                Painter.hideLabelInfo();
-//                $e.floor.blocks.on('mousemove', function(){
-//                    $e.floor.blocks.off('mousemove');
-//                    Painter.clear($(this));
-//                });
+//                Painter.hideLabelInfo();
+                $e.floor.blocks.on('mousemove', function(e){
+                    e.preventDefault();
+                    $e.floor.blocks.off('mousemove');
+                    Painter.clear($(this));
+                });
                 $e.floor.blocks.on('mouseover', function(e){
                     e.preventDefault();
                     Painter.clear($(this));
@@ -110,17 +111,20 @@ var Events = {
         {
             //
             // Pintar etiquetas dejando pulsado cmd o ctrl y pasando el ratón por el grid
-            Mousetrap.bind(['command', 'ctrl'], function(){
+            Mousetrap.bind(['command', 'ctrl'], function(e){
+
+                e.preventDefault();
 
                 // Si se está cargando la imágen de un icono salimos..
                 if(Painter.loading_icon)
                     return;
 
                 // Para que no se muestren iconos de las etiquetas mientras pintamos..
-                Painter.hideLabelInfo();
+//                Painter.hideLabelInfo();
 
                 Painter.painting_trace = true;
-                $e.floor.blocks.on('mousemove', function(){
+                $e.floor.blocks.on('mousemove', function(e){
+                    e.preventDefault();
                     $e.floor.blocks.off('mousemove');
                     Painter.paintLabel($(this));
                 });
@@ -129,7 +133,8 @@ var Events = {
                     Painter.paintLabel($(this));
                 });
             });
-            Mousetrap.bind(['command', 'ctrl'], function(){
+            Mousetrap.bind(['command', 'ctrl'], function(e){
+                e.preventDefault();
                 $e.floor.blocks.off('mouseover');
                 $e.floor.blocks.off('mousemove');
                 Events.grid.bind();
