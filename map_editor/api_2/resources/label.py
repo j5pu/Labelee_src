@@ -10,12 +10,7 @@ from map_editor.models import Label, LabelCategory
 
 def read_grouped(request):
     """
-    /api-2/object/read-grouped
-
-    ->
-    [
-
-    ]
+    /api-2/label/read-grouped
     """
     label_list = LabelResource().get_list(request)
     return HttpResponse(label_list, content_type="application/json")
@@ -23,29 +18,9 @@ def read_grouped(request):
 
 def read_from_floor(request, floor_id):
     """
-    /api-2/object/grid/1
+    /api-2/label/floor/1
 
-    xej para obtener la lista de objetos que pertenecen al grid con id=1:
-        /api-2/object/points__grid__id=1
     """
-    # ["point", "object", ..] --> ["object", "point", ..]
-    # related_resources = related_resources.split("/")[:-1].reverse()
-
-    #arr = filter_query.split('=')
-    #kwargs = {
-    #	arr[0] : arr[1]
-    #}
-
-    # labels = [
-    # 	{
-    #		"total": 6,
-    #		"category_id": 1,
-    #		"id": 1,
-    #		"img": "img/objects/builders/wall.png",
-    #		"name": "wall"
-    #	},
-    #	...
-    # ]
     labels = Label.objects.filter(points__floor__id=floor_id).values().annotate(total=Sum('id'))
 
     resp = {}
@@ -65,8 +40,13 @@ def read_from_floor(request, floor_id):
     for label in labels:
         label_category = LabelCategory.objects.get(id=label['category_id'])
         label['img'] = '/media/' + label['img']
-        label['category_name'] = label_category.name
-        label['category_uri'] = '/api/v1/label-category/' + str(label_category.id)
+        label['category'] = {
+            'id': label_category.id,
+            'name': label_category.name,
+            'color': label_category.color,
+            'img': label_category.img.name,
+            'resource_uri': '/api/v1/label-category/' + str(label_category.id)
+        }
         resource_uri = '/api/v1/label/' + str(label['id']) + '/'
         label['resource_uri'] = resource_uri
 

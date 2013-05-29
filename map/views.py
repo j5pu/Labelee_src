@@ -10,14 +10,14 @@ from django.http import HttpResponseRedirect
 import json
 
 
-def origin(request, enclosure_id, floor_id, point_id):
+def origin(request, enclosure_id, floor_id, poi_id):
     """
         map/origin/1_25_91234
     """
     ctx = {
         'enclosure_id': enclosure_id,
         'floor_id': floor_id,
-        'point_id': point_id
+        'poi_id': poi_id
     }
     return render_to_response('map/index.html', ctx, context_instance=RequestContext(request))
 

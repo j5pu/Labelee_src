@@ -50,7 +50,7 @@ class EnclosureResource(ModelResource):
         queryset = Enclosure.objects.all()
         include_resource_uri = True
         authorization = DjangoAuthorization()
-        authentication = BasicAuthentication()
+        # authentication = BasicAuthentication()
         # 		validation = FormValidation(form_class=EnclosureForm)
         filtering = {
             'name': ALL,
@@ -74,7 +74,7 @@ class FloorResource(ModelResource):
     class Meta:
         queryset = Floor.objects.all()
         authorization = DjangoAuthorization()
-        authentication = BasicAuthentication()
+        # authentication = BasicAuthentication()
         include_resource_uri = True
         filtering = {
             'enclosure': ALL_WITH_RELATIONS,
@@ -98,7 +98,7 @@ class PointResource(ModelResource):
     class Meta:
         queryset = Point.objects.all()
         authorization = DjangoAuthorization()
-        authentication = BasicAuthentication()
+        # authentication = BasicAuthentication()
         # usando apikey:
         # authentication = ApiKeyAuthentication()
         always_return_data = True
@@ -107,7 +107,8 @@ class PointResource(ModelResource):
             'label': ALL_WITH_RELATIONS,
             'id': ALL,
             'row': ALL,
-            'col': ALL
+            'col': ALL,
+            'description': ALL
         }
         max_limit = 5000
 
@@ -122,7 +123,7 @@ class LabelResource(ModelResource):
     class Meta:
         queryset = Label.objects.all()
         authorization = DjangoAuthorization()
-        authentication = BasicAuthentication()
+        # authentication = BasicAuthentication()
         always_return_data = True
         filtering = {
             'id': ALL,
@@ -142,7 +143,7 @@ class LabelCategoryResource(ModelResource):
         resource_name = 'label-category'
         queryset = LabelCategory.objects.all()
         authorization = DjangoAuthorization()
-        authentication = BasicAuthentication()
+        # authentication = BasicAuthentication()
         always_return_data = True
         filtering = {
             'id': ALL,
@@ -162,7 +163,7 @@ class QRCodeResource(ModelResource):
         resource_name = 'qr-code'
         queryset = QR_Code.objects.all()
         authorization = DjangoAuthorization()
-        authentication = BasicAuthentication()
+        # authentication = BasicAuthentication()
         always_return_data = True
         filtering = {
             'id': ALL,
@@ -181,7 +182,7 @@ class ConnectionResource(ModelResource):
         resource_name = 'connection'
         queryset = Connection.objects.all()
         authorization = DjangoAuthorization()
-        authentication = BasicAuthentication()
+        # authentication = BasicAuthentication()
         always_return_data = True
         filtering = {
             'id': ALL,
@@ -191,3 +192,43 @@ class ConnectionResource(ModelResource):
     def determine_format(self, request):
         return 'application/json'
 
+
+class RouteResource(ModelResource):
+    origin = fields.ToOneField('map_editor.api.resources.PointResource', 'origin', full=True)
+    destiny = fields.ToOneField('map_editor.api.resources.PointResource', 'destiny', full=True)
+    steps = fields.ToManyField('map_editor.api.resources.StepResource', 'steps', null=True, full=True)
+
+    class Meta:
+        resource_name = 'route'
+        queryset = Route.objects.all()
+        authorization = DjangoAuthorization()
+        # authentication = BasicAuthentication()
+        always_return_data = True
+        filtering = {
+            'id': ALL,
+            'origin': ALL_WITH_RELATIONS,
+            'destiny': ALL_WITH_RELATIONS
+            }
+
+    def determine_format(self, request):
+        return 'application/json'
+
+
+class StepResource(ModelResource):
+    route = fields.ToOneField('map_editor.api.resources.RouteResource', 'route')
+    floor = fields.ToOneField('map_editor.api.resources.FloorResource', 'floor')
+
+    class Meta:
+        resource_name = 'step'
+        queryset = Step.objects.all()
+        authorization = DjangoAuthorization()
+        # authentication = BasicAuthentication()
+        always_return_data = True
+        filtering = {
+            'id': ALL,
+            'origin': ALL_WITH_RELATIONS,
+            'destiny': ALL_WITH_RELATIONS
+        }
+
+    def determine_format(self, request):
+        return 'application/json'

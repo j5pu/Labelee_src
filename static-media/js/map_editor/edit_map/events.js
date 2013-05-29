@@ -23,7 +23,8 @@ var Events = {
         {
             // Mostrar imágen de la etiqueta al sólo pasar el ratón sobre el bloque
 
-            if(Painter.current_hovered_block && Painter.current_hovered_block.data('qr'))
+            var block_is_qr = Painter.current_hovered_block && Painter.current_hovered_block.data('qr');
+            if(block_is_qr || Floor.show_only_qrs)
                 return;
 
             $e.floor.blocks.on('mouseover', Painter.showLabelInfo);
@@ -31,9 +32,32 @@ var Events = {
         },
 
 
+        _showUpQRInfo: function()
+        {
+            // Pone encima de lo demás la info del QR al pasarle el ratón
+            if(!Floor.show_only_qrs)
+                return;
+
+            $e.floor.blocks.on('mouseover', function(){
+                Label.info_hovered = true;
+                Label.toggleHoverQRInfo($(this));
+            });
+            $e.floor.blocks.on('mouseleave', function(){
+                Label.info_hovered = false;
+                Label.toggleHoverQRInfo($(this));
+            });
+        },
+
+
         _assign_qr_by_right_click: function()
         {
-            $e.floor.blocks.on('contextmenu', function(e){
+            // No vamos a asignar un QR a un bloque que no tenga etiqueta..
+
+            // Si la planta no tiene etiqueta no hay evento que asignar
+            if(!$e.floor.labeled_blocks)
+                return;
+
+            $e.floor.labeled_blocks.on('contextmenu', function(e){
                 e.preventDefault();
                 Painter.assignQR();
                 $e.floor.blocks.off('mouseover');
@@ -48,7 +72,9 @@ var Events = {
             // Borrar etiquetas pulsando ALT
             Mousetrap.bind('alt', function(e){
                 e.preventDefault();
-                $e.floor.blocks.on('mousemove', function(){
+//                Painter.hideLabelInfo();
+                $e.floor.blocks.on('mousemove', function(e){
+                    e.preventDefault();
                     $e.floor.blocks.off('mousemove');
                     Painter.clear($(this));
                 });
@@ -80,8 +106,8 @@ var Events = {
             });
             $e.floor.blocks.on('mouseup', function(){
                 $e.floor.blocks.off('mouseover');
-                Painter.painting_trace = true;
-                Events.bindGrid();
+                Painter.painting_trace = false;
+                Events.grid.bind();
             });
         },
 
@@ -90,14 +116,20 @@ var Events = {
         {
             //
             // Pintar etiquetas dejando pulsado cmd o ctrl y pasando el ratón por el grid
-            Mousetrap.bind(['command', 'ctrl'], function(){
+            Mousetrap.bind(['command', 'ctrl'], function(e){
+
+                e.preventDefault();
 
                 // Si se está cargando la imágen de un icono salimos..
                 if(Painter.loading_icon)
                     return;
 
+                // Para que no se muestren iconos de las etiquetas mientras pintamos..
+//                Painter.hideLabelInfo();
+
                 Painter.painting_trace = true;
-                $e.floor.blocks.on('mousemove', function(){
+                $e.floor.blocks.on('mousemove', function(e){
+                    e.preventDefault();
                     $e.floor.blocks.off('mousemove');
                     Painter.paintLabel($(this));
                 });
@@ -106,7 +138,8 @@ var Events = {
                     Painter.paintLabel($(this));
                 });
             });
-            Mousetrap.bind(['command', 'ctrl'], function(){
+            Mousetrap.bind(['command', 'ctrl'], function(e){
+                e.preventDefault();
                 $e.floor.blocks.off('mouseover');
                 $e.floor.blocks.off('mousemove');
                 Events.grid.bind();
@@ -118,12 +151,14 @@ var Events = {
         bind: function()
         {
             var self = this;
+            $('#grid *').off();
             self._assign_qr_by_right_click();
             self._paint_with_key_pressed();
-//            self._paint_with_mouse_pressed();
+            self._paint_with_mouse_pressed();
             self._removeLabel();
             self._toggleBlockShadow();
             self._toggleLabelInfo();
+            self._showUpQRInfo();
         }
     },
 
@@ -133,6 +168,15 @@ var Events = {
         {
             // Mostrar o no los QRs
             $e.qr.toggle.on('change', Menu.toggleQRs);
+        },
+
+
+        _showQR: function()
+        {
+            // Muestra en el plano el QR sobre el que hacemos click en la lista
+
+            var a = $e.qr.list.find('a');
+            a.on('click', Menu.showQR)
         },
 
 
@@ -191,6 +235,7 @@ var Events = {
         bind: function()
         {
             var self = this;
+            $('#menu *').off();
             self._changeNumRows();
             self._manageLabel();
             self._manageLabelCategory();
@@ -199,6 +244,7 @@ var Events = {
             self._toggleBlockBorders();
             self._toggleQRs();
             self._updateFloor();
+            self._showQR();
         }
     },
 

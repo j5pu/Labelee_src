@@ -125,15 +125,21 @@ img#fake
     position: absolute;
     z-index: 2;
     background: #ffffff;
-    display: visible;
+    display: none;
+    background: #ffffff;
+    padding: 1em;
+    top: 42px;
 }
 
-.point_info
+.label_pos
 {
     background:white;
     position:absolute;
     z-index:2;
-    display:none
+    display:none;
+    bottom: 45px;
+    padding: 1em;
+    width: 4em;
 }
 
 

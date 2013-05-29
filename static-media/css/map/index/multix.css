@@ -430,15 +430,16 @@ pre
 }
 
 #header a {
-//background: center center no-repeat #f6f6f6;
+/*background: center center no-repeat #f6f6f6;*/
 
 background-image: url(http://bradjasper.com/subtle-patterns-bookmarklet/patterns/squairy_light.png);
 background-size: auto;
 background-repeat: repeat repeat;
-//background-image: url(logo.png);
+/*background-image: url(logo.png);*/
 display: block;
 width: 55px;
 height: 35px;
+line-height: 35px;
 position: absolute;
 bottom: 40px;
 left: 0;
@@ -451,6 +452,9 @@ border-left: none;
 border-radius: 0 6px 6px 0;
     }
 
+#header a img {
+    margin-top: 9px;
+}
 span#fake{
     bottom:0;
     position: absolute;
@@ -458,8 +462,8 @@ span#fake{
     width: 1px;
     display: block;
     left: 2px;
-    -webkit-box-shadow: 2px 3px 3px rgba(0,0,0,0.8);
-    box-shadow: 2px 3px 3px rgba(0,0,0,0.8);
+    -webkit-box-shadow: 2px 3px 3px rgba(0,0,0,0.5);
+    box-shadow: 2px 3px 3px rgba(0,0,0,0.5);
     z-index: 99;
     opacity: 1;
 }
@@ -519,7 +523,12 @@ html{
 
 .leaflet-control-search .search-button {
 //       background-position: 0 -30px;
-    opacity: .5;
+    opacity: .4;
+}
+
+.leaflet-control-search .search-input {
+    display: block !important;
+    max-width:62px !important;
 }
 
 .leaflet-control-layers-toggle {
@@ -537,6 +546,7 @@ html{
     background: #f8f8f8;
     top: -2px;
     opacity: .85;
+    max-width: 90px;
 
 }
 
@@ -548,6 +558,62 @@ html{
     -webkit-box-shadow: 2px 2px 8px rgba(0,0,0,0.3) !important;
     box-shadow: 2px 2px 8px rgba(0,0,0,0.3) !important;
 }
+
+.leaflet-control-layers-expanded {
+    padding: 6px 6px 0 6px;
+    color: #333;
+    background: #fff;
+    width: 36px;
+
+}
+
+.leaflet-control-layers label {
+    display: block;
+    /*background:#ccc;*/
+    margin-bottom:6px;
+    height:34px;
+    position:relative;
+    color: white;
+//    text-align: center;
+
+}
+
+
+.leaflet-control-layers-selector {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance:      none;
+    background:#bbb;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    border: none;
+}
+
+.leaflet-control-layers-selector:active, .leaflet-control-layers-selector:checked {
+    background:#111;
+    color:blue;
+
+}
+label > span {
+    position:absolute;
+    top:0;
+    line-height:34px;
+    left: 13px;
+}
+
+span>span{
+    color: green;
+    font: 20px bolder;
+    font-style: ;
+    line-height:34px;
+    margin-left:-7px;
+
+}
+/*ESTILOS DEL MENU LATERAL
+///////////////////////////*/
 .mmenu div.search
 {
     background: #eee;

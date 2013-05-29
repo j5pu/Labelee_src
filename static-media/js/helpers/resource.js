@@ -199,24 +199,7 @@ function LabelResource()
 
 	this.readFromFloor = function(floor_id) {
 
-		// Para obtener todos los objetos de un grid, agrupados por id:
-		// 		uri = /api-2/object/grid/4
-        //
-        // -> objects = {
-        // 		'api/v1/object/1': {
-        //			category_id: 1
-        //			category_name: builder
-	    //			id: 1
-	    //			img: "img/objects/builders/wall.png"
-	    //			name: "wall"
-	    //			total: 6
-	    //			resource_uri: api/v1/object/1
-	    //			from_db: True
-        // 		},
-        //      ..
-        //   }
-
-		var element;
+		var elements;
 		$.ajax({
 			url : this.api2_url + 'floor/' + floor_id,
 			type : 'get',
@@ -226,15 +209,36 @@ function LabelResource()
 			dataType : 'json', // esto indica que la respuesta vendrá en formato json
 			async : false,
 			success : function(response) {
-				element = response;
+				elements = response;
 			},
 			error : function(response) {
 				var j = response;
 			}
 		});
 
-		return element;
+		return elements;
 	};
+
+    this.readGrouped = function() {
+        var elements;
+        $.ajax({
+            url : this.api2_url + 'read-grouped',
+            type : 'get',
+            headers : {
+                'Content-Type' : 'application/json'
+            },
+            dataType : 'json', // esto indica que la respuesta vendrá en formato json
+            async : false,
+            success : function(response) {
+                elements = response.objects;
+            },
+            error : function(response) {
+                var j = response;
+            }
+        });
+
+        return elements;
+    }
 }
 
 
@@ -349,12 +353,23 @@ function PointResource()
         });
 
         return element;
-    },
+    };
 
     this.readConnectionsFromEnclosure = function(enclosure_id)
     {
         return this.readAllFiltered('?label__category__name__icontains=arista&floor__enclosure__id=' + enclosure_id);
-    }
+    };
+
+    this.readQRsFromFloor = function(floor_id)
+    {
+        qr_codes = new Resource('qr-code').readAllFiltered('?point__floor__id=' + floor_id);
+
+        points = [];
+        for(i in qr_codes)
+            points.push(qr_codes[i].point);
+
+        return points;
+    };
 }
 
 
@@ -392,10 +407,46 @@ function ConnectionResource()
     };
 }
 
+
+function RouteResource()
+{
+    Resource.call(this, 'route');
+
+    this.getRoute = function(origin, destiny)
+    {
+        var elements;
+        $.ajax({
+            url : '/get-route/' + origin + '_' + destiny,
+            type : 'get',
+            headers : {
+                'Content-Type' : 'application/json'
+            },
+            dataType : 'json', // esto indica que la respuesta vendrá en formato json
+            async : false,
+            success : function(response) {
+                elements = response;
+            },
+            error : function(response) {
+                var j = response;
+            }
+        });
+
+        return elements;
+    };
+}
+
+
+function StepResource()
+{
+    Resource.call(this, 'step');
+}
+
+
 FloorResource.prototype = new Resource;
 LabelResource.prototype = new Resource;
 LabelCategoryResource.prototype = new Resource;
 PointResource.prototype = new Resource;
 EnclosureResource.prototype = new Resource;
 ConnectionResource.prototype = new Resource;
-//RouteResource.prototype = new Resource;
+RouteResource.prototype = new Resource;
+StepResource.prototype = new Resource;

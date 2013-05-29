@@ -24,7 +24,7 @@ class Step(models.Model):
     step_number = models.PositiveIntegerField()
     row = models.PositiveIntegerField()
     column = models.PositiveIntegerField()
-    route = models.ForeignKey(Route)
+    route = models.ForeignKey(Route, related_name='steps')
     floor = models.ForeignKey('map_editor.Floor')
 
 

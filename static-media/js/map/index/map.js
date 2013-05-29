@@ -1,227 +1,361 @@
-;
+//Configuración de iconos
+var	OriginIcon = L.AwesomeMarkers.icon({
+        icon: 'home',
+        color: 'green'
+    }),
+    blueMarker = L.AwesomeMarkers.icon({
+        icon: 'star',
+        color: 'blue',
+        spin: true
 
-var map_img = new Image(),
-    floorJson = new FloorResource().read(floor_id),
-    poisJson = new PointResource().readOnlyPois(floor_id);
-
-    // Para segunda parte:
-    //  - click sobre poi
-    //  - buscar destino
-    //    routeJson= RouteResource().read() + plantaB_route.json";
-
-/*
- // Crear mapas base
- var base = {
- "Planta2": L.imageOverlay('{{ STATIC_URL }}labelee/34.jpg', bounds),
- "Planta1": L.imageOverlay('{{ STATIC_URL }}labelee/28.jpg', bounds),
- "Planta0": L.imageOverlay('{{ STATIC_URL }}labelee/29.jpg', bounds),
- "Parquing":L.imageOverlay('{{ STATIC_URL }}labelee/27.jpg', bounds),
- };
+    }),
+    redMarker = L.AwesomeMarkers.icon({
+        icon: 'coffee',
+        color: 'red'
+    });
 
 
- // Crear map overlays
- var overlays = {
-
- 'POIs_1': L.layerGroup([
-
- ]),
-
- 'POIs_2': L.layerGroup([
- ]),
 
 
- };
- */
-
-drawMap(floorJson,routeJson);
-
-function drawMap (mapJson, rutaJson)  {
-
-    $.getJSON(mapJson,function(data){
-        map_img.src = STATIC_URL + data.map;
-
-        map_img.onload = function(){
-
-            var	mapH = $(document).height(),
-                mapW = (map_img.width/map_img.height)*mapH,
+var originFloor;
+//Configuración del mapa
 
 
-                rows= data.num_rows,
-                scaleX = mapW/data.num_cols,
-                scaleY = mapH/rows,
-                offsetX = scaleX/2,
-                offsetY = scaleY/2,
+//Carga de datos globales
+var origin = {
+    point:new PointResource().read(poi_id),
+    floor:new FloorResource().read(floor_id),
+    enclosure:new EnclosureResource().read(enclosure_id)
+}
 
 
-                bounds = new L.LatLngBounds(new L.LatLng(0, 0), new L.LatLng(mapH, mapW));
+var    mapH = $(document).height();
 
-            var pois_1 = new L.LayerGroup();
+///////////////////////////////////////////////
+//pinta en el mapa la posición inicial Origin
 
-            var	greenMarker = L.AwesomeMarkers.icon({
-                    icon: 'home',
-                    color: 'green'
-                }),
-                blueMarker = L.AwesomeMarkers.icon({
-                    icon: 'star',
-                    color: 'blue'
-                }),
-                redMarker = L.AwesomeMarkers.icon({
-                    icon: 'coffee',
-                    color: 'red'
+//Cálculos restantes
+//Plantas del enclosure asociado al QR
+var floorsUris=[];
+for (f=0; f<origin.enclosure.floors.length; f++){
+    floorsUris.push(origin.enclosure.floors[f]);
+}
+
+var floors = [],
+    uris=origin.enclosure.floors;
+for (var i in uris) {
+    floors.push(new FloorResource().readFromUri(uris[i]));
+}
+
+//POIs de cada floor, separados para pintarlos por capas
+for (var i in floors){
+    floors[i].pois = new PointResource().readOnlyPois(floors[i].id);
+}
+
+
+//Variables globales
+
+var baseLayers={},
+    //overlays = {},
+    floor_index = 0,
+    totalPois=new L.LayerGroup();
+
+
+//Configuración de la lupa
+var mobileOpts = {
+    text: 'Buscar',
+    autoType: true,
+    autoCollapse: false,
+    autoCollapseTime: 6000,
+    animateLocation: true,
+    tipAutoSubmit: true,  		//auto map panTo when click on tooltip
+    autoResize: true,			//autoresize on input change
+    markerLocation:true,
+    minLength: 1,				//minimal text length for autocomplete
+    textErr: 'No hay ningún sitio',
+    layer: totalPois,
+    //title: title,
+    callTip: customTip,
+    tooltipLimit: -1,			//limit max results to show in tooltip. -1 for no limit.
+    delayType: 800	//with mobile device typing is more slow
+};
+
+//Configuración de los resultados de búsqueda en la lupa
+function customTip(text)
+{
+    var tip = L.DomUtil.create('a', 'colortip');
+
+    tip.href = "#"+text;
+    tip.innerHTML = text;
+
+    var subtip = L.DomUtil.create('em', 'subtip', tip);
+    subtip.style.display = 'inline-block';
+    subtip.style.float = 'right';
+    subtip.style.width = '18px';
+    subtip.style.height = '18px';
+    //subtip.style.backgroundColor = text;
+    subtip.style.backgroundColor = 'red';
+    return tip;
+}
+
+
+//Carga de planos
+loopFloors(floor_index);
+
+
+var name, img;
+function loopFloors ()
+{
+    if(floor_index == floors.length)
+    {
+        loadPOIs();
+        drawOrigin(origin);
+        return;
+    }
+
+    name=floors[floor_index].name;
+    img=floors[floor_index].img;
+    var floorImg = new Image();
+    floorImg.src = img;
+    floorImg.onload = function () {
+        var mapW = (floorImg.width / floorImg.height) * mapH;
+        var bounds = new L.LatLngBounds(new L.LatLng(0, 0), new L.LatLng(mapH, mapW));
+
+        floors[floor_index].scaleX= mapW/floors[floor_index].num_cols;
+        floors[floor_index].scaleY= mapH/floors[floor_index].num_rows;
+        floors[floor_index].bounds=bounds;
+        floors[floor_index].photo = new L.imageOverlay(img, bounds);
+
+        baseLayers[name] = new L.imageOverlay(img, bounds);
+
+        floor_index++;
+        loopFloors();
+    };
+}
+
+
+
+//Carga de POIs
+
+function loadPOIs()
+{
+
+    for (var fl in floors){
+        floors[fl].layer=new L.LayerGroup();
+
+
+        for (j=0; j<floors[fl].pois.length; j++) {
+                var loc = [(floors[fl].pois[j].row)*floors[fl].scaleY+(floors[fl].scaleY/2),
+                            floors[fl].pois[j].col*floors[fl].scaleX+(floors[fl].scaleY/2)],	//posición de los marcadores
+                    colorIcon = floors[fl].pois[j].label.category.color,
+                    nameIcon =floors[fl].pois[j].label.name,
+                    category = floors[fl].pois[j].label.category.name;
+                floors[fl].pois[j].marker = new L.Marker(new L.latLng(loc), {icon:blueMarker, title:nameIcon});
+                //floors[fl].pois[j].marker.options.icon.options.className='awesome-marker';
+                floors[fl].pois[j].marker.options.icon.options.color=colorIcon;
+
+                floors[fl].pois[j].marker.options.icon.options.icon='star';
+                //
+                        //cambiar {icon: por categoría, sacar Cat y Color de pois[j].label}
+                floors[fl].pois[j].marker.bindPopup(nameIcon +": " + category);
+                floors[fl].layer.addLayer(floors[fl].pois[j].marker);
+                //totalPois.addLayer(floors[fl].pois[j].marker);
+
+
+        }
+        //overlays["POIs de "+ floors[fl].name]=floors[fl].layer;
+    }
+
+
+    floors[1].layer.eachLayer(function (layer) {
+//        layer.on({
+//           click: function(e){
+                layer.setIcon(redMarker);
+//                alert('Lat: '+layer._latlng.lat+', Lng: '+layer._latlng.lng);
+//            }
+//        });
+    });
+
+
+    for(i in totalPois._layers) {
+        var title = totalPois._layers[i].title;	//value searched
+        //    loc = data[i].loc,		//position found
+        //    marker = new L.Marker(new L.latLng(loc), {title: title} );//se property searched
+        //marker.bindPopup('title: '+ title );
+        //markersLayer.addLayer(marker);
+    }
+        layersControl= new L.control.layers(baseLayers, null, {collapsed:false});
+
+}
+
+var map = L.map('map', {
+    crs: L.CRS.Simple,
+    zoom: 0,
+    zoomControl:false
+    //layer: originFloor.layer
+});
+
+var originPoint;
+function drawOrigin(origin)
+{
+    for(i in floors){
+        layersControl.removeLayer(floors[i].layer);
+        layersControl.removeLayer(floors[i].photo);
+    }
+
+    for(i in floors)
+        if(origin.floor.id == floors[i].id)
+        {
+            originFloor = floors[i];
+            break;
+         }
+
+    map.setMaxBounds(originFloor.bounds);
+    map.setView(originFloor.bounds.getCenter(),0);
+    //map.setView(originPoint, 0);
+
+
+
+
+    map.addControl( new L.Control.Search(mobileOpts) );
+    map.addControl(new L.Control.Zoom());
+
+
+    map.addLayer(originFloor.photo);
+    map.addLayer(originFloor.layer);
+    originPoint = [(origin.point.row)*originFloor.scaleY,
+            origin.point.col*originFloor.scaleX];
+        originMarker = new L.marker(originPoint, { bounceOnAdd: false,
+            //bounceOnAddHeight: 20,
+            icon: OriginIcon}).bindPopup(origin.point.description+ "-"+originFloor.name +"-" + origin.enclosure.name);
+    originMarker.addTo(map).openPopup();
+
+   /*for (i in floors[0].layer._layers){
+        floors[0].layer._layers[i].options.icon.options.color ="red";
+        floors[0].layer._layers[i].options.icon.options.icon ="coffee";
+    }
+   */
+
+
+    //layersControl.addBaseLayer(originFloor.photo, origin.enclosure.name+" - "+originFloor.name);
+    layersControl.addBaseLayer(originFloor.photo, "<span>TÚ</span>");
+
+    //layersControl.addOverlay(originFloor.layer, "Destinos - "+ originFloor.name);
+    //layersControl.addOverlay(originMarker,"<img src='/static/css/map/index/images/logo.png' /> <span class='my-layer-item'>Estás en </span>" + originFloor.name+","+"<br>"+"localizado vía QR en "+origin.point.description);
+    //layersControl.addOverlay(originMarker,"Estás aquí");
+
+    layersControl.addTo(map);
+
+}
+
+
+// Para segunda parte:
+//  - click sobre poi
+//  - buscar destino
+//    routeJson= RouteResource().read() + plantaB_route.json";
+
+
+
+map.on('baselayerchange', function (e) {
+    if(map.hasLayer(originFloor.layer)){
+        map.removeLayer(originFloor.layer);
+        map.removeLayer(originFloor.photo);
+        //layersControl.removeLayer(originFloor.layer, "POIs de "+ originFloor.name);
+        layersControl.removeLayer(originFloor.photo, originFloor.name);
+    }
+    var floor_x;
+    for (var i in floors){
+
+        if (e.layer._url === floors[i].photo._url) {
+            floor_x = floors[i];
+
+        } else {
+            //layersControl.removeLayer(floors[i].layer, "POIs de " + floors[i].name);
+            map.removeLayer(floors[i].layer);
+        }
+
+    }
+    //map.setView(floor_x.bounds.getCenter(), 0);
+    map.setView(originPoint, 0);
+    map.addLayer(floor_x.layer);
+    //layersControl.addOverlay(floor_x.layer, "POIs de " + floor_x.name);
+    map.setMaxBounds(floor_x.bounds);
+});
+
+
+/*function getRoute(route, rs, sX, sY, oX, oY) {
+    $.getJSON (route,function(data){
+        //parquing
+
+
+        var originPoint = [(rs-data.origin.row)*sY-sY, data.origin.col*sX+sX],
+
+            greenMarker = L.AwesomeMarkers.icon({
+                icon: 'home',
+                color: 'green'
+            }),
+
+            originMarker = L.marker(originPoint, { bounceOnAdd: true,
+                //bounceOnAddHeight: 20,
+                icon: greenMarker})
+                .addTo(map)
+                .bindPopup("<b>¡Estás justo aquí!</b>");
+        //.openPopup();
+
+
+        //map.setView(originPoint, 1);
+
+        var destinyPoint = [(rs-data.destiny.row)*sY-sY, data.destiny.col*sX+sX],
+
+            redMarker = L.AwesomeMarkers.icon({
+                icon: 'coffee',
+                color: 'red'
+            }),
+*/
+
+// Flecha con animación para indicar el sentido de la ruta
+var path=[];
+var arrow = L.polyline(path,{color: 'orange'});
+var arrowHead = L.polylineDecorator(arrow);
+var arrowOffset = 0;
+var anim = window.setInterval(function() {
+    arrowHead.setPatterns([
+        {offset: arrowOffset+'%', repeat: 0, symbol: new L.Symbol.ArrowHead({pixelSize: 13, polygon: false, pathOptions: {stroke: true, color: 'orange'}})}
+    ])
+    if(++arrowOffset > 100)
+        arrowOffset = 0;
+}, 100);
+
+var route=new RouteResource().getRoute(originPoint, destinyPoint);
+
+            destinyMarker= L.marker(destinyPoint, { bounceOnAdd: false,bounceOnAddHeight: 4,  icon: redMarker})
+                .addTo(map)
+                //.bindPopup("Cineteca")
+                .on('click', function () {
+                    drawRoute(originPoint, destinyPoint, route);
+                    //this.openPopup();
+                    this.bounce(1000, -10);
                 });
 
-            /*				originMarker = L.marker(originPoint, { bounceOnAdd: true,
-             //bounceOnAddHeight: 20,
-             icon: greenMarker})
-             .addTo(map)
-             .bindPopup("¡Estás justo aquí!");
-             //.openPopup();
+//Creamos la ruta uniendo los puntos del array "path"
 
+function drawRoute(org, dst, route) {
+            path.push(org);
 
-             //map.setView(originPoint, 1);
-
-             var destinyPoint = [(rs-data.destiny.row)*sY-sY, data.destiny.col*sX+sX],
-
-             redMarker = L.AwesomeMarkers.icon({
-             icon: 'coffee',
-             color: 'red'
-             }),
-
-             destinyMarker= L.marker(destinyPoint, { bounceOnAdd: false,bounceOnAddHeight: 4,  icon: redMarker})
-             .addTo(map)
-             //.bindPopup("Cineteca")
-             .on('click', function () {
-             drawRoute(originPoint, destinyPoint, data);
-             //this.openPopup();
-             this.bounce(1000, -10);
-             });
-             */
-
-
-
-            L.marker([75, 100], {icon:redMarker}).bindPopup('POI_1.2').addTo(pois_1);
-            L.marker([150, 300],{icon:redMarker}).bindPopup('Hola').openPopup().addTo(pois_1);
-            L.marker([50, 150],{icon:redMarker}).bindPopup('POI_1.4').addTo(pois_1);
-
-
-            var planta0 = new L.imageOverlay('{{ STATIC_URL }}labelee/34.jpg', bounds),
-                parquing = new L.imageOverlay('{{ STATIC_URL }}labelee/28.jpg',bounds),
-                planta1 = new L.imageOverlay('{{ STATIC_URL }}labelee/29.jpg',bounds),
-                planta2 = new L.imageOverlay('{{ STATIC_URL }}labelee/27.jpg',bounds);
-
-
-            var map = L.map('map', {
-                center: bounds.getCenter(),
-                crs: L.CRS.Simple,
-                zoom: 0,
-                zoomControl:false,
-                maxBounds: bounds,
-                layers: [planta2, planta1,planta0,pois_1]
-            });
-
-            var baseLayers = {
-                "Planta2": planta2,
-                "Planta1": planta1,
-                "Planta0": planta0,
-                "Parquing":parquing
-            };
-
-            var overlays = {
-                "POIs1": pois_1
-            };
-
-
-            var originMarker = L.marker([200, 400], { bounceOnAdd:false, icon: greenMarker})
-                .addTo(map);
-            //.bindPopup('¡Hola!')
-            //.openPopup()
-            //.addTo(pois_1)
-            //    .on('click', function () {
-            //this.openPopup();
-            //this.bounce(1000, -10);
-            //    });
-            var hover_bubble = new L.Rrose({ offset: new L.Point(0,-25), closeButton: false, autoPan: false })
-                .setContent('Estás justo aquí')
-                .setLatLng(originMarker.getLatLng())
-                .openOn(map);
-
-            L.control.layers(baseLayers, overlays).addTo(map);
-
-            parquing.addTo(map);
-
-
-
-//pois de muestra para rellenar el mapa
-            var pois = [
-                {"col":600, "row": 50, "description":"ocio1"},
-                {"col":500, "row": 100, "description":"acceso1"},
-                {"col":500, "row": 150, "description":"ocio2"},
-                {"col":400, "row": 150, "description":"comida"},
-                {"col":600, "row": 50, "description":"aseos"},
-                {"col":500, "row": 100, "description":"ocio3"},
-                {"col":400, "row": 150, "description":"acceso2"},
-                {"col":300, "row": 200, "description":"tienda1"},
-                {"col":200, "row": 150, "description":"tienda2"},
-                {"col":100, "row": 200, "description":"aseos"},
-            ];
-
-
-            var markersLayer = new L.LayerGroup();	//esta capa contiene los pois buscados
-            map.addLayer(markersLayer);
-
-            function customTip(text)
-            {
-                var tip = L.DomUtil.create('a', 'colortip');
-
-                tip.href = "#"+text;
-                tip.innerHTML = text;
-
-                var subtip = L.DomUtil.create('em', 'subtip', tip);
-                subtip.style.display = 'inline-block';
-                subtip.style.float = 'right';
-                subtip.style.width = '18px';
-                subtip.style.height = '18px';
-                //subtip.style.backgroundColor = text;
-                subtip.style.backgroundColor = 'red';
-                return tip;
+            for (var i in route.steps ) {
+                path.push([(rs-route.steps[i].row)*sY-sY, route.steps[i].col*sX+sX]);
             }
+            path.push(dst);
 
+            //Quizá haya que cambiar los segundos sY/sX de los puntos por oY/oX
 
+            arrow.addTo(map);
+            arrowHead.addTo(map);
 
-            var mobileOpts = {
-                //url: jsonpurl,
-                //jsonpParam: jsonpName,
-                //filterJSON: filterJSONCall,
-                text: 'Destino...',
-                autoType: false,
-                tipAutoSubmit: true,
-                autoCollapse: true,
-                autoCollapseTime: 6000,
-                animateLocation: true,
-                markerLocation: true,
-                textErr: 'No hay ningún sitio',
-                layer: markersLayer,
-                callTip: customTip,
-                delayType: 800	//with mobile device typing is more slow
-            };
+            // Aplicamos zoom y centramos el mapa con respecto a la ruta
 
-            //map.addControl( new L.Control.Search({layer: markersLayer}) );  //inizializa el control 'search' lupa
+            map.fitBounds(arrow.getBounds());
+            //map.setView(centro, zoom);
 
-            ////////////rellena el mapa con marcadores de los pois de muestra
-            for(i in pois) {
-                var description = pois[i].description,	//valor buscado
-                    loc = [pois[i].col,	pois[i].row],	//posición encontrada
-                    marker = new L.Marker(new L.latLng(loc), {title: description, icon: blueMarker} );//propiedad buscada
-                marker.bindPopup('descripción: '+ description );
-                markersLayer.addLayer(marker);
-            }
-
-
-
-            map.addControl( new L.Control.Search(mobileOpts) );
-            map.addControl(new L.Control.Zoom());
-        }//image.onload
-
-    }); //getJSon
-} //drawMap
+        }
 

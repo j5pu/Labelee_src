@@ -1,10 +1,16 @@
 //Pantalla completa
-//new line
 
 function hideAddressBar()
 {
-    var android_version = parseFloat(device.version);
-    if (!(android_version >= 2.3)) return;
+    var ua = navigator.userAgent;
+    if( ua.indexOf("Android") >= 0 )
+    {
+        var androidversion = parseFloat(ua.slice(ua.indexOf("Android")+8));
+        if (androidversion < 2.3)
+        {
+            return;
+        }
+    }
 
     if(!window.location.hash)
     {
@@ -20,10 +26,10 @@ function hideAddressBar()
 window.addEventListener("load", function(){ if(!window.pageYOffset){ hideAddressBar(); } } );
 window.addEventListener("orientationchange", hideAddressBar );
 
+////
 
-
-
-//	Activación y configuración del menú
+/*
+///	Activación y configuración del menú
 $(function() {
 
     var $menu = $('nav#menu-right');
@@ -99,3 +105,4 @@ $(function() {
     );
 });
 
+*/

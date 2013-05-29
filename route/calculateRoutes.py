@@ -14,21 +14,30 @@ from route.pathfinding.Dijkstra import *
 
 
 def calculate_routes(request, enclosure_id):
+
+
+
+
+
     # t1 = threading.Thread(target=threadCalculateRoute, args=[enclosure_id])
     # t1.start()
     try:
         t1 = threading.Thread(target=threadCalculateRoute, args=[enclosure_id])
         t1.start()
+        #threadCalculateRoute(enclosure_id)
     except Exception as ex:
-        print type(ex)
-        print ex.args
+       print type(ex)
+       print ex.args
 
     return HttpResponse('Se están calculando las rutas')
 
 
 def threadCalculateRoute(enclosure_id):
-    email = EmailMessage('Cálculo de rutas','Se están calculando rutas', to=['alvaro.gutierrez@mnopi.com'])
-    email.send()
+    try:
+        email = EmailMessage('Cálculo de rutas','Se están calculando rutas', to=['alvaro.gutierrez@mnopi.com'])
+        email.send()
+    except:
+        pass
     sql = "select * from route_route where origin_id in  " \
           "( SELECT id FROM map_editor_point where floor_id in " \
           "(select id from map_editor_floor where map_editor_floor.enclosure_id = %s))" % enclosure_id

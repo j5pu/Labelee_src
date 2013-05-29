@@ -1,9 +1,10 @@
 
 
 Cuidado con subir imágenes con espacios, por ejemplo "boceto mapa matadero.jpg"
+(bug reportado en asana)
+
 
 Dar de alta etiquetas con QRs:
 	- Pintamos las etiquetas
 	- Guardamos el plano
-	- Click con botón derecho sobre etiqueta
-	- Se verá
+	- Sobre la etiqueta que queramos asignarlo, le damos con el botón derecho

@@ -196,14 +196,28 @@ var Menu = {
     sending_img: false,
 
     init: function(){
-        this._setSelectors();
-        this.setQrList();
-        this._fillConnectionsList();
-//        this.toggleBorders();
-        this.toggleQRs();
-        this.setPointStats();
+        Menu.labels = new LabelResource().readGrouped();
+        Menu._setSelectors();
+        Menu.setQrList();
+        Menu.setPointStats();
         Events.menu.bind();
-        Menu.saved_labels = new LabelResource().readFromFloor(Floor.data.id);
+    },
+
+
+    showQR: function(ev)
+    {
+        ev.preventDefault();
+        var item = $(this);
+        var row = item.data('point-row');
+        var col = item.data('point-col');
+
+        var block = Floor.findBlock(row, col);
+        block.find('.qr_info').show();
+        block.find('.label_pos').show();
+
+        var offset_x = Floor.block_width * row;
+        var offset_y = Floor.block_height * col;
+        window.scrollTo(offset_x, offset_y);
     },
 
 
@@ -239,8 +253,16 @@ var Menu = {
         for(var i in Menu.qr_list)
         {
             var qr = Menu.qr_list[i];
-            list.append('<li>' + qr.code + '</li>');
+            list.append(
+                '<li>' +
+                    '<a href="#" ' +
+                    'data-point-row="' + qr.point.row + '"' +
+                    'data-point-col="' + qr.point.col + '">' + qr.code + '</a>' +
+                '</li>'
+            );
         }
+
+        Menu.toggleQRs();
     },
 
 
@@ -329,13 +351,25 @@ var Menu = {
 
     toggleQRs: function()
     {
-        if($e.qr.toggle.is(':checked'))
-        {
-            $e.floor.blocks.find('div').show();
-        }
-        else
-        {
-            $e.floor.blocks.find('div').hide();
-        }
+
+//        var not_qr_blocks = $e.floor.blocks.find(':not(.qr_info)').parent();
+//        var qr_infos = $e.floor.blocks.find('.qr_info');
+
+
+        if(Floor.loading)
+            return;
+
+        var checkbox = $e.qr.toggle;
+        var checkbox_is_checked = $e.qr.toggle.is(':checked');
+
+        checkbox.attr('checked', checkbox_is_checked);
+
+        if(checkbox_is_checked &&
+            !confirm('Se perderán los puntos que no se han guardado. ¿Desea continuar?'))
+            return;
+
+        Floor.show_only_qrs = checkbox_is_checked;
+
+        Floor.loadGrid();
     }
 };
