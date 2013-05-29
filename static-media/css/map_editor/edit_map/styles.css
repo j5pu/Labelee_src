@@ -4,6 +4,7 @@ body
 	margin: 50px auto;
 	text-align: center;
 	/*background: black*/
+    background-color: #8C8C87;
 }
 
 input[name="num_rows"]
@@ -87,7 +88,7 @@ input[name="num_rows"]
 .box-1
 {
 	display: inline-block;
-	background: darkgray;
+	background: #D9D4C7;
 	padding: 0.6em;
 	border-radius: 0.4em;
 	margin: 0.3em 0.4em;
@@ -95,7 +96,7 @@ input[name="num_rows"]
 
 .box-2
 {
-	background: antiquewhite;
+	background: #F2EFE4;
 	padding: 1em;
 	border: 1px solid grey;
 }
@@ -148,4 +149,9 @@ img#fake
     background: #ffffff;
     padding: 1em;
     z-index: 2;
+}
+
+h4{
+   color: #FEFAF1;
+   font-family: 'raleway';
 }

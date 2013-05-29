@@ -208,7 +208,7 @@ else:
             "NAME": "labelee_dev",
             "USER": "josko",
             "PASSWORD": "1234",
-            "HOST": "192.168.1.18",
+            "HOST": "192.168.1.47",
             "PORT": "3306",
         }
     }

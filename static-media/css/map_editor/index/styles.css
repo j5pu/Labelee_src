@@ -2,6 +2,7 @@
 body {
     margin: 4em auto;
     max-width: 35em;
+    background-color: #8C8C87;
 }
 h3 {
     display: inline-block;
@@ -16,7 +17,7 @@ input[type="text"] {
 }
 .file-input-name {
     background: none repeat scroll 0 0 whitesmoke;
-    border-radius: 7px 7px 7px 7px;
+    border-radius: 7px 7px 7px 7px; font-family: 'raleway';
     display: block;
     margin: 4px auto 8px !important;
     opacity: 0.7;
@@ -29,33 +30,32 @@ input[type="text"] {
     padding: 1em 0;
 }
 #enclosures {
-    border: 3px solid grey;
+    /*border: 3px solid #8C665E;*/
     padding: 21px 3px 5px;
 }
 .enclosure {
-    background: none repeat scroll 0 0 #C8DCEC;
-    border: 0 none;
+    background: none repeat scroll 0 0 #D9D4C7;
+    border-radius: 5px 5px 5px 5px;
     box-shadow: 1px -2px 5px;
     margin: 22px 15px;
     overflow: hidden;
     padding: 1.2em;
 }
 .floor {
-    background: none repeat scroll 0 0 #E2F6FF;
+    background: none repeat scroll 0 0 #F2EFE4;
     border: 1px none grey;
     display: block;
     margin-top: 0.1em;
     padding: 5px 16px;
     position: relative;
-    text-align: right;
+    text-align: center;
     width: 81;
 }
 .floors .action_box {
     display: inline-block;
-    position: static;
 }
 .floors {
-    background: none repeat scroll 0 0 #7FADBE;
+    background: none repeat scroll 0 0 #A3A59A;
     border-radius: 5px 5px 5px 5px;
     display: inline-block;
     margin: 0.8em auto;
@@ -67,6 +67,21 @@ input[type="text"] {
 .floor .floor_name {
     float: left;
 }
+#aristas{
+    color: black;
+}
+#aristas:hover, #aristas:focus{
+   color: #005580;
+}
+
+
+
+h2 {
+     color: #8C8C87;
+    font-family: 'raleway';
+    margin-bottom: 6%;
+}
+
 .action_box {
     position: absolute;
     right: 0;
@@ -127,4 +142,8 @@ iframe {
 
 .editable_element {
     position: relative;
+}
+
+.btn{
+    font-family: 'raleway';
 }

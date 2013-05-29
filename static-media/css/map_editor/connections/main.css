@@ -1,11 +1,12 @@
 #caja {
-    background: none repeat scroll 0 0 #7FADBE;
+    background: none repeat scroll 0 0 #D9D4C7;
     border-radius: 1em 1em 1em 1em;
     display: inline-block;
     height: 250px;
     width: auto;
     padding: 1em;
-    border: 3px solid #808080;
+    /*border: 3px solid grey;*/
+    box-shadow: 1px -2px 5px;
 }
 
 #caja1 {
@@ -26,12 +27,12 @@
 }
 
 body{
-    background-color: #C8DCEC;
+    background-color: #8C8C87;
 }
 
 #lista_connections{
 
-    background: none repeat scroll 0 0 #7FADBE;
+    background: none repeat scroll 0 0 #D9D4C7;
     border-radius: 1em 1em 1em 1em;
     display: inline-block;
     height: auto;
@@ -54,9 +55,13 @@ li{
      /*background-color: #7FADBE;*/
     text-align: left;
     width: auto;
+    color: black;
 
 }
 
+h4{
+    color: #D9D4C7;
+}
 
 #ul {
     list-style: none;
@@ -64,6 +69,7 @@ li{
     height: 250px;
     overflow-x: hidden;
     overflow-y: auto;
+    margin-left: -10px;
 
 }
 

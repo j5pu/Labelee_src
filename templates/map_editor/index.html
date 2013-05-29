@@ -3,6 +3,7 @@
 
 {% block css %}
     <link rel="stylesheet" href="{{ STATIC_URL }}css/map_editor/index/styles.css"/>
+    <link href='http://fonts.googleapis.com/css?family=Raleway:200' rel='stylesheet' type='text/css'>
 {% endblock css %}
 
 
@@ -43,17 +44,18 @@
             <!--<include src="{{ STATIC_URL }}partials/_enclosure.html"></include>-->
 
                <div class="editable_element">
+                   <h2>[[enclosure.name]]</h2>
                 <div ng-hide="editing">
-                    <h3>[[enclosure.name]]</h3>
+
 
                     <div class="action_box">
                         <i class="icon-edit" ng-click="update()"></i>
                         <i class="icon-remove" ng-click="del()"></i>
                     </div>
 
-                    <button ng-click="calculateRoutes()">Calcular rutas</button>
+                    <button class= 'btn' ng-click="calculateRoutes()">Calcular rutas</button>
 
-                    <a href="edit/connections/[[enclosure.id]]">Gestión de aristas</a>
+                    <a id='aristas' href="edit/connections/[[enclosure.id]]">Gestión de aristas</a>
 
                 </div>
                 <div ng-show="editing">
@@ -85,7 +87,8 @@
                       target="upload_target">
 
                     <div class="form_content" ng-hide="sending_img">
-                        <input type="file"
+                        <input class="btn"
+                                type="file"
                                name="img"
                                title="Elegir imágen..">
                         <input type="text"
@@ -111,9 +114,11 @@
                     <div class="editable_element">
                         <div ng-hide="editing">
                             <h3>
+
                                 <a href="[[urls.map_editor.edit]]/[[floor.id]]">
                                     [[floor.name]]
                                 </a>
+
                             </h3>
 
                             <div class="action_box">
