@@ -208,7 +208,7 @@ else:
             "NAME": "labelee_dev",
             "USER": "root",
             "PASSWORD": "",
-            "HOST": "",
+            "HOST": "127.0.0.1",
             "PORT": "3306",
             }
     }
@@ -225,5 +225,10 @@ else:
     #
 #     Estas aplicaciones sólo se usarán en desarrollo..
     INSTALLED_APPS += ('south', 'sandbox',)
-
+    
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'alvaro.gutierrez@mnopi.com'
+EMAIL_HOST_PASSWORD = '1aragon1'
+EMAIL_PORT = 587
 from utils.constants import *
