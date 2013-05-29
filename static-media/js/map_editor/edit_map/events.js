@@ -52,6 +52,11 @@ var Events = {
         _assign_qr_by_right_click: function()
         {
             // No vamos a asignar un QR a un bloque que no tenga etiqueta..
+
+            // Si la planta no tiene etiqueta no hay evento que asignar
+            if(!$e.floor.labeled_blocks)
+                return;
+
             $e.floor.labeled_blocks.on('contextmenu', function(e){
                 e.preventDefault();
                 Painter.assignQR();
