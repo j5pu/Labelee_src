@@ -32,6 +32,23 @@ var Events = {
         },
 
 
+        _showUpQRInfo: function()
+        {
+            // Pone encima de lo demás la info del QR al pasarle el ratón
+            if(!Floor.show_only_qrs)
+                return;
+
+            $e.floor.blocks.on('mouseover', function(){
+                Label.info_hovered = true;
+                Label.toggleHoverQRInfo($(this));
+            });
+            $e.floor.blocks.on('mouseleave', function(){
+                Label.info_hovered = false;
+                Label.toggleHoverQRInfo($(this));
+            });
+        },
+
+
         _assign_qr_by_right_click: function()
         {
             // No vamos a asignar un QR a un bloque que no tenga etiqueta..
@@ -51,10 +68,10 @@ var Events = {
             Mousetrap.bind('alt', function(e){
                 e.preventDefault();
                 Painter.hideLabelInfo();
-                $e.floor.blocks.on('mousemove', function(){
-                    $e.floor.blocks.off('mousemove');
-                    Painter.clear($(this));
-                });
+//                $e.floor.blocks.on('mousemove', function(){
+//                    $e.floor.blocks.off('mousemove');
+//                    Painter.clear($(this));
+//                });
                 $e.floor.blocks.on('mouseover', function(e){
                     e.preventDefault();
                     Painter.clear($(this));
@@ -131,6 +148,7 @@ var Events = {
             self._removeLabel();
             self._toggleBlockShadow();
             self._toggleLabelInfo();
+            self._showUpQRInfo();
         }
     },
 
