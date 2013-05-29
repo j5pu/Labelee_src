@@ -196,7 +196,7 @@ class ConnectionResource(ModelResource):
 class RouteResource(ModelResource):
     origin = fields.ToOneField('map_editor.api.resources.PointResource', 'origin', full=True)
     destiny = fields.ToOneField('map_editor.api.resources.PointResource', 'destiny', full=True)
-    steps = fields.ToManyField('map_editor.api.resources.FloorResource', 'steps', null=True)
+    steps = fields.ToManyField('map_editor.api.resources.StepResource', 'steps', null=True)
 
     class Meta:
         resource_name = 'route'
