@@ -192,3 +192,42 @@ class ConnectionResource(ModelResource):
     def determine_format(self, request):
         return 'application/json'
 
+
+class RouteResource(ModelResource):
+    origin = fields.ToOneField('map_editor.api.resources.PointResource', 'origin', full=True)
+    destiny = fields.ToOneField('map_editor.api.resources.PointResource', 'destiny', full=True)
+
+    class Meta:
+        resource_name = 'route'
+        queryset = Route.objects.all()
+        authorization = DjangoAuthorization()
+        # authentication = BasicAuthentication()
+        always_return_data = True
+        filtering = {
+            'id': ALL,
+            'origin': ALL_WITH_RELATIONS,
+            'destiny': ALL_WITH_RELATIONS
+            }
+
+    def determine_format(self, request):
+        return 'application/json'
+
+
+class StepResource(ModelResource):
+    route = fields.ToOneField('map_editor.api.resources.RouteResource', 'route')
+    floor = fields.ToOneField('map_editor.api.resources.FloorResource', 'floor')
+
+    class Meta:
+        resource_name = 'step'
+        queryset = Step.objects.all()
+        authorization = DjangoAuthorization()
+        # authentication = BasicAuthentication()
+        always_return_data = True
+        filtering = {
+            'id': ALL,
+            'origin': ALL_WITH_RELATIONS,
+            'destiny': ALL_WITH_RELATIONS
+        }
+
+    def determine_format(self, request):
+        return 'application/json'

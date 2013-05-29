@@ -435,6 +435,13 @@ function RouteResource()
     };
 }
 
+
+function StepResource()
+{
+    Resource.call(this, 'step');
+}
+
+
 FloorResource.prototype = new Resource;
 LabelResource.prototype = new Resource;
 LabelCategoryResource.prototype = new Resource;
@@ -442,4 +449,4 @@ PointResource.prototype = new Resource;
 EnclosureResource.prototype = new Resource;
 ConnectionResource.prototype = new Resource;
 RouteResource.prototype = new Resource;
-//RouteResource.prototype = new Resource;
+StepResource.prototype = new Resource;

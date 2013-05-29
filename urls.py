@@ -19,6 +19,8 @@ v1_api.register(LabelResource())
 v1_api.register(PointResource())
 v1_api.register(QRCodeResource())
 v1_api.register(ConnectionResource())
+v1_api.register(RouteResource())
+v1_api.register(StepResource())
 
 
 urlpatterns = patterns('',
