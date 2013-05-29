@@ -83,8 +83,8 @@ var Events = {
             });
             $e.floor.blocks.on('mouseup', function(){
                 $e.floor.blocks.off('mouseover');
-                Painter.painting_trace = true;
-                Events.bindGrid();
+                Painter.painting_trace = false;
+                Events.grid.bind();
             });
         },
 
@@ -127,7 +127,7 @@ var Events = {
             $('#grid *').off();
             self._assign_qr_by_right_click();
             self._paint_with_key_pressed();
-//            self._paint_with_mouse_pressed();
+            self._paint_with_mouse_pressed();
             self._removeLabel();
             self._toggleBlockShadow();
             self._toggleLabelInfo();
