@@ -92,6 +92,7 @@ def readOnlyPois(request, floor_id):
             'name': label.name,
         }
         json_poi = {
+            'id': poi.id,
             'row': poi.row,
             'col': poi.col,
             'description': poi.description,

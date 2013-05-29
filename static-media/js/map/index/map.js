@@ -65,14 +65,14 @@ var baseLayers={},
 var mobileOpts = {
     text: 'Buscar',
     autoType: true,
-    autoCollapse: false,
-    autoCollapseTime: 6000,
+    autoCollapse: true,
+    autoCollapseTime: 4000,
     animateLocation: true,
     tipAutoSubmit: true,  		//auto map panTo when click on tooltip
     autoResize: true,			//autoresize on input change
-    markerLocation:true,
+    markerLocation:false,
     minLength: 1,				//minimal text length for autocomplete
-    textErr: 'No hay ningún sitio',
+    textErr: 'Ningún resultado',
     layer: totalPois,
     //title: title,
     callTip: customTip,
@@ -155,11 +155,14 @@ function loadPOIs()
                 floors[fl].pois[j].marker.options.icon.options.color=colorIcon;
 
                 floors[fl].pois[j].marker.options.icon.options.icon='star';
-                //
-                        //cambiar {icon: por categoría, sacar Cat y Color de pois[j].label}
-                floors[fl].pois[j].marker.bindPopup(nameIcon +": " + category);
+
+                floors[fl].pois[j].marker.bindPopup(nameIcon +": " + category)
+                    .on('click', function () {
+                        drawRoute(origin.point.id, floors[fl].pois[j].id);
+                        this.bounce(1000, -10);
+                    });
                 floors[fl].layer.addLayer(floors[fl].pois[j].marker);
-                //totalPois.addLayer(floors[fl].pois[j].marker);
+                totalPois.addLayer(floors[fl].pois[j].marker);
 
 
         }
@@ -168,17 +171,22 @@ function loadPOIs()
 
 
     floors[1].layer.eachLayer(function (layer) {
+        layer.setIcon(redMarker);
+//        var destinyPoint= [layer._latlng.lat, layer._latlng.lng];
 //        layer.on({
 //           click: function(e){
-                layer.setIcon(redMarker);
-//                alert('Lat: '+layer._latlng.lat+', Lng: '+layer._latlng.lng);
-//            }
+//               drawRoute(origin.point.id, destinyPoint);
+////                alert('Lat: '+layer._latlng.lat+', Lng: '+layer._latlng.lng);
+//           }
 //        });
     });
 
-
-    for(i in totalPois._layers) {
-        var title = totalPois._layers[i].title;	//value searched
+    //var title;
+console.log(totalPois._layers);
+    for(var i in totalPois._layers) {
+        console.log(i);
+        totalPois._layers[i].title = totalPois._layers[i].options.title;
+        	//value searched
         //    loc = data[i].loc,		//position found
         //    marker = new L.Marker(new L.latLng(loc), {title: title} );//se property searched
         //marker.bindPopup('title: '+ title );
@@ -313,21 +321,24 @@ map.on('baselayerchange', function (e) {
             }),
 */
 
+
+
+
 // Flecha con animación para indicar el sentido de la ruta
 var path=[];
 var arrow = L.polyline(path,{color: 'orange'});
 var arrowHead = L.polylineDecorator(arrow);
 var arrowOffset = 0;
-var anim = window.setInterval(function() {
-    arrowHead.setPatterns([
-        {offset: arrowOffset+'%', repeat: 0, symbol: new L.Symbol.ArrowHead({pixelSize: 13, polygon: false, pathOptions: {stroke: true, color: 'orange'}})}
-    ])
-    if(++arrowOffset > 100)
-        arrowOffset = 0;
-}, 100);
+//var anim = window.setInterval(function() {
+//    arrowHead.setPatterns([
+//        {offset: arrowOffset+'%', repeat: 0, symbol: new L.Symbol.ArrowHead({pixelSize: 13, polygon: false, pathOptions: {stroke: true, color: 'orange'}})}
+//    ])
+//    if(++arrowOffset > 100)
+//        arrowOffset = 0;
+//}, 100);
 
-var route=new RouteResource().getRoute(originPoint, destinyPoint);
 
+/*
             destinyMarker= L.marker(destinyPoint, { bounceOnAdd: false,bounceOnAddHeight: 4,  icon: redMarker})
                 .addTo(map)
                 //.bindPopup("Cineteca")
@@ -336,11 +347,15 @@ var route=new RouteResource().getRoute(originPoint, destinyPoint);
                     //this.openPopup();
                     this.bounce(1000, -10);
                 });
+*/
 
 //Creamos la ruta uniendo los puntos del array "path"
 
-function drawRoute(org, dst, route) {
-            path.push(org);
+function drawRoute(org, dst) {
+    var route=new RouteResource().getRoute(org, dst);
+    console.log (dst[0] +":"+ dst[1]);
+
+    path.push(org);
 
             for (var i in route.steps ) {
                 path.push([(rs-route.steps[i].row)*sY-sY, route.steps[i].col*sX+sX]);

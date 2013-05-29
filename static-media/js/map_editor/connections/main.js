@@ -66,8 +66,8 @@ var Connections = {
             //create new li element
             var elementoli = document.createElement("li");
             elementoli.setAttribute("class", "li");
-            elementoli.innerHTML = '<button class="eliminar_connection" ' +
-                'data-connection-id="' + connection.id + '">X</button>' + text;
+            elementoli.innerHTML = '<button class="btn eliminar_connection" ' +
+                'data-connection-id="' + connection.id + '"><i class="icon-remove"></i></button>' + text;
 
             Connections.$e.lista_connections[0].appendChild(elementoli);
         }

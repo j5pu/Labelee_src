@@ -4,6 +4,7 @@ var Painter = {
     point: null,
     label_category: null,
     loading_icon: false,
+    erase_mode: false,
 
 
     //
@@ -84,8 +85,12 @@ var Painter = {
         //
         // Pinta etiqueta sobre un bloque en el grid para el plano
 
-        if(!Painter.label)
+        if(!Painter.label || Painter.erase_mode)
+        {
+            if(Painter.erase_mode)
+                Painter.clear(block);
             return;
+        }
 
         // Si se está cargando el plano se pinta marcándola como cargada desde la BD
         if(Floor.loading)
@@ -120,6 +125,10 @@ var Painter = {
             block.append(
                 '<div class="connector_descr">' + connector_descr + '</div>'
             );
+            block.find('.connector_descr').css({
+                'bottom': '10px',
+                'left': Floor.block_width * 2 + 'px'
+            });
         }
 
         // Ponemos el bloque de un color según la categoría de la etiqueta..
@@ -172,10 +181,11 @@ var Painter = {
 
             var qr_info = block.find('.qr_info');
             var label_pos = block.find('.label_pos');
+            qr_info.css({'top': Floor.block_height + 'px'});
+            label_pos.css({'bottom': Floor.block_height + 'px'});
             if(Floor.show_only_qrs)
             {
                 block.css({'background': 'black'})
-                qr_info.css({'opacity': '0.8'});
                 qr_info.show();
                 label_pos.show();
             }

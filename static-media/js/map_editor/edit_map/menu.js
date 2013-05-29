@@ -96,6 +96,8 @@ var Label = {
 
     // Para indicar que por defecto no se seleccione el muro al seleccionar la categoría 'Bloqueantes'
     skip_wall_by_default: false,
+    // Para indicar si su información se muestra por encima de las demás
+    info_hovered: false,
 
     show_form_new: function(){
         $e.label.form.root_node.show(400);
@@ -183,6 +185,27 @@ var Label = {
     {
         return label.name.toUpperCase() === 'MURO'
             || label.name.toUpperCase() === 'WALL';
+    },
+
+
+    toggleHoverQRInfo: function(block)
+    {
+        var label_pos = block.find('.label_pos');
+        var qr_info = block.find('.qr_info');
+
+        var i1 = label_pos.css('z-index');
+        var i2 = qr_info.css('z-index');
+
+        if(Label.info_hovered)
+        {
+            label_pos.css({'z-index': i1+1});
+            qr_info.css({'z-index': i2+1});
+        }
+        else
+        {
+            label_pos.css({'z-index': i1-1});
+            qr_info.css({'z-index': i2-1});
+        }
     }
 };
 
@@ -346,6 +369,12 @@ var Menu = {
                 'width': Floor.block_width_initial + 'px'
             });
         }
+    },
+
+
+    toggleEraseMode: function()
+    {
+        Painter.erase_mode = $e.floor.toggle_erase_mode.is(':checked');
     },
 
 

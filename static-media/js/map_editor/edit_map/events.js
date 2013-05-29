@@ -66,7 +66,7 @@ var Events = {
         },
 
 
-        _removeLabel: function()
+        _remove_with_key_pressed: function()
         {
             //
             // Borrar etiquetas pulsando ALT
@@ -155,7 +155,7 @@ var Events = {
             self._assign_qr_by_right_click();
             self._paint_with_key_pressed();
             self._paint_with_mouse_pressed();
-            self._removeLabel();
+//            self._remove_with_key_pressed();
             self._toggleBlockShadow();
             self._toggleLabelInfo();
             self._showUpQRInfo();
@@ -202,6 +202,12 @@ var Events = {
         },
 
 
+        _toggle_erase_mode: function()
+        {
+            $e.floor.toggle_erase_mode.on('change', Menu.toggleEraseMode)
+        },
+
+
         _selectLabelCategory: function()
         {
             $e.category.selector.on('change', Menu.setLabelSelector);
@@ -245,6 +251,7 @@ var Events = {
             self._toggleQRs();
             self._updateFloor();
             self._showQR();
+            self._toggle_erase_mode();
         }
     },
 

@@ -3,6 +3,8 @@
 {% block css %}
     <link rel="stylesheet" href="{{ STATIC_URL }}css/map_editor/edit_map/styles.css"/>
     <link rel="stylesheet" media = "print" href="{{ STATIC_URL }}css/map_editor/edit_map/print.css"/>
+    <link href='http://fonts.googleapis.com/css?family=Raleway:200' rel='stylesheet' type='text/css'>
+
 {% endblock css %}
 
 {# prueba cambio#}
@@ -44,7 +46,9 @@
 
         <a href="{% url 'map_editor.views.index' %}">Volver al menú</a>
 
-        <input type="checkbox" id="toggle_border" checked>Ver rejilla
+        <input type="checkbox" id="toggle_border" checked>Ver rejilla<br>
+
+        <input type="checkbox" id="toggle_erase_mode">Modo borrar<br>
 
         Filas:
             <input type="text"
