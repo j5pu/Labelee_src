@@ -14,14 +14,20 @@ from route.pathfinding.Dijkstra import *
 
 
 def calculate_routes(request, enclosure_id):
+
+
+
+
+
     # t1 = threading.Thread(target=threadCalculateRoute, args=[enclosure_id])
     # t1.start()
     try:
         t1 = threading.Thread(target=threadCalculateRoute, args=[enclosure_id])
         t1.start()
+        #threadCalculateRoute(enclosure_id)
     except Exception as ex:
-        print type(ex)
-        print ex.args
+       print type(ex)
+       print ex.args
 
     return HttpResponse('Se están calculando las rutas')
 
