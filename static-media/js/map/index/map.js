@@ -1,5 +1,5 @@
 //Configuración de iconos
-var	greenMarker = L.AwesomeMarkers.icon({
+var	OriginIcon = L.AwesomeMarkers.icon({
         icon: 'home',
         color: 'green'
     }),
@@ -56,14 +56,14 @@ for (var i in floors){
 //Variables globales
 
 var baseLayers={},
-    overlays = {},
+    //overlays = {},
     floor_index = 0,
     totalPois=new L.LayerGroup();
 
 
 //Configuración de la lupa
 var mobileOpts = {
-    text: 'Destino',
+    text: 'Buscar',
     autoType: true,
     autoCollapse: false,
     autoCollapseTime: 6000,
@@ -148,21 +148,22 @@ function loadPOIs()
                 var loc = [(floors[fl].pois[j].row)*floors[fl].scaleY+(floors[fl].scaleY/2),
                             floors[fl].pois[j].col*floors[fl].scaleX+(floors[fl].scaleY/2)],	//posición de los marcadores
                     colorIcon = floors[fl].pois[j].label.category.color,
-                    catIcon = floors[fl].pois[j].label.category.name;
-                floors[fl].pois[j].marker = new L.Marker(new L.latLng(loc), {icon:blueMarker, title:catIcon});
+                    nameIcon =floors[fl].pois[j].label.name,
+                    category = floors[fl].pois[j].label.category.name;
+                floors[fl].pois[j].marker = new L.Marker(new L.latLng(loc), {icon:blueMarker, title:nameIcon});
                 //floors[fl].pois[j].marker.options.icon.options.className='awesome-marker';
                 floors[fl].pois[j].marker.options.icon.options.color=colorIcon;
 
                 floors[fl].pois[j].marker.options.icon.options.icon='star';
                 //
                         //cambiar {icon: por categoría, sacar Cat y Color de pois[j].label}
-                floors[fl].pois[j].marker.bindPopup(floors[fl].pois[j].description +": " + catIcon);
+                floors[fl].pois[j].marker.bindPopup(nameIcon +": " + category);
                 floors[fl].layer.addLayer(floors[fl].pois[j].marker);
                 //totalPois.addLayer(floors[fl].pois[j].marker);
 
 
         }
-        overlays["POIs de "+ floors[fl].name]=floors[fl].layer;
+        //overlays["POIs de "+ floors[fl].name]=floors[fl].layer;
     }
 
 
@@ -226,7 +227,7 @@ function drawOrigin(origin)
             origin.point.col*originFloor.scaleX];
         originMarker = new L.marker(originPoint, { bounceOnAdd: false,
             //bounceOnAddHeight: 20,
-            icon: greenMarker}).bindPopup("Estás justo aquí: "+ origin.point.description+ ","+"</br>"+"en " + originFloor.name +" de " + origin.enclosure.name);
+            icon: OriginIcon}).bindPopup(origin.point.description+ "-"+originFloor.name +"-" + origin.enclosure.name);
     originMarker.addTo(map).openPopup();
 
    /*for (i in floors[0].layer._layers){
@@ -236,10 +237,12 @@ function drawOrigin(origin)
    */
 
 
-    layersControl.addBaseLayer(originFloor.photo, origin.enclosure.name+" - "+originFloor.name);
-    layersControl.addOverlay(originFloor.layer, "Destinos - "+ originFloor.name);
+    //layersControl.addBaseLayer(originFloor.photo, origin.enclosure.name+" - "+originFloor.name);
+    layersControl.addBaseLayer(originFloor.photo, "<span>TÚ</span>");
+
+    //layersControl.addOverlay(originFloor.layer, "Destinos - "+ originFloor.name);
     //layersControl.addOverlay(originMarker,"<img src='/static/css/map/index/images/logo.png' /> <span class='my-layer-item'>Estás en </span>" + originFloor.name+","+"<br>"+"localizado vía QR en "+origin.point.description);
-    layersControl.addOverlay(originMarker,"Estás aquí");
+    //layersControl.addOverlay(originMarker,"Estás aquí");
 
     layersControl.addTo(map);
 
@@ -254,14 +257,12 @@ function drawOrigin(origin)
 
 
 map.on('baselayerchange', function (e) {
-    console.log(e);
     if(map.hasLayer(originFloor.layer)){
         map.removeLayer(originFloor.layer);
         map.removeLayer(originFloor.photo);
-        layersControl.removeLayer(originFloor.layer, "POIs de "+ originFloor.name);
+        //layersControl.removeLayer(originFloor.layer, "POIs de "+ originFloor.name);
         layersControl.removeLayer(originFloor.photo, originFloor.name);
     }
-    //$('input[type=checkbox]').attr('checked', false);
     var floor_x;
     for (var i in floors){
 
@@ -269,14 +270,92 @@ map.on('baselayerchange', function (e) {
             floor_x = floors[i];
 
         } else {
-            layersControl.removeLayer(floors[i].layer, "POIs de " + floors[i].name);
+            //layersControl.removeLayer(floors[i].layer, "POIs de " + floors[i].name);
             map.removeLayer(floors[i].layer);
         }
 
     }
-    map.setView(floor_x.bounds.getCenter(), 0);
+    //map.setView(floor_x.bounds.getCenter(), 0);
+    map.setView(originPoint, 0);
     map.addLayer(floor_x.layer);
-    layersControl.addOverlay(floor_x.layer, "POIs de " + floor_x.name);
+    //layersControl.addOverlay(floor_x.layer, "POIs de " + floor_x.name);
     map.setMaxBounds(floor_x.bounds);
 });
+
+
+/*function getRoute(route, rs, sX, sY, oX, oY) {
+    $.getJSON (route,function(data){
+        //parquing
+
+
+        var originPoint = [(rs-data.origin.row)*sY-sY, data.origin.col*sX+sX],
+
+            greenMarker = L.AwesomeMarkers.icon({
+                icon: 'home',
+                color: 'green'
+            }),
+
+            originMarker = L.marker(originPoint, { bounceOnAdd: true,
+                //bounceOnAddHeight: 20,
+                icon: greenMarker})
+                .addTo(map)
+                .bindPopup("<b>¡Estás justo aquí!</b>");
+        //.openPopup();
+
+
+        //map.setView(originPoint, 1);
+
+        var destinyPoint = [(rs-data.destiny.row)*sY-sY, data.destiny.col*sX+sX],
+
+            redMarker = L.AwesomeMarkers.icon({
+                icon: 'coffee',
+                color: 'red'
+            }),
+*/
+
+// Flecha con animación para indicar el sentido de la ruta
+var path=[];
+var arrow = L.polyline(path,{color: 'orange'});
+var arrowHead = L.polylineDecorator(arrow);
+var arrowOffset = 0;
+var anim = window.setInterval(function() {
+    arrowHead.setPatterns([
+        {offset: arrowOffset+'%', repeat: 0, symbol: new L.Symbol.ArrowHead({pixelSize: 13, polygon: false, pathOptions: {stroke: true, color: 'orange'}})}
+    ])
+    if(++arrowOffset > 100)
+        arrowOffset = 0;
+}, 100);
+
+var route=new RouteResource().getRoute(originPoint, destinyPoint);
+
+            destinyMarker= L.marker(destinyPoint, { bounceOnAdd: false,bounceOnAddHeight: 4,  icon: redMarker})
+                .addTo(map)
+                //.bindPopup("Cineteca")
+                .on('click', function () {
+                    drawRoute(originPoint, destinyPoint, route);
+                    //this.openPopup();
+                    this.bounce(1000, -10);
+                });
+
+//Creamos la ruta uniendo los puntos del array "path"
+
+function drawRoute(org, dst, route) {
+            path.push(org);
+
+            for (var i in route.steps ) {
+                path.push([(rs-route.steps[i].row)*sY-sY, route.steps[i].col*sX+sX]);
+            }
+            path.push(dst);
+
+            //Quizá haya que cambiar los segundos sY/sX de los puntos por oY/oX
+
+            arrow.addTo(map);
+            arrowHead.addTo(map);
+
+            // Aplicamos zoom y centramos el mapa con respecto a la ruta
+
+            map.fitBounds(arrow.getBounds());
+            //map.setView(centro, zoom);
+
+        }
 

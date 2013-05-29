@@ -19,6 +19,8 @@ v1_api.register(LabelResource())
 v1_api.register(PointResource())
 v1_api.register(QRCodeResource())
 v1_api.register(ConnectionResource())
+v1_api.register(RouteResource())
+v1_api.register(StepResource())
 
 
 urlpatterns = patterns('',
@@ -38,8 +40,9 @@ urlpatterns = patterns('',
     # Uncomment the next line to enable the admin:
     url(r'^admin/', include(admin.site.urls)),
 
-    	# Calculo de rutas
+    # Calculo de rutas
 	url(r'^calculate-routes/(?P<enclosure_id>\d+)', 'route.calculateRoutes.calculate_routes'),
+	url(r'^get-route/(?P<origin>\d+)_(?P<destiny>\d+)', 'route.services.get_route'),
 
     # Para poder crear un superusuario en appfog
     # Allow for a superuser to be created if one does not exist.

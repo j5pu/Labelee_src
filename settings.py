@@ -212,7 +212,7 @@ else:
             "PORT": "3306",
             }
     }
-    # DATABASES = {
+    #DATABASES = {
     #     "default": {
     #         "ENGINE": "django.db.backends.sqlite3",
     #         "NAME": "dev.db",
@@ -225,10 +225,5 @@ else:
     #
 #     Estas aplicaciones sólo se usarán en desarrollo..
     INSTALLED_APPS += ('south', 'sandbox',)
-
-
-SERIALIZATION_MODULES = {
-    'json': 'wadofstuff.django.serializers.json'
-}
 
 from utils.constants import *

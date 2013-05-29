@@ -407,10 +407,46 @@ function ConnectionResource()
     };
 }
 
+
+function RouteResource()
+{
+    Resource.call(this, 'route');
+
+    this.getRoute = function(origin, destiny)
+    {
+        var elements;
+        $.ajax({
+            url : '/get-route/' + origin + '_' + destiny,
+            type : 'get',
+            headers : {
+                'Content-Type' : 'application/json'
+            },
+            dataType : 'json', // esto indica que la respuesta vendrá en formato json
+            async : false,
+            success : function(response) {
+                elements = response;
+            },
+            error : function(response) {
+                var j = response;
+            }
+        });
+
+        return elements;
+    };
+}
+
+
+function StepResource()
+{
+    Resource.call(this, 'step');
+}
+
+
 FloorResource.prototype = new Resource;
 LabelResource.prototype = new Resource;
 LabelCategoryResource.prototype = new Resource;
 PointResource.prototype = new Resource;
 EnclosureResource.prototype = new Resource;
 ConnectionResource.prototype = new Resource;
-//RouteResource.prototype = new Resource;
+RouteResource.prototype = new Resource;
+StepResource.prototype = new Resource;
