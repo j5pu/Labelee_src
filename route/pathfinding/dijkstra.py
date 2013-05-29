@@ -195,7 +195,8 @@ class Dijkstra():
                         print type(ex)
                         print ex.args
                     else:
-                        result.append([origin, destination, path])
+                        if path is not None:
+                            result.append([origin, destination, path])
 
         return result
 
