@@ -416,7 +416,7 @@ function RouteResource()
     {
         var elements;
         $.ajax({
-            url : '/get-route/' + origin + '_' + destiny,
+            url : this.api1_url + '?origin__id=' + origin + '&destiny__id=' + destiny,
             type : 'get',
             headers : {
                 'Content-Type' : 'application/json'
@@ -424,7 +424,7 @@ function RouteResource()
             dataType : 'json', // esto indica que la respuesta vendrá en formato json
             async : false,
             success : function(response) {
-                elements = response;
+                elements = response.objects;
             },
             error : function(response) {
                 var j = response;

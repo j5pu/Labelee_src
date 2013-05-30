@@ -15,52 +15,6 @@ var	OriginIcon = L.AwesomeMarkers.icon({
     });
 
 
-
-
-var originFloor;
-//Configuración del mapa
-
-
-//Carga de datos globales
-var origin = {
-    point:new PointResource().read(poi_id),
-    floor:new FloorResource().read(floor_id),
-    enclosure:new EnclosureResource().read(enclosure_id)
-}
-
-
-var    mapH = $(document).height();
-
-///////////////////////////////////////////////
-//pinta en el mapa la posición inicial Origin
-
-//Cálculos restantes
-//Plantas del enclosure asociado al QR
-var floorsUris=[];
-for (f=0; f<origin.enclosure.floors.length; f++){
-    floorsUris.push(origin.enclosure.floors[f]);
-}
-
-var floors = [],
-    uris=origin.enclosure.floors;
-for (var i in uris) {
-    floors.push(new FloorResource().readFromUri(uris[i]));
-}
-
-//POIs de cada floor, separados para pintarlos por capas
-for (var i in floors){
-    floors[i].pois = new PointResource().readOnlyPois(floors[i].id);
-}
-
-
-//Variables globales
-
-var baseLayers={},
-    //overlays = {},
-    floor_index = 0,
-    totalPois=new L.LayerGroup();
-
-
 //Configuración de la lupa
 var mobileOpts = {
     text: 'Buscar',
@@ -97,6 +51,50 @@ function customTip(text)
     subtip.style.backgroundColor = 'red';
     return tip;
 }
+
+
+
+
+
+
+
+//Carga de datos globales
+var origin = {
+    point:new PointResource().read(poi_id),
+    floor:new FloorResource().read(floor_id),
+    enclosure:new EnclosureResource().read(enclosure_id)
+}
+var originFloor;
+var originPoint;
+
+
+//Altura de la pantalla
+var  mapH = $(document).height();
+
+//Plantas del enclosure asociado al QR
+var floorsUris=[];
+for (f=0; f<origin.enclosure.floors.length; f++){
+    floorsUris.push(origin.enclosure.floors[f]);
+}
+
+var floors = [],
+    uris=origin.enclosure.floors;
+for (var i in uris) {
+    floors.push(new FloorResource().readFromUri(uris[i]));
+}
+
+//POIs de cada floor, separados para pintarlos por capas
+for (var i in floors){
+    floors[i].pois = new PointResource().readOnlyPois(floors[i].id);
+}
+
+
+//Variables globales
+
+var baseLayers={},
+    //overlays = {},
+    floor_index = 0,
+    totalPois=new L.LayerGroup();
 
 
 //Carga de planos
@@ -136,6 +134,7 @@ function loopFloors ()
 
 
 //Carga de POIs
+var id;
 
 function loadPOIs()
 {
@@ -145,21 +144,29 @@ function loadPOIs()
 
 
         for (j=0; j<floors[fl].pois.length; j++) {
-                var loc = [(floors[fl].pois[j].row)*floors[fl].scaleY+(floors[fl].scaleY/2),
-                            floors[fl].pois[j].col*floors[fl].scaleX+(floors[fl].scaleY/2)],	//posición de los marcadores
-                    colorIcon = floors[fl].pois[j].label.category.color,
+                var colorIcon = floors[fl].pois[j].label.category.color,
                     nameIcon =floors[fl].pois[j].label.name,
+                    id= floors[fl].pois[j].id,
+                    sX= floors[fl].scaleX,
+                    sY= floors[fl].scaleY,
+                    loc = [(floors[fl].pois[j].row)*sY+(sY/2),
+                        floors[fl].pois[j].col*sX+(sY/2)],	//posición de los marcadores
                     category = floors[fl].pois[j].label.category.name;
                 floors[fl].pois[j].marker = new L.Marker(new L.latLng(loc), {icon:blueMarker, title:nameIcon});
                 //floors[fl].pois[j].marker.options.icon.options.className='awesome-marker';
                 floors[fl].pois[j].marker.options.icon.options.color=colorIcon;
-
                 floors[fl].pois[j].marker.options.icon.options.icon='star';
+                floors[fl].pois[j].marker.poid=id;
+                floors[fl].pois[j].marker.psX=sX;
+                floors[fl].pois[j].marker.psY=sY;
+                floors[fl].pois[j].marker.loc=loc;
+console.log(id);
 
                 floors[fl].pois[j].marker.bindPopup(nameIcon +": " + category)
                     .on('click', function () {
-                        drawRoute(origin.point.id, floors[fl].pois[j].id);
-                        this.bounce(1000, -10);
+                        console.log(this.poid);
+                        drawRoute(origin.point.id, this.poid, this.psX, this.psY);
+                        //this.bounce(1000, -10);
                     });
                 floors[fl].layer.addLayer(floors[fl].pois[j].marker);
                 totalPois.addLayer(floors[fl].pois[j].marker);
@@ -182,9 +189,9 @@ function loadPOIs()
     });
 
     //var title;
-console.log(totalPois._layers);
+//  console.log(totalPois._layers);
     for(var i in totalPois._layers) {
-        console.log(i);
+//        console.log(i);
         totalPois._layers[i].title = totalPois._layers[i].options.title;
         	//value searched
         //    loc = data[i].loc,		//position found
@@ -192,7 +199,23 @@ console.log(totalPois._layers);
         //marker.bindPopup('title: '+ title );
         //markersLayer.addLayer(marker);
     }
-        layersControl= new L.control.layers(baseLayers, null, {collapsed:false});
+
+    for(i in floors) {
+        if (origin.floor.id == floors[i].id) {
+            originFloor = floors[i];
+            originPoint = [(origin.point.row) * originFloor.scaleY,
+                origin.point.col * originFloor.scaleX];
+            originMarker = new L.marker(originPoint, { bounceOnAdd: false,
+                //bounceOnAddHeight: 20,
+                icon: OriginIcon})
+                .bindPopup(origin.point.description + "-" + originFloor.name + "-" + origin.enclosure.name);
+            originMarker.addTo(floors[i].layer).openPopup();
+            break;
+        }
+    }
+
+  layersControl= new L.control.layers(baseLayers, null, {collapsed:false});
+//    layersControl= new L.control.layers(null, null, {collapsed:false});
 
 }
 
@@ -203,11 +226,12 @@ var map = L.map('map', {
     //layer: originFloor.layer
 });
 
-var originPoint;
+
 function drawOrigin(origin)
+
 {
     for(i in floors){
-        layersControl.removeLayer(floors[i].layer);
+        //layersControl.removeLayer(floors[i].layer);
         layersControl.removeLayer(floors[i].photo);
     }
 
@@ -229,20 +253,21 @@ function drawOrigin(origin)
     map.addControl(new L.Control.Zoom());
 
 
-    map.addLayer(originFloor.photo);
-    map.addLayer(originFloor.layer);
     originPoint = [(origin.point.row)*originFloor.scaleY,
             origin.point.col*originFloor.scaleX];
         originMarker = new L.marker(originPoint, { bounceOnAdd: false,
             //bounceOnAddHeight: 20,
             icon: OriginIcon}).bindPopup(origin.point.description+ "-"+originFloor.name +"-" + origin.enclosure.name);
-    originMarker.addTo(map).openPopup();
+    originMarker.addTo(originFloor.layer).openPopup();
 
-   /*for (i in floors[0].layer._layers){
-        floors[0].layer._layers[i].options.icon.options.color ="red";
-        floors[0].layer._layers[i].options.icon.options.icon ="coffee";
-    }
-   */
+    map.addLayer(originFloor.photo);
+    map.addLayer(originFloor.layer);
+
+    /*for (i in floors[0].layer._layers){
+         floors[0].layer._layers[i].options.icon.options.color ="red";
+         floors[0].layer._layers[i].options.icon.options.icon ="coffee";
+     }
+    */
 
 
     //layersControl.addBaseLayer(originFloor.photo, origin.enclosure.name+" - "+originFloor.name);
@@ -326,9 +351,9 @@ map.on('baselayerchange', function (e) {
 
 // Flecha con animación para indicar el sentido de la ruta
 var path=[];
-var arrow = L.polyline(path,{color: 'orange'});
-var arrowHead = L.polylineDecorator(arrow);
-var arrowOffset = 0;
+//var arrow = L.polyline(path,{color: 'orange'});
+//var arrowHead = L.polylineDecorator(arrow);
+//var arrowOffset = 0;
 //var anim = window.setInterval(function() {
 //    arrowHead.setPatterns([
 //        {offset: arrowOffset+'%', repeat: 0, symbol: new L.Symbol.ArrowHead({pixelSize: 13, polygon: false, pathOptions: {stroke: true, color: 'orange'}})}
@@ -350,24 +375,37 @@ var arrowOffset = 0;
 */
 
 //Creamos la ruta uniendo los puntos del array "path"
+var route = {};
+function drawRoute(org, dst, sX, sY) {
+    route = new RouteResource().getRoute(org, dst);
 
-function drawRoute(org, dst) {
-    var route=new RouteResource().getRoute(org, dst);
-    console.log (dst[0] +":"+ dst[1]);
+//REHACER            path.push([(route.origin.row)*sY+sY/2, route.origin.col*sX+sX/2]);
 
-    path.push(org);
+//REHACER            if (route.origin.floor===route.destiny.floor){
+                for (var i in route ) {
+                    path.push([(route[i].fields.row)*sY+sY/2, (route[i].fields.column)*sX+sX/2]);
+                }
+//REHACER                path.push([(route.destiny.row)*sY+sY/2, route.destiny.col*sX+sX/2]);
+//REHACER            }else{
 
-            for (var i in route.steps ) {
-                path.push([(rs-route.steps[i].row)*sY-sY, route.steps[i].col*sX+sX]);
-            }
-            path.push(dst);
+//REHACER            }
+    console.log(path);
 
-            //Quizá haya que cambiar los segundos sY/sX de los puntos por oY/oX
+    var arrow = L.polyline(path,{color: 'orange'});
+    var arrowHead = L.polylineDecorator(arrow);
+    var arrowOffset = 0;
+    var anim = window.setInterval(function() {
+        arrowHead.setPatterns([
+            {offset: arrowOffset+'%', repeat: 0, symbol: new L.Symbol.ArrowHead({pixelSize: 13, polygon: false, pathOptions: {stroke: true, color: 'orange'}})}
+        ])
+        if(++arrowOffset > 100)
+            arrowOffset = 0;
+    }, 100);
 
-            arrow.addTo(map);
-            arrowHead.addTo(map);
+    arrow.addTo(map);
+    arrowHead.addTo(map);
 
-            // Aplicamos zoom y centramos el mapa con respecto a la ruta
+    // Aplicamos zoom y centramos el mapa con respecto a la ruta
 
             map.fitBounds(arrow.getBounds());
             //map.setView(centro, zoom);
