@@ -150,8 +150,8 @@ function loadPOIs()
                     id= floors[fl].pois[j].id,
                     sX= floors[fl].scaleX,
                     sY= floors[fl].scaleY,
-                    loc = [(floors[fl].pois[j].row)*sY+(sY/2),
-                        floors[fl].pois[j].col*sX+(sY/2)],
+                    loc = [(floors[fl].pois[j].row)*sY+(sY),
+                        floors[fl].pois[j].col*sX+(sY)],
                     category = floors[fl].pois[j].label.category.name;
 
                 floors[fl].pois[j].marker = new L.Marker(new L.latLng(loc), {icon:blueMarker, title:nameIcon});
@@ -284,13 +284,13 @@ function drawRoute(org, dst, sX, sY) {
     route = new RouteResource().getRoute(org, dst);
     if(route){
 
-           path.push([(route.origin.row)*sY+sY/2, route.origin.col*sX+sX/2]);
+           path.push([(route.origin.row)*sY+sY, route.origin.col*sX+sX]);
 
             if (route.origin.floor===route.destiny.floor){
                 for (var i in route.steps ) {
-                    path.push([(route.steps[i].row)*sY+sY/2, (route.steps[i].column)*sX+sX/2]);
+                    path.push([(route.steps[i].row)*sY+sY, (route.steps[i].column)*sX+sX]);
                 }
-            path.push([(route.destiny.row)*sY+sY/2, route.destiny.col*sX+sX/2]);
+            path.push([(route.destiny.row)*sY+sY, route.destiny.col*sX+sX]);
             }else{
 
             }

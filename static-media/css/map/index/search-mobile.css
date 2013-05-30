@@ -164,6 +164,7 @@ h3,h4 {
 
 /* ATTRIBUTION*/
 .leaflet-control.leaflet-control-attribution {
+    display:none;
 	border:none;
 	padding:0 4px 2px 4px;
 	margin:0 -4px -4px 0;
