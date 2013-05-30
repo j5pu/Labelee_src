@@ -99,8 +99,8 @@ var Events = {
             $e.floor.blocks.on('mousedown', function(e){
                 e.preventDefault();
                 Painter.paintLabel($(this));
+                Painter.painting_trace = true;
                 $e.floor.blocks.on('mouseover', function(){
-                    Painter.painting_trace = true;
                     Painter.paintLabel($(this));
                 });
             });

@@ -20,8 +20,6 @@ def get_route(request, origin, destiny):
     route_dict['fields']['origin'] = to_dict(route_model.origin)
     route_dict['fields']['destiny'] = to_dict(route_model.destiny)
 
-
-
     if route_model.origin.floor == route_model.destiny.floor:
         route_steps_dict = route_dict['fields']['steps'] = []
         for step in route_model.steps.all():
@@ -44,10 +42,5 @@ def get_route(request, origin, destiny):
             for step in steps:
                 floor['steps'].append(to_dict(step))
 
-
-
-        for step in route_model.steps.all():
-            # if step.floor.id == floor
-            pass
 
     return HttpResponse(simplejson.dumps(route_dict), mimetype='application/json')
