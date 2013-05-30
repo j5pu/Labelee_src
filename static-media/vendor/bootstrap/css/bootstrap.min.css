@@ -137,11 +137,11 @@ textarea {
     vertical-align: top
 }
 
-/*p {
+@media print {
     * {
-        color: #000 !important;
+ /*       color: #000 !important;*/
         text-shadow: none !important;
-        background: transparent !important;
+ /*       background: transparent !important;*/
         box-shadow: none !important
     }
 
@@ -190,7 +190,7 @@ textarea {
     h2, h3 {
         page-break-after: avoid
     }
-}*/
+}
 
 body {
     margin: 0;

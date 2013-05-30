@@ -206,9 +206,9 @@ else:
         "default": {
             "ENGINE": "django.db.backends.mysql",
             "NAME": "labelee_dev",
-            "USER": "root",
-            "PASSWORD": "",
-            "HOST": "127.0.0.1",
+            "USER": "mnopi",
+            "PASSWORD": "1aragon1",
+            "HOST": "192.168.1.201",
             "PORT": "3306",
             }
     }
@@ -225,6 +225,7 @@ else:
     #
 #     Estas aplicaciones sólo se usarán en desarrollo..
     INSTALLED_APPS += ('south', 'sandbox',)
+
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_USER = 'alvaro.gutierrez@mnopi.com'
