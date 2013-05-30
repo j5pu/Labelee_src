@@ -15,47 +15,6 @@ var	OriginIcon = L.AwesomeMarkers.icon({
     });
 
 
-//Configuración de la lupa
-var mobileOpts = {
-    text: 'Buscar',
-    autoType: true,
-    autoCollapse: true,
-    autoCollapseTime: 4000,
-    animateLocation: true,
-    tipAutoSubmit: true,  		//auto map panTo when click on tooltip
-    autoResize: true,			//autoresize on input change
-    markerLocation:false,
-    minLength: 1,				//minimal text length for autocomplete
-    textErr: 'Ningún resultado',
-    layer: totalPois,
-    //title: title,
-    callTip: customTip,
-    tooltipLimit: -1,			//limit max results to show in tooltip. -1 for no limit.
-    delayType: 800	//with mobile device typing is more slow
-};
-
-//Configuración de los resultados de búsqueda en la lupa
-function customTip(text)
-{
-    var tip = L.DomUtil.create('a', 'colortip');
-
-    tip.href = "#"+text;
-    tip.innerHTML = text;
-
-    var subtip = L.DomUtil.create('em', 'subtip', tip);
-    subtip.style.display = 'inline-block';
-    subtip.style.float = 'right';
-    subtip.style.width = '18px';
-    subtip.style.height = '18px';
-    //subtip.style.backgroundColor = text;
-    subtip.style.backgroundColor = 'red';
-    return tip;
-}
-
-
-
-
-
 
 
 //Carga de datos globales
@@ -211,9 +170,49 @@ function loadPOIs()
         }
     }
 
-  layersControl= new L.control.layers(null, null, {collapsed:false});
+    layersControl= new L.control.layers(null, null, {collapsed:false});
 
 }
+var searchPois=totalPois._layers;
+
+//Configuración de la lupa
+var mobileOpts = {
+    text: 'Buscar',
+    autoType: true,
+    autoCollapse: true,
+    autoCollapseTime: 4000,
+    animateLocation: true,
+    tipAutoSubmit: true,  		//auto map panTo when click on tooltip
+    autoResize: true,			//autoresize on input change
+    markerLocation:false,
+    minLength: 1,				//minimal text length for autocomplete
+    textErr: 'Ningún resultado',
+    layer: totalPois,
+    //title: title,
+    callTip: customTip,
+    tooltipLimit: -1,			//limit max results to show in tooltip. -1 for no limit.
+    delayType: 800	//with mobile device typing is more slow
+};
+
+//Configuración de los resultados de búsqueda en la lupa
+function customTip(text)
+{
+    var tip = L.DomUtil.create('a', 'colortip');
+
+    tip.href = "#"+text;
+    tip.innerHTML = text;
+
+    var subtip = L.DomUtil.create('em', 'subtip', tip);
+    subtip.style.display = 'inline-block';
+    subtip.style.float = 'right';
+    subtip.style.width = '18px';
+    subtip.style.height = '18px';
+    //subtip.style.backgroundColor = text;
+    subtip.style.backgroundColor = 'red';
+    return tip;
+}
+
+
 
 var map = L.map('map', {
     crs: L.CRS.Simple,
@@ -225,6 +224,9 @@ var map = L.map('map', {
 
 function drawOrigin(origin) {
 
+    for(i in floors)
+    {        map.removeLayer(floors[i].layer);
+    }
 
     for(i in floors)
     {
@@ -284,13 +286,13 @@ function drawRoute(org, dst, sX, sY) {
     route = new RouteResource().getRoute(org, dst);
     if(route){
 
-           path.push([(route.origin.row)*sY+sY, route.origin.col*sX+sX]);
+           path.push([(route.fields.origin.fields.row)*sY+sY, route.fields.origin.fields.col*sX+sX]);
 
-            if (route.origin.floor===route.destiny.floor){
-                for (var i in route.steps ) {
-                    path.push([(route.steps[i].row)*sY+sY, (route.steps[i].column)*sX+sX]);
+            if (route.fields.origin.fields.floor===route.fields.destiny.fields.floor){
+                for (var i in route.fields.steps ) {
+                    path.push([(route.fields.steps[i].fields.row)*sY+sY, (route.fields.steps[i].fields.column)*sX+sX]);
                 }
-            path.push([(route.destiny.row)*sY+sY, route.destiny.col*sX+sX]);
+            path.push([(route.fields.destiny.fields.row)*sY+sY, route.fields.destiny.fields.col*sX+sX]);
             }else{
 
             }

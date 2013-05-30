@@ -109,6 +109,7 @@ h3,h4 {
 	padding:0 .125em;
 	margin:3px;
 	padding-right:30px;
+    opacity: .5;
 }
 .leaflet-control-search .search-button:hover,
 .leaflet-control-search .search-button {
