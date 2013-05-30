@@ -104,7 +104,10 @@ var Events = {
                     Painter.paintLabel($(this));
                 });
             });
-            $e.floor.blocks.on('mouseup', function(){
+            $(document).on('mouseup', function(){
+                if(!Painter.painting_trace)
+                    return;
+
                 $e.floor.blocks.off('mouseover');
                 Painter.painting_trace = false;
                 Events.grid.bind();
@@ -153,7 +156,7 @@ var Events = {
             var self = this;
             $('#grid *').off();
             self._assign_qr_by_right_click();
-            self._paint_with_key_pressed();
+//            self._paint_with_key_pressed();
             self._paint_with_mouse_pressed();
 //            self._remove_with_key_pressed();
             self._toggleBlockShadow();
