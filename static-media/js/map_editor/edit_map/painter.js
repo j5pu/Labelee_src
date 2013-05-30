@@ -59,7 +59,10 @@ var Painter = {
             Floor.points_to_delete.push(block.data('point-id'));
 
         if(block.data('label'))
-            Floor.point_count.to_save--;
+            if(block.data('from-db'))
+                Floor.point_count.to_delete++;
+            else if(Painter.erase_mode)
+                Floor.point_count.to_save--;
 
         if(block.data('connector-descr'))
             Floor.point_count.connectors--;
@@ -109,8 +112,9 @@ var Painter = {
         }
         else
         {
+            if(!block.data('label') || block.data('from-db'))
+                Floor.point_count.to_save++;
             Painter.clear(block);
-            Floor.point_count.to_save++;
         }
 
         // Dejamos el bloque como pintado
