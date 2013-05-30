@@ -424,7 +424,7 @@ function RouteResource()
             dataType : 'json', // esto indica que la respuesta vendrá en formato json
             async : false,
             success : function(response) {
-                elements = response.objects;
+                elements = response.objects[0];
             },
             error : function(response) {
                 var j = response;
