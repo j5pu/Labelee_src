@@ -148,5 +148,7 @@ iframe {
 }
 
 .btn{
-    font-family: 'raleway';
+    font-family: helvetica;
+    color: #555555;
+    text-rendering: optimizelegibility;
 }
