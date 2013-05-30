@@ -238,6 +238,11 @@ function drawOrigin(origin)
     for(i in floors)
         if(origin.floor.id == floors[i].id)
         {
+            map.addLayer(floors[i].photo);
+            map.addLayer(floors[i].layer);
+
+            //layersControl.addBaseLayer(floors[i].photo);
+            //layersControl.addOverlay(floors[i].layer);
             originFloor = floors[i];
             break;
          }
@@ -253,15 +258,15 @@ function drawOrigin(origin)
     map.addControl(new L.Control.Zoom());
 
 
-    originPoint = [(origin.point.row)*originFloor.scaleY,
-            origin.point.col*originFloor.scaleX];
-        originMarker = new L.marker(originPoint, { bounceOnAdd: false,
-            //bounceOnAddHeight: 20,
-            icon: OriginIcon}).bindPopup(origin.point.description+ "-"+originFloor.name +"-" + origin.enclosure.name);
-    originMarker.addTo(originFloor.layer).openPopup();
-
-    map.addLayer(originFloor.photo);
-    map.addLayer(originFloor.layer);
+//    originPoint = [(origin.point.row)*originFloor.scaleY,
+//            origin.point.col*originFloor.scaleX];
+//        originMarker = new L.marker(originPoint, { bounceOnAdd: false,
+//            //bounceOnAddHeight: 20,
+//            icon: OriginIcon}).bindPopup(origin.point.description+ "-"+originFloor.name +"-" + origin.enclosure.name);
+//    originMarker.addTo(originFloor.layer).openPopup();
+//
+//    map.addLayer(originFloor.photo);
+//    map.addLayer(originFloor.layer);
 
     /*for (i in floors[0].layer._layers){
          floors[0].layer._layers[i].options.icon.options.color ="red";
@@ -271,7 +276,7 @@ function drawOrigin(origin)
 
 
     //layersControl.addBaseLayer(originFloor.photo, origin.enclosure.name+" - "+originFloor.name);
-    layersControl.addBaseLayer(originFloor.photo, "<span>TÚ</span>");
+    //layersControl.addBaseLayer(originFloor.photo, "<span>TÚ</span>");
 
     //layersControl.addOverlay(originFloor.layer, "Destinos - "+ originFloor.name);
     //layersControl.addOverlay(originMarker,"<img src='/static/css/map/index/images/logo.png' /> <span class='my-layer-item'>Estás en </span>" + originFloor.name+","+"<br>"+"localizado vía QR en "+origin.point.description);
@@ -378,37 +383,41 @@ var path=[];
 var route = {};
 function drawRoute(org, dst, sX, sY) {
     route = new RouteResource().getRoute(org, dst);
+    if(route){
 
-//REHACER            path.push([(route.origin.row)*sY+sY/2, route.origin.col*sX+sX/2]);
+           path.push([(route.origin.row)*sY+sY/2, route.origin.col*sX+sX/2]);
 
-//REHACER            if (route.origin.floor===route.destiny.floor){
-                for (var i in route ) {
-                    path.push([(route[i].fields.row)*sY+sY/2, (route[i].fields.column)*sX+sX/2]);
+            if (route.origin.floor===route.destiny.floor){
+                for (var i in route.steps ) {
+                    path.push([(route.steps[i].row)*sY+sY/2, (route.steps[i].column)*sX+sX/2]);
                 }
-//REHACER                path.push([(route.destiny.row)*sY+sY/2, route.destiny.col*sX+sX/2]);
-//REHACER            }else{
+            path.push([(route.destiny.row)*sY+sY/2, route.destiny.col*sX+sX/2]);
+            }else{
 
-//REHACER            }
+            }
     console.log(path);
 
-    var arrow = L.polyline(path,{color: 'orange'});
-    var arrowHead = L.polylineDecorator(arrow);
+    arrow = L.polyline(path,{color: 'orange'});
+    arrowHead = L.polylineDecorator(arrow);
+
     var arrowOffset = 0;
     var anim = window.setInterval(function() {
         arrowHead.setPatterns([
-            {offset: arrowOffset+'%', repeat: 0, symbol: new L.Symbol.ArrowHead({pixelSize: 13, polygon: false, pathOptions: {stroke: true, color: 'orange'}})}
+            {offset: arrowOffset+'%', repeat: 0, symbol: new L.Symbol.ArrowHead({pixelSize: 15, polygon: false, pathOptions: {stroke: true}})}
         ])
         if(++arrowOffset > 100)
             arrowOffset = 0;
     }, 100);
 
-    arrow.addTo(map);
-    arrowHead.addTo(map);
+   arrow.addTo(map).bringToFront();
+   arrowHead.addTo(map);
 
     // Aplicamos zoom y centramos el mapa con respecto a la ruta
 
-            map.fitBounds(arrow.getBounds());
-            //map.setView(centro, zoom);
+           // map.fitBounds(arrow.getBounds());
+    }else{
+        alert('No existe esa ruta');
+    }
 
-        }
+}
 
