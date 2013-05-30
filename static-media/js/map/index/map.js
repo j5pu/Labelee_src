@@ -96,8 +96,10 @@ var baseLayers={},
     floor_index = 0,
     totalPois=new L.LayerGroup();
 
-
-//Carga de planos
+var path=[];
+var route = {};
+var arrow = new L.polyline(path);
+var arrowHead = new L.polylineDecorator(arrow);//Carga de planos
 loopFloors(floor_index);
 
 
@@ -162,7 +164,7 @@ function loadPOIs()
                 floors[fl].pois[j].marker.loc=loc;
 console.log(id);
 
-                floors[fl].pois[j].marker.bindPopup(nameIcon +": " + category)
+                floors[fl].pois[j].marker.bindPopup(nameIcon)
                     .on('click', function () {
                         console.log(this.poid);
                         drawRoute(origin.point.id, this.poid, this.psX, this.psY);
@@ -173,7 +175,6 @@ console.log(id);
 
 
         }
-        //overlays["POIs de "+ floors[fl].name]=floors[fl].layer;
     }
 
 
@@ -355,7 +356,7 @@ map.on('baselayerchange', function (e) {
 
 
 // Flecha con animación para indicar el sentido de la ruta
-var path=[];
+
 //var arrow = L.polyline(path,{color: 'orange'});
 //var arrowHead = L.polylineDecorator(arrow);
 //var arrowOffset = 0;
@@ -380,8 +381,14 @@ var path=[];
 */
 
 //Creamos la ruta uniendo los puntos del array "path"
-var route = {};
 function drawRoute(org, dst, sX, sY) {
+//   if (arrow._latlngs.length != 0){
+//       arrow.removeFrom(map);
+//       arrowHead.removeFrom(map);
+//   }
+//
+    path=[];
+
     route = new RouteResource().getRoute(org, dst);
     if(route){
 
@@ -396,14 +403,15 @@ function drawRoute(org, dst, sX, sY) {
 
             }
     console.log(path);
-
-    arrow = L.polyline(path,{color: 'orange'});
+    map.removeLayer(arrow);
+    map.removeLayer(arrowHead);
+    arrow = L.polyline(path,{color: 'orange'}).redraw();
     arrowHead = L.polylineDecorator(arrow);
 
     var arrowOffset = 0;
     var anim = window.setInterval(function() {
         arrowHead.setPatterns([
-            {offset: arrowOffset+'%', repeat: 0, symbol: new L.Symbol.ArrowHead({pixelSize: 15, polygon: false, pathOptions: {stroke: true}})}
+            {offset: arrowOffset+'%', repeat: 0, symbol: new L.Symbol.ArrowHead({pixelSize: 15, polygon: false, pathOptions: {/*color:"orange",*/ stroke: true}})}
         ])
         if(++arrowOffset > 100)
             arrowOffset = 0;
@@ -412,9 +420,9 @@ function drawRoute(org, dst, sX, sY) {
    arrow.addTo(map).bringToFront();
    arrowHead.addTo(map);
 
-    // Aplicamos zoom y centramos el mapa con respecto a la ruta
+// Aplicamos zoom y centramos el mapa con respecto a la ruta
+// map.fitBounds(arrow.getBounds());
 
-           // map.fitBounds(arrow.getBounds());
     }else{
         alert('No existe esa ruta');
     }
