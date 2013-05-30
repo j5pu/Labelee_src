@@ -4,7 +4,7 @@ body
 	margin: 50px auto;
 	text-align: center;
 	/*background: black*/
-    background-color: #8C8C87;
+    background-color: #bababa;
 }
 
 input[name="num_rows"]
@@ -44,6 +44,14 @@ input[name="num_rows"]
 	top: 0;
 }
 
+#puntos{
+
+}
+
+#caja-check{
+
+}
+
 #menu
 {
 	margin: 20px;
@@ -63,6 +71,10 @@ input[name="num_rows"]
 
 }
 
+#toggle_erase_mode{
+    margin-left: 4%;
+}
+
 .box
 {
 
@@ -80,7 +92,6 @@ input[name="num_rows"]
 
 .box-0
 {
-	border: 1px solid;
 	margin: 0.4em;
 	padding: 0.7em;
 }
@@ -92,6 +103,10 @@ input[name="num_rows"]
 	padding: 0.6em;
 	border-radius: 0.4em;
 	margin: 0.3em 0.4em;
+    margin-left: 12%;
+    float:left;
+    width: 40%;
+    margin-right: 5px;
 }
 
 .box-2
@@ -163,9 +178,46 @@ img#fake
     z-index: 2;
 }
 
-/*Comentarioooooooo2*/
 
 h4{
    color: #FEFAF1;
    font-family: 'raleway';
+}
+
+a{
+    color: #FEFAF1;
+}
+
+.new{
+    color: #777777;
+}
+
+.delete{
+    color: #777777;
+}
+
+
+#qr_list{
+    float:left;
+    width: 30%;
+    margin-right: 15%;
+    margin-left: 2%;
+
+}
+
+#caja1{
+    float:left;
+    width: 35%;
+    margin-left:5px;
+}
+
+#caja2{
+    float:left;
+    width: 40%;
+    margin-top: 3%;
+    margin-right: 3%;
+}
+
+ul{
+    list-style: none;
 }

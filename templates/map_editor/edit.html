@@ -36,28 +36,29 @@
     <!--MENU-->
     <div id="menu" class="box box-0">
 
-        <div>
-            <h4>Puntos:</h4>
-            Guardados: <span id="num_saved_points"></span> <br>
-            Por guardar: <span id="num_points_to_save"></span> <br>
-            Por elminar: <span id="num_points_to_delete"></span> <br>
-            Total: <span id="num_total_points"></span> <br>
+
+        <div id="caja1">
+            <div id="puntos">
+                <h4>Puntos:</h4>
+                Guardados: <span id="num_saved_points"></span> <br>
+                Por guardar: <span id="num_points_to_save"></span> <br>
+                Por elminar: <span id="num_points_to_delete"></span> <br>
+                Total: <span id="num_total_points"></span> <br>
+            </div>
+
+
+
+            <a href="{% url 'map_editor.views.index' %}">Volver al menú</a>
+
+            <div id="caja-check">
+
+            <input type="checkbox" id="toggle_border" checked>Ver rejilla<br>
+
+            <input type="checkbox" id="toggle_erase_mode">Modo borrar<br>
+
+            </div>
         </div>
 
-        <a href="{% url 'map_editor.views.index' %}">Volver al menú</a>
-
-        <input type="checkbox" id="toggle_border" checked>Ver rejilla<br>
-
-        <input type="checkbox" id="toggle_erase_mode">Modo borrar<br>
-
-        Filas:
-            <input type="text"
-                   id="num_rows"
-                   value="20">
-            = <span id="num_blocks"></span>
-
-        <button id="update_floor">Guardar</button>
-        <button id="clear_floor">Limpiar</button>
 
         <!-- MENU POI -->
         <div class="box box-1">
@@ -82,6 +83,14 @@
                 <a class="delete" href=''>Eliminar</a>
             </div>
         </div>
+
+         <!-- LISTA DE QRs -->
+         <div id="qr_list" class="box box-0">
+             <h4>Lista de QRs:</h4>
+             <input type="checkbox" id="toggle_qrs">Resaltar todos
+             <ul></ul>
+         </div>
+
 
         <!--
         Cajas para crear objeto o categoría
@@ -134,12 +143,18 @@
             </form>
         </div>
 
-        <!-- LISTA DE QRs -->
-        <div id="qr_list" class="box box-0">
-            <h4>Lista de QRs:</h4>
-            <input type="checkbox" id="toggle_qrs">Resaltar todos
-            <ul></ul>
-        </div>
+    <div id="caja2">
+            Filas:
+                <input type="text"
+                       id="num_rows"
+                       value="20">
+                = <span id="num_blocks"></span>
+
+            <button class="btn" id="update_floor">Guardar</button>
+            <button class="btn" id="clear_floor">Limpiar</button>
+    </div>
+
+
     </div>
 
 

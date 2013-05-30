@@ -19,8 +19,6 @@
 
     <h1>Administración de recintos</h1>
 
-    <div class="box box-0 alert">No subir imágenes con espacios, por ejemplo "boceto mapa matadero.jpg"</div>
-
     <div id="enclosures" class="box box-0" ng-controller="EnclosuresCtrl">
 
         <!--PARA AGREGAR LUGAR -->
@@ -45,7 +43,7 @@
 
                <div class="editable_element">
                    <h2>[[enclosure.name]]</h2>
-                <div ng-hide="editing">
+                <div id="botones-enclosure" ng-hide="editing">
 
 
                     <div class="action_box">
