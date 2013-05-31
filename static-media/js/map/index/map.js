@@ -293,7 +293,21 @@ function drawRoute(org, dst, sX, sY) {
                 for (var i in route.fields.steps ) {
                     path.push([(route.fields.steps[i].fields.row)*sY+sY, (route.fields.steps[i].fields.column)*sX+sX]);
                 }
-            path.push([(route.fields.destiny.fields.row)*sY+sY, route.fields.destiny.fields.col*sX+sX]);
+            //path.push([(route.fields.destiny.fields.row)*sY+sY, route.fields.destiny.fields.col*sX+sX]);
+            console.log(path);
+            map.removeLayer(arrow);
+            map.removeLayer(arrowHead);
+            arrow = L.polyline(path,{color: 'orange'});
+            //    arrowHead = L.polylineDecorator(arrow);
+            //
+            //    var arrowOffset = 0;
+            //    anim = window.setInterval(function() {
+            //        arrowHead.setPatterns([
+            //            {offset: arrowOffset+'%', repeat: 0, symbol: new L.Symbol.ArrowHead({pixelSize: 15, polygon: false, pathOptions: {/*color:"orange",*/ stroke: true}})}
+            //        ])
+            //        if(++arrowOffset > 100)
+            //            arrowOffset = 0;
+            //    }, 100);
 
             }else{
                 for (var i in route.fields.subroutes) {
@@ -317,20 +331,6 @@ function drawRoute(org, dst, sX, sY) {
                 }
 
             }
-    console.log(path);
-    map.removeLayer(arrow);
-    map.removeLayer(arrowHead);
-    arrow = L.polyline(path,{color: 'orange'});
-//    arrowHead = L.polylineDecorator(arrow);
-//
-//    var arrowOffset = 0;
-//    anim = window.setInterval(function() {
-//        arrowHead.setPatterns([
-//            {offset: arrowOffset+'%', repeat: 0, symbol: new L.Symbol.ArrowHead({pixelSize: 15, polygon: false, pathOptions: {/*color:"orange",*/ stroke: true}})}
-//        ])
-//        if(++arrowOffset > 100)
-//            arrowOffset = 0;
-//    }, 100);
 
         for(i in floors)
         {
