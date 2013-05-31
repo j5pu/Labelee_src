@@ -159,8 +159,8 @@ function loadPOIs()
     for(i in floors) {
         if (origin.floor.id == floors[i].id) {
             originFloor = floors[i];
-            originPoint = [(origin.point.row) * originFloor.scaleY,
-                origin.point.col * originFloor.scaleX];
+            originPoint = [((origin.point.row) * originFloor.scaleY)+originFloor.scaleY,
+                (origin.point.col * originFloor.scaleX)+originFloor.scaleX];
             originMarker = new L.marker(originPoint, { bounceOnAdd: false,
                 //bounceOnAddHeight: 20,
                 icon: OriginIcon})
@@ -225,7 +225,8 @@ var map = L.map('map', {
 function drawOrigin(origin) {
 
     for(i in floors)
-    {        map.removeLayer(floors[i].layer);
+    {
+        map.removeLayer(floors[i].layer);
     }
 
     for(i in floors)
@@ -258,7 +259,6 @@ function drawOrigin(origin) {
 map.on('baselayerchange', function (e) {
     if(map.hasLayer(originFloor.layer)){
         map.removeLayer(originFloor.layer);
-
     }
     var floor_x;
     for (var i in floors){
@@ -282,8 +282,9 @@ map.on('baselayerchange', function (e) {
 function drawRoute(org, dst, sX, sY) {
 
     path=[];
+    subpath=[];
 
-    route = new RouteResource().getRoute(org, dst);
+    route = new RouteResource().getRoute(org, 2014);
     if(route){
 
            path.push([(route.fields.origin.fields.row)*sY+sY, route.fields.origin.fields.col*sX+sX]);
@@ -293,26 +294,57 @@ function drawRoute(org, dst, sX, sY) {
                     path.push([(route.fields.steps[i].fields.row)*sY+sY, (route.fields.steps[i].fields.column)*sX+sX]);
                 }
             path.push([(route.fields.destiny.fields.row)*sY+sY, route.fields.destiny.fields.col*sX+sX]);
+
             }else{
+                for (var i in route.fields.subroutes) {
+                    if (route.fields.subroutes[i].floor.pk === route.fields.origin.fields.floor){
+                        subpath[i]=path;
+                        console.log ('planta: '+i);
+                        for (var j in route.fields.subroutes[i].steps ) {
+                            subpath[i].push([(route.fields.subroutes[i].steps[j].fields.row)*sY+sY, (route.fields.subroutes[i].steps[j].fields.column)*sX+sX]);
+                        }
+                    }
+                    else {
+                        subpath[i]=[];
+                        console.log ('planta: '+i);
+                        for (var j in route.fields.subroutes[i].steps ) {
+                            subpath[i].push([(route.fields.subroutes[i].steps[j].fields.row)*sY+sY, (route.fields.subroutes[i].steps[j].fields.column)*sX+sX]);
+                        }
+                        //El destino ya está incluido en la subruta!! No hace falta añadirlo
+                        // subpath[i].push([(route.fields.destiny.fields.row)*sY+sY, route.fields.destiny.fields.col*sX+sX]);
+                    }
+
+                }
 
             }
     console.log(path);
     map.removeLayer(arrow);
     map.removeLayer(arrowHead);
-    arrow = L.polyline(path,{color: 'orange'}).redraw();
-    arrowHead = L.polylineDecorator(arrow);
+    arrow = L.polyline(path,{color: 'orange'});
+//    arrowHead = L.polylineDecorator(arrow);
+//
+//    var arrowOffset = 0;
+//    anim = window.setInterval(function() {
+//        arrowHead.setPatterns([
+//            {offset: arrowOffset+'%', repeat: 0, symbol: new L.Symbol.ArrowHead({pixelSize: 15, polygon: false, pathOptions: {/*color:"orange",*/ stroke: true}})}
+//        ])
+//        if(++arrowOffset > 100)
+//            arrowOffset = 0;
+//    }, 100);
 
-    var arrowOffset = 0;
-    anim = window.setInterval(function() {
-        arrowHead.setPatterns([
-            {offset: arrowOffset+'%', repeat: 0, symbol: new L.Symbol.ArrowHead({pixelSize: 15, polygon: false, pathOptions: {/*color:"orange",*/ stroke: true}})}
-        ])
-        if(++arrowOffset > 100)
-            arrowOffset = 0;
-    }, 100);
+        for(i in floors)
+        {
 
-   arrow.addTo(map);
-   arrowHead.addTo(map);
+
+            if(route.fields.origin.fields.floor == floors[i].id)
+            {
+                floors[i].layer.addLayer(arrow);
+                //floors[i].layer.addLayer(arrowHead);
+                break;
+            }
+        }
+//   arrow.addTo(map);
+//   arrowHead.addTo(map);
 
     }else{
         alert('No existe esa ruta');
