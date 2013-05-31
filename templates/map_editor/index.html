@@ -92,6 +92,9 @@
                         <input type="text"
                                ng-model="floor_name"
                                placeholder="Nombre de planta..">
+                        <input type="text"
+                               ng-model="floor_number"
+                               placeholder="Número..">
 
                         <button class="btn" ng-click="createFloor()">Añadir planta</button>
                     </div>
@@ -111,12 +114,13 @@
 
                     <div class="editable_element">
                         <div ng-hide="editing">
+
                             <h3>
+                                ([[floor.floor_number]])
 
                                 <a href="[[urls.map_editor.edit]]/[[floor.id]]">
                                     [[floor.name]]
                                 </a>
-
                             </h3>
 
                             <div class="action_box">
@@ -132,13 +136,19 @@
                                       target="upload_target">
 
                                     <!--<div ng-include src="_form_alert_box"></div>-->
-
+                                    Descr:
                                     <input type="text"
                                            ng-init="floor_name=floor.name"
                                            ng-model="floor_name"
                                            ng-change="validate()"
                                            placeholder="Nuevo nombre para la planta.."
-                                           autofocus>
+                                           autofocus><br>
+                                    Número:
+                                    <input type="text"
+                                           ng-init="floor_number=floor.floor_number"
+                                           ng-model="floor_number"
+                                           ng-change="validate()"
+                                           placeholder="Número.."><br>
                                     <input type="file" name="img" title="Cambiar imágen..">
 
                                     <button class="btn" ng-click="update()">Editar</button>

@@ -31,6 +31,7 @@ class Floor(models.Model):
     img = models.FileField(upload_to=floor_filename, null=True, blank=True)
     num_rows = models.PositiveIntegerField(null=True, blank=True)
     num_cols = models.PositiveIntegerField(null=True, blank=True)
+    floor_number = models.IntegerField(null=True, blank=True)
 
 
     # por defecto, si eliminamos un lugar también se eliminan todos sus mapas

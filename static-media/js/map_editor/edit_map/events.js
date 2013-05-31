@@ -19,6 +19,17 @@ var Events = {
         },
 
 
+        _setHoveredBlock: function()
+        {
+            $e.floor.blocks.on('mouseover', function(){
+                Painter.current_hovered_block = $(this);
+            });
+            $e.floor.blocks.on('mouseleave', function(){
+                Painter.current_hovered_block = null;
+            });
+        },
+
+
         _toggleLabelInfo: function()
         {
             // Mostrar imágen de la etiqueta al sólo pasar el ratón sobre el bloque
@@ -162,6 +173,7 @@ var Events = {
             self._toggleBlockShadow();
             self._toggleLabelInfo();
             self._showUpQRInfo();
+            self._setHoveredBlock();
         }
     },
 
@@ -293,11 +305,27 @@ var Events = {
         },
 
 
+        _toggleEraseMode: function()
+        {
+            Mousetrap.bind('e', function(e){
+                // Si el ratón no está sobre un bloque cuando se pulsa la e,
+                // entonces no hacemos nada
+                if(!Painter.current_hovered_block)
+                    return;
+
+                e.preventDefault();
+                $e.floor.toggle_erase_mode.attr('checked', !Painter.erase_mode)
+                Menu.toggleEraseMode();
+            });
+        },
+
+
         bind: function()
         {
             var self = this;
             self._assignQR();
-            self._toggleLabels();
+//            self._toggleLabels();
+            self._toggleEraseMode();
         }
     },
 

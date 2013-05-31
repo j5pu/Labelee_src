@@ -191,6 +191,28 @@ function Resource(resource_name) {
 function FloorResource()
 {
     Resource.call(this, 'floor');
+
+    this.readFromEnclosure = function(enclosure_id) {
+
+        var elements;
+        $.ajax({
+            url : this.api1_url + '?enclosure__id=' + enclosure_id + '&order_by=floor_number',
+            type : 'get',
+            headers : {
+                'Content-Type' : 'application/json'
+            },
+            dataType : 'json', // esto indica que la respuesta vendrá en formato json
+            async : false,
+            success : function(response) {
+                elements = response.objects;
+            },
+            error : function(response) {
+                var j = response;
+            }
+        });
+
+        return elements;
+    };
 }
 
 function LabelResource()
