@@ -66,28 +66,34 @@ function EnclosureCtrl($scope)
     {
         new EnclosureResource().calculateRoutes($scope.enclosure.id);
     };
-
-//    $scope.calculateConnections = function()
-//    {
-//        new ConnectionResource().calculateConnections($scope.enclosure.id);
-//    };
 }
 
 function FloorsCtrl($scope, $element)
 {
 	$scope.sending_img = false;
 
-    $scope.floor_resource = new Resource('floor');
-	
-	$scope.floors = $scope.floor_resource.readAllFiltered('?enclosure__id=' + $scope.enclosure.id);
+    $scope.floor_resource = new FloorResource();
 
+    $scope.loadFloorList = function() {
+        $scope.floors = $scope.floor_resource.readFromEnclosure($scope.enclosure.id);
+    };
+
+    $scope.loadFloorList();
 
 	$scope.createFloor = function() {
+
+        var img = $($element).find('input[name="img"]');
+        if(!img.val())
+        {
+            alert('También debe subir la imágen del plano para la planta');
+            return;
+        }
 		
 		//
 		// 1: Creamos el registro en B.D.
 		var floor_data = {
 			name : $scope.floor_name,
+			floor_number : parseInt($scope.floor_number),
 			enclosure : $scope.enclosure.resource_uri
 		};
 		
@@ -106,6 +112,7 @@ function FloorsCtrl($scope, $element)
 				// Una vez se sube la imágen se limpia el formulario y se actualiza
 				// la lista de mapas para el lugar
 				$scope.floor_name = '';
+				$scope.floor_number = '';
 				img_form.find('input[name="img"]').val('');
 				$scope.floors =
 					$scope.floor_resource.readAllFiltered('?enclosure__id=' + $scope.enclosure.id);
@@ -124,8 +131,7 @@ function FloorCtrl($scope, $element)
 	
 	$scope.update = function() {
 		var img = $($element).find('input[name="img"]');
-		var img_val = img.val();
-		
+
 		if (!$scope.editing)
         {
 			$scope.editing = true;
@@ -137,8 +143,9 @@ function FloorCtrl($scope, $element)
 			// guardamos el nuevo nombre en la BD
 
 			var floor_data = {
-				name : $scope.floor_name
-			}
+				name : $scope.floor_name,
+				floor_number : $scope.floor_number
+			};
 
 			$scope.floor_resource.update(floor_data, $scope.floor.id);
 			
@@ -162,7 +169,7 @@ function FloorCtrl($scope, $element)
 
 			$scope.editing = false;
 
-			$scope.$parent.floor.name = $scope.floor_resource.read($scope.floor.id).name;
+            $scope.loadFloorList();
 		}
 	};
 

@@ -92,14 +92,13 @@ function divideInGroups(arr, group_size)
     //      [{point0}, {point1}, .., {point9}]
     //      => [ [{point0}, {point1}], [{point2}, {point3}], ..]
     var group_counter = 0;
-    var GROUP_SIZE = group_size;
 
     var group = [];
     var groups = [];
 
     for(var i in arr)
     {
-        if(group_counter >= GROUP_SIZE)
+        if(group_counter >= group_size)
         {
             groups.push(group);
             group = [];
