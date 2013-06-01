@@ -313,7 +313,6 @@ function drawRoute(org, dst, sX, sY) {
                 for (var i in route.fields.steps ) {
                     path.push([(route.fields.steps[i].fields.row)*sY+sY, (route.fields.steps[i].fields.column)*sX+sX]);
                 }
-            //path.push([(route.fields.destiny.fields.row)*sY+sY, route.fields.destiny.fields.col*sX+sX]);
             console.log(path);
             map.removeLayer(arrow);
             map.removeLayer(arrowHead);
@@ -346,7 +345,6 @@ function drawRoute(org, dst, sX, sY) {
                             subpath[i].push([(route.fields.subroutes[i].steps[j].fields.row)*sY+sY, (route.fields.subroutes[i].steps[j].fields.column)*sX+sX]);
                         }
                         //El destino ya está incluido en la subruta!! No hace falta añadirlo
-                        // subpath[i].push([(route.fields.destiny.fields.row)*sY+sY, route.fields.destiny.fields.col*sX+sX]);
                     }
 
                 }
