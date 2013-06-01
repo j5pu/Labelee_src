@@ -1,15 +1,31 @@
 //Configuración de iconos
 var	OriginIcon = L.AwesomeMarkers.icon({
-        icon: 'home',
-        color: 'green'
-    }),
-    blueMarker = L.AwesomeMarkers.icon({
         icon: 'star',
         color: 'blue',
         spin: true
 
     }),
-    redMarker = L.AwesomeMarkers.icon({
+    green = L.AwesomeMarkers.icon({
+        icon: 'retweet',
+        color: 'green'
+
+    }),
+    orange = L.AwesomeMarkers.icon({
+        icon: 'gift',
+        color: 'orange'
+
+    }),
+    purple = L.AwesomeMarkers.icon({
+        icon: 'food',
+        color: 'purple'
+
+    }),
+    blue = L.AwesomeMarkers.icon({
+        icon: 'star',
+        color: 'blue'
+
+    }),
+    red = L.AwesomeMarkers.icon({
         icon: 'coffee',
         color: 'red'
     });
@@ -22,42 +38,38 @@ var origin = {
     point:new PointResource().read(poi_id),
     floor:new FloorResource().read(floor_id),
     enclosure:new EnclosureResource().read(enclosure_id)
-}
-var originFloor;
-var originPoint;
+};
 
 
-//Altura de la pantalla
-var  mapH = $(document).height();
+//Variables globales
 
-//Plantas del enclosure asociado al QR
-var floorsUris=[];
-for (f=0; f<origin.enclosure.floors.length; f++){
-    floorsUris.push(origin.enclosure.floors[f]);
-}
+var  mapH = $(document).height(),//Altura de la pantalla
 
-var floors = [],
-    uris=origin.enclosure.floors;
-for (var i in uris) {
-    floors.push(new FloorResource().readFromUri(uris[i]));
-}
+    baseLayers={},
+    floor_index = 0,
+    totalPois=new L.LayerGroup(),
+    originFloor,
+    originPoint,
+
+    floors = new FloorResource().readFromEnclosure(origin.enclosure.id);
 
 //POIs de cada floor, separados para pintarlos por capas
 for (var i in floors){
     floors[i].pois = new PointResource().readOnlyPois(floors[i].id);
 }
 
+var path=[],
+    route = {},
+    arrow = new L.polyline(path),
+    arrowHead = new L.polylineDecorator(arrow);
 
-//Variables globales
-var baseLayers={},
-    floor_index = 0,
-    totalPois=new L.LayerGroup();
-
-var path=[];
-var route = {};
-var arrow = new L.polyline(path);
-var arrowHead = new L.polylineDecorator(arrow);
-
+function loadIcon(color) {
+var icon= new L.AwesomeMarkers.icon({
+        icon: 'bolt',
+        color: color
+    });
+    return icon;
+}
 //Carga de planos
 loopFloors(floor_index);
 
@@ -95,7 +107,6 @@ function loopFloors ()
 
 
 //Carga de POIs
-var id;
 
 function loadPOIs()
 {
@@ -104,6 +115,8 @@ function loadPOIs()
         floors[fl].layer=new L.LayerGroup();
 
         for (j=0; j<floors[fl].pois.length; j++) {
+                if (floors[fl].pois[j].id===poi_id)
+                    floors[fl].pois.splice(j, 1);
                 var colorIcon = floors[fl].pois[j].label.category.color,
                     nameIcon =floors[fl].pois[j].label.name,
                     id= floors[fl].pois[j].id,
@@ -113,10 +126,11 @@ function loadPOIs()
                         floors[fl].pois[j].col*sX+(sY)],
                     category = floors[fl].pois[j].label.category.name;
 
-                floors[fl].pois[j].marker = new L.Marker(new L.latLng(loc), {icon:blueMarker, title:nameIcon});
+                floors[fl].pois[j].marker = new L.Marker(new L.latLng(loc), {icon:loadIcon(colorIcon), title:nameIcon /*, color:colorIcon*/});
                 //floors[fl].pois[j].marker.options.icon.options.className='awesome-marker';
-                floors[fl].pois[j].marker.options.icon.options.color=colorIcon;
-                floors[fl].pois[j].marker.options.icon.options.icon='star';
+            floors[fl].pois[j].marker.options.icon.options.color=colorIcon;
+//IMPORTANTE- CAMBIO DE ICONOS DINÁMICO
+// floors[fl].pois[j].marker.options.icon.options.icon='star';
                 floors[fl].pois[j].marker.poid=id;
                 floors[fl].pois[j].marker.psX=sX;
                 floors[fl].pois[j].marker.psY=sY;
@@ -135,6 +149,7 @@ function loadPOIs()
     }
 
 
+    /*
     floors[1].layer.eachLayer(function (layer) {
         layer.setIcon(redMarker);
 //        var destinyPoint= [layer._latlng.lat, layer._latlng.lng];
@@ -146,10 +161,13 @@ function loadPOIs()
 //        });
     });
 
+*/
     for(var i in totalPois._layers) {
 //        console.log(i);
         totalPois._layers[i].title = totalPois._layers[i].options.title;
         	//value searched
+        totalPois._layers[i].color = totalPois._layers[i].options.icon.options.color;
+
         //    loc = data[i].loc,		//position found
         //    marker = new L.Marker(new L.latLng(loc), {title: title} );//se property searched
         //marker.bindPopup('title: '+ title );
@@ -161,7 +179,7 @@ function loadPOIs()
             originFloor = floors[i];
             originPoint = [((origin.point.row) * originFloor.scaleY)+originFloor.scaleY,
                 (origin.point.col * originFloor.scaleX)+originFloor.scaleX];
-            originMarker = new L.marker(originPoint, { bounceOnAdd: false,
+            originMarker = new L.marker(originPoint, { bounceOnAdd: true,
                 //bounceOnAddHeight: 20,
                 icon: OriginIcon})
                 .bindPopup(origin.point.description + "-" + originFloor.name + "-" + origin.enclosure.name);
@@ -173,7 +191,6 @@ function loadPOIs()
     layersControl= new L.control.layers(null, null, {collapsed:false});
 
 }
-var searchPois=totalPois._layers;
 
 //Configuración de la lupa
 var mobileOpts = {
@@ -195,7 +212,7 @@ var mobileOpts = {
 };
 
 //Configuración de los resultados de búsqueda en la lupa
-function customTip(text)
+function customTip(text, color)
 {
     var tip = L.DomUtil.create('a', 'colortip');
 
@@ -207,7 +224,7 @@ function customTip(text)
     subtip.style.float = 'right';
     subtip.style.width = '18px';
     subtip.style.height = '18px';
-    //subtip.style.backgroundColor = text;
+    //subtip.style.backgroundColor = colortext;
     subtip.style.backgroundColor = 'red';
     return tip;
 }
@@ -221,6 +238,7 @@ var map = L.map('map', {
     //layer: originFloor.layer
 });
 
+var searchMarker=new L.Control.Search(mobileOpts);
 
 function drawOrigin(origin) {
 
@@ -229,7 +247,7 @@ function drawOrigin(origin) {
         map.removeLayer(floors[i].layer);
     }
 
-    for(i in floors)
+    for (i=(floors.length)-1; i>=0; i--)
     {
         layersControl.addBaseLayer(floors[i].photo,floors[i].name);
 
@@ -245,8 +263,7 @@ function drawOrigin(origin) {
     map.setMaxBounds(originFloor.bounds);
     map.setView(originFloor.bounds.getCenter(),0);
 
-
-    map.addControl( new L.Control.Search(mobileOpts) );
+    map.addControl(searchMarker);
     map.addControl(new L.Control.Zoom());
 
     layersControl.addTo(map);
@@ -265,9 +282,12 @@ map.on('baselayerchange', function (e) {
 
         if (e.layer._url === floors[i].photo._url) {
             floor_x = floors[i];
+            map.addLayer(searchMarker._markerLoc._circleLoc);
+
 
         } else {
             map.removeLayer(floors[i].layer);
+            map.removeLayer(searchMarker._markerLoc._circleLoc);
         }
 
     }
@@ -284,7 +304,7 @@ function drawRoute(org, dst, sX, sY) {
     path=[];
     subpath=[];
 
-    route = new RouteResource().getRoute(org, 2014);
+    route = new RouteResource().getRoute(org, dst);
     if(route){
 
            path.push([(route.fields.origin.fields.row)*sY+sY, route.fields.origin.fields.col*sX+sX]);
@@ -298,16 +318,17 @@ function drawRoute(org, dst, sX, sY) {
             map.removeLayer(arrow);
             map.removeLayer(arrowHead);
             arrow = L.polyline(path,{color: 'orange'});
-            //    arrowHead = L.polylineDecorator(arrow);
-            //
-            //    var arrowOffset = 0;
-            //    anim = window.setInterval(function() {
-            //        arrowHead.setPatterns([
-            //            {offset: arrowOffset+'%', repeat: 0, symbol: new L.Symbol.ArrowHead({pixelSize: 15, polygon: false, pathOptions: {/*color:"orange",*/ stroke: true}})}
-            //        ])
-            //        if(++arrowOffset > 100)
-            //            arrowOffset = 0;
-            //    }, 100);
+
+            arrowHead = L.polylineDecorator(arrow);
+
+            var arrowOffset = 0;
+            anim = window.setInterval(function() {
+            arrowHead.setPatterns([
+                   {offset: arrowOffset+'%', repeat: 0, symbol: new L.Symbol.ArrowHead({pixelSize: 15, polygon: false, pathOptions: {/*color:"orange",*/ stroke: true}})}
+                   ])
+                  if(++arrowOffset > 100)
+                        arrowOffset = 0;
+                }, 100);
 
             }else{
                 for (var i in route.fields.subroutes) {
@@ -339,7 +360,7 @@ function drawRoute(org, dst, sX, sY) {
             if(route.fields.origin.fields.floor == floors[i].id)
             {
                 floors[i].layer.addLayer(arrow);
-                //floors[i].layer.addLayer(arrowHead);
+                floors[i].layer.addLayer(arrowHead);
                 break;
             }
         }
