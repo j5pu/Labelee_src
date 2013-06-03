@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 
+import os
 from django.db import models
 from django.contrib.auth.models import User
 
-CATEGORIAS_FIJAS= {
+CATEGORIAS_FIJAS = {
     0: 'Bloqueantes',
     1: 'Aristas',
     2: 'Intermedias',
@@ -20,9 +21,11 @@ class Enclosure(models.Model):
 
 def floor_filename(instance, filename):
     """
-	xej: img/enclosures/matadero_prueba/floors/nave16.png
+    img/enclosures/[encl_id]/floors/[floor_id].ext
+	xej: img/enclosures/25/floors/167.png
 	"""
-    return 'img/enclosures/' + instance.enclosure.name.replace(" ", "_") + '/floors/' + filename
+    fileName, fileExtension = os.path.splitext(filename)
+    return 'img/enclosures/' + str(instance.enclosure.id) + '/floors/' + str(instance.id) + fileExtension
 
 
 #Se crea el modelo para los productos
@@ -31,6 +34,7 @@ class Floor(models.Model):
     img = models.FileField(upload_to=floor_filename, null=True, blank=True)
     num_rows = models.PositiveIntegerField(null=True, blank=True)
     num_cols = models.PositiveIntegerField(null=True, blank=True)
+    floor_number = models.IntegerField(null=True, blank=True)
 
 
     # por defecto, si eliminamos un lugar también se eliminan todos sus mapas
@@ -41,24 +45,24 @@ class Floor(models.Model):
     def __unicode__(self):
         return self.name
 
-    def delete(self, *args, **kwargs):
-        """
-		Sobreescribimos el método delete() para también eliminar la imágen del mapa
-		"""
-        if self.img:
-            # You have to prepare what you need before delete the model
-            storage, path = self.img.storage, self.img.path
-            # Delete the model before the file
-            super(Floor, self).delete(*args, **kwargs)
-            # Delete the file after the model
-            storage.delete(path)
-        else:
-            super(Floor, self).delete(*args, **kwargs)
+    # def delete(self, *args, **kwargs):
+    #     """
+		# Sobreescribimos el método delete() para también eliminar la imágen del mapa
+		# """
+    #     if self.img:
+    #         # You have to prepare what you need before delete the model
+    #         storage, path = self.img.storage, self.img.path
+    #         # Delete the model before the file
+    #         super(Floor, self).delete(*args, **kwargs)
+    #         # Delete the file after the model
+    #         storage.delete(path)
+    #     else:
+    #         super(Floor, self).delete(*args, **kwargs)
 
 
 class LabelCategory(models.Model):
-    name = models.CharField(max_length=200, unique=True, blank=False);
-    color = models.CharField(max_length=50, blank=False);
+    name = models.CharField(max_length=200, unique=True, blank=False)
+    color = models.CharField(max_length=50, blank=False)
     img = models.FileField(upload_to="img/label_categories", blank=True, null=True)
 
     class Meta:
@@ -83,6 +87,7 @@ def label_filename(instance, filename):
     """
 	Aquí indicaremos cómo guardaremos la imágen para el objeto.
 	En este caso se creará una carpeta para cada categoría.
+
 
 	Xej: img/objects/restaurante/rodilla.png
 

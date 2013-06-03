@@ -54,7 +54,7 @@ def delete_from_list(request):
     point_list = simplejson.loads(json_data)
 
     for point in point_list:
-        p = Point.objects.get(id=point)
+        p = Point.objects.get(id=point['id'] if isinstance(point, dict) else point)
         p.delete()
 
     return HttpResponse(simplejson.dumps('ok'))

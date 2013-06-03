@@ -593,7 +593,7 @@ html{
 }
 
 .leaflet-control-layers-selector:active, .leaflet-control-layers-selector:checked {
-    background:#111;
+    background:darkorange;
     color:blue;
 
 }
@@ -602,6 +602,7 @@ label > span {
     top:0;
     line-height:34px;
     left: 13px;
+    font-size: 18px;
 }
 
 span>span{
@@ -611,6 +612,14 @@ span>span{
     line-height:34px;
     margin-left:-7px;
 
+}
+
+.leaflet-container img.leaflet-image-layer {
+    z-index: -1;
+}
+
+.leaflet-popup-pane, .leaflet-control {
+    opacity: 0.7;
 }
 /*ESTILOS DEL MENU LATERAL
 ///////////////////////////*/

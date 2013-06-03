@@ -1,8 +1,9 @@
 
 var LabelCategory = {
 
-    show_form_new: function()
+    show_form_new: function(ev)
     {
+        ev.preventDefault();
         $e.label.form.root_node.hide(400);
         $e.category.form.root_node.show(400);
     },
@@ -67,8 +68,9 @@ var LabelCategory = {
     },
 
 
-    delete: function()
+    delete: function(ev)
     {
+        ev.preventDefault();
         var category_id = $e.category.selector.val();
         var confirm_msg = '¿Eliminar categoría? (se eliminarán todas sus etiquetas)';
         new LabelCategoryResource().del(category_id, confirm_msg);
@@ -99,7 +101,8 @@ var Label = {
     // Para indicar si su información se muestra por encima de las demás
     info_hovered: false,
 
-    show_form_new: function(){
+    show_form_new: function(ev){
+        ev.preventDefault();
         $e.label.form.root_node.show(400);
         $e.category.form.root_node.hide(400);
         var category = $e.category.selector.val();
@@ -172,8 +175,9 @@ var Label = {
     },
 
 
-    delete: function()
+    delete: function(ev)
     {
+        ev.preventDefault();
         var label_id = $e.label.selector.val();
         var confirm_msg = '¿Eliminar etiqueta?';
         new LabelResource().del(label_id, confirm_msg);

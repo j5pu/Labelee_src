@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from StdSuites.QuickDraw_Graphics_Suite import _Prop_ordering
 
 from django.contrib.auth.models import User
 
@@ -78,7 +79,10 @@ class FloorResource(ModelResource):
         include_resource_uri = True
         filtering = {
             'enclosure': ALL_WITH_RELATIONS,
-            'id': ALL
+            'id': ALL,
+        }
+        ordering = {
+            'floor_number': ALL
         }
         always_return_data = True
         max_limit = 5000
@@ -186,7 +190,8 @@ class ConnectionResource(ModelResource):
         always_return_data = True
         filtering = {
             'id': ALL,
-            'init': ALL_WITH_RELATIONS
+            'init': ALL_WITH_RELATIONS,
+            'end': ALL_WITH_RELATIONS,
             }
 
     def determine_format(self, request):

@@ -1,5 +1,6 @@
 # -*- coding: utf8 -*-
 
+import os
 from django.core.files.base import ContentFile
 
 from utils.helpers import *
@@ -40,10 +41,10 @@ class ImgService:
             self.delete_img()
 
         # Guardamos la nueva imágen
-
-        # Reemplazamos espacios por _
         filename = self.request.FILES['img'].name.replace(" ", "_")
-        resource_obj.img.save(filename, file_content)
+        fileName, fileExtension = os.path.splitext(filename)
+        fileName = str(resource_obj.id) + fileExtension
+        resource_obj.img.save(fileName, file_content)
         saved_obj = resource_obj.save()
 
         # respuesta en el iframe
