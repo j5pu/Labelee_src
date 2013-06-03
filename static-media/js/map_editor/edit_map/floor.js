@@ -14,6 +14,10 @@ var Floor = {
         total: 0
     },
     points_to_delete: [],
+    painted_connectors: null,
+
+    //Planta1_escalera_1
+    connector_index: 1,
 
 
     init: function()
@@ -336,7 +340,10 @@ var Floor = {
         if(Floor.show_only_qrs)
             Floor.points = new PointResource().readQRsFromFloor(Floor.data.id);
         else
+        {
             Floor.points = new PointResource().readAllFiltered('?floor__id=' + Floor.data.id);
+            Floor.painted_connectors = new PointResource().readConnectionsFromFloor(Floor.data.id)
+        }
 
         // Obtenemos todas las etiquetas que contiene la planta a cargar, y así evitar
         // llamar a BD cada vez que queramos pedir la etiqueta de cada punto
@@ -430,6 +437,8 @@ var Floor = {
 
         Floor._drawGrid();
 
+        Floor.painted_connectors = [];
+
         Menu.init();
 
         Events.bindAll();
@@ -446,6 +455,8 @@ var Floor = {
         Floor.point_count.to_save = 0;
         Floor.point_count.to_delete = 0;
         Floor.point_count.connectors = 0;
+
+        Floor.painted_connectors = [];
 
         // Si la planta no tiene todavía un número de filas entonces
         // 'tirará' de lo indicado en el formulario de la página

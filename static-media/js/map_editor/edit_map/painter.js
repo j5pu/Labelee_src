@@ -65,7 +65,12 @@ var Painter = {
                 Floor.point_count.to_save--;
 
         if(block.data('connector-descr'))
-            Floor.point_count.connectors--;
+        {
+            var descr = block.data('connector-descr');
+
+            var index = Floor.painted_connectors.indexOf(descr);
+            Floor.painted_connectors.splice(index, 1);
+        }
 
         // Limpiamos todo el contenido del bloque..
         block.empty();
@@ -123,17 +128,7 @@ var Painter = {
         // Si lo que se está pintando es una arista, añadimos al bloque la descripción para el punto:
         //      xej: Parquing_Escalera_4
         if(LabelCategory.isConnector(Painter.label.category))
-        {
-            var connector_descr = Floor.data.name + '_' + Painter.label.name + '_' + ++Floor.point_count.connectors;
-            block.attr('data-connector-descr', connector_descr);
-            block.append(
-                '<div class="connector_descr">' + connector_descr + '</div>'
-            );
-            block.find('.connector_descr').css({
-                'bottom': '10px',
-                'left': Floor.block_width * 2 + 'px'
-            });
-        }
+            Painter.paintConnector(block);
 
         // Ponemos el bloque de un color según la categoría de la etiqueta..
         block.css({
@@ -160,6 +155,52 @@ var Painter = {
         // Seguimos iterando mientras se esté cargando el plano
         if(Floor.loading)
             Floor._loopPoints();
+    },
+
+
+    paintConnector: function(block)
+    {
+        var connector_descr;
+
+        if(Floor.loading)
+            connector_descr = Painter.point.description;
+        else
+        {
+            // Pintamos la arista de manera que si hemos por ejemplo cargado
+            // la escalera_2 y escalera_3, la nueva ocupe el hueco que quede libre
+            // con escalera_1 y no escalera_4
+            Floor.connector_index = 1;
+            do
+            {
+                var valid_descr = true;
+                connector_descr = Floor.data.name + '_' + Painter.label.name + '_' + Floor.connector_index;
+
+                // Comparamos la descripción de la nueva arista. Si existe entre las
+                // descripciones de las aristas ya cargadas desde BD entonces la aumentamos en
+                // una unidad y volvemos a hacer la comparación
+                for(var i in Floor.painted_connectors)
+                {
+                    if(Floor.painted_connectors[i] == connector_descr)
+                    {
+                        valid_descr = false;
+                        Floor.connector_index++;
+                        break;
+                    }
+                }
+            }
+            while(!valid_descr);
+        }
+
+        Floor.painted_connectors.push(connector_descr);
+
+        block.attr('data-connector-descr', connector_descr);
+        block.append(
+            '<div class="connector_descr">' + connector_descr + '</div>'
+        );
+        block.find('.connector_descr').css({
+            'bottom': '10px',
+            'left': Floor.block_width * 2 + 'px'
+        });
     },
 
 
