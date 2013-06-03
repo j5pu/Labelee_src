@@ -190,7 +190,8 @@ class ConnectionResource(ModelResource):
         always_return_data = True
         filtering = {
             'id': ALL,
-            'init': ALL_WITH_RELATIONS
+            'init': ALL_WITH_RELATIONS,
+            'end': ALL_WITH_RELATIONS,
             }
 
     def determine_format(self, request):

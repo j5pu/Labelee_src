@@ -179,8 +179,7 @@ function FloorCtrl($scope, $element)
 
 		$scope.floor_resource.del($scope.floor.id, confirm_msg);
 
-		$scope.$parent.$parent.floors =
-			$scope.floor_resource.readAllFiltered('?enclosure__id=' + $scope.enclosure.id);
+        $scope.loadFloorList();
 	};
 }
 

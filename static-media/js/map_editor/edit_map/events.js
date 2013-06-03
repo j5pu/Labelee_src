@@ -2,12 +2,28 @@
 var Events = {
 
     grid: {
+
+        _toggleMousePointer: function()
+        {
+            $e.floor.grid.on('mouseover', function(){
+                if(Painter.erase_mode)
+                    $(this).css({'cursor': 'no-drop'});
+                else
+                    $(this).css({'cursor': 'default'});
+            });
+            $e.floor.grid.on('mouseleave', function(){
+                $(this).css({'cursor': 'default'});
+            });
+        },
+
+
         _toggleBlockShadow: function()
         {
             // Cambiamos el evento 'mouseover' del elemento para que haga esto:
 
-            // Si el bloque contiene un qr entonces no hacemos nada de esto
-            if(Painter.current_hovered_block && Painter.current_hovered_block.data('qr'))
+            // Si el bloque contiene un qr entonces no le sacamos la sombra
+            var block_is_qr = Painter.current_hovered_block && Painter.current_hovered_block.data('qr');
+            if(block_is_qr)
                 return;
 
             $e.floor.blocks.on('mouseover', function(){
@@ -23,6 +39,8 @@ var Events = {
         {
             $e.floor.blocks.on('mouseover', function(){
                 Painter.current_hovered_block = $(this);
+                if(Painter.current_hovered_block.data('qr'))
+                    Painter.current_hovered_block.is_qr = true;
             });
             $e.floor.blocks.on('mouseleave', function(){
                 Painter.current_hovered_block = null;
@@ -174,6 +192,7 @@ var Events = {
             self._toggleLabelInfo();
             self._showUpQRInfo();
             self._setHoveredBlock();
+            self._toggleMousePointer();
         }
     },
 
@@ -310,12 +329,16 @@ var Events = {
             Mousetrap.bind('e', function(e){
                 // Si el ratón no está sobre un bloque cuando se pulsa la e,
                 // entonces no hacemos nada
+                e.preventDefault();
+
                 if(!Painter.current_hovered_block)
                     return;
 
-                e.preventDefault();
-                $e.floor.toggle_erase_mode.attr('checked', !Painter.erase_mode)
-                Menu.toggleEraseMode();
+                Painter.erase_mode = !Painter.erase_mode;
+
+                $e.floor.toggle_erase_mode.prop('checked', Painter.erase_mode);
+
+                $e.floor.grid.trigger('mouseover');
             });
         },
 

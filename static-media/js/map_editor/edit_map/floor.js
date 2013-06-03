@@ -109,7 +109,7 @@ var Floor = {
 
     update: function()
     {
-        Floor.point_count.saved = 0;
+
 //        loadingMsg.show('Actualizando planta..');
 
         // Tomamos todas las etiquetas pintadas sobre el plano hasta el momento
@@ -165,7 +165,6 @@ var Floor = {
 
         // Recargamos el grid
         Floor.reloading = true;
-        Floor.point_count.to_save = 0;
         Floor.loadGrid();
 
 //        loadingMsg.hide();
@@ -442,6 +441,10 @@ var Floor = {
     loadGrid: function()
     {
         Floor.loading = true;
+
+        Floor.point_count.saved = 0;
+        Floor.point_count.to_save = 0;
+        Floor.point_count.to_delete = 0;
         Floor.point_count.connectors = 0;
 
         // Si la planta no tiene todavía un número de filas entonces
