@@ -302,17 +302,17 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
                     for (var j in route.fields.steps ) {
                         subpath[i].push([(route.fields.steps[j].fields.row)*osY+osY, (route.fields.steps[j].fields.column)*osX+osX]);
                     }
-                    arrow[i] = L.polyline(subpath[i],{color: 'orange'});
-                    arrowHead[i] = L.polylineDecorator(arrow[i]);
+                    arrow = L.polyline(subpath[i],{color: 'orange'});
+                    arrowHead = L.polylineDecorator(arrow);
 
-                        var arrowOffset = 0;
-                        anim = window.setInterval(function() {
-                        arrowHead[i].setPatterns([
-                        {offset: arrowOffset+'%', repeat: 0, symbol: new L.Symbol.ArrowHead({pixelSize: 15, polygon: false, pathOptions: {/*color:"orange",*/ stroke: true}})}
-                        ]);
-                        if(++arrowOffset > 100)
-                        arrowOffset = 0;
-                        }, 100);
+                            var arrowOffset = 0;
+                            anim = window.setInterval(function() {
+                            arrowHead.setPatterns([
+                            {offset: arrowOffset+'%', repeat: 0, symbol: new L.Symbol.ArrowHead({pixelSize: 15, polygon: false, pathOptions: {/*color:"orange",*/ stroke: true}})}
+                            ]);
+                            if(++arrowOffset > 100)
+                            arrowOffset = 0;
+                            }, 100);
                     }
                 }
 
@@ -328,14 +328,14 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
                         arrow[i] = L.polyline(subpath[i],{color: 'orange'});
                         arrowHead[i] = L.polylineDecorator(arrow[i]);
 
-//                        var arrowOffset = 0;
-//                        anim = window.setInterval(function() {
-//                        arrowHead[i].setPatterns([
-//                        {offset: arrowOffset+'%', repeat: 0, symbol: new L.Symbol.ArrowHead({pixelSize: 15, polygon: false, pathOptions: {/*color:"orange",*/ stroke: true}})}
-//                        ]);
-//                        if(++arrowOffset > 100)
-//                        arrowOffset = 0;
-//                        }, 100);
+                        var arrowOffset = 0;
+                        anim = window.setInterval(function() {
+                        arrowHead[i].setPatterns([
+                        {offset: arrowOffset+'%', repeat: 0, symbol: new L.Symbol.ArrowHead({pixelSize: 15, polygon: false, pathOptions: {/*color:"orange",*/ stroke: true}})}
+                        ]);
+                        if(++arrowOffset > 100)
+                        arrowOffset = 0;
+                        }, 100);
 
                     }
                     else {
@@ -348,20 +348,16 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
                         arrow[i] = L.polyline(subpath[i],{color: 'orange'});
                         arrowHead[i] = L.polylineDecorator(arrow[i]);
 
-//                        var arrowOffset = 0;
-//                        anim = window.setInterval(function() {
-//                            arrowHead[i].setPatterns([
-//                                {offset: arrowOffset+'%', repeat: 0, symbol: new L.Symbol.ArrowHead({pixelSize: 15, polygon: false, pathOptions: {/*color:"orange",*/ stroke: true}})}
-//                            ]);
-//                            if(++arrowOffset > 100)
-//                                arrowOffset = 0;
-//                        }, 100);
-
-
+                        var arrowOffset = 0;
+                        anim = window.setInterval(function() {
+                            arrowHead[i].setPatterns([
+                                {offset: arrowOffset+'%', repeat: 0, symbol: new L.Symbol.ArrowHead({pixelSize: 15, polygon: false, pathOptions: {/*color:"orange",*/ stroke: true}})}
+                            ]);
+                            if(++arrowOffset > 100)
+                                arrowOffset = 0;
+                        }, 100);
                     }
-
                 }
-
             }
 
         for(i in floors)
