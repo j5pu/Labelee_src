@@ -243,11 +243,6 @@ function drawOrigin(origin) {
                 map.setMaxBounds(originFloor.bounds);
                 map.setView(originFloor.bounds.getCenter(),0);
              }
-
-        else {
-                map.removeLayer(floors[i].layer);
-        }
-
     }
 
         for(i in floors)
@@ -257,13 +252,10 @@ function drawOrigin(origin) {
 
     map.removeLayer(totalPois);
     map.addLayer(originFloor.layer);
-
 }
 
 
-
 //EVENTOS - CAMBIO DE PLANTA
-
 map.on('baselayerchange', function (e) {
     if(map.hasLayer(originFloor.layer)){
         map.removeLayer(originFloor.layer);
@@ -313,14 +305,14 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
                     arrow[i] = L.polyline(subpath[i],{color: 'orange'});
                     arrowHead[i] = L.polylineDecorator(arrow[i]);
 
-//                        var arrowOffset = 0;
-//                        anim = window.setInterval(function() {
-//                        arrowHead[i].setPatterns([
-//                        {offset: arrowOffset+'%', repeat: 0, symbol: new L.Symbol.ArrowHead({pixelSize: 15, polygon: false, pathOptions: {/*color:"orange",*/ stroke: true}})}
-//                        ]);
-//                        if(++arrowOffset > 100)
-//                        arrowOffset = 0;
-//                        }, 100);
+                        var arrowOffset = 0;
+                        anim = window.setInterval(function() {
+                        arrowHead[i].setPatterns([
+                        {offset: arrowOffset+'%', repeat: 0, symbol: new L.Symbol.ArrowHead({pixelSize: 15, polygon: false, pathOptions: {/*color:"orange",*/ stroke: true}})}
+                        ]);
+                        if(++arrowOffset > 100)
+                        arrowOffset = 0;
+                        }, 100);
                     }
                 }
 
