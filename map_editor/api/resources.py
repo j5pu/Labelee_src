@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from StdSuites.QuickDraw_Graphics_Suite import _Prop_ordering
+#sfrom StdSuites.QuickDraw_Graphics_Suite import _Prop_ordering
 
 from django.contrib.auth.models import User
 
