@@ -45,9 +45,9 @@ var origin = {
 
 var  mapH = $(document).height(),//Altura de la pantalla
 
-    baseLayers={},
+    baseLayers = {},
     floor_index = 0,
-    totalPois=new L.LayerGroup(),
+    totalPois = new L.LayerGroup(),
     originFloor,
     originPoint,
 
@@ -127,8 +127,8 @@ function loadPOIs()
                     category = floors[fl].pois[j].label.category.name;
 
                 floors[fl].pois[j].marker = new L.Marker(new L.latLng(loc), {icon:loadIcon(colorIcon), title:nameIcon /*, color:colorIcon*/});
-                //floors[fl].pois[j].marker.options.icon.options.className='awesome-marker';
-            floors[fl].pois[j].marker.options.icon.options.color=colorIcon;
+                floors[fl].pois[j].marker.options.icon.options.color=colorIcon;
+
 //IMPORTANTE- CAMBIO DE ICONOS DINÁMICO
 // floors[fl].pois[j].marker.options.icon.options.icon='star';
                 floors[fl].pois[j].marker.poid=id;
@@ -143,35 +143,12 @@ function loadPOIs()
                     });
                 floors[fl].layer.addLayer(floors[fl].pois[j].marker);
                 totalPois.addLayer(floors[fl].pois[j].marker);
-
-
         }
     }
 
-
-    /*
-    floors[1].layer.eachLayer(function (layer) {
-        layer.setIcon(redMarker);
-//        var destinyPoint= [layer._latlng.lat, layer._latlng.lng];
-//        layer.on({
-//           click: function(e){
-//               drawRoute(origin.point.id, destinyPoint);
-////                alert('Lat: '+layer._latlng.lat+', Lng: '+layer._latlng.lng);
-//           }
-//        });
-    });
-
-*/
     for(var i in totalPois._layers) {
-//        console.log(i);
-        totalPois._layers[i].title = totalPois._layers[i].options.title;
-        	//value searched
+        totalPois._layers[i].title = totalPois._layers[i].options.title;	//value searched
         totalPois._layers[i].color = totalPois._layers[i].options.icon.options.color;
-
-        //    loc = data[i].loc,		//position found
-        //    marker = new L.Marker(new L.latLng(loc), {title: title} );//se property searched
-        //marker.bindPopup('title: '+ title );
-        //markersLayer.addLayer(marker);
     }
 
     for(i in floors) {
@@ -179,6 +156,8 @@ function loadPOIs()
             originFloor = floors[i];
             originFloor.sX = floors[i].scaleX;
             originFloor.sY =floors[i].scaleY;
+            originFloor.layer = floors[i].layer;
+
 
             originPoint = [((origin.point.row) * originFloor.scaleY)+originFloor.scaleY,
                 (origin.point.col * originFloor.scaleX)+originFloor.scaleX];
@@ -191,9 +170,11 @@ function loadPOIs()
         }
     }
 
-    layersControl= new L.control.layers(null, null, {collapsed:false});
 
 }
+
+var layersControl= new L.control.layers(null, null, {collapsed:false});
+
 
 //Configuración de la lupa
 var mobileOpts = {
@@ -231,7 +212,6 @@ function customTip(text, color)
     subtip.style.float = 'right';
     subtip.style.width = '18px';
     subtip.style.height = '18px';
-    //subtip.style.backgroundColor = colortext;
     subtip.style.backgroundColor = loadColor() || 'red';
     return tip;
 }
@@ -248,40 +228,35 @@ var searchMarker=new L.Control.Search(mobileOpts);
 function drawOrigin(origin) {
     map.addControl(searchMarker);
     map.addControl(new L.Control.Zoom());
-
     layersControl.addTo(map);
-
-    for(i in floors)
-    {
-        map.removeLayer(floors[i].layer);
-    }
 
 
     for (i=(floors.length)-1; i>=0; i--)
     {
         layersControl.addBaseLayer(floors[i].photo,floors[i].name);
 
-        if(origin.floor.id === floors[i].id)
+        if(floors[i].id===origin.floor.id)
             {
-                map.addLayer(floors[i].photo);
-                console.log("añade foto " + i);
-
+                originFloor = floors[i];
+                map.addLayer(originFloor.photo);
                 map.addLayer(floors[i].layer);
-                console.log("añade iconos " + i);
-
-                //originFloor = floors[i];
-                map.setMaxBounds(floors[i].bounds);
-                map.setView(floors[i].bounds.getCenter(),0);
-                //break;
+                map.setMaxBounds(originFloor.bounds);
+                map.setView(originFloor.bounds.getCenter(),0);
              }
 
         else {
-            map.removeLayer(floors[i].layer);
-            map.removeLayer(totalPois);
-
+                map.removeLayer(floors[i].layer);
         }
+
     }
 
+        for(i in floors)
+    {
+        map.removeLayer(floors[i].layer);
+    }
+
+    map.removeLayer(totalPois);
+    map.addLayer(originFloor.layer);
 
 }
 
@@ -304,7 +279,7 @@ map.on('baselayerchange', function (e) {
             map.removeLayer(searchMarker._markerLoc._circleLoc);
         }
     }
-    map.setView(originPoint, 0);
+    //map.setView(originPoint, 0);
     map.addLayer(floor_x.layer);
     map.setMaxBounds(floor_x.bounds);
 });
@@ -381,14 +356,14 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
                         arrow[i] = L.polyline(subpath[i],{color: 'orange'});
                         arrowHead[i] = L.polylineDecorator(arrow[i]);
 
-                        var arrowOffset = 0;
-                        anim = window.setInterval(function() {
-                            arrowHead[i].setPatterns([
-                                {offset: arrowOffset+'%', repeat: 0, symbol: new L.Symbol.ArrowHead({pixelSize: 15, polygon: false, pathOptions: {/*color:"orange",*/ stroke: true}})}
-                            ]);
-                            if(++arrowOffset > 100)
-                                arrowOffset = 0;
-                        }, 100);
+//                        var arrowOffset = 0;
+//                        anim = window.setInterval(function() {
+//                            arrowHead[i].setPatterns([
+//                                {offset: arrowOffset+'%', repeat: 0, symbol: new L.Symbol.ArrowHead({pixelSize: 15, polygon: false, pathOptions: {/*color:"orange",*/ stroke: true}})}
+//                            ]);
+//                            if(++arrowOffset > 100)
+//                                arrowOffset = 0;
+//                        }, 100);
 
 
                     }
