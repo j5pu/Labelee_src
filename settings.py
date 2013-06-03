@@ -219,10 +219,9 @@ else:
             "USER": "root",
             "PASSWORD": "",
             "HOST": "",
-            "PORT": "3306",
+            "PORT": "",
             }
-    }
-
+        }
 
 #     Estas aplicaciones sólo se usarán en desarrollo..
     INSTALLED_APPS += ('south', 'sandbox',)
