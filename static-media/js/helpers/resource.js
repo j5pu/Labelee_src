@@ -244,12 +244,14 @@ function FloorResource()
 
         // Primero eliminamos todos los puntos para el plano, de forma que no
         // puedan quedar aristas sueltas
-        var filter = '?floor__id=' + floor_id;
-        var point_list = new PointResource().readAllFiltered(filter);
-        new PointResource().deletePoints(point_list);
+//        var filter = '?floor__id=' + floor_id;
+//        var point_list = new PointResource().readAllFiltered(filter);
+//        new PointResource().deletePoints(point_list);
 
         // Eliminamos la imágen para el plano
-        this.delImg(floor_id);
+        //
+        // POR CORREGIR
+//        this.delImg(floor_id);
 
         // Eliminamos la planta
         $.ajax({
@@ -434,7 +436,11 @@ function PointResource()
 
     this.readConnectionsFromEnclosure = function(enclosure_id)
     {
-        return this.readAllFiltered('?label__category__name__icontains=arista&floor__enclosure__id=' + enclosure_id);
+        return this.readAllFiltered(
+            '?label__category__name__icontains=arista' +
+                '&floor__enclosure__id=' + enclosure_id +
+                '&order_by=description'
+        );
     };
 
     this.readConnectionsFromFloor = function(floor_id)

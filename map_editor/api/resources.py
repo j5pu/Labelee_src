@@ -27,10 +27,9 @@ class UserResource(ModelResource):
     class Meta:
         resource_name = 'user'
         queryset = User.objects.all()
-
+        authorization = DjangoAuthorization()
         # excludes = ['email', 'password', 'is_staff', 'is_superuser']
     # allowed_methods = ['get']
-    # authorization = DjangoAuthorization()
     # authentication = BasicAuthentication()
     # include_resource_uri = False
 
@@ -112,6 +111,9 @@ class PointResource(ModelResource):
             'id': ALL,
             'row': ALL,
             'col': ALL,
+            'description': ALL
+        }
+        ordering = {
             'description': ALL
         }
         max_limit = 5000
