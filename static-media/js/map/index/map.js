@@ -118,13 +118,14 @@ function loadPOIs()
                 var colorIcon = floors[fl].pois[j].label.category.color,
                     nameIcon =floors[fl].pois[j].label.name,
                     id= floors[fl].pois[j].id,
+                    descriptionIcon=floors[fl].pois[j].description,
                     sX= floors[fl].scaleX,
                     sY= floors[fl].scaleY,
                     loc = [(floors[fl].pois[j].row)*sY+(sY),
                         floors[fl].pois[j].col*sX+(sY)],
                     category = floors[fl].pois[j].label.category.name;
 
-                floors[fl].pois[j].marker = new L.Marker(new L.latLng(loc), {icon:loadIcon(colorIcon), title:nameIcon /*, color:colorIcon*/});
+                floors[fl].pois[j].marker = new L.Marker(new L.latLng(loc), {icon:loadIcon(colorIcon), title:descriptionIcon /*, color:colorIcon*/});
                 floors[fl].pois[j].marker.options.icon.options.color=colorIcon;
 
 //IMPORTANTE- CAMBIO DE ICONOS DINÁMICO
@@ -134,7 +135,7 @@ function loadPOIs()
                 floors[fl].pois[j].marker.psY=sY;
                 floors[fl].pois[j].marker.loc=loc;
 
-                floors[fl].pois[j].marker.bindPopup(nameIcon)
+                floors[fl].pois[j].marker.bindPopup(descriptionIcon)
                     .on('click', function () {
                         map.removeLayer(searchMarker._markerLoc._circleLoc);
                         drawRoute(origin.point.id, originFloor.sX, originFloor.sY,this.poid, this.psX, this.psY);
@@ -274,11 +275,12 @@ map.on('baselayerchange', function (e) {
 
 
     }
+    map.addLayer(floor_x.layer);
+    map.setMaxBounds(floor_x.bounds);
     if(arrowHead[i]){
         map.addLayer(flechita);
     }
-    map.addLayer(floor_x.layer);
-    map.setMaxBounds(floor_x.bounds);
+
     //map.setView(originPoint, 0);
 });
 
@@ -291,31 +293,14 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
         map.removeLayer(arrowHead[i]);
         }
     }
-console.log(dst);
     path=[];
     subpath=[];
+    subarrow=[];
 
     route = new RouteResource().getRoute(org, dst);
     if(route){
 
-//            if (route.fields.origin.fields.floor===route.fields.destiny.fields.floor){ //ruta monoplanta
-//                for (var i in floors ) {
-//                    if(route.fields.origin.fields.floor == floors[i].id){
-//
-//                    subpath[i]=[];
-//                    subpath[i].push([(route.fields.origin.fields.row)*osY+osY, route.fields.origin.fields.col*osX+osX]);
-//                    console.log ('planta: '+i);
-//                    for (var j in route.fields.steps ) {
-//                        subpath[i].push([(route.fields.steps[j].fields.row)*osY+osY, (route.fields.steps[j].fields.column)*osX+osX]);
-//                    }
-//                    arrow[i] = new L.polyline(subpath[i],{color: 'orange'});
-//                    arrowHead[i] = new L.polylineDecorator(arrow[i]);
-//                    }
-//                }
-//
-//            }else{//ruta multiplanta
 
-                    //for (var f in floors ) {
                         for (var i in route.fields.subroutes) {
                             if (route.fields.subroutes[i].floor.pk === route.fields.origin.fields.floor){
                                 subpath[i]=[];
@@ -324,9 +309,16 @@ console.log(dst);
                                 for (var j in route.fields.subroutes[i].steps ) {
                                     subpath[i].push([(route.fields.subroutes[i].steps[j].fields.row)*osY+osY, (route.fields.subroutes[i].steps[j].fields.column)*osX+osX]);
                                 }
-                                arrow[i] = L.polyline(subpath[i],{color: 'orange'});
-                                arrowHead[i] = L.polylineDecorator(arrow[i]);
-                                map.addLayer(arrowHead[i]);
+
+                                for (var f in floors) {
+                                    if(route.fields.subroutes[i].floor.pk  == floors[f].id){
+                                     subarrow[f] = subpath[i];
+                                     break;
+                                    }
+                                }
+                                arrow[f] = L.polyline(subarrow[f],{color: 'orange'});
+                                arrowHead[f] = L.polylineDecorator(arrow[f]);
+                                map.addLayer(arrowHead[f]);
                             }
                             else {
                                 subpath[i]=[];
@@ -335,37 +327,27 @@ console.log(dst);
                                     subpath[i].push([(route.fields.subroutes[i].steps[j].fields.row)*sY+sY, (route.fields.subroutes[i].steps[j].fields.column)*sX+sX]);
                                 }
 
-                                arrow[i] = L.polyline(subpath[i],{color: 'orange'});
-                                arrowHead[i] = new L.polylineDecorator(arrow[i]);
-                                map.addLayer(arrowHead[i]);
+                                for (var f in floors) {
+                                    if(route.fields.subroutes[i].floor.pk  == floors[f].id){
+                                        subarrow[f] = subpath[i];
+                                        break;
+                                    }
+                                }
+                                arrow[f] = L.polyline(subarrow[f],{color: 'orange'});
+                                arrowHead[f] = L.polylineDecorator(arrow[f]);
+                                map.addLayer(arrowHead[f]);
                             }
                         }
-                    //}
 
         for(i in floors)
         {
             if(arrow[i]){
             floors[i].layer.addLayer(arrow[i]);
-//            anim = window.setInterval(setArrow(arrowHead[i]), 100);
             map.addLayer(arrowHead[i]);
             var flechita = arrowHead[i];
-            anim = window.setInterval(function(){setArrow(flechita, 'wwwooooo')}, 100);
-
-            map.fitBounds(arrow[i].getBounds());
+            anim = window.setInterval(function(){setArrow(flechita)}, 100);
             }
 
-
-//            if(route.fields.origin.fields.floor == floors[i].id)
-//            {
-//                floors[i].layer.addLayer(arrow);
-//                floors[i].layer.addLayer(arrowHead);
-//                //break;
-//            }
-//            else{
-//                floors[i].layer.addLayer(arrow[i]);
-//                floors[i].layer.addLayer(arrowHead[i]);
-//
-//            }
         }
 
     }else{
@@ -374,16 +356,10 @@ console.log(dst);
 }
 
 
-var setArrow = function(flecha, txt) {
-    //console.log(txt);
-
+var setArrow = function(flecha) {
     flecha.setPatterns([
         {offset: arrowOffset+'%', repeat: 0, symbol: new L.Symbol.ArrowHead({pixelSize: 15, polygon: false, pathOptions: {/*color:"orange",*/ stroke: true}})}
     ]);
     if(++arrowOffset > 100)
         arrowOffset = 0;
 }
-
-//function log(txt){
-//    console.log(txt);
-//}
