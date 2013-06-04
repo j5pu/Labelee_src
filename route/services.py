@@ -26,7 +26,7 @@ def get_route(request, origin, destiny):
             route_steps_dict.append(to_dict(step))
     else:
         route_floors_dict = route_dict['fields']['subroutes'] = []
-        route_floors_model = Floor.objects.filter(step__route__id=route_model.id).annotate(total=Sum('id'))
+        route_floors_model = Floor.objects.filter(steps__route__id=route_model.id).annotate(total=Sum('id'))
 
         # metemos plantas
         for floor in route_floors_model:

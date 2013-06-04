@@ -258,23 +258,28 @@ map.on('baselayerchange', function (e) {
         map.removeLayer(originFloor.layer);
     }
     var floor_x;
+    var flechita;
     for (var i in floors){
         if (e.layer._url === floors[i].photo._url) {
             floor_x = floors[i];
             map.addLayer(searchMarker._markerLoc._circleLoc);
-
+            if(arrowHead[i])
+                flechita = arrowHead[i];
         } else {
             map.removeLayer(floors[i].layer);
             map.removeLayer(searchMarker._markerLoc._circleLoc);
-            map.removeLayer(arrowHead[i]);
+            if(arrowHead[i])
+                map.removeLayer(arrowHead[i]);
         }
 
 
     }
-    //map.setView(originPoint, 0);
+    if(arrowHead[i]){
+        map.addLayer(flechita);
+    }
     map.addLayer(floor_x.layer);
     map.setMaxBounds(floor_x.bounds);
-
+    //map.setView(originPoint, 0);
 });
 
 
@@ -286,29 +291,30 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
         map.removeLayer(arrowHead[i]);
         }
     }
-
+console.log(dst);
     path=[];
     subpath=[];
 
     route = new RouteResource().getRoute(org, dst);
     if(route){
 
-            if (route.fields.origin.fields.floor===route.fields.destiny.fields.floor){ //ruta monoplanta
-                for (var i in floors ) {
-                    if(route.fields.origin.fields.floor == floors[i].id){
-
-                    subpath[i]=[];
-                    subpath[i].push([(route.fields.origin.fields.row)*osY+osY, route.fields.origin.fields.col*osX+osX]);
-                    console.log ('planta: '+i);
-                    for (var j in route.fields.steps ) {
-                        subpath[i].push([(route.fields.steps[j].fields.row)*osY+osY, (route.fields.steps[j].fields.column)*osX+osX]);
-                    }
-                    arrow[i] = new L.polyline(subpath[i],{color: 'orange'});
-                    arrowHead[i] = new L.polylineDecorator(arrow[i]);
-                    }
-                }
-
-            }else{//ruta multiplanta
+//        //var is_monoplant =
+//            if (route.fields.origin.fields.floor===route.fields.destiny.fields.floor){ //ruta monoplanta
+//                for (var i in floors ) {
+//                    if(route.fields.origin.fields.floor == floors[i].id){
+//
+//                    subpath[i]=[];
+//                    subpath[i].push([(route.fields.origin.fields.row)*osY+osY, route.fields.origin.fields.col*osX+osX]);
+//                    console.log ('planta: '+i);
+//                    for (var j in route.fields.steps ) {
+//                        subpath[i].push([(route.fields.steps[j].fields.row)*osY+osY, (route.fields.steps[j].fields.column)*osX+osX]);
+//                    }
+//                    arrow[i] = new L.polyline(subpath[i],{color: 'orange'});
+//                    arrowHead[i] = new L.polylineDecorator(arrow[i]);
+//                    }
+//                }
+//
+//            }else{//ruta multiplanta
 
 //                for (var f in floors)
 
@@ -336,7 +342,7 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
                                 map.addLayer(arrowHead[i]);
                             }
                         }
-                    }
+
 
         for(i in floors)
         {
@@ -371,7 +377,7 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
 
 
 var setArrow = function(flecha, txt) {
-    console.log(txt);
+    //console.log(txt);
 
     flecha.setPatterns([
         {offset: arrowOffset+'%', repeat: 0, symbol: new L.Symbol.ArrowHead({pixelSize: 15, polygon: false, pathOptions: {/*color:"orange",*/ stroke: true}})}
@@ -380,6 +386,6 @@ var setArrow = function(flecha, txt) {
         arrowOffset = 0;
 }
 
-function log(txt){
-    console.log(txt);
-}
+//function log(txt){
+//    console.log(txt);
+//}
