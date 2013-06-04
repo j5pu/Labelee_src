@@ -41,15 +41,13 @@ var origin = {
 
 
 //Variables globales
-
 var  mapH = $(document).height(),//Altura de la pantalla
-
     baseLayers = {},
+    layersControl= new L.control.layers(null, null, {collapsed:false}),
     floor_index = 0,
     totalPois = new L.LayerGroup(),
     originFloor,
     originPoint,
-
     floors = new FloorResource().readFromEnclosure(origin.enclosure.id);
 
 //POIs de cada floor, separados para pintarlos por capas
@@ -57,8 +55,7 @@ for (var i in floors){
     floors[i].pois = new PointResource().readOnlyPois(floors[i].id);
 }
 
-var path=[],
-    route = {},
+var route = {},
     arrow = [];
     arrowHead = [];
 
@@ -171,7 +168,6 @@ function loadPOIs()
 
 }
 
-var layersControl= new L.control.layers(null, null, {collapsed:false});
 
 
 //Configuración de la lupa
@@ -194,14 +190,13 @@ var mobileOpts = {
 };
 
 function loadColor(){
-    //TODO
+    //¡¡POR HACER!!
 }
 
 //Configuración de los resultados de búsqueda en la lupa
 function customTip(text, color)
 {
     var tip = L.DomUtil.create('a', 'colortip');
-
     tip.href = "#"+text;
     tip.innerHTML = text;
 
@@ -214,6 +209,7 @@ function customTip(text, color)
     return tip;
 }
 
+//Configuración inicial del mapa
 var map = L.map('map', {
     crs: L.CRS.Simple,
     zoom: 0,
@@ -221,8 +217,10 @@ var map = L.map('map', {
     //layer: originFloor.layer
 });
 
-var searchMarker=new L.Control.Search(mobileOpts);
 
+
+//Localización del origen (QR) y carga del mapa
+var searchMarker=new L.Control.Search(mobileOpts);
 function drawOrigin(origin) {
     map.addControl(searchMarker);
     map.addControl(new L.Control.Zoom());
@@ -265,10 +263,14 @@ map.on('baselayerchange', function (e) {
             floor_x = floors[i];
             map.addLayer(searchMarker._markerLoc._circleLoc);
             if(arrowHead[i]){
+                map.fitBounds(arrow[i].getBounds());
                 map.addLayer(arrowHead[i]);
-                var flechita = arrowHead[i];
+                flechita = arrowHead[i];
                 anim = window.setInterval(function(){setArrow(flechita)}, 100);
+            }else{
+                map.setView(originFloor.bounds.getCenter(),0);
             }
+
         } else {
             map.removeLayer(floors[i].layer);
             map.removeLayer(searchMarker._markerLoc._circleLoc);
@@ -276,16 +278,14 @@ map.on('baselayerchange', function (e) {
                 map.removeLayer(arrowHead[i]);
         }
 
-
     }
     map.addLayer(floor_x.layer);
     map.setMaxBounds(floor_x.bounds);
-
     //map.setView(originPoint, 0);
 });
 
 
-//Creamos la ruta uniendo los puntos del array "path"
+//Creación de las rutas (con subrutas correspondientes), desde el origen hasta el POI destino
 function drawRoute(org, osX, osY, dst, sX, sY) {
     for (var i in floors){
         if(arrow[i]){
@@ -293,7 +293,6 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
         map.removeLayer(arrowHead[i]);
         }
     }
-    path=[];
     subpath=[];
     subarrow=[];
 
@@ -344,6 +343,8 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
             if(arrow[i]){
             floors[i].layer.addLayer(arrow[i]);
                 if (floors[i].id === route.fields.destiny.fields.floor) {
+                    map.fitBounds(arrow[i].getBounds());
+
                     map.addLayer(arrowHead[i]);
                     var flechita = arrowHead[i];
                     anim = window.setInterval(function(){setArrow(flechita)}, 100);
@@ -356,7 +357,7 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
     }
 }
 
-
+//Función que define la flecha animada que marca la ruta
 var setArrow = function(flecha) {
     flecha.setPatterns([
         {offset: arrowOffset+'%', repeat: 0, symbol: new L.Symbol.ArrowHead({pixelSize: 15, polygon: false, pathOptions: {/*color:"orange",*/ stroke: true}})}
