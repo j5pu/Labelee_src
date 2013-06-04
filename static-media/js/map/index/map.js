@@ -298,7 +298,6 @@ console.log(dst);
     route = new RouteResource().getRoute(org, dst);
     if(route){
 
-//        //var is_monoplant =
 //            if (route.fields.origin.fields.floor===route.fields.destiny.fields.floor){ //ruta monoplanta
 //                for (var i in floors ) {
 //                    if(route.fields.origin.fields.floor == floors[i].id){
@@ -316,8 +315,7 @@ console.log(dst);
 //
 //            }else{//ruta multiplanta
 
-//                for (var f in floors)
-
+                    //for (var f in floors ) {
                         for (var i in route.fields.subroutes) {
                             if (route.fields.subroutes[i].floor.pk === route.fields.origin.fields.floor){
                                 subpath[i]=[];
@@ -342,7 +340,7 @@ console.log(dst);
                                 map.addLayer(arrowHead[i]);
                             }
                         }
-
+                    //}
 
         for(i in floors)
         {
