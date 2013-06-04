@@ -264,8 +264,11 @@ map.on('baselayerchange', function (e) {
         if (e.layer._url === floors[i].photo._url) {
             floor_x = floors[i];
             map.addLayer(searchMarker._markerLoc._circleLoc);
-            if(arrowHead[i])
-                flechita = arrowHead[i];
+            if(arrowHead[i]){
+                map.addLayer(arrowHead[i]);
+                var flechita = arrowHead[i];
+                anim = window.setInterval(function(){setArrow(flechita)}, 100);
+            }
         } else {
             map.removeLayer(floors[i].layer);
             map.removeLayer(searchMarker._markerLoc._circleLoc);
@@ -277,9 +280,6 @@ map.on('baselayerchange', function (e) {
     }
     map.addLayer(floor_x.layer);
     map.setMaxBounds(floor_x.bounds);
-    if(arrowHead[i]){
-        map.addLayer(flechita);
-    }
 
     //map.setView(originPoint, 0);
 });
@@ -311,7 +311,7 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
                                 }
 
                                 for (var f in floors) {
-                                    if(route.fields.subroutes[i].floor.pk  == floors[f].id){
+                                    if(route.fields.subroutes[i].floor.pk === floors[f].id){
                                      subarrow[f] = subpath[i];
                                      break;
                                     }
@@ -343,11 +343,12 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
         {
             if(arrow[i]){
             floors[i].layer.addLayer(arrow[i]);
-            map.addLayer(arrowHead[i]);
-            var flechita = arrowHead[i];
-            anim = window.setInterval(function(){setArrow(flechita)}, 100);
+                if (floors[i].id === route.fields.destiny.fields.floor) {
+                    map.addLayer(arrowHead[i]);
+                    var flechita = arrowHead[i];
+                    anim = window.setInterval(function(){setArrow(flechita)}, 100);
+                }
             }
-
         }
 
     }else{
