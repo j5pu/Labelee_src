@@ -41,15 +41,13 @@ var origin = {
 
 
 //Variables globales
-
 var  mapH = $(document).height(),//Altura de la pantalla
-
     baseLayers = {},
+    layersControl= new L.control.layers(null, null, {collapsed:false}),
     floor_index = 0,
     totalPois = new L.LayerGroup(),
     originFloor,
     originPoint,
-
     floors = new FloorResource().readFromEnclosure(origin.enclosure.id);
 
 //POIs de cada floor, separados para pintarlos por capas
@@ -57,8 +55,7 @@ for (var i in floors){
     floors[i].pois = new PointResource().readOnlyPois(floors[i].id);
 }
 
-var path=[],
-    route = {},
+var route = {},
     arrow = [];
     arrowHead = [];
 
@@ -69,9 +66,9 @@ var icon= new L.AwesomeMarkers.icon({
     });
     return icon;
 }
+
 //Carga de planos
 loopFloors(floor_index);
-
 
 var name, img;
 function loopFloors ()
@@ -108,7 +105,6 @@ function loopFloors ()
 //Carga de POIs
 function loadPOIs()
 {
-
     for (var fl in floors){
         floors[fl].layer=new L.LayerGroup();
 
@@ -118,13 +114,14 @@ function loadPOIs()
                 var colorIcon = floors[fl].pois[j].label.category.color,
                     nameIcon =floors[fl].pois[j].label.name,
                     id= floors[fl].pois[j].id,
+                    descriptionIcon=floors[fl].pois[j].description,
                     sX= floors[fl].scaleX,
                     sY= floors[fl].scaleY,
                     loc = [(floors[fl].pois[j].row)*sY+(sY),
                         floors[fl].pois[j].col*sX+(sY)],
                     category = floors[fl].pois[j].label.category.name;
 
-                floors[fl].pois[j].marker = new L.Marker(new L.latLng(loc), {icon:loadIcon(colorIcon), title:nameIcon /*, color:colorIcon*/});
+                floors[fl].pois[j].marker = new L.Marker(new L.latLng(loc), {icon:loadIcon(colorIcon), title:descriptionIcon /*, color:colorIcon*/});
                 floors[fl].pois[j].marker.options.icon.options.color=colorIcon;
 
 //IMPORTANTE- CAMBIO DE ICONOS DINÁMICO
@@ -134,7 +131,7 @@ function loadPOIs()
                 floors[fl].pois[j].marker.psY=sY;
                 floors[fl].pois[j].marker.loc=loc;
 
-                floors[fl].pois[j].marker.bindPopup(nameIcon)
+                floors[fl].pois[j].marker.bindPopup(descriptionIcon)
                     .on('click', function () {
                         map.removeLayer(searchMarker._markerLoc._circleLoc);
                         drawRoute(origin.point.id, originFloor.sX, originFloor.sY,this.poid, this.psX, this.psY);
@@ -170,7 +167,6 @@ function loadPOIs()
 
 }
 
-var layersControl= new L.control.layers(null, null, {collapsed:false});
 
 
 //Configuración de la lupa
@@ -193,14 +189,13 @@ var mobileOpts = {
 };
 
 function loadColor(){
-    //TODO
+    //¡¡POR HACER!!
 }
 
 //Configuración de los resultados de búsqueda en la lupa
 function customTip(text, color)
 {
     var tip = L.DomUtil.create('a', 'colortip');
-
     tip.href = "#"+text;
     tip.innerHTML = text;
 
@@ -213,6 +208,7 @@ function customTip(text, color)
     return tip;
 }
 
+//Configuración inicial del mapa
 var map = L.map('map', {
     crs: L.CRS.Simple,
     zoom: 0,
@@ -220,8 +216,10 @@ var map = L.map('map', {
     //layer: originFloor.layer
 });
 
-var searchMarker=new L.Control.Search(mobileOpts);
 
+
+//Localización del origen (QR) y carga del mapa
+var searchMarker=new L.Control.Search(mobileOpts);
 function drawOrigin(origin) {
     map.addControl(searchMarker);
     map.addControl(new L.Control.Zoom());
@@ -263,8 +261,15 @@ map.on('baselayerchange', function (e) {
         if (e.layer._url === floors[i].photo._url) {
             floor_x = floors[i];
             map.addLayer(searchMarker._markerLoc._circleLoc);
-            if(arrowHead[i])
+            if(arrowHead[i]){
+                map.fitBounds(arrow[i].getBounds());
+                map.addLayer(arrowHead[i]);
                 flechita = arrowHead[i];
+                anim = window.setInterval(function(){setArrow(flechita)}, 100);
+            }else{
+                map.setView(originFloor.bounds.getCenter(),0);
+            }
+
         } else {
             map.removeLayer(floors[i].layer);
             map.removeLayer(searchMarker._markerLoc._circleLoc);
@@ -272,10 +277,6 @@ map.on('baselayerchange', function (e) {
                 map.removeLayer(arrowHead[i]);
         }
 
-
-    }
-    if(arrowHead[i]){
-        map.addLayer(flechita);
     }
     map.addLayer(floor_x.layer);
     map.setMaxBounds(floor_x.bounds);
@@ -283,7 +284,7 @@ map.on('baselayerchange', function (e) {
 });
 
 
-//Creamos la ruta uniendo los puntos del array "path"
+//Creación de las rutas (con subrutas correspondientes), desde el origen hasta el POI destino
 function drawRoute(org, osX, osY, dst, sX, sY) {
     for (var i in floors){
         if(arrow[i]){
@@ -291,81 +292,60 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
         map.removeLayer(arrowHead[i]);
         }
     }
-console.log(dst);
-    path=[];
     subpath=[];
+    subarrow=[];
 
     route = new RouteResource().getRoute(org, dst);
     if(route){
 
-//            if (route.fields.origin.fields.floor===route.fields.destiny.fields.floor){ //ruta monoplanta
-//                for (var i in floors ) {
-//                    if(route.fields.origin.fields.floor == floors[i].id){
-//
-//                    subpath[i]=[];
-//                    subpath[i].push([(route.fields.origin.fields.row)*osY+osY, route.fields.origin.fields.col*osX+osX]);
-//                    console.log ('planta: '+i);
-//                    for (var j in route.fields.steps ) {
-//                        subpath[i].push([(route.fields.steps[j].fields.row)*osY+osY, (route.fields.steps[j].fields.column)*osX+osX]);
-//                    }
-//                    arrow[i] = new L.polyline(subpath[i],{color: 'orange'});
-//                    arrowHead[i] = new L.polylineDecorator(arrow[i]);
-//                    }
-//                }
-//
-//            }else{//ruta multiplanta
-
-                    //for (var f in floors ) {
                         for (var i in route.fields.subroutes) {
                             if (route.fields.subroutes[i].floor.pk === route.fields.origin.fields.floor){
                                 subpath[i]=[];
                                 subpath[i].push([(route.fields.origin.fields.row)*osY+osY, route.fields.origin.fields.col*osX+osX]);
-                                console.log ('planta: '+i);
                                 for (var j in route.fields.subroutes[i].steps ) {
                                     subpath[i].push([(route.fields.subroutes[i].steps[j].fields.row)*osY+osY, (route.fields.subroutes[i].steps[j].fields.column)*osX+osX]);
                                 }
-                                arrow[i] = L.polyline(subpath[i],{color: 'orange'});
-                                arrowHead[i] = L.polylineDecorator(arrow[i]);
-                                map.addLayer(arrowHead[i]);
+
+                                for (var f in floors) {
+                                    if(route.fields.subroutes[i].floor.pk === floors[f].id){
+                                     subarrow[f] = subpath[i];
+                                     break;
+                                    }
+                                }
+                                arrow[f] = L.polyline(subarrow[f],{color: 'orange'});
+                                arrowHead[f] = L.polylineDecorator(arrow[f]);
+                                map.addLayer(arrowHead[f]);
                             }
                             else {
                                 subpath[i]=[];
-                                console.log ('planta: '+i);
                                 for (var j in route.fields.subroutes[i].steps ) {
                                     subpath[i].push([(route.fields.subroutes[i].steps[j].fields.row)*sY+sY, (route.fields.subroutes[i].steps[j].fields.column)*sX+sX]);
                                 }
 
-                                arrow[i] = L.polyline(subpath[i],{color: 'orange'});
-                                arrowHead[i] = new L.polylineDecorator(arrow[i]);
-                                map.addLayer(arrowHead[i]);
+                                for (var f in floors) {
+                                    if(route.fields.subroutes[i].floor.pk  == floors[f].id){
+                                        subarrow[f] = subpath[i];
+                                        break;
+                                    }
+                                }
+                                arrow[f] = L.polyline(subarrow[f],{color: 'orange'});
+                                arrowHead[f] = L.polylineDecorator(arrow[f]);
+                                map.addLayer(arrowHead[f]);
                             }
                         }
-                    //}
 
         for(i in floors)
         {
             if(arrow[i]){
             floors[i].layer.addLayer(arrow[i]);
-//            anim = window.setInterval(setArrow(arrowHead[i]), 100);
-            map.addLayer(arrowHead[i]);
-            var flechita = arrowHead[i];
-            anim = window.setInterval(function(){setArrow(flechita, 'wwwooooo')}, 100);
+                if (floors[i].id === route.fields.destiny.fields.floor) {
+                    map.fitBounds(arrow[i].getBounds());
 
-            map.fitBounds(arrow[i].getBounds());
+                    map.addLayer(arrowHead[i]);
+                    var flechita = arrowHead[i];
+                    anim = window.setInterval(function(){setArrow(flechita)}, 100);
+                }
             }
-
-
-//            if(route.fields.origin.fields.floor == floors[i].id)
-//            {
-//                floors[i].layer.addLayer(arrow);
-//                floors[i].layer.addLayer(arrowHead);
-//                //break;
-//            }
-//            else{
-//                floors[i].layer.addLayer(arrow[i]);
-//                floors[i].layer.addLayer(arrowHead[i]);
-//
-//            }
         }
 
     }else{
@@ -373,17 +353,11 @@ console.log(dst);
     }
 }
 
-
-var setArrow = function(flecha, txt) {
-    //console.log(txt);
-
+//Función que define la flecha animada que marca la ruta
+var setArrow = function(flecha) {
     flecha.setPatterns([
         {offset: arrowOffset+'%', repeat: 0, symbol: new L.Symbol.ArrowHead({pixelSize: 15, polygon: false, pathOptions: {/*color:"orange",*/ stroke: true}})}
     ]);
     if(++arrowOffset > 100)
         arrowOffset = 0;
 }
-
-//function log(txt){
-//    console.log(txt);
-//}
