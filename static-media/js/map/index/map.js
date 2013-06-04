@@ -66,9 +66,9 @@ var icon= new L.AwesomeMarkers.icon({
     });
     return icon;
 }
+
 //Carga de planos
 loopFloors(floor_index);
-
 
 var name, img;
 function loopFloors ()
@@ -105,7 +105,6 @@ function loopFloors ()
 //Carga de POIs
 function loadPOIs()
 {
-
     for (var fl in floors){
         floors[fl].layer=new L.LayerGroup();
 
