@@ -30,8 +30,7 @@ var	OriginIcon = L.AwesomeMarkers.icon({
         color: 'red'
     });
 
-
-
+var arrowOffset = 0;
 
 //Carga de datos globales
 var origin = {
@@ -60,8 +59,8 @@ for (var i in floors){
 
 var path=[],
     route = {},
-    arrow = new L.polyline(path),
-    arrowHead = new L.polylineDecorator(arrow);
+    arrow = [];
+    arrowHead = [];
 
 function loadIcon(color) {
 var icon= new L.AwesomeMarkers.icon({
@@ -107,7 +106,6 @@ function loopFloors ()
 
 
 //Carga de POIs
-
 function loadPOIs()
 {
 
@@ -169,7 +167,6 @@ function loadPOIs()
             break;
         }
     }
-
 
 }
 
@@ -261,19 +258,28 @@ map.on('baselayerchange', function (e) {
         map.removeLayer(originFloor.layer);
     }
     var floor_x;
+    var flechita;
     for (var i in floors){
         if (e.layer._url === floors[i].photo._url) {
             floor_x = floors[i];
             map.addLayer(searchMarker._markerLoc._circleLoc);
-
+            if(arrowHead[i])
+                flechita = arrowHead[i];
         } else {
             map.removeLayer(floors[i].layer);
             map.removeLayer(searchMarker._markerLoc._circleLoc);
+            if(arrowHead[i])
+                map.removeLayer(arrowHead[i]);
         }
+
+
     }
-    //map.setView(originPoint, 0);
+    if(arrowHead[i]){
+        map.addLayer(flechita);
+    }
     map.addLayer(floor_x.layer);
     map.setMaxBounds(floor_x.bounds);
+    //map.setView(originPoint, 0);
 });
 
 
@@ -282,91 +288,70 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
     for (var i in floors){
         if(arrow[i]){
         floors[i].layer.removeLayer(arrow[i]);
-        floors[i].layer.removeLayer(arrowHead[i]);
+        map.removeLayer(arrowHead[i]);
         }
     }
-
+console.log(dst);
     path=[];
     subpath=[];
 
     route = new RouteResource().getRoute(org, dst);
     if(route){
 
-            if (route.fields.origin.fields.floor===route.fields.destiny.fields.floor){
-                for (var i in floors ) {
-                    if(route.fields.origin.fields.floor == floors[i].id){
+//            if (route.fields.origin.fields.floor===route.fields.destiny.fields.floor){ //ruta monoplanta
+//                for (var i in floors ) {
+//                    if(route.fields.origin.fields.floor == floors[i].id){
+//
+//                    subpath[i]=[];
+//                    subpath[i].push([(route.fields.origin.fields.row)*osY+osY, route.fields.origin.fields.col*osX+osX]);
+//                    console.log ('planta: '+i);
+//                    for (var j in route.fields.steps ) {
+//                        subpath[i].push([(route.fields.steps[j].fields.row)*osY+osY, (route.fields.steps[j].fields.column)*osX+osX]);
+//                    }
+//                    arrow[i] = new L.polyline(subpath[i],{color: 'orange'});
+//                    arrowHead[i] = new L.polylineDecorator(arrow[i]);
+//                    }
+//                }
+//
+//            }else{//ruta multiplanta
 
-                    subpath[i]=[];
-                    subpath[i].push([(route.fields.origin.fields.row)*osY+osY, route.fields.origin.fields.col*osX+osX]);
-                    console.log ('planta: '+i);
-                    for (var j in route.fields.steps ) {
-                        subpath[i].push([(route.fields.steps[j].fields.row)*osY+osY, (route.fields.steps[j].fields.column)*osX+osX]);
-                    }
-                    arrow = L.polyline(subpath[i],{color: 'orange'});
-                    arrowHead = L.polylineDecorator(arrow);
+                    //for (var f in floors ) {
+                        for (var i in route.fields.subroutes) {
+                            if (route.fields.subroutes[i].floor.pk === route.fields.origin.fields.floor){
+                                subpath[i]=[];
+                                subpath[i].push([(route.fields.origin.fields.row)*osY+osY, route.fields.origin.fields.col*osX+osX]);
+                                console.log ('planta: '+i);
+                                for (var j in route.fields.subroutes[i].steps ) {
+                                    subpath[i].push([(route.fields.subroutes[i].steps[j].fields.row)*osY+osY, (route.fields.subroutes[i].steps[j].fields.column)*osX+osX]);
+                                }
+                                arrow[i] = L.polyline(subpath[i],{color: 'orange'});
+                                arrowHead[i] = L.polylineDecorator(arrow[i]);
+                                map.addLayer(arrowHead[i]);
+                            }
+                            else {
+                                subpath[i]=[];
+                                console.log ('planta: '+i);
+                                for (var j in route.fields.subroutes[i].steps ) {
+                                    subpath[i].push([(route.fields.subroutes[i].steps[j].fields.row)*sY+sY, (route.fields.subroutes[i].steps[j].fields.column)*sX+sX]);
+                                }
 
-                            var arrowOffset = 0;
-                            anim = window.setInterval(function() {
-                            arrowHead.setPatterns([
-                            {offset: arrowOffset+'%', repeat: 0, symbol: new L.Symbol.ArrowHead({pixelSize: 15, polygon: false, pathOptions: {/*color:"orange",*/ stroke: true}})}
-                            ]);
-                            if(++arrowOffset > 100)
-                            arrowOffset = 0;
-                            }, 100);
-                    }
-                }
-
-            }else{
-                for (var i in route.fields.subroutes) {
-                    if (route.fields.subroutes[i].floor.pk === route.fields.origin.fields.floor){
-                        subpath[i]=[];
-                        subpath[i].push([(route.fields.origin.fields.row)*osY+osY, route.fields.origin.fields.col*osX+osX]);
-                        console.log ('planta: '+i);
-                        for (var j in route.fields.subroutes[i].steps ) {
-                            subpath[i].push([(route.fields.subroutes[i].steps[j].fields.row)*osY+osY, (route.fields.subroutes[i].steps[j].fields.column)*osX+osX]);
+                                arrow[i] = L.polyline(subpath[i],{color: 'orange'});
+                                arrowHead[i] = new L.polylineDecorator(arrow[i]);
+                                map.addLayer(arrowHead[i]);
+                            }
                         }
-                        arrow[i] = L.polyline(subpath[i],{color: 'orange'});
-                        arrowHead[i] = L.polylineDecorator(arrow[i]);
-
-                        var arrowOffset = 0;
-                        anim = window.setInterval(function() {
-                        arrowHead[i].setPatterns([
-                        {offset: arrowOffset+'%', repeat: 0, symbol: new L.Symbol.ArrowHead({pixelSize: 15, polygon: false, pathOptions: {/*color:"orange",*/ stroke: true}})}
-                        ]);
-                        if(++arrowOffset > 100)
-                        arrowOffset = 0;
-                        }, 100);
-
-                    }
-                    else {
-                        subpath[i]=[];
-                        console.log ('planta: '+i);
-                        for (var j in route.fields.subroutes[i].steps ) {
-                            subpath[i].push([(route.fields.subroutes[i].steps[j].fields.row)*sY+sY, (route.fields.subroutes[i].steps[j].fields.column)*sX+sX]);
-                        }
-
-                        arrow[i] = L.polyline(subpath[i],{color: 'orange'});
-                        arrowHead[i] = L.polylineDecorator(arrow[i]);
-
-                        var arrowOffset = 0;
-                        anim = window.setInterval(function() {
-                            arrowHead[i].setPatterns([
-                                {offset: arrowOffset+'%', repeat: 0, symbol: new L.Symbol.ArrowHead({pixelSize: 15, polygon: false, pathOptions: {/*color:"orange",*/ stroke: true}})}
-                            ]);
-                            if(++arrowOffset > 100)
-                                arrowOffset = 0;
-                        }, 100);
-                    }
-                }
-            }
+                    //}
 
         for(i in floors)
         {
             if(arrow[i]){
             floors[i].layer.addLayer(arrow[i]);
-            floors[i].layer.addLayer(arrowHead[i]);
-            //floors[i].fitBounds(arrow[i].getBounds());
-            //map.setView(arrow[i].getCenter(), 0);
+//            anim = window.setInterval(setArrow(arrowHead[i]), 100);
+            map.addLayer(arrowHead[i]);
+            var flechita = arrowHead[i];
+            anim = window.setInterval(function(){setArrow(flechita, 'wwwooooo')}, 100);
+
+            map.fitBounds(arrow[i].getBounds());
             }
 
 
@@ -386,6 +371,19 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
     }else{
         alert('No existe esa ruta');
     }
-
 }
 
+
+var setArrow = function(flecha, txt) {
+    //console.log(txt);
+
+    flecha.setPatterns([
+        {offset: arrowOffset+'%', repeat: 0, symbol: new L.Symbol.ArrowHead({pixelSize: 15, polygon: false, pathOptions: {/*color:"orange",*/ stroke: true}})}
+    ]);
+    if(++arrowOffset > 100)
+        arrowOffset = 0;
+}
+
+//function log(txt){
+//    console.log(txt);
+//}
