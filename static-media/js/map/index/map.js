@@ -299,12 +299,10 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
     route = new RouteResource().getRoute(org, dst);
     if(route){
 
-
                         for (var i in route.fields.subroutes) {
                             if (route.fields.subroutes[i].floor.pk === route.fields.origin.fields.floor){
                                 subpath[i]=[];
                                 subpath[i].push([(route.fields.origin.fields.row)*osY+osY, route.fields.origin.fields.col*osX+osX]);
-                                console.log ('planta: '+i);
                                 for (var j in route.fields.subroutes[i].steps ) {
                                     subpath[i].push([(route.fields.subroutes[i].steps[j].fields.row)*osY+osY, (route.fields.subroutes[i].steps[j].fields.column)*osX+osX]);
                                 }
@@ -321,7 +319,6 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
                             }
                             else {
                                 subpath[i]=[];
-                                console.log ('planta: '+i);
                                 for (var j in route.fields.subroutes[i].steps ) {
                                     subpath[i].push([(route.fields.subroutes[i].steps[j].fields.row)*sY+sY, (route.fields.subroutes[i].steps[j].fields.column)*sX+sX]);
                                 }
