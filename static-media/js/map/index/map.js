@@ -284,6 +284,30 @@ map.on('baselayerchange', function (e) {
     //map.setView(originPoint, 0);
 });
 
+//Creación de las rutas (con subrutas correspondientes), desde el origen hasta el POI destino usando
+// solamente el id de los puntos y las plantas
+function preDrawRoute(origin,originFloor,destination,destinationFloor)
+{
+    var osX=1;
+    var osY=1;
+    var dsX=1;
+    var dsY=1;
+        for (var f in floors) {
+            if(originFloor === floors[f].id){
+                osX= floors[f].scaleX;
+                osY= floors[f].scaleY;
+
+                }
+            if(destinationFloor === floors[f].id){
+                dsX= floors[f].scaleX;
+                dsY= floors[f].scaleY;
+
+                }
+            }
+    drawRoute(origin,osX,osY,destination,dsX,dsY);
+
+}
+
 
 //Creación de las rutas (con subrutas correspondientes), desde el origen hasta el POI destino
 function drawRoute(org, osX, osY, dst, sX, sY) {
