@@ -253,13 +253,15 @@ function drawOrigin(origin) {
 
 //EVENTOS - CAMBIO DE PLANTA
 map.on('baselayerchange', function (e) {
+    console.log(e);
     if(map.hasLayer(originFloor.layer)){
         map.removeLayer(originFloor.layer);
     }
     var floor_x;
     var flechita;
     for (var i in floors){
-        if (e.layer._url === floors[i].photo._url) {
+        if ((e.layer && (e.layer._url === floors[i].photo._url)) || (e._url === floors[i].photo._url))
+        {
             floor_x = floors[i];
             map.addLayer(searchMarker._markerLoc._circleLoc);
             if(arrowHead[i]&&subarrow[i]){
@@ -304,6 +306,7 @@ function preDrawRoute(origin,originFloor,destination,destinationFloor)
 
                 }
             }
+    changeFloor(destinationFloor);
     drawRoute(origin,osX,osY,destination,dsX,dsY);
 
 }
@@ -385,4 +388,18 @@ var setArrow = function(flecha) {
     ]);
     if(++arrowOffset > 100)
         arrowOffset = 0;
+}
+
+
+function changeFloor(destFloor) {
+    for (var f in floors) {
+        if(destFloor === floors[f].id){
+            //jQuery('span:contains("' +floors[f].name+ '")').prev().prop('checked', true);
+            var url=floors[f].photo._url;
+            map.fireEvent('baselayerchange', {_url: url});
+        }
+    }
+
+
+//    {tile: tile, url: tile.src}
 }
