@@ -160,7 +160,7 @@ function loadPOIs()
             originMarker = new L.marker(originPoint, { bounceOnAdd: false,
                 //bounceOnAddHeight: 20,
                 icon: OriginIcon})
-                .bindPopup("Estás aquí: " /*+ origin.point.description*/ + "(planta " + originFloor.name + "," + origin.enclosure.name+ ")");
+                .bindPopup("Estás aquí: " + origin.point.description + " (planta " + originFloor.name + "," + origin.enclosure.name+ ")");
             originMarker.addTo(floors[i].layer).openPopup();
             break;
         }
@@ -221,11 +221,11 @@ var map = L.map('map', {
 
 //Localización del origen (QR) y carga del mapa
 var searchMarker=new L.Control.Search(mobileOpts);
+
 function drawOrigin(origin) {
     map.addControl(searchMarker);
     map.addControl(new L.Control.Zoom());
     layersControl.addTo(map);
-
 
     for (i=(floors.length)-1; i>=0; i--)
     {
@@ -241,7 +241,7 @@ function drawOrigin(origin) {
              }
     }
 
-        for(i in floors)
+    for(i in floors)
     {
         map.removeLayer(floors[i].layer);
     }
