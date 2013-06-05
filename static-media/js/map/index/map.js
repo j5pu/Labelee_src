@@ -253,7 +253,6 @@ function drawOrigin(origin) {
 
 //EVENTOS - CAMBIO DE PLANTA
 map.on('baselayerchange', function (e) {
-    console.log(e);
     if(map.hasLayer(originFloor.layer)){
         map.removeLayer(originFloor.layer);
     }
@@ -264,8 +263,9 @@ map.on('baselayerchange', function (e) {
         {
             floor_x = floors[i];
             map.addLayer(searchMarker._markerLoc._circleLoc);
+            map.addLayer(floor_x.photo);
             if(arrowHead[i]&&subarrow[i]){
-                map.fitBounds(arrow[i].getBounds());
+                //map.fitBounds(arrow[i].getBounds());
                 map.addLayer(arrowHead[i]);
                 flechita = arrowHead[i];
                 anim = window.setInterval(function(){setArrow(flechita)}, 100);
@@ -306,7 +306,6 @@ function preDrawRoute(origin,originFloor,destination,destinationFloor)
 
                 }
             }
-    changeFloor(destinationFloor);
     drawRoute(origin,osX,osY,destination,dsX,dsY);
 
 }
@@ -367,7 +366,7 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
             if(arrow[i]&&subarrow[i]){
             floors[i].layer.addLayer(arrow[i]);
                 if (floors[i].id === route.fields.destiny.fields.floor) {
-                    map.fitBounds(arrow[i].getBounds());
+                    //map.fitBounds(arrow[i].getBounds());
 
                     map.addLayer(arrowHead[i]);
                     var flechita = arrowHead[i];
@@ -376,7 +375,32 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
             }
         }
 
-    }else{
+        for(f in floors)
+        {
+            if (route.fields.origin.fields.floor !== route.fields.destiny.fields.floor)
+            {
+                if(route.fields.destiny.fields.floor === floors[f].id)
+                {
+                    map.removeLayer(floors[f].layer);
+                    map.removeLayer(floors[f].photo);
+                    map.removeLayer(arrowHead[f]);
+                }
+
+                if(route.fields.origin.fields.floor === floors[f].id)
+                {
+                    map.addLayer(floors[f].layer);
+                    map.addLayer(floors[f].photo);
+                    //map.fitBounds(arrow[i].getBounds());
+                    map.addLayer(arrowHead[f]);
+                    var flechita = arrowHead[f];
+                    anim = window.setInterval(function(){setArrow(flechita)}, 100);
+                }
+
+            }
+
+        }
+
+        }else{
         alert('No existe esa ruta');
     }
 }
@@ -390,16 +414,3 @@ var setArrow = function(flecha) {
         arrowOffset = 0;
 }
 
-
-function changeFloor(destFloor) {
-    for (var f in floors) {
-        if(destFloor === floors[f].id){
-            //jQuery('span:contains("' +floors[f].name+ '")').prev().prop('checked', true);
-            var url=floors[f].photo._url;
-            map.fireEvent('baselayerchange', {_url: url});
-        }
-    }
-
-
-//    {tile: tile, url: tile.src}
-}
