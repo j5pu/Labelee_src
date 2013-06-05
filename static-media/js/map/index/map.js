@@ -324,7 +324,7 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
                                 }
 
                                 for (var f in floors) {
-                                    if(route.fields.subroutes[i].floor.pk  == floors[f].id){
+                                    if(route.fields.subroutes[i].floor.pk === floors[f].id){
                                         subarrow[f] = subpath[i];
                                         break;
                                     }
@@ -354,7 +354,7 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
     }
 }
 
-//Función que define la flecha animada que marca la ruta
+//Función que define la animación (en este caso, flecha azul) que marca la ruta
 var setArrow = function(flecha) {
     flecha.setPatterns([
         {offset: arrowOffset+'%', repeat: 0, symbol: new L.Symbol.ArrowHead({pixelSize: 15, polygon: false, pathOptions: {/*color:"orange",*/ stroke: true}})}
