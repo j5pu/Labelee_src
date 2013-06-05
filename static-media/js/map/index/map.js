@@ -30,7 +30,14 @@ var	OriginIcon = L.AwesomeMarkers.icon({
         color: 'red'
     });
 
-var arrowOffset = 0;
+
+function loadIcon(color) {
+    var icon= new L.AwesomeMarkers.icon({
+        icon: 'bolt',
+        color: color
+    });
+    return icon;
+}
 
 //Carga de datos globales
 var origin = {
@@ -41,13 +48,17 @@ var origin = {
 
 
 //Variables globales
-var  mapH = $(document).height(),//Altura de la pantalla
+var mapH = $(document).height(),//Altura de la pantalla
     baseLayers = {},
     layersControl= new L.control.layers(null, null, {collapsed:false}),
     floor_index = 0,
     totalPois = new L.LayerGroup(),
     originFloor,
     originPoint,
+    route = {},
+    arrow = [],
+    arrowHead = [],
+    arrowOffset = 0,
     floors = new FloorResource().readFromEnclosure(origin.enclosure.id);
 
 //POIs de cada floor, separados para pintarlos por capas
@@ -55,17 +66,7 @@ for (var i in floors){
     floors[i].pois = new PointResource().readOnlyPois(floors[i].id);
 }
 
-var route = {},
-    arrow = [];
-    arrowHead = [];
 
-function loadIcon(color) {
-var icon= new L.AwesomeMarkers.icon({
-        icon: 'bolt',
-        color: color
-    });
-    return icon;
-}
 
 //Carga de planos
 loopFloors(floor_index);
@@ -261,7 +262,7 @@ map.on('baselayerchange', function (e) {
         if (e.layer._url === floors[i].photo._url) {
             floor_x = floors[i];
             map.addLayer(searchMarker._markerLoc._circleLoc);
-            if(arrowHead[i]){
+            if(arrowHead[i]&&subarrow[i]){
                 map.fitBounds(arrow[i].getBounds());
                 map.addLayer(arrowHead[i]);
                 flechita = arrowHead[i];
@@ -323,7 +324,7 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
                                 }
 
                                 for (var f in floors) {
-                                    if(route.fields.subroutes[i].floor.pk  == floors[f].id){
+                                    if(route.fields.subroutes[i].floor.pk === floors[f].id){
                                         subarrow[f] = subpath[i];
                                         break;
                                     }
@@ -336,7 +337,7 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
 
         for(i in floors)
         {
-            if(arrow[i]){
+            if(arrow[i]&&subarrow[i]){
             floors[i].layer.addLayer(arrow[i]);
                 if (floors[i].id === route.fields.destiny.fields.floor) {
                     map.fitBounds(arrow[i].getBounds());
@@ -353,7 +354,7 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
     }
 }
 
-//Función que define la flecha animada que marca la ruta
+//Función que define la animación (en este caso, flecha azul) que marca la ruta
 var setArrow = function(flecha) {
     flecha.setPatterns([
         {offset: arrowOffset+'%', repeat: 0, symbol: new L.Symbol.ArrowHead({pixelSize: 15, polygon: false, pathOptions: {/*color:"orange",*/ stroke: true}})}
