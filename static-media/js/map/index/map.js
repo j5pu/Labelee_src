@@ -59,6 +59,8 @@ var mapH = $(document).height(),//Altura de la pantalla
     arrow = [],
     arrowHead = [],
     arrowOffset = 0,
+    subpath=[],
+    subarrow=[],
     floors = new FloorResource().readFromEnclosure(origin.enclosure.id);
 
 //POIs de cada floor, separados para pintarlos por capas
@@ -256,6 +258,8 @@ map.on('baselayerchange', function (e) {
     if(map.hasLayer(originFloor.layer)){
         map.removeLayer(originFloor.layer);
     }
+    map.removeLayer(searchMarker._markerLoc._circleLoc);
+
     var floor_x;
     var flechita;
     for (var i in floors){
@@ -265,7 +269,8 @@ map.on('baselayerchange', function (e) {
             map.addLayer(searchMarker._markerLoc._circleLoc);
             map.addLayer(floor_x.photo);
             if(arrowHead[i]&&subarrow[i]){
-                //map.fitBounds(arrow[i].getBounds());
+//                map.fitBounds(arrow[i].getBounds());
+//                map.panTo(arrow[i].getBounds().getCenter(), 0);
                 map.addLayer(arrowHead[i]);
                 flechita = arrowHead[i];
                 anim = window.setInterval(function(){setArrow(flechita)}, 100);
@@ -282,7 +287,7 @@ map.on('baselayerchange', function (e) {
 
     }
     map.addLayer(floor_x.layer);
-    map.setMaxBounds(floor_x.bounds);
+    //map.setMaxBounds(floor_x.bounds);
     //map.setView(originPoint, 0);
 });
 
@@ -344,6 +349,7 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
                                 map.addLayer(arrowHead[f]);
                             }
                             else {
+                                flag=true;
                                 subpath[i]=[];
                                 for (var j in route.fields.subroutes[i].steps ) {
                                     subpath[i].push([(route.fields.subroutes[i].steps[j].fields.row)*sY+sY, (route.fields.subroutes[i].steps[j].fields.column)*sX+sX]);
@@ -367,7 +373,6 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
             floors[i].layer.addLayer(arrow[i]);
                 if (floors[i].id === route.fields.destiny.fields.floor) {
                     //map.fitBounds(arrow[i].getBounds());
-
                     map.addLayer(arrowHead[i]);
                     var flechita = arrowHead[i];
                     anim = window.setInterval(function(){setArrow(flechita)}, 100);
@@ -390,11 +395,32 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
                 {
                     map.addLayer(floors[f].layer);
                     map.addLayer(floors[f].photo);
-                    //map.fitBounds(arrow[i].getBounds());
+//                    map.fitBounds(arrow[i].getBounds());
+//                    map.panTo(arrow[i].getBounds().getCenter(), 0);
                     map.addLayer(arrowHead[f]);
                     var flechita = arrowHead[f];
                     anim = window.setInterval(function(){setArrow(flechita)}, 100);
                 }
+
+            }else{
+                if(route.fields.destiny.fields.floor !== floors[f].id)
+                {
+                    map.removeLayer(floors[f].layer);
+                    map.removeLayer(floors[f].photo);
+                    map.removeLayer(arrowHead[f]);
+                }
+
+                else
+                {
+                    map.addLayer(floors[f].layer);
+                    map.addLayer(floors[f].photo);
+//                    map.fitBounds(arrow[i].getBounds());
+//                    map.panTo(arrow[i].getBounds().getCenter(), 0);
+                    map.addLayer(arrowHead[f]);
+                    var flechita = arrowHead[f];
+                    anim = window.setInterval(function(){setArrow(flechita)}, 100);
+                }
+
 
             }
 
