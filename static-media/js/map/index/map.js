@@ -380,53 +380,49 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
             }
         }
 
-        for(f in floors)
-        {
-            if (route.fields.origin.fields.floor !== route.fields.destiny.fields.floor)
+            for(f in floors)
             {
-                if(route.fields.destiny.fields.floor === floors[f].id)
+                if (route.fields.origin.fields.floor !== route.fields.destiny.fields.floor)
                 {
-                    map.removeLayer(floors[f].layer);
-                    map.removeLayer(floors[f].photo);
-                    map.removeLayer(arrowHead[f]);
-                }
+                    if(route.fields.destiny.fields.floor === floors[f].id)
+                    {
+                        map.removeLayer(floors[f].layer);
+                        map.removeLayer(floors[f].photo);
+                        map.removeLayer(arrowHead[f]);
+                    }
 
-                if(route.fields.origin.fields.floor === floors[f].id)
-                {
-                    map.addLayer(floors[f].layer);
-                    map.addLayer(floors[f].photo);
+                    if(route.fields.origin.fields.floor === floors[f].id)
+                    {
+                        map.addLayer(floors[f].layer);
+                        map.addLayer(floors[f].photo);
 //                    map.fitBounds(arrow[i].getBounds());
 //                    map.panTo(arrow[i].getBounds().getCenter(), 0);
-                    map.addLayer(arrowHead[f]);
-                    var flechita = arrowHead[f];
-                    anim = window.setInterval(function(){setArrow(flechita)}, 100);
+                        map.addLayer(arrowHead[f]);
+                        var flechita = arrowHead[f];
+                        anim = window.setInterval(function(){setArrow(flechita)}, 100);
+                    }
+
+                }else{
+                    if(route.fields.destiny.fields.floor !== floors[f].id)
+                    {
+                        map.removeLayer(floors[f].layer);
+                        map.removeLayer(floors[f].photo);
+                        map.removeLayer(arrowHead[f]);
+                    }
+                    else
+                    {
+                        map.addLayer(floors[f].layer);
+                        map.addLayer(floors[f].photo);
+    //                    map.fitBounds(arrow[i].getBounds());
+    //                    map.panTo(arrow[i].getBounds().getCenter(), 0);
+                        map.addLayer(arrowHead[f]);
+                        var flechita = arrowHead[f];
+                        anim = window.setInterval(function(){setArrow(flechita)}, 100);
+                    }
                 }
-
-            }else{
-                if(route.fields.destiny.fields.floor !== floors[f].id)
-                {
-                    map.removeLayer(floors[f].layer);
-                    map.removeLayer(floors[f].photo);
-                    map.removeLayer(arrowHead[f]);
-                }
-
-                else
-                {
-                    map.addLayer(floors[f].layer);
-                    map.addLayer(floors[f].photo);
-//                    map.fitBounds(arrow[i].getBounds());
-//                    map.panTo(arrow[i].getBounds().getCenter(), 0);
-                    map.addLayer(arrowHead[f]);
-                    var flechita = arrowHead[f];
-                    anim = window.setInterval(function(){setArrow(flechita)}, 100);
-                }
-
-
             }
 
-        }
-
-        }else{
+    }else{
         alert('No existe esa ruta');
     }
 }
