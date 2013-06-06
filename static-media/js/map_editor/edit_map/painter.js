@@ -105,6 +105,7 @@ var Painter = {
         {
             block.attr('data-from-db', 'y');
             block.attr('data-point-id', Painter.point_id);
+            block.attr('data-saved-descr', Painter.point.description);
 
             // Posición en el grid
             block.append(
@@ -121,8 +122,6 @@ var Painter = {
                 Floor.point_count.to_save++;
             Painter.clear(block);
         }
-
-        Painter._paintMenu(block);
 
         // Dejamos el bloque como pintado
         block.attr('data-label', Painter.label.resource_uri);
@@ -152,17 +151,36 @@ var Painter = {
             'display': 'none'
         });
 
+        if(!Floor.loading)
+        {
+            Menu.setPointStats();
+            Events.grid._showPointMenu(block);
+        }
 
-        Menu.setPointStats();
+        Painter._paintMenu(block);
 
         // Seguimos iterando mientras se esté cargando el plano
         if(Floor.loading)
             Floor._loopPoints();
+    },
 
+
+    togglePointMenu: function(e, block)
+    {
+        e.preventDefault();
+
+        // Si se ha vuelto abrir el menú para otro bloque cerramos el actual
+        if(Floor.current_menu_block && block[0] != Floor.current_menu_block[0])
+            Floor.current_menu_block.find('.menu').hide();
+
+        Floor.current_menu_block = block;
+
+        Floor.current_menu_block.find('.menu').show();
     },
 
 
     _paintMenu: function(block){
+        // Pinta un menú con el checkbox para el QR aún sin setear conforme a lo que haya en BD
         var block_description = Floor.loading ? Painter.point.description : Painter.label.name;
         var block_menu =
             '<div class="menu">' +
@@ -176,7 +194,13 @@ var Painter = {
                     '<input type="checkbox"/> QR' +
                 '</div>' +
             '</div>';
+
         block.append(block_menu);
+    },
+
+
+    checkQRForMenu: function(block){
+        block.find('.qr input[type="checkbox"]').prop('checked', true);
     },
 
 
@@ -244,7 +268,7 @@ var Painter = {
         {
             // Según estemos pintando directamente o cargando desde BD
             var block = Painter.current_hovered_block || Painter.block;
-            block.attr('data-qr', Painter.qr.id);
+            block.attr('data-qr-id', Painter.qr.id);
             block.append(
                 '<div class="qr_info">' + Painter.qr.id + '</div>'
             );
@@ -268,6 +292,13 @@ var Painter = {
             // Le damos un sombreado para saber que es QR
 //            block.css({'box-shadow': 'inset 0px 0px 19px blue'});
         }
+    },
+
+
+    closeBlockMenu: function()
+    {
+        Floor.current_menu_block.find('.menu').hide();
+        Floor.current_menu_block = null;
     },
 
 
@@ -309,8 +340,6 @@ var Painter = {
 
     showLabelMenu: function(){
         Painter.current_menu_block = $(this);
-
-
     },
 
 
