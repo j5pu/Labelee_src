@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+#sfrom StdSuites.QuickDraw_Graphics_Suite import _Prop_ordering
 
 from django.contrib.auth.models import User
 
@@ -26,10 +27,9 @@ class UserResource(ModelResource):
     class Meta:
         resource_name = 'user'
         queryset = User.objects.all()
-
+        authorization = DjangoAuthorization()
         # excludes = ['email', 'password', 'is_staff', 'is_superuser']
     # allowed_methods = ['get']
-    # authorization = DjangoAuthorization()
     # authentication = BasicAuthentication()
     # include_resource_uri = False
 
@@ -78,7 +78,10 @@ class FloorResource(ModelResource):
         include_resource_uri = True
         filtering = {
             'enclosure': ALL_WITH_RELATIONS,
-            'id': ALL
+            'id': ALL,
+        }
+        ordering = {
+            'floor_number': ALL
         }
         always_return_data = True
         max_limit = 5000
@@ -108,6 +111,9 @@ class PointResource(ModelResource):
             'id': ALL,
             'row': ALL,
             'col': ALL,
+            'description': ALL
+        }
+        ordering = {
             'description': ALL
         }
         max_limit = 5000
@@ -186,7 +192,8 @@ class ConnectionResource(ModelResource):
         always_return_data = True
         filtering = {
             'id': ALL,
-            'init': ALL_WITH_RELATIONS
+            'init': ALL_WITH_RELATIONS,
+            'end': ALL_WITH_RELATIONS,
             }
 
     def determine_format(self, request):

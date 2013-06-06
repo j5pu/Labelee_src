@@ -14,6 +14,10 @@ var Floor = {
         total: 0
     },
     points_to_delete: [],
+    painted_connectors: null,
+
+    //Planta1_escalera_1
+    connector_index: 1,
 
 
     init: function()
@@ -109,7 +113,7 @@ var Floor = {
 
     update: function()
     {
-        Floor.point_count.saved = 0;
+
 //        loadingMsg.show('Actualizando planta..');
 
         // Tomamos todas las etiquetas pintadas sobre el plano hasta el momento
@@ -132,17 +136,12 @@ var Floor = {
                 var col = $(this).data('col');
 
                 var point_data = {
-                    description: null,
+                    description: $(this).find('.descr input[type="text"]').val(),
                     row: row,
                     col: col,
                     floor: Floor.data.id,
                     label: Floor.painted_labels[block_label].id
                 };
-
-                // Si es una arista (connection) guardamos la descripción
-                var connection = $(this).data('connector-descr');
-                if(!from_db && connection)
-                    point_data.description = connection;
 
                 // Guardaremos los bloques que aparecen pintados y no han sido cargados desde la BD
                 if(block_label && !from_db)
@@ -165,7 +164,6 @@ var Floor = {
 
         // Recargamos el grid
         Floor.reloading = true;
-        Floor.point_count.to_save = 0;
         Floor.loadGrid();
 
 //        loadingMsg.hide();
@@ -337,7 +335,10 @@ var Floor = {
         if(Floor.show_only_qrs)
             Floor.points = new PointResource().readQRsFromFloor(Floor.data.id);
         else
+        {
             Floor.points = new PointResource().readAllFiltered('?floor__id=' + Floor.data.id);
+            Floor.painted_connectors = new PointResource().readConnectionsFromFloor(Floor.data.id)
+        }
 
         // Obtenemos todas las etiquetas que contiene la planta a cargar, y así evitar
         // llamar a BD cada vez que queramos pedir la etiqueta de cada punto
@@ -431,6 +432,8 @@ var Floor = {
 
         Floor._drawGrid();
 
+        Floor.painted_connectors = [];
+
         Menu.init();
 
         Events.bindAll();
@@ -442,7 +445,13 @@ var Floor = {
     loadGrid: function()
     {
         Floor.loading = true;
+
+        Floor.point_count.saved = 0;
+        Floor.point_count.to_save = 0;
+        Floor.point_count.to_delete = 0;
         Floor.point_count.connectors = 0;
+
+        Floor.painted_connectors = [];
 
         // Si la planta no tiene todavía un número de filas entonces
         // 'tirará' de lo indicado en el formulario de la página

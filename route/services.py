@@ -20,13 +20,18 @@ def get_route(request, origin, destiny):
     route_dict['fields']['origin'] = to_dict(route_model.origin)
     route_dict['fields']['destiny'] = to_dict(route_model.destiny)
 
+    route_floors_dict = route_dict['fields']['subroutes'] = []
+
     if route_model.origin.floor == route_model.destiny.floor:
-        route_steps_dict = route_dict['fields']['steps'] = []
+        subroute = {
+            'floor': to_dict(route_model.origin.floor),
+            'steps': []
+        }
+        route_floors_dict.append(subroute)
         for step in route_model.steps.all():
-            route_steps_dict.append(to_dict(step))
+            route_floors_dict[0]['steps'].append(to_dict(step))
     else:
-        route_floors_dict = route_dict['fields']['subroutes'] = []
-        route_floors_model = Floor.objects.filter(step__route__id=route_model.id).annotate(total=Sum('id'))
+        route_floors_model = Floor.objects.filter(steps__route__id=route_model.id).annotate(total=Sum('id'))
 
         # metemos plantas
         for floor in route_floors_model:

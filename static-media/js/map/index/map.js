@@ -1,87 +1,67 @@
 //Configuración de iconos
 var	OriginIcon = L.AwesomeMarkers.icon({
-        icon: 'home',
-        color: 'green'
-    }),
-    blueMarker = L.AwesomeMarkers.icon({
         icon: 'star',
         color: 'blue',
         spin: true
 
     }),
-    redMarker = L.AwesomeMarkers.icon({
+    green = L.AwesomeMarkers.icon({
+        icon: 'retweet',
+        color: 'green'
+
+    }),
+    orange = L.AwesomeMarkers.icon({
+        icon: 'gift',
+        color: 'orange'
+
+    }),
+    purple = L.AwesomeMarkers.icon({
+        icon: 'food',
+        color: 'purple'
+
+    }),
+    blue = L.AwesomeMarkers.icon({
+        icon: 'star',
+        color: 'blue'
+
+    }),
+    red = L.AwesomeMarkers.icon({
         icon: 'coffee',
         color: 'red'
     });
 
 
-//Configuración de la lupa
-var mobileOpts = {
-    text: 'Buscar',
-    autoType: true,
-    autoCollapse: true,
-    autoCollapseTime: 4000,
-    animateLocation: true,
-    tipAutoSubmit: true,  		//auto map panTo when click on tooltip
-    autoResize: true,			//autoresize on input change
-    markerLocation:false,
-    minLength: 1,				//minimal text length for autocomplete
-    textErr: 'Ningún resultado',
-    layer: totalPois,
-    //title: title,
-    callTip: customTip,
-    tooltipLimit: -1,			//limit max results to show in tooltip. -1 for no limit.
-    delayType: 800	//with mobile device typing is more slow
-};
-
-//Configuración de los resultados de búsqueda en la lupa
-function customTip(text)
-{
-    var tip = L.DomUtil.create('a', 'colortip');
-
-    tip.href = "#"+text;
-    tip.innerHTML = text;
-
-    var subtip = L.DomUtil.create('em', 'subtip', tip);
-    subtip.style.display = 'inline-block';
-    subtip.style.float = 'right';
-    subtip.style.width = '18px';
-    subtip.style.height = '18px';
-    //subtip.style.backgroundColor = text;
-    subtip.style.backgroundColor = 'red';
-    return tip;
+function loadIcon(color) {
+    var icon= new L.AwesomeMarkers.icon({
+        icon: 'bolt',
+        color: color
+    });
+    return icon;
 }
-
-
-
-
-
-
 
 //Carga de datos globales
 var origin = {
     point:new PointResource().read(poi_id),
     floor:new FloorResource().read(floor_id),
     enclosure:new EnclosureResource().read(enclosure_id)
-}
-var originFloor;
-var originPoint;
+};
 
 
-//Altura de la pantalla
-var  mapH = $(document).height();
-
-//Plantas del enclosure asociado al QR
-var floorsUris=[];
-for (f=0; f<origin.enclosure.floors.length; f++){
-    floorsUris.push(origin.enclosure.floors[f]);
-}
-
-var floors = [],
-    uris=origin.enclosure.floors;
-for (var i in uris) {
-    floors.push(new FloorResource().readFromUri(uris[i]));
-}
+//Variables globales
+var mapH = $(document).height(),//Altura de la pantalla
+    baseLayers = {},
+    layersControl= new L.control.layers(null, null, {collapsed:false}),
+    floor_index = 0,
+    totalPois = new L.LayerGroup(),
+    originFloor,
+    originPoint,
+    route = {},
+    arrow = [],
+    arrowHead = [],
+    arrowOffset = 0,
+    subpath=[],
+    subarrow=[],
+    floors = new FloorResource().readFromEnclosure(origin.enclosure.id);
 
 //POIs de cada floor, separados para pintarlos por capas
 for (var i in floors){
@@ -89,19 +69,9 @@ for (var i in floors){
 }
 
 
-//Variables globales
-var baseLayers={},
-    floor_index = 0,
-    totalPois=new L.LayerGroup();
-
-var path=[];
-var route = {};
-var arrow = new L.polyline(path);
-var arrowHead = new L.polylineDecorator(arrow);
 
 //Carga de planos
 loopFloors(floor_index);
-
 
 var name, img;
 function loopFloors ()
@@ -136,85 +106,112 @@ function loopFloors ()
 
 
 //Carga de POIs
-var id;
-
 function loadPOIs()
 {
-
     for (var fl in floors){
         floors[fl].layer=new L.LayerGroup();
 
         for (j=0; j<floors[fl].pois.length; j++) {
+                if (floors[fl].pois[j].id===poi_id)
+                    floors[fl].pois.splice(j, 1);
                 var colorIcon = floors[fl].pois[j].label.category.color,
                     nameIcon =floors[fl].pois[j].label.name,
                     id= floors[fl].pois[j].id,
+                    descriptionIcon=floors[fl].pois[j].description,
                     sX= floors[fl].scaleX,
                     sY= floors[fl].scaleY,
                     loc = [(floors[fl].pois[j].row)*sY+(sY),
                         floors[fl].pois[j].col*sX+(sY)],
                     category = floors[fl].pois[j].label.category.name;
 
-                floors[fl].pois[j].marker = new L.Marker(new L.latLng(loc), {icon:blueMarker, title:nameIcon});
-                //floors[fl].pois[j].marker.options.icon.options.className='awesome-marker';
+                floors[fl].pois[j].marker = new L.Marker(new L.latLng(loc), {icon:loadIcon(colorIcon), title:descriptionIcon /*, color:colorIcon*/});
                 floors[fl].pois[j].marker.options.icon.options.color=colorIcon;
-                floors[fl].pois[j].marker.options.icon.options.icon='star';
+
+//IMPORTANTE- CAMBIO DE ICONOS DINÁMICO
+// floors[fl].pois[j].marker.options.icon.options.icon='star';
                 floors[fl].pois[j].marker.poid=id;
                 floors[fl].pois[j].marker.psX=sX;
                 floors[fl].pois[j].marker.psY=sY;
                 floors[fl].pois[j].marker.loc=loc;
 
-                floors[fl].pois[j].marker.bindPopup(nameIcon)
+                floors[fl].pois[j].marker.bindPopup(descriptionIcon)
                     .on('click', function () {
-                        console.log(this.poid);
-                        drawRoute(origin.point.id, this.poid, this.psX, this.psY);
+                        map.removeLayer(searchMarker._markerLoc._circleLoc);
+                        drawRoute(origin.point.id, originFloor.sX, originFloor.sY,this.poid, this.psX, this.psY);
                     });
                 floors[fl].layer.addLayer(floors[fl].pois[j].marker);
                 totalPois.addLayer(floors[fl].pois[j].marker);
-
-
         }
     }
 
-
-    floors[1].layer.eachLayer(function (layer) {
-        layer.setIcon(redMarker);
-//        var destinyPoint= [layer._latlng.lat, layer._latlng.lng];
-//        layer.on({
-//           click: function(e){
-//               drawRoute(origin.point.id, destinyPoint);
-////                alert('Lat: '+layer._latlng.lat+', Lng: '+layer._latlng.lng);
-//           }
-//        });
-    });
-
     for(var i in totalPois._layers) {
-//        console.log(i);
-        totalPois._layers[i].title = totalPois._layers[i].options.title;
-        	//value searched
-        //    loc = data[i].loc,		//position found
-        //    marker = new L.Marker(new L.latLng(loc), {title: title} );//se property searched
-        //marker.bindPopup('title: '+ title );
-        //markersLayer.addLayer(marker);
+        totalPois._layers[i].title = totalPois._layers[i].options.title;	//value searched
+        totalPois._layers[i].color = totalPois._layers[i].options.icon.options.color;
     }
 
     for(i in floors) {
         if (origin.floor.id == floors[i].id) {
             originFloor = floors[i];
-            originPoint = [(origin.point.row) * originFloor.scaleY,
-                origin.point.col * originFloor.scaleX];
+            originFloor.sX = floors[i].scaleX;
+            originFloor.sY =floors[i].scaleY;
+            originFloor.layer = floors[i].layer;
+
+
+            originPoint = [((origin.point.row) * originFloor.scaleY)+originFloor.scaleY,
+                (origin.point.col * originFloor.scaleX)+originFloor.scaleX];
             originMarker = new L.marker(originPoint, { bounceOnAdd: false,
                 //bounceOnAddHeight: 20,
                 icon: OriginIcon})
-                .bindPopup(origin.point.description + "-" + originFloor.name + "-" + origin.enclosure.name);
+                .bindPopup("Estás aquí: " + origin.point.description + " (planta " + originFloor.name + "," + origin.enclosure.name+ ")");
             originMarker.addTo(floors[i].layer).openPopup();
             break;
         }
     }
 
-  layersControl= new L.control.layers(null, null, {collapsed:false});
-
 }
 
+
+
+//Configuración de la lupa
+var mobileOpts = {
+    text: 'Buscar',
+    autoType: true,
+    autoCollapse: true,
+    autoCollapseTime: 4000,
+    animateLocation: true,
+    tipAutoSubmit: true,  		//auto map panTo when click on tooltip
+    autoResize: true,			//autoresize on input change
+    markerLocation:false,
+    minLength: 1,				//minimal text length for autocomplete
+    textErr: 'Ningún resultado',
+    layer: totalPois,
+    //title: title,
+    callTip: customTip,
+    tooltipLimit: -1,			//limit max results to show in tooltip. -1 for no limit.
+    delayType: 800	//with mobile device typing is more slow
+};
+
+function loadColor(){
+    //¡¡POR HACER!!
+}
+
+//Configuración de los resultados de búsqueda en la lupa
+function customTip(text, color)
+{
+    var tip = L.DomUtil.create('a', 'colortip');
+    tip.href = "#"+text;
+    tip.innerHTML = text;
+
+    var subtip = L.DomUtil.create('em', 'subtip', tip);
+    subtip.style.display = 'inline-block';
+    subtip.style.float = 'right';
+    subtip.style.width = '18px';
+    subtip.style.height = '18px';
+    subtip.style.backgroundColor = loadColor() || 'red';
+    return tip;
+}
+
+//Configuración inicial del mapa
 var map = L.map('map', {
     crs: L.CRS.Simple,
     zoom: 0,
@@ -223,98 +220,219 @@ var map = L.map('map', {
 });
 
 
+
+//Localización del origen (QR) y carga del mapa
+var searchMarker=new L.Control.Search(mobileOpts);
+
 function drawOrigin(origin) {
+    map.addControl(searchMarker);
+    map.addControl(new L.Control.Zoom());
+    layersControl.addTo(map);
 
-
-    for(i in floors)
+    for (i=(floors.length)-1; i>=0; i--)
     {
         layersControl.addBaseLayer(floors[i].photo,floors[i].name);
 
-    if(origin.floor.id == floors[i].id)
-        {
-            map.addLayer(floors[i].photo);
-            map.addLayer(floors[i].layer);
-            originFloor = floors[i];
-            //break;
-         }
+        if(floors[i].id===origin.floor.id)
+            {
+                originFloor = floors[i];
+                map.addLayer(originFloor.photo);
+                map.addLayer(floors[i].layer);
+                map.setMaxBounds(originFloor.bounds);
+                map.setView(originFloor.bounds.getCenter(),0);
+             }
     }
 
-    map.setMaxBounds(originFloor.bounds);
-    map.setView(originFloor.bounds.getCenter(),0);
+    for(i in floors)
+    {
+        map.removeLayer(floors[i].layer);
+    }
 
-
-    map.addControl( new L.Control.Search(mobileOpts) );
-    map.addControl(new L.Control.Zoom());
-
-    layersControl.addTo(map);
-
+    map.removeLayer(totalPois);
+    map.addLayer(originFloor.layer);
 }
 
 
 //EVENTOS - CAMBIO DE PLANTA
-
 map.on('baselayerchange', function (e) {
     if(map.hasLayer(originFloor.layer)){
         map.removeLayer(originFloor.layer);
-
     }
-    var floor_x;
-    for (var i in floors){
+    map.removeLayer(searchMarker._markerLoc._circleLoc);
 
-        if (e.layer._url === floors[i].photo._url) {
+    var floor_x;
+    var flechita;
+    for (var i in floors){
+        if ((e.layer && (e.layer._url === floors[i].photo._url)) || (e._url === floors[i].photo._url))
+        {
             floor_x = floors[i];
+            map.addLayer(searchMarker._markerLoc._circleLoc);
+            map.addLayer(floor_x.photo);
+            if(arrowHead[i]&&subarrow[i]){
+//                map.fitBounds(arrow[i].getBounds());
+//                map.panTo(arrow[i].getBounds().getCenter(), 0);
+                map.addLayer(arrowHead[i]);
+                flechita = arrowHead[i];
+                anim = window.setInterval(function(){setArrow(flechita)}, 100);
+            }else{
+                map.setView(originFloor.bounds.getCenter(),0);
+            }
 
         } else {
             map.removeLayer(floors[i].layer);
+            map.removeLayer(searchMarker._markerLoc._circleLoc);
+            if(arrowHead[i])
+                map.removeLayer(arrowHead[i]);
         }
 
     }
-    map.setView(originPoint, 0);
     map.addLayer(floor_x.layer);
-    map.setMaxBounds(floor_x.bounds);
+    //map.setMaxBounds(floor_x.bounds);
+    //map.setView(originPoint, 0);
 });
 
+//Creación de las rutas (con subrutas correspondientes), desde el origen hasta el POI destino usando
+// solamente el id de los puntos y las plantas
+function preDrawRoute(origin,originFloor,destination,destinationFloor)
+{
+    var osX=1;
+    var osY=1;
+    var dsX=1;
+    var dsY=1;
+        for (var f in floors) {
+            if(originFloor === floors[f].id){
+                osX= floors[f].scaleX;
+                osY= floors[f].scaleY;
+
+                }
+            if(destinationFloor === floors[f].id){
+                dsX= floors[f].scaleX;
+                dsY= floors[f].scaleY;
+
+                }
+            }
+    drawRoute(origin,osX,osY,destination,dsX,dsY);
+
+}
 
 
-//Creamos la ruta uniendo los puntos del array "path"
-function drawRoute(org, dst, sX, sY) {
-
-    path=[];
+//Creación de las rutas (con subrutas correspondientes), desde el origen hasta el POI destino
+function drawRoute(org, osX, osY, dst, sX, sY) {
+    for (var i in floors){
+        if(arrow[i]){
+        floors[i].layer.removeLayer(arrow[i]);
+        map.removeLayer(arrowHead[i]);
+        }
+    }
+    subpath=[];
+    subarrow=[];
 
     route = new RouteResource().getRoute(org, dst);
     if(route){
 
-           path.push([(route.origin.row)*sY+sY, route.origin.col*sX+sX]);
+                        for (var i in route.fields.subroutes) {
+                            if (route.fields.subroutes[i].floor.pk === route.fields.origin.fields.floor){
+                                subpath[i]=[];
+                                subpath[i].push([(route.fields.origin.fields.row)*osY+osY, route.fields.origin.fields.col*osX+osX]);
+                                for (var j in route.fields.subroutes[i].steps ) {
+                                    subpath[i].push([(route.fields.subroutes[i].steps[j].fields.row)*osY+osY, (route.fields.subroutes[i].steps[j].fields.column)*osX+osX]);
+                                }
 
-            if (route.origin.floor===route.destiny.floor){
-                for (var i in route.steps ) {
-                    path.push([(route.steps[i].row)*sY+sY, (route.steps[i].column)*sX+sX]);
+                                for (var f in floors) {
+                                    if(route.fields.subroutes[i].floor.pk === floors[f].id){
+                                     subarrow[f] = subpath[i];
+                                     break;
+                                    }
+                                }
+                                arrow[f] = L.polyline(subarrow[f],{color: 'orange'});
+                                arrowHead[f] = L.polylineDecorator(arrow[f]);
+                                map.addLayer(arrowHead[f]);
+                            }
+                            else {
+                                flag=true;
+                                subpath[i]=[];
+                                for (var j in route.fields.subroutes[i].steps ) {
+                                    subpath[i].push([(route.fields.subroutes[i].steps[j].fields.row)*sY+sY, (route.fields.subroutes[i].steps[j].fields.column)*sX+sX]);
+                                }
+
+                                for (var f in floors) {
+                                    if(route.fields.subroutes[i].floor.pk === floors[f].id){
+                                        subarrow[f] = subpath[i];
+                                        break;
+                                    }
+                                }
+                                arrow[f] = L.polyline(subarrow[f],{color: 'orange'});
+                                arrowHead[f] = L.polylineDecorator(arrow[f]);
+                                map.addLayer(arrowHead[f]);
+                            }
+                        }
+
+        for(i in floors)
+        {
+            if(arrow[i]&&subarrow[i]){
+            floors[i].layer.addLayer(arrow[i]);
+                if (floors[i].id === route.fields.destiny.fields.floor) {
+                    //map.fitBounds(arrow[i].getBounds());
+                    map.addLayer(arrowHead[i]);
+                    var flechita = arrowHead[i];
+                    anim = window.setInterval(function(){setArrow(flechita)}, 100);
                 }
-            path.push([(route.destiny.row)*sY+sY, route.destiny.col*sX+sX]);
-            }else{
-
             }
-    console.log(path);
-    map.removeLayer(arrow);
-    map.removeLayer(arrowHead);
-    arrow = L.polyline(path,{color: 'orange'}).redraw();
-    arrowHead = L.polylineDecorator(arrow);
+        }
 
-    var arrowOffset = 0;
-    anim = window.setInterval(function() {
-        arrowHead.setPatterns([
-            {offset: arrowOffset+'%', repeat: 0, symbol: new L.Symbol.ArrowHead({pixelSize: 15, polygon: false, pathOptions: {/*color:"orange",*/ stroke: true}})}
-        ])
-        if(++arrowOffset > 100)
-            arrowOffset = 0;
-    }, 100);
+            for(f in floors)
+            {
+                if (route.fields.origin.fields.floor !== route.fields.destiny.fields.floor)
+                {
+                    if(route.fields.destiny.fields.floor === floors[f].id)
+                    {
+                        map.removeLayer(floors[f].layer);
+                        map.removeLayer(floors[f].photo);
+                        map.removeLayer(arrowHead[f]);
+                    }
 
-   arrow.addTo(map);
-   arrowHead.addTo(map);
+                    if(route.fields.origin.fields.floor === floors[f].id)
+                    {
+                        map.addLayer(floors[f].layer);
+                        map.addLayer(floors[f].photo);
+//                    map.fitBounds(arrow[i].getBounds());
+//                    map.panTo(arrow[i].getBounds().getCenter(), 0);
+                        map.addLayer(arrowHead[f]);
+                        var flechita = arrowHead[f];
+                        anim = window.setInterval(function(){setArrow(flechita)}, 100);
+                    }
+
+                }else{
+                    if(route.fields.destiny.fields.floor !== floors[f].id)
+                    {
+                        map.removeLayer(floors[f].layer);
+                        map.removeLayer(floors[f].photo);
+                        map.removeLayer(arrowHead[f]);
+                    }
+                    else
+                    {
+                        map.addLayer(floors[f].layer);
+                        map.addLayer(floors[f].photo);
+    //                    map.fitBounds(arrow[i].getBounds());
+    //                    map.panTo(arrow[i].getBounds().getCenter(), 0);
+                        map.addLayer(arrowHead[f]);
+                        var flechita = arrowHead[f];
+                        anim = window.setInterval(function(){setArrow(flechita)}, 100);
+                    }
+                }
+            }
 
     }else{
         alert('No existe esa ruta');
     }
+}
 
+//Función que define la animación (en este caso, flecha azul) que marca la ruta
+var setArrow = function(flecha) {
+    flecha.setPatterns([
+        {offset: arrowOffset+'%', repeat: 0, symbol: new L.Symbol.ArrowHead({pixelSize: 15, polygon: false, pathOptions: {/*color:"orange",*/ stroke: true}})}
+    ]);
+    if(++arrowOffset > 100)
+        arrowOffset = 0;
 }
 

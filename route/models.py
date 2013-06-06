@@ -25,12 +25,12 @@ class Step(models.Model):
     row = models.PositiveIntegerField()
     column = models.PositiveIntegerField()
     route = models.ForeignKey(Route, related_name='steps')
-    floor = models.ForeignKey('map_editor.Floor')
+    floor = models.ForeignKey('map_editor.Floor', related_name='steps')
 
 
 class Connection(models.Model):
-    init = models.OneToOneField('map_editor.Point', related_name='map_connection', on_delete=models.CASCADE)
-    end = models.ForeignKey('map_editor.Point', related_name='+', on_delete=models.CASCADE)
+    init = models.ForeignKey('map_editor.Point', related_name='connection_init', on_delete=models.CASCADE)
+    end = models.ForeignKey('map_editor.Point', related_name='connection_end', on_delete=models.CASCADE)
 
 
 

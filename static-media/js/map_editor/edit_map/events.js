@@ -2,12 +2,28 @@
 var Events = {
 
     grid: {
+
+        _toggleMousePointer: function()
+        {
+            $e.floor.grid.on('mouseover', function(){
+                if(Painter.erase_mode)
+                    $(this).css({'cursor': 'no-drop'});
+                else
+                    $(this).css({'cursor': 'default'});
+            });
+            $e.floor.grid.on('mouseleave', function(){
+                $(this).css({'cursor': 'default'});
+            });
+        },
+
+
         _toggleBlockShadow: function()
         {
             // Cambiamos el evento 'mouseover' del elemento para que haga esto:
 
-            // Si el bloque contiene un qr entonces no hacemos nada de esto
-            if(Painter.current_hovered_block && Painter.current_hovered_block.data('qr'))
+            // Si el bloque contiene un qr entonces no le sacamos la sombra
+            var block_is_qr = Painter.current_hovered_block && Painter.current_hovered_block.data('qr');
+            if(block_is_qr)
                 return;
 
             $e.floor.blocks.on('mouseover', function(){
@@ -15,6 +31,19 @@ var Events = {
             });
             $e.floor.blocks.on('mouseleave', function(){
                 $(this).css({'box-shadow': ''});
+            });
+        },
+
+
+        _setHoveredBlock: function()
+        {
+            $e.floor.blocks.on('mouseover', function(){
+                Painter.current_hovered_block = $(this);
+                if(Painter.current_hovered_block.data('qr'))
+                    Painter.current_hovered_block.is_qr = true;
+            });
+            $e.floor.blocks.on('mouseleave', function(){
+                Painter.current_hovered_block = null;
             });
         },
 
@@ -96,21 +125,82 @@ var Events = {
         {
             //
             // Pintar etiquetas dejando pulsado el botón izquierdo del ratón mientras lo movemos
-            $e.floor.blocks.on('mousedown', function(e){
+            $e.floor.blocks.on('mousedown', function(e) {
+
+                // Si se pulsó con el botón derecho no hacemos nada
+                if(e.button == 2)
+                    return;
+
+                // Si hay un menú abierto y el bloque es distinto se cierra el menú
+                if(Floor.current_menu_block)
+                {
+                    // Si se hace click en el input del descr..
+                    if($(e.target).parent().hasClass('descr'))
+                        return;
+
+                    // Si se hace click dentro del menú || dentro del descr..
+                    if($(e.target).parent().hasClass('menu')
+                        ||
+                        $(e.target).parent().parent().hasClass('menu'))
+                        if($(e.target).parent()[0] != Floor.current_menu_block[0])
+                        {
+                            Floor.current_menu_block.find('.menu').hide();
+                            Floor.current_menu_block = null;
+                            return;
+                        }
+                        else
+                            return;
+
+                    // Si se hace click sobre otro bloque
+                }
+
                 e.preventDefault();
+
+
+                // Si el bloque ya tiene etiqueta
+
                 Painter.paintLabel($(this));
                 Painter.painting_trace = true;
                 $e.floor.blocks.on('mouseover', function(){
                     Painter.paintLabel($(this));
                 });
             });
-            $(document).on('mouseup', function(){
+            $(document).on('mouseup', function(e){
+                // Esperamos un poco a que suceda lo disparado por el mousedown
                 if(!Painter.painting_trace)
-                    return;
+                    // Si hay un menú abierto y el bloque es distinto se cierra el menú
+                    if(Floor.current_menu_block)
+                    {
+                        if($(e.target).parent()[0] != Floor.current_menu_block[0])
+                        {
+//                                Floor.current_menu_block.find('.menu').hide();
+//                                Floor.current_menu_block = null;
+                            return;
+                        }
+                        else
+                            return;
+                    }
+                    else
+                        return;
 
                 $e.floor.blocks.off('mouseover');
                 Painter.painting_trace = false;
                 Events.grid.bind();
+            });
+        },
+
+
+        _showPointMenu: function(){
+            // Mostramos una caja de texto para poder introducir la descripción del punto
+            $e.floor.labeled_blocks.on('contextmenu', function(e){
+                // Si se ha vuelto abrir el menú para otro bloque cerramos el actual
+                if(Floor.current_menu_block && $(this)[0] != Floor.current_menu_block[0])
+                    Floor.current_menu_block.find('.menu').hide();
+
+                Floor.current_menu_block = $(this);
+                e.preventDefault();
+
+                Floor.current_menu_block.find('.menu').show();
             });
         },
 
@@ -155,13 +245,16 @@ var Events = {
         {
             var self = this;
             $('#grid *').off();
-            self._assign_qr_by_right_click();
+//            self._assign_qr_by_right_click();
 //            self._paint_with_key_pressed();
             self._paint_with_mouse_pressed();
 //            self._remove_with_key_pressed();
             self._toggleBlockShadow();
             self._toggleLabelInfo();
             self._showUpQRInfo();
+            self._setHoveredBlock();
+            self._toggleMousePointer();
+            self._showPointMenu();
         }
     },
 
@@ -293,11 +386,31 @@ var Events = {
         },
 
 
+        _toggleEraseMode: function()
+        {
+            Mousetrap.bind('e', function(e){
+                // Si el ratón no está sobre un bloque cuando se pulsa la e,
+                // entonces no hacemos nada
+                e.preventDefault();
+
+                if(!Painter.current_hovered_block)
+                    return;
+
+                Painter.erase_mode = !Painter.erase_mode;
+
+                $e.floor.toggle_erase_mode.prop('checked', Painter.erase_mode);
+
+                $e.floor.grid.trigger('mouseover');
+            });
+        },
+
+
         bind: function()
         {
             var self = this;
             self._assignQR();
-            self._toggleLabels();
+//            self._toggleLabels();
+            self._toggleEraseMode();
         }
     },
 

@@ -107,7 +107,7 @@ L.PolylineDecorator = L.LayerGroup.extend({
         var dirPoints = pattern.cache[this._map.getZoom()];
         if(typeof dirPoints != 'undefined')
             return dirPoints;
-        
+
         // polyline can be defined as a L.Polyline object or just an array of coordinates
         this._latLngs = (this._polyline instanceof L.Polyline) ? this._polyline.getLatLngs() : this._polyline;
         if(this._latLngs.length < 2) { return []; }

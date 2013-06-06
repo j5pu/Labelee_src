@@ -186,11 +186,90 @@ function Resource(resource_name) {
 		// dejamos escuchando al iframe con la respuesta del servidor
 		listenIframe(form, callback);
 	};
+
+
+    this.delImg = function(element_id){
+
+        //		DELETE -> /api-2/floor/16/img
+
+        $.ajax({
+            url : this.api2_url + element_id + '/img',
+            type : 'delete',
+            headers : {
+                'Content-Type' : 'application/json'
+            },
+            dataType : 'json', // esto indica que la respuesta vendrá en formato json
+            async : false,
+            success : function(response) {
+                var i = response;
+            },
+            error : function(response) {
+                var j = response;
+            }
+        });
+    };
 }
 
 function FloorResource()
 {
     Resource.call(this, 'floor');
+
+    this.readFromEnclosure = function(enclosure_id) {
+
+        var elements;
+        $.ajax({
+            url : this.api1_url + '?enclosure__id=' + enclosure_id + '&order_by=floor_number',
+            type : 'get',
+            headers : {
+                'Content-Type' : 'application/json'
+            },
+            dataType : 'json', // esto indica que la respuesta vendrá en formato json
+            async : false,
+            success : function(response) {
+                elements = response.objects;
+            },
+            error : function(response) {
+                var j = response;
+            }
+        });
+
+        return elements;
+    };
+
+
+    this.del = function(floor_id, confirm_msg) {
+
+        if (!confirm(confirm_msg))
+            return;
+
+        // Primero eliminamos todos los puntos para el plano, de forma que no
+        // puedan quedar aristas sueltas
+//        var filter = '?floor__id=' + floor_id;
+//        var point_list = new PointResource().readAllFiltered(filter);
+//        new PointResource().deletePoints(point_list);
+
+        // Eliminamos la imágen para el plano
+        //
+        // POR CORREGIR
+//        this.delImg(floor_id);
+
+        // Eliminamos la planta
+        $.ajax({
+            url : this.api1_url + floor_id + '/',
+            type : 'delete',
+            headers : {
+                'Content-Type' : 'application/json'
+            },
+            dataType : 'json', // esto indica que la respuesta vendrá en formato json
+            async : false,
+            success : function(response) {
+                var i = response;
+            },
+            error : function(response) {
+                var j = response;
+            }
+        });
+    };
 }
 
 function LabelResource()
@@ -357,7 +436,16 @@ function PointResource()
 
     this.readConnectionsFromEnclosure = function(enclosure_id)
     {
-        return this.readAllFiltered('?label__category__name__icontains=arista&floor__enclosure__id=' + enclosure_id);
+        return this.readAllFiltered(
+            '?label__category__name__icontains=arista' +
+                '&floor__enclosure__id=' + enclosure_id +
+                '&order_by=description'
+        );
+    };
+
+    this.readConnectionsFromFloor = function(floor_id)
+    {
+        return this.readAllFiltered('?label__category__name__icontains=arista&floor__id=' + floor_id);
     };
 
     this.readQRsFromFloor = function(floor_id)
@@ -416,7 +504,7 @@ function RouteResource()
     {
         var elements;
         $.ajax({
-            url : this.api1_url + '?origin__id=' + origin + '&destiny__id=' + destiny,
+            url : '/get-route/' + origin + '_' + destiny,
             type : 'get',
             headers : {
                 'Content-Type' : 'application/json'
@@ -424,7 +512,7 @@ function RouteResource()
             dataType : 'json', // esto indica que la respuesta vendrá en formato json
             async : false,
             success : function(response) {
-                elements = response.objects[0];
+                elements = response;
             },
             error : function(response) {
                 var j = response;

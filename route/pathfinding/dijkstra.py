@@ -102,15 +102,15 @@ class Dijkstra():
 
     def __shortestpathUsingHeap__(self, graph, start, end, visited=[], distances={}, predecessors={}):
 
-         predecessors, min_cost = self.__dijkstraUsingHeap__(graph, start, end)
-         c = end
-         path = [c]
+        predecessors, min_cost = self.__dijkstraUsingHeap__(graph, start, end)
+        c = end
+        path = [c]
 
-         while predecessors.get(c):
-             path.insert(0, predecessors[c])
-             c = predecessors[c]
+        while predecessors.get(c):
+            path.insert(0, predecessors[c])
+            c = predecessors[c]
 
-         return [len(path), path]
+        return [len(path), path]
 
     def __createMap__(self):
         map = {}
@@ -142,14 +142,15 @@ class Dijkstra():
         """
 
         connection = {}
-        keys = [self.getKey(row - 1, column, numfloor), #North 0
-                self.getKey(row, column + 1, numfloor), #East 90
-                self.getKey(row + 1, column, numfloor), #South 180
-                self.getKey(row, column - 1, numfloor), #West 270
-                self.getKey(row - 1, column + 1, numfloor), #Northeast  45
-                self.getKey(row + 1, column + 1, numfloor), #Southeast 135
-                self.getKey(row + 1, column - 1, numfloor), #Southwest 225
-                self.getKey(row - 1, column - 1, numfloor), #Northwest 315
+        keys = [
+           # self.getKey(row - 1, column + 1, numfloor), #Northeast  45
+           # self.getKey(row + 1, column + 1, numfloor), #Southeast 135
+           # self.getKey(row + 1, column - 1, numfloor), #Southwest 225
+           # self.getKey(row - 1, column - 1, numfloor), #Northwest 315
+            self.getKey(row, column - 1, numfloor), #West 270
+            self.getKey(row + 1, column, numfloor), #South 180
+            self.getKey(row, column + 1, numfloor), #East 90
+            self.getKey(row - 1, column, numfloor), #North 0
         ]
         for key in keys:
             if self.__existConnection__(map, key):

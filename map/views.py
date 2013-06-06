@@ -8,16 +8,30 @@ from django.http import HttpResponseRedirect
 # from touching_log import log
 
 import json
+from map_editor.models import *
+from django.db.models.query import Q
 
 
 def origin(request, enclosure_id, floor_id, poi_id):
     """
         map/origin/1_25_91234
     """
+    categories = {}
+    points = Point.objects.filter(~Q(label__category__name__in=CATEGORIAS_FIJAS.values()),
+                                  floor__enclosure__id=enclosure_id)
+    for point in points:
+        if point.label.category.name not in CATEGORIAS_FIJAS.values():
+            if point.label.category.name in categories:
+                categories[point.label.category.name].append(point)
+            else:
+                categories[point.label.category.name] = [point]
+
+
     ctx = {
         'enclosure_id': enclosure_id,
         'floor_id': floor_id,
-        'poi_id': poi_id
+        'poi_id': poi_id,
+        'categories': categories,
     }
     return render_to_response('map/index.html', ctx, context_instance=RequestContext(request))
 
