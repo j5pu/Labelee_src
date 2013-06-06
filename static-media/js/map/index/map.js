@@ -59,6 +59,8 @@ var mapH = $(document).height(),//Altura de la pantalla
     arrow = [],
     arrowHead = [],
     arrowOffset = 0,
+    subpath=[],
+    subarrow=[],
     floors = new FloorResource().readFromEnclosure(origin.enclosure.id);
 
 //POIs de cada floor, separados para pintarlos por capas
@@ -160,7 +162,7 @@ function loadPOIs()
             originMarker = new L.marker(originPoint, { bounceOnAdd: false,
                 //bounceOnAddHeight: 20,
                 icon: OriginIcon})
-                .bindPopup("Estás aquí: " /*+ origin.point.description*/ + "(planta " + originFloor.name + "," + origin.enclosure.name+ ")");
+                .bindPopup("Estás aquí: " + origin.point.description + " (planta " + originFloor.name + "," + origin.enclosure.name+ ")");
             originMarker.addTo(floors[i].layer).openPopup();
             break;
         }
@@ -221,11 +223,11 @@ var map = L.map('map', {
 
 //Localización del origen (QR) y carga del mapa
 var searchMarker=new L.Control.Search(mobileOpts);
+
 function drawOrigin(origin) {
     map.addControl(searchMarker);
     map.addControl(new L.Control.Zoom());
     layersControl.addTo(map);
-
 
     for (i=(floors.length)-1; i>=0; i--)
     {
@@ -241,7 +243,7 @@ function drawOrigin(origin) {
              }
     }
 
-        for(i in floors)
+    for(i in floors)
     {
         map.removeLayer(floors[i].layer);
     }
@@ -256,14 +258,19 @@ map.on('baselayerchange', function (e) {
     if(map.hasLayer(originFloor.layer)){
         map.removeLayer(originFloor.layer);
     }
+    map.removeLayer(searchMarker._markerLoc._circleLoc);
+
     var floor_x;
     var flechita;
     for (var i in floors){
-        if (e.layer._url === floors[i].photo._url) {
+        if ((e.layer && (e.layer._url === floors[i].photo._url)) || (e._url === floors[i].photo._url))
+        {
             floor_x = floors[i];
             map.addLayer(searchMarker._markerLoc._circleLoc);
+            map.addLayer(floor_x.photo);
             if(arrowHead[i]&&subarrow[i]){
-                map.fitBounds(arrow[i].getBounds());
+//                map.fitBounds(arrow[i].getBounds());
+//                map.panTo(arrow[i].getBounds().getCenter(), 0);
                 map.addLayer(arrowHead[i]);
                 flechita = arrowHead[i];
                 anim = window.setInterval(function(){setArrow(flechita)}, 100);
@@ -280,7 +287,7 @@ map.on('baselayerchange', function (e) {
 
     }
     map.addLayer(floor_x.layer);
-    map.setMaxBounds(floor_x.bounds);
+    //map.setMaxBounds(floor_x.bounds);
     //map.setView(originPoint, 0);
 });
 
@@ -342,6 +349,7 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
                                 map.addLayer(arrowHead[f]);
                             }
                             else {
+                                flag=true;
                                 subpath[i]=[];
                                 for (var j in route.fields.subroutes[i].steps ) {
                                     subpath[i].push([(route.fields.subroutes[i].steps[j].fields.row)*sY+sY, (route.fields.subroutes[i].steps[j].fields.column)*sX+sX]);
@@ -364,14 +372,55 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
             if(arrow[i]&&subarrow[i]){
             floors[i].layer.addLayer(arrow[i]);
                 if (floors[i].id === route.fields.destiny.fields.floor) {
-                    map.fitBounds(arrow[i].getBounds());
-
+                    //map.fitBounds(arrow[i].getBounds());
                     map.addLayer(arrowHead[i]);
                     var flechita = arrowHead[i];
                     anim = window.setInterval(function(){setArrow(flechita)}, 100);
                 }
             }
         }
+
+            for(f in floors)
+            {
+                if (route.fields.origin.fields.floor !== route.fields.destiny.fields.floor)
+                {
+                    if(route.fields.destiny.fields.floor === floors[f].id)
+                    {
+                        map.removeLayer(floors[f].layer);
+                        map.removeLayer(floors[f].photo);
+                        map.removeLayer(arrowHead[f]);
+                    }
+
+                    if(route.fields.origin.fields.floor === floors[f].id)
+                    {
+                        map.addLayer(floors[f].layer);
+                        map.addLayer(floors[f].photo);
+//                    map.fitBounds(arrow[i].getBounds());
+//                    map.panTo(arrow[i].getBounds().getCenter(), 0);
+                        map.addLayer(arrowHead[f]);
+                        var flechita = arrowHead[f];
+                        anim = window.setInterval(function(){setArrow(flechita)}, 100);
+                    }
+
+                }else{
+                    if(route.fields.destiny.fields.floor !== floors[f].id)
+                    {
+                        map.removeLayer(floors[f].layer);
+                        map.removeLayer(floors[f].photo);
+                        map.removeLayer(arrowHead[f]);
+                    }
+                    else
+                    {
+                        map.addLayer(floors[f].layer);
+                        map.addLayer(floors[f].photo);
+    //                    map.fitBounds(arrow[i].getBounds());
+    //                    map.panTo(arrow[i].getBounds().getCenter(), 0);
+                        map.addLayer(arrowHead[f]);
+                        var flechita = arrowHead[f];
+                        anim = window.setInterval(function(){setArrow(flechita)}, 100);
+                    }
+                }
+            }
 
     }else{
         alert('No existe esa ruta');
@@ -386,3 +435,4 @@ var setArrow = function(flecha) {
     if(++arrowOffset > 100)
         arrowOffset = 0;
 }
+
