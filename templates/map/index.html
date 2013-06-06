@@ -76,7 +76,7 @@
                 <li>
                    <li class="Label">{{ category }}</li>
                     {% for destination in pois %}
-                    <li onclick="preDrawRoute({{ poi_id }},floor_id,{{ destination.id }},{{ destination.floor_id }})">{{ destination.description }}</li>
+                    <li onclick="$('#menu-right').trigger( 'close' );preDrawRoute({{ poi_id }},floor_id,{{ destination.id }},{{ destination.floor_id }})">{{ destination.description }}</li>
                     {% endfor %}
 
                 </li>
