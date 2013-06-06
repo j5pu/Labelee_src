@@ -23,6 +23,7 @@
     <script src="{{ STATIC_URL }}vendor/jquery-1.9.1.min.js"></script>
 	<!--script type="text/javascript" src="http://code.jquery.com/jquery-1.9.1.min.js"></script-->
 	<!--script src="http://cdn.leafletjs.com/leaflet-0.5.1/leaflet.js"></script-->
+    <script>L_PREFER_CANVAS = true;</script>
 	<script src="{{ STATIC_URL }}vendor/leaflet/leaflet.js"></script>
 	<script src="{{ STATIC_URL }}vendor/leaflet/plugins/bouncemarker.js"></script>
 	<script src="{{ STATIC_URL }}vendor/leaflet/plugins/leaflet.awesome-markers.js"></script>
@@ -56,7 +57,13 @@
         <div id="content">
             <div id="map"></div>
         </div>
-
+     <script>
+        var STATIC_URL = {{ STATIC_URL }};
+        var enclosure_id = {{ enclosure_id }};
+        var floor_id = {{ floor_id }};
+        var poi_id = {{ poi_id }};
+    </script>
+    <script src="{{ STATIC_URL }}js/map/index/map.js"></script>
         <nav id="menu-right">
             <!--
             <div class="search">
@@ -64,170 +71,21 @@
             </div>
             -->
             <ul>
-                <li class="Label">Mapa actual: Matadero</li>
 
+                {% for category, pois in categories.items %}
                 <li>
-                    <span>Sitios <i></i></span>
-                    <ul>
-                        <li class="Label">A</li>
-                        <li><a href="#">Alexa</a></li>
-                        <li><a href="#">Alexander</a></li>
+                   <li class="Label">{{ category }}</li>
+                    {% for destination in pois %}
+                    <li onclick="preDrawRoute({{ poi_id }},floor_id,{{ destination.id }},{{ destination.floor_id }})">{{ destination.description }}</li>
+                    {% endfor %}
 
-                        <li class="Label">F</li>
-                        <li><a href="#">Fred</a></li>
-
-                        <li class="Label">J</li>
-                        <li><a href="#">James</a></li>
-                        <li><a href="#">Jefferson</a></li>
-                        <li><a href="#">Jordan</a></li>
-
-                        <li class="Label">K</li>
-                        <li><a href="#">Kim</a></li>
-
-                        <li class="Label">M</li>
-                        <li><a href="#">Meagan</a></li>
-                        <li><a href="#">Melissa</a></li>
-
-                        <li class="Label">N</li>
-                        <li><a href="#">Nicole</a></li>
-
-                        <li class="Label">S</li>
-                        <li><a href="#">Samantha</a></li>
-                        <li><a href="#">Scott</a></li>
-                    </ul>
                 </li>
-
-                <li>
-                    <span>Categorías <i></i></span>
-                    <ul>
-                        <li class="Label">A</li>
-                        <li><a href="#">Adam</a></li>
-
-                        <li class="Label">B</li>
-                        <li><a href="#">Ben</a></li>
-                        <li><a href="#">Bruce</a></li>
-
-                        <li class="Label">E</li>
-                        <li><a href="#">Eddie</a></li>
-
-                        <li class="Label">J</li>
-                        <li><a href="#">Jack</a></li>
-                        <li><a href="#">John</a></li>
-
-                        <li class="Label">M</li>
-                        <li><a href="#">Martina</a></li>
-                        <li><a href="#">Matthew</a></li>
-
-                        <li class="Label">O</li>
-                        <li><a href="#">Olivia</a></li>
-                        <li><a href="#">Owen</a></li>
-                    </ul>
-                </li>
-
-
-                <li>
-                    <span><a href="#">Compartir</a><i></i></span>
-                    <ul>
-                        <li><a href="#">Facebook</a></li>
-                        <li><a href="#">Twitter</a></li>
-                        <li><a href="#">G+</a></li>
-                        <li><a href="#">Instagram</a></li>
-                        <li><a href="#">Pinterest</a></li>
-
-                    </ul>
-                </li>
-
-                <li class="Label">&#160;&#160;&#160;</li>
-
-                <li>
-
-                    <span><a href="#">Otros mapas</a><i></i></span>
-                    <ul>
-                        <li>
-                            <span><a href="#">La Vaguada</a></span>
-                            <ul>
-                                <li>
-                                    <span>Categorías <i></i></span>
-                                    <ul>
-                                        <li class="Label">A</li>
-                                        <li><a href="#">Adam</a></li>
-
-                                        <li class="Label">B</li>
-                                        <li><a href="#">Ben</a></li>
-                                        <li><a href="#">Bruce</a></li>
-
-                                        <li class="Label">E</li>
-                                        <li><a href="#">Eddie</a></li>
-
-                                        <li class="Label">J</li>
-                                        <li><a href="#">Jack</a></li>
-                                        <li><a href="#">John</a></li>
-
-                                        <li class="Label">M</li>
-                                        <li><a href="#">Martina</a></li>
-                                        <li><a href="#">Matthew</a></li>
-
-                                        <li class="Label">O</li>
-                                        <li><a href="#">Olivia</a></li>
-                                        <li><a href="#">Owen</a></li>
-                                    </ul>
-                                </li>
-
-                                <li>
-                                    <span>Sitios <i></i></span>
-                                    <ul>
-                                        <li class="Label">D</li>
-                                        <li><a href="#">David</a></li>
-                                        <li><a href="#">Dennis</a></li>
-
-                                        <li class="Label">E</li>
-                                        <li><a href="#">Eliza</a></li>
-
-                                        <li class="Label">L</li>
-                                        <li><a href="#">Larry</a></li>
-                                        <li><a href="#">Lisa</a></li>
-
-                                        <li class="Label">M</li>
-                                        <li><a href="#">Michael</a></li>
-
-                                        <li class="Label">R</li>
-                                        <li><a href="#">Rachelle</a></li>
-                                        <li><a href="#">Rick</a></li>
-                                    </ul>
-                                </li>
-                            </ul>
-                        </li>
-                        <li><a href="#">Parquing Pepe</a></li>
-                        <li><a href="#">Metrovacesa</a></li>
-                    </ul>
-                </li>
-                <li>
-                    <span><a href="#">Ayuda</a></span>
-                    <ul>
-                        <li></li>
-                    </ul>
-                </li>
-                <li>
-                    <span><a href="#">Info</a></span>
-                    <ul>
-                        <li></li>
-                    </ul>
-                </li>
-
-
-
-
+                {%  endfor %}
                 <li class="no-results"><span>Lo sentimos, no se ha encontrado ningún resultado.</span></li>
             </ul>
         </nav>
     </div>
-    <script>
-        var STATIC_URL = {{ STATIC_URL }};
-        var enclosure_id = {{ enclosure_id }};
-        var floor_id = {{ floor_id }};
-        var poi_id = {{ poi_id }};
-    </script>
-    <script src="{{ STATIC_URL }}js/map/index/map.js"></script>
+
 
 </body>
 </html>
