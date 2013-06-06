@@ -2,6 +2,7 @@
  Leaflet, a JavaScript library for mobile-friendly interactive maps. http://leafletjs.com
  (c) 2010-2013, Vladimir Agafonkin, CloudMade
  */
+var floorChecks = [];
 (function (t, e, i) {
     var n, o;
     typeof exports != i + "" ? n = exports : (o = t.L, n = {}, n.noConflict = function () {
@@ -1906,6 +1907,8 @@
         t.overlay ? (i = e.createElement("input"), i.type = "checkbox", i.className = "leaflet-control-layers-selector", i.defaultChecked = s) : i = this._createRadioElement("leaflet-base-layers", s), i.layerId = n.stamp(t.layer), n.DomEvent.on(i, "click", this._onInputClick, this);
         var a = e.createElement("span");
         a.innerHTML = " " + t.name, o.appendChild(i), o.appendChild(a);
+        floorChecks[t.name] = i;
+        //toggleColor(i);
         var r = t.overlay ? this._overlaysList : this._baseLayersList;
         return r.appendChild(o), o
     }, _onInputClick: function () {
@@ -2022,3 +2025,21 @@
         this.fire("locationfound", {latlng: a, bounds: l, accuracy: t.coords.accuracy})
     }})
 })(this, document);
+
+var blinkingMode = 0;
+function blinker(element) {
+    if (blinkingMode) {
+        var color = element.style.background;
+        if (color == "red") {
+            element.style.background = "";
+        } else {
+            element.style.background = "red";
+        }
+        window.setTimeout(function () {
+            blinker(element);
+        }, 1000);
+    }else
+    {
+    element.style.background="";
+    }
+}
