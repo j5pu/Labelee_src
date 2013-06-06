@@ -261,9 +261,7 @@ map.on('baselayerchange', function (e) {
 //                map.panTo(arrow[i].getBounds().getCenter(), 0);
                 map.addLayer(arrowHead[i]);
                 flechita = arrowHead[i];
-                anim = window.setInterval(function () {
-                    setArrow(flechita)
-                }, 100);
+                arrowAnim(flechita, floor_x.name);
             } else {
                 map.setView(originFloor.bounds.getCenter(), 0);
             }
@@ -304,7 +302,7 @@ function preDrawRoute(origin, originFloor, destination, destinationFloor) {
 
 }
 
-
+var anim = null;
 //Creación de las rutas (con subrutas correspondientes), desde el origen hasta el POI destino
 function drawRoute(org, osX, osY, dst, sX, sY) {
     for (var i in floors) {
@@ -315,7 +313,7 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
     }
     subpath = [];
     subarrow = [];
-    blinkingMode =0;
+    blinkingMode = null;
     route = new RouteResource().getRoute(org, dst);
     if (route) {
 
@@ -363,14 +361,12 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
                     //map.fitBounds(arrow[i].getBounds());
                     if (route.fields.origin.fields.floor !== route.fields.destiny.fields.floor) {
                         var check = floorChecks[floors[i].name];
-                        blinkingMode = 1;
+                        blinkingMode = floors[i].name;
                         blinker(check);
                     }
                     map.addLayer(arrowHead[i]);
                     var flechita = arrowHead[i];
-                    anim = window.setInterval(function () {
-                        setArrow(flechita)
-                    }, 100);
+                    arrowAnim(flechita,floors[i].name);
                 }
             }
         }
@@ -380,7 +376,8 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
                 if (route.fields.destiny.fields.floor === floors[f].id) {
                     map.removeLayer(floors[f].layer);
                     map.removeLayer(floors[f].photo);
-                    map.removeLayer(arrowHead[f]);
+                    if(arrowHead[f]!=null)
+                      map.removeLayer(arrowHead[f]);
                 }
 
                 if (route.fields.origin.fields.floor === floors[f].id) {
@@ -390,16 +387,15 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
 //                    map.panTo(arrow[i].getBounds().getCenter(), 0);
                     map.addLayer(arrowHead[f]);
                     var flechita = arrowHead[f];
-                    anim = window.setInterval(function () {
-                        setArrow(flechita)
-                    }, 100);
+                    arrowAnim(arrow,floors[f].name);
                 }
 
             } else {
                 if (route.fields.destiny.fields.floor !== floors[f].id) {
                     map.removeLayer(floors[f].layer);
                     map.removeLayer(floors[f].photo);
-                    map.removeLayer(arrowHead[f]);
+                    if(arrowHead[f]!=null)
+                      map.removeLayer(arrowHead[f]);
                 }
                 else {
                     map.addLayer(floors[f].layer);
@@ -408,9 +404,8 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
                     //                    map.panTo(arrow[i].getBounds().getCenter(), 0);
                     map.addLayer(arrowHead[f]);
                     var flechita = arrowHead[f];
-                    anim = window.setInterval(function () {
-                        setArrow(flechita)
-                    }, 100);
+                    arrowAnim(flechita,floors[f].name);
+
                 }
             }
         }
@@ -419,13 +414,29 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
         alert('No existe esa ruta');
     }
 }
+//Fución que gestiona la animación de la flecha
+function arrowAnim(arrow,idFloor) {
 
-//Función que define la animación (en este caso, flecha azul) que marca la ruta
-var setArrow = function (flecha) {
-    flecha.setPatterns([
-        {offset: arrowOffset + '%', repeat: 0, symbol: new L.Symbol.ArrowHead({pixelSize: 15, polygon: false, pathOptions: {/*color:"orange",*/ stroke: true}})}
-    ]);
-    if (++arrowOffset > 100)
-        arrowOffset = 0;
+
+//        anim = window.setInterval(function () {
+//            setArrow(arrow,idFloor)
+//        }, 100);
+
 }
+/*
+var arrowsOffset = [];
+//Función que define la animación (en este caso, flecha azul) que marca la ruta
+var setArrow = function (flecha,idFloor) {
+    if(arrowsOffset.indexOf(idFloor)===-1)
+    {
 
+        arrowsOffset.push(idFloor);
+        arrowsOffset[idFloor] =0;
+
+    }
+    flecha.setPatterns([{offset: arrowsOffset[idFloor] + '%', repeat: 0, symbol: new L.Symbol.ArrowHead({pixelSize: 15, polygon: false, pathOptions: {/ stroke: true}})}
+    ]);
+    if (++arrowsOffset[idFloor] > 100)
+        arrowsOffset[idFloor] = 0;
+}
+*/

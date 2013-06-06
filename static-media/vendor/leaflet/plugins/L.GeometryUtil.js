@@ -1,58 +1,59 @@
-
 L.GeometryUtil = {
-    computeAngle: function(a, b) {
+    computeAngle: function (a, b) {
         return (Math.atan2(b.y - a.y, b.x - a.x) * 180 / Math.PI) + 90;
     },
 
-    getPointPathPixelLength: function(pts) {
+    getPointPathPixelLength: function (pts) {
         var nbPts = pts.length;
-        if(nbPts < 2) {
+        if (nbPts < 2) {
             return 0;
         }
         var dist = 0;
-        var prevPt = pts[0], pt; 
-        for(var i=1, l=pts.length; i<l; i++) {
+        var prevPt = pts[0], pt;
+        for (var i = 1, l = pts.length; i < l; i++) {
             dist += prevPt.distanceTo(pt = pts[i]);
             prevPt = pt;
-        } 
+        }
         return dist;
     },
 
-    getPixelLength: function(pl, map) {
+    getPixelLength: function (pl, map) {
         var ll = (pl instanceof L.Polyline) ? pl.getLatLngs() : pl;
         var nbPts = ll.length;
-        if(nbPts < 2) {
+        if (nbPts < 2) {
             return 0;
         }
         var dist = 0;
-        var prevPt = map.latLngToLayerPoint(ll[0]), pt; 
-        for(var i=1, l=ll.length; i<l; i++) {
+        var prevPt = map.latLngToLayerPoint(ll[0]), pt;
+        for (var i = 1, l = ll.length; i < l; i++) {
             dist += prevPt.distanceTo(pt = map.latLngToLayerPoint(ll[i]));
             prevPt = pt;
-        } 
+        }
         return dist;
     },
 
     /**
-    * path: array of L.LatLng
-    * offsetRatio: the ratio of the total pixel length where the pattern will start
-    * repeatRatio: the ratio of the total pixel length between two points of the pattern 
-    * map: the map, to access the current projection state
-    */
+     * path: array of L.LatLng
+     * offsetRatio: the ratio of the total pixel length where the pattern will start
+     * repeatRatio: the ratio of the total pixel length between two points of the pattern
+     * map: the map, to access the current projection state
+     */
     projectPatternOnPath: function (path, offsetRatio, repeatRatio, map) {
         var pathAsPoints = [];
-        for(var i=0, l=path.length; i<l; i++) {
-            pathAsPoints[i] = map.latLngToLayerPoint(path[i]);
+        for (var i = 0, l = path.length; i < l; i++) {
+            if (path[i] != null)
+                pathAsPoints[i] = map.latLngToLayerPoint(path[i]);
         }
         // project the pattern as pixel points
         var pattern = this.projectPatternOnPointPath(pathAsPoints, offsetRatio, repeatRatio);
         // and convert it to latlngs;
-        for(var i=0, l=pattern.length; i<l; i++) {
-            pattern[i].latLng = map.layerPointToLatLng(pattern[i].pt);
-        }        
+        for (var i = 0, l = pattern.length; i < l; i++) {
+            if (pattern[i] != null)
+                pattern[i].latLng = map.layerPointToLatLng(pattern[i].pt);
+        }
         return pattern;
     },
-    
+
     projectPatternOnPointPath: function (pts, offsetRatio, repeatRatio) {
         var positions = [];
         // 1. compute the absolute interval length in pixels
@@ -60,7 +61,7 @@ L.GeometryUtil = {
         // 2. find the starting point by using the offsetRatio
         var previous = L.GeometryUtil.interpolateOnPointPath(pts, offsetRatio);
         positions.push(previous);
-        if(repeatRatio > 0) {
+        if (repeatRatio > 0) {
             // 3. consider only the rest of the path, starting at the previous point
             var remainingPath = pts;
             remainingPath = remainingPath.slice(previous.predecessor);
@@ -68,8 +69,8 @@ L.GeometryUtil = {
             var remainingLength = L.GeometryUtil.getPointPathPixelLength(remainingPath);
             // 4. project as a ratio of the remaining length,
             // and repeat while there is room for another point of the pattern
-            while(repeatIntervalLength <= remainingLength) {
-                previous = L.GeometryUtil.interpolateOnPointPath(remainingPath, repeatIntervalLength/remainingLength);
+            while (repeatIntervalLength <= remainingLength) {
+                previous = L.GeometryUtil.interpolateOnPointPath(remainingPath, repeatIntervalLength / remainingLength);
                 positions.push(previous);
                 remainingPath = remainingPath.slice(previous.predecessor);
                 remainingPath[0] = previous.pt;
@@ -80,13 +81,13 @@ L.GeometryUtil = {
     },
 
     /**
-    * pts: array of L.Point
-    * ratio: the ratio of the total length where the point should be computed
-    * Returns null if ll has less than 2 LatLng, or an object with the following properties:
-    *    latLng: the LatLng of the interpolated point
-    *    predecessor: the index of the previous vertex on the path
-    *    heading: the heading of the path at this point, in degrees
-    */
+     * pts: array of L.Point
+     * ratio: the ratio of the total length where the point should be computed
+     * Returns null if ll has less than 2 LatLng, or an object with the following properties:
+     *    latLng: the LatLng of the interpolated point
+     *    predecessor: the index of the previous vertex on the path
+     *    heading: the heading of the path at this point, in degrees
+     */
     interpolateOnPointPath: function (pts, ratio) {
         var nbVertices = pts.length;
 
@@ -117,7 +118,7 @@ L.GeometryUtil = {
                 heading: L.GeometryUtil.computeAngle(pts[0], pts[1])
             };
         }
-            
+
         var pathLength = L.GeometryUtil.getPointPathPixelLength(pts);
         var a = b = pts[0],
             ratioA = ratioB = 0,
@@ -138,17 +139,17 @@ L.GeometryUtil = {
 
         return {
             pt: L.GeometryUtil.interpolateBetweenPoints(a, b, segmentRatio),
-            predecessor: i-2,
+            predecessor: i - 2,
             heading: L.GeometryUtil.computeAngle(a, b)
         }
     },
-    
+
     /**
-    * Finds the point which lies on the segment defined by points A and B,
-    * at the given ratio of the distance from A to B, by linear interpolation. 
-    */
+     * Finds the point which lies on the segment defined by points A and B,
+     * at the given ratio of the distance from A to B, by linear interpolation.
+     */
     interpolateBetweenPoints: function (ptA, ptB, ratio) {
-        if(ptB.x != ptA.x) {
+        if (ptB.x != ptA.x) {
             return new L.Point(
                 (ptA.x * (1 - ratio)) + (ratio * ptB.x),
                 (ptA.y * (1 - ratio)) + (ratio * ptB.y)
