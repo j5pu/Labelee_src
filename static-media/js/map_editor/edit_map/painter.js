@@ -122,6 +122,8 @@ var Painter = {
             Painter.clear(block);
         }
 
+        Painter._paintMenu(block);
+
         // Dejamos el bloque como pintado
         block.attr('data-label', Painter.label.resource_uri);
 
@@ -150,11 +152,31 @@ var Painter = {
             'display': 'none'
         });
 
+
         Menu.setPointStats();
 
         // Seguimos iterando mientras se esté cargando el plano
         if(Floor.loading)
             Floor._loopPoints();
+
+    },
+
+
+    _paintMenu: function(block){
+        var block_description = Floor.loading ? Painter.point.description : Painter.label.name;
+        var block_menu =
+            '<div class="menu">' +
+                '<div class="descr">' +
+                    'Descr: ' +
+                    '<input type="text" ' +
+                        'value="' + block_description + '" ' +
+                        'placeholder="Descripción para el punto..">' +
+                '</div>' +
+                '<div class="qr">' +
+                    '<input type="checkbox"/> QR' +
+                '</div>' +
+            '</div>';
+        block.append(block_menu);
     },
 
 
@@ -194,6 +216,9 @@ var Painter = {
         Floor.painted_connectors.push(connector_descr);
 
         block.attr('data-connector-descr', connector_descr);
+
+        block.find('.menu input[type="text"]').val(connector_descr);
+
         block.append(
             '<div class="connector_descr">' + connector_descr + '</div>'
         );
@@ -246,7 +271,7 @@ var Painter = {
     },
 
 
-    showLabelInfo: function()
+    showLabelInfo: function(block)
     {
         Painter.current_hovered_block = $(this);
 
@@ -264,23 +289,34 @@ var Painter = {
 //        Painter.current_hovered_block.find('img').show();
 //        Painter.current_hovered_block.find('div').show();
 
-        Painter.current_hovered_block.find('.label_img').show();
-        Painter.current_hovered_block.find('.qr_info').show();
-        Painter.current_hovered_block.find('.label_pos').show();
-        Painter.current_hovered_block.find('.connector_descr').show();
+//        Painter.current_hovered_block.find('.label_img').show();
+//        Painter.current_hovered_block.find('.qr_info').show();
+//        Painter.current_hovered_block.find('.label_pos').show();
+//        Painter.current_hovered_block.find('.connector_descr').show();
     },
 
 
-    hideLabelInfo: function(){
+    hideLabelInfo: function(block){
         if(Painter.painting_trace || !Painter.current_hovered_block)
             return;
-        Painter.current_hovered_block.find('.label_img').hide();
-        Painter.current_hovered_block.find('.qr_info').hide();
-        Painter.current_hovered_block.find('.label_pos').hide();
-        Painter.current_hovered_block.find('.connector_descr').hide();
+//        Painter.current_hovered_block.find('.label_img').hide();
+//        Painter.current_hovered_block.find('.qr_info').hide();
+//        Painter.current_hovered_block.find('.label_pos').hide();
+//        Painter.current_hovered_block.find('.connector_descr').hide();
         Painter.current_hovered_block = null;
     },
 
+
+    showLabelMenu: function(){
+        Painter.current_menu_block = $(this);
+
+
+    },
+
+
+    hideLabelMenu: function(){
+
+    },
 
 
 
