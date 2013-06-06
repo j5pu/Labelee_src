@@ -125,21 +125,82 @@ var Events = {
         {
             //
             // Pintar etiquetas dejando pulsado el botón izquierdo del ratón mientras lo movemos
-            $e.floor.blocks.on('mousedown', function(e){
+            $e.floor.blocks.on('mousedown', function(e) {
+
+                // Si se pulsó con el botón derecho no hacemos nada
+                if(e.button == 2)
+                    return;
+
+                // Si hay un menú abierto y el bloque es distinto se cierra el menú
+                if(Floor.current_menu_block)
+                {
+                    // Si se hace click en el input del descr..
+                    if($(e.target).parent().hasClass('descr'))
+                        return;
+
+                    // Si se hace click dentro del menú || dentro del descr..
+                    if($(e.target).parent().hasClass('menu')
+                        ||
+                        $(e.target).parent().parent().hasClass('menu'))
+                        if($(e.target).parent()[0] != Floor.current_menu_block[0])
+                        {
+                            Floor.current_menu_block.find('.menu').hide();
+                            Floor.current_menu_block = null;
+                            return;
+                        }
+                        else
+                            return;
+
+                    // Si se hace click sobre otro bloque
+                }
+
                 e.preventDefault();
+
+
+                // Si el bloque ya tiene etiqueta
+
                 Painter.paintLabel($(this));
                 Painter.painting_trace = true;
                 $e.floor.blocks.on('mouseover', function(){
                     Painter.paintLabel($(this));
                 });
             });
-            $(document).on('mouseup', function(){
+            $(document).on('mouseup', function(e){
+                // Esperamos un poco a que suceda lo disparado por el mousedown
                 if(!Painter.painting_trace)
-                    return;
+                    // Si hay un menú abierto y el bloque es distinto se cierra el menú
+                    if(Floor.current_menu_block)
+                    {
+                        if($(e.target).parent()[0] != Floor.current_menu_block[0])
+                        {
+//                                Floor.current_menu_block.find('.menu').hide();
+//                                Floor.current_menu_block = null;
+                            return;
+                        }
+                        else
+                            return;
+                    }
+                    else
+                        return;
 
                 $e.floor.blocks.off('mouseover');
                 Painter.painting_trace = false;
                 Events.grid.bind();
+            });
+        },
+
+
+        _showPointMenu: function(){
+            // Mostramos una caja de texto para poder introducir la descripción del punto
+            $e.floor.labeled_blocks.on('contextmenu', function(e){
+                // Si se ha vuelto abrir el menú para otro bloque cerramos el actual
+                if(Floor.current_menu_block && $(this)[0] != Floor.current_menu_block[0])
+                    Floor.current_menu_block.find('.menu').hide();
+
+                Floor.current_menu_block = $(this);
+                e.preventDefault();
+
+                Floor.current_menu_block.find('.menu').show();
             });
         },
 
@@ -184,7 +245,7 @@ var Events = {
         {
             var self = this;
             $('#grid *').off();
-            self._assign_qr_by_right_click();
+//            self._assign_qr_by_right_click();
 //            self._paint_with_key_pressed();
             self._paint_with_mouse_pressed();
 //            self._remove_with_key_pressed();
@@ -193,6 +254,7 @@ var Events = {
             self._showUpQRInfo();
             self._setHoveredBlock();
             self._toggleMousePointer();
+            self._showPointMenu();
         }
     },
 

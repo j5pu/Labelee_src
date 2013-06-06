@@ -221,3 +221,12 @@ a{
 ul{
     list-style: none;
 }
+
+.block .menu
+{
+    display: none;
+    background: white;
+    position: absolute;
+    padding: 1em;
+    z-index: 2;
+}

@@ -136,17 +136,12 @@ var Floor = {
                 var col = $(this).data('col');
 
                 var point_data = {
-                    description: null,
+                    description: $(this).find('.descr input[type="text"]').val(),
                     row: row,
                     col: col,
                     floor: Floor.data.id,
                     label: Floor.painted_labels[block_label].id
                 };
-
-                // Si es una arista (connection) guardamos la descripción
-                var connection = $(this).data('connector-descr');
-                if(!from_db && connection)
-                    point_data.description = connection;
 
                 // Guardaremos los bloques que aparecen pintados y no han sido cargados desde la BD
                 if(block_label && !from_db)
