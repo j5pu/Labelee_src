@@ -135,6 +135,7 @@ var Floor = {
                     return;
 
                 var col = $(this).data('col');
+
                 var descr = $(this).find('.descr input[type="text"]').val();
                 var checked_qr = $(this).find('.qr input[type="checkbox"]').is(":checked");
 

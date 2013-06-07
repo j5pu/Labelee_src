@@ -100,6 +100,7 @@ var Painter = {
             return;
         }
 
+
         // Si se está cargando el plano se pinta marcándola como cargada desde la BD
         if(Floor.loading)
         {
@@ -116,12 +117,16 @@ var Painter = {
 
             Floor.point_count.saved++;
         }
+        // Si no se está cargando el plano
         else
         {
             if(!block.data('label') || block.data('from-db'))
                 Floor.point_count.to_save++;
             Painter.clear(block);
         }
+
+        // Pintamos el menú que se mostrará para el bloque
+        Painter._paintMenu(block);
 
         // Dejamos el bloque como pintado
         block.attr('data-label', Painter.label.resource_uri);
@@ -160,7 +165,6 @@ var Painter = {
 //            Events.grid._showPointMenu(block);
         }
 
-        Painter._paintMenu(block);
 
         // Seguimos iterando mientras se esté cargando el plano
         if(Floor.loading)
@@ -244,11 +248,12 @@ var Painter = {
 
         block.attr('data-connector-descr', connector_descr);
 
-        block.find('.menu input[type="text"]').val(connector_descr);
+        block.find('.descr input[type="text"]').attr('value', connector_descr);
 
         block.append(
             '<div class="connector_descr">' + connector_descr + '</div>'
         );
+
         block.find('.connector_descr').css({
             'bottom': '10px',
             'left': Floor.block_width * 2 + 'px'
