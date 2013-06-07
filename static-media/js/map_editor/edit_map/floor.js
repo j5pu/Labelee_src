@@ -481,6 +481,8 @@ var Floor = {
         Events.bindAll();
 
         Floor.loading = false;
+
+        closeWaitingDialog();
     },
 
 
