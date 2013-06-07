@@ -39,7 +39,7 @@ var Events = {
         {
             $e.floor.blocks.on('mouseover', function(){
                 Painter.current_hovered_block = $(this);
-                if(Painter.current_hovered_block.data('qr'))
+                if(Painter.current_hovered_block.data('qr-id'))
                     Painter.current_hovered_block.is_qr = true;
             });
             $e.floor.blocks.on('mouseleave', function(){
@@ -134,28 +134,22 @@ var Events = {
                 // Si hay un menú abierto y el bloque es distinto se cierra el menú
                 if(Floor.current_menu_block)
                 {
-                    // Si se hace click en el input del descr..
-                    if($(e.target).parent().hasClass('descr'))
+                    var target = $(e.target);
+
+                    // Si se hace click en un bloque distinto al del menú, entonces lo cerramos
+                    // antes de poder pintar
+                    if(target.hasClass('block') && target[0] != Floor.current_menu_block[0])
+                    {
+                        Painter.closeBlockMenu();
                         return;
+                    }
 
-                    // Si se hace click dentro del menú || dentro del descr..
-                    if($(e.target).parent().hasClass('menu')
-                        ||
-                        $(e.target).parent().parent().hasClass('menu'))
-                        if($(e.target).parent()[0] != Floor.current_menu_block[0])
-                        {
-                            Floor.current_menu_block.find('.menu').hide();
-                            Floor.current_menu_block = null;
-                            return;
-                        }
-                        else
-                            return;
-
-                    // Si se hace click sobre otro bloque
+                    // Si se hace click dentro del menú..
+                    if(target.closest('.menu')[0])
+                        return;
                 }
 
                 e.preventDefault();
-
 
                 // Si el bloque ya tiene etiqueta
 
@@ -166,22 +160,14 @@ var Events = {
                 });
             });
             $(document).on('mouseup', function(e){
-                // Esperamos un poco a que suceda lo disparado por el mousedown
                 if(!Painter.painting_trace)
-                    // Si hay un menú abierto y el bloque es distinto se cierra el menú
-                    if(Floor.current_menu_block)
-                    {
-                        if($(e.target).parent()[0] != Floor.current_menu_block[0])
-                        {
-//                                Floor.current_menu_block.find('.menu').hide();
-//                                Floor.current_menu_block = null;
-                            return;
-                        }
-                        else
-                            return;
-                    }
-                    else
-                        return;
+                {
+                    // Cerramos el menú del bloque si está abierto ..
+                    if(Floor.current_menu_block && !$(e.target).closest('.menu')[0])
+                        Painter.closeBlockMenu();
+                    return;
+                }
+
 
                 $e.floor.blocks.off('mouseover');
                 Painter.painting_trace = false;
@@ -192,16 +178,18 @@ var Events = {
 
         _showPointMenu: function(){
             // Mostramos una caja de texto para poder introducir la descripción del punto
-            $e.floor.labeled_blocks.on('contextmenu', function(e){
-                // Si se ha vuelto abrir el menú para otro bloque cerramos el actual
-                if(Floor.current_menu_block && $(this)[0] != Floor.current_menu_block[0])
-                    Floor.current_menu_block.find('.menu').hide();
-
-                Floor.current_menu_block = $(this);
-                e.preventDefault();
-
-                Floor.current_menu_block.find('.menu').show();
-            });
+            if(Floor.loading)
+            {
+                $e.floor.labeled_blocks.on('contextmenu', function(e){
+                    Painter.togglePointMenu(e, $(this));
+                });
+            }
+            else
+            {
+                Painter.current_hovered_block.on('contextmenu', function(e){
+                    Painter.togglePointMenu(e, $(this));
+                });
+            }
         },
 
 
@@ -254,7 +242,8 @@ var Events = {
             self._showUpQRInfo();
             self._setHoveredBlock();
             self._toggleMousePointer();
-            self._showPointMenu();
+            if(Floor.data.num_rows)
+                self._showPointMenu();
         }
     },
 

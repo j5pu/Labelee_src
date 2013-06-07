@@ -120,6 +120,7 @@ var Floor = {
         Floor._getPaintedLabels();
 
         var new_points = [];
+        var points_to_update = [];
 
         $('#grid .row').each(function(){
             var row = $(this).data('row');
@@ -134,18 +135,50 @@ var Floor = {
                     return;
 
                 var col = $(this).data('col');
+                var descr = $(this).find('.descr input[type="text"]').val();
+                var checked_qr = $(this).find('.qr input[type="checkbox"]').is(":checked");
 
-                var point_data = {
-                    description: $(this).find('.descr input[type="text"]').val(),
-                    row: row,
-                    col: col,
-                    floor: Floor.data.id,
-                    label: Floor.painted_labels[block_label].id
-                };
+                // Guardaremos aquellos bloques que:
+                //      aparecen pintados y no han sido cargados desde la BD
+                //      ||
+                //      han sido cargados desde BD y se les modificó el QR
 
-                // Guardaremos los bloques que aparecen pintados y no han sido cargados desde la BD
-                if(block_label && !from_db)
-                    new_points.push(point_data);
+                var is_new = block_label && !from_db;
+                var has_qr_modified =
+                    from_db
+                    &&
+                    (
+                        ($(this).data('qr-id') && !checked_qr)
+                        ||
+                        (!$(this).data('qr-id') && checked_qr)
+                    );
+                var has_descr_modified =
+                    from_db && ($(this).data('saved-descr') != descr);
+                var is_modified = has_qr_modified || has_descr_modified;
+
+
+                if(is_new)
+                {
+                    var new_point = {
+                        description: descr,
+                        row: row,
+                        col: col,
+                        floor: Floor.data.id,
+                        label: Floor.painted_labels[block_label].id
+                    };
+
+                    new_points.push(new_point);
+                }
+                else if(is_modified)
+                {
+                    var point_to_update = {
+                        id: $(this).data('point-id'),
+                        description: descr,
+                        qr: checked_qr
+                    };
+
+                    points_to_update.push(point_to_update);
+                }
             });
         });
 
@@ -157,6 +190,7 @@ var Floor = {
         // Enviamos al servidor primero los puntos a eliminar y luego los nuevos
         var pr = new PointResource();
         pr.deletePoints(Floor.points_to_delete);
+        pr.updatePoints(points_to_update);
         pr.createPoints(new_points);
 
         // Vaciamos la lista de puntos eliminados
@@ -290,6 +324,9 @@ var Floor = {
 
             Painter.paintQR();
 
+            // Dejamos a 'checked' el campo QR para el bloque
+            Painter.checkQRForMenu(Painter.block);
+
             Painter.i++;
             Floor._loopQRs();
         }
@@ -364,23 +401,13 @@ var Floor = {
 
         Floor.painted_labels = [];
 
-        $e.floor.grid.find('.row').each(function(){
-            var row = $(this).data('row');
-            //Recorremos cada bloque de la fila
-            $(this).find('.block').each(function(){
+        $e.floor.grid.find('.block[data-label]').each(function(){
+            var block_label = $(this).data('label');
 
-                var block_label = $(this).data('label');
+            if(Floor.painted_labels[block_label])
+                return;
 
-                // Si:
-                //      el bloque no tiene etiqueta
-                //      ||
-                //      la etiqueta ya está en la lista
-                // Entonces: saltamos a la siguiente iteración
-                if(!block_label || Floor.painted_labels[block_label])
-                    return;
-
-                Floor.painted_labels[block_label] = new LabelResource().readFromUri(block_label);
-            });
+            Floor.painted_labels[block_label] = new LabelResource().readFromUri(block_label);
         });
     },
 

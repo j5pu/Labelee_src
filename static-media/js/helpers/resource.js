@@ -339,7 +339,7 @@ function PointResource()
         //      row: 12,
         //      col: 33,
         //      grid: "/api/v1/grid/35/",
-        //      object: "/api/v1/object/1/"
+        //      label: "/api/v1/object/1/"
         // }
         //
         // points_data = [{point0}, {point1}..]
@@ -373,6 +373,39 @@ function PointResource()
 			});
 		}
 	};
+
+
+    this.updatePoints = function(points_data){
+        // Divido los puntos en grupos de 500 y envío cada grupo
+        // vía POST -> /api-2/point/update-from-list
+
+        if(points_data.length === 0)
+            return;
+
+        var groups = divideInGroups(points_data, 500);
+
+        for(var i in groups)
+        {
+            var data = groups[i];
+
+            $.ajax({
+                url : this.api2_url + 'update-from-list',
+                type : 'post',
+                headers : {
+                    'Content-Type' : 'application/json'
+                },
+                data : JSON.stringify(data),
+                dataType : 'json', // esto indica que la respuesta vendrá en formato json
+                async : false,
+                success : function(response) {
+                    new_element = response;
+                },
+                error : function(response) {
+                    var j = response;
+                }
+            });
+        }
+    };
 
 
     this.deletePoints = function(points_data){
