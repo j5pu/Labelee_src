@@ -279,7 +279,7 @@ var Floor = {
             Menu.setPointStats();
             Menu.toggleEraseMode();
             Floor.reloading = false;
-            alert('Plano actualizado');
+//            alert('Plano actualizado');
         }
 
         $e.floor.labeled_blocks = $e.floor.grid.find('[data-label]');
@@ -290,6 +290,9 @@ var Floor = {
         Events.bindAll();
 
         Floor.loading = false;
+
+        // Cerramos el mensaje de espera
+        closeWaitingDialog();
     },
 
 
@@ -436,6 +439,9 @@ var Floor = {
 
     loadSaved: function()
     {
+        if(!Floor.reloading)
+            waitingDialog('Cargando grid para la planta..');
+
         //
         //  1. Dibujamos el grid vacío con el nro. de filas y columnas almacenado en BD
         //  2. Pintamos cada etiqueta almacenada para la planta (muro, POI, etc)

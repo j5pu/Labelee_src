@@ -268,7 +268,11 @@ var Events = {
         _updateFloor: function()
         {
             // Actualizar planta
-            $e.floor.update.on('click', Floor.update);
+            $e.floor.update.on('click', function(){
+                waitingDialog('Actualizando planta..');
+
+                setTimeout(Floor.update, 300);
+            });
             $e.floor.clear.on('click', Floor.clear);
         },
 
