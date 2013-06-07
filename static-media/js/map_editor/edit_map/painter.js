@@ -138,18 +138,21 @@ var Painter = {
         });
 
 
-        // Le añadimos la imágen para la etiqueta, escondida para que se muestre
-        // sólo cuando se pase el ratón por encima de su bloque
-        block.append('<img class="label_img" src="' + Painter.label.img + '"/>');
+        // Si la etiqueta tiene imágen se la añadimos escondida para que se muestre
+        // sólo cuando se requiera
+        if(Painter.label.img)
+        {
+            block.append('<img class="label_img" src="' + Painter.label.img + '"/>');
 
-        var img = block.find('img.label_img');
-        var transform_factor = Painter.label.loaded_img.width / Floor.block_width;
-        img.css({
-            'margin-top': (Floor.block_height - img.height()) / 2 + 'px',
-            'transform': 'scale(' + transform_factor + ')',
-            'z-index': '1',
-            'display': 'none'
-        });
+            var img = block.find('img.label_img');
+            var transform_factor = Painter.label.loaded_img.width / Floor.block_width;
+            img.css({
+                'margin-top': (Floor.block_height - img.height()) / 2 + 'px',
+                'transform': 'scale(' + transform_factor + ')',
+                'z-index': '1',
+                'display': 'none'
+            });
+        }
 
         if(!Floor.loading)
         {

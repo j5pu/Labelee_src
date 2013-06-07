@@ -130,12 +130,12 @@ var Label = {
         Menu.label_created = label_resource.create(data);
 
         //
-        // 2. Subimos su imágen
+        // 2. Si se indicó una imágen la subimos..
         var img_form = $(this).closest('form');
 
         if(!img_form.find('input[name=img]').val())
         {
-            Label._post_create(label);
+            Label._post_create();
             return;
         }
 
