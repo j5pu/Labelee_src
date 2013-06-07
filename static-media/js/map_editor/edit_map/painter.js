@@ -157,7 +157,7 @@ var Painter = {
         if(!Floor.loading)
         {
             Menu.setPointStats();
-            Events.grid._showPointMenu(block);
+//            Events.grid._showPointMenu(block);
         }
 
         Painter._paintMenu(block);

@@ -78,47 +78,47 @@ var Events = {
         },
 
 
-        _assign_qr_by_right_click: function()
-        {
-            // No vamos a asignar un QR a un bloque que no tenga etiqueta..
+//        _assign_qr_by_right_click: function()
+//        {
+//            // No vamos a asignar un QR a un bloque que no tenga etiqueta..
+//
+//            // Si la planta no tiene etiqueta no hay evento que asignar
+//            if(!$e.floor.labeled_blocks)
+//                return;
+//
+//            $e.floor.labeled_blocks.on('contextmenu', function(e){
+//                e.preventDefault();
+//                Painter.assignQR();
+//                $e.floor.blocks.off('mouseover');
+//                Events.grid.bind();
+//            });
+//        },
 
-            // Si la planta no tiene etiqueta no hay evento que asignar
-            if(!$e.floor.labeled_blocks)
-                return;
 
-            $e.floor.labeled_blocks.on('contextmenu', function(e){
-                e.preventDefault();
-                Painter.assignQR();
-                $e.floor.blocks.off('mouseover');
-                Events.grid.bind();
-            });
-        },
-
-
-        _remove_with_key_pressed: function()
-        {
-            //
-            // Borrar etiquetas pulsando ALT
-            Mousetrap.bind('alt', function(e){
-                e.preventDefault();
-//                Painter.hideLabelInfo();
-                $e.floor.blocks.on('mousemove', function(e){
-                    e.preventDefault();
-                    $e.floor.blocks.off('mousemove');
-                    Painter.clear($(this));
-                });
-                $e.floor.blocks.on('mouseover', function(e){
-                    e.preventDefault();
-                    Painter.clear($(this));
-                });
-            });
-
-            Mousetrap.bind('alt', function(e){
-                e.preventDefault();
-                $e.floor.blocks.off('mouseover');
-                Events.grid.bind();
-            },'keyup');
-        },
+//        _remove_with_key_pressed: function()
+//        {
+//            //
+//            // Borrar etiquetas pulsando ALT
+//            Mousetrap.bind('alt', function(e){
+//                e.preventDefault();
+////                Painter.hideLabelInfo();
+//                $e.floor.blocks.on('mousemove', function(e){
+//                    e.preventDefault();
+//                    $e.floor.blocks.off('mousemove');
+//                    Painter.clear($(this));
+//                });
+//                $e.floor.blocks.on('mouseover', function(e){
+//                    e.preventDefault();
+//                    Painter.clear($(this));
+//                });
+//            });
+//
+//            Mousetrap.bind('alt', function(e){
+//                e.preventDefault();
+//                $e.floor.blocks.off('mouseover');
+//                Events.grid.bind();
+//            },'keyup');
+//        },
 
 
         _paint_with_mouse_pressed: function()
@@ -178,55 +178,46 @@ var Events = {
 
         _showPointMenu: function(){
             // Mostramos una caja de texto para poder introducir la descripción del punto
-            if(Floor.loading)
-            {
-                $e.floor.labeled_blocks.on('contextmenu', function(e){
-                    Painter.togglePointMenu(e, $(this));
-                });
-            }
-            else
-            {
-                Painter.current_hovered_block.on('contextmenu', function(e){
-                    Painter.togglePointMenu(e, $(this));
-                });
-            }
-        },
-
-
-        _paint_with_key_pressed: function()
-        {
-            //
-            // Pintar etiquetas dejando pulsado cmd o ctrl y pasando el ratón por el grid
-            Mousetrap.bind(['command', 'ctrl'], function(e){
-
-                e.preventDefault();
-
-                // Si se está cargando la imágen de un icono salimos..
-                if(Painter.loading_icon)
-                    return;
-
-                // Para que no se muestren iconos de las etiquetas mientras pintamos..
-//                Painter.hideLabelInfo();
-
-                Painter.painting_trace = true;
-                $e.floor.blocks.on('mousemove', function(e){
-                    e.preventDefault();
-                    $e.floor.blocks.off('mousemove');
-                    Painter.paintLabel($(this));
-                });
-                $e.floor.blocks.on('mouseover', function(e){
-                    e.preventDefault();
-                    Painter.paintLabel($(this));
-                });
+            $e.floor.labeled_blocks.on('contextmenu', function(e){
+                Painter.togglePointMenu(e, $(this));
             });
-            Mousetrap.bind(['command', 'ctrl'], function(e){
-                e.preventDefault();
-                $e.floor.blocks.off('mouseover');
-                $e.floor.blocks.off('mousemove');
-                Events.grid.bind();
-                Painter.painting_trace = false;
-            },'keyup');
         },
+
+
+//        _paint_with_key_pressed: function()
+//        {
+//            //
+//            // Pintar etiquetas dejando pulsado cmd o ctrl y pasando el ratón por el grid
+//            Mousetrap.bind(['command', 'ctrl'], function(e){
+//
+//                e.preventDefault();
+//
+//                // Si se está cargando la imágen de un icono salimos..
+//                if(Painter.loading_icon)
+//                    return;
+//
+//                // Para que no se muestren iconos de las etiquetas mientras pintamos..
+////                Painter.hideLabelInfo();
+//
+//                Painter.painting_trace = true;
+//                $e.floor.blocks.on('mousemove', function(e){
+//                    e.preventDefault();
+//                    $e.floor.blocks.off('mousemove');
+//                    Painter.paintLabel($(this));
+//                });
+//                $e.floor.blocks.on('mouseover', function(e){
+//                    e.preventDefault();
+//                    Painter.paintLabel($(this));
+//                });
+//            });
+//            Mousetrap.bind(['command', 'ctrl'], function(e){
+//                e.preventDefault();
+//                $e.floor.blocks.off('mouseover');
+//                $e.floor.blocks.off('mousemove');
+//                Events.grid.bind();
+//                Painter.painting_trace = false;
+//            },'keyup');
+//        },
 
 
         bind: function()
@@ -242,7 +233,7 @@ var Events = {
             self._showUpQRInfo();
             self._setHoveredBlock();
             self._toggleMousePointer();
-            if(Floor.data.num_rows)
+            if(Floor.data.num_rows )
                 self._showPointMenu();
         }
     },
