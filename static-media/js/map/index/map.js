@@ -241,6 +241,7 @@ function drawOrigin(origin) {
 
     map.removeLayer(totalPois);
     map.addLayer(originFloor.layer);
+    originMarker._bringToFront();
     map.invalidateSize();
 }
 
