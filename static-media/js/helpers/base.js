@@ -158,3 +158,54 @@ var WaitingDialog = {
         $("#loadingScreen").dialog('close');
     }
 };
+
+
+var ImgLoader = {
+
+    // {
+    //      '/media/img/label/kichi.png': (correspondiente objeto Image() cargado),
+    //      ...
+    // }
+
+    imgs: {},
+    i: 0,
+    src_list: [],
+    callback: null,
+
+    load: function(src_list, callback){
+        var self = this;
+
+        if(src_list && callback)
+        {
+            self.src_list = src_list;
+            self.callback = callback;
+        }
+
+        // Si se han cargardo todos los src..
+        if(self.i == self.src_list.length)
+        {
+            self.callback();
+            self.i = 0;
+            return;
+        }
+
+        var img = new Image();
+        img.src = self.src_list[self.i];
+        img.onload = function(){
+            self.imgs[self.src_list[self.i]] = img;
+
+            self.i++;
+
+            // Cargamos el siguiente src..
+            self.load();
+        };
+    },
+
+    get: function(img_src){
+        return this.imgs[img_src].src
+    },
+
+    push: function(img_src){
+        this.src_list.push(img_src);
+    }
+};
