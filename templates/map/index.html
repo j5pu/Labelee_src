@@ -23,7 +23,7 @@
     <script src="{{ STATIC_URL }}vendor/jquery-1.9.1.min.js"></script>
 	<!--script type="text/javascript" src="http://code.jquery.com/jquery-1.9.1.min.js"></script-->
 	<!--script src="http://cdn.leafletjs.com/leaflet-0.5.1/leaflet.js"></script-->
-    <script>L_PREFER_CANVAS = true;</script>
+   <!-- <script>L_PREFER_CANVAS = true;</script>-->
 	<script src="{{ STATIC_URL }}vendor/leaflet/leaflet.js"></script>
 	<script src="{{ STATIC_URL }}vendor/leaflet/plugins/bouncemarker.js"></script>
 	<script src="{{ STATIC_URL }}vendor/leaflet/plugins/leaflet.awesome-markers.js"></script>
@@ -76,7 +76,7 @@
                 <li>
                    <li class="Label">{{ category }}</li>
                     {% for destination in pois %}
-                    <li onclick="preDrawRoute({{ poi_id }},floor_id,{{ destination.id }},{{ destination.floor_id }})">{{ destination.description }}</li>
+                    <li onclick="$('#menu-right').trigger( 'close' );preDrawRoute({{ poi_id }},floor_id,{{ destination.id }},{{ destination.floor_id }})">{{ destination.description }}</li>
                     {% endfor %}
 
                 </li>

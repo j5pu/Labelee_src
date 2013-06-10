@@ -22,15 +22,46 @@ var Events = {
             // Cambiamos el evento 'mouseover' del elemento para que haga esto:
 
             // Si el bloque contiene un qr entonces no le sacamos la sombra
-            var block_is_qr = Painter.current_hovered_block && Painter.current_hovered_block.data('qr');
-            if(block_is_qr)
-                return;
+//            var block_is_qr = Painter.current_hovered_block && Painter.current_hovered_block.data('qr');
+//            if(block_is_qr)
+//                return;
 
             $e.floor.blocks.on('mouseover', function(){
-                $(this).css({'box-shadow': '1px 1px 10px'});
+//                $(this).css({'box-shadow': '1px 1px 10px'});
+
+                if(Floor.current_hovered_block || $e.floor.toggle_border.is(':checked'))
+                    return;
+
+                Floor.block_height_prev = $(this).height();
+                Floor.block_width_prev = $(this).width();
+
+                Floor.border_size_prev = $e.floor.toggle_border.is(':checked') ? 1 : 0;
+                Floor.border_size_new = 5;
+
+                var new_height = Floor.block_height_prev - (Floor.border_size_new*2) + Floor.border_size_prev*2,
+                    new_width = Floor.block_width_prev - (Floor.border_size_new*2) + Floor.border_size_prev*2;
+
+                $(this).css({
+                    'border': Floor.border_size_new + 'px solid black',
+                    'height': new_height + 'px',
+                    'width': new_width + 'px'
+                });
+
+                Floor.current_hovered_block = $(this);
             });
             $e.floor.blocks.on('mouseleave', function(){
-                $(this).css({'box-shadow': ''});
+//                $(this).css({'box-shadow': ''});
+
+                if($e.floor.toggle_border.is(':checked'))
+                    return;
+
+                $(this).css({
+                    'border': Floor.border_size_prev + 'px solid black',
+                    'height': Floor.block_height_prev + 'px',
+                    'width': Floor.block_width_prev + 'px'
+                });
+
+                Floor.current_hovered_block = null;
             });
         },
 
@@ -39,7 +70,7 @@ var Events = {
         {
             $e.floor.blocks.on('mouseover', function(){
                 Painter.current_hovered_block = $(this);
-                if(Painter.current_hovered_block.data('qr'))
+                if(Painter.current_hovered_block.data('qr-id'))
                     Painter.current_hovered_block.is_qr = true;
             });
             $e.floor.blocks.on('mouseleave', function(){
@@ -52,72 +83,29 @@ var Events = {
         {
             // Mostrar imágen de la etiqueta al sólo pasar el ratón sobre el bloque
 
-            var block_is_qr = Painter.current_hovered_block && Painter.current_hovered_block.data('qr');
-            if(block_is_qr || Floor.show_only_qrs)
-                return;
+//            var block_is_qr = Painter.current_hovered_block && Painter.current_hovered_block.data('qr');
+//            if(block_is_qr || Floor.show_only_qrs)
+//                return;
 
-            $e.floor.blocks.on('mouseover', Painter.showLabelInfo);
-            $e.floor.blocks.on('mouseleave', Painter.hideLabelInfo);
+                $e.floor.blocks.on('mouseover', Painter.showLabelInfo);
+                $e.floor.blocks.on('mouseleave', Painter.hideLabelInfo);
         },
 
 
         _showUpQRInfo: function()
         {
-            // Pone encima de lo demás la info del QR al pasarle el ratón
-            if(!Floor.show_only_qrs)
-                return;
-
-            $e.floor.blocks.on('mouseover', function(){
-                Label.info_hovered = true;
-                Label.toggleHoverQRInfo($(this));
-            });
-            $e.floor.blocks.on('mouseleave', function(){
-                Label.info_hovered = false;
-                Label.toggleHoverQRInfo($(this));
-            });
-        },
-
-
-        _assign_qr_by_right_click: function()
-        {
-            // No vamos a asignar un QR a un bloque que no tenga etiqueta..
-
-            // Si la planta no tiene etiqueta no hay evento que asignar
-            if(!$e.floor.labeled_blocks)
-                return;
-
-            $e.floor.labeled_blocks.on('contextmenu', function(e){
-                e.preventDefault();
-                Painter.assignQR();
-                $e.floor.blocks.off('mouseover');
-                Events.grid.bind();
-            });
-        },
-
-
-        _remove_with_key_pressed: function()
-        {
-            //
-            // Borrar etiquetas pulsando ALT
-            Mousetrap.bind('alt', function(e){
-                e.preventDefault();
-//                Painter.hideLabelInfo();
-                $e.floor.blocks.on('mousemove', function(e){
-                    e.preventDefault();
-                    $e.floor.blocks.off('mousemove');
-                    Painter.clear($(this));
-                });
-                $e.floor.blocks.on('mouseover', function(e){
-                    e.preventDefault();
-                    Painter.clear($(this));
-                });
-            });
-
-            Mousetrap.bind('alt', function(e){
-                e.preventDefault();
-                $e.floor.blocks.off('mouseover');
-                Events.grid.bind();
-            },'keyup');
+//            // Pone encima de lo demás la info del QR al pasarle el ratón
+//            if(!Floor.show_only_qrs)
+//                return;
+//
+//            $e.floor.blocks.on('mouseover', function(){
+//                Label.info_hovered = true;
+//                Label.toggleHoverQRInfo($(this));
+//            });
+//            $e.floor.blocks.on('mouseleave', function(){
+//                Label.info_hovered = false;
+//                Label.toggleHoverQRInfo($(this));
+//            });
         },
 
 
@@ -134,58 +122,42 @@ var Events = {
                 // Si hay un menú abierto y el bloque es distinto se cierra el menú
                 if(Floor.current_menu_block)
                 {
-                    // Si se hace click en el input del descr..
-                    if($(e.target).parent().hasClass('descr'))
+                    var target = $(e.target);
+
+                    // Si se hace click en un bloque distinto al del menú, entonces lo cerramos
+                    // antes de poder pintar
+                    if(target.hasClass('block') && target[0] != Floor.current_menu_block[0])
+                    {
+                        Painter.closeBlockMenu();
                         return;
+                    }
 
-                    // Si se hace click dentro del menú || dentro del descr..
-                    if($(e.target).parent().hasClass('menu')
-                        ||
-                        $(e.target).parent().parent().hasClass('menu'))
-                        if($(e.target).parent()[0] != Floor.current_menu_block[0])
-                        {
-                            Floor.current_menu_block.find('.menu').hide();
-                            Floor.current_menu_block = null;
-                            return;
-                        }
-                        else
-                            return;
-
-                    // Si se hace click sobre otro bloque
+                    // Si se hace click dentro del menú..
+                    if(target.closest('.menu')[0])
+                        return;
                 }
 
                 e.preventDefault();
-
 
                 // Si el bloque ya tiene etiqueta
 
                 Painter.paintLabel($(this));
                 Painter.painting_trace = true;
                 $e.floor.blocks.on('mouseover', function(){
-                    Painter.paintLabel($(this));
+                    if(Painter.painting_trace)
+                        Painter.paintLabel($(this));
                 });
             });
             $(document).on('mouseup', function(e){
-                // Esperamos un poco a que suceda lo disparado por el mousedown
                 if(!Painter.painting_trace)
-                    // Si hay un menú abierto y el bloque es distinto se cierra el menú
-                    if(Floor.current_menu_block)
-                    {
-                        if($(e.target).parent()[0] != Floor.current_menu_block[0])
-                        {
-//                                Floor.current_menu_block.find('.menu').hide();
-//                                Floor.current_menu_block = null;
-                            return;
-                        }
-                        else
-                            return;
-                    }
-                    else
-                        return;
+                {
+                    // Cerramos el menú del bloque si está abierto ..
+                    if(Floor.current_menu_block && !$(e.target).closest('.menu')[0])
+                        Painter.closeBlockMenu();
+                    return;
+                }
 
-                $e.floor.blocks.off('mouseover');
                 Painter.painting_trace = false;
-                Events.grid.bind();
             });
         },
 
@@ -193,51 +165,8 @@ var Events = {
         _showPointMenu: function(){
             // Mostramos una caja de texto para poder introducir la descripción del punto
             $e.floor.labeled_blocks.on('contextmenu', function(e){
-                // Si se ha vuelto abrir el menú para otro bloque cerramos el actual
-                if(Floor.current_menu_block && $(this)[0] != Floor.current_menu_block[0])
-                    Floor.current_menu_block.find('.menu').hide();
-
-                Floor.current_menu_block = $(this);
-                e.preventDefault();
-
-                Floor.current_menu_block.find('.menu').show();
+                Painter.togglePointMenu(e, $(this));
             });
-        },
-
-
-        _paint_with_key_pressed: function()
-        {
-            //
-            // Pintar etiquetas dejando pulsado cmd o ctrl y pasando el ratón por el grid
-            Mousetrap.bind(['command', 'ctrl'], function(e){
-
-                e.preventDefault();
-
-                // Si se está cargando la imágen de un icono salimos..
-                if(Painter.loading_icon)
-                    return;
-
-                // Para que no se muestren iconos de las etiquetas mientras pintamos..
-//                Painter.hideLabelInfo();
-
-                Painter.painting_trace = true;
-                $e.floor.blocks.on('mousemove', function(e){
-                    e.preventDefault();
-                    $e.floor.blocks.off('mousemove');
-                    Painter.paintLabel($(this));
-                });
-                $e.floor.blocks.on('mouseover', function(e){
-                    e.preventDefault();
-                    Painter.paintLabel($(this));
-                });
-            });
-            Mousetrap.bind(['command', 'ctrl'], function(e){
-                e.preventDefault();
-                $e.floor.blocks.off('mouseover');
-                $e.floor.blocks.off('mousemove');
-                Events.grid.bind();
-                Painter.painting_trace = false;
-            },'keyup');
         },
 
 
@@ -245,16 +174,14 @@ var Events = {
         {
             var self = this;
             $('#grid *').off();
-//            self._assign_qr_by_right_click();
-//            self._paint_with_key_pressed();
             self._paint_with_mouse_pressed();
-//            self._remove_with_key_pressed();
             self._toggleBlockShadow();
             self._toggleLabelInfo();
             self._showUpQRInfo();
             self._setHoveredBlock();
             self._toggleMousePointer();
-            self._showPointMenu();
+            if(Floor.data.num_rows )
+                self._showPointMenu();
         }
     },
 
@@ -279,7 +206,11 @@ var Events = {
         _updateFloor: function()
         {
             // Actualizar planta
-            $e.floor.update.on('click', Floor.update);
+            $e.floor.update.on('click', function(){
+                WaitingDialog.open('Actualizando planta..');
+
+                setTimeout(Floor.update, 300);
+            });
             $e.floor.clear.on('click', Floor.clear);
         },
 
@@ -287,7 +218,11 @@ var Events = {
         _changeNumRows: function()
         {
             // Campo para nro. de filas
-            $e.floor.num_rows.on('change', Floor.loadEmpty);
+            $e.floor.num_rows.on('change', function(){
+                WaitingDialog.open('Redibujando grid..');
+
+                setTimeout(Floor.loadEmpty, 200);
+            });
         },
 
 

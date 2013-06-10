@@ -133,7 +133,7 @@ class Point(models.Model):
 
 class QR_Code(models.Model):
     code = models.CharField(max_length=200, unique=True, blank=False)
-    point = models.OneToOneField(Point, related_name='qr_code', on_delete=models.CASCADE)
+    point = models.OneToOneField(Point, related_name='qr_code', null=True, blank=True, on_delete=models.CASCADE)
 
     class Meta:
         verbose_name = 'QR_Code'

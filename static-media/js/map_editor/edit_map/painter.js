@@ -5,6 +5,7 @@ var Painter = {
     label_category: null,
     loading_icon: false,
     erase_mode: false,
+    showing_label_info: false,
 
 
     //
@@ -100,11 +101,13 @@ var Painter = {
             return;
         }
 
+
         // Si se está cargando el plano se pinta marcándola como cargada desde la BD
         if(Floor.loading)
         {
             block.attr('data-from-db', 'y');
             block.attr('data-point-id', Painter.point_id);
+            block.attr('data-saved-descr', Painter.point.description);
 
             // Posición en el grid
             block.append(
@@ -115,13 +118,18 @@ var Painter = {
 
             Floor.point_count.saved++;
         }
+        // Si no se está cargando el plano
         else
         {
             if(!block.data('label') || block.data('from-db'))
                 Floor.point_count.to_save++;
+
             Painter.clear(block);
+
+            Menu.setPointStats();
         }
 
+        // Pintamos el menú que se mostrará para el bloque
         Painter._paintMenu(block);
 
         // Dejamos el bloque como pintado
@@ -138,31 +146,48 @@ var Painter = {
 //            'opacity': '0.5'
         });
 
+        // Si la etiqueta tiene imágen se la añadimos escondida para que se muestre
+        // sólo cuando se requiera
+        if(!LabelCategory.isBlocker() && Painter.label.img)
+        {
+            block.append('<img class="label_img" src="' + Painter.label.img + '"/>');
 
-        // Le añadimos la imágen para la etiqueta, escondida para que se muestre
-        // sólo cuando se pase el ratón por encima de su bloque
-        block.append('<img class="label_img" src="' + Painter.label.img + '"/>');
+            var img = block.find('img.label_img');
+            var transform_factor = Painter.label.loaded_img.width / Floor.block_width;
+            img.css({
+                'margin-top': (Floor.block_height - img.height()) / 2 + 'px',
+                'transform': 'scale(' + transform_factor + ')',
+                'z-index': '1',
+                'display': 'none'
+            });
+        }
 
-        var img = block.find('img.label_img');
-        var transform_factor = Painter.label.loaded_img.width / Floor.block_width;
-        img.css({
-            'margin-top': (Floor.block_height - img.height()) / 2 + 'px',
-            'transform': 'scale(' + transform_factor + ')',
-            'z-index': '1',
-            'display': 'none'
-        });
-
-
-        Menu.setPointStats();
 
         // Seguimos iterando mientras se esté cargando el plano
         if(Floor.loading)
             Floor._loopPoints();
+    },
 
+
+    togglePointMenu: function(e, block)
+    {
+        e.preventDefault();
+
+        // Si se ha vuelto abrir el menú para otro bloque cerramos el actual
+        if(Floor.current_menu_block && block[0] != Floor.current_menu_block[0])
+            Floor.current_menu_block.find('.menu').hide();
+
+        Floor.current_menu_block = block;
+
+        //Ponemos el menú por delante de la demás info..
+        block.find('> :not(.menu)').css({'z-index': 1});
+
+        Floor.current_menu_block.find('.menu').show();
     },
 
 
     _paintMenu: function(block){
+        // Pinta un menú con el checkbox para el QR aún sin setear conforme a lo que haya en BD
         var block_description = Floor.loading ? Painter.point.description : Painter.label.name;
         var block_menu =
             '<div class="menu">' +
@@ -176,7 +201,13 @@ var Painter = {
                     '<input type="checkbox"/> QR' +
                 '</div>' +
             '</div>';
+
         block.append(block_menu);
+    },
+
+
+    checkQRForMenu: function(block){
+        block.find('.qr input[type="checkbox"]').prop('checked', true);
     },
 
 
@@ -217,11 +248,12 @@ var Painter = {
 
         block.attr('data-connector-descr', connector_descr);
 
-        block.find('.menu input[type="text"]').val(connector_descr);
+        block.find('.descr input[type="text"]').attr('value', connector_descr);
 
         block.append(
             '<div class="connector_descr">' + connector_descr + '</div>'
         );
+
         block.find('.connector_descr').css({
             'bottom': '10px',
             'left': Floor.block_width * 2 + 'px'
@@ -244,7 +276,7 @@ var Painter = {
         {
             // Según estemos pintando directamente o cargando desde BD
             var block = Painter.current_hovered_block || Painter.block;
-            block.attr('data-qr', Painter.qr.id);
+            block.attr('data-qr-id', Painter.qr.id);
             block.append(
                 '<div class="qr_info">' + Painter.qr.id + '</div>'
             );
@@ -255,7 +287,7 @@ var Painter = {
             label_pos.css({'bottom': Floor.block_height + 'px'});
             if(Floor.show_only_qrs)
             {
-                block.css({'background': 'black'})
+                block.css({'background': 'black'});
                 qr_info.show();
                 label_pos.show();
             }
@@ -271,35 +303,60 @@ var Painter = {
     },
 
 
-    showLabelInfo: function(block)
+    closeBlockMenu: function()
+    {
+        Floor.current_menu_block.find('.menu').hide();
+        Floor.current_menu_block = null;
+    },
+
+
+    showLabelInfo: function()
     {
         Painter.current_hovered_block = $(this);
 
-        // Si:
-        //      - se está pintando un trazo
-        //      - se están pintando etiquetas bloqueantes
-        //      - el bloque no tiene etiqueta
-        if(Painter.painting_trace
-            || (Painter.painting_trace && Painter.label_category.id === 1)
-            || !Painter.current_hovered_block.data('label'))
+        // Se indica que se muestre info de la etiqueta si:
+        //      - no se está pintando un trazo
+        //      - el bloque tiene etiqueta
+        //      - la etiqueta para el bloque no es una bloqueante
+        Painter.showing_label_info = !Painter.painting_trace &&
+            Painter.current_hovered_block.data('label') &&
+            !Painter.isBlocker(Painter.current_hovered_block);
+
+        if(!Painter.showing_label_info)
         {
             Painter.current_hovered_block = null;
             return;
         }
+
+
 //        Painter.current_hovered_block.find('img').show();
 //        Painter.current_hovered_block.find('div').show();
 
-//        Painter.current_hovered_block.find('.label_img').show();
+        Painter.current_hovered_block.find('.label_img').show();
 //        Painter.current_hovered_block.find('.qr_info').show();
 //        Painter.current_hovered_block.find('.label_pos').show();
 //        Painter.current_hovered_block.find('.connector_descr').show();
     },
 
 
-    hideLabelInfo: function(block){
-        if(Painter.painting_trace || !Painter.current_hovered_block)
+    isBlocker: function(block)
+    {
+        var label = block.data('label');
+        if(!Floor.saved_labels || !Floor.saved_labels[label])
             return;
-//        Painter.current_hovered_block.find('.label_img').hide();
+        var category = Floor.saved_labels[label].category;
+
+        return LabelCategory.isBlocker(category);
+    },
+
+
+    hideLabelInfo: function(block){
+        if(!Painter.showing_label_info)
+        {
+            Painter.current_hovered_block = null;
+            return;
+        }
+        Painter.current_hovered_block.find('.label_img').hide();
 //        Painter.current_hovered_block.find('.qr_info').hide();
 //        Painter.current_hovered_block.find('.label_pos').hide();
 //        Painter.current_hovered_block.find('.connector_descr').hide();
@@ -309,8 +366,6 @@ var Painter = {
 
     showLabelMenu: function(){
         Painter.current_menu_block = $(this);
-
-
     },
 
 
