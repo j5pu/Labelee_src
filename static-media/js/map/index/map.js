@@ -231,7 +231,7 @@ function drawOrigin(origin) {
             map.addLayer(originFloor.photo);
             map.addLayer(floors[i].layer);
             map.setMaxBounds(originFloor.bounds);
-            map.setView(originFloor.bounds.getCenter(), 0);
+            map.setView(originPoint, 0);
         }
     }
 
@@ -335,7 +335,7 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
                         break;
                     }
                 }
-                arrow[f] = L.polyline(subarrow[f], {color: 'orange'});
+                arrow[f] = L.polyline(subarrow[f], {color: 'orange', opacity: 0.8});
                 arrowHead[f] = L.polylineDecorator(arrow[f]);
                 map.addLayer(arrowHead[f]);
             }
@@ -352,7 +352,7 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
                         break;
                     }
                 }
-                arrow[f] = L.polyline(subarrow[f], {color: 'orange'});
+                arrow[f] = L.polyline(subarrow[f], {color: 'orange', opacity: 0.8});
                 arrowHead[f] = L.polylineDecorator(arrow[f]);
                 map.addLayer(arrowHead[f]);
             }
@@ -402,7 +402,7 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
                 else {
                     map.addLayer(floors[f].layer);
                     map.addLayer(floors[f].photo);
-                    map.fitBounds(arrow[i].getBounds());
+                    map.fitBounds(arrow[f].getBounds());
                     //                    map.panTo(arrow[i].getBounds().getCenter(), 0);
                     map.addLayer(arrowHead[f]);
                     flechita = arrowHead[f];
