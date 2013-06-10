@@ -8,6 +8,10 @@ urlpatterns = patterns('map_editor.api_2',
 	# /api-2/map/16/img
 	url(r'^(?P<resource>.*)/(?P<id>\d*)/img$', 'services.views.img'),
 
+    #FLOOR
+	url(r'^floor/(?P<floor_id>.*)/render-grid$', 'resources.floor.render_grid'),
+
+
 	# LABEL
 	url(r'^label/floor/(?P<floor_id>\d+)$', 'resources.label.read_from_floor'),
 	url(r'^label/read-grouped', 'resources.label.read_grouped'),

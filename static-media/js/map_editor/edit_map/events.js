@@ -22,15 +22,46 @@ var Events = {
             // Cambiamos el evento 'mouseover' del elemento para que haga esto:
 
             // Si el bloque contiene un qr entonces no le sacamos la sombra
-            var block_is_qr = Painter.current_hovered_block && Painter.current_hovered_block.data('qr');
-            if(block_is_qr)
-                return;
+//            var block_is_qr = Painter.current_hovered_block && Painter.current_hovered_block.data('qr');
+//            if(block_is_qr)
+//                return;
 
             $e.floor.blocks.on('mouseover', function(){
-                $(this).css({'box-shadow': '1px 1px 10px'});
+//                $(this).css({'box-shadow': '1px 1px 10px'});
+
+                if(Floor.current_hovered_block || $e.floor.toggle_border.is(':checked'))
+                    return;
+
+                Floor.block_height_prev = $(this).height();
+                Floor.block_width_prev = $(this).width();
+
+                Floor.border_size_prev = $e.floor.toggle_border.is(':checked') ? 1 : 0;
+                Floor.border_size_new = 5;
+
+                var new_height = Floor.block_height_prev - (Floor.border_size_new*2) + Floor.border_size_prev*2,
+                    new_width = Floor.block_width_prev - (Floor.border_size_new*2) + Floor.border_size_prev*2;
+
+                $(this).css({
+                    'border': Floor.border_size_new + 'px solid black',
+                    'height': new_height + 'px',
+                    'width': new_width + 'px'
+                });
+
+                Floor.current_hovered_block = $(this);
             });
             $e.floor.blocks.on('mouseleave', function(){
-                $(this).css({'box-shadow': ''});
+//                $(this).css({'box-shadow': ''});
+
+                if($e.floor.toggle_border.is(':checked'))
+                    return;
+
+                $(this).css({
+                    'border': Floor.border_size_prev + 'px solid black',
+                    'height': Floor.block_height_prev + 'px',
+                    'width': Floor.block_width_prev + 'px'
+                });
+
+                Floor.current_hovered_block = null;
             });
         },
 
@@ -52,29 +83,29 @@ var Events = {
         {
             // Mostrar imágen de la etiqueta al sólo pasar el ratón sobre el bloque
 
-            var block_is_qr = Painter.current_hovered_block && Painter.current_hovered_block.data('qr');
-            if(block_is_qr || Floor.show_only_qrs)
-                return;
+//            var block_is_qr = Painter.current_hovered_block && Painter.current_hovered_block.data('qr');
+//            if(block_is_qr || Floor.show_only_qrs)
+//                return;
 
-            $e.floor.blocks.on('mouseover', Painter.showLabelInfo);
-            $e.floor.blocks.on('mouseleave', Painter.hideLabelInfo);
+                $e.floor.blocks.on('mouseover', Painter.showLabelInfo);
+                $e.floor.blocks.on('mouseleave', Painter.hideLabelInfo);
         },
 
 
         _showUpQRInfo: function()
         {
-            // Pone encima de lo demás la info del QR al pasarle el ratón
-            if(!Floor.show_only_qrs)
-                return;
-
-            $e.floor.blocks.on('mouseover', function(){
-                Label.info_hovered = true;
-                Label.toggleHoverQRInfo($(this));
-            });
-            $e.floor.blocks.on('mouseleave', function(){
-                Label.info_hovered = false;
-                Label.toggleHoverQRInfo($(this));
-            });
+//            // Pone encima de lo demás la info del QR al pasarle el ratón
+//            if(!Floor.show_only_qrs)
+//                return;
+//
+//            $e.floor.blocks.on('mouseover', function(){
+//                Label.info_hovered = true;
+//                Label.toggleHoverQRInfo($(this));
+//            });
+//            $e.floor.blocks.on('mouseleave', function(){
+//                Label.info_hovered = false;
+//                Label.toggleHoverQRInfo($(this));
+//            });
         },
 
 
@@ -126,10 +157,7 @@ var Events = {
                     return;
                 }
 
-
-//                $e.floor.blocks.off('mouseover');
                 Painter.painting_trace = false;
-//                Events.grid.bind();
             });
         },
 
@@ -190,7 +218,11 @@ var Events = {
         _changeNumRows: function()
         {
             // Campo para nro. de filas
-            $e.floor.num_rows.on('change', Floor.loadEmpty);
+            $e.floor.num_rows.on('change', function(){
+                waitingDialog('Redibujando grid..')
+
+                setTimeout(Floor.loadEmpty, 200);
+            });
         },
 
 

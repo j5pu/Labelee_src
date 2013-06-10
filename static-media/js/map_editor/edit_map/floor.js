@@ -440,7 +440,7 @@ var Floor = {
 
     loadSaved: function()
     {
-        if(!Floor.reloading)
+        if(Floor.loading)
             waitingDialog('Cargando grid para la planta..');
 
         //
