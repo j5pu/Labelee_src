@@ -260,7 +260,7 @@ map.on('baselayerchange', function (e) {
             map.addLayer(searchMarker._markerLoc._circleLoc);
             map.addLayer(floor_x.photo);
             if (arrowHead[i] && subarrow[i]) {
-//                map.fitBounds(arrow[i].getBounds());
+                map.fitBounds(arrow[i].getBounds());
 //                map.panTo(arrow[i].getBounds().getCenter(), 0);
                 map.addLayer(arrowHead[i]);
                 flechita = arrowHead[i];
@@ -386,7 +386,7 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
                 if (route.fields.origin.fields.floor === floors[f].id) {
                     map.addLayer(floors[f].layer);
                     map.addLayer(floors[f].photo);
-//                    map.fitBounds(arrow[i].getBounds());
+                    map.fitBounds(arrow[i].getBounds());
 //                    map.panTo(arrow[i].getBounds().getCenter(), 0);
                     map.addLayer(arrowHead[f]);
                     flechita = arrowHead[f];
@@ -402,7 +402,7 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
                 else {
                     map.addLayer(floors[f].layer);
                     map.addLayer(floors[f].photo);
-                    //                    map.fitBounds(arrow[i].getBounds());
+                    map.fitBounds(arrow[i].getBounds());
                     //                    map.panTo(arrow[i].getBounds().getCenter(), 0);
                     map.addLayer(arrowHead[f]);
                     flechita = arrowHead[f];
