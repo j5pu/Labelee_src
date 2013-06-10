@@ -1,5 +1,5 @@
 //Pantalla completa
-
+/*
 function hideAddressBar()
 {
     var ua = navigator.userAgent;
@@ -25,8 +25,8 @@ function hideAddressBar()
 
 window.addEventListener("load", function(){ if(!window.pageYOffset){ hideAddressBar(); } } );
 window.addEventListener("orientationchange", hideAddressBar );
+*/
 
-////
 
 
 ///	Activación y configuración del menú
