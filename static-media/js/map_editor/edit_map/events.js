@@ -207,7 +207,7 @@ var Events = {
         {
             // Actualizar planta
             $e.floor.update.on('click', function(){
-                waitingDialog('Actualizando planta..');
+                WaitingDialog.open('Actualizando planta..');
 
                 setTimeout(Floor.update, 300);
             });
@@ -219,7 +219,7 @@ var Events = {
         {
             // Campo para nro. de filas
             $e.floor.num_rows.on('change', function(){
-                waitingDialog('Redibujando grid..')
+                WaitingDialog.open('Redibujando grid..');
 
                 setTimeout(Floor.loadEmpty, 200);
             });

@@ -293,7 +293,7 @@ var Floor = {
         Floor.loading = false;
 
         // Cerramos el mensaje de espera
-        closeWaitingDialog();
+        WaitingDialog.close();
     },
 
 
@@ -440,9 +440,6 @@ var Floor = {
 
     loadSaved: function()
     {
-        if(Floor.loading)
-            waitingDialog('Cargando grid para la planta..');
-
         //
         //  1. Dibujamos el grid vacío con el nro. de filas y columnas almacenado en BD
         //  2. Pintamos cada etiqueta almacenada para la planta (muro, POI, etc)
@@ -483,7 +480,7 @@ var Floor = {
 
         Floor.loading = false;
 
-        closeWaitingDialog();
+        WaitingDialog.close();
     },
 
 
@@ -499,12 +496,15 @@ var Floor = {
         Floor.painted_connectors = [];
         Painter.erase_mode = false;
 
-        // Si la planta no tiene todavía un número de filas entonces
-        // 'tirará' de lo indicado en el formulario de la página
-        if(Floor.data.num_rows)
-            Floor.loadSaved();
-        else
-            Floor.loadEmpty();
+        WaitingDialog.open('Cargando grid para la planta..');
+
+        setTimeout(function(){
+            if(Floor.data.num_rows)
+                Floor.loadSaved();
+            else
+                Floor.loadEmpty();
+        }, 200);
+
     },
 
 

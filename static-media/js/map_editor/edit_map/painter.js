@@ -287,7 +287,7 @@ var Painter = {
             label_pos.css({'bottom': Floor.block_height + 'px'});
             if(Floor.show_only_qrs)
             {
-                block.css({'background': 'black'})
+                block.css({'background': 'black'});
                 qr_info.show();
                 label_pos.show();
             }
