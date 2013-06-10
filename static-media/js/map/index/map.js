@@ -360,7 +360,7 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
             if (arrow[i] && subarrow[i]) {
                 floors[i].layer.addLayer(arrow[i]);
                 if (floors[i].id === route.fields.destiny.fields.floor) {
-                    //map.fitBounds(arrow[i].getBounds());
+                    map.fitBounds(arrow[i].getBounds());
                     if (route.fields.origin.fields.floor !== route.fields.destiny.fields.floor) {
                         var check = floorChecks[floors[i].name];
                         blinkingMode = floors[i].name;
