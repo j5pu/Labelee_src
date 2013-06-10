@@ -68,7 +68,7 @@ function Resource(resource_name) {
 			dataType : 'json', // esto indica que la respuesta vendrá en formato json
 			async : false,
 			success : function(response) {
-				elements = response.img;
+				elements = response.objects;
 			},
 			error : function(response) {
 				var j = response;
@@ -92,7 +92,7 @@ function Resource(resource_name) {
 			dataType : 'json', // esto indica que la respuesta vendrá en formato json
 			async : false,
 			success : function(response) {
-				elements = response.img;
+				elements = response.objects;
 			},
 			error : function(response) {
 				var j = response;
@@ -226,7 +226,7 @@ function FloorResource()
             dataType : 'json', // esto indica que la respuesta vendrá en formato json
             async : false,
             success : function(response) {
-                elements = response.img;
+                elements = response.objects;
             },
             error : function(response) {
                 var j = response;
@@ -334,7 +334,7 @@ function LabelResource()
             dataType : 'json', // esto indica que la respuesta vendrá en formato json
             async : false,
             success : function(response) {
-                elements = response.img;
+                elements = response.objects;
             },
             error : function(response) {
                 var j = response;
