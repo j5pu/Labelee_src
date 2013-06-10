@@ -54,3 +54,7 @@ def tlouder(request):
 
 def multix(request):
     return render_to_response('labelee/multix.html', context_instance=RequestContext(request))
+
+
+def imgLoader(request):
+    return render_to_response('imgLoader/imgloader.html', context_instance=RequestContext(request))

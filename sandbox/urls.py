@@ -22,6 +22,7 @@ urlpatterns = patterns('sandbox.views',
 
 	# url(r'^arista$', 'arista'),
 
+	url(r'^imgloader$', 'imgLoader'),
 
 
 )
