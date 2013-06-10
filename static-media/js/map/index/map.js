@@ -30,6 +30,8 @@ var OriginIcon = L.AwesomeMarkers.icon({
         color: 'red'
     });
 
+var anim = null;
+var flechita = null;
 
 function loadIcon(color) {
     var icon = new L.AwesomeMarkers.icon({
@@ -229,7 +231,7 @@ function drawOrigin(origin) {
             map.addLayer(originFloor.photo);
             map.addLayer(floors[i].layer);
             map.setMaxBounds(originFloor.bounds);
-            map.setView(originFloor.bounds.getCenter(), 0);
+            map.setView(originPoint, 0);
         }
     }
 
@@ -251,14 +253,14 @@ map.on('baselayerchange', function (e) {
     map.removeLayer(searchMarker._markerLoc._circleLoc);
 
     var floor_x;
-    var flechita;
+
     for (var i in floors) {
         if ((e.layer && (e.layer._url === floors[i].photo._url)) || (e._url === floors[i].photo._url)) {
             floor_x = floors[i];
             map.addLayer(searchMarker._markerLoc._circleLoc);
             map.addLayer(floor_x.photo);
             if (arrowHead[i] && subarrow[i]) {
-//                map.fitBounds(arrow[i].getBounds());
+                map.fitBounds(arrow[i].getBounds());
 //                map.panTo(arrow[i].getBounds().getCenter(), 0);
                 map.addLayer(arrowHead[i]);
                 flechita = arrowHead[i];
@@ -270,8 +272,9 @@ map.on('baselayerchange', function (e) {
         } else {
             map.removeLayer(floors[i].layer);
             map.removeLayer(searchMarker._markerLoc._circleLoc);
-            if (arrowHead[i])
+            if(arrowHead[i]!=null)
                 map.removeLayer(arrowHead[i]);
+
         }
 
     }
@@ -303,7 +306,7 @@ function preDrawRoute(origin, originFloor, destination, destinationFloor) {
 
 }
 
-var anim = null;
+
 //Creación de las rutas (con subrutas correspondientes), desde el origen hasta el POI destino
 function drawRoute(org, osX, osY, dst, sX, sY) {
     for (var i in floors) {
@@ -332,7 +335,7 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
                         break;
                     }
                 }
-                arrow[f] = L.polyline(subarrow[f], {color: 'orange'});
+                arrow[f] = L.polyline(subarrow[f], {color: 'orange', opacity: 0.8});
                 arrowHead[f] = L.polylineDecorator(arrow[f]);
                 map.addLayer(arrowHead[f]);
             }
@@ -349,7 +352,7 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
                         break;
                     }
                 }
-                arrow[f] = L.polyline(subarrow[f], {color: 'orange'});
+                arrow[f] = L.polyline(subarrow[f], {color: 'orange', opacity: 0.8});
                 arrowHead[f] = L.polylineDecorator(arrow[f]);
                 map.addLayer(arrowHead[f]);
             }
@@ -366,8 +369,8 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
                         blinker(check);
                     }
                     map.addLayer(arrowHead[i]);
-                    var flechita = arrowHead[i];
-                    arrowAnim(flechita,floors[i].name);
+                    flechita = arrowHead[i];
+                    arrowAnim(flechita, floors[i].name);
                 }
             }
         }
@@ -377,35 +380,33 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
                 if (route.fields.destiny.fields.floor === floors[f].id) {
                     map.removeLayer(floors[f].layer);
                     map.removeLayer(floors[f].photo);
-                    if(arrowHead[f]!=null)
-                      map.removeLayer(arrowHead[f]);
+
                 }
 
                 if (route.fields.origin.fields.floor === floors[f].id) {
                     map.addLayer(floors[f].layer);
                     map.addLayer(floors[f].photo);
-//                    map.fitBounds(arrow[i].getBounds());
+                    map.fitBounds(arrow[i].getBounds());
 //                    map.panTo(arrow[i].getBounds().getCenter(), 0);
                     map.addLayer(arrowHead[f]);
-                    var flechita = arrowHead[f];
-                    arrowAnim(arrow,floors[f].name);
+                    flechita = arrowHead[f];
+                    arrowAnim(flechita, floors[f].name);
                 }
 
             } else {
                 if (route.fields.destiny.fields.floor !== floors[f].id) {
                     map.removeLayer(floors[f].layer);
                     map.removeLayer(floors[f].photo);
-                    if(arrowHead[f]!=null)
-                      map.removeLayer(arrowHead[f]);
+
                 }
                 else {
                     map.addLayer(floors[f].layer);
                     map.addLayer(floors[f].photo);
-                    //                    map.fitBounds(arrow[i].getBounds());
+                    map.fitBounds(arrow[f].getBounds());
                     //                    map.panTo(arrow[i].getBounds().getCenter(), 0);
                     map.addLayer(arrowHead[f]);
-                    var flechita = arrowHead[f];
-                    arrowAnim(flechita,floors[f].name);
+                    flechita = arrowHead[f];
+                    arrowAnim(flechita, floors[f].name);
 
                 }
             }
@@ -416,28 +417,25 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
     }
 }
 //Fución que gestiona la animación de la flecha
-function arrowAnim(arrow,idFloor) {
+function arrowAnim(arrow, idFloor) {
+       if(anim!=null)
+       {
+            window.clearInterval(anim);
 
-
-//        anim = window.setInterval(function () {
-//            setArrow(arrow,idFloor)
-//        }, 100);
+       }
+         anim = window.setInterval(function () {
+         setArrow(arrow,idFloor)
+         }, 100);
 
 }
-/*
-var arrowsOffset = [];
-//Función que define la animación (en este caso, flecha azul) que marca la ruta
+
+var arrowsOffset = 0;
+////Función que define la animación (en este caso, flecha azul) que marca la ruta
 var setArrow = function (flecha,idFloor) {
-    if(arrowsOffset.indexOf(idFloor)===-1)
-    {
 
-        arrowsOffset.push(idFloor);
-        arrowsOffset[idFloor] =0;
-
-    }
-    flecha.setPatterns([{offset: arrowsOffset[idFloor] + '%', repeat: 0, symbol: new L.Symbol.ArrowHead({pixelSize: 15, polygon: false, pathOptions: {/ stroke: true}})}
+    flecha.setPatterns([{offset: arrowsOffset + '%', repeat: 0, symbol: new L.Symbol.ArrowHead({pixelSize: 15, polygon: false, pathOptions: { stroke: true}})}
     ]);
-    if (++arrowsOffset[idFloor] > 100)
-        arrowsOffset[idFloor] = 0;
+    if (++arrowsOffset > 100)
+        arrowsOffset = 0;
 }
-*/
+
