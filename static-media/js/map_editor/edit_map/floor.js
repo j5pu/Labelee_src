@@ -135,6 +135,7 @@ var Floor = {
                     return;
 
                 var col = $(this).data('col');
+
                 var descr = $(this).find('.descr input[type="text"]').val();
                 var checked_qr = $(this).find('.qr input[type="checkbox"]').is(":checked");
 
@@ -279,7 +280,7 @@ var Floor = {
             Menu.setPointStats();
             Menu.toggleEraseMode();
             Floor.reloading = false;
-            alert('Plano actualizado');
+//            alert('Plano actualizado');
         }
 
         $e.floor.labeled_blocks = $e.floor.grid.find('[data-label]');
@@ -290,6 +291,9 @@ var Floor = {
         Events.bindAll();
 
         Floor.loading = false;
+
+        // Cerramos el mensaje de espera
+        WaitingDialog.close();
     },
 
 
@@ -354,14 +358,25 @@ var Floor = {
         }
 
         var label = Floor.saved_labels[Label.keys[Label.i]];
-        var img = new Image();
-        img.src = label.img;
-        img.onload = function(){
+
+        // Si la etiqueta contiene imágen
+        if(label.img)
+        {
+            var img = new Image();
+            img.src = label.img;
+            img.onload = function(){
+                Floor.saved_labels[Label.keys[Label.i]].loaded_img = null;
+                Floor.saved_labels[Label.keys[Label.i]].loaded_img = img;
+                Label.i++;
+                Floor._loopLabels();
+            };
+        }
+        else
+        {
             Floor.saved_labels[Label.keys[Label.i]].loaded_img = null;
-            Floor.saved_labels[Label.keys[Label.i]].loaded_img = img;
             Label.i++;
             Floor._loopLabels();
-        };
+        }
     },
 
 
@@ -439,8 +454,6 @@ var Floor = {
 
         Floor._drawGrid();
 
-        Painter.erase_mode = false;
-
         Floor._loadLabels();
     },
 
@@ -466,6 +479,8 @@ var Floor = {
         Events.bindAll();
 
         Floor.loading = false;
+
+        WaitingDialog.close();
     },
 
 
@@ -479,13 +494,17 @@ var Floor = {
         Floor.point_count.connectors = 0;
 
         Floor.painted_connectors = [];
+        Painter.erase_mode = false;
 
-        // Si la planta no tiene todavía un número de filas entonces
-        // 'tirará' de lo indicado en el formulario de la página
-        if(Floor.data.num_rows)
-            Floor.loadSaved();
-        else
-            Floor.loadEmpty();
+        WaitingDialog.open('Cargando grid para la planta..');
+
+        setTimeout(function(){
+            if(Floor.data.num_rows)
+                Floor.loadSaved();
+            else
+                Floor.loadEmpty();
+        }, 200);
+
     },
 
 

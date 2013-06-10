@@ -81,7 +81,14 @@ var LabelCategory = {
     isBlocker: function(label_category)
     {
         // Nos indica si la categoría es bloqueante
-        return label_category.name.toUpperCase() === 'BLOQUEANTES';
+        var cat_name = null;
+
+        if(label_category)
+            cat_name = label_category.name;
+        else if(Painter.label.category)
+            cat_name = Painter.label.category.name;
+
+        return cat_name.toUpperCase() === 'BLOQUEANTES';
     },
 
 
@@ -130,12 +137,12 @@ var Label = {
         Menu.label_created = label_resource.create(data);
 
         //
-        // 2. Subimos su imágen
+        // 2. Si se indicó una imágen la subimos..
         var img_form = $(this).closest('form');
 
         if(!img_form.find('input[name=img]').val())
         {
-            Label._post_create(label);
+            Label._post_create();
             return;
         }
 
@@ -194,22 +201,22 @@ var Label = {
 
     toggleHoverQRInfo: function(block)
     {
-        var label_pos = block.find('.label_pos');
-        var qr_info = block.find('.qr_info');
-
-        var i1 = label_pos.css('z-index');
-        var i2 = qr_info.css('z-index');
-
-        if(Label.info_hovered)
-        {
-            label_pos.css({'z-index': i1+1});
-            qr_info.css({'z-index': i2+1});
-        }
-        else
-        {
-            label_pos.css({'z-index': i1-1});
-            qr_info.css({'z-index': i2-1});
-        }
+//        var label_pos = block.find('.label_pos');
+//        var qr_info = block.find('.qr_info');
+//
+//        var i1 = label_pos.css('z-index');
+//        var i2 = qr_info.css('z-index');
+//
+//        if(Label.info_hovered)
+//        {
+//            label_pos.css({'z-index': i1+1});
+//            qr_info.css({'z-index': i2+1});
+//        }
+//        else
+//        {
+//            label_pos.css({'z-index': i1-1});
+//            qr_info.css({'z-index': i2-1});
+//        }
     }
 };
 
@@ -402,6 +409,8 @@ var Menu = {
             return;
 
         Floor.show_only_qrs = checkbox_is_checked;
+
+        Floor.reloading = true;
 
         Floor.loadGrid();
     }

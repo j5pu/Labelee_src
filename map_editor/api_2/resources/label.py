@@ -39,7 +39,8 @@ def read_from_floor(request, floor_id):
     # }
     for label in labels:
         label_category = LabelCategory.objects.get(id=label['category_id'])
-        label['img'] = '/media/' + label['img']
+
+        label['img'] = '/media/' + label['img'] if label['img'] else None
         label['category'] = {
             'id': label_category.id,
             'name': label_category.name,

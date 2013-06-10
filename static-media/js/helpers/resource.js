@@ -270,6 +270,31 @@ function FloorResource()
             }
         });
     };
+
+
+    this.renderGrid = function(floor_id){
+        // Obtenemos el código html del grid renderizado de lado del servidor para
+        // el plano de la planta
+
+        var gridHtml;
+        $.ajax({
+            url : this.api2_url + 'floor/' + floor_id + '/render-grid',
+            type : 'get',
+            headers : {
+                'Content-Type' : 'application/json'
+            },
+            dataType : 'json', // esto indica que la respuesta vendrá en formato json
+            async : false,
+            success : function(response) {
+                elements = response;
+            },
+            error : function(response) {
+                var j = response;
+            }
+        });
+
+        return elements;
+    };
 }
 
 function LabelResource()

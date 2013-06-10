@@ -5,6 +5,7 @@ var Painter = {
     label_category: null,
     loading_icon: false,
     erase_mode: false,
+    showing_label_info: false,
 
 
     //
@@ -100,6 +101,7 @@ var Painter = {
             return;
         }
 
+
         // Si se está cargando el plano se pinta marcándola como cargada desde la BD
         if(Floor.loading)
         {
@@ -116,12 +118,19 @@ var Painter = {
 
             Floor.point_count.saved++;
         }
+        // Si no se está cargando el plano
         else
         {
             if(!block.data('label') || block.data('from-db'))
                 Floor.point_count.to_save++;
+
             Painter.clear(block);
+
+            Menu.setPointStats();
         }
+
+        // Pintamos el menú que se mostrará para el bloque
+        Painter._paintMenu(block);
 
         // Dejamos el bloque como pintado
         block.attr('data-label', Painter.label.resource_uri);
@@ -137,27 +146,22 @@ var Painter = {
 //            'opacity': '0.5'
         });
 
-
-        // Le añadimos la imágen para la etiqueta, escondida para que se muestre
-        // sólo cuando se pase el ratón por encima de su bloque
-        block.append('<img class="label_img" src="' + Painter.label.img + '"/>');
-
-        var img = block.find('img.label_img');
-        var transform_factor = Painter.label.loaded_img.width / Floor.block_width;
-        img.css({
-            'margin-top': (Floor.block_height - img.height()) / 2 + 'px',
-            'transform': 'scale(' + transform_factor + ')',
-            'z-index': '1',
-            'display': 'none'
-        });
-
-        if(!Floor.loading)
+        // Si la etiqueta tiene imágen se la añadimos escondida para que se muestre
+        // sólo cuando se requiera
+        if(!LabelCategory.isBlocker() && Painter.label.img)
         {
-            Menu.setPointStats();
-            Events.grid._showPointMenu(block);
+            block.append('<img class="label_img" src="' + Painter.label.img + '"/>');
+
+            var img = block.find('img.label_img');
+            var transform_factor = Painter.label.loaded_img.width / Floor.block_width;
+            img.css({
+                'margin-top': (Floor.block_height - img.height()) / 2 + 'px',
+                'transform': 'scale(' + transform_factor + ')',
+                'z-index': '1',
+                'display': 'none'
+            });
         }
 
-        Painter._paintMenu(block);
 
         // Seguimos iterando mientras se esté cargando el plano
         if(Floor.loading)
@@ -174,6 +178,9 @@ var Painter = {
             Floor.current_menu_block.find('.menu').hide();
 
         Floor.current_menu_block = block;
+
+        //Ponemos el menú por delante de la demás info..
+        block.find('> :not(.menu)').css({'z-index': 1});
 
         Floor.current_menu_block.find('.menu').show();
     },
@@ -241,11 +248,12 @@ var Painter = {
 
         block.attr('data-connector-descr', connector_descr);
 
-        block.find('.menu input[type="text"]').val(connector_descr);
+        block.find('.descr input[type="text"]').attr('value', connector_descr);
 
         block.append(
             '<div class="connector_descr">' + connector_descr + '</div>'
         );
+
         block.find('.connector_descr').css({
             'bottom': '10px',
             'left': Floor.block_width * 2 + 'px'
@@ -279,7 +287,7 @@ var Painter = {
             label_pos.css({'bottom': Floor.block_height + 'px'});
             if(Floor.show_only_qrs)
             {
-                block.css({'background': 'black'})
+                block.css({'background': 'black'});
                 qr_info.show();
                 label_pos.show();
             }
@@ -302,35 +310,53 @@ var Painter = {
     },
 
 
-    showLabelInfo: function(block)
+    showLabelInfo: function()
     {
         Painter.current_hovered_block = $(this);
 
-        // Si:
-        //      - se está pintando un trazo
-        //      - se están pintando etiquetas bloqueantes
-        //      - el bloque no tiene etiqueta
-        if(Painter.painting_trace
-            || (Painter.painting_trace && Painter.label_category.id === 1)
-            || !Painter.current_hovered_block.data('label'))
+        // Se indica que se muestre info de la etiqueta si:
+        //      - no se está pintando un trazo
+        //      - el bloque tiene etiqueta
+        //      - la etiqueta para el bloque no es una bloqueante
+        Painter.showing_label_info = !Painter.painting_trace &&
+            Painter.current_hovered_block.data('label') &&
+            !Painter.isBlocker(Painter.current_hovered_block);
+
+        if(!Painter.showing_label_info)
         {
             Painter.current_hovered_block = null;
             return;
         }
+
+
 //        Painter.current_hovered_block.find('img').show();
 //        Painter.current_hovered_block.find('div').show();
 
-//        Painter.current_hovered_block.find('.label_img').show();
+        Painter.current_hovered_block.find('.label_img').show();
 //        Painter.current_hovered_block.find('.qr_info').show();
 //        Painter.current_hovered_block.find('.label_pos').show();
 //        Painter.current_hovered_block.find('.connector_descr').show();
     },
 
 
-    hideLabelInfo: function(block){
-        if(Painter.painting_trace || !Painter.current_hovered_block)
+    isBlocker: function(block)
+    {
+        var label = block.data('label');
+        if(!Floor.saved_labels || !Floor.saved_labels[label])
             return;
-//        Painter.current_hovered_block.find('.label_img').hide();
+        var category = Floor.saved_labels[label].category;
+
+        return LabelCategory.isBlocker(category);
+    },
+
+
+    hideLabelInfo: function(block){
+        if(!Painter.showing_label_info)
+        {
+            Painter.current_hovered_block = null;
+            return;
+        }
+        Painter.current_hovered_block.find('.label_img').hide();
 //        Painter.current_hovered_block.find('.qr_info').hide();
 //        Painter.current_hovered_block.find('.label_pos').hide();
 //        Painter.current_hovered_block.find('.connector_descr').hide();
