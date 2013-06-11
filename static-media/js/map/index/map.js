@@ -181,6 +181,7 @@ var mobileOpts = {
     minLength: 1,				//minimal text length for autocomplete
     textErr: 'Ningún resultado',
     layer: totalPois,
+    initial: false,
     //title: title,
     callTip: customTip,
     tooltipLimit: -1,			//limit max results to show in tooltip. -1 for no limit.
@@ -266,6 +267,8 @@ map.on('baselayerchange', function (e) {
                 map.addLayer(arrowHead[i]);
                 flechita = arrowHead[i];
                 arrowAnim(flechita, floor_x.name);
+                map.setZoom(0);
+
             } else {
                 map.setView(originFloor.bounds.getCenter(), 0);
             }
@@ -363,7 +366,6 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
             if (arrow[i] && subarrow[i]) {
                 floors[i].layer.addLayer(arrow[i]);
                 if (floors[i].id === route.fields.destiny.fields.floor) {
-                    //map.fitBounds(arrow[i].getBounds());
                     if (route.fields.origin.fields.floor !== route.fields.destiny.fields.floor) {
                         var check = floorChecks[floors[i].name];
                         blinkingMode = floors[i].name;
@@ -372,6 +374,9 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
                     map.addLayer(arrowHead[i]);
                     flechita = arrowHead[i];
                     arrowAnim(flechita, floors[i].name);
+                    map.fitBounds(arrow[i].getBounds());
+                    map.setZoom(0);
+
                 }
             }
         }
@@ -387,11 +392,13 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
                 if (route.fields.origin.fields.floor === floors[f].id) {
                     map.addLayer(floors[f].layer);
                     map.addLayer(floors[f].photo);
-                    map.fitBounds(arrow[i].getBounds());
+                    map.fitBounds(arrow[f].getBounds());
 //                    map.panTo(arrow[i].getBounds().getCenter(), 0);
                     map.addLayer(arrowHead[f]);
                     flechita = arrowHead[f];
                     arrowAnim(flechita, floors[f].name);
+                    map.setZoom(0);
+
                 }
 
             } else {
@@ -408,6 +415,8 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
                     map.addLayer(arrowHead[f]);
                     flechita = arrowHead[f];
                     arrowAnim(flechita, floors[f].name);
+                    map.setZoom(0);
+
 
                 }
             }
@@ -417,7 +426,7 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
         alert('No existe esa ruta');
     }
 }
-//Fución que gestiona la animación de la flecha
+//Función que gestiona la animación de la flecha
 function arrowAnim(arrow, idFloor) {
        if(anim!=null)
        {
