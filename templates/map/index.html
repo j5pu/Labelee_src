@@ -48,24 +48,17 @@
 </head>
 
 
-<body onload="setTimeout(hideSplash, 5000)">
-<div class="splash">
-    <div class="container">
-        <div class="sp-container"
-             style="width:100%;height: 100%; z-index: 10000; position: absolute; vertical-align: middle; background-color: white">
-
-            <div class="frame-5"><span><img src="/media/logo-labelee-sin-slogan.png"></span></div>
-            <div id="find" class="frame-6">find<span id="your"> your<span id="way"> way!</span></span></div>
-        </div>
-    </div>
-
-</div>
+<body onload="">
 
 <script type='text/javascript'>
+  $(function(){
+ $('body').prepend('<div class="splash">    <div class="container">        <div class="sp-container"             style="width:auto;height: 100%; z-index: 10000; position: absolute; vertical-align: middle; background-color: white">            <div class="frame-5"><span><img src="/media/logo-labelee-sin-slogan.png"></span></div>            <div id="find" class="frame-6">find<span id="your"> your<span id="way"> way!</span></span></div>        </div>    </div></div>')
+   setTimeout(hideSplash,5000);
+  });
     function hideSplash() {
         $('div.splash').hide();
     }
-    ;
+
 </script>
 <div id="page">
     <div id="header">
