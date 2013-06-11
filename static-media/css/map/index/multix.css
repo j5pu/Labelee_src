@@ -44,7 +44,7 @@ html.mmenu-opened body
 }
 .mmenu > ul
 {
-    padding: 10px 0 40px 0;
+    padding: 0;
 }
 html.mmenu-left .mmenu > ul > li
 {
@@ -427,6 +427,7 @@ pre
     height: 40px;
     padding: 0 50px;
     top:6px;
+    left:0;
 }
 
 #header a {
@@ -747,10 +748,16 @@ html.mmenu-opened .mmenu-page
     border-color: rgba( 0, 0, 0, 0.2 );
 }
 
-::-webkit-scrollbar              { /* 1 */ }
-::-webkit-scrollbar-button       { /* 2 */ }
-::-webkit-scrollbar-track        { /* 3 */ }
-::-webkit-scrollbar-track-piece  { /* 4 */ }
-::-webkit-scrollbar-thumb        { /* 5 */ }
-::-webkit-scrollbar-corner       { /* 6 */ }
-::-webkit-resizer                { /* 7 */ }
+#scrollMenu
+{
+    position: absolute;
+}
+nav
+{
+    position: absolute;
+}
+
+#page
+{
+
+}

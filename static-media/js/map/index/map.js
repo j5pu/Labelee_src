@@ -45,9 +45,11 @@ function loadIcon(color) {
 var origin = {
     point: new PointResource().read(poi_id),
     floor: new FloorResource().read(floor_id),
-    enclosure: new EnclosureResource().read(enclosure_id)
+    enclosure: new EnclosureResource().read(enclosure_id),
+    label: null
 };
 
+origin.label = new LabelResource().readFromUri(origin.point.label);
 
 //Variables globales
 var mapH = $(document).height(),//Altura de la pantalla
@@ -374,8 +376,10 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
                     map.addLayer(arrowHead[i]);
                     flechita = arrowHead[i];
                     arrowAnim(flechita, floors[i].name);
+/*
                     map.fitBounds(arrow[i].getBounds());
                     map.setZoom(0);
+*/
 
                 }
             }
