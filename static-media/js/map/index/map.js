@@ -70,6 +70,9 @@ $(function(){
     {
         var miCoche = JSON.parse(localStorage.getItem('miCoche'));
 
+        if(origin.enclosure.id != miCoche.enclosure.id)
+            return;
+
         $('#scrollMenu').prepend(
             '<li>' +
                 '<li class="Label mmenu-label">' + miCoche.labelCategory.name + '</li>' +
