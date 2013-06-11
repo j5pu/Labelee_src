@@ -85,7 +85,13 @@
             </ul>
         </nav>
     </div>
-
+<div  style="background: rgb(17, 17, 17); background:rgba(17, 17, 17, 0.4); padding:0">
+    	<marquee align="center" direction="left" loop="40"   style="width:100%; z-index: 10000; position: absolute;bottom: 0;background:rgba(17, 17, 17, 0.4);color: #ddd">
+            {% for text in marquee %}
+                    <span>{{ text }} --</span>
+                {% endfor %}
+    	</marquee>
+</div>
 
 </body>
 </html>
