@@ -126,15 +126,19 @@ var ScrollMenu = {
     {
         var self = ScrollMenu;
 
+        ev.preventDefault();
+
         self.top_new = self.top + ev.gesture['deltaY'];
         self.$listMenu.css({
             'top': parseInt(self.top_new) + 'px'
         });
     },
 
-    scrollEnd: function()
+    scrollEnd: function(ev)
     {
         var self = ScrollMenu;
+
+        ev.preventDefault();
 
         if(self.top_new > 0 || self.$listMenu.height() < self.$wrapper.height())
             self.top_new = 0;
@@ -158,7 +162,7 @@ var ScrollMenu = {
         var self = this;
 
         self.$listMenu
-            .hammer({prevent_default: true})
+            .hammer()
 
             // SCROLL
             .bind('drag', self.scroll)
