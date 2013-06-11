@@ -1,22 +1,22 @@
-
 <!DOCTYPE html>
 <html>
 <head>
-	<title>labelee v1</title>
-	<meta charset="utf-8" />
+    <title>labelee v1</title>
+    <meta charset="utf-8"/>
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
 
 
-	<link rel="stylesheet" href="{{ STATIC_URL }}vendor/leaflet/leaflet.css" />
-	<link rel="stylesheet" href="{{ STATIC_URL }}css/map/index/font-awesome.min.css">
-	<link rel="stylesheet" href="{{ STATIC_URL }}css/map/index/leaflet.awesome-markers.css">
-	<link rel="stylesheet" href="{{ STATIC_URL }}css/map/index/leaflet.rrose.css">
-	<link rel="stylesheet" href="{{ STATIC_URL }}css/map/index/leaflet-search.css">
-	<link rel="stylesheet" href="{{ STATIC_URL }}css/map/index/search-mobile.css">
+    <link rel="stylesheet" href="{{ STATIC_URL }}vendor/leaflet/leaflet.css"/>
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/map/index/font-awesome.min.css">
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/map/index/leaflet.awesome-markers.css">
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/map/index/leaflet.rrose.css">
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/map/index/leaflet-search.css">
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/map/index/search-mobile.css">
     <link rel="stylesheet" href="{{ STATIC_URL }}css/map/index/multix.css">
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/map/index/animation.css">
 
 
     <script src="{{ STATIC_URL }}vendor/leaflet/plugins/scale.fix.js"></script>
@@ -24,14 +24,14 @@
     <script src="{{ STATIC_URL }}vendor/hammer.js_v1.0.3/dist/hammer.min.js"></script>
     <script src="{{ STATIC_URL }}vendor/hammer.js_v1.0.3/dist/jquery.hammer.min.js"></script>
 
-	<!--script type="text/javascript" src="http://code.jquery.com/jquery-1.9.1.min.js"></script-->
-	<!--script src="http://cdn.leafletjs.com/leaflet-0.5.1/leaflet.js"></script-->
-   <!-- <script>L_PREFER_CANVAS = true;</script>-->
-	<script src="{{ STATIC_URL }}vendor/leaflet/leaflet.js"></script>
-	<script src="{{ STATIC_URL }}vendor/leaflet/plugins/bouncemarker.js"></script>
-	<script src="{{ STATIC_URL }}vendor/leaflet/plugins/leaflet.awesome-markers.js"></script>
-	<script src="{{ STATIC_URL }}vendor/leaflet/plugins/L.GeometryUtil.js"></script>
-	<script src="{{ STATIC_URL }}vendor/leaflet/plugins/L.RotatedMarker.js"></script>
+    <!--script type="text/javascript" src="http://code.jquery.com/jquery-1.9.1.min.js"></script-->
+    <!--script src="http://cdn.leafletjs.com/leaflet-0.5.1/leaflet.js"></script-->
+    <!-- <script>L_PREFER_CANVAS = true;</script>-->
+    <script src="{{ STATIC_URL }}vendor/leaflet/leaflet.js"></script>
+    <script src="{{ STATIC_URL }}vendor/leaflet/plugins/bouncemarker.js"></script>
+    <script src="{{ STATIC_URL }}vendor/leaflet/plugins/leaflet.awesome-markers.js"></script>
+    <script src="{{ STATIC_URL }}vendor/leaflet/plugins/L.GeometryUtil.js"></script>
+    <script src="{{ STATIC_URL }}vendor/leaflet/plugins/L.RotatedMarker.js"></script>
     <script src="{{ STATIC_URL }}vendor/leaflet/plugins/L.Symbol.js"></script>
     <script src="{{ STATIC_URL }}vendor/leaflet/plugins/L.PolylineDecorator.js"></script>
     <script src="{{ STATIC_URL }}vendor/leaflet/plugins/rrose-src.js"></script>
@@ -48,52 +48,64 @@
 </head>
 
 
-<body>
-    <div id="page">
-        <div id="header">
-            <a href="#menu-right">
-                <img src="{{ STATIC_URL }}css/map/index/images/logo.png" />
-            </a>
-            <span id="fake"></span>
-            labelee
-        </div>
-        <div id="content">
-            <div id="map"></div>
-        </div>
-     <script>
+<body onload="">
+
+<script type='text/javascript'>
+  $(function(){
+ $('body').prepend('<div class="splash">    <div class="container">        <div class="sp-container"             style="width:auto;height: 100%; z-index: 10000; position: absolute; vertical-align: middle; background-color: white">            <div class="frame-5"><span><img src="/media/logo-labelee-sin-slogan.png"></span></div>            <div id="find" class="frame-6">find<span id="your"> your<span id="way"> way!</span></span></div>        </div>    </div></div>')
+   setTimeout(hideSplash,5000);
+  });
+    function hideSplash() {
+        $('div.splash').hide();
+    }
+
+</script>
+<div id="page">
+    <div id="header">
+        <a href="#menu-right">
+            <img src="{{ STATIC_URL }}css/map/index/images/logo.png"/>
+        </a>
+        <span id="fake"></span>
+        labelee
+    </div>
+    <div id="content">
+        <div id="map"></div>
+    </div>
+    <script>
         var STATIC_URL = {{ STATIC_URL }};
         var enclosure_id = {{ enclosure_id }};
         var floor_id = {{ floor_id }};
         var poi_id = {{ poi_id }};
     </script>
     <script src="{{ STATIC_URL }}js/map/index/map.js"></script>
-        <nav id="menu-right">
-            <!--
-            <div class="search">
-                <input type="text" name="search" placeholder="Buscar..." autocomplete="off" />
-            </div>
-            -->
-            <ul id="scrollMenu">
-                 <li class="Label"><span>Selecciona tu destino</span></li>
-                {% for category, pois in categories.items %}
+    <nav id="menu-right">
+        <!--
+        <div class="search">
+            <input type="text" name="search" placeholder="Buscar..." autocomplete="off" />
+        </div>
+        -->
+        <ul id="scrollMenu">
+            <li class="Label"><span>Selecciona tu destino</span></li>
+            {% for category, pois in categories.items %}
                 <li>
-                   <li class="Label">{{ category }}</li>
-                    {% for destination in pois %}
+                <li class="Label">{{ category }}</li>
+                {% for destination in pois %}
                     <li onclick="$('#menu-right').trigger( 'close' );preDrawRoute({{ poi_id }},floor_id,{{ destination.id }},{{ destination.floor_id }})">{{ destination.description }}</li>
-                    {% endfor %}
+                {% endfor %}
 
                 </li>
-                {%  endfor %}
-                <li class="no-results"><span>Lo sentimos, no se ha encontrado ningún resultado.</span></li>
-            </ul>
-        </nav>
-    </div>
-<div  style="background: rgb(17, 17, 17); background:rgba(17, 17, 17, 0.4); padding:0">
-    	<marquee align="center" direction="left" loop="40"   style="width:100%; z-index: 10000; position: absolute;bottom: 0;background:rgba(17, 17, 17, 0.4);color: #ddd">
-            {% for text in marquee %}
-                    <span>{{ text }} --</span>
-                {% endfor %}
-    	</marquee>
+            {% endfor %}
+            <li class="no-results"><span>Lo sentimos, no se ha encontrado ningún resultado.</span></li>
+        </ul>
+    </nav>
+</div>
+<div style="background: rgb(17, 17, 17); background:rgba(17, 17, 17, 0.4); padding:0">
+    <marquee align="center" direction="left" loop="40"
+             style="width:100%; z-index: 10000; position: absolute;bottom: 0;background:rgba(17, 17, 17, 0.4);color: #ddd">
+        {% for text in marquee %}
+            <span>{{ text }} --</span>
+        {% endfor %}
+    </marquee>
 </div>
 
 </body>
