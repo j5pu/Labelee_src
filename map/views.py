@@ -20,6 +20,7 @@ def origin(request, enclosure_id, floor_id, poi_id):
     """
         map/origin/1_25_91234
     """
+    enclosure = Enclosure.objects.filter(id=enclosure_id)
     categories = {}
     points = Point.objects.filter(~Q(label__category__name__in=CATEGORIAS_FIJAS.values()),
                                   floor__enclosure__id=enclosure_id)
@@ -32,7 +33,7 @@ def origin(request, enclosure_id, floor_id, poi_id):
 
 
     marquee = []
-    twitterhelper = TwitterHelper()
+    twitterhelper = TwitterHelper(enclosure[0].twitter_account)
     tweets = twitterhelper.getTweets()
     for tweet in tweets:
         marquee.append(tweet.text)
