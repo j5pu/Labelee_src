@@ -5,6 +5,12 @@ var OriginIcon = L.AwesomeMarkers.icon({
         spin: true
 
     }),
+    DestinyIcon = L.AwesomeMarkers.icon({
+        icon: 'star',
+        color: 'darkred',
+        spin: true
+
+    }),
     cadetblue = L.AwesomeMarkers.icon({
         icon: 'retweet',
         color: 'cadetblue'
@@ -47,22 +53,22 @@ function loadIcon(color) {
 }
 
 //Carga de datos globales
-var origin = {
+var qrPoint = {
     point: new PointResource().read(poi_id),
     floor: new FloorResource().read(floor_id),
     enclosure: new EnclosureResource().read(enclosure_id)
 };
-origin.label = new LabelCategoryResource().readFromUri(origin.point.label)
-origin.labelCategory = new LabelCategoryResource().readFromUri(origin.label.category)
-origin.isParquing = function () {
+qrPoint.label = new LabelCategoryResource().readFromUri(qrPoint.point.label)
+qrPoint.labelCategory = new LabelCategoryResource().readFromUri(qrPoint.label.category)
+qrPoint.isParquing = function () {
     return this.labelCategory.name == 'Parquing';
 };
 
 
-if (origin.isParquing()) {
+if (qrPoint.isParquing()) {
     if (confirm('¿Desea recordar su plaza?')) {
         var miCoche = {
-            dest: origin,
+            dest: qrPoint,
             prevDate: new Date().getMilliseconds()
         };
         localStorage.setItem('miCoche', JSON.stringify(miCoche));
@@ -77,7 +83,7 @@ $(function () {
     if (localStorage.getItem('miCoche')) {
         var miCoche = JSON.parse(localStorage.getItem('miCoche'));
 
-        if (origin.enclosure.id != miCoche.dest.enclosure.id)
+        if (qrPoint.enclosure.id != miCoche.dest.enclosure.id)
             return;
 
         $('#scrollMenu').prepend(
@@ -85,7 +91,7 @@ $(function () {
                 '<li class="Label mmenu-label">' + miCoche.dest.labelCategory.name + '</li>' +
                 '<li ' +
                 'onclick="' + "$('#menu-right').trigger( 'close' );" +
-                "preDrawRoute(" + origin.point.id + ', ' + floor_id + ', ' + miCoche.dest.point.id + ', ' + miCoche.dest.floor.id + ');">' +
+                "preDrawRoute(" + qrPoint.point.id + ', ' + floor_id + ', ' + miCoche.dest.point.id + ', ' + miCoche.dest.floor.id + ');">' +
                 miCoche.dest.point.description +
                 '</li>' +
                 '</li>'
@@ -100,15 +106,15 @@ var mapH = $(document).height(),//Altura de la pantalla
     layersControl = new L.control.layers(null, null, {collapsed: false}),
     floor_index = 0,
     totalPois = new L.LayerGroup(),
-    originFloor,
-    originPoint,
+    qrFloor,
+    qrLoc,
     route = {},
     arrow = [],
     arrowHead = [],
     arrowOffset = 0,
     subpath = [],
     subarrow = [],
-    floors = new FloorResource().readFromEnclosure(origin.enclosure.id);
+    floors = new FloorResource().readFromEnclosure(qrPoint.enclosure.id);
 
 //POIs de cada floor, separados para pintarlos por capas
 for (var i in floors) {
@@ -135,14 +141,19 @@ function loopFloors() {
     if (floor_index == floors.length) {
         loadPOIs();
 
-        drawOrigin(origin);
+        initMap(qrPoint);
 
         var prevDest = JSON.parse(localStorage.getItem('prevDest'));
-        if (prevDest && !confirm(prevDest.mesg))
-            drawRoute(origin.point.id, originFloor.sX, originFloor.sY, prevDest.poid, prevDest.psX, prevDest.psY);
+        if (qr_type == 'origin' && prevDest)
+            if(confirm(prevDest.mesg))
+                drawRoute(qrPoint.point.id, qrFloor.sX, qrFloor.sY, prevDest.poid, prevDest.psX, prevDest.psY);
+            else
+                localStorage.removeItem('prevDest');
 
+
+
+        // fin de loopFloors
         return;
-
     }
 
     name = floors[floor_index].name;
@@ -197,17 +208,26 @@ function loadPOIs() {
             floors[fl].pois[j].marker.bindPopup(descriptionIcon)
                 .on('click', function () {
 
-                    if (searchMarker._markerLoc)
+                    if(searchMarker._markerLoc)
                         map.removeLayer(searchMarker._markerLoc._circleLoc);
 
-                    drawRoute(origin.point.id, originFloor.sX, originFloor.sY, this.poid, this.psX, this.psY);
+                    if(localStorage.getItem('prevDest'))
+                        localStorage.removeItem('prevDest');
+
+                    if(qr_type == 'dest')
+                    {
+                        this.bindPopup("Escanea un QR para llegar hasta " + qrPoint.point.description).openPopup();
+                        return;
+                    }
+
+                    drawRoute(qrPoint.point.id, qrFloor.sX, qrFloor.sY, this.poid, this.psX, this.psY);
 
                     var prevDest = {
                         'prevDate': new Date().getTime(),
                         'poid': this.poid,
                         'psX': this.psX,
                         'psY': this.psY,
-                        'mesg': 'Ya seleccionaste un destino, ¿desea cambiarlo?'
+                        'mesg': '¿Todavía quieres ir a ' + this.title + '?'
                     };
                     localStorage.setItem('prevDest', JSON.stringify(prevDest));
                 });
@@ -222,20 +242,44 @@ function loadPOIs() {
     }
 
     for (i in floors) {
-        if (origin.floor.id == floors[i].id) {
-            originFloor = floors[i];
-            originFloor.sX = floors[i].scaleX;
-            originFloor.sY = floors[i].scaleY;
-            originFloor.layer = floors[i].layer;
+        if (qrPoint.floor.id == floors[i].id) {
+            qrFloor = floors[i];
+            qrFloor.sX = floors[i].scaleX;
+            qrFloor.sY = floors[i].scaleY;
+            qrFloor.layer = floors[i].layer;
 
 
-            originPoint = [((origin.point.row) * originFloor.scaleY) + originFloor.scaleY,
-                (origin.point.col * originFloor.scaleX) + originFloor.scaleX];
-            originMarker = new L.marker(originPoint, { bounceOnAdd: false,
-                //bounceOnAddHeight: 20,
-                icon: OriginIcon})
-                .bindPopup("Estás aquí: " + origin.point.description + " (planta " + originFloor.name + "," + origin.enclosure.name + ")");
-            originMarker.addTo(floors[i].layer).openPopup();
+            qrLoc = [((qrPoint.point.row) * qrFloor.scaleY) + qrFloor.scaleY,
+                (qrPoint.point.col * qrFloor.scaleX) + qrFloor.scaleX];
+
+            if(qr_type == 'origin')
+            {
+                qrMarker = new L.marker(qrLoc, { bounceOnAdd: false,
+                    //bounceOnAddHeight: 20,
+                    icon: OriginIcon})
+                    .bindPopup("Estás aquí: " + qrPoint.point.description +
+                        " (planta " + qrFloor.name + "," + qrPoint.enclosure.name + ")"
+                    ).openPopup();
+            }
+            else
+            {
+                qrMarker = new L.marker(qrLoc, { bounceOnAdd: false,
+                    //bounceOnAddHeight: 20,
+                    icon: DestinyIcon})
+                    .bindPopup("Escanea un QR para llegar hasta aquí: " + qrPoint.point.description +
+                        " (planta " + qrFloor.name + "," + qrPoint.enclosure.name + ")"
+                    ).openPopup();
+
+                var sharedDest = {
+                    'prevDate': new Date().getTime(),
+                    'poid': qrPoint.point.id,
+                    'psX': this.psX,
+                    'psY': this.psY
+                };
+
+                localStorage.setItem('sharedDest', JSON.stringify(sharedDest));
+            }
+            qrMarker.addTo(floors[i].layer).openPopup();
             break;
         }
     }
@@ -287,14 +331,14 @@ var map = L.map('map', {
     crs: L.CRS.Simple,
     zoom: 0,
     zoomControl: false
-    //layer: originFloor.layer
+    //layer: qrFloor.layer
 });
 
 
 //Localización del origen (QR) y carga del mapa
 var searchMarker = new L.Control.Search(mobileOpts);
 
-function drawOrigin(origin) {
+function initMap(qrPoint) {
 
     map.addControl(searchMarker);
     map.addControl(new L.Control.Zoom());
@@ -303,12 +347,12 @@ function drawOrigin(origin) {
     for (i = (floors.length) - 1; i >= 0; i--) {
         layersControl.addBaseLayer(floors[i].photo, floors[i].name);
 
-        if (floors[i].id === origin.floor.id) {
-            originFloor = floors[i];
-            map.addLayer(originFloor.photo);
+        if (floors[i].id === qrPoint.floor.id) {
+            qrFloor = floors[i];
+            map.addLayer(qrFloor.photo);
             map.addLayer(floors[i].layer);
-            map.setMaxBounds(originFloor.bounds);
-            map.setView(originPoint, 0);
+            map.setMaxBounds(qrFloor.bounds);
+            map.setView(qrLoc, 0);
         }
     }
 
@@ -317,8 +361,8 @@ function drawOrigin(origin) {
     }
 
     map.removeLayer(totalPois);
-    map.addLayer(originFloor.layer);
-    originMarker._bringToFront();
+    map.addLayer(qrFloor.layer);
+    qrMarker._bringToFront();
 
     map.invalidateSize();
 }
@@ -326,8 +370,8 @@ function drawOrigin(origin) {
 
 //EVENTOS - CAMBIO DE PLANTA
 map.on('baselayerchange', function (e) {
-    if (map.hasLayer(originFloor.layer)) {
-        map.removeLayer(originFloor.layer);
+    if (map.hasLayer(qrFloor.layer)) {
+        map.removeLayer(qrFloor.layer);
     }
     map.removeLayer(searchMarker._markerLoc._circleLoc);
 
@@ -347,7 +391,7 @@ map.on('baselayerchange', function (e) {
                 map.setZoom(0);
 
             } else {
-                map.setView(originFloor.bounds.getCenter(), 0);
+                map.setView(qrFloor.bounds.getCenter(), 0);
             }
 
         } else {
@@ -361,7 +405,7 @@ map.on('baselayerchange', function (e) {
     }
     map.addLayer(floor_x.layer);
     //map.setMaxBounds(floor_x.bounds);
-    //map.setView(originPoint, 0);
+    //map.setView(qrPoint, 0);
 });
 
 
@@ -375,13 +419,13 @@ function drawLocator() {
 
 //Creación de las rutas (con subrutas correspondientes), desde el origen hasta el POI destino usando
 // solamente el id de los puntos y las plantas
-function preDrawRoute(origin, originFloor, destination, destinationFloor) {
+function preDrawRoute(origin, qrFloor, destination, destinationFloor) {
     var osX = 1;
     var osY = 1;
     var dsX = 1;
     var dsY = 1;
     for (var f in floors) {
-        if (originFloor === floors[f].id) {
+        if (qrFloor === floors[f].id) {
             osX = floors[f].scaleX;
             osY = floors[f].scaleY;
 
