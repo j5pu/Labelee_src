@@ -15,6 +15,7 @@ CATEGORIAS_FIJAS = {
 class Enclosure(models.Model):
     name = models.CharField(max_length=60, unique=True, blank=False)
     owner = models.ForeignKey(User, related_name='enclosures', blank=False)
+    twitter_account = models.CharField(max_length=60, unique=True, blank=True, null=True)
 
     def __unicode__(self):
         return self.name

@@ -1,28 +1,30 @@
+
 var $e = {};
 var Events = {};
 
-function listenIframe(form, callback) {
+function listenIframe(form, callback)
+{
     // Cada cierto tiempo comprobamos si hay contenido en el <body> del iframe
     // con id 'upload_target',
     // ya que cada vez que se suba un archivo el contenido de este <body> será la respuesta del
     // servidor serializada en formato JSON. De esta forma podremos
     // saber cuándo ejecutar el callback una vez subido el archivo
     // sin tener que recargar la página
-
+    
     // Una vez enviado, copiamos el html del form en una variable
     // para así sólo mostrar un icono animado de espera..
-    // var form_html = form.html();
-    // form.empty();
-    // form.append('<img src="/static/img/ajax-loader.gif">');
+	// var form_html = form.html();
+	// form.empty(); 
+	// form.append('<img src="/static/img/ajax-loader.gif">');
 
 
-    var id = setInterval(function () {
+    var id = setInterval(function(){
         var iframe_doc = window.frames["upload_target"].document;
 
         var iframe_body = $(iframe_doc).find('body');
 
         // Si el cuerpo está vacío salimos
-        if (!iframe_body.text())
+        if(!iframe_body.text())
             return;
 
         // deserializamos lo devuelto por el HttpResponse de Django en el iframe_body
@@ -30,19 +32,20 @@ function listenIframe(form, callback) {
         // var form_name = server_response.data.form;
         iframe_body.empty();
 
-        // ejecutamos el callback con la respuesta del servidor
+		// ejecutamos el callback con la respuesta del servidor
         callback(server_response);
-
+        
         // una vez ejecutado el callback paramos la escucha del iframe
         clearInterval(id);
-
+        
         // volvemos a darle al form su html original antes de la llamada
         // form.html(form_html);
     }, 400);
 }
 
 
-function capitaliseFirstLetter(string) {
+function capitaliseFirstLetter(string)
+{
     return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
@@ -63,23 +66,26 @@ function getCookie(name) {
 }
 
 
-function setSelector(selector, data, prompt_opt) {
-    // Vacía el contenido del selector y lo popula poniendo primero
-    // la opción 'prompt_opt' y luego rellenándolo con data
-    // xej:
-    //		setSelector(elements.category_selector, categories, 'Selecc. categoría')
-
-    selector.empty();
-
-    selector.append('<option value="">' + prompt_opt + '</option>');
-    for (var i in data) {
-        var opt = '<option value="' + data[i].id + '">' + data[i].name + '</option>';
-        selector.append(opt);
-    }
+function setSelector(selector, data, prompt_opt)
+{
+	// Vacía el contenido del selector y lo popula poniendo primero
+	// la opción 'prompt_opt' y luego rellenándolo con data
+	// xej: 
+	//		setSelector(elements.category_selector, categories, 'Selecc. categoría')
+	
+	selector.empty();
+	
+	selector.append('<option value="">' + prompt_opt + '</option>');
+	for(var i in data)
+	{
+		var opt = '<option value="' + data[i].id + '">' + data[i].name + '</option>';
+		selector.append(opt);		
+	}
 }
 
 
-function divideInGroups(arr, group_size) {
+function divideInGroups(arr, group_size)
+{
     // Divide el array 'arr' en grupos de tamaño 'group_size'
     //
     // xej en grupos de 2:
@@ -90,8 +96,10 @@ function divideInGroups(arr, group_size) {
     var group = [];
     var groups = [];
 
-    for (var i in arr) {
-        if (group_counter >= group_size) {
+    for(var i in arr)
+    {
+        if(group_counter >= group_size)
+        {
             groups.push(group);
             group = [];
             group_counter = 0;
@@ -101,7 +109,7 @@ function divideInGroups(arr, group_size) {
     }
 
     // Añadimos también el último grupo
-    if (group.length > 0)
+    if(group.length > 0)
         groups.push(group);
 
     return groups;
@@ -109,7 +117,7 @@ function divideInGroups(arr, group_size) {
 
 
 // http://stackoverflow.com/a/6700/1260374
-Object.size = function (obj) {
+Object.size = function(obj) {
     var size = 0, key;
     for (key in obj) {
         if (obj.hasOwnProperty(key)) size++;
@@ -119,7 +127,7 @@ Object.size = function (obj) {
 
 
 var WaitingDialog = {
-    init: function () {
+    init: function(){
         $("#loadingScreen").dialog({
             autoOpen: false,    // set this to false so we can manually open it
             dialogClass: "loadingScreenWindow",
@@ -130,23 +138,23 @@ var WaitingDialog = {
             modal: true,
             buttons: {},
             resizable: false,
-            open: function () {
+            open: function() {
                 // scrollbar fix for IE
-                $('body').css('overflow', 'hidden');
+                $('body').css('overflow','hidden');
             },
-            close: function () {
+            close: function() {
                 // reset overflow
-                $('body').css('overflow', 'auto');
+                $('body').css('overflow','auto');
             }
         }); // end of dialog
     },
 
-    open: function (msg) {
+    open: function(msg){
         $("#loadingScreen").html(msg);
         $("#loadingScreen").dialog('open');
     },
 
-    close: function () {
+    close: function(){
         $("#loadingScreen").dialog('close');
     }
 };
@@ -164,63 +172,45 @@ var ImgLoader = {
     src_list: [],
     callback: null,
 
-    load: function (src_list, callback) {
+    load: function(src_list, callback){
         var self = this;
 
-        if (src_list && callback) {
+        if(src_list && callback)
+        {
             self.src_list = src_list;
             self.callback = callback;
         }
 
-        // Si se han cargardo todos los src..
-        if (self.i == self.src_list.length) {
+        // Si se han cargardo todos los src ejecutamos el callback..
+        if(self.i == self.src_list.length)
+        {
             self.callback();
             self.i = 0;
             return;
         }
 
-        var img = new Image();
-        img.src = self.src_list[self.i];
-        img.onload = function () {
-            self.imgs[self.src_list[self.i]] = img;
+        if(self.src_list[self.i])
+        {
+            var img = new Image();
+            img.src = self.src_list[self.i];
+            img.onload = function(){
+                self.imgs[self.src_list[self.i]] = img;
+            };
+        }
+        else
+            self.imgs[self.src_list[self.i]] = null;
 
-            self.i++;
+        self.i++;
 
-            // Cargamos el siguiente src..
-            self.load();
-        };
+        // Cargamos el siguiente src..
+        self.load();
     },
 
-    get: function (img_src) {
-        return this.imgs[img_src].src
+    get: function(img_src){
+        return this.imgs[img_src]
     },
 
-    push: function (img_src) {
+    push: function(img_src){
         this.src_list.push(img_src);
     }
 };
-
-function isTouchDevice() {
-    try {
-        document.createEvent("TouchEvent");
-        return true;
-    } catch (e) {
-        return false;
-    }
-}
-function touchScroll(id) {
-    if (isTouchDevice()) { //if touch events exist...
-        var el = document.getElementById(id);
-        var scrollStartPos = 0;
-
-        document.getElementById(id).addEventListener("touchstart", function (event) {
-            scrollStartPos = this.scrollTop + event.touches[0].pageY;
-            event.preventDefault();
-        }, false);
-
-        document.getElementById(id).addEventListener("touchmove", function (event) {
-            this.scrollTop = scrollStartPos - event.touches[0].pageY;
-            event.preventDefault();
-        }, false);
-    }
-}

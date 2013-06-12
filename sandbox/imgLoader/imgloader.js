@@ -9,7 +9,7 @@ img_srcs = [];
 for(var key in labels)
     img_srcs.push(labels[key].img);
 
-ImgLoader.load(img_srcs, main);
+ImgLoader.onload(img_srcs, main);
 //    main();
 
 });
@@ -17,8 +17,8 @@ ImgLoader.load(img_srcs, main);
 var main = function(){
     console.log('imágenes cargadas!');
 
-    $('body').append('<img src="' + ImgLoader.get('/media/img/labels/Restaurantes/vips_2.png') + '">');
-//    $('body').append('<img src="/media/img/enclosures/Matadero_Prueba/floors/mapa_matadero_1500.jpg">');
+//    $('body').append('<img src="' + ImgLoader.get('/media/img/labels/Restaurantes/vips_2.png') + '">');
+    $('body').append('<img src="/media/img/enclosures/Matadero_Prueba/floors/mapa_matadero_1500.jpg">');
 
 //    $('body img').css({'width': '200px'});
 

@@ -4,4 +4,4 @@ django-tastypie
 simplejson
 south
 docutils
-tweepy
+tweepy>=2.0
