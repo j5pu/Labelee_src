@@ -5,6 +5,11 @@ var OriginIcon = L.AwesomeMarkers.icon({
         spin: true
 
     }),
+    cadetblue = L.AwesomeMarkers.icon({
+        icon: 'retweet',
+        color: 'cadetblue'
+
+    }),
     green = L.AwesomeMarkers.icon({
         icon: 'retweet',
         color: 'green'
@@ -45,11 +50,45 @@ function loadIcon(color) {
 var origin = {
     point: new PointResource().read(poi_id),
     floor: new FloorResource().read(floor_id),
-    enclosure: new EnclosureResource().read(enclosure_id),
-    label: null
+    enclosure: new EnclosureResource().read(enclosure_id)
+};
+origin.label = new LabelCategoryResource().readFromUri(origin.point.label)
+origin.labelCategory = new LabelCategoryResource().readFromUri(origin.label.category)
+origin.isParquing = function()
+{
+    return this.labelCategory.name == 'Parquing';
 };
 
-origin.label = new LabelResource().readFromUri(origin.point.label);
+
+if(origin.isParquing() && confirm('¿Desea recordar su plaza?'))
+{
+    localStorage.setItem('miCoche', JSON.stringify(origin));
+}
+
+$(function(){
+    if(localStorage.getItem('miCoche'))
+    {
+        var miCoche = JSON.parse(localStorage.getItem('miCoche'));
+
+        if(origin.enclosure.id != miCoche.enclosure.id)
+            return;
+
+        $('#scrollMenu').prepend(
+            '<li>' +
+                '<li class="Label mmenu-label">' + miCoche.labelCategory.name + '</li>' +
+                '<li ' +
+                    'onclick="' + "$('#menu-right').trigger( 'close' );" +
+                    "preDrawRoute(" + origin.point.id + ', ' + floor_id + ', ' + miCoche.point.id + ', ' + miCoche.floor.id + ');">' +
+                        miCoche.point.description +
+                '</li>' +
+            '</li>'
+        );
+    }
+});
+
+
+
+
 
 //Variables globales
 var mapH = $(document).height(),//Altura de la pantalla

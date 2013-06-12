@@ -36,6 +36,7 @@ def origin(request, enclosure_id, floor_id, poi_id):
     tweets = twitterhelper.getTweets()
     for tweet in tweets:
         marquee.append(tweet.text)
+        break
 
 
     ctx = {

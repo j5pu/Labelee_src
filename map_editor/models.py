@@ -8,6 +8,7 @@ CATEGORIAS_FIJAS = {
     0: 'Bloqueantes',
     1: 'Aristas',
     2: 'Intermedias',
+    3: 'Parquing',
 }
 
 
