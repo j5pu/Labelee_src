@@ -340,11 +340,11 @@ map.on('baselayerchange', function (e) {
 
 function drawLocator()
 {
-    for (var i in floors)
-    {
-        for (var j in floors[i])
-        if floors[i].pois[j].la
-    }
+//    for (var i in floors)
+//    {
+//        for (var j in floors[i])
+//        if floors[i].pois[j].la
+//    }
 }
 
 //Creación de las rutas (con subrutas correspondientes), desde el origen hasta el POI destino usando
