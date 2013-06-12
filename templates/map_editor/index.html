@@ -41,11 +41,11 @@
 
             <!--<include src="{{ STATIC_URL }}partials/_enclosure.html"></include>-->
 
-               <div class="editable_element">
-                   <h2>[[enclosure.name]]</h2>
+            <div class="editable_element">
+               <h2>[[enclosure.name]]</h2>
+               <h4>[[enclosure.twitter_account]]</h4>
+
                 <div id="botones-enclosure" ng-hide="editing">
-
-
                     <div class="action_box">
                         <i class="icon-edit" ng-click="update()"></i>
                         <i class="icon-remove" ng-click="del()"></i>
@@ -54,7 +54,6 @@
                     <button class= 'btn' ng-click="calculateRoutes()">Calcular rutas</button>
 
                     <a id='aristas' href="edit/connections/[[enclosure.id]]">Gestión de aristas</a>
-
                 </div>
                 <div ng-show="editing">
                     <form>
@@ -64,6 +63,11 @@
                                ng-change="validate()"
                                placeholder="Nuevo nombre para el recinto.."
                                autofocus>
+                        <input type="text"
+                               ng-init="twitter_account=enclosure.twitter_account"
+                               ng-model="twitter_account"
+                               ng-change="validate()"
+                               placeholder="Cuenta de twitter..">
                         <button ng-click="update()">Editar</button>
                     </form>
                     <div class="action_box">
