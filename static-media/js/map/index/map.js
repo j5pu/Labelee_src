@@ -121,13 +121,16 @@ function loopFloors() {
 
         drawOrigin(origin);
 
-        var prevDest = JSON.parse(localStorage.getItem('prevDest'));
-        var delay = 86400000; // 24h
-        var expired = new Date().getMilliseconds() > prevDest.prevDate + delay;
-        if(prevDest && !expired && !confirm('Ya seleccionaste un destino, ¿desea cambiarlo?'))
-            drawRoute(origin.point.id, originFloor.sX, originFloor.sY, prevDest.poid, prevDest.psX, prevDest.psY);
-        else
-            localStorage.removeItem('prevDest');
+        if(localStorage.getItem('prevDest'))
+        {
+            var prevDest = JSON.parse(localStorage.getItem('prevDest'));
+            var delay = 86400000; // 24h
+            var expired = new Date().getMilliseconds() > prevDest.prevDate + delay;
+            if(prevDest && !expired && !confirm('Ya seleccionaste un destino, ¿desea cambiarlo?'))
+                drawRoute(origin.point.id, originFloor.sX, originFloor.sY, prevDest.poid, prevDest.psX, prevDest.psY);
+            else
+                localStorage.removeItem('prevDest');
+        }
     }
 
     name = floors[floor_index].name;
