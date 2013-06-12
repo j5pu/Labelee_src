@@ -89,7 +89,6 @@ $(function(){
 
 
 
-
 //Variables globales
 var mapH = $(document).height(),//Altura de la pantalla
     baseLayers = {},
@@ -119,8 +118,16 @@ var name, img;
 function loopFloors() {
     if (floor_index == floors.length) {
         loadPOIs();
+
         drawOrigin(origin);
-        return;
+
+        var prevDest = JSON.parse(localStorage.getItem('prevDest'));
+        var delay = 86400000; // 24h
+        var expired = new Date().getMilliseconds() > prevDest.prevDate + delay;
+        if(prevDest && !expired && !confirm('Ya seleccionaste un destino, ¿desea cambiarlo?'))
+            drawRoute(origin.point.id, originFloor.sX, originFloor.sY, prevDest.poid, prevDest.psX, prevDest.psY);
+        else
+            localStorage.removeItem('prevDest');
     }
 
     name = floors[floor_index].name;
@@ -175,11 +182,18 @@ function loadPOIs() {
             floors[fl].pois[j].marker.bindPopup(descriptionIcon)
                 .on('click', function () {
 
-                    if(localStorage.get())
+                    if(searchMarker._markerLoc)
+                        map.removeLayer(searchMarker._markerLoc._circleLoc);
 
-                    map.removeLayer(searchMarker._markerLoc._circleLoc);
                     drawRoute(origin.point.id, originFloor.sX, originFloor.sY, this.poid, this.psX, this.psY);
-                    localStorage.setItem('destinoAnterior', JSON.stringify(this.poid));
+
+                    var prevDest = {
+                        'prevDate': new Date().getTime(),
+                        'poid': this.poid,
+                        'psX': this.psX,
+                        'psY': this.psY
+                    };
+                    localStorage.setItem('prevDest', JSON.stringify(prevDest));
                 });
             floors[fl].layer.addLayer(floors[fl].pois[j].marker);
             totalPois.addLayer(floors[fl].pois[j].marker);
@@ -265,11 +279,13 @@ var map = L.map('map', {
 var searchMarker = new L.Control.Search(mobileOpts);
 
 function drawOrigin(origin) {
+
     map.addControl(searchMarker);
     map.addControl(new L.Control.Zoom());
     layersControl.addTo(map);
 
-    for (i = (floors.length) - 1; i >= 0; i--) {
+    for (i = (floors.length) - 1; i >= 0; i--)
+    {
         layersControl.addBaseLayer(floors[i].photo, floors[i].name);
 
         if (floors[i].id === origin.floor.id) {
@@ -288,22 +304,17 @@ function drawOrigin(origin) {
     map.removeLayer(totalPois);
     map.addLayer(originFloor.layer);
     originMarker._bringToFront();
+
     map.invalidateSize();
 }
 
 
 //EVENTOS - CAMBIO DE PLANTA
 map.on('baselayerchange', function (e) {
-
     if (map.hasLayer(originFloor.layer)) {
         map.removeLayer(originFloor.layer);
     }
-
-    if (map.hasLayer(searchMarker._markerLoc._circleLoc))
-    {
-        drawLocator();
-    }
-
+    map.removeLayer(searchMarker._markerLoc._circleLoc);
 
     var floor_x;
 
@@ -337,15 +348,6 @@ map.on('baselayerchange', function (e) {
     //map.setMaxBounds(floor_x.bounds);
     //map.setView(originPoint, 0);
 });
-
-function drawLocator()
-{
-    for (var i in floors)
-    {
-        for (var j in floors[i])
-        if floors[i].pois[j].la
-    }
-}
 
 //Creación de las rutas (con subrutas correspondientes), desde el origen hasta el POI destino usando
 // solamente el id de los puntos y las plantas
