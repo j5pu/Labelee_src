@@ -486,6 +486,8 @@ var Floor = {
 
     loadGrid: function()
     {
+        WaitingDialog.open('Cargando grid para la planta..');
+
         Floor.loading = true;
 
         Floor.point_count.saved = 0;
@@ -495,8 +497,6 @@ var Floor = {
 
         Floor.painted_connectors = [];
         Painter.erase_mode = false;
-
-        WaitingDialog.open('Cargando grid para la planta..');
 
         setTimeout(function(){
             if(Floor.data.num_rows)

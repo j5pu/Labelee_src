@@ -129,6 +129,7 @@ function Resource(resource_name) {
 
 
 	this.update = function(data, element_id) {
+        var element;
 		$.ajax({
 			url : this.api1_url + element_id + '/',
 			type : 'put',
@@ -139,12 +140,14 @@ function Resource(resource_name) {
 			dataType : 'json', // esto indica que la respuesta vendrá en formato json
 			async : false,
 			success : function(data) {
-				var j = 1;
+				element = data;
 			},
 			error : function(respuesta) {
 				var i = 4;
 			}
 		});
+
+        return element;
 	};
 
 	this.del = function(element_id, confirm_msg) {

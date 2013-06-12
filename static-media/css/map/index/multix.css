@@ -44,7 +44,7 @@ html.mmenu-opened body
 }
 .mmenu > ul
 {
-    padding: 10px 0 40px 0;
+    padding: 0;
 }
 html.mmenu-left .mmenu > ul > li
 {
@@ -427,6 +427,7 @@ pre
     height: 40px;
     padding: 0 50px;
     top:6px;
+    left:0;
 }
 
 #header a {
@@ -588,7 +589,7 @@ html{
     height: 100%;
     position: absolute;
     top: -2px;
-    left: -2px;
+    left: -3px;
     border: none;
 }
 
@@ -602,7 +603,7 @@ label > span {
     top:0;
     line-height:34px;
     left: 13px;
-    font-size: 18px;
+    font-size: 14px;
 }
 
 span>span{
@@ -745,4 +746,18 @@ html.mmenu-opened .mmenu-page
 .mmenu a.mmenu-subclose:before
 {
     border-color: rgba( 0, 0, 0, 0.2 );
+}
+
+#scrollMenu
+{
+    position: absolute;
+}
+nav
+{
+    position: absolute;
+}
+
+#page
+{
+
 }

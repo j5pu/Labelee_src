@@ -36,14 +36,16 @@ function EnclosureCtrl($scope)
 			// guardamos el nuevo nombre en la BD
 
 			var data = {
-				name : $scope.enclosure_name
+				name : $scope.enclosure_name,
+                twitter_account : $scope.twitter_account
 			};
 
-			$scope.enclosure_resource.update(data, $scope.enclosure.id);
+			var updated_enclosure = $scope.enclosure_resource.update(data, $scope.enclosure.id);
 
 			$scope.editing = false;
 
-			$scope.$parent.enclosure.name = $scope.enclosure_resource.read($scope.enclosure.id).name;
+			$scope.$parent.enclosure.name = updated_enclosure.name;
+			$scope.$parent.enclosure.twitter_account = updated_enclosure.twitter_account;
 		}
 	};
 

@@ -5,6 +5,11 @@ var OriginIcon = L.AwesomeMarkers.icon({
         spin: true
 
     }),
+    cadetblue = L.AwesomeMarkers.icon({
+        icon: 'retweet',
+        color: 'cadetblue'
+
+    }),
     green = L.AwesomeMarkers.icon({
         icon: 'retweet',
         color: 'green'
@@ -47,6 +52,46 @@ var origin = {
     floor: new FloorResource().read(floor_id),
     enclosure: new EnclosureResource().read(enclosure_id)
 };
+origin.label = new LabelCategoryResource().readFromUri(origin.point.label)
+origin.labelCategory = new LabelCategoryResource().readFromUri(origin.label.category)
+origin.isParquing = function () {
+    return this.labelCategory.name == 'Parquing';
+};
+
+
+if (origin.isParquing()) {
+    if (confirm('¿Desea recordar su plaza?')) {
+        var miCoche = {
+            dest: origin,
+            prevDate: new Date().getMilliseconds()
+        };
+        localStorage.setItem('miCoche', JSON.stringify(miCoche));
+    } else {
+        localStorage.removeItem('miCoche')
+
+    }
+}
+
+
+$(function () {
+    if (localStorage.getItem('miCoche')) {
+        var miCoche = JSON.parse(localStorage.getItem('miCoche'));
+
+        if (origin.enclosure.id != miCoche.dest.enclosure.id)
+            return;
+
+        $('#scrollMenu').prepend(
+            '<li>' +
+                '<li class="Label mmenu-label">' + miCoche.dest.labelCategory.name + '</li>' +
+                '<li ' +
+                'onclick="' + "$('#menu-right').trigger( 'close' );" +
+                "preDrawRoute(" + origin.point.id + ', ' + floor_id + ', ' + miCoche.dest.point.id + ', ' + miCoche.dest.floor.id + ');">' +
+                miCoche.dest.point.description +
+                '</li>' +
+                '</li>'
+        );
+    }
+});
 
 
 //Variables globales
@@ -70,16 +115,34 @@ for (var i in floors) {
     floors[i].pois = new PointResource().readOnlyPois(floors[i].id);
 }
 
+function checkLocalStorage() {
+    for (index = 0; index < localStorage.length; index++) {
+        var obj = JSON.parse(localStorage.getItem(localStorage.key(index)));
+        var delay = 86400000; // 24h
+        var expired = new Date().getMilliseconds() > obj.prevDate + delay;
+        if (obj && expired) {
+            localStorage.removeItem(localStorage.key(index));
+        }
+    }
+}
+checkLocalStorage();
 
 //Carga de planos
 loopFloors(floor_index);
 
-var name, img;
+var name=null, img;
 function loopFloors() {
     if (floor_index == floors.length) {
         loadPOIs();
+
         drawOrigin(origin);
+
+        var prevDest = JSON.parse(localStorage.getItem('prevDest'));
+        if (prevDest && !confirm(prevDest.mesg))
+            drawRoute(origin.point.id, originFloor.sX, originFloor.sY, prevDest.poid, prevDest.psX, prevDest.psY);
+
         return;
+
     }
 
     name = floors[floor_index].name;
@@ -133,8 +196,20 @@ function loadPOIs() {
 
             floors[fl].pois[j].marker.bindPopup(descriptionIcon)
                 .on('click', function () {
-                    map.removeLayer(searchMarker._markerLoc._circleLoc);
+
+                    if (searchMarker._markerLoc)
+                        map.removeLayer(searchMarker._markerLoc._circleLoc);
+
                     drawRoute(origin.point.id, originFloor.sX, originFloor.sY, this.poid, this.psX, this.psY);
+
+                    var prevDest = {
+                        'prevDate': new Date().getTime(),
+                        'poid': this.poid,
+                        'psX': this.psX,
+                        'psY': this.psY,
+                        'mesg': 'Ya seleccionaste un destino, ¿desea cambiarlo?'
+                    };
+                    localStorage.setItem('prevDest', JSON.stringify(prevDest));
                 });
             floors[fl].layer.addLayer(floors[fl].pois[j].marker);
             totalPois.addLayer(floors[fl].pois[j].marker);
@@ -181,6 +256,7 @@ var mobileOpts = {
     minLength: 1,				//minimal text length for autocomplete
     textErr: 'Ningún resultado',
     layer: totalPois,
+    initial: false,
     //title: title,
     callTip: customTip,
     tooltipLimit: -1,			//limit max results to show in tooltip. -1 for no limit.
@@ -219,6 +295,7 @@ var map = L.map('map', {
 var searchMarker = new L.Control.Search(mobileOpts);
 
 function drawOrigin(origin) {
+
     map.addControl(searchMarker);
     map.addControl(new L.Control.Zoom());
     layersControl.addTo(map);
@@ -241,6 +318,8 @@ function drawOrigin(origin) {
 
     map.removeLayer(totalPois);
     map.addLayer(originFloor.layer);
+    originMarker._bringToFront();
+
     map.invalidateSize();
 }
 
@@ -265,6 +344,8 @@ map.on('baselayerchange', function (e) {
                 map.addLayer(arrowHead[i]);
                 flechita = arrowHead[i];
                 arrowAnim(flechita, floor_x.name);
+                map.setZoom(0);
+
             } else {
                 map.setView(originFloor.bounds.getCenter(), 0);
             }
@@ -272,7 +353,7 @@ map.on('baselayerchange', function (e) {
         } else {
             map.removeLayer(floors[i].layer);
             map.removeLayer(searchMarker._markerLoc._circleLoc);
-            if(arrowHead[i]!=null)
+            if (arrowHead[i] != null)
                 map.removeLayer(arrowHead[i]);
 
         }
@@ -282,6 +363,15 @@ map.on('baselayerchange', function (e) {
     //map.setMaxBounds(floor_x.bounds);
     //map.setView(originPoint, 0);
 });
+
+
+function drawLocator() {
+//    for (var i in floors)
+//    {
+//        for (var j in floors[i])
+//        if floors[i].pois[j].la
+//    }
+}
 
 //Creación de las rutas (con subrutas correspondientes), desde el origen hasta el POI destino usando
 // solamente el id de los puntos y las plantas
@@ -362,7 +452,6 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
             if (arrow[i] && subarrow[i]) {
                 floors[i].layer.addLayer(arrow[i]);
                 if (floors[i].id === route.fields.destiny.fields.floor) {
-                    //map.fitBounds(arrow[i].getBounds());
                     if (route.fields.origin.fields.floor !== route.fields.destiny.fields.floor) {
                         var check = floorChecks[floors[i].name];
                         blinkingMode = floors[i].name;
@@ -371,6 +460,11 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
                     map.addLayer(arrowHead[i]);
                     flechita = arrowHead[i];
                     arrowAnim(flechita, floors[i].name);
+                    /*
+                     map.fitBounds(arrow[i].getBounds());
+                     map.setZoom(0);
+                     */
+
                 }
             }
         }
@@ -386,11 +480,13 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
                 if (route.fields.origin.fields.floor === floors[f].id) {
                     map.addLayer(floors[f].layer);
                     map.addLayer(floors[f].photo);
-                    map.fitBounds(arrow[i].getBounds());
+                    map.fitBounds(arrow[f].getBounds());
 //                    map.panTo(arrow[i].getBounds().getCenter(), 0);
                     map.addLayer(arrowHead[f]);
                     flechita = arrowHead[f];
                     arrowAnim(flechita, floors[f].name);
+                    map.setZoom(0);
+
                 }
 
             } else {
@@ -407,6 +503,8 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
                     map.addLayer(arrowHead[f]);
                     flechita = arrowHead[f];
                     arrowAnim(flechita, floors[f].name);
+                    map.setZoom(0);
+
 
                 }
             }
@@ -416,24 +514,24 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
         alert('No existe esa ruta');
     }
 }
-//Fución que gestiona la animación de la flecha
+//Función que gestiona la animación de la flecha
 function arrowAnim(arrow, idFloor) {
-       if(anim!=null)
-       {
-            window.clearInterval(anim);
+    if (anim != null) {
+        window.clearInterval(anim);
 
-       }
-         anim = window.setInterval(function () {
-         setArrow(arrow,idFloor)
-         }, 100);
+    }
+    anim = window.setInterval(function () {
+        setArrow(arrow, idFloor)
+    }, 100);
 
 }
 
 var arrowsOffset = 0;
 ////Función que define la animación (en este caso, flecha azul) que marca la ruta
-var setArrow = function (flecha,idFloor) {
+var setArrow = function (flecha, idFloor) {
 
-    flecha.setPatterns([{offset: arrowsOffset + '%', repeat: 0, symbol: new L.Symbol.ArrowHead({pixelSize: 15, polygon: false, pathOptions: { stroke: true}})}
+    flecha.setPatterns([
+        {offset: arrowsOffset + '%', repeat: 0, symbol: new L.Symbol.ArrowHead({pixelSize: 15, polygon: false, pathOptions: { stroke: true}})}
     ]);
     if (++arrowsOffset > 100)
         arrowsOffset = 0;

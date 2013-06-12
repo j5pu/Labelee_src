@@ -8,14 +8,19 @@ from django.http import HttpResponseRedirect
 # from touching_log import log
 
 import json
+from map.twitterHelper import TwitterHelper
 from map_editor.models import *
 from django.db.models.query import Q
+
+
+
 
 
 def origin(request, enclosure_id, floor_id, poi_id):
     """
         map/origin/1_25_91234
     """
+    enclosure = Enclosure.objects.filter(id=enclosure_id)
     categories = {}
     points = Point.objects.filter(~Q(label__category__name__in=CATEGORIAS_FIJAS.values()),
                                   floor__enclosure__id=enclosure_id)
@@ -27,11 +32,20 @@ def origin(request, enclosure_id, floor_id, poi_id):
                 categories[point.label.category.name] = [point]
 
 
+    marquee = []
+    twitterhelper = TwitterHelper(enclosure[0].twitter_account)
+    tweets = twitterhelper.getTweets()
+    for tweet in tweets:
+        marquee.append(tweet.text)
+        break
+
+
     ctx = {
         'enclosure_id': enclosure_id,
         'floor_id': floor_id,
         'poi_id': poi_id,
         'categories': categories,
+        'marquee': marquee,
     }
     return render_to_response('map/index.html', ctx, context_instance=RequestContext(request))
 

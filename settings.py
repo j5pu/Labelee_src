@@ -211,7 +211,7 @@ else:
             "HOST": "192.168.1.47",
             "PORT": "3306",
             }
-    }
+     }
     # DATABASES = {
     #     "default": {
     #         "ENGINE": "django.db.backends.mysql",
