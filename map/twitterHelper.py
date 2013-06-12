@@ -6,9 +6,9 @@ class TwitterHelper:
     consumer_secret = ""
     access_token = ""
     access_token_secret = ""
-    twitter_user = ""
+    twitter_user = "Labeleee1"
 
-    def __init__(self):
+    def __init__(self, twitter_account="Labeleee1"):
         # Go to http://dev.twitter.com and create an app.
         # The consumer key and secret will be generated for you after
         self.consumer_key = "CVGTvwY4CXqT9sXQ3fjtqQ"
@@ -18,7 +18,8 @@ class TwitterHelper:
         # Create an access token under the the "Your access token" section
         self.access_token = "1354700762-5nORKEYHNDmcc7GTCWfGUTVtodiZ4QfX04QwPVW"
         self.access_token_secret = "zPUUFTQglOrQg5Ga2MGMgQqqtArhzxvgzkVwARNY"
-        self.twitter_user = "Labeleee1"
+        if twitter_account is not None:
+            self.twitter_user = twitter_account
 
 
     def getTweets(self):
