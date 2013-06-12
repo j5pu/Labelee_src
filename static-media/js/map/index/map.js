@@ -174,8 +174,12 @@ function loadPOIs() {
 
             floors[fl].pois[j].marker.bindPopup(descriptionIcon)
                 .on('click', function () {
+
+                    if(localStorage.get())
+
                     map.removeLayer(searchMarker._markerLoc._circleLoc);
                     drawRoute(origin.point.id, originFloor.sX, originFloor.sY, this.poid, this.psX, this.psY);
+                    localStorage.setItem('destinoAnterior', JSON.stringify(this.poid));
                 });
             floors[fl].layer.addLayer(floors[fl].pois[j].marker);
             totalPois.addLayer(floors[fl].pois[j].marker);
@@ -290,10 +294,16 @@ function drawOrigin(origin) {
 
 //EVENTOS - CAMBIO DE PLANTA
 map.on('baselayerchange', function (e) {
+
     if (map.hasLayer(originFloor.layer)) {
         map.removeLayer(originFloor.layer);
     }
-    map.removeLayer(searchMarker._markerLoc._circleLoc);
+
+    if (map.hasLayer(searchMarker._markerLoc._circleLoc))
+    {
+        drawLocator();
+    }
+
 
     var floor_x;
 
@@ -327,6 +337,15 @@ map.on('baselayerchange', function (e) {
     //map.setMaxBounds(floor_x.bounds);
     //map.setView(originPoint, 0);
 });
+
+function drawLocator()
+{
+    for (var i in floors)
+    {
+        for (var j in floors[i])
+        if floors[i].pois[j].la
+    }
+}
 
 //Creación de las rutas (con subrutas correspondientes), desde el origen hasta el POI destino usando
 // solamente el id de los puntos y las plantas
