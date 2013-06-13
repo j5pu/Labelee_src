@@ -249,11 +249,14 @@ var mapH = $(document).height(),//Altura de la pantalla
     arrowOffset = 0,
     subpath = [],
     subarrow = [],
-    floors = new FloorResource().readFromEnclosure(qrPoint.enclosure.id);
+    floors = new FloorResource().readFromEnclosure(qrPoint.enclosure.id),
+    labels = new LabelCategoryResource().readAllFiltered('?label__point__floor__enclosure__id=16');
+
 
 //POIs de cada floor, separados para pintarlos por capas
 for (var i in floors) {
     floors[i].pois = new PointResource().readOnlyPois(floors[i].id);
+//    floors[i].labels = new PointResource().readOnlyPois(floors[i].id);
 }
 
 //Carga de planos
@@ -294,10 +297,17 @@ function loopFloors() {
 
 //Carga de POIs
 function loadPOIs() {
-    for (var fl in floors) {
+    for (var fl in floors)
+    {
+//        for (var l in labels)
+//        {
+//            floors[fl].label[l] = new L.LayerGroup();
+//        }
+
         floors[fl].layer = new L.LayerGroup();
 
-        for (j = 0; j < floors[fl].pois.length; j++) {
+        for (j = 0; j < floors[fl].pois.length; j++)
+        {
             if (floors[fl].pois[j].id === poi_id)
                 floors[fl].pois.splice(j, 1);
             var colorIcon = floors[fl].pois[j].label.category.color,
@@ -320,6 +330,7 @@ function loadPOIs() {
             floors[fl].pois[j].marker.psX = sX;
             floors[fl].pois[j].marker.psY = sY;
             floors[fl].pois[j].marker.loc = loc;
+            floors[fl].pois[j].marker.category = category;
 
             floors[fl].pois[j].marker.bindPopup(descriptionIcon)
                 .on('click', function () {
@@ -338,10 +349,21 @@ function loadPOIs() {
                     drawRoute(qrPoint.point.id, qrFloor.sX, qrFloor.sY, this.poid, this.psX, this.psY);
 
                 });
+
+//            for (var l in labels)
+//            {
+//                if (floors[fl].pois[j].marker.category === floors[fl].label[l].name)
+//                    floors[fl].label[l].addLayer(floors[fl].pois[j].marker);
+//            }
+
+
             floors[fl].layer.addLayer(floors[fl].pois[j].marker);
+
             totalPois.addLayer(floors[fl].pois[j].marker);
         }
     }
+
+
 
     for (var i in totalPois._layers) {
         totalPois._layers[i].title = totalPois._layers[i].options.title;	//value searched
@@ -459,12 +481,36 @@ var map = L.map('map', {
 
 //Localización del origen (QR) y carga del mapa
 var searchMarker = new L.Control.Search(mobileOpts);
+var qrControl = L.Control.extend({
+    options: {
+        position: 'topright'
+    },
+
+    onAdd: function (map) {
+        // create the control container with a particular class name
+        var container = L.DomUtil.create('div', 'qr-control');
+
+    /*    container.on('click', function (){
+            map.panTo(qrMarker._latlng);
+        });
+        // ... initialize other DOM elements, add listeners, etc.
+    */
+        return container;
+    }
+});
+
 
 function initMap(qrPoint) {
 
     map.addControl(searchMarker);
     map.addControl(new L.Control.Zoom());
+    //Prueba de controles
+    layersControl.addOverlay(qrMarker, '<i class="icon-map-marker icon-white"></i>');
+    layersControl.addOverlay(totalPois, 'POIs');
+    //
     layersControl.addTo(map);
+    map.addControl(new qrControl());
+
 
     for (i = (floors.length) - 1; i >= 0; i--) {
         layersControl.addBaseLayer(floors[i].photo, floors[i].name);
