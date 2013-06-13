@@ -143,7 +143,7 @@
 @media only screen
 and (min-width : 320px)
 and (max-width : 480px) {
-.splash .frame-6 span, .splash .frame-6 div{
+.splash .frame-6 span, .splash .frame-6{
    font-size: 45px !important;
 
 
