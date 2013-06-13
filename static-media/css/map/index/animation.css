@@ -53,9 +53,9 @@
 	top: 80%;
 	font-family: 'Just Me Again Down Here';
 	//font-size: 60px;
-	-webkit-animation: fadeInBackF 2s;
-	-moz-animation: fadeInBack2 2s;
-	animation: fadeInBack2 2s;
+	-webkit-animation: fadeInBackF 1s;
+	-moz-animation: fadeInBack2 1s;
+	animation: fadeInBack2 1s;
 	color: black;
 	transform: rotate(-7deg);
 	-webkit-transform: rotate(-7deg); /* Safari and Chrome */
@@ -65,9 +65,9 @@
 	top: 80%;
 	font-family: 'Just Me Again Down Here';
 	//font-size: 60px;
-	-webkit-animation: fadeInBackY 5s;
-	-moz-animation: fadeInBack2 5s;
-	animation: fadeInBack2 5s;
+	-webkit-animation: fadeInBackY 4s;
+	-moz-animation: fadeInBack2 4s;
+	animation: fadeInBack2 4s;
 	color: black;
 	transform: rotate(-7deg);
 	-webkit-transform: rotate(-7deg); /* Safari and Chrome */

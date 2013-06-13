@@ -256,7 +256,6 @@ for (var i in floors) {
 }
 
 //Carga de planos
-loopFloors(floor_index);
 
 var name=null, img;
 function loopFloors() {
