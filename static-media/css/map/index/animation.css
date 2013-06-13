@@ -50,7 +50,7 @@
 }
 
 #find {
-	top: 70%;
+	top: 80%;
 	font-family: 'Just Me Again Down Here';
 	//font-size: 60px;
 	-webkit-animation: fadeInBackF 2s;
@@ -62,7 +62,7 @@
 }
 
 #your{
-	top: 70%;
+	top: 80%;
 	font-family: 'Just Me Again Down Here';
 	//font-size: 60px;
 	-webkit-animation: fadeInBackY 5s;
@@ -73,7 +73,7 @@
 	-webkit-transform: rotate(-7deg); /* Safari and Chrome */
 }
 #way{
-	top: 70%;
+	top: 80%;
 	font-family: 'Just Me Again Down Here';
 	//font-size: 60px;
 	-webkit-animation: fadeInBackW 3s;
