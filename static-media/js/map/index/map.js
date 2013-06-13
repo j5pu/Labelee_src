@@ -71,7 +71,6 @@ var LocalStorageHandler = {
     {
         this.checkExpire();
         this.setValues();
-        this.setSideMenu();
     },
 
     checkExpire: function(){
@@ -103,7 +102,8 @@ var LocalStorageHandler = {
         {
             var sharedDest = {
                 dest: qrPoint,
-                'prevDate': new Date().getTime()
+                'prevDate': new Date().getTime(),
+                'shooted_origin': false
             };
 
             localStorage.setItem('sharedDest', JSON.stringify(sharedDest));
@@ -114,8 +114,8 @@ var LocalStorageHandler = {
             if(sharedDest)
             {
                 localStorage.removeItem('sharedDest');
+                sharedDest.mesg = '¿Todavía quieres ir al destino anterior?';
                 sharedDest.with_predraw = true;
-                sharedDest.mesg ='¿Todavía quieres ir al destino anterior?';
 
                 localStorage.setItem('prevDest', JSON.stringify(sharedDest));
             }
@@ -142,23 +142,38 @@ var LocalStorageHandler = {
             );
         }
 
-        // SHAREDDEST
-        var sharedDest = JSON.parse(localStorage.getItem('sharedDest'));
-        if (sharedDest)
+        var prevDest = JSON.parse(localStorage.getItem('prevDest'));
+        if (prevDest)
         {
-            if (qrPoint.enclosure.id != sharedDest.dest.enclosure.id)
+            if (qrPoint.enclosure.id != prevDest.dest.enclosure.id)
                 return;
+
+            var point_dest_id, floor_dest_id, description, func;
+            if(prevDest.with_predraw)
+            {
+                point_dest_id = prevDest.dest.point.id;
+                floor_dest_id = prevDest.dest.floor.id;
+                description = prevDest.dest.point.description;
+            }
+            else
+            {
+                point_dest_id = prevDest.poid;
+                floor_dest_id = prevDest.floorid;
+                description = prevDest.description;
+            }
+
 
             $('#scrollMenu').prepend(
                 '<li>' +
-                    '<li class="Label mmenu-label">DESTINO COMPARTIDO</li>' +
+                    '<li class="Label mmenu-label">DESTINO PREVIO</li>' +
                     '<li ' +
-                    'onclick="' + "$('#menu-right').trigger( 'close' );" +
-                    "preDrawRoute(" + qrPoint.point.id + ', ' + floor_id + ', ' + sharedDest.poid + ', ' + sharedDest.floorid + ');">' +
-                    sharedDest.dest.point.description +
+                        'onclick="' + "$('#menu-right').trigger( 'close' );" +
+                        "preDrawRoute(" + qrPoint.point.id + ', ' + floor_id + ', ' + point_dest_id + ', ' + floor_dest_id + ');">' +
+                        description +
                     '</li>' +
                     '</li>'
             );
+
         }
     },
 
@@ -166,10 +181,12 @@ var LocalStorageHandler = {
         var prevDest = {
             'prevDate': new Date().getTime(),
             'poid': marker.poid,
+            'floorid': qrPoint.floor.id,
             'enclosureid': qrPoint.enclosure.id,
             'psX': marker.psX,
             'psY': marker.psY,
             'mesg': '¿Todavía quieres ir a ' + marker.title + '?',
+            'description': marker.title,
             'with_predraw': false
         };
         localStorage.setItem('prevDest', JSON.stringify(prevDest));
@@ -181,21 +198,32 @@ var LocalStorageHandler = {
         {
             // DESTINO PREVIO
             var prevDest = JSON.parse(localStorage.getItem('prevDest'));
-            if(prevDest &&
-                prevDest.enclosureid == qrPoint.enclosure.id &&
-                confirm(prevDest.mesg))
+            if(prevDest)
             {
-                if(prevDest.with_predraw)
-                    preDrawRoute(qrPoint.point.id, qrPoint.floor.id, prevDest.poid, prevDest.floorid);
-                else
-                    drawRoute(qrPoint.point.id, qrFloor.sX, qrFloor.sY, prevDest.poid, prevDest.psX, prevDest.psY);
+                if(prevDest.with_predraw && prevDest.dest.enclosure.id == qrPoint.enclosure.id)
+                {
+                    if(prevDest.shooted_origin)
+                        if(confirm(prevDest.mesg))
+                            preDrawRoute(qrPoint.point.id, qrPoint.floor.id, prevDest.dest.point.id, prevDest.dest.floor.id);
+                        else
+                            localStorage.removeItem('prevDest');
+                    else
+                    {
+                        preDrawRoute(qrPoint.point.id, qrPoint.floor.id, prevDest.dest.point.id, prevDest.dest.floor.id);
+                        prevDest.shooted_origin = true;
+                        localStorage.setItem('prevDest', JSON.stringify(prevDest));
+                    }
+                }
+                else if(prevDest.enclosureid == qrPoint.enclosure.id)
+                {
+                    if(confirm(prevDest.mesg))
+                        drawRoute(qrPoint.point.id, qrFloor.sX, qrFloor.sY, prevDest.poid, prevDest.psX, prevDest.psY);
+                    else
+                        localStorage.removeItem('prevDest');
+                }
             }
-            else
-                localStorage.removeItem('prevDest');
 
-            var sharedDest = JSON.parse(localStorage.getItem('sharedDest'));
-            if(sharedDest && sharedDest.enclosureid == qrPoint.enclosure.id)
-                preDrawRoute(qrPoint.point.id, floor_id, sharedDest.poid, sharedDest.floorid);
+            this.setSideMenu();
         }
     }
 };
@@ -320,7 +348,7 @@ function loadPOIs() {
         totalPois._layers[i].color = totalPois._layers[i].options.icon.options.color;
     }
 
-    for (i in floors) {
+    for (var i in floors) {
         if (qrPoint.floor.id == floors[i].id) {
             qrFloor = floors[i];
             qrFloor.sX = floors[i].scaleX;
@@ -338,7 +366,9 @@ function loadPOIs() {
                     icon: OriginIcon})
                     .bindPopup("Estás aquí: " + qrPoint.point.description +
                         " (planta " + qrFloor.name + "," + qrPoint.enclosure.name + ")"
-                    ).openPopup();
+                    );
+
+
             }
             else
             {
@@ -347,9 +377,31 @@ function loadPOIs() {
                     icon: DestinyIcon})
                     .bindPopup("Escanea un QR para llegar hasta aquí: " + qrPoint.point.description +
                         " (planta " + qrFloor.name + "," + qrPoint.enclosure.name + ")"
-                    ).openPopup();
+                    );
+
+                qrMarker
+                    .on('click', function () {
+
+                        if(searchMarker._markerLoc)
+                            map.removeLayer(searchMarker._markerLoc._circleLoc);
+
+                        if(qr_type == 'dest')
+                        {
+                            this.bindPopup("Escanea un QR para llegar hasta " + qrPoint.point.description).openPopup();
+                            return;
+                        }
+
+                        LocalStorageHandler.setPrevDest(this);
+
+                        drawRoute(qrPoint.point.id, qrFloor.sX, qrFloor.sY, this.poid, this.psX, this.psY);
+
+                    });
+
+                totalPois.addLayer(qrMarker);
             }
+
             qrMarker.addTo(floors[i].layer).openPopup();
+
             break;
         }
     }
