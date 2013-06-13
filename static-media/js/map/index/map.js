@@ -65,38 +65,172 @@ qrPoint.isParquing = function () {
 };
 
 
-if (qrPoint.isParquing()) {
-    if (confirm('¿Desea recordar su plaza?')) {
-        var miCoche = {
-            dest: qrPoint,
-            prevDate: new Date().getMilliseconds()
-        };
-        localStorage.setItem('miCoche', JSON.stringify(miCoche));
-    } else {
-        localStorage.removeItem('miCoche')
+var LocalStorageHandler = {
 
+    init: function()
+    {
+        this.checkExpire();
+        this.setValues();
+    },
+
+    checkExpire: function(){
+        for (index = 0; index < localStorage.length; index++) {
+            var obj = JSON.parse(localStorage.getItem(localStorage.key(index)));
+            var delay = 86400000; // 24h
+            var expired = new Date().getMilliseconds() > obj.prevDate + delay;
+            if (obj && expired) {
+                localStorage.removeItem(localStorage.key(index));
+            }
+        }
+    },
+
+    setValues: function(){
+        if (qrPoint.isParquing()) {
+            if (confirm('¿Desea recordar su plaza?')) {
+                var miCoche = {
+                    dest: qrPoint,
+                    prevDate: new Date().getTime()
+                };
+                localStorage.setItem('miCoche', JSON.stringify(miCoche));
+            } else {
+                localStorage.removeItem('miCoche')
+            }
+        }
+
+
+        if(qr_type == 'dest')
+        {
+            var sharedDest = {
+                dest: qrPoint,
+                'prevDate': new Date().getTime(),
+                'shooted_origin': false
+            };
+
+            localStorage.setItem('sharedDest', JSON.stringify(sharedDest));
+        }
+        else
+        {
+            var sharedDest = JSON.parse(localStorage.getItem('sharedDest'));
+            if(sharedDest)
+            {
+                localStorage.removeItem('sharedDest');
+                sharedDest.mesg = '¿Todavía quieres ir al destino anterior?';
+                sharedDest.with_predraw = true;
+
+                localStorage.setItem('prevDest', JSON.stringify(sharedDest));
+            }
+        }
+    },
+
+    setSideMenu: function(){
+        // MICOCHE
+        var miCoche = JSON.parse(localStorage.getItem('miCoche'));
+        if (miCoche)
+        {
+            if (qrPoint.enclosure.id != miCoche.dest.enclosure.id)
+                return;
+
+            $('#scrollMenu').prepend(
+                '<li>' +
+                    '<li class="Label mmenu-label">' + miCoche.dest.labelCategory.name + '</li>' +
+                    '<li ' +
+                    'onclick="' + "$('#menu-right').trigger( 'close' );" +
+                    "preDrawRoute(" + qrPoint.point.id + ', ' + floor_id + ', ' + miCoche.dest.point.id + ', ' + miCoche.dest.floor.id + ');">' +
+                    miCoche.dest.point.description +
+                    '</li>' +
+                    '</li>'
+            );
+        }
+
+        var prevDest = JSON.parse(localStorage.getItem('prevDest'));
+        if (prevDest)
+        {
+            if (qrPoint.enclosure.id != prevDest.dest.enclosure.id)
+                return;
+
+            var point_dest_id, floor_dest_id, description, func;
+            if(prevDest.with_predraw)
+            {
+                point_dest_id = prevDest.dest.point.id;
+                floor_dest_id = prevDest.dest.floor.id;
+                description = prevDest.dest.point.description;
+            }
+            else
+            {
+                point_dest_id = prevDest.poid;
+                floor_dest_id = prevDest.floorid;
+                description = prevDest.description;
+            }
+
+
+            $('#scrollMenu').prepend(
+                '<li>' +
+                    '<li class="Label mmenu-label">DESTINO PREVIO</li>' +
+                    '<li ' +
+                        'onclick="' + "$('#menu-right').trigger( 'close' );" +
+                        "preDrawRoute(" + qrPoint.point.id + ', ' + floor_id + ', ' + point_dest_id + ', ' + floor_dest_id + ');">' +
+                        description +
+                    '</li>' +
+                    '</li>'
+            );
+
+        }
+    },
+
+    setPrevDest: function(marker){
+        var prevDest = {
+            'prevDate': new Date().getTime(),
+            'poid': marker.poid,
+            'floorid': qrPoint.floor.id,
+            'enclosureid': qrPoint.enclosure.id,
+            'psX': marker.psX,
+            'psY': marker.psY,
+            'mesg': '¿Todavía quieres ir a ' + marker.title + '?',
+            'description': marker.title,
+            'with_predraw': false
+        };
+        localStorage.setItem('prevDest', JSON.stringify(prevDest));
+    },
+
+
+    draw: function(){
+        if (qr_type == 'origin')
+        {
+            // DESTINO PREVIO
+            var prevDest = JSON.parse(localStorage.getItem('prevDest'));
+            if(prevDest)
+            {
+                if(prevDest.with_predraw && prevDest.dest.enclosure.id == qrPoint.enclosure.id)
+                {
+                    if(prevDest.shooted_origin)
+                        if(confirm(prevDest.mesg))
+                            preDrawRoute(qrPoint.point.id, qrPoint.floor.id, prevDest.dest.point.id, prevDest.dest.floor.id);
+                        else
+                            localStorage.removeItem('prevDest');
+                    else
+                    {
+                        preDrawRoute(qrPoint.point.id, qrPoint.floor.id, prevDest.dest.point.id, prevDest.dest.floor.id);
+                        prevDest.shooted_origin = true;
+                        localStorage.setItem('prevDest', JSON.stringify(prevDest));
+                    }
+                }
+                else if(prevDest.enclosureid == qrPoint.enclosure.id)
+                {
+                    if(confirm(prevDest.mesg))
+                        drawRoute(qrPoint.point.id, qrFloor.sX, qrFloor.sY, prevDest.poid, prevDest.psX, prevDest.psY);
+                    else
+                        localStorage.removeItem('prevDest');
+                }
+            }
+
+            this.setSideMenu();
+        }
     }
-}
+};
 
 
 $(function () {
-    if (localStorage.getItem('miCoche')) {
-        var miCoche = JSON.parse(localStorage.getItem('miCoche'));
-
-        if (qrPoint.enclosure.id != miCoche.dest.enclosure.id)
-            return;
-
-        $('#scrollMenu').prepend(
-            '<li>' +
-                '<li class="Label mmenu-label">' + miCoche.dest.labelCategory.name + '</li>' +
-                '<li ' +
-                'onclick="' + "$('#menu-right').trigger( 'close' );" +
-                "preDrawRoute(" + qrPoint.point.id + ', ' + floor_id + ', ' + miCoche.dest.point.id + ', ' + miCoche.dest.floor.id + ');">' +
-                miCoche.dest.point.description +
-                '</li>' +
-                '</li>'
-        );
-    }
+    LocalStorageHandler.init();
 });
 
 
@@ -121,18 +255,6 @@ for (var i in floors) {
     floors[i].pois = new PointResource().readOnlyPois(floors[i].id);
 }
 
-function checkLocalStorage() {
-    for (index = 0; index < localStorage.length; index++) {
-        var obj = JSON.parse(localStorage.getItem(localStorage.key(index)));
-        var delay = 86400000; // 24h
-        var expired = new Date().getMilliseconds() > obj.prevDate + delay;
-        if (obj && expired) {
-            localStorage.removeItem(localStorage.key(index));
-        }
-    }
-}
-checkLocalStorage();
-
 //Carga de planos
 loopFloors(floor_index);
 
@@ -143,14 +265,7 @@ function loopFloors() {
 
         initMap(qrPoint);
 
-        var prevDest = JSON.parse(localStorage.getItem('prevDest'));
-        if (qr_type == 'origin' && prevDest)
-            if(confirm(prevDest.mesg))
-                drawRoute(qrPoint.point.id, qrFloor.sX, qrFloor.sY, prevDest.poid, prevDest.psX, prevDest.psY);
-            else
-                localStorage.removeItem('prevDest');
-
-
+        LocalStorageHandler.draw();
 
         // fin de loopFloors
         return;
@@ -193,6 +308,7 @@ function loadPOIs() {
                 sY = floors[fl].scaleY,
                 loc = [(floors[fl].pois[j].row) * sY + (sY),
                     floors[fl].pois[j].col * sX + (sY)],
+                enclosureid = qrPoint.enclosure.id,
                 category = floors[fl].pois[j].label.category.name;
 
             floors[fl].pois[j].marker = new L.Marker(new L.latLng(loc), {icon: loadIcon(colorIcon), title: descriptionIcon /*, color:colorIcon*/});
@@ -211,25 +327,16 @@ function loadPOIs() {
                     if(searchMarker._markerLoc)
                         map.removeLayer(searchMarker._markerLoc._circleLoc);
 
-                    if(localStorage.getItem('prevDest'))
-                        localStorage.removeItem('prevDest');
-
                     if(qr_type == 'dest')
                     {
                         this.bindPopup("Escanea un QR para llegar hasta " + qrPoint.point.description).openPopup();
                         return;
                     }
 
+                    LocalStorageHandler.setPrevDest(this);
+
                     drawRoute(qrPoint.point.id, qrFloor.sX, qrFloor.sY, this.poid, this.psX, this.psY);
 
-                    var prevDest = {
-                        'prevDate': new Date().getTime(),
-                        'poid': this.poid,
-                        'psX': this.psX,
-                        'psY': this.psY,
-                        'mesg': '¿Todavía quieres ir a ' + this.title + '?'
-                    };
-                    localStorage.setItem('prevDest', JSON.stringify(prevDest));
                 });
             floors[fl].layer.addLayer(floors[fl].pois[j].marker);
             totalPois.addLayer(floors[fl].pois[j].marker);
@@ -241,7 +348,7 @@ function loadPOIs() {
         totalPois._layers[i].color = totalPois._layers[i].options.icon.options.color;
     }
 
-    for (i in floors) {
+    for (var i in floors) {
         if (qrPoint.floor.id == floors[i].id) {
             qrFloor = floors[i];
             qrFloor.sX = floors[i].scaleX;
@@ -259,7 +366,9 @@ function loadPOIs() {
                     icon: OriginIcon})
                     .bindPopup("Estás aquí: " + qrPoint.point.description +
                         " (planta " + qrFloor.name + "," + qrPoint.enclosure.name + ")"
-                    ).openPopup();
+                    );
+
+
             }
             else
             {
@@ -268,18 +377,31 @@ function loadPOIs() {
                     icon: DestinyIcon})
                     .bindPopup("Escanea un QR para llegar hasta aquí: " + qrPoint.point.description +
                         " (planta " + qrFloor.name + "," + qrPoint.enclosure.name + ")"
-                    ).openPopup();
+                    );
 
-                var sharedDest = {
-                    'prevDate': new Date().getTime(),
-                    'poid': qrPoint.point.id,
-                    'psX': this.psX,
-                    'psY': this.psY
-                };
+                qrMarker
+                    .on('click', function () {
 
-                localStorage.setItem('sharedDest', JSON.stringify(sharedDest));
+                        if(searchMarker._markerLoc)
+                            map.removeLayer(searchMarker._markerLoc._circleLoc);
+
+                        if(qr_type == 'dest')
+                        {
+                            this.bindPopup("Escanea un QR para llegar hasta " + qrPoint.point.description).openPopup();
+                            return;
+                        }
+
+                        LocalStorageHandler.setPrevDest(this);
+
+                        drawRoute(qrPoint.point.id, qrFloor.sX, qrFloor.sY, this.poid, this.psX, this.psY);
+
+                    });
+
+                totalPois.addLayer(qrMarker);
             }
+
             qrMarker.addTo(floors[i].layer).openPopup();
+
             break;
         }
     }
