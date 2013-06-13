@@ -145,7 +145,8 @@ var LocalStorageHandler = {
         var prevDest = JSON.parse(localStorage.getItem('prevDest'));
         if (prevDest)
         {
-            if (qrPoint.enclosure.id != prevDest.dest.enclosure.id)
+            var enclosure_dest_id = prevDest.with_predraw ? prevDest.dest.enclosure.id : prevDest.enclosureid;
+            if (qrPoint.enclosure.id != enclosure_dest_id)
                 return;
 
             var point_dest_id, floor_dest_id, description, func;
