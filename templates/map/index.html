@@ -111,7 +111,7 @@
             <li class="no-results"><span>Lo sentimos, no se ha encontrado ningún resultado.</span></li>
         </ul>
     </nav>
-    <div style="background: rgb(17, 17, 17); background:rgba(17, 17, 17, 0.4); padding:0">
+    <div id='marquee' style="background: rgb(17, 17, 17); background:rgba(17, 17, 17, 0.4); padding:0;display: none">
         <marquee align="center" direction="left" loop="40"
                  style="width:100%; z-index: 10000; position: absolute;bottom: 0;background:rgba(17, 17, 17, 0.4);color: #ddd">
             {% for text in marquee %}
@@ -123,14 +123,17 @@
 <script type='text/javascript'>
 
     $(function () {
-         $('div.page').hide();
+        $('div.page').hide();
         $('body').prepend('<div class="splash">    <div class="container">        <div class="sp-container"             >            <div class="frame-5"><span><img src="/media/logo-labelee-sin-slogan.png"></span></div>            <div id="find" class="frame-6">find<span id="your"> your<span id="way"> way!</span></span></div>        </div>    </div></div>')
-        setTimeout(hideSplash, 6000);
+        setTimeout(hideSplash, 4000);
 
     });
     function hideSplash() {
         $('div.splash').hide();
         $('div.page').show();
+        var marquee = document.getElementById('marquee');
+        marquee.style.display=true;
+        loopFloors(floor_index);
     }
 
 </script>
