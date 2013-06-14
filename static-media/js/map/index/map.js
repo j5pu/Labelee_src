@@ -504,9 +504,8 @@ function initMap(qrPoint) {
 
     map.addControl(searchMarker);
     map.addControl(new L.Control.Zoom());
-    //Prueba de controles
+    //Prueba de control
     layersControl.addOverlay(qrMarker, '<i class="icon-map-marker icon-white"></i>');
-//    layersControl.addOverlay(totalPois, 'POIs');
     //
     layersControl.addTo(map);
     map.addControl(new qrControl());
@@ -522,7 +521,9 @@ function initMap(qrPoint) {
 
             for (var l in floors[i].labels)
             {
-                layersControl.addOverlay(floors[i].labels[l].layer,  floors[i].labels[l].fields.name);
+                //layersControl.addOverlay(floors[i].labels[l].layer,  floors[i].labels[l].fields.name);
+                layersControl.addOverlay(floors[i].labels[l].layer,  '<i class="icon-bolt icon-white"></i>');
+                '<i class="icon-map-marker icon-white"></i>'
             }
 
             map.setMaxBounds(qrFloor.bounds);
