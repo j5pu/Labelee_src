@@ -26,4 +26,3 @@ def read_only_valid_categories(request, enclosure_id):
 
 
     return HttpResponse(serialize('json', label_categories), mimetype='application/json')
-    # return HttpResponse(simplejson.dumps(grouped_categories), mimetype='application/json')
