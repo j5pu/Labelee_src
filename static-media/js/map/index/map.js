@@ -249,14 +249,14 @@ var mapH = $(document).height(),//Altura de la pantalla
     arrowOffset = 0,
     subpath = [],
     subarrow = [],
-    floors = new FloorResource().readFromEnclosure(qrPoint.enclosure.id),
-    labels = new LabelCategoryResource().readAllFiltered('?label__point__floor__enclosure__id=16');
+    floors = new FloorResource().readFromEnclosure(qrPoint.enclosure.id);
+//    labels = new LabelCategoryResource().readAllFiltered('?label__point__floor__enclosure__id=16');
 
 
 //POIs de cada floor, separados para pintarlos por capas
 for (var i in floors) {
     floors[i].pois = new PointResource().readOnlyPois(floors[i].id);
-//    floors[i].labels = new PointResource().readOnlyPois(floors[i].id);
+    floors[i].labels = new LabelCategoryResource().readValidAsPois(qrPoint.enclosure.id);
 }
 
 //Carga de planos
@@ -299,10 +299,10 @@ function loopFloors() {
 function loadPOIs() {
     for (var fl in floors)
     {
-//        for (var l in labels)
-//        {
-//            floors[fl].label[l] = new L.LayerGroup();
-//        }
+        for (var l in floors[fl].labels)
+        {
+            floors[fl].labels[l].layer = new L.LayerGroup();
+        }
 
         floors[fl].layer = new L.LayerGroup();
 
@@ -350,11 +350,11 @@ function loadPOIs() {
 
                 });
 
-//            for (var l in labels)
-//            {
-//                if (floors[fl].pois[j].marker.category === floors[fl].label[l].name)
-//                    floors[fl].label[l].addLayer(floors[fl].pois[j].marker);
-//            }
+            for (var l in floors[fl].labels)
+            {
+                if (floors[fl].pois[j].marker.category === floors[fl].labels[l].fields.name)
+                    floors[fl].labels[l].layer.addLayer(floors[fl].pois[j].marker);
+            }
 
 
             floors[fl].layer.addLayer(floors[fl].pois[j].marker);
@@ -506,7 +506,7 @@ function initMap(qrPoint) {
     map.addControl(new L.Control.Zoom());
     //Prueba de controles
     layersControl.addOverlay(qrMarker, '<i class="icon-map-marker icon-white"></i>');
-    layersControl.addOverlay(totalPois, 'POIs');
+//    layersControl.addOverlay(totalPois, 'POIs');
     //
     layersControl.addTo(map);
     map.addControl(new qrControl());
@@ -518,7 +518,13 @@ function initMap(qrPoint) {
         if (floors[i].id === qrPoint.floor.id) {
             qrFloor = floors[i];
             map.addLayer(qrFloor.photo);
-            map.addLayer(floors[i].layer);
+//            map.addLayer(floors[i].layer);
+
+            for (var l in floors[i].labels)
+            {
+                layersControl.addOverlay(floors[i].labels[l].layer,  floors[i].labels[l].fields.name);
+            }
+
             map.setMaxBounds(qrFloor.bounds);
             map.setView(qrLoc, 0);
         }
