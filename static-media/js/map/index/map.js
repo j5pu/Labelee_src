@@ -522,7 +522,7 @@ function initMap(qrPoint) {
             for (var l in floors[i].labels)
             {
                 //layersControl.addOverlay(floors[i].labels[l].layer,  floors[i].labels[l].fields.name);
-                layersControl.addOverlay(floors[i].labels[l].layer,  '<i class="icon-bolt icon-white"></i>');
+                layersControl.addOverlay(floors[i].labels[l].layer,  '<span style="background:'+ floors[i].labels[l].fields.color +';width:36px;position:absolute;left:-5px;border:none;border-radius:4px;"><i class="icon-bolt icon-white"></i></span>');
                 '<i class="icon-map-marker icon-white"></i>'
             }
 

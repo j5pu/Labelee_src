@@ -769,9 +769,15 @@ nav
     position: absolute;
 }
 
-label span i
+span>span>i
 {
     font-size: 22px;
     margin-left: -2px;
     margin-top: 10px;
+    color:white;
+}
+
+label span>span>i
+{
+    margin-left:12px;
 }

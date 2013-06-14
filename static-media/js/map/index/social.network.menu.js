@@ -30,7 +30,7 @@ function mail_click() {
     window.open(uri);
 }
 
-function sms_click() {
+/*function sms_click() {
 
     var body = get_url();
     body += window.location.href;
@@ -38,7 +38,7 @@ function sms_click() {
     var uri = "sms:?body=";
     uri += encodeURIComponent(body);
     window.open(uri);
-}
+}*/
 
 
 function get_url() {
