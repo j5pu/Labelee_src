@@ -257,7 +257,6 @@ for (var i in floors) {
 
 //Carga de planos
 
-
 var name=null, img;
 function loopFloors() {
     if (floor_index == floors.length) {

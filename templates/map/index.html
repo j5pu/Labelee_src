@@ -18,6 +18,7 @@
     <link rel="stylesheet" href="{{ STATIC_URL }}css/map/index/leaflet-search.css">
     <link rel="stylesheet" href="{{ STATIC_URL }}css/map/index/search-mobile.css">
     <link rel="stylesheet" href="{{ STATIC_URL }}css/map/index/multix.css">
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/map/index/social.network.menu.css">
     <link rel="stylesheet" href="{{ STATIC_URL }}css/map/index/animation.css">
 
 
@@ -46,6 +47,7 @@
 
 
     <script src="{{ STATIC_URL }}js/map/index/main.js"></script>
+    <script src="{{ STATIC_URL }}js/map/index/social.network.menu.js"></script>
     <script>
         (function (i, s, o, g, r, a, m) {
             i['GoogleAnalyticsObject'] = r;
@@ -111,7 +113,39 @@
             <li class="no-results"><span>Lo sentimos, no se ha encontrado ningún resultado.</span></li>
         </ul>
     </nav>
-    <div id='marquee' style="background: rgb(17, 17, 17); background:rgba(17, 17, 17, 0.4); padding:0;display: none">
+<!--Inicio menú social networks -->
+ <span align="center"
+       style="width:100%; z-index: 10000; position: absolute;bottom: 5;">
+     <ul class="navi">
+         <li id="n1"><a class="mjn-tab1" href="#" title="Compartir con Facebook" onclick="fbs_click()"><span> <i
+                 class="icon-facebook-sign"></i></span></a>
+
+         </li>
+         <li id="n2"><a class="mjn-tab2" href="#" title="Compartir con Twitter" onclick="twt_click()"><span>  <i
+                 class="icon-twitter-sign"></i></span></a>
+         </li>
+         <li id="n3"><a class="mjn-tab3" href="#" title="Compartir con google" onclick="google_click()"><span>  <i
+                 class="icon-google-plus-sign"></i></span></a>
+
+         </li>
+         <li id="n4"><a class="mjn-tab4" href="#" title="Compartirlo por mail" onclick="mail_click()"><span>  <i
+                 class="icon-envelope"></i></span></a>
+
+         </li>
+         <li id="n5"><a class="mjn-tab5" href="#" title="Compartirlo por sms" onclick="sms_click()"><span>  <i
+                 class="icon-mobile-phone"></i></span></a>
+
+         </li>
+
+         <li id="n6"><a class="mjn-tab6" href="#"><span>   <i class="icon-plus-sign"></i></span></a>
+         </li>
+     </ul>
+        <!--     <i class="icon-facebook-sign"></i>
+            <i class="icon-twitter-sign"></i>
+            <i class="icon-plus-sign"></i>-->
+        </span>
+<!--Fin menú social networks -->
+    <div style="background: rgb(17, 17, 17); background:rgba(17, 17, 17, 0.4); padding:0">
         <marquee align="center" direction="left" loop="40"
                  style="width:100%; z-index: 10000; position: absolute;bottom: 0;background:rgba(17, 17, 17, 0.4);color: #ddd">
             {% for text in marquee %}
@@ -131,9 +165,8 @@
     function hideSplash() {
         $('div.splash').hide();
         $('div.page').show();
-        var marquee = document.getElementById('marquee');
-        marquee.style.display=true;
         loopFloors(floor_index);
+
     }
 
 </script>
