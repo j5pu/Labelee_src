@@ -433,10 +433,9 @@ pre
 #header a {
 /*background: center center no-repeat #f6f6f6;*/
 
-background-image: url(http://bradjasper.com/subtle-patterns-bookmarklet/patterns/squairy_light.png);
-background-size: auto;
-background-repeat: repeat repeat;
-/*background-image: url(logo.png);*/
+    background-size: auto;
+    background: url(http://bradjasper.com/subtle-patterns-bookmarklet/patterns/squairy_light.png) repeat repeat;
+    /*background-image: url(logo.png);*/
 display: block;
 width: 55px;
 height: 35px;
@@ -488,10 +487,9 @@ body {
     margin: 0;
 /*background: #f6f6f6;*/
 
-background-image: url(http://bradjasper.com/subtle-patterns-bookmarklet/patterns/squairy_light.png);
-background-size: auto;
-background-repeat: repeat repeat;
-    }
+    background-size: auto;
+    background: url(http://bradjasper.com/subtle-patterns-bookmarklet/patterns/squairy_light.png) repeat repeat;
+}
 
 body:before {
     content: "";
@@ -591,13 +589,27 @@ html{
     top: -2px;
     left: -3px;
     border: none;
+    -webkit-border-radius: 4px;
+    border-radius: 4px;
 }
 
 .leaflet-control-layers-selector:active, .leaflet-control-layers-selector:checked {
     background:darkorange;
-    color:blue;
-
+    -webkit-border-radius: 4px;
+    border-radius: 4px;
 }
+
+.leaflet-control-layers-separator {
+    height: 20px;
+    border: none;
+}
+
+input[type=checkbox].leaflet-control-layers-selector:active, input[type=checkbox].leaflet-control-layers-selector:checked {
+    background:cornflowerblue;
+    -webkit-border-radius: 4px;
+    border-radius: 4px;
+}
+
 label > span {
     position:absolute;
     top:0;
@@ -757,7 +769,9 @@ nav
     position: absolute;
 }
 
-#page
+label span i
 {
-
+    font-size: 22px;
+    margin-left: -2px;
+    margin-top: 10px;
 }

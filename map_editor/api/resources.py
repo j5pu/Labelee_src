@@ -128,7 +128,7 @@ class PointResource(ModelResource):
 
 class LabelResource(ModelResource):
     category = fields.ToOneField('map_editor.api.resources.LabelCategoryResource', 'category')
-    # points = fields.ToManyField('map_editor.api.resources.PointResource', 'points', null=True)
+    points = fields.ToManyField('map_editor.api.resources.PointResource', 'points', null=True)
 
     class Meta:
         queryset = Label.objects.all()
@@ -137,6 +137,7 @@ class LabelResource(ModelResource):
         always_return_data = True
         filtering = {
             'id': ALL,
+            'name': ALL,
             'category': ALL_WITH_RELATIONS,
             'points': ALL_WITH_RELATIONS
         }
