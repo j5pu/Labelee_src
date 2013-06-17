@@ -21,22 +21,19 @@ function google_click() {
 function mail_click() {
     var subject = "Labelee";
     var body = get_url();
-    body += window.location.href;
-    body += ">";
     var uri = "mailto:?subject=";
     uri += encodeURIComponent(subject);
     uri += "&body=";
     uri += encodeURIComponent(body);
+    alert(uri);
     window.open(uri);
 }
 
 function sms_click() {
-
     var body = get_url();
-    body += window.location.href;
-    body += ">";
     var uri = "sms:?body=";
     uri += encodeURIComponent(body);
+    alert(uri);
     window.open(uri);
 }
 
@@ -51,8 +48,8 @@ function get_url() {
         for (var sfl in floors) {
             for (var poi in floors[sfl].pois) {
                 if (searchMarker._markerLoc._circleLoc._latlng == floors[sfl].pois[poi].marker._latlng) {
-                      urlstring += 'dest/' + qrPoint.enclosure.id + '_' +  floors[sfl].id + '_' + floors[sfl].pois[poi].id;
-                      return urlstring;
+                    urlstring += 'dest/' + qrPoint.enclosure.id + '_' + floors[sfl].id + '_' + floors[sfl].pois[poi].id;
+                    return urlstring;
                 }
             }
         }
