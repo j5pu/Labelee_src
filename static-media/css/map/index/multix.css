@@ -605,11 +605,17 @@ html{
 }
 
 input[type=checkbox].leaflet-control-layers-selector:active, input[type=checkbox].leaflet-control-layers-selector:checked {
-    background:transparent;
+   // background:transparent;
     -webkit-border-radius: 4px;
     border-radius: 4px;
 
 //    color:white;
+
+}
+
+input[type=checkbox].leaflet-control-layers-selector, input[type=checkbox].leaflet-control-layers-selector
+{
+    background:#333;
 
 }
 
@@ -780,6 +786,11 @@ span>span>i
     color:white;
 }
 
+/*
+.off{
+    background-color: #bbb !important;
+*/
+}
 label span>span>i
 {
     margin-left:12px;
