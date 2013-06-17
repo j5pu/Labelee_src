@@ -44,6 +44,8 @@ var OriginIcon = L.AwesomeMarkers.icon({
 var anim = null;
 var flechita = null;
 
+
+
 function loadIcon(color) {
     var icon = new L.AwesomeMarkers.icon({
         icon: 'bolt',
@@ -357,7 +359,7 @@ function loadPOIs() {
             }
 
 
-            floors[fl].layer.addLayer(floors[fl].pois[j].marker);
+            //floors[fl].layer.addLayer(floors[fl].pois[j].marker);
 
             totalPois.addLayer(floors[fl].pois[j].marker);
         }
@@ -419,7 +421,7 @@ function loadPOIs() {
 
                     });
 
-                totalPois.addLayer(qrMarker);
+                //totalPois.addLayer(qrMarker);
             }
 
             qrMarker.addTo(floors[i].layer).openPopup();
@@ -481,23 +483,6 @@ var map = L.map('map', {
 
 //Localización del origen (QR) y carga del mapa
 var searchMarker = new L.Control.Search(mobileOpts);
-var qrControl = L.Control.extend({
-    options: {
-        position: 'topright'
-    },
-
-    onAdd: function (map) {
-        // create the control container with a particular class name
-        var container = L.DomUtil.create('div', 'qr-control');
-
-    /*    container.on('click', function (){
-            map.panTo(qrMarker._latlng);
-        });
-        // ... initialize other DOM elements, add listeners, etc.
-    */
-        return container;
-    }
-});
 
 
 function initMap(qrPoint) {
@@ -505,10 +490,9 @@ function initMap(qrPoint) {
     map.addControl(searchMarker);
     map.addControl(new L.Control.Zoom());
     //Prueba de control
-    layersControl.addOverlay(qrMarker, '<i class="icon-map-marker icon-white"></i>');
+//    layersControl.addOverlay(qrMarker, '<i class="icon-map-marker icon-white"></i>');
     //
     layersControl.addTo(map);
-    map.addControl(new qrControl());
 
 
     for (i = (floors.length) - 1; i >= 0; i--) {
@@ -517,13 +501,11 @@ function initMap(qrPoint) {
         if (floors[i].id === qrPoint.floor.id) {
             qrFloor = floors[i];
             map.addLayer(qrFloor.photo);
-//            map.addLayer(floors[i].layer);
+            map.addLayer(floors[i].layer);
 
             for (var l in floors[i].labels)
             {
-                //layersControl.addOverlay(floors[i].labels[l].layer,  floors[i].labels[l].fields.name);
-                layersControl.addOverlay(floors[i].labels[l].layer,  '<span style="background:'+ floors[i].labels[l].fields.color +';width:36px;position:absolute;left:-5px;border:none;border-radius:4px;"><i class="icon-bolt icon-white"></i></span>');
-                '<i class="icon-map-marker icon-white"></i>'
+                layersControl.addOverlay(floors[i].labels[l].layer,  '<span onclick= "this.style.background='+'&#39;'+ floors[i].labels[l].fields.color+'&#39;' +'" style="width:36px;position:absolute;left:-5px;border:none;border-radius:4px;"><i class="icon-bolt icon-white"></i></span>');
             }
 
             map.setMaxBounds(qrFloor.bounds);
@@ -534,9 +516,9 @@ function initMap(qrPoint) {
     for (i in floors) {
         map.removeLayer(floors[i].layer);
     }
+    map.addLayer(qrFloor.layer);
 
     map.removeLayer(totalPois);
-    map.addLayer(qrFloor.layer);
     qrMarker._bringToFront();
 
     map.invalidateSize();
@@ -550,6 +532,7 @@ map.on('baselayerchange', function (e) {
     }
     map.removeLayer(searchMarker._markerLoc._circleLoc);
 
+
     var floor_x;
 
     for (var i in floors) {
@@ -559,7 +542,6 @@ map.on('baselayerchange', function (e) {
             map.addLayer(floor_x.photo);
             if (arrowHead[i] && subarrow[i]) {
                 map.fitBounds(arrow[i].getBounds());
-//                map.panTo(arrow[i].getBounds().getCenter(), 0);
                 map.addLayer(arrowHead[i]);
                 flechita = arrowHead[i];
                 arrowAnim(flechita, floor_x.name);
@@ -571,6 +553,12 @@ map.on('baselayerchange', function (e) {
 
         } else {
             map.removeLayer(floors[i].layer);
+            for (var l in floors[i].labels)
+            {
+                layersControl.removeLayer(floors[i].labels[l].layer);
+                map.removeLayer(floors[i].labels[l].layer);
+            }
+
             map.removeLayer(searchMarker._markerLoc._circleLoc);
             if (arrowHead[i] != null)
                 map.removeLayer(arrowHead[i]);
@@ -579,9 +567,15 @@ map.on('baselayerchange', function (e) {
 
     }
     map.addLayer(floor_x.layer);
+    for (var l in floor_x.labels)
+    {
+        layersControl.addOverlay(floor_x.labels[l].layer,  '<span onclick= "this.style.background='+'&#39;'+ floors[i].labels[l].fields.color+'&#39;' +'" style="width:36px;position:absolute;left:-5px;border:none;border-radius:4px;"><i class="icon-bolt icon-white"></i></span>');
+    }
+
     //map.setMaxBounds(floor_x.bounds);
     //map.setView(qrPoint, 0);
 });
+
 
 
 function drawLocator() {
@@ -692,6 +686,12 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
             if (route.fields.origin.fields.floor !== route.fields.destiny.fields.floor) {
                 if (route.fields.destiny.fields.floor === floors[f].id) {
                     map.removeLayer(floors[f].layer);
+                    for (var l in floors[f].labels)
+                    {
+                        //layersControl.removeLayer(floors[f].labels[l].layer);
+                        map.removeLayer(floors[f].labels[l].layer);
+                    }
+
                     map.removeLayer(floors[f].photo);
 
                 }
@@ -699,6 +699,12 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
                 if (route.fields.origin.fields.floor === floors[f].id) {
                     map.addLayer(floors[f].layer);
                     map.addLayer(floors[f].photo);
+                    for (var l in floors[f].labels)
+                    {
+                        //layersControl.addOverlay()(floors[f].labels[l].layer);
+                        map.addLayer(floors[f].labels[l].layer);
+                    }
+
                     map.fitBounds(arrow[f].getBounds());
 //                    map.panTo(arrow[i].getBounds().getCenter(), 0);
                     map.addLayer(arrowHead[f]);
@@ -712,11 +718,23 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
                 if (route.fields.destiny.fields.floor !== floors[f].id) {
                     map.removeLayer(floors[f].layer);
                     map.removeLayer(floors[f].photo);
+                    for (var l in floors[f].labels)
+                    {
+                        //layersControl.removeLayer(floors[f].labels[l].layer);
+                        map.removeLayer(floors[f].labels[l].layer);
+                    }
+
 
                 }
                 else {
                     map.addLayer(floors[f].layer);
                     map.addLayer(floors[f].photo);
+                    for (var l in floors[f].labels)
+                    {
+                        //layersControl.addLayer(floors[f].labels[l].layer);
+                        map.addLayer(floors[f].labels[l].layer);
+                    }
+
                     map.fitBounds(arrow[f].getBounds());
                     //                    map.panTo(arrow[i].getBounds().getCenter(), 0);
                     map.addLayer(arrowHead[f]);

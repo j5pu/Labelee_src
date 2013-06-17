@@ -2031,6 +2031,7 @@ var floorChecks = [];
     }})
 })(this, document);
 
+//Parpadeo a la planta del POI destino
 var blinkingMode = null;
 function blinker(element) {
     if (blinkingMode!=null) {
