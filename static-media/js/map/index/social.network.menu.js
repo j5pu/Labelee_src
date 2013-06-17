@@ -29,13 +29,13 @@ function mail_click() {
     window.open(uri);
 }
 
-function sms_click() {
+/*function sms_click() {
     var body = get_url();
     var uri = "sms:?body=";
     uri += encodeURIComponent(body);
     alert(uri);
     window.open(uri);
-}
+}*/
 
 
 function get_url() {

@@ -438,10 +438,10 @@ pre
     /*background-image: url(logo.png);*/
 display: block;
 width: 55px;
-height: 35px;
-line-height: 35px;
+height: 30px;
+line-height: 30px;
 position: absolute;
-bottom: 40px;
+bottom: 25px;
 left: 0;
 z-index: 99;
 opacity: 1;
@@ -453,12 +453,12 @@ border-radius: 0 6px 6px 0;
     }
 
 #header a img {
-    margin-top: 9px;
+    margin-top: 5px;
 }
 span#fake{
     bottom:0;
     position: absolute;
-    height: 40px;
+    height: 25px;
     width: 1px;
     display: block;
     left: 2px;
@@ -605,9 +605,12 @@ html{
 }
 
 input[type=checkbox].leaflet-control-layers-selector:active, input[type=checkbox].leaflet-control-layers-selector:checked {
-    background:cornflowerblue;
+    background:transparent;
     -webkit-border-radius: 4px;
     border-radius: 4px;
+
+//    color:white;
+
 }
 
 label > span {
@@ -769,9 +772,15 @@ nav
     position: absolute;
 }
 
-label span i
+span>span>i
 {
     font-size: 22px;
     margin-left: -2px;
     margin-top: 10px;
+    color:white;
+}
+
+label span>span>i
+{
+    margin-left:12px;
 }
