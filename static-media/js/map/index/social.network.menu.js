@@ -57,3 +57,24 @@ function get_url() {
 
     return location.href;
 }
+
+$(document).ready(function() {
+
+	if (Modernizr.touch) {
+        alert('hola');
+			/* ok we have a touch device so we will grab the touch events now */
+			$(".navi").click(function() {
+				/* for the first ul which is our list of other items display it */
+				this.show();
+			});
+
+			/* if the user touches the content of the page then hide all the nav items */
+			$("#content").click(function() {
+				$(".n1").hide();
+                $(".n2").hide();
+                $(".n3").hide();
+                $(".n4").hide();
+			})
+	}
+
+});
