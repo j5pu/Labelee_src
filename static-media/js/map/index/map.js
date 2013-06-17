@@ -424,7 +424,7 @@ function loadPOIs() {
                 //totalPois.addLayer(qrMarker);
             }
 
-            qrMarker.addTo(floors[i].layer).openPopup();
+            qrMarker.addTo(floors[i].layer);
 
             break;
         }
@@ -505,6 +505,7 @@ function initMap(qrPoint) {
 
             for (var l in floors[i].labels)
             {
+//                layersControl.addOverlay(floors[i].labels[l].layer,  '<i class="icon-bolt icon-white" style="color:'+ floors[i].labels[l].fields.color+';width:36px;position:absolute;left:-5px;border:none;border-radius:4px;"></i>');
                 layersControl.addOverlay(floors[i].labels[l].layer,  '<span onclick= "this.style.background='+'&#39;'+ floors[i].labels[l].fields.color+'&#39;' +'" style="width:36px;position:absolute;left:-5px;border:none;border-radius:4px;"><i class="icon-bolt icon-white"></i></span>');
             }
 
@@ -519,6 +520,7 @@ function initMap(qrPoint) {
     map.addLayer(qrFloor.layer);
 
     map.removeLayer(totalPois);
+    qrMarker.openPopup();
     qrMarker._bringToFront();
 
     map.invalidateSize();
@@ -527,6 +529,10 @@ function initMap(qrPoint) {
 
 //EVENTOS - CAMBIO DE PLANTA
 map.on('baselayerchange', function (e) {
+    changeFloor(e);
+});
+
+function changeFloor(e) {
     if (map.hasLayer(qrFloor.layer)) {
         map.removeLayer(qrFloor.layer);
     }
@@ -553,8 +559,7 @@ map.on('baselayerchange', function (e) {
 
         } else {
             map.removeLayer(floors[i].layer);
-            for (var l in floors[i].labels)
-            {
+            for (var l in floors[i].labels) {
                 layersControl.removeLayer(floors[i].labels[l].layer);
                 map.removeLayer(floors[i].labels[l].layer);
             }
@@ -567,15 +572,13 @@ map.on('baselayerchange', function (e) {
 
     }
     map.addLayer(floor_x.layer);
-    for (var l in floor_x.labels)
-    {
-        layersControl.addOverlay(floor_x.labels[l].layer,  '<span onclick= "this.style.background='+'&#39;'+ floors[i].labels[l].fields.color+'&#39;' +'" style="width:36px;position:absolute;left:-5px;border:none;border-radius:4px;"><i class="icon-bolt icon-white"></i></span>');
+    for (var l in floor_x.labels) {
+        layersControl.addOverlay(floor_x.labels[l].layer, '<span onclick= "this.style.background=' + '&#39;' + floors[i].labels[l].fields.color + '&#39;' + '" style="width:36px;position:absolute;left:-5px;border:none;border-radius:4px;"><i class="icon-bolt icon-white"></i></span>');
     }
 
-    //map.setMaxBounds(floor_x.bounds);
-    //map.setView(qrPoint, 0);
-});
-
+//map.setMaxBounds(floor_x.bounds);
+//map.setView(qrPoint, 0);
+}
 
 
 function drawLocator() {

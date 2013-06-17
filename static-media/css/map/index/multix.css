@@ -605,9 +605,12 @@ html{
 }
 
 input[type=checkbox].leaflet-control-layers-selector:active, input[type=checkbox].leaflet-control-layers-selector:checked {
-    background:cornflowerblue;
+//    background:saddlebrown;
     -webkit-border-radius: 4px;
     border-radius: 4px;
+
+//    color:white;
+
 }
 
 label > span {
