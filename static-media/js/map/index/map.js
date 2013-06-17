@@ -1,3 +1,4 @@
+
 //Configuración de iconos
 var OriginIcon = L.AwesomeMarkers.icon({
         icon: 'star',
@@ -506,7 +507,9 @@ function initMap(qrPoint) {
             for (var l in floors[i].labels)
             {
 //                layersControl.addOverlay(floors[i].labels[l].layer,  '<i class="icon-bolt icon-white" style="color:'+ floors[i].labels[l].fields.color+';width:36px;position:absolute;left:-5px;border:none;border-radius:4px;"></i>');
-                layersControl.addOverlay(floors[i].labels[l].layer,  '<span onclick= "this.style.background='+'&#39;'+ floors[i].labels[l].fields.color+'&#39;' +'" style="width:36px;position:absolute;left:-5px;border:none;border-radius:4px;"><i class="icon-bolt icon-white"></i></span>');
+//                layersControl.addOverlay(floors[i].labels[l].layer,  '<span class="inner-color" onclick= "this.style.background='+'&#39;'+ floors[i].labels[l].fields.color+'&#39;' +'" style="width:36px;position:absolute;left:-5px;border:none;border-radius:4px;"><i class="icon-bolt icon-white"></i></span>');
+                layersControl.addOverlay(floors[i].labels[l].layer,  '<i class="icon-bolt icon-white"></i>');
+//floors[i].labels[l].fields.color // <span style="background:transparent;width:36px;position:absolute;left:-5px;border:none;border-radius:4px;">
             }
 
             map.setMaxBounds(qrFloor.bounds);
@@ -527,10 +530,65 @@ function initMap(qrPoint) {
 }
 
 
+//EVENTOS - Añadir layer
+map.on('layeradd', function(e) {
+    console.log(e);
+    addCategory(e);
+});
+
+//EVENTOS - Añadir layer
+map.on('layerremove', function(e) {
+//    console.log(e);
+    removeCategory(e);
+});
 //EVENTOS - CAMBIO DE PLANTA
 map.on('baselayerchange', function (e) {
     changeFloor(e);
 });
+
+function addCategory(e)
+{
+    if(e.layer._layers)
+    {
+        var keyPoi= Object.keys(e.layer._layers).pop();
+        if (e.layer._layers[keyPoi].color)
+            console.log(e.layer._layers[keyPoi].color);
+
+        for (var i in floors)
+        {
+            for (var l in floors[i].labels)
+            {
+                if (map.hasLayer(floors[i].labels[l].layer) &&
+                    jQuery('input[type=checkbox].leaflet-control-layers-selector:eq('+l+')').is(':checked'))
+                {
+                    jQuery('input[type=checkbox].leaflet-control-layers-selector:eq('+l+')').css('background', floors[i].labels[l].fields.color);
+                }
+
+            }
+
+        }
+    }
+}
+
+function removeCategory(e)
+{
+    if(e.layer._layers)
+    {
+        for (var i in floors)
+        {
+            for (var l in floors[i].labels)
+            {
+                if (!(jQuery('input[type=checkbox].leaflet-control-layers-selector:eq('+l+')').is(':checked')))
+                {
+                    jQuery('input[type=checkbox].leaflet-control-layers-selector:eq('+l+')').css('background', '#333');
+                }
+
+            }
+
+        }
+    }
+
+}
 
 function changeFloor(e) {
     if (map.hasLayer(qrFloor.layer)) {
