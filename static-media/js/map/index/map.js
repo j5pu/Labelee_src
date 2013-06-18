@@ -425,7 +425,7 @@ function loadPOIs() {
 
                     });
 
-                //totalPois.addLayer(qrMarker);
+                totalPois.addLayer(qrMarker);
             }
 
             qrMarker.addTo(floors[i].layer);
@@ -493,9 +493,6 @@ function initMap(qrPoint) {
 
     map.addControl(searchMarker);
     map.addControl(new L.Control.Zoom());
-    //Prueba de control
-//    layersControl.addOverlay(qrMarker, '<i class="icon-map-marker icon-white"></i>');
-    //
     layersControl.addTo(map);
 
 
@@ -509,10 +506,7 @@ function initMap(qrPoint) {
 
             for (var l in floors[i].labels)
             {
-//                layersControl.addOverlay(floors[i].labels[l].layer,  '<i class="icon-bolt icon-white" style="color:'+ floors[i].labels[l].fields.color+';width:36px;position:absolute;left:-5px;border:none;border-radius:4px;"></i>');
-//                layersControl.addOverlay(floors[i].labels[l].layer,  '<span class="inner-color" onclick= "this.style.background='+'&#39;'+ floors[i].labels[l].fields.color+'&#39;' +'" style="width:36px;position:absolute;left:-5px;border:none;border-radius:4px;"><i class="icon-bolt icon-white"></i></span>');
                 layersControl.addOverlay(floors[i].labels[l].layer,  '<i class="icon-bolt icon-white"></i>');
-//floors[i].labels[l].fields.color // <span style="background:transparent;width:36px;position:absolute;left:-5px;border:none;border-radius:4px;">
             }
 
             map.setMaxBounds(qrFloor.bounds);
