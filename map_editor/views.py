@@ -1,8 +1,7 @@
-# -*- coding: utf8 -*-
+# -*- coding: utf-8 -*-
 
 from django.shortcuts import render_to_response
 from django.template import RequestContext
-from django.http import HttpResponseRedirect
 
 import settings
 
@@ -16,6 +15,9 @@ def index(request):
             '3': 'Intermedias',
         }
     }
+
+    # translation.activate(request.session['django_language'])
+
     return render_to_response('map_editor/index.html', ctx, context_instance=RequestContext(request))
 
 

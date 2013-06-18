@@ -1,4 +1,4 @@
-# -*- coding: utf8 -*-
+# -*- coding: utf-8 -*-
 
 # FOLDERS
 MEDIA_COMMON = '/media/common/'

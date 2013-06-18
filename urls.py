@@ -56,6 +56,12 @@ urlpatterns = patterns('',
         'document_root': settings.STATIC_ROOT}),
 
     (r'^sandbox/', include('sandbox.urls')),
+
+    (r'^i18n/', include('django.conf.urls.i18n')),
+    # (r'^i18n/', 'django.views.i18n.set_language'),
+
+
+
 )
 
 

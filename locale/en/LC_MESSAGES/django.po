@@ -1,0 +1,112 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-06-18 13:13+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: sandbox/i18n/test.html:13
+msgid "Esto es un titulo"
+msgstr "This is a title"
+
+#: templates/map_editor/index.html:34
+msgid "Administración de recintos"
+msgstr "Enclosure manager"
+
+#: templates/map_editor/index.html:45
+msgid "Nombre del recinto"
+msgstr "Enclosure name"
+
+#: templates/map_editor/index.html:47
+msgid "Añadir recinto"
+msgstr "Add enclosure"
+
+#: templates/map_editor/index.html:68
+msgid "Calcular rutas"
+msgstr "Calculate routes"
+
+#: templates/map_editor/index.html:70
+msgid "Gestión de aristas"
+msgstr "Connections manager"
+
+#: templates/map_editor/index.html:79
+msgid "Nuevo nombre para el recinto"
+msgstr "New name for the enclosure"
+
+#: templates/map_editor/index.html:85
+msgid "Cuenta de twitter"
+msgstr "Twitter account"
+
+#: templates/map_editor/index.html:86 templates/map_editor/index.html:173
+msgid "Editar"
+msgstr "Edit"
+
+#: templates/map_editor/index.html:100
+msgid "Nueva planta"
+msgstr "New floor"
+
+#: templates/map_editor/index.html:110
+msgid "Elegir imágen"
+msgstr "Choose image"
+
+#: templates/map_editor/index.html:113
+msgid "Nombre de planta"
+msgstr "Enclosure name.."
+
+#: templates/map_editor/index.html:116 templates/map_editor/index.html:170
+msgid "Número"
+msgstr "Number"
+
+#: templates/map_editor/index.html:118
+msgid "Añadir planta"
+msgstr "Add enclosure"
+
+#: templates/map_editor/index.html:126
+msgid "Plantas"
+msgstr "Floors"
+
+#: templates/map_editor/index.html:163
+msgid "Nuevo nombre para la planta"
+msgstr "New name for the floor"
+
+#: templates/map_editor/index.html:171
+msgid "Cambiar imágen"
+msgstr "Change image"
+
+#~ msgid ""
+#~ "\n"
+#~ "                <input type=\"text\"\n"
+#~ "                       ng-model=\"enclosure_name\"\n"
+#~ "                       ng-change=\"validate()\"\n"
+#~ "                       placeholder=\"Nombre del recinto..\">\n"
+#~ "            "
+#~ msgstr ""
+#~ "\n"
+#~ "                <input type=\"text\"\n"
+#~ "                       ng-model=\"enclosure_name\"\n"
+#~ "                       ng-change=\"validate()\"\n"
+#~ "                       placeholder=\"Enclosure name..\">\n"
+#~ "            "
+
+#~ msgid ""
+#~ "\n"
+#~ "                        <a id='aristas' href=\"edit/connections/"
+#~ "[[enclosure.id]]\">Gestión de aristas</a>\n"
+#~ "                    "
+#~ msgstr ""
+#~ "\n"
+#~ "                        <a id='aristas' href=\"edit/connections/"
+#~ "[[enclosure.id]]\">Connection manager</a>\n"
+#~ "                    "
