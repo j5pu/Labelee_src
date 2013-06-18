@@ -61,6 +61,7 @@ function get_url() {
 $(document).ready(function() {
 
 	if (Modernizr.touch) {
+       
 
 			/* ok we have a touch device so we will grab the touch events now */
 			$(".navi").click(function() {
