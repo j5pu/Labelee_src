@@ -532,13 +532,11 @@ function initMap(qrPoint) {
 
 //EVENTOS - Añadir layer
 map.on('layeradd', function(e) {
-    console.log(e);
     addCategory(e);
 });
 
 //EVENTOS - Añadir layer
 map.on('layerremove', function(e) {
-//    console.log(e);
     removeCategory(e);
 });
 //EVENTOS - CAMBIO DE PLANTA
@@ -551,7 +549,7 @@ function addCategory(e)
     if(e.layer._layers)
     {
         var keyPoi= Object.keys(e.layer._layers).pop();
-        if (e.layer._layers[keyPoi].color)
+        if (e.layer._layers[keyPoi])
             console.log(e.layer._layers[keyPoi].color);
 
         for (var i in floors)
@@ -590,6 +588,8 @@ function removeCategory(e)
 
 }
 
+var checked = [];
+
 function changeFloor(e) {
     if (map.hasLayer(qrFloor.layer)) {
         map.removeLayer(qrFloor.layer);
@@ -603,7 +603,7 @@ function changeFloor(e) {
         if ((e.layer && (e.layer._url === floors[i].photo._url)) || (e._url === floors[i].photo._url)) {
             floor_x = floors[i];
             map.addLayer(searchMarker._markerLoc._circleLoc);
-            map.addLayer(floor_x.photo);
+         //   map.addLayer(floor_x.photo);
             if (arrowHead[i] && subarrow[i]) {
                 map.fitBounds(arrow[i].getBounds());
                 map.addLayer(arrowHead[i]);
@@ -618,6 +618,14 @@ function changeFloor(e) {
         } else {
             map.removeLayer(floors[i].layer);
             for (var l in floors[i].labels) {
+                if (jQuery('input[type=checkbox].leaflet-control-layers-selector:eq('+l+')').is(':checked')){
+                    checked[l] = true;
+                }else{
+                    checked[l] = false;
+                }
+            }
+
+            for (var l in floors[i].labels) {
                 layersControl.removeLayer(floors[i].labels[l].layer);
                 map.removeLayer(floors[i].labels[l].layer);
             }
@@ -630,8 +638,15 @@ function changeFloor(e) {
 
     }
     map.addLayer(floor_x.layer);
-    for (var l in floor_x.labels) {
-        layersControl.addOverlay(floor_x.labels[l].layer, '<span onclick= "this.style.background=' + '&#39;' + floors[i].labels[l].fields.color + '&#39;' + '" style="width:36px;position:absolute;left:-5px;border:none;border-radius:4px;"><i class="icon-bolt icon-white"></i></span>');
+    for (var l in floor_x.labels)
+    {
+        layersControl.addOverlay(floor_x.labels[l].layer,  '<i class="icon-bolt icon-white"></i>');
+        if (checked[l]===true)
+        {
+            map.addLayer(floor_x.labels[l].layer);
+            jQuery('input[type=checkbox].leaflet-control-layers-selector:eq('+l+')').css('background', floors[i].labels[l].fields.color);
+            jQuery('input[type=checkbox].leaflet-control-layers-selector:eq('+l+')').prop("checked", true);
+        }
     }
 
 //map.setMaxBounds(floor_x.bounds);
@@ -758,7 +773,7 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
                 }
 
                 if (route.fields.origin.fields.floor === floors[f].id) {
-                    map.addLayer(floors[f].layer);
+                    //map.addLayer(floors[f].layer);
                     map.addLayer(floors[f].photo);
                     for (var l in floors[f].labels)
                     {
@@ -767,7 +782,7 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
                     }
 
                     map.fitBounds(arrow[f].getBounds());
-//                    map.panTo(arrow[i].getBounds().getCenter(), 0);
+                    map.panTo(arrow[i].getBounds().getCenter(), 0);
                     map.addLayer(arrowHead[f]);
                     flechita = arrowHead[f];
                     arrowAnim(flechita, floors[f].name);
