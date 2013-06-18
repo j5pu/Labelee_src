@@ -322,7 +322,9 @@ function loadPOIs() {
                 loc = [(floors[fl].pois[j].row) * sY + (sY),
                     floors[fl].pois[j].col * sX + (sY)],
                 enclosureid = qrPoint.enclosure.id,
+                labelid = floors[fl].pois[j].label.id
                 category = floors[fl].pois[j].label.category.name;
+
 
             floors[fl].pois[j].marker = new L.Marker(new L.latLng(loc), {icon: loadIcon(colorIcon), title: descriptionIcon /*, color:colorIcon*/});
             floors[fl].pois[j].marker.options.icon.options.color = colorIcon;
@@ -334,6 +336,7 @@ function loadPOIs() {
             floors[fl].pois[j].marker.psY = sY;
             floors[fl].pois[j].marker.loc = loc;
             floors[fl].pois[j].marker.category = category;
+            floors[fl].pois[j].marker.label = labelid;
 
             floors[fl].pois[j].marker.bindPopup(descriptionIcon)
                 .on('click', function () {
@@ -534,7 +537,6 @@ function initMap(qrPoint) {
 map.on('layeradd', function(e) {
     addCategory(e);
 });
-
 //EVENTOS - Añadir layer
 map.on('layerremove', function(e) {
     removeCategory(e);
@@ -596,9 +598,7 @@ function changeFloor(e) {
     }
     map.removeLayer(searchMarker._markerLoc._circleLoc);
 
-
     var floor_x;
-
     for (var i in floors) {
         if ((e.layer && (e.layer._url === floors[i].photo._url)) || (e._url === floors[i].photo._url)) {
             floor_x = floors[i];
@@ -644,6 +644,13 @@ function changeFloor(e) {
         if (checked[l]===true)
         {
             map.addLayer(floor_x.labels[l].layer);
+        }
+    }
+
+    for (var l in floor_x.labels)
+    {
+        if (checked[l]===true)
+        {
             jQuery('input[type=checkbox].leaflet-control-layers-selector:eq('+l+')').css('background', floors[i].labels[l].fields.color);
             jQuery('input[type=checkbox].leaflet-control-layers-selector:eq('+l+')').prop("checked", true);
         }
@@ -764,23 +771,42 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
                     map.removeLayer(floors[f].layer);
                     for (var l in floors[f].labels)
                     {
-                        //layersControl.removeLayer(floors[f].labels[l].layer);
-                        map.removeLayer(floors[f].labels[l].layer);
+                        if (jQuery('input[type=checkbox].leaflet-control-layers-selector:eq('+l+')').is(':checked')){
+                            checked[l] = true;
+                        }else{
+                            checked[l] = false;
+                        }
                     }
 
+                    for (var l in floors[f].labels)
+                    {
+                        layersControl.removeLayer(floors[f].labels[l].layer);
+                        map.removeLayer(floors[f].labels[l].layer);
+                    }
                     map.removeLayer(floors[f].photo);
 
                 }
 
                 if (route.fields.origin.fields.floor === floors[f].id) {
-                    //map.addLayer(floors[f].layer);
+                    map.addLayer(floors[f].layer);
                     map.addLayer(floors[f].photo);
                     for (var l in floors[f].labels)
                     {
-                        //layersControl.addOverlay()(floors[f].labels[l].layer);
-                        map.addLayer(floors[f].labels[l].layer);
+                        layersControl.addOverlay(floors[f].labels[l].layer,  '<i class="icon-bolt icon-white"></i>');
+                        if (checked[l]===true)
+                        {
+                            map.addLayer(floors[f].labels[l].layer);
+                        }
                     }
 
+                    for (var l in floors[f].labels)
+                    {
+                        if (checked[l]===true)
+                        {
+                            jQuery('input[type=checkbox].leaflet-control-layers-selector:eq('+l+')').css('background', floors[i].labels[l].fields.color);
+                            jQuery('input[type=checkbox].leaflet-control-layers-selector:eq('+l+')').prop("checked", true);
+                        }
+                    }
                     map.fitBounds(arrow[f].getBounds());
                     map.panTo(arrow[i].getBounds().getCenter(), 0);
                     map.addLayer(arrowHead[f]);
@@ -803,16 +829,27 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
 
                 }
                 else {
-                    map.addLayer(floors[f].layer);
-                    map.addLayer(floors[f].photo);
-                    for (var l in floors[f].labels)
-                    {
-                        //layersControl.addLayer(floors[f].labels[l].layer);
-                        map.addLayer(floors[f].labels[l].layer);
+                    for (var l in floors[i].labels) {
+                        if (jQuery('input[type=checkbox].leaflet-control-layers-selector:eq('+l+')').is(':checked')){
+                            checked[l] = true;
+                        }else{
+                            checked[l] = false;
+                        }
                     }
 
+
+                                        map.addLayer(floors[f].layer);
+                                        map.addLayer(floors[f].photo);
+                    /*                    for (var l in floors[f].labels)
+                                        {
+                                           if (destCategoryroute.fields.destiny.fields.label=== floors[f].labels[l].fields.name)
+                                            //layersControl.addLayer(floors[f].labels[l].layer);
+                                            map.addLayer(floors[f].labels[l].layer);
+                                        }
+                    */
+
                     map.fitBounds(arrow[f].getBounds());
-                    //                    map.panTo(arrow[i].getBounds().getCenter(), 0);
+                    //map.panTo(arrow[i].getBounds().getCenter(), 0);
                     map.addLayer(arrowHead[f]);
                     flechita = arrowHead[f];
                     arrowAnim(flechita, floors[f].name);
