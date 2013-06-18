@@ -603,7 +603,7 @@ function changeFloor(e) {
         if ((e.layer && (e.layer._url === floors[i].photo._url)) || (e._url === floors[i].photo._url)) {
             floor_x = floors[i];
             map.addLayer(searchMarker._markerLoc._circleLoc);
-         //   map.addLayer(floor_x.photo);
+            map.addLayer(floor_x.photo);
             if (arrowHead[i] && subarrow[i]) {
                 map.fitBounds(arrow[i].getBounds());
                 map.addLayer(arrowHead[i]);
@@ -637,6 +637,7 @@ function changeFloor(e) {
         }
 
     }
+    map.addLayer(floor_x.photo);
     map.addLayer(floor_x.layer);
     for (var l in floor_x.labels)
     {
