@@ -70,6 +70,7 @@ $(document).ready(function() {
                 $(".n2").show();
                 $(".n3").show();
                 $(".n4").show();
+                //$(".n6").hide();
 			});
 
 			/* if the user touches the content of the page then hide all the nav items */
@@ -78,7 +79,8 @@ $(document).ready(function() {
                 $(".n2").hide();
                 $(".n3").hide();
                 $(".n4").hide();
-			})
+                //$(".n6").show();
+            })
 	}
 
 });

@@ -552,7 +552,6 @@ function addCategory(e)
     {
         var keyPoi= Object.keys(e.layer._layers).pop();
         if (e.layer._layers[keyPoi])
-            console.log(e.layer._layers[keyPoi].color);
 
         for (var i in floors)
         {

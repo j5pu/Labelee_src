@@ -124,12 +124,12 @@ ul.navi {
     z-index:100;
     padding:0;
     margin:0;
+    width:40px !important;
 /*
     margin:0 0 0 60px;
 */
     list-style:none;
-    width:auto;
-    height:30px;
+    height:40px;
 }
 ul.navi > li {
     width:32px;
@@ -222,10 +222,10 @@ ul.navi a:hover li#n6, .n6.fake-active {
 
 span#social
 {
-    width:  100%;
+    width:  240px;
     z-index: 10000;
     position: absolute;
-    bottom: 72px;
+    bottom: 62px;
     left: 10px;
 }
 
