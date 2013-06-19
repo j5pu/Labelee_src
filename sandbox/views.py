@@ -1,5 +1,5 @@
 # Create your views here.
-# -*- coding: utf8 -*-
+# -*- coding: utf-8 -*-
 
 from django.shortcuts import render_to_response
 from django.template import RequestContext
@@ -58,3 +58,20 @@ def multix(request):
 
 def imgLoader(request):
     return render_to_response('imgLoader/imgloader.html', context_instance=RequestContext(request))
+
+
+from django.utils.translation import ugettext as _
+
+def i18n(request):
+    # if request.LANGUAGE_CODE == 'es':
+    #     return HttpResponse("You prefer to read Spanish.")
+    # else:
+    #     return HttpResponse("You prefer to read another language.")
+
+    return render_to_response('i18n/test.html', context_instance=RequestContext(request))
+
+
+def i18n_2(request):
+    sentence = 'Welcome to my site.'
+    output = _(sentence)
+    return HttpResponse(output)

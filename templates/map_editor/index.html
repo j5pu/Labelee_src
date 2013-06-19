@@ -1,5 +1,7 @@
 {% extends "base.html" %}
 
+{% load i18n %}
+
 
 {% block css %}
     <link rel="stylesheet" href="{{ STATIC_URL }}css/map_editor/index/styles.css"/>
@@ -17,7 +19,19 @@
 
     {% csrf_token %}
 
-    <h1>Administración de recintos</h1>
+    <form action="/i18n/setlang/" method="post">
+        {% csrf_token %}
+        <input name="next" type="hidden" value="{{ redirect_to }}" />
+        <select name="language">
+            {% get_language_info_list for LANGUAGES as languages %}
+            {% for language in languages %}
+                <option value="{{ language.code }}">{{ language.name_local }} ({{ language.code }})</option>
+            {% endfor %}
+        </select>
+        <input type="submit" value="Go" />
+    </form>
+
+    <h1>{% trans "Administración de recintos" %}</h1>
 
     <div id="enclosures" class="box box-0" ng-controller="EnclosuresCtrl">
 
@@ -28,9 +42,9 @@
             <input type="text"
                    ng-model="enclosure_name"
                    ng-change="validate()"
-                   placeholder="Nombre del recinto..">
+                   placeholder="{% trans "Nombre del recinto" %}..">
 
-            <button class="btn" ng-click="createEnclosure()">Añadir recinto</button>
+            <button class="btn" ng-click="createEnclosure()">{% trans "Añadir recinto" %}</button>
         </form>
 
         <!--CADA LUGAR-->
@@ -51,9 +65,10 @@
                         <i class="icon-remove" ng-click="del()"></i>
                     </div>
 
-                    <button class= 'btn' ng-click="calculateRoutes()">Calcular rutas</button>
+                    <button class= 'btn' ng-click="calculateRoutes()">{% trans "Calcular rutas" %}</button>
 
-                    <a id='aristas' href="edit/connections/[[enclosure.id]]">Gestión de aristas</a>
+                    <a id='aristas' href="edit/connections/[[enclosure.id]]">{% trans "Gestión de aristas" %}</a>
+
                 </div>
                 <div ng-show="editing">
                     <form>
@@ -61,18 +76,18 @@
                                ng-init="enclosure_name=enclosure.name"
                                ng-model="enclosure_name"
                                ng-change="validate()"
-                               placeholder="Nuevo nombre para el recinto.."
+                               placeholder="{% trans "Nuevo nombre para el recinto" %}.."
                                autofocus>
                         <input type="text"
                                ng-init="twitter_account=enclosure.twitter_account"
                                ng-model="twitter_account"
                                ng-change="validate()"
-                               placeholder="Cuenta de twitter..">
-                        <button ng-click="update()">Editar</button>
+                               placeholder="{% trans "Cuenta de twitter" %}..">
+                        <button ng-click="update()">{% trans "Editar" %}</button>
                     </form>
                     <div class="action_box">
                         <i class="icon-remove"
-                           ng-click="del('¿Seguro que desea eliminar el recinto [[enclosure_name]]? (se perderá toda su información)')">
+                           ng-click="del()">
                         </i>
                     </div>
                 </div>
@@ -82,7 +97,7 @@
             <!--PLANTAS PARA EL RECINTO-->
             <div class="floors box box-2" ng-controller="FloorsCtrl">
                 <!--PARA AGREGAR PLANTA-->
-                <h4>Nueva planta:</h4>
+                <h4>{% trans "Nueva planta" %}:</h4>
                 <form action=""
                       method="post"
                       enctype="multipart/form-data"
@@ -92,15 +107,15 @@
                         <input class="btn"
                                 type="file"
                                name="img"
-                               title="Elegir imágen..">
+                               title="{% trans "Elegir imágen" %}..">
                         <input type="text"
                                ng-model="floor_name"
-                               placeholder="Nombre de planta..">
+                               placeholder="{% trans "Nombre de planta" %}..">
                         <input type="text"
                                ng-model="floor_number"
-                               placeholder="Número..">
+                               placeholder="{% trans "Número" %}..">
 
-                        <button class="btn" ng-click="createFloor()">Añadir planta</button>
+                        <button class="btn" ng-click="createFloor()">{% trans "Añadir planta" %}</button>
                     </div>
 
                     <div class="ajax_gif" ng-show="sending_img">
@@ -108,7 +123,7 @@
                     </div>
                 </form>
 
-                <h4 ng-show="floors">Plantas:</h4>
+                <h4 ng-show="floors">{% trans "Plantas" %}:</h4>
 
                 <!--CADA PLANTA-->
                 <div class="floor"
@@ -145,17 +160,17 @@
                                            ng-init="floor_name=floor.name"
                                            ng-model="floor_name"
                                            ng-change="validate()"
-                                           placeholder="Nuevo nombre para la planta.."
+                                           placeholder="{% trans "Nuevo nombre para la planta" %}.."
                                            autofocus><br>
                                     Número:
                                     <input type="text"
                                            ng-init="floor_number=floor.floor_number"
                                            ng-model="floor_number"
                                            ng-change="validate()"
-                                           placeholder="Número.."><br>
-                                    <input type="file" name="img" title="Cambiar imágen..">
+                                           placeholder="{% trans "Número" %}.."><br>
+                                    <input type="file" name="img" title="{% trans "Cambiar imágen" %}..">
 
-                                    <button class="btn" ng-click="update()">Editar</button>
+                                    <button class="btn" ng-click="update()">{% trans "Editar" %}</button>
                                 </form>
                             </div>
 

@@ -1,0 +1,216 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-06-19 16:57+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: route/calculateRoutes.py:28
+msgid "Se están calculando las rutas"
+msgstr ""
+
+#: sandbox/i18n/test.html:13
+msgid "Esto es un titulo"
+msgstr ""
+
+#: templates/map_editor/connections.html:25 templates/map_editor/index.html:70
+msgid "Gestión de aristas"
+msgstr ""
+
+#: templates/map_editor/connections.html:27 templates/map_editor/edit.html:51
+msgid "Volver al menú"
+msgstr ""
+
+#: templates/map_editor/connections.html:31
+msgid "Arista1"
+msgstr ""
+
+#: templates/map_editor/connections.html:36
+msgid "Arista2"
+msgstr ""
+
+#: templates/map_editor/connections.html:42
+msgid "Guardar connection"
+msgstr ""
+
+#: templates/map_editor/connections.html:47
+msgid "Lista de conexiones"
+msgstr ""
+
+#: templates/map_editor/edit.html:36
+msgid "Antes de poner un QR o cambiar la descripción guardar el plano"
+msgstr ""
+
+#: templates/map_editor/edit.html:44
+msgid "Puntos"
+msgstr ""
+
+#: templates/map_editor/edit.html:45
+msgid "Guardados"
+msgstr ""
+
+#: templates/map_editor/edit.html:46
+msgid "Por guardar"
+msgstr ""
+
+#: templates/map_editor/edit.html:47
+msgid "Por elminar"
+msgstr ""
+
+#: templates/map_editor/edit.html:55
+msgid "Ver rejilla"
+msgstr ""
+
+#: templates/map_editor/edit.html:57
+msgid "Modo borrar"
+msgstr ""
+
+#: templates/map_editor/edit.html:65
+msgid "Elegir POI"
+msgstr ""
+
+#: templates/map_editor/edit.html:69
+msgid "Categoría"
+msgstr ""
+
+#: templates/map_editor/edit.html:72
+msgid "Nueva"
+msgstr ""
+
+#: templates/map_editor/edit.html:74 templates/map_editor/edit.html.py:83
+msgid "Eliminar"
+msgstr ""
+
+#: templates/map_editor/edit.html:81
+msgid "Nuevo"
+msgstr ""
+
+#: templates/map_editor/edit.html:89
+msgid "Lista de QRs"
+msgstr ""
+
+#: templates/map_editor/edit.html:90
+msgid "Resaltar todos"
+msgstr ""
+
+#: templates/map_editor/edit.html:101
+msgid "Crear categoría"
+msgstr ""
+
+#: templates/map_editor/edit.html:108
+msgid "Nombre para la categoría"
+msgstr ""
+
+#: templates/map_editor/edit.html:112
+msgid "Icono para la categoría"
+msgstr ""
+
+#: templates/map_editor/edit.html:113 templates/map_editor/edit.html.py:140
+#: templates/map_editor/index.html:110
+msgid "Elegir imágen"
+msgstr ""
+
+#: templates/map_editor/edit.html:116
+msgid "Color de bloque"
+msgstr ""
+
+#: templates/map_editor/edit.html:121 templates/map_editor/edit.html.py:142
+msgid "Crear"
+msgstr ""
+
+#: templates/map_editor/edit.html:126
+msgid "Crear POI"
+msgstr ""
+
+#: templates/map_editor/edit.html:133
+msgid "Nombre para el POI"
+msgstr ""
+
+#: templates/map_editor/edit.html:136
+msgid "Para la categoría"
+msgstr ""
+
+#: templates/map_editor/edit.html:139
+msgid "Imágen para el POI"
+msgstr ""
+
+#: templates/map_editor/edit.html:147
+msgid "Filas"
+msgstr ""
+
+#: templates/map_editor/edit.html:153
+msgid "Guardar"
+msgstr ""
+
+#: templates/map_editor/edit.html:154
+msgid "Limpiar"
+msgstr ""
+
+#: templates/map_editor/index.html:34
+msgid "Administración de recintos"
+msgstr ""
+
+#: templates/map_editor/index.html:45
+msgid "Nombre del recinto"
+msgstr ""
+
+#: templates/map_editor/index.html:47
+msgid "Añadir recinto"
+msgstr ""
+
+#: templates/map_editor/index.html:68
+msgid "Calcular rutas"
+msgstr ""
+
+#: templates/map_editor/index.html:79
+msgid "Nuevo nombre para el recinto"
+msgstr ""
+
+#: templates/map_editor/index.html:85
+msgid "Cuenta de twitter"
+msgstr ""
+
+#: templates/map_editor/index.html:86 templates/map_editor/index.html:173
+msgid "Editar"
+msgstr ""
+
+#: templates/map_editor/index.html:100
+msgid "Nueva planta"
+msgstr ""
+
+#: templates/map_editor/index.html:113
+msgid "Nombre de planta"
+msgstr ""
+
+#: templates/map_editor/index.html:116 templates/map_editor/index.html:170
+msgid "Número"
+msgstr ""
+
+#: templates/map_editor/index.html:118
+msgid "Añadir planta"
+msgstr ""
+
+#: templates/map_editor/index.html:126
+msgid "Plantas"
+msgstr ""
+
+#: templates/map_editor/index.html:163
+msgid "Nuevo nombre para la planta"
+msgstr ""
+
+#: templates/map_editor/index.html:171
+msgid "Cambiar imágen"
+msgstr ""
