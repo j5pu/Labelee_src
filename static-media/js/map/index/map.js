@@ -372,7 +372,7 @@ function loadPOIs() {
             if (floors[fl].labels[l].fields.name === "Aristas" || floors[fl].labels[l].fields.name === "Aseos")
             {
                 floors[fl].layer.addLayer(floors[fl].labels[l].layer);
-                delete floors[fl].labels[l];
+                floors[fl].labels.splice(l, 1);
             }
         }
 
