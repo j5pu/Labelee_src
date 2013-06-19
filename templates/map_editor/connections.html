@@ -1,5 +1,8 @@
 {% extends "base.html" %}
 
+{% load i18n %}
+
+
 {% block css %}
 
     <link rel="stylesheet" href="{{ STATIC_URL }}css/map_editor/connections/main.css">
@@ -19,29 +22,29 @@
 {% block content %}
 
 
-    <h1>Gestión de aristas</h1>
+    <h1>{% trans "Gestión de aristas" %}</h1>
 
-    <a href="{% url 'map_editor.views.index' %}">Volver al menú</a>
+    <a href="{% url 'map_editor.views.index' %}">{% trans "Volver al menú" %}</a>
 
 
     <form name="formul">
-        <input placeholder="Arista1.." id="textbox1" type="text">
+        <input placeholder="{% trans "Arista1" %}.." id="textbox1" type="text">
         <br>
         <select id="select1" name="miSelect1" multiple=""></select>
         <br>
         <br>
-        <input placeholder="Arista2.." id="textbox2" type="text">
+        <input placeholder="{% trans "Arista2" %}.." id="textbox2" type="text">
         <br>
         <select id="select2" name="miSelect2" multiple=""></select>
 
         <br>
         <br>
-        <input class='btn' type="button" value="Guardar connection">
+        <input class='btn' type="button" value="{% trans "Guardar connection" %}">
 {#               onclick="javascript:agregaArista(document.formul.miSelect1,document.formul.miSelect2)">#}
     </form>
 
     <div id= caja1 name="caja1">
-        <h4> Lista de connections </h4>
+        <h4>{% trans "Lista de conexiones" %}</h4>
 
         <div id="caja" name="caja2">
             <ul id="ul">

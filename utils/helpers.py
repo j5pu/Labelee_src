@@ -1,4 +1,4 @@
-# -*- coding: utf8 -*-
+# -*- coding: utf-8 -*-
 from django.db.models import Sum
 
 from tastypie.models import ApiKey

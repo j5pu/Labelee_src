@@ -4,6 +4,7 @@ import threading
 from django.core.mail import EmailMessage
 from django.db import transaction
 from django.http import *
+from django.utils.translation import gettext as _
 
 from map_editor.models import *
 from route.models import *
@@ -12,12 +13,7 @@ from route.pathfinding.Dijkstra import *
 #from django.core import serializers
 
 
-
 def calculate_routes(request, enclosure_id):
-
-
-
-
 
     # t1 = threading.Thread(target=threadCalculateRoute, args=[enclosure_id])
     # t1.start()
@@ -29,7 +25,7 @@ def calculate_routes(request, enclosure_id):
        print type(ex)
        print ex.args
 
-    return HttpResponse('Se están calculando las rutas')
+    return HttpResponse(_('Se están calculando las rutas'))
 
 
 def threadCalculateRoute(enclosure_id):
@@ -61,7 +57,7 @@ def threadCalculateRoute(enclosure_id):
         if hasattr(point, 'qr_code'):
             qrlist.append(point.qr_code)
 
-        if point.label.category.name.upper() in CATEGORIAS_FIJAS[0].upper():
+        if point.label.category.name_es.upper() in CATEGORIAS_FIJAS[0].upper():
             walls.append(Dijkstra.getKey(point.row, point.col, point.floor.id))
 
         pmapconnections = Connection.objects.filter(init__id=point.id)
