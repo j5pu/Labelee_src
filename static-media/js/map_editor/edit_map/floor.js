@@ -54,7 +54,7 @@ var Floor = {
             'background-size': Floor.grid_width + 'px' + ' ' + Floor.grid_height + 'px'
         });
 
-        $e.floor.num_blocks.html((Floor.num_rows * Floor.num_cols) + ' bloques');
+        $e.floor.num_blocks.html((Floor.num_rows * Floor.num_cols) + ' ' + gettext('bloques'));
 
         // Limpiamos el grid si estaba creado
         $grid.empty();
@@ -486,7 +486,7 @@ var Floor = {
 
     loadGrid: function()
     {
-        WaitingDialog.open('Cargando grid para la planta..');
+        WaitingDialog.open(gettext('Cargando grid para la planta..'));
 
         Floor.loading = true;
 

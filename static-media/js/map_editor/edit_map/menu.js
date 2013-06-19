@@ -1,6 +1,11 @@
 
 var LabelCategory = {
 
+    ids:{
+        blocker: 1,
+        connector: 3
+    },
+
     show_form_new: function(ev)
     {
         ev.preventDefault();
@@ -81,21 +86,29 @@ var LabelCategory = {
     isBlocker: function(label_category)
     {
         // Nos indica si la categoría es bloqueante
-        var cat_name = null;
+        var self = this;
+        var cat_id;
 
         if(label_category)
-            cat_name = label_category.name;
+        {
+            cat_id = label_category.id;
+            cat_name = label_category.name_es;
+        }
         else if(Painter.label.category)
-            cat_name = Painter.label.category.name;
+        {
+            cat_id = Painter.label.category.id;
+            cat_name = label_category.name_es;
+        }
 
-        return cat_name.toUpperCase() === 'BLOQUEANTES';
+        // Nos aseguramos por el id o el nombre que es una bloqueante
+        return cat_id == self.ids.blocker || cat_name.toUpperCase() == 'BLOQUEANTES';
     },
 
 
     isConnector: function(label_category)
     {
         // Nos indica si la categoría es arista
-        return label_category.name.toUpperCase() === 'ARISTAS';
+        return label_category.name_es.toUpperCase() === 'ARISTAS';
     }
 };
 
@@ -311,7 +324,7 @@ var Menu = {
         // Recogemos de la B.D. todos los LabelCategory y los metemos en el selector
 
         Menu.categories = new LabelCategoryResource().readAll();
-        var prompt_opt = 'Selecc. categoría';
+        var prompt_opt = gettext('Selecc. categoría');
         setSelector($e.category.selector, Menu.categories, prompt_opt);
         setSelector($e.label.form.category, Menu.categories, prompt_opt);
 
@@ -339,7 +352,7 @@ var Menu = {
         Painter.label_category = new LabelCategoryResource().read(category_id);
         Menu.labels = new LabelResource().readAllFiltered('?category__id=' + category_id);
 
-        setSelector($e.label.selector, Menu.labels, 'Selecc. etiqueta');
+        setSelector($e.label.selector, Menu.labels, gettext('Selecc. etiqueta'));
 
         // Si se viene de crear una etiqueta se elije esa
         if(Menu.label_created)

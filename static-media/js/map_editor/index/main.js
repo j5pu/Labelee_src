@@ -1,5 +1,4 @@
 $(function() {
-
 });
 
 
@@ -51,7 +50,7 @@ function EnclosureCtrl($scope)
 
 	$scope.del = function() {
 
-		var confirm_msg = '¿Seguro que desea eliminar el recinto? (también se perderán todas sus plantas)';
+		var confirm_msg = gettext('¿Seguro que desea eliminar el recinto? (también se perderán todas sus plantas)');
 
 		$scope.enclosure_resource.del($scope.enclosure.id, confirm_msg);
 
@@ -87,7 +86,7 @@ function FloorsCtrl($scope, $element)
         var img = $($element).find('input[name="img"]');
         if(!img.val())
         {
-            alert('También debe subir la imágen del plano para la planta');
+            alert(gettext('También debe subir la imágen del plano para la planta'));
             return;
         }
 		
@@ -177,7 +176,7 @@ function FloorCtrl($scope, $element)
 
 	$scope.del = function() {
 
-		var confirm_msg = '¿Seguro que desea eliminar la planta? (también se perderá toda la información relativa a ella)';
+		var confirm_msg = gettext('¿Seguro que desea eliminar la planta? (también se perderá toda la información relativa a ella)');
 
 		$scope.floor_resource.del($scope.floor.id, confirm_msg);
 

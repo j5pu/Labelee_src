@@ -57,11 +57,9 @@ urlpatterns = patterns('',
 
     (r'^sandbox/', include('sandbox.urls')),
 
+    # I18N
     (r'^i18n/', include('django.conf.urls.i18n')),
-    # (r'^i18n/', 'django.views.i18n.set_language'),
-
-
-
+    (r'^jsi18n/$', 'django.views.i18n.javascript_catalog')
 )
 
 

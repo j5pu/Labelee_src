@@ -27,7 +27,7 @@ TIME_ZONE = 'Europe/Madrid'
 
 # Language code for this installation. All choices can be found here:
 # http://www.i18nguy.com/unicode/language-identifiers.html
-LANGUAGE_CODE = 'es-ES'
+LANGUAGE_CODE = 'es'
 
 SITE_ID = 1
 
@@ -135,6 +135,7 @@ INSTALLED_APPS = (
     'map_editor',
     'map',
     'route',
+    'modeltranslation',
 )
 
 # A sample logging configuration. The only tangible logging
@@ -251,3 +252,7 @@ TEMPLATE_CONTEXT_PROCESSORS = {
     'django.contrib.auth.context_processors.auth',
     'django.core.context_processors.i18n',
 }
+
+
+MODELTRANSLATION_AUTO_POPULATE = True
+# MODELTRANSLATION_FALLBACK_LANGUAGES = ('en', 'es')

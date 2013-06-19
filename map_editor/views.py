@@ -5,7 +5,6 @@ from django.template import RequestContext
 
 import settings
 
-
 def index(request):
     ctx = {
         '_enclosure': settings.STATIC_URL + 'partials/_enclosure.html',
