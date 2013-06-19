@@ -363,10 +363,19 @@ function loadPOIs() {
             }
 
 
-            //floors[fl].layer.addLayer(floors[fl].pois[j].marker);
 
             totalPois.addLayer(floors[fl].pois[j].marker);
         }
+
+        for (var l in floors[fl].labels)
+        {
+            if (floors[fl].labels[l].fields.name === "Aristas" || floors[fl].labels[l].fields.name === "Aseos")
+            {
+                floors[fl].layer.addLayer(floors[fl].labels[l].layer);
+                delete floors[fl].labels[l];
+            }
+        }
+
     }
 
 
@@ -514,9 +523,9 @@ function initMap(qrPoint) {
         }
     }
 
-    for (i in floors) {
-        map.removeLayer(floors[i].layer);
-    }
+//    for (i in floors) {
+//        map.removeLayer(floors[i].layer);
+//    }
     map.addLayer(qrFloor.layer);
 
     map.removeLayer(totalPois);
