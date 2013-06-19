@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-06-19 16:56+0200\n"
+"POT-Creation-Date: 2013-06-19 18:32+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -21,6 +21,10 @@ msgstr ""
 msgid "¿Eliminar esta conexión?"
 msgstr "Delete connection?"
 
+#: static-media/js/map_editor/edit_map/events.js:209
+msgid "Actualizando planta.."
+msgstr "Updating floor.."
+
 #: static-media/js/map_editor/edit_map/floor.js:57
 msgid "bloques"
 msgstr "blocks"
@@ -29,11 +33,19 @@ msgstr "blocks"
 msgid "Cargando grid para la planta.."
 msgstr "Loading floor grid.."
 
-#: static-media/js/map_editor/edit_map/menu.js:320
+#: static-media/js/map_editor/edit_map/menu.js:80
+msgid "¿Eliminar categoría? (se eliminarán todas sus etiquetas)"
+msgstr "Delete category? (all your tags will be removed)"
+
+#: static-media/js/map_editor/edit_map/menu.js:202
+msgid "¿Eliminar etiqueta?"
+msgstr "Delete label?"
+
+#: static-media/js/map_editor/edit_map/menu.js:327
 msgid "Selecc. categoría"
 msgstr "Select category"
 
-#: static-media/js/map_editor/edit_map/menu.js:348
+#: static-media/js/map_editor/edit_map/menu.js:355
 msgid "Selecc. etiqueta"
 msgstr "Select label"
 

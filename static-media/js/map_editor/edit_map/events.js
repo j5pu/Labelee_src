@@ -205,9 +205,8 @@ var Events = {
 
         _updateFloor: function()
         {
-            // Actualizar planta
             $e.floor.update.on('click', function(){
-                WaitingDialog.open('Actualizando planta..');
+                WaitingDialog.open(gettext('Actualizando planta..'));
 
                 setTimeout(Floor.update, 300);
             });

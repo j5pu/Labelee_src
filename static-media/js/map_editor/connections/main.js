@@ -116,7 +116,7 @@ Connections.$e = {
             select2: $('#select2')
         };
 
-        this.guardarConnection = $('input[value="Guardar connection"]');
+        this.guardarConnection = $('input.btn');
 
         this.lista_connections = $('#lista_connections');
 

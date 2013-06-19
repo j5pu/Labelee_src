@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-06-19 16:57+0200\n"
+"POT-Creation-Date: 2013-06-19 18:32+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -202,7 +202,7 @@ msgstr "Number"
 
 #: templates/map_editor/index.html:118
 msgid "Añadir planta"
-msgstr "Add enclosure"
+msgstr "Add floor"
 
 #: templates/map_editor/index.html:126
 msgid "Plantas"

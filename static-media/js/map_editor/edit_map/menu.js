@@ -77,7 +77,7 @@ var LabelCategory = {
     {
         ev.preventDefault();
         var category_id = $e.category.selector.val();
-        var confirm_msg = '¿Eliminar categoría? (se eliminarán todas sus etiquetas)';
+        var confirm_msg = gettext('¿Eliminar categoría? (se eliminarán todas sus etiquetas)');
         new LabelCategoryResource().del(category_id, confirm_msg);
         Menu.setCategorySelector();
     },
@@ -97,7 +97,7 @@ var LabelCategory = {
         else if(Painter.label.category)
         {
             cat_id = Painter.label.category.id;
-            cat_name = label_category.name_es;
+            cat_name = Painter.label.category.name_es;
         }
 
         // Nos aseguramos por el id o el nombre que es una bloqueante
@@ -199,7 +199,7 @@ var Label = {
     {
         ev.preventDefault();
         var label_id = $e.label.selector.val();
-        var confirm_msg = '¿Eliminar etiqueta?';
+        var confirm_msg = gettext('¿Eliminar etiqueta?');
         new LabelResource().del(label_id, confirm_msg);
         Menu.setLabelSelector();
     },
