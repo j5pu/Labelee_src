@@ -234,7 +234,7 @@ var LocalStorageHandler = {
 
 
 $(function () {
-    LocalStorageHandler.init();
+//    LocalStorageHandler.init();
 });
 
 
