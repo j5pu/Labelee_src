@@ -554,6 +554,14 @@ map.on('baselayerchange', function (e) {
     changeFloor(e);
 });
 
+$('a#location').on('click', function(e){
+    e.preventDefault();
+});
+
+$('a#myCar').on('click', function(e){
+    e.preventDefault();
+});
+
 function addCategory(e)
 {
     if(e.layer._layers)
