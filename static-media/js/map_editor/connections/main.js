@@ -100,7 +100,7 @@ var Connections = {
         var button = $(this);
         var connection_id = button.data('connection-id');
 
-        new ConnectionResource().del(connection_id, gettext('¿Eliminar esta conexión?'));
+        new ConnectionResource().del(connection_id, gettext('Delete connection?'));
 
         Connections.cargarConnections();
     }

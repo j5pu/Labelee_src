@@ -77,7 +77,7 @@ var LabelCategory = {
     {
         ev.preventDefault();
         var category_id = $e.category.selector.val();
-        var confirm_msg = gettext('¿Eliminar categoría? (se eliminarán todas sus etiquetas)');
+        var confirm_msg = gettext('Delete category? (all its labels will be removed)');
         new LabelCategoryResource().del(category_id, confirm_msg);
         Menu.setCategorySelector();
     },
@@ -199,7 +199,7 @@ var Label = {
     {
         ev.preventDefault();
         var label_id = $e.label.selector.val();
-        var confirm_msg = gettext('¿Eliminar etiqueta?');
+        var confirm_msg = gettext('Delete label?');
         new LabelResource().del(label_id, confirm_msg);
         Menu.setLabelSelector();
     },
@@ -324,7 +324,7 @@ var Menu = {
         // Recogemos de la B.D. todos los LabelCategory y los metemos en el selector
 
         Menu.categories = new LabelCategoryResource().readAll();
-        var prompt_opt = gettext('Selecc. categoría');
+        var prompt_opt = gettext('Select category');
         setSelector($e.category.selector, Menu.categories, prompt_opt);
         setSelector($e.label.form.category, Menu.categories, prompt_opt);
 
@@ -345,14 +345,14 @@ var Menu = {
 
         if(!category_id)
         {
-            setSelector($e.label.selector, null, 'Selecc. etiqueta');
+            setSelector($e.label.selector, null, gettext('Select label'));
             return;
         }
 
         Painter.label_category = new LabelCategoryResource().read(category_id);
         Menu.labels = new LabelResource().readAllFiltered('?category__id=' + category_id);
 
-        setSelector($e.label.selector, Menu.labels, gettext('Selecc. etiqueta'));
+        setSelector($e.label.selector, Menu.labels, gettext('Select label'));
 
         // Si se viene de crear una etiqueta se elije esa
         if(Menu.label_created)

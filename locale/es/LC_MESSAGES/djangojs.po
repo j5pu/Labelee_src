@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-06-19 18:33+0200\n"
+"POT-Creation-Date: 2013-06-20 16:12+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,49 +19,48 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: static-media/js/map_editor/connections/main.js:103
-msgid "¿Eliminar esta conexión?"
-msgstr ""
+msgid "Delete connection?"
+msgstr "¿Eliminar esta conexión?"
 
 #: static-media/js/map_editor/edit_map/events.js:209
-msgid "Actualizando planta.."
-msgstr ""
+msgid "Updating floor"
+msgstr "Actualizando planta"
 
 #: static-media/js/map_editor/edit_map/floor.js:57
-msgid "bloques"
-msgstr ""
+msgid "blocks"
+msgstr "bloques"
 
 #: static-media/js/map_editor/edit_map/floor.js:489
-msgid "Cargando grid para la planta.."
-msgstr ""
+msgid "Loading floor grid"
+msgstr "Cargando grid para la planta"
 
 #: static-media/js/map_editor/edit_map/menu.js:80
-msgid "¿Eliminar categoría? (se eliminarán todas sus etiquetas)"
-msgstr ""
+msgid "Delete category? (all its labels will be removed)"
+msgstr "¿Eliminar categoría? (se eliminarán todas sus etiquetas)"
 
 #: static-media/js/map_editor/edit_map/menu.js:202
-msgid "¿Eliminar etiqueta?"
-msgstr ""
+msgid "Delete label?"
+msgstr "¿Eliminar etiqueta?"
 
 #: static-media/js/map_editor/edit_map/menu.js:327
-msgid "Selecc. categoría"
-msgstr ""
+msgid "Select category"
+msgstr "Selecc. categoría"
 
+#: static-media/js/map_editor/edit_map/menu.js:348
 #: static-media/js/map_editor/edit_map/menu.js:355
-msgid "Selecc. etiqueta"
-msgstr ""
+msgid "Select label"
+msgstr "Selecc. etiqueta"
 
 #: static-media/js/map_editor/index/main.js:53
-msgid ""
-"¿Seguro que desea eliminar el recinto? (también se perderán todas sus "
-"plantas)"
-msgstr ""
+msgid "Are you sure you want to remove this enclosure? (this will erase all their floors)"
+msgstr "¿Seguro que desea eliminar el recinto? (también se perderán todas sus "
+        "plantas)"
 
 #: static-media/js/map_editor/index/main.js:89
-msgid "También debe subir la imágen del plano para la planta"
-msgstr ""
+msgid "You must specify the floor image too"
+msgstr "También debe subir la imágen del plano para la planta"
 
 #: static-media/js/map_editor/index/main.js:179
-msgid ""
-"¿Seguro que desea eliminar la planta? (también se perderá toda la "
-"información relativa a ella)"
-msgstr ""
+msgid "Are you sure you want to remove this floor?"
+msgstr "¿Seguro que desea eliminar la planta? (también se perderá toda la "
+        "información relativa a ella)"
