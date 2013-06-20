@@ -8,7 +8,7 @@ var OriginIcon = L.AwesomeMarkers.icon({
     }),
     DestinyIcon = L.AwesomeMarkers.icon({
         icon: 'star',
-        color: 'darkred',
+        color: 'red',
         spin: true
 
     }),
@@ -47,9 +47,9 @@ var flechita = null;
 
 
 
-function loadIcon(color) {
+function loadIcon(color, shape) {
     var icon = new L.AwesomeMarkers.icon({
-        icon: 'bolt',
+        icon: shape,
         color: color
     });
     return icon;
@@ -250,6 +250,7 @@ var mapH = $(document).height(),//Altura de la pantalla
     arrow = [],
     arrowHead = [],
     arrowOffset = 0,
+    destMarker = new L.Marker(),
     subpath = [],
     subarrow = [],
     floors = new FloorResource().readFromEnclosure(qrPoint.enclosure.id);
@@ -315,6 +316,9 @@ function loadPOIs() {
                 floors[fl].pois.splice(j, 1);
             var colorIcon = floors[fl].pois[j].label.category.color,
                 nameIcon = floors[fl].pois[j].label.name,
+                //shapeIcon = floors[fl].pois[j].label.icon,
+            //shapeIcon = floors[fl].pois[j].label.category.icon,
+                shapeIcon = "bolt",
                 id = floors[fl].pois[j].id,
                 descriptionIcon = floors[fl].pois[j].description,
                 sX = floors[fl].scaleX,
@@ -326,7 +330,7 @@ function loadPOIs() {
                 category = floors[fl].pois[j].label.category.name;
 
 
-            floors[fl].pois[j].marker = new L.Marker(new L.latLng(loc), {icon: loadIcon(colorIcon), title: descriptionIcon /*, color:colorIcon*/});
+            floors[fl].pois[j].marker = new L.Marker(new L.latLng(loc), {icon: loadIcon(colorIcon, shapeIcon), title: descriptionIcon});
             floors[fl].pois[j].marker.options.icon.options.color = colorIcon;
 
 //IMPORTANTE- CAMBIO DE ICONOS DINÁMICO
@@ -434,7 +438,7 @@ function loadPOIs() {
 
                     });
 
-                totalPois.addLayer(qrMarker);
+            //    totalPois.addLayer(qrMarker);
             }
 
             qrMarker.addTo(floors[i].layer);
@@ -458,7 +462,7 @@ var mobileOpts = {
     markerLocation: false,
     minLength: 1,				//minimal text length for autocomplete
     textErr: 'Ningún resultado',
-    layer: totalPois,
+//IMPORTANTE: CAPA DE BUSQUEDA->   layer: totalPois,
     initial: false,
     //title: title,
     callTip: customTip,
@@ -526,9 +530,9 @@ function initMap(qrPoint) {
 //    for (i in floors) {
 //        map.removeLayer(floors[i].layer);
 //    }
-    map.addLayer(qrFloor.layer);
 
-    map.removeLayer(totalPois);
+//    map.removeLayer(totalPois);
+    map.addLayer(qrFloor.layer);
     qrMarker.openPopup();
     qrMarker._bringToFront();
 
@@ -555,19 +559,19 @@ function addCategory(e)
     {
         var keyPoi= Object.keys(e.layer._layers).pop();
         if (e.layer._layers[keyPoi])
-
-        for (var i in floors)
         {
-            for (var l in floors[i].labels)
+            for (var i in floors)
             {
-                if (map.hasLayer(floors[i].labels[l].layer) &&
-                    jQuery('input[type=checkbox].leaflet-control-layers-selector:eq('+l+')').is(':checked'))
+                for (var l in floors[i].labels)
                 {
-                    jQuery('input[type=checkbox].leaflet-control-layers-selector:eq('+l+')').css('background', floors[i].labels[l].fields.color);
+                    if (map.hasLayer(floors[i].labels[l].layer) &&
+                        jQuery('input[type=checkbox].leaflet-control-layers-selector:eq(' + l + ')').is(':checked'))
+                    {
+                        jQuery('input[type=checkbox].leaflet-control-layers-selector:eq(' + l + ')').css('background', floors[i].labels[l].fields.color);
+                    }
                 }
 
             }
-
         }
     }
 }
@@ -639,8 +643,7 @@ function changeFloor(e) {
         }
 
     }
-    map.addLayer(floor_x.photo);
-    map.addLayer(floor_x.layer);
+
     for (var l in floor_x.labels)
     {
         layersControl.addOverlay(floor_x.labels[l].layer,  '<i class="icon-bolt icon-white"></i>');
@@ -658,6 +661,9 @@ function changeFloor(e) {
             jQuery('input[type=checkbox].leaflet-control-layers-selector:eq('+l+')').prop("checked", true);
         }
     }
+    map.addLayer(floor_x.photo);
+    map.addLayer(floor_x.layer);
+
 
 //map.setMaxBounds(floor_x.bounds);
 //map.setView(qrPoint, 0);
@@ -703,12 +709,33 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
             floors[i].layer.removeLayer(arrow[i]);
             map.removeLayer(arrowHead[i]);
         }
-    }
+   }
+
+
     subpath = [];
     subarrow = [];
     blinkingMode = null;
     route = new RouteResource().getRoute(org, dst);
-    if (route) {
+
+    if (route)
+    {
+        for (var i in floors) {
+            if (destMarker) {
+                floors[i].layer.removeLayer(destMarker);
+            }
+
+        }
+        destLoc = [(route.fields.destiny.fields.row) * sY + sY, route.fields.destiny.fields.col * sX + sX];
+        destMarker = L.marker(destLoc, { bounceOnAdd: false,
+            //bounceOnAddHeight: 20,
+            icon: DestinyIcon})
+            .bindPopup(route.fields.destiny.fields.description);
+
+        for (var i in floors) {
+            if (route.fields.destiny.fields.floor == floors[i].id) {
+                floors[i].layer.addLayer(destMarker);
+            }
+        }
 
         for (var i in route.fields.subroutes) {
             if (route.fields.subroutes[i].floor.pk === route.fields.origin.fields.floor) {
