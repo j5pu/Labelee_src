@@ -136,6 +136,7 @@ INSTALLED_APPS = (
     'map',
     'route',
     'modeltranslation',
+    'log',
 )
 
 # A sample logging configuration. The only tangible logging

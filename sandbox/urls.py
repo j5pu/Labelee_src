@@ -28,4 +28,6 @@ urlpatterns = patterns('sandbox.views',
 	url(r'^i18n$', 'i18n'),
 	url(r'^i18n-2$', 'i18n_2'),
 
+	url(r'^db-log$', 'dblog'),
+
 )
