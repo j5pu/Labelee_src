@@ -367,7 +367,7 @@ function loadPOIs() {
             }
 
 
-
+            if (floors[fl].pois[j].marker.category !== "Aristas")
             totalPois.addLayer(floors[fl].pois[j].marker);
         }
 
@@ -462,7 +462,8 @@ var mobileOpts = {
     markerLocation: false,
     minLength: 1,				//minimal text length for autocomplete
     textErr: 'Ningún resultado',
-//IMPORTANTE: CAPA DE BUSQUEDA->   layer: totalPois,
+//IMPORTANTE: CAPA DE BUSQUEDA->
+   layer: totalPois,
     initial: false,
     //title: title,
     callTip: customTip,
@@ -531,7 +532,7 @@ function initMap(qrPoint) {
 //        map.removeLayer(floors[i].layer);
 //    }
 
-//    map.removeLayer(totalPois);
+    map.removeLayer(totalPois);
     map.addLayer(qrFloor.layer);
     qrMarker.openPopup();
     qrMarker._bringToFront();
