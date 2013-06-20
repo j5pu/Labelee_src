@@ -66,6 +66,7 @@ class LabelCategory(models.Model):
     name = models.CharField(max_length=200, unique=True, blank=False, null=False)
     color = models.CharField(max_length=50, blank=False)
     img = models.FileField(upload_to="img/label_categories", blank=True, null=True)
+    icon = models.CharField(max_length=50, blank=True, null=True)
 
     class Meta:
         verbose_name_plural = 'Label categories'
