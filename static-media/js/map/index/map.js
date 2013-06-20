@@ -434,7 +434,7 @@ function loadPOIs() {
 
                     });
 
-                totalPois.addLayer(qrMarker);
+            //    totalPois.addLayer(qrMarker);
             }
 
             qrMarker.addTo(floors[i].layer);
@@ -458,7 +458,7 @@ var mobileOpts = {
     markerLocation: false,
     minLength: 1,				//minimal text length for autocomplete
     textErr: 'Ningún resultado',
-    layer: totalPois,
+//IMPORTANTE: CAPA DE BUSQUEDA->   layer: totalPois,
     initial: false,
     //title: title,
     callTip: customTip,
@@ -526,9 +526,9 @@ function initMap(qrPoint) {
 //    for (i in floors) {
 //        map.removeLayer(floors[i].layer);
 //    }
-    map.addLayer(qrFloor.layer);
 
-    map.removeLayer(totalPois);
+//    map.removeLayer(totalPois);
+    map.addLayer(qrFloor.layer);
     qrMarker.openPopup();
     qrMarker._bringToFront();
 
