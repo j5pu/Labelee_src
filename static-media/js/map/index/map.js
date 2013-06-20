@@ -47,9 +47,9 @@ var flechita = null;
 
 
 
-function loadIcon(color) {
+function loadIcon(color, shape) {
     var icon = new L.AwesomeMarkers.icon({
-        icon: 'bolt',
+        icon: shape,
         color: color
     });
     return icon;
@@ -316,6 +316,9 @@ function loadPOIs() {
                 floors[fl].pois.splice(j, 1);
             var colorIcon = floors[fl].pois[j].label.category.color,
                 nameIcon = floors[fl].pois[j].label.name,
+                //shapeIcon = floors[fl].pois[j].label.icon,
+            //shapeIcon = floors[fl].pois[j].label.category.icon,
+                shapeIcon = "bolt",
                 id = floors[fl].pois[j].id,
                 descriptionIcon = floors[fl].pois[j].description,
                 sX = floors[fl].scaleX,
@@ -327,7 +330,7 @@ function loadPOIs() {
                 category = floors[fl].pois[j].label.category.name;
 
 
-            floors[fl].pois[j].marker = new L.Marker(new L.latLng(loc), {icon: loadIcon(colorIcon), title: descriptionIcon /*, color:colorIcon*/});
+            floors[fl].pois[j].marker = new L.Marker(new L.latLng(loc), {icon: loadIcon(colorIcon, shapeIcon), title: descriptionIcon});
             floors[fl].pois[j].marker.options.icon.options.color = colorIcon;
 
 //IMPORTANTE- CAMBIO DE ICONOS DINÁMICO
@@ -556,19 +559,19 @@ function addCategory(e)
     {
         var keyPoi= Object.keys(e.layer._layers).pop();
         if (e.layer._layers[keyPoi])
-
-        for (var i in floors)
         {
-            for (var l in floors[i].labels)
+            for (var i in floors)
             {
-                if (map.hasLayer(floors[i].labels[l].layer) &&
-                    jQuery('input[type=checkbox].leaflet-control-layers-selector:eq('+l+')').is(':checked'))
+                for (var l in floors[i].labels)
                 {
-                    jQuery('input[type=checkbox].leaflet-control-layers-selector:eq('+l+')').css('background', floors[i].labels[l].fields.color);
+                    if (map.hasLayer(floors[i].labels[l].layer) &&
+                        jQuery('input[type=checkbox].leaflet-control-layers-selector:eq(' + l + ')').is(':checked'))
+                    {
+                        jQuery('input[type=checkbox].leaflet-control-layers-selector:eq(' + l + ')').css('background', floors[i].labels[l].fields.color);
+                    }
                 }
 
             }
-
         }
     }
 }
