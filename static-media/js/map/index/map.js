@@ -317,8 +317,8 @@ function loadPOIs() {
             var colorIcon = floors[fl].pois[j].label.category.color,
                 nameIcon = floors[fl].pois[j].label.name,
                 //shapeIcon = floors[fl].pois[j].label.icon,
-            //shapeIcon = floors[fl].pois[j].label.category.icon,
-                shapeIcon = "bolt",
+                shapeIcon = floors[fl].pois[j].label.category.icon,
+                //shapeIcon = "bolt",
                 id = floors[fl].pois[j].id,
                 descriptionIcon = floors[fl].pois[j].description,
                 sX = floors[fl].scaleX,
@@ -519,7 +519,7 @@ function initMap(qrPoint) {
 
             for (var l in floors[i].labels)
             {
-                layersControl.addOverlay(floors[i].labels[l].layer,  '<i class="icon-bolt icon-white"></i>');
+                layersControl.addOverlay(floors[i].labels[l].layer,  '<i class="icon-' +floors[i].labels[l].fields.icon +' icon-white"></i>');
             }
 
             map.setMaxBounds(qrFloor.bounds);
@@ -646,7 +646,7 @@ function changeFloor(e) {
 
     for (var l in floor_x.labels)
     {
-        layersControl.addOverlay(floor_x.labels[l].layer,  '<i class="icon-bolt icon-white"></i>');
+        layersControl.addOverlay(floor_x.labels[l].layer,   '<i class="icon-' +floors[i].labels[l].fields.icon +' icon-white"></i>');
         if (checked[l]===true)
         {
             map.addLayer(floor_x.labels[l].layer);
@@ -822,7 +822,7 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
                     map.addLayer(floors[f].photo);
                     for (var l in floors[f].labels)
                     {
-                        layersControl.addOverlay(floors[f].labels[l].layer,  '<i class="icon-bolt icon-white"></i>');
+                        layersControl.addOverlay(floors[f].labels[l].layer,   '<i class="icon-' +floors[i].labels[l].fields.icon +' icon-white"></i>');
                         if (checked[l]===true)
                         {
                             map.addLayer(floors[f].labels[l].layer);
