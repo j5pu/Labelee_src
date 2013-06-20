@@ -8,7 +8,7 @@ var OriginIcon = L.AwesomeMarkers.icon({
     }),
     DestinyIcon = L.AwesomeMarkers.icon({
         icon: 'star',
-        color: 'darkred',
+        color: 'red',
         spin: true
 
     }),
@@ -250,6 +250,7 @@ var mapH = $(document).height(),//Altura de la pantalla
     arrow = [],
     arrowHead = [],
     arrowOffset = 0,
+    destMarker = new L.Marker(),
     subpath = [],
     subarrow = [],
     floors = new FloorResource().readFromEnclosure(qrPoint.enclosure.id);
@@ -639,8 +640,7 @@ function changeFloor(e) {
         }
 
     }
-    map.addLayer(floor_x.photo);
-    map.addLayer(floor_x.layer);
+
     for (var l in floor_x.labels)
     {
         layersControl.addOverlay(floor_x.labels[l].layer,  '<i class="icon-bolt icon-white"></i>');
@@ -658,6 +658,9 @@ function changeFloor(e) {
             jQuery('input[type=checkbox].leaflet-control-layers-selector:eq('+l+')').prop("checked", true);
         }
     }
+    map.addLayer(floor_x.photo);
+    map.addLayer(floor_x.layer);
+
 
 //map.setMaxBounds(floor_x.bounds);
 //map.setView(qrPoint, 0);
@@ -703,12 +706,33 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
             floors[i].layer.removeLayer(arrow[i]);
             map.removeLayer(arrowHead[i]);
         }
-    }
+   }
+
+
     subpath = [];
     subarrow = [];
     blinkingMode = null;
     route = new RouteResource().getRoute(org, dst);
-    if (route) {
+
+    if (route)
+    {
+        for (var i in floors) {
+            if (destMarker) {
+                floors[i].layer.removeLayer(destMarker);
+            }
+
+        }
+        destLoc = [(route.fields.destiny.fields.row) * sY + sY, route.fields.destiny.fields.col * sX + sX];
+        destMarker = L.marker(destLoc, { bounceOnAdd: false,
+            //bounceOnAddHeight: 20,
+            icon: DestinyIcon})
+            .bindPopup(route.fields.destiny.fields.description);
+
+        for (var i in floors) {
+            if (route.fields.destiny.fields.floor == floors[i].id) {
+                floors[i].layer.addLayer(destMarker);
+            }
+        }
 
         for (var i in route.fields.subroutes) {
             if (route.fields.subroutes[i].floor.pk === route.fields.origin.fields.floor) {
