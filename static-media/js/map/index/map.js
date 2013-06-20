@@ -2,14 +2,14 @@
 //Configuración de iconos
 var OriginIcon = L.AwesomeMarkers.icon({
         icon: 'star',
-        color: 'blue',
-        spin: true
+        color: 'blue'
+        //spin: true
 
     }),
     DestinyIcon = L.AwesomeMarkers.icon({
         icon: 'star',
-        color: 'red',
-        spin: true
+        color: 'red'
+        //spin: true
 
     }),
     cadetblue = L.AwesomeMarkers.icon({
@@ -463,7 +463,7 @@ var mobileOpts = {
     minLength: 1,				//minimal text length for autocomplete
     textErr: 'Ningún resultado',
 //IMPORTANTE: CAPA DE BUSQUEDA->
-   layer: totalPois,
+    layer: totalPois,
     initial: false,
     //title: title,
     callTip: customTip,
@@ -554,6 +554,8 @@ map.on('baselayerchange', function (e) {
     changeFloor(e);
 });
 
+/*
+
 $('a#location').on('click', function(e){
     e.preventDefault();
 });
@@ -561,6 +563,7 @@ $('a#location').on('click', function(e){
 $('a#myCar').on('click', function(e){
     e.preventDefault();
 });
+*/
 
 function addCategory(e)
 {
@@ -620,11 +623,11 @@ function changeFloor(e) {
             map.addLayer(searchMarker._markerLoc._circleLoc);
             map.addLayer(floor_x.photo);
             if (arrowHead[i] && subarrow[i]) {
-                map.fitBounds(arrow[i].getBounds());
                 map.addLayer(arrowHead[i]);
                 flechita = arrowHead[i];
                 arrowAnim(flechita, floor_x.name);
-                map.setZoom(0);
+//                map.fitBounds(arrow[i].getBounds());
+//                map.setZoom(0);
 
             } else {
                 map.setView(qrFloor.bounds.getCenter(), 0);
@@ -846,12 +849,12 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
                             jQuery('input[type=checkbox].leaflet-control-layers-selector:eq('+l+')').prop("checked", true);
                         }
                     }
-                    map.fitBounds(arrow[f].getBounds());
                     map.panTo(arrow[i].getBounds().getCenter(), 0);
                     map.addLayer(arrowHead[f]);
                     flechita = arrowHead[f];
                     arrowAnim(flechita, floors[f].name);
-                    map.setZoom(0);
+//                    map.fitBounds(arrow[f].getBounds());
+//                    map.setZoom(0);
 
                 }
 
@@ -887,12 +890,12 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
                                         }
                     */
 
-                    map.fitBounds(arrow[f].getBounds());
                     //map.panTo(arrow[i].getBounds().getCenter(), 0);
                     map.addLayer(arrowHead[f]);
                     flechita = arrowHead[f];
                     arrowAnim(flechita, floors[f].name);
-                    map.setZoom(0);
+//                    map.fitBounds(arrow[f].getBounds());
+//                    map.setZoom(0);
 
 
                 }
