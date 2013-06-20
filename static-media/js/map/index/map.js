@@ -317,8 +317,8 @@ function loadPOIs() {
             var colorIcon = floors[fl].pois[j].label.category.color,
                 nameIcon = floors[fl].pois[j].label.name,
                 //shapeIcon = floors[fl].pois[j].label.icon,
-            //shapeIcon = floors[fl].pois[j].label.category.icon,
-                shapeIcon = "bolt",
+                shapeIcon = floors[fl].pois[j].label.category.icon,
+                //shapeIcon = "bolt",
                 id = floors[fl].pois[j].id,
                 descriptionIcon = floors[fl].pois[j].description,
                 sX = floors[fl].scaleX,
@@ -367,7 +367,7 @@ function loadPOIs() {
             }
 
 
-
+            if (floors[fl].pois[j].marker.category !== "Aristas")
             totalPois.addLayer(floors[fl].pois[j].marker);
         }
 
@@ -462,7 +462,8 @@ var mobileOpts = {
     markerLocation: false,
     minLength: 1,				//minimal text length for autocomplete
     textErr: 'Ningún resultado',
-//IMPORTANTE: CAPA DE BUSQUEDA->   layer: totalPois,
+//IMPORTANTE: CAPA DE BUSQUEDA->
+   layer: totalPois,
     initial: false,
     //title: title,
     callTip: customTip,
@@ -519,7 +520,7 @@ function initMap(qrPoint) {
 
             for (var l in floors[i].labels)
             {
-                layersControl.addOverlay(floors[i].labels[l].layer,  '<i class="icon-bolt icon-white"></i>');
+                layersControl.addOverlay(floors[i].labels[l].layer,  '<i class="icon-' +floors[i].labels[l].fields.icon +' icon-white"></i>');
             }
 
             map.setMaxBounds(qrFloor.bounds);
@@ -531,7 +532,7 @@ function initMap(qrPoint) {
 //        map.removeLayer(floors[i].layer);
 //    }
 
-//    map.removeLayer(totalPois);
+    map.removeLayer(totalPois);
     map.addLayer(qrFloor.layer);
     qrMarker.openPopup();
     qrMarker._bringToFront();
@@ -646,7 +647,7 @@ function changeFloor(e) {
 
     for (var l in floor_x.labels)
     {
-        layersControl.addOverlay(floor_x.labels[l].layer,  '<i class="icon-bolt icon-white"></i>');
+        layersControl.addOverlay(floor_x.labels[l].layer,   '<i class="icon-' +floors[i].labels[l].fields.icon +' icon-white"></i>');
         if (checked[l]===true)
         {
             map.addLayer(floor_x.labels[l].layer);
@@ -822,7 +823,7 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
                     map.addLayer(floors[f].photo);
                     for (var l in floors[f].labels)
                     {
-                        layersControl.addOverlay(floors[f].labels[l].layer,  '<i class="icon-bolt icon-white"></i>');
+                        layersControl.addOverlay(floors[f].labels[l].layer,   '<i class="icon-' +floors[i].labels[l].fields.icon +' icon-white"></i>');
                         if (checked[l]===true)
                         {
                             map.addLayer(floors[f].labels[l].layer);

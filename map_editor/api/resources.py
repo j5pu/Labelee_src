@@ -161,6 +161,7 @@ class LabelCategoryResource(ModelResource):
             'id': ALL,
             'name': ALL,
             'color': ALL,
+            'icon': ALL,
             'labels': ALL_WITH_RELATIONS,
         }
 
