@@ -9,6 +9,7 @@ var LabelCategory = {
     show_form_new: function(ev)
     {
         ev.preventDefault();
+        $e.floor.poi_menu.hide(400);
         $e.label.form.root_node.hide(400);
         $e.category.form.root_node.show(400);
     },
@@ -59,6 +60,7 @@ var LabelCategory = {
         $e.category.form.img.val('');
         $e.category.form.color.val('');
         $e.category.form.root_node.hide(400);
+        $e.floor.poi_menu.show(400);
 
         // volvemos a rellenar el selector con el nuevo dato
         Menu.setCategorySelector();
@@ -123,6 +125,7 @@ var Label = {
 
     show_form_new: function(ev){
         ev.preventDefault();
+        $e.floor.poi_menu.hide(400);
         $e.label.form.root_node.show(400);
         $e.category.form.root_node.hide(400);
         var category = $e.category.selector.val();
@@ -184,6 +187,7 @@ var Label = {
 
         // Escondemos el formulario para crear la etiqueta
         $e.label.form.root_node.hide(400);
+        $e.floor.poi_menu.show(400);
 
         Menu.label_created = null;
     },
@@ -245,9 +249,9 @@ var Menu = {
     init: function(){
         Menu.labels = new LabelResource().readGrouped();
         Menu._setSelectors();
-        Menu.setQrList();
-        Menu.setPointStats();
-        Events.menu.bind();
+//        Menu.setQrList();
+//        Menu.setPointStats();
+//        Events.menu.bind();
     },
 
 

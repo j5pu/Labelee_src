@@ -252,7 +252,7 @@ var LocalStorageHandler = {
 
 
 $(function () {
-//    LocalStorageHandler.init();
+    LocalStorageHandler.init();
 });
 
 
@@ -331,7 +331,12 @@ function loadPOIs() {
         for (j = 0; j < floors[fl].pois.length; j++)
         {
             if (floors[fl].pois[j].id === poi_id)
+            {
                 floors[fl].pois.splice(j, 1);
+
+                if(!floors[fl].pois[j])
+                    break;
+            }
             var colorIcon = floors[fl].pois[j].label.category.color,
                 nameIcon = floors[fl].pois[j].label.name,
                 //shapeIcon = floors[fl].pois[j].label.icon,
@@ -857,8 +862,15 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
                 }
 
                 if (route.fields.origin.fields.floor === floors[f].id) {
-                    map.addLayer(floors[f].layer);
-                    map.addLayer(floors[f].photo);
+                    for (var l in floors[f].labels)
+                    {
+                        if (jQuery('input[type=checkbox].leaflet-control-layers-selector:eq('+l+')').is(':checked')){
+                            checked[l] = true;
+                        }else{
+                            checked[l] = false;
+                        }
+                    }
+
                     for (var l in floors[f].labels)
                     {
                         layersControl.addOverlay(floors[f].labels[l].layer,   '<i class="icon-' +floors[i].labels[l].fields.icon +' icon-white"></i>');
@@ -876,6 +888,8 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
                             jQuery('input[type=checkbox].leaflet-control-layers-selector:eq('+l+')').prop("checked", true);
                         }
                     }
+                    map.addLayer(floors[f].layer);
+                    map.addLayer(floors[f].photo);
                     map.panTo(arrow[i].getBounds().getCenter(), 0);
                     map.addLayer(arrowHead[f]);
                     flechita = arrowHead[f];

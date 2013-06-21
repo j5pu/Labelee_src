@@ -36,7 +36,7 @@ var Events = {
                 Floor.block_width_prev = $(this).width();
 
                 Floor.border_size_prev = $e.floor.toggle_border.is(':checked') ? 1 : 0;
-                Floor.border_size_new = 5;
+                Floor.border_size_new = 2;
 
                 var new_height = Floor.block_height_prev - (Floor.border_size_new*2) + Floor.border_size_prev*2,
                     new_width = Floor.block_width_prev - (Floor.border_size_new*2) + Floor.border_size_prev*2;
@@ -256,6 +256,7 @@ var Events = {
             $e.category.edit.on('click', LabelCategory.update);
             $e.category.delete.on('click', LabelCategory.delete);
             $e.category.form.create.on('click', LabelCategory.create);
+            $e.category.form.cancel.on('click', LabelCategory._post_create);
         },
 
 
@@ -265,6 +266,7 @@ var Events = {
             $e.label.edit.on('click', Label.update);
             $e.label.delete.on('click', Label.delete);
             $e.label.form.create.on('click', Label.create);
+            $e.label.form.cancel.on('click', Label._post_create);
         },
 
 

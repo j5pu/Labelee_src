@@ -10,7 +10,6 @@
 
 
 {% block js %}
-    <script src="{{ STATIC_URL }}vendor/bootstrap/bootstrap.file-input.js"></script>
     <script src="{{ STATIC_URL }}js/map_editor/index/main.js"></script>
 {% endblock js %}
 
@@ -105,7 +104,7 @@
 
                     <div class="form_content" ng-hide="sending_img">
                         <input class="btn"
-                                type="file"
+                               type="file"
                                name="img"
                                title="{% trans "Elegir imágen" %}..">
                         <input type="text"

@@ -3,7 +3,6 @@
  (c) 2010-2013, Vladimir Agafonkin, CloudMade
  */
 window.L_DISABLE_3D=true;
-//L.Browser.webkit3d = false;
 
 (function (t, e, i) {
     var n, o;
