@@ -11,6 +11,8 @@
 
 {# prueba cambio#}
 {% block js %}
+    <script src="{{ STATIC_URL }}vendor/bootstrap/bootstrap.file-input.js"></script>
+
     <script src="{{ STATIC_URL }}js/map_editor/edit_map/menu.js"></script>
     <script src="{{ STATIC_URL }}js/map_editor/edit_map/painter.js"></script>
     <script src="{{ STATIC_URL }}js/map_editor/edit_map/events.js"></script>
@@ -33,7 +35,12 @@
     <!--<img src = "/media/img/enclosures/Arista_Prueba/floors/28.jpg" id = "fake"> -->
     <div id="grid"></div>
 
-    <div class="box box-0 alert">{% trans "Antes de poner un QR o cambiar la descripción guardar el plano" %}</div>
+    <div class="box box-0 alert">
+        <ul>
+            <li>{% trans "Antes de poner un QR o cambiar la descripción guardar el plano" %}</li>
+            <li>{% trans "No aumentar el tamaño de la página" %}</li>
+        </ul>
+    </div>
 
     <!--MENU-->
     <div id="menu">
@@ -117,7 +124,8 @@
                     <br>
 
                     <form action=""
-                          method="post" enctype="multipart/form-data"
+                          method="post"
+                          enctype="multipart/form-data"
                           target="upload_target">
                         <input type="text" name="name"
                                placeholder="{% trans "Nombre para la categoría" %}.."/>
