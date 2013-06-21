@@ -5,6 +5,7 @@ var Floor = {
 
     loading: false,
     updating: false,
+    redrawing_grid: false,
     show_only_qrs: false,
     point_count: {
         to_save: 0,
@@ -113,6 +114,9 @@ var Floor = {
 
     update: function()
     {
+
+        if(Floor.redrawing_grid)
+            return;
 
 //        loadingMsg.show('Actualizando planta..');
 

@@ -7,11 +7,6 @@ body
     background-color: #bababa;
 }
 
-input[name="num_rows"]
-{
-	width: 2em
-}
-
 #grid
 {
 
@@ -52,18 +47,12 @@ input[name="num_rows"]
 
 }
 
-#menu
-{
-	margin: 20px;
-}
 
-
-#menu input[name="num_rows"]
+#menu #num_rows
 {
-	width: 3em;
-	margin-top: 8px;
-	text-align: center;
-	margin: 8px;
+    width: 2em;
+    text-align: right;
+    margin-top: 0.5em;
 }
 
 #menu input[name="map_name"]
@@ -94,6 +83,8 @@ input[name="num_rows"]
 {
 	margin: 0.4em;
 	padding: 0.7em;
+    display: inline-block;
+    vertical-align: top;
 }
 
 .box-1
@@ -103,17 +94,19 @@ input[name="num_rows"]
 	padding: 0.6em;
 	border-radius: 0.4em;
 	margin: 0.3em 0.4em;
-    margin-left: 12%;
-    float:left;
-    width: 40%;
-    margin-right: 5px;
+    vertical-align: top;
 }
 
 .box-2
 {
-	background: #F2EFE4;
-	padding: 1em;
-	border: 1px solid grey;
+    display: inline-block;
+    background: rgb(196, 190, 170);
+    padding: 1em;
+    border: 1px solid grey;
+    border-radius: 0.4em;
+    box-shadow: 1px 1px 5px black;
+    vertical-align: middle;
+    margin: 0.4em;
 }
 
 
@@ -196,21 +189,6 @@ a{
     color: #777777;
 }
 
-
-#qr_list{
-    float:left;
-    width: 30%;
-    margin-right: 15%;
-    margin-left: 2%;
-
-}
-
-#caja1{
-    float:left;
-    width: 35%;
-    margin-left:5px;
-}
-
 #caja2{
     float:left;
     width: 40%;
@@ -235,3 +213,34 @@ ul{
     background: url(../../../img/ajax-loader.gif) no-repeat 5px 8px;
     padding: 1em;
 }
+
+button#update_floor
+{
+    margin-left: 2em;
+}
+
+.back_button
+{
+    background: rgb(173, 157, 101);
+    padding: 0.3em 1em;
+    border: 0px solid grey;
+    border-radius: 0em;
+    box-shadow: 0px 0px 0px black;
+    margin: 0;
+}
+
+input[name="color"]
+{
+    width: 6em !important;
+}
+
+button[name="create"], button[name="cancel"]
+{
+    margin-top: 1em;
+    margin-bottom: -1em;
+}
+
+#category-form a{
+    margin-bottom: 0.6em;
+}
+

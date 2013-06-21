@@ -4,7 +4,7 @@
 
 {% block css %}
     <link rel="stylesheet" href="{{ STATIC_URL }}css/map_editor/edit_map/styles.css"/>
-{#    <link rel="stylesheet" media = "print" href="{{ STATIC_URL }}css/map_editor/edit_map/print.css"/>#}
+    {#    <link rel="stylesheet" media = "print" href="{{ STATIC_URL }}css/map_editor/edit_map/print.css"/>#}
     <link href='http://fonts.googleapis.com/css?family=Raleway:200' rel='stylesheet' type='text/css'>
 
 {% endblock css %}
@@ -36,125 +36,135 @@
     <div class="box box-0 alert">{% trans "Antes de poner un QR o cambiar la descripción guardar el plano" %}</div>
 
     <!--MENU-->
-    <div id="menu" class="box box-0">
-
-
-        <div id="caja1">
-            <div id="puntos">
-                <h4>{% trans "Puntos" %}:</h4>
-                {% trans "Guardados" %}: <span id="num_saved_points"></span> <br>
-                {% trans "Por guardar" %}: <span id="num_points_to_save"></span> <br>
-                {% trans "Por elminar" %}: <span id="num_points_to_delete"></span> <br>
-                <!--Total: <span id="num_total_points"></span> <br>-->
-            </div>
-
-            <a href="{% url 'map_editor.views.index' %}">{% trans "Volver al menú" %}</a>
-
-            <div id="caja-check">
-
-            <input type="checkbox" id="toggle_border" checked>{% trans "Ver rejilla" %}<br>
-
-            <input type="checkbox" name="toggle_erase_mode">{% trans "Modo borrar" %}<br>
-
-            </div>
-        </div>
-
-
-        <!-- MENU POI -->
-        <div class="box box-1">
-            <span class="title">{% trans "Elegir POI" %}:</span>
-            <br>
-
-            <div id="category" class="box box-2">
-                {% trans "Categoría" %}:
-                <br>
-                <select></select>
-                <a class="new" href=''>{% trans "Nueva" %}</a>
-                <!--<a class="edit" href=''>Editar</a>-->
-                <a class="delete" href=''>{% trans "Eliminar" %}</a>
-            </div>
-
-            <div id="label" class="box box-2">
-                POI:
-                <br>
-                <select></select>
-                <a class="new" href=''>{% trans "Nuevo" %}</a>
-                <!--<a class="edit" href=''>Editar</a>-->
-                <a class="delete" href=''>{% trans "Eliminar" %}</a>
-            </div>
-        </div>
-
-         <!-- LISTA DE QRs -->
-         <div id="qr_list" class="box box-0">
-             <h4>{% trans "Lista de QRs" %}:</h4>
-             <input type="checkbox" id="toggle_qrs">{% trans "Resaltar todos" %}
-             <ul></ul>
-         </div>
-
-
-        <!--
-        Cajas para crear objeto o categoría
-        -->
-
-        <div id="category-form" class="box box-1">
-
-            <span class="title">{% trans "Crear categoría" %}:</span>
-            <br>
-
-            <form action=""
-                  method="post" enctype="multipart/form-data"
-                  target="upload_target">
-                <input type="text" name="name"
-                       placeholder="{% trans "Nombre para la categoría" %}.."/>
-                <br>
-
-                <!-- Campo para la imágen -->
-                {% trans "Icono para la categoría" %}:
-                <input type="file" name="img" title="{% trans "Elegir imágen" %}..">
-                <br>
-
-                {% trans "Color de bloque" %}:
-                <input type="text" name="color"
-                       placeholder="Color.."/>
-                <br>
-
-                <button name="create">{% trans "Crear" %}</button>
-            </form>
-        </div>
-
-        <div id="label-form" class="box box-1">
-            <span class="title">{% trans "Crear POI" %}:</span>
-            <br>
-
-            <form action=""
-                  method="post" enctype="multipart/form-data"
-                  target="upload_target">
-                <input type="text" name="name"
-                       placeholder="{% trans "Nombre para el POI" %}.."/>
-                <br>
-
-                {% trans "Para la categoría" %}:
-                <select></select>
-
-                {% trans "Imágen para el POI" %}:
-                <input type="file" name="img" title="{% trans "Elegir imágen" %}..">
-
-                <button name="create">{% trans "Crear" %}</button>
-            </form>
-        </div>
-
-    <div id="caja2">
-        {% trans "Filas" %}:
+    <div id="menu">
+        <div class="box box-0">
+            <!-- NUMERO DE FILAS Y GUARDAR FLOOR -->
+            <div class="box box-1">
+            <span class="num_rows">
+                {% trans "Filas" %}:
                 <input type="text"
                        id="num_rows"
                        value="20">
-                = <span id="num_blocks"></span>
+                =
+            </span>
+                <span id="num_blocks"></span>
 
-            <button class="btn" id="update_floor">{% trans "Guardar" %}</button>
-            <button class="btn" id="clear_floor">{% trans "Limpiar" %}</button>
-    </div>
+                <button class="btn" id="update_floor">{% trans "Guardar" %}</button><br>
+                <!--<button class="btn" id="clear_floor">{% trans "Limpiar" %}</button>-->
 
+                <div class="back_button box-2">
+                    <a href="{% url 'map_editor.views.index' %}">{% trans "Volver al menú" %}</a>
+                </div>
+            </div><br>
 
+            <!-- STATS CHECKBOXES Y QR LIST -->
+            <div class="box box-1">
+                <div id="puntos" class="box box-2">
+                    <h4>{% trans "Puntos" %}:</h4>
+                    {% trans "Guardados" %}: <span id="num_saved_points"></span> <br>
+                    {% trans "Por guardar" %}: <span id="num_points_to_save"></span> <br>
+                    {% trans "Por elminar" %}: <span id="num_points_to_delete"></span> <br>
+                    <!--Total: <span id="num_total_points"></span> <br>-->
+                </div>
+
+                <div class="box box-2">
+                    <input type="checkbox" id="toggle_border" checked>{% trans "Ver rejilla" %}<br>
+                    <input type="checkbox" name="toggle_erase_mode">{% trans "Modo borrar" %}<br>
+                </div><br>
+
+                <!-- LISTA DE QRs -->
+                <div id="qr_list" class="box box-2">
+                    <h4>{% trans "Lista de QRs" %}:</h4>
+                    <input type="checkbox" id="toggle_qrs">{% trans "Resaltar todos" %}
+                    <ul></ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="box box-0">
+            <!-- WRAPPER MENU POI-->
+            <div class="box box-1">
+                <!-- MENU -->
+                <div id="poi_menu" class="box box-2">
+                    <span class="title">{% trans "Elegir POI" %}:</span>
+                    <br>
+
+                    <div id="category" class="box box-2">
+                        {% trans "Categoría" %}:
+                        <br>
+                        <select></select>
+                        <a class="new" href=''>{% trans "Nueva" %}</a>
+                        <!--<a class="edit" href=''>Editar</a>-->
+                        <a class="delete" href=''>{% trans "Eliminar" %}</a>
+                    </div><br>
+
+                    <div id="label" class="box box-2">
+                        POI:
+                        <br>
+                        <select></select>
+                        <a class="new" href=''>{% trans "Nuevo" %}</a>
+                        <!--<a class="edit" href=''>Editar</a>-->
+                        <a class="delete" href=''>{% trans "Eliminar" %}</a>
+                    </div>
+                </div>
+
+                <!--
+                    Cajas para crear objeto o categoría
+                -->
+                <div id="category-form" class="box box-2">
+
+                    <span class="title">{% trans "Crear categoría" %}:</span>
+                    <br>
+
+                    <form action=""
+                          method="post" enctype="multipart/form-data"
+                          target="upload_target">
+                        <input type="text" name="name"
+                               placeholder="{% trans "Nombre para la categoría" %}.."/>
+                        <br>
+
+                        <!-- Campo para la imágen -->
+                        <input class="btn"
+                               type="file"
+                               name="img"
+                               title="{% trans "Elegir icono" %}..">
+                        <br>
+
+                        {% trans "Color de bloque" %}:
+                        <input type="text" name="color"
+                               placeholder="{% trans "Color" %}.."/>
+                        <br>
+
+                        <button name="create">{% trans "Crear" %}</button>
+                        <button name="cancel">{% trans "Cancelar" %}</button>
+                    </form>
+                </div>
+
+                <div id="label-form" class="box box-2">
+                    <span class="title">{% trans "Crear POI" %}:</span>
+                    <br>
+
+                    <form action=""
+                          method="post" enctype="multipart/form-data"
+                          target="upload_target">
+                        <input type="text" name="name"
+                               placeholder="{% trans "Nombre para el POI" %}.."/><br>
+
+                        {% trans "Para la categoría" %}:
+                        <select></select><br>
+
+                        {% trans "Imágen para el POI" %}:
+                        <input class="btn"
+                               type="file"
+                               name="img"
+                               title="{% trans "Elegir imágen" %}.."><br>
+
+                        <button name="create">{% trans "Crear" %}</button>
+                        <button name="cancel">{% trans "Cancelar" %}</button>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
 
 
