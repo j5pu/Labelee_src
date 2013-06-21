@@ -1,4 +1,3 @@
-
 //Configuración de iconos
 var OriginIcon = L.AwesomeMarkers.icon({
         icon: 'star',
@@ -44,7 +43,24 @@ var OriginIcon = L.AwesomeMarkers.icon({
 
 var anim = null;
 var flechita = null;
-
+var floorChecks = [];
+//Parpadeo a la planta del POI destino
+var blinkingMode = null;
+function blinker(element) {
+    if (blinkingMode != null) {
+        var color = element.css('background-color');
+        if (color == "rgb(255, 0, 0)") {
+            element.css('background',"rgb(187, 187, 187)");
+        } else {
+            element.css('background',"rgb(255, 0, 0)");
+        }
+        window.setTimeout(function () {
+            blinker(element);
+        }, 1000);
+    } else {
+        element.css('background',"rgb(187, 187, 187)");
+    }
+}
 
 
 function loadIcon(color, shape) {
@@ -70,13 +86,12 @@ qrPoint.isParquing = function () {
 
 var LocalStorageHandler = {
 
-    init: function()
-    {
+    init: function () {
         this.checkExpire();
         this.setValues();
     },
 
-    checkExpire: function(){
+    checkExpire: function () {
         for (index = 0; index < localStorage.length; index++) {
             var obj = JSON.parse(localStorage.getItem(localStorage.key(index)));
             var delay = 86400000; // 24h
@@ -87,7 +102,7 @@ var LocalStorageHandler = {
         }
     },
 
-    setValues: function(){
+    setValues: function () {
         if (qrPoint.isParquing()) {
             if (confirm('¿Desea recordar su plaza?')) {
                 var miCoche = {
@@ -101,8 +116,7 @@ var LocalStorageHandler = {
         }
 
 
-        if(qr_type == 'dest')
-        {
+        if (qr_type == 'dest') {
             var sharedDest = {
                 dest: qrPoint,
                 'prevDate': new Date().getTime(),
@@ -111,11 +125,9 @@ var LocalStorageHandler = {
 
             localStorage.setItem('sharedDest', JSON.stringify(sharedDest));
         }
-        else
-        {
+        else {
             var sharedDest = JSON.parse(localStorage.getItem('sharedDest'));
-            if(sharedDest)
-            {
+            if (sharedDest) {
                 localStorage.removeItem('sharedDest');
                 sharedDest.mesg = '¿Todavía quieres ir al destino anterior?';
                 sharedDest.with_predraw = true;
@@ -125,11 +137,10 @@ var LocalStorageHandler = {
         }
     },
 
-    setSideMenu: function(){
+    setSideMenu: function () {
         // MICOCHE
         var miCoche = JSON.parse(localStorage.getItem('miCoche'));
-        if (miCoche)
-        {
+        if (miCoche) {
             if (qrPoint.enclosure.id != miCoche.dest.enclosure.id)
                 return;
 
@@ -146,21 +157,18 @@ var LocalStorageHandler = {
         }
 
         var prevDest = JSON.parse(localStorage.getItem('prevDest'));
-        if (prevDest)
-        {
+        if (prevDest) {
             var enclosure_dest_id = prevDest.with_predraw ? prevDest.dest.enclosure.id : prevDest.enclosureid;
             if (qrPoint.enclosure.id != enclosure_dest_id)
                 return;
 
             var point_dest_id, floor_dest_id, description, func;
-            if(prevDest.with_predraw)
-            {
+            if (prevDest.with_predraw) {
                 point_dest_id = prevDest.dest.point.id;
                 floor_dest_id = prevDest.dest.floor.id;
                 description = prevDest.dest.point.description;
             }
-            else
-            {
+            else {
                 point_dest_id = prevDest.poid;
                 floor_dest_id = prevDest.floorid;
                 description = prevDest.description;
@@ -171,9 +179,9 @@ var LocalStorageHandler = {
                 '<li>' +
                     '<li class="Label mmenu-label">DESTINO PREVIO</li>' +
                     '<li ' +
-                        'onclick="' + "$('#menu-right').trigger( 'close' );" +
-                        "preDrawRoute(" + qrPoint.point.id + ', ' + floor_id + ', ' + point_dest_id + ', ' + floor_dest_id + ');">' +
-                        description +
+                    'onclick="' + "$('#menu-right').trigger( 'close' );" +
+                    "preDrawRoute(" + qrPoint.point.id + ', ' + floor_id + ', ' + point_dest_id + ', ' + floor_dest_id + ');">' +
+                    description +
                     '</li>' +
                     '</li>'
             );
@@ -181,7 +189,7 @@ var LocalStorageHandler = {
         }
     },
 
-    setPrevDest: function(marker){
+    setPrevDest: function (marker) {
         var prevDest = {
             'prevDate': new Date().getTime(),
             'poid': marker.poid,
@@ -197,30 +205,25 @@ var LocalStorageHandler = {
     },
 
 
-    draw: function(){
-        if (qr_type == 'origin')
-        {
+    draw: function () {
+        if (qr_type == 'origin') {
             // DESTINO PREVIO
             var prevDest = JSON.parse(localStorage.getItem('prevDest'));
-            if(prevDest)
-            {
-                if(prevDest.with_predraw && prevDest.dest.enclosure.id == qrPoint.enclosure.id)
-                {
-                    if(prevDest.shooted_origin)
-                        if(confirm(prevDest.mesg))
+            if (prevDest) {
+                if (prevDest.with_predraw && prevDest.dest.enclosure.id == qrPoint.enclosure.id) {
+                    if (prevDest.shooted_origin)
+                        if (confirm(prevDest.mesg))
                             preDrawRoute(qrPoint.point.id, qrPoint.floor.id, prevDest.dest.point.id, prevDest.dest.floor.id);
                         else
                             localStorage.removeItem('prevDest');
-                    else
-                    {
+                    else {
                         preDrawRoute(qrPoint.point.id, qrPoint.floor.id, prevDest.dest.point.id, prevDest.dest.floor.id);
                         prevDest.shooted_origin = true;
                         localStorage.setItem('prevDest', JSON.stringify(prevDest));
                     }
                 }
-                else if(prevDest.enclosureid == qrPoint.enclosure.id)
-                {
-                    if(confirm(prevDest.mesg))
+                else if (prevDest.enclosureid == qrPoint.enclosure.id) {
+                    if (confirm(prevDest.mesg))
                         drawRoute(qrPoint.point.id, qrFloor.sX, qrFloor.sY, prevDest.poid, prevDest.psX, prevDest.psY);
                     else
                         localStorage.removeItem('prevDest');
@@ -265,7 +268,7 @@ for (var i in floors) {
 
 //Carga de planos
 
-var name=null, img;
+var name = null, img;
 function loopFloors() {
     if (floor_index == floors.length) {
         loadPOIs();
@@ -277,7 +280,7 @@ function loopFloors() {
         // fin de loopFloors
         return;
     }
-  
+
     name = floors[floor_index].name;
     img = floors[floor_index].img;
     var floorImg = new Image();
@@ -301,23 +304,19 @@ function loopFloors() {
 
 //Carga de POIs
 function loadPOIs() {
-    for (var fl in floors)
-    {
-        for (var l in floors[fl].labels)
-        {
+    for (var fl in floors) {
+        for (var l in floors[fl].labels) {
             floors[fl].labels[l].layer = new L.LayerGroup();
         }
 
         floors[fl].layer = new L.LayerGroup();
 
-        try{
-            for (j = 0; j < floors[fl].pois.length; j++)
-            {
-                if (floors[fl].pois[j].id === poi_id)
-                {
+        try {
+            for (j = 0; j < floors[fl].pois.length; j++) {
+                if (floors[fl].pois[j].id === poi_id) {
                     floors[fl].pois.splice(j, 1);
-                    if(j==floors[fl].pois.length)
-                          break;
+                    if (j == floors[fl].pois.length)
+                        break;
                 }
                 var colorIcon = floors[fl].pois[j].label.category.color,
                     nameIcon = floors[fl].pois[j].label.name,
@@ -350,11 +349,10 @@ function loadPOIs() {
                 floors[fl].pois[j].marker.bindPopup(descriptionIcon)
                     .on('click', function () {
 
-                        if(searchMarker._markerLoc)
+                        if (searchMarker._markerLoc)
                             map.removeLayer(searchMarker._markerLoc._circleLoc);
 
-                        if(qr_type == 'dest')
-                        {
+                        if (qr_type == 'dest') {
                             this.bindPopup("Escanea un QR para llegar hasta " + qrPoint.point.description).openPopup();
                             return;
                         }
@@ -365,8 +363,7 @@ function loadPOIs() {
 
                     });
 
-                for (var l in floors[fl].labels)
-                {
+                for (var l in floors[fl].labels) {
                     if (floors[fl].pois[j].marker.category === floors[fl].labels[l].fields.name)
                         floors[fl].labels[l].layer.addLayer(floors[fl].pois[j].marker);
                 }
@@ -375,22 +372,18 @@ function loadPOIs() {
                 if (floors[fl].pois[j].marker.category !== "Aristas")
                     totalPois.addLayer(floors[fl].pois[j].marker);
             }
-        }catch (e)
-        {
+        } catch (e) {
 
         }
 
-        for (var l in floors[fl].labels)
-        {
-            if (floors[fl].labels[l].fields.name === "Aristas" || floors[fl].labels[l].fields.name === "Aseos")
-            {
+        for (var l in floors[fl].labels) {
+            if (floors[fl].labels[l].fields.name === "Aristas" || floors[fl].labels[l].fields.name === "Aseos") {
                 floors[fl].layer.addLayer(floors[fl].labels[l].layer);
                 floors[fl].labels.splice(l, 1);
             }
         }
 
     }
-
 
 
     for (var i in totalPois._layers) {
@@ -409,8 +402,7 @@ function loadPOIs() {
             qrLoc = [((qrPoint.point.row) * qrFloor.scaleY) + qrFloor.scaleY,
                 (qrPoint.point.col * qrFloor.scaleX) + qrFloor.scaleX];
 
-            if(qr_type == 'origin')
-            {
+            if (qr_type == 'origin') {
                 qrMarker = new L.marker(qrLoc, { bounceOnAdd: false,
                     //bounceOnAddHeight: 20,
                     icon: OriginIcon})
@@ -420,8 +412,7 @@ function loadPOIs() {
 
 
             }
-            else
-            {
+            else {
                 qrMarker = new L.marker(qrLoc, { bounceOnAdd: false,
                     //bounceOnAddHeight: 20,
                     icon: DestinyIcon})
@@ -432,11 +423,10 @@ function loadPOIs() {
                 qrMarker
                     .on('click', function () {
 
-                        if(searchMarker._markerLoc)
+                        if (searchMarker._markerLoc)
                             map.removeLayer(searchMarker._markerLoc._circleLoc);
 
-                        if(qr_type == 'dest')
-                        {
+                        if (qr_type == 'dest') {
                             this.bindPopup("Escanea un QR para llegar hasta " + qrPoint.point.description).openPopup();
                             return;
                         }
@@ -447,7 +437,7 @@ function loadPOIs() {
 
                     });
 
-            //    totalPois.addLayer(qrMarker);
+                //    totalPois.addLayer(qrMarker);
             }
 
             qrMarker.addTo(floors[i].layer);
@@ -527,9 +517,8 @@ function initMap(qrPoint) {
             map.addLayer(qrFloor.photo);
             map.addLayer(qrFloor.layer);
 
-            for (var l in floors[i].labels)
-            {
-                layersControl.addOverlay(floors[i].labels[l].layer,  '<i class="icon-' +floors[i].labels[l].fields.icon +' icon-white"></i>');
+            for (var l in floors[i].labels) {
+                layersControl.addOverlay(floors[i].labels[l].layer, '<i class="icon-' + floors[i].labels[l].fields.icon + ' icon-white"></i>');
             }
 
             map.setMaxBounds(qrFloor.bounds);
@@ -551,11 +540,11 @@ function initMap(qrPoint) {
 
 
 //EVENTOS - Añadir layer
-map.on('layeradd', function(e) {
+map.on('layeradd', function (e) {
     addCategory(e);
 });
 //EVENTOS - Añadir layer
-map.on('layerremove', function(e) {
+map.on('layerremove', function (e) {
     removeCategory(e);
 });
 //EVENTOS - CAMBIO DE PLANTA
@@ -564,57 +553,44 @@ map.on('baselayerchange', function (e) {
 });
 
 
-
 /*
 
-$('a#location').on('click', function(e){
-    e.preventDefault();
-});
+ $('a#location').on('click', function(e){
+ e.preventDefault();
+ });
 
-$('a#myCar').on('click', function(e){
-    e.preventDefault();
-});
-*/
+ $('a#myCar').on('click', function(e){
+ e.preventDefault();
+ });
+ */
 
-function addCategory(e)
-{
+function addCategory(e) {
     // Si existe una layer de POIs de esta categoría
-    if(e.layer._layers)
-    {
-        var keyPoi= Object.keys(e.layer._layers).pop();
-        if (e.layer._layers[keyPoi])
-        {
-            for (var i in floors)
-            {
-                for (var l in floors[i].labels)
-                {
+    if (e.layer._layers) {
+        var keyPoi = Object.keys(e.layer._layers).pop();
+        if (e.layer._layers[keyPoi]) {
+            for (var i in floors) {
+                for (var l in floors[i].labels) {
                     var checkbox = jQuery('input[type=checkbox].leaflet-control-layers-selector:eq(' + l + ')');
-                    if (floors[i].labels[l] && checkbox.is(':checked'))
-                    {
+                    if (floors[i].labels[l] && checkbox.is(':checked')) {
                         checkbox.css('background', floors[i].labels[l].fields.color);
                     }
                 }
 
             }
         }
-        else
-        {
+        else {
 
         }
     }
 }
 
-function removeCategory(e)
-{
-    if(e.layer._layers)
-    {
-        for (var i in floors)
-        {
-            for (var l in floors[i].labels)
-            {
-                if (!(jQuery('input[type=checkbox].leaflet-control-layers-selector:eq('+l+')').is(':checked')))
-                {
-                    jQuery('input[type=checkbox].leaflet-control-layers-selector:eq('+l+')').css('background', '#333');
+function removeCategory(e) {
+    if (e.layer._layers) {
+        for (var i in floors) {
+            for (var l in floors[i].labels) {
+                if (!(jQuery('input[type=checkbox].leaflet-control-layers-selector:eq(' + l + ')').is(':checked'))) {
+                    jQuery('input[type=checkbox].leaflet-control-layers-selector:eq(' + l + ')').css('background', '#333');
                 }
 
             }
@@ -652,9 +628,9 @@ function changeFloor(e) {
         } else {
             map.removeLayer(floors[i].layer);
             for (var l in floors[i].labels) {
-                if (jQuery('input[type=checkbox].leaflet-control-layers-selector:eq('+l+')').is(':checked')){
+                if (jQuery('input[type=checkbox].leaflet-control-layers-selector:eq(' + l + ')').is(':checked')) {
                     checked[l] = true;
-                }else{
+                } else {
                     checked[l] = false;
                 }
             }
@@ -672,21 +648,17 @@ function changeFloor(e) {
 
     }
 
-    for (var l in floor_x.labels)
-    {
-        layersControl.addOverlay(floor_x.labels[l].layer,   '<i class="icon-' +floors[i].labels[l].fields.icon +' icon-white"></i>');
-        if (checked[l]===true)
-        {
+    for (var l in floor_x.labels) {
+        layersControl.addOverlay(floor_x.labels[l].layer, '<i class="icon-' + floors[i].labels[l].fields.icon + ' icon-white"></i>');
+        if (checked[l] === true) {
             map.addLayer(floor_x.labels[l].layer);
         }
     }
 
-    for (var l in floor_x.labels)
-    {
-        if (checked[l]===true)
-        {
-            jQuery('input[type=checkbox].leaflet-control-layers-selector:eq('+l+')').css('background', floors[i].labels[l].fields.color);
-            jQuery('input[type=checkbox].leaflet-control-layers-selector:eq('+l+')').prop("checked", true);
+    for (var l in floor_x.labels) {
+        if (checked[l] === true) {
+            jQuery('input[type=checkbox].leaflet-control-layers-selector:eq(' + l + ')').css('background', floors[i].labels[l].fields.color);
+            jQuery('input[type=checkbox].leaflet-control-layers-selector:eq(' + l + ')').prop("checked", true);
         }
     }
     map.addLayer(floor_x.photo);
@@ -737,16 +709,15 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
             floors[i].layer.removeLayer(arrow[i]);
             map.removeLayer(arrowHead[i]);
         }
-   }
+    }
 
-
+    var check = null;
     subpath = [];
     subarrow = [];
     blinkingMode = null;
     route = new RouteResource().getRoute(org, dst);
 
-    if (route)
-    {
+    if (route) {
         for (var i in floors) {
             if (destMarker) {
                 floors[i].layer.removeLayer(destMarker);
@@ -807,9 +778,16 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
                 floors[i].layer.addLayer(arrow[i]);
                 if (floors[i].id === route.fields.destiny.fields.floor) {
                     if (route.fields.origin.fields.floor !== route.fields.destiny.fields.floor) {
-                        var check = floorChecks[floors[i].name];
-                        blinkingMode = floors[i].name;
-                        blinker(check);
+                        /* var check = floorChecks[floors[i].name];
+                         blinkingMode = floors[i].name;
+                         blinker(check);*/
+                        for (index = 0; index < floors.length; index++) {
+                            var check = $('input[type=radio].leaflet-control-layers-selector:eq(' + index + ')');
+                            if (check.parent().find('span').html().trim() == floors[i].name) {
+                                blinkingMode = floors[i].name;
+                                blinker(check);
+                            }
+                        }
                     }
                     map.addLayer(arrowHead[i]);
                     flechita = arrowHead[i];
@@ -827,49 +805,43 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
             if (route.fields.origin.fields.floor !== route.fields.destiny.fields.floor) {
                 if (route.fields.destiny.fields.floor === floors[f].id) {
                     map.removeLayer(floors[f].layer);
-                    for (var l in floors[f].labels)
-                    {
-                        if (jQuery('input[type=checkbox].leaflet-control-layers-selector:eq('+l+')').is(':checked')){
+                    for (var l in floors[f].labels) {
+                        if (jQuery('input[type=checkbox].leaflet-control-layers-selector:eq(' + l + ')').is(':checked')) {
                             checked[l] = true;
-                        }else{
+                        } else {
                             checked[l] = false;
                         }
                     }
 
-                    for (var l in floors[f].labels)
-                    {
+                    for (var l in floors[f].labels) {
                         layersControl.removeLayer(floors[f].labels[l].layer);
                         map.removeLayer(floors[f].labels[l].layer);
                     }
-                    map.removeLayer(floors[f].photo);
+
+                     map.removeLayer(floors[f].photo);
 
                 }
 
                 if (route.fields.origin.fields.floor === floors[f].id) {
-                    for (var l in floors[f].labels)
-                    {
-                        if (jQuery('input[type=checkbox].leaflet-control-layers-selector:eq('+l+')').is(':checked')){
+                    for (var l in floors[f].labels) {
+                        if (jQuery('input[type=checkbox].leaflet-control-layers-selector:eq(' + l + ')').is(':checked')) {
                             checked[l] = true;
-                        }else{
+                        } else {
                             checked[l] = false;
                         }
                     }
 
-                    for (var l in floors[f].labels)
-                    {
-                        layersControl.addOverlay(floors[f].labels[l].layer,   '<i class="icon-' +floors[i].labels[l].fields.icon +' icon-white"></i>');
-                        if (checked[l]===true)
-                        {
+                    for (var l in floors[f].labels) {
+                        layersControl.addOverlay(floors[f].labels[l].layer, '<i class="icon-' + floors[i].labels[l].fields.icon + ' icon-white"></i>');
+                        if (checked[l] === true) {
                             map.addLayer(floors[f].labels[l].layer);
                         }
                     }
 
-                    for (var l in floors[f].labels)
-                    {
-                        if (checked[l]===true)
-                        {
-                            jQuery('input[type=checkbox].leaflet-control-layers-selector:eq('+l+')').css('background', floors[i].labels[l].fields.color);
-                            jQuery('input[type=checkbox].leaflet-control-layers-selector:eq('+l+')').prop("checked", true);
+                    for (var l in floors[f].labels) {
+                        if (checked[l] === true) {
+                            jQuery('input[type=checkbox].leaflet-control-layers-selector:eq(' + l + ')').css('background', floors[i].labels[l].fields.color);
+                            jQuery('input[type=checkbox].leaflet-control-layers-selector:eq(' + l + ')').prop("checked", true);
                         }
                     }
                     map.addLayer(floors[f].layer);
@@ -887,8 +859,7 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
                 if (route.fields.destiny.fields.floor !== floors[f].id) {
                     map.removeLayer(floors[f].layer);
                     map.removeLayer(floors[f].photo);
-                    for (var l in floors[f].labels)
-                    {
+                    for (var l in floors[f].labels) {
                         //layersControl.removeLayer(floors[f].labels[l].layer);
                         map.removeLayer(floors[f].labels[l].layer);
                     }
@@ -897,23 +868,23 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
                 }
                 else {
                     for (var l in floors[i].labels) {
-                        if (jQuery('input[type=checkbox].leaflet-control-layers-selector:eq('+l+')').is(':checked')){
+                        if (jQuery('input[type=checkbox].leaflet-control-layers-selector:eq(' + l + ')').is(':checked')) {
                             checked[l] = true;
-                        }else{
+                        } else {
                             checked[l] = false;
                         }
                     }
 
 
-                                        map.addLayer(floors[f].layer);
-                                        map.addLayer(floors[f].photo);
+                    map.addLayer(floors[f].layer);
+                    map.addLayer(floors[f].photo);
                     /*                    for (var l in floors[f].labels)
-                                        {
-                                           if (destCategoryroute.fields.destiny.fields.label=== floors[f].labels[l].fields.name)
-                                            //layersControl.addLayer(floors[f].labels[l].layer);
-                                            map.addLayer(floors[f].labels[l].layer);
-                                        }
-                    */
+                     {
+                     if (destCategoryroute.fields.destiny.fields.label=== floors[f].labels[l].fields.name)
+                     //layersControl.addLayer(floors[f].labels[l].layer);
+                     map.addLayer(floors[f].labels[l].layer);
+                     }
+                     */
 
                     //map.panTo(arrow[i].getBounds().getCenter(), 0);
                     map.addLayer(arrowHead[f]);
