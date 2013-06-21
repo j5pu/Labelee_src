@@ -50,15 +50,15 @@ function blinker(element) {
     if (blinkingMode != null) {
         var color = element.css('background-color');
         if (color == "rgb(255, 0, 0)") {
-            element.css('background',"rgb(187, 187, 187)");
+            element.css('background-color','');
         } else {
-            element.css('background',"rgb(255, 0, 0)");
+            element.css('background-color','rgb(255, 0, 0)');
         }
         window.setTimeout(function () {
             blinker(element);
         }, 1000);
     } else {
-        element.css('background',"rgb(187, 187, 187)");
+        element.css('background-color','');
     }
 }
 
@@ -636,7 +636,7 @@ function changeFloor(e) {
             }
 
             for (var l in floors[i].labels) {
-                layersControl.removeLayer(floors[i].labels[l].layer);
+//BLINK CAMBIO                //layersControl.removeLayer(floors[i].labels[l].layer);
                 map.removeLayer(floors[i].labels[l].layer);
             }
 
@@ -649,7 +649,7 @@ function changeFloor(e) {
     }
 
     for (var l in floor_x.labels) {
-        layersControl.addOverlay(floor_x.labels[l].layer, '<i class="icon-' + floors[i].labels[l].fields.icon + ' icon-white"></i>');
+//BLINK CAMBIO        layersControl.addOverlay(floor_x.labels[l].layer, '<i class="icon-' + floors[i].labels[l].fields.icon + ' icon-white"></i>');
         if (checked[l] === true) {
             map.addLayer(floor_x.labels[l].layer);
         }
@@ -718,6 +718,7 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
     route = new RouteResource().getRoute(org, dst);
 
     if (route) {
+//MARKER DESTINO
         for (var i in floors) {
             if (destMarker) {
                 floors[i].layer.removeLayer(destMarker);
@@ -735,7 +736,7 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
                 floors[i].layer.addLayer(destMarker);
             }
         }
-
+//CALCULO DE SUBRUTAS
         for (var i in route.fields.subroutes) {
             if (route.fields.subroutes[i].floor.pk === route.fields.origin.fields.floor) {
                 subpath[i] = [];
@@ -777,10 +778,11 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
             if (arrow[i] && subarrow[i]) {
                 floors[i].layer.addLayer(arrow[i]);
                 if (floors[i].id === route.fields.destiny.fields.floor) {
-                    if (route.fields.origin.fields.floor !== route.fields.destiny.fields.floor) {
-                        /* var check = floorChecks[floors[i].name];
+ /*                   if (route.fields.origin.fields.floor !== route.fields.destiny.fields.floor)
+                    {
+                        *//* var check = floorChecks[floors[i].name];
                          blinkingMode = floors[i].name;
-                         blinker(check);*/
+                         blinker(check);*//*
                         for (index = 0; index < floors.length; index++) {
                             var check = $('input[type=radio].leaflet-control-layers-selector:eq(' + index + ')');
                             if (check.parent().find('span').html().trim() == floors[i].name) {
@@ -789,7 +791,7 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
                             }
                         }
                     }
-                    map.addLayer(arrowHead[i]);
+ */                   map.addLayer(arrowHead[i]);
                     flechita = arrowHead[i];
                     arrowAnim(flechita, floors[i].name);
                     /*
@@ -801,6 +803,7 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
             }
         }
 
+ //PINTADO DE CAPAS
         for (f in floors) {
             if (route.fields.origin.fields.floor !== route.fields.destiny.fields.floor) {
                 if (route.fields.destiny.fields.floor === floors[f].id) {
@@ -822,6 +825,7 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
 
                 }
 
+
                 if (route.fields.origin.fields.floor === floors[f].id) {
                     for (var l in floors[f].labels) {
                         if (jQuery('input[type=checkbox].leaflet-control-layers-selector:eq(' + l + ')').is(':checked')) {
@@ -832,7 +836,8 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
                     }
 
                     for (var l in floors[f].labels) {
-                        layersControl.addOverlay(floors[f].labels[l].layer, '<i class="icon-' + floors[i].labels[l].fields.icon + ' icon-white"></i>');
+//CONTROL BLINKING
+                       layersControl.addOverlay(floors[f].labels[l].layer, '<i class="icon-' + floors[i].labels[l].fields.icon + ' icon-white"></i>');
                         if (checked[l] === true) {
                             map.addLayer(floors[f].labels[l].layer);
                         }
@@ -878,14 +883,6 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
 
                     map.addLayer(floors[f].layer);
                     map.addLayer(floors[f].photo);
-                    /*                    for (var l in floors[f].labels)
-                     {
-                     if (destCategoryroute.fields.destiny.fields.label=== floors[f].labels[l].fields.name)
-                     //layersControl.addLayer(floors[f].labels[l].layer);
-                     map.addLayer(floors[f].labels[l].layer);
-                     }
-                     */
-
                     //map.panTo(arrow[i].getBounds().getCenter(), 0);
                     map.addLayer(arrowHead[f]);
                     flechita = arrowHead[f];
@@ -894,6 +891,16 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
 //                    map.setZoom(0);
 
 
+                }
+            }
+        }
+
+        for (var i in floors) {
+            if (route.fields.destiny.fields.floor === floors[i].id) {
+                var check = $('input[type=radio].leaflet-control-layers-selector:eq(' + i + ')');
+                if (check.parent().find('span').html().trim() == floors[i].name) {
+                    blinkingMode = floors[i].name;
+                    blinker(check);
                 }
             }
         }
