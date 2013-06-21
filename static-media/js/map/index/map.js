@@ -328,70 +328,72 @@ function loadPOIs() {
 
         floors[fl].layer = new L.LayerGroup();
 
-        for (j = 0; j < floors[fl].pois.length; j++)
-        {
-            if (floors[fl].pois[j].id === poi_id)
+        try{
+            for (j = 0; j < floors[fl].pois.length; j++)
             {
-                floors[fl].pois.splice(j, 1);
-
-                if(!floors[fl].pois[j])
-                    break;
-            }
-            var colorIcon = floors[fl].pois[j].label.category.color,
-                nameIcon = floors[fl].pois[j].label.name,
+                if (floors[fl].pois[j].id === poi_id)
+                {
+                    floors[fl].pois.splice(j, 1);
+                }
+                var colorIcon = floors[fl].pois[j].label.category.color,
+                    nameIcon = floors[fl].pois[j].label.name,
                 //shapeIcon = floors[fl].pois[j].label.icon,
-                shapeIcon = floors[fl].pois[j].label.category.icon,
+                    shapeIcon = floors[fl].pois[j].label.category.icon,
                 //shapeIcon = "bolt",
-                id = floors[fl].pois[j].id,
-                descriptionIcon = floors[fl].pois[j].description,
-                sX = floors[fl].scaleX,
-                sY = floors[fl].scaleY,
-                loc = [(floors[fl].pois[j].row) * sY + (sY),
-                    floors[fl].pois[j].col * sX + (sY)],
-                enclosureid = qrPoint.enclosure.id,
-                labelid = floors[fl].pois[j].label.id
+                    id = floors[fl].pois[j].id,
+                    descriptionIcon = floors[fl].pois[j].description,
+                    sX = floors[fl].scaleX,
+                    sY = floors[fl].scaleY,
+                    loc = [(floors[fl].pois[j].row) * sY + (sY),
+                        floors[fl].pois[j].col * sX + (sY)],
+                    enclosureid = qrPoint.enclosure.id,
+                    labelid = floors[fl].pois[j].label.id
                 category = floors[fl].pois[j].label.category.name;
 
 
-            floors[fl].pois[j].marker = new L.Marker(new L.latLng(loc), {icon: loadIcon(colorIcon, shapeIcon), title: descriptionIcon});
-            floors[fl].pois[j].marker.options.icon.options.color = colorIcon;
+                floors[fl].pois[j].marker = new L.Marker(new L.latLng(loc), {icon: loadIcon(colorIcon, shapeIcon), title: descriptionIcon});
+                floors[fl].pois[j].marker.options.icon.options.color = colorIcon;
 
 //IMPORTANTE- CAMBIO DE ICONOS DINÁMICO
 // floors[fl].pois[j].marker.options.icon.options.icon='star';
-            floors[fl].pois[j].marker.poid = id;
-            floors[fl].pois[j].marker.psX = sX;
-            floors[fl].pois[j].marker.psY = sY;
-            floors[fl].pois[j].marker.loc = loc;
-            floors[fl].pois[j].marker.category = category;
-            floors[fl].pois[j].marker.label = labelid;
+                floors[fl].pois[j].marker.poid = id;
+                floors[fl].pois[j].marker.psX = sX;
+                floors[fl].pois[j].marker.psY = sY;
+                floors[fl].pois[j].marker.loc = loc;
+                floors[fl].pois[j].marker.category = category;
+                floors[fl].pois[j].marker.label = labelid;
 
-            floors[fl].pois[j].marker.bindPopup(descriptionIcon)
-                .on('click', function () {
+                floors[fl].pois[j].marker.bindPopup(descriptionIcon)
+                    .on('click', function () {
 
-                    if(searchMarker._markerLoc)
-                        map.removeLayer(searchMarker._markerLoc._circleLoc);
+                        if(searchMarker._markerLoc)
+                            map.removeLayer(searchMarker._markerLoc._circleLoc);
 
-                    if(qr_type == 'dest')
-                    {
-                        this.bindPopup("Escanea un QR para llegar hasta " + qrPoint.point.description).openPopup();
-                        return;
-                    }
+                        if(qr_type == 'dest')
+                        {
+                            this.bindPopup("Escanea un QR para llegar hasta " + qrPoint.point.description).openPopup();
+                            return;
+                        }
 
-                    LocalStorageHandler.setPrevDest(this);
+                        LocalStorageHandler.setPrevDest(this);
 
-                    drawRoute(qrPoint.point.id, qrFloor.sX, qrFloor.sY, this.poid, this.psX, this.psY);
+                        drawRoute(qrPoint.point.id, qrFloor.sX, qrFloor.sY, this.poid, this.psX, this.psY);
 
-                });
+                    });
 
-            for (var l in floors[fl].labels)
-            {
-                if (floors[fl].pois[j].marker.category === floors[fl].labels[l].fields.name)
-                    floors[fl].labels[l].layer.addLayer(floors[fl].pois[j].marker);
+                for (var l in floors[fl].labels)
+                {
+                    if (floors[fl].pois[j].marker.category === floors[fl].labels[l].fields.name)
+                        floors[fl].labels[l].layer.addLayer(floors[fl].pois[j].marker);
+                }
+
+
+                if (floors[fl].pois[j].marker.category !== "Aristas")
+                    totalPois.addLayer(floors[fl].pois[j].marker);
             }
+        }catch (e)
+        {
 
-
-            if (floors[fl].pois[j].marker.category !== "Aristas")
-            totalPois.addLayer(floors[fl].pois[j].marker);
         }
 
         for (var l in floors[fl].labels)
@@ -539,7 +541,7 @@ function initMap(qrPoint) {
         if (floors[i].id === qrPoint.floor.id) {
             qrFloor = floors[i];
             map.addLayer(qrFloor.photo);
-            map.addLayer(floors[i].layer);
+            map.addLayer(qrFloor.layer);
 
             for (var l in floors[i].labels)
             {
@@ -577,6 +579,8 @@ map.on('baselayerchange', function (e) {
     changeFloor(e);
 });
 
+
+
 /*
 
 $('a#location').on('click', function(e){
@@ -590,6 +594,7 @@ $('a#myCar').on('click', function(e){
 
 function addCategory(e)
 {
+    // Si existe una layer de POIs de esta categoría
     if(e.layer._layers)
     {
         var keyPoi= Object.keys(e.layer._layers).pop();
@@ -599,14 +604,18 @@ function addCategory(e)
             {
                 for (var l in floors[i].labels)
                 {
-                    if (map.hasLayer(floors[i].labels[l].layer) &&
-                        jQuery('input[type=checkbox].leaflet-control-layers-selector:eq(' + l + ')').is(':checked'))
+                    var checkbox = jQuery('input[type=checkbox].leaflet-control-layers-selector:eq(' + l + ')');
+                    if (floors[i].labels[l] && checkbox.is(':checked'))
                     {
-                        jQuery('input[type=checkbox].leaflet-control-layers-selector:eq(' + l + ')').css('background', floors[i].labels[l].fields.color);
+                        checkbox.css('background', floors[i].labels[l].fields.color);
                     }
                 }
 
             }
+        }
+        else
+        {
+
         }
     }
 }
