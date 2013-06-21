@@ -44,7 +44,25 @@ var OriginIcon = L.AwesomeMarkers.icon({
 
 var anim = null;
 var flechita = null;
-
+var floorChecks = [];
+//Parpadeo a la planta del POI destino
+var blinkingMode = null;
+function blinker(element) {
+    if (blinkingMode!=null) {
+        var color = element[0].style.background;
+        if (color == "red") {
+            element[0].style.background = "";
+        } else {
+            element[0].style.background = "red";
+        }
+        window.setTimeout(function () {
+            blinker(element);
+        }, 1000);
+    }else
+    {
+    element.style.background="";
+    }
+}
 
 
 function loadIcon(color, shape) {
@@ -791,9 +809,18 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
                 floors[i].layer.addLayer(arrow[i]);
                 if (floors[i].id === route.fields.destiny.fields.floor) {
                     if (route.fields.origin.fields.floor !== route.fields.destiny.fields.floor) {
-                        var check = floorChecks[floors[i].name];
-                        blinkingMode = floors[i].name;
-                        blinker(check);
+                      //  var check = floorChecks[floors[i].name];
+                      //  blinkingMode = floors[i].name;
+                        for (index=0;index<floors.length;index++)
+                        {
+                            var check=$('input[type=radio].leaflet-control-layers-selector:eq('+index+')');
+                            if(check.parent().find('span').html().trim()==floors[i].name)
+                            {
+                                blinkingMode = floors[i].name;
+                                blinker(check);
+                            }
+                        }
+
                     }
                     map.addLayer(arrowHead[i]);
                     flechita = arrowHead[i];
