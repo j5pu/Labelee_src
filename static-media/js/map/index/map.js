@@ -234,7 +234,7 @@ var LocalStorageHandler = {
 
 
 $(function () {
-//    LocalStorageHandler.init();
+    LocalStorageHandler.init();
 });
 
 
@@ -830,8 +830,15 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
                 }
 
                 if (route.fields.origin.fields.floor === floors[f].id) {
-                    map.addLayer(floors[f].layer);
-                    map.addLayer(floors[f].photo);
+                    for (var l in floors[f].labels)
+                    {
+                        if (jQuery('input[type=checkbox].leaflet-control-layers-selector:eq('+l+')').is(':checked')){
+                            checked[l] = true;
+                        }else{
+                            checked[l] = false;
+                        }
+                    }
+
                     for (var l in floors[f].labels)
                     {
                         layersControl.addOverlay(floors[f].labels[l].layer,   '<i class="icon-' +floors[i].labels[l].fields.icon +' icon-white"></i>');
@@ -849,6 +856,8 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
                             jQuery('input[type=checkbox].leaflet-control-layers-selector:eq('+l+')').prop("checked", true);
                         }
                     }
+                    map.addLayer(floors[f].layer);
+                    map.addLayer(floors[f].photo);
                     map.panTo(arrow[i].getBounds().getCenter(), 0);
                     map.addLayer(arrowHead[f]);
                     flechita = arrowHead[f];
