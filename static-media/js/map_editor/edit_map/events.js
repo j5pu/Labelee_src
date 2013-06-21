@@ -216,12 +216,7 @@ var Events = {
 
         _changeNumRows: function()
         {
-            // Campo para nro. de filas
-            $e.floor.num_rows.on('change', function(){
-                WaitingDialog.open('Redibujando grid..');
-
-                setTimeout(Floor.loadEmpty, 200);
-            });
+            $e.floor.num_rows.on('change', Floor.changeNumRows);
         },
 
 

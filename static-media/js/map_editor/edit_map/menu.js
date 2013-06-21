@@ -249,8 +249,8 @@ var Menu = {
     init: function(){
         Menu.labels = new LabelResource().readGrouped();
         Menu._setSelectors();
-//        Menu.setQrList();
-//        Menu.setPointStats();
+        Menu.setQrList();
+        Menu.setPointStats();
 //        Events.menu.bind();
     },
 

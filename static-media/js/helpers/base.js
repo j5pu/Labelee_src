@@ -214,3 +214,6 @@ var ImgLoader = {
         this.src_list.push(img_src);
     }
 };
+
+
+
