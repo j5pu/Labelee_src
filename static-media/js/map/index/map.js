@@ -313,7 +313,12 @@ function loadPOIs() {
         for (j = 0; j < floors[fl].pois.length; j++)
         {
             if (floors[fl].pois[j].id === poi_id)
+            {
                 floors[fl].pois.splice(j, 1);
+
+                if(!floors[fl].pois[j])
+                    break;
+            }
             var colorIcon = floors[fl].pois[j].label.category.color,
                 nameIcon = floors[fl].pois[j].label.name,
                 //shapeIcon = floors[fl].pois[j].label.icon,
