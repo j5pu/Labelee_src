@@ -423,8 +423,8 @@ pre
     font-weight: bold;
     color: #fff;
     text-align: center;
-    line-height: 40px;
-    height: 40px;
+    line-height: 36px;
+    height: 36px;
     padding: 0 50px;
     top:6px;
     left:0;
@@ -477,7 +477,7 @@ span#fake{
 }
 #content
 {
-    padding: 20px;
+   // padding: 20px;
 
 }
 
@@ -550,7 +550,7 @@ html{
 }
 
 .leaflet-top {
-    top: 3.75% !important;
+    top: 1.75% !important;
 }
 
 .leaflet-control {
@@ -561,19 +561,43 @@ html{
 .leaflet-control-layers-expanded {
     padding: 6px 6px 0 6px;
     color: #333;
-    background: #fff;
+    background: transparent;
     width: 36px;
+    -webkit-box-shadow: none !important;
+    box-shadow: none !important;
+}
 
+
+.leaflet-control-layers-overlays {
+    top: -5.25%;
+    margin-top: -12px;
+    position: absolute;
+    left: -193px;
+    float: left;
+    height: 36px;
+    width: 210px;
+    display: block;
+}
+
+.leaflet-control-layers-base {
+    margin-top: -10px;
+    top: -1px;
+    position:absolute;
 }
 
 .leaflet-control-layers label {
     display: block;
     /*background:#ccc;*/
     margin-bottom:6px;
-    height:34px;
+    height:32px;
     position:relative;
     color: white;
 //    text-align: center;
+    display: block;
+    margin-left: 4px;
+    width: 32px;
+    float:  left;
+
 
 }
 
@@ -600,8 +624,7 @@ html{
 }
 
 .leaflet-control-layers-separator {
-    height: 20px;
-    border: none;
+    display:none;
 }
 
 input[type=checkbox].leaflet-control-layers-selector:active, input[type=checkbox].leaflet-control-layers-selector:checked {
@@ -789,36 +812,37 @@ span>span>i
 
 span.locator
 {
-    width: 36px;
-    height: 36px;
+    width: 31px;
+    height: 31px;
     position: absolute;
-    top: 0;
+    top: .01%;
     -webkit-border-radius: 4px;
     border-radius: 4px;
     z-index: 10000;
     position: absolute;
-    left: 12px;
     opacity: 0.7;
     color: white;
     font-size: 1.1em;
     -webkit-box-shadow: 2px 2px 8px rgba(0,0,0,0.5) !important;
     box-shadow: 2px 2px 8px rgba(0,0,0,0.5) !important;
     border: none;
-    display: block;
+    display: inline-block;
     text-align: center;
-    line-height: 36px;
+    line-height: 31px;
+    margin-left: 2px;
+    margin-top: 8px;
 }
 
 #myCar
 {
     background-color: cadetblue;
-    top: 189px;
+    left:40px;
 }
 
 #location
 {
     background-color: darkblue;
-    top: 146px;
+    left: 5px;
 }
 
 #location:hover, #myCar:hover
@@ -828,7 +852,8 @@ span.locator
 }
 
 
+/*
 label span>span>i
 {
     margin-left:12px;
-}
+}*/

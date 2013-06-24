@@ -41,13 +41,13 @@ h3,h4 {
 .leaflet-bottom .leaflet-control,
 .leaflet-left .leaflet-control {
 	box-shadow: 0 0 8px rgba(0,0,0,0.4);
-	border: 2px solid #cfcfcf;
-	border-radius:6px;
+//	border: 1px solid #cfcfcf;
+	border-radius:4px;
 }
 .leaflet-left.leaflet-top .leaflet-control,
 .leaflet-touch .leaflet-left .leaflet-control {
-	margin-left: 8px;
-	margin-top: 8px;
+	margin-left: 4px;
+	margin-top: 40px;
 	margin-bottom: 0;
 }
 .leaflet-left.leaflet-bottom .leaflet-control {
@@ -66,8 +66,8 @@ h3,h4 {
 .leaflet-bar a,
 .leaflet-touch .leaflet-bar a {
 	background-color: rgba(255, 255, 255, 0.8);	
-	width: 32px;
-	height: 28px;
+	width: 28px;
+	height: 26px;
 }
 .leaflet-touch .leaflet-control-zoom-out {
 	line-height: 24px;	

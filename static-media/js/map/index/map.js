@@ -108,6 +108,7 @@ var LocalStorageHandler = {
             if (confirm('¿Desea recordar su plaza?')) {
                 var miCoche = {
                     dest: qrPoint,
+/*
                     marker: new L.marker(qrLoc, { bounceOnAdd: false,
                     //bounceOnAddHeight: 20,
                     icon: CarIcon})
@@ -116,8 +117,8 @@ var LocalStorageHandler = {
                         )
                     .on('click', function () {
 
-                        if (searchMarker._markerLoc)
-                            map.removeLayer(searchMarker._markerLoc._circleLoc);
+                        //if (searchMarker._markerLoc)
+                            //map.removeLayer(searchMarker._markerLoc._circleLoc);
 
                         if (qr_type == 'dest') {
                             this.bindPopup("Escanea un QR para llegar hasta " + qrPoint.point.description).openPopup();
@@ -132,6 +133,7 @@ var LocalStorageHandler = {
 
 
 
+*/
                 prevDate: new Date().getTime()
                 };
                 localStorage.setItem('miCoche', JSON.stringify(miCoche));
@@ -374,8 +376,8 @@ function loadPOIs() {
                 floors[fl].pois[j].marker.bindPopup(descriptionIcon)
                     .on('click', function () {
 
-                        if (searchMarker._markerLoc)
-                            map.removeLayer(searchMarker._markerLoc._circleLoc);
+                        //if (searchMarker._markerLoc)
+                          //  map.removeLayer(searchMarker._markerLoc._circleLoc);
 
                         if (qr_type == 'dest') {
                             this.bindPopup("Escanea un QR para llegar hasta " + qrPoint.point.description).openPopup();
@@ -448,8 +450,8 @@ function loadPOIs() {
                 qrMarker
                     .on('click', function () {
 
-                        if (searchMarker._markerLoc)
-                            map.removeLayer(searchMarker._markerLoc._circleLoc);
+                        //if (searchMarker._markerLoc)
+                            //map.removeLayer(searchMarker._markerLoc._circleLoc);
 
                         if (qr_type == 'dest') {
                             this.bindPopup("Escanea un QR para llegar hasta " + qrPoint.point.description).openPopup();
@@ -524,12 +526,12 @@ var map = L.map('map', {
 
 
 //Localización del origen (QR) y carga del mapa
-var searchMarker = new L.Control.Search(mobileOpts);
+//var searchMarker = new L.Control.Search(mobileOpts);
 
 
 function initMap(qrPoint) {
 
-    map.addControl(searchMarker);
+//    map.addControl(searchMarker);
     map.addControl(new L.Control.Zoom());
     layersControl.addTo(map);
 
@@ -641,14 +643,34 @@ function changeFloor(e) {
     if (map.hasLayer(qrFloor.layer)) {
         map.removeLayer(qrFloor.layer);
     }
-    map.removeLayer(searchMarker._markerLoc._circleLoc);
+    //map.removeLayer(searchMarker._markerLoc._circleLoc);
 
     var floor_x;
     for (var i in floors) {
         if ((e.layer && (e.layer._url === floors[i].photo._url)) || (e._url === floors[i].photo._url)) {
             floor_x = floors[i];
-            map.addLayer(searchMarker._markerLoc._circleLoc);
+//            map.addLayer(searchMarker._markerLoc._circleLoc);
+            //map.addLayer(floor_x.photo);
+            for (var l in floor_x.labels)
+            {
+                layersControl.addOverlay(floor_x.labels[l].layer,   '<i class="icon-' +floors[i].labels[l].fields.icon +' icon-white"></i>');
+                if (checked[l]===true)
+                {
+                    map.addLayer(floor_x.labels[l].layer);
+                }
+            }
+
+            for (var l in floor_x.labels)
+            {
+                if (checked[l]===true)
+                {
+                    jQuery('input[type=checkbox].leaflet-control-layers-selector:eq('+l+')').css('background', floors[i].labels[l].fields.color);
+                    jQuery('input[type=checkbox].leaflet-control-layers-selector:eq('+l+')').prop("checked", true);
+                }
+            }
             map.addLayer(floor_x.photo);
+            map.addLayer(floor_x.layer);
+
             if (arrowHead[i] && subarrow[i]) {
                 map.addLayer(arrowHead[i]);
                 flechita = arrowHead[i];
@@ -663,20 +685,19 @@ function changeFloor(e) {
         } else {
             map.removeLayer(floors[i].layer);
             for (var l in floors[i].labels) {
-                if (jQuery('input[type=checkbox].leaflet-control-layers-selector:eq(' + l + ')').is(':checked')) {
+                if (jQuery('input[type=checkbox].leaflet-control-layers-selector:eq('+l+')').is(':checked')){
                     checked[l] = true;
-                } else {
+                }else{
                     checked[l] = false;
                 }
             }
 
             for (var l in floors[i].labels) {
-//BLINK CAMBIO
-               layersControl.removeLayer(floors[i].labels[l].layer);
+                layersControl.removeLayer(floors[i].labels[l].layer);
                 map.removeLayer(floors[i].labels[l].layer);
             }
 
-            map.removeLayer(searchMarker._markerLoc._circleLoc);
+            //map.removeLayer(searchMarker._markerLoc._circleLoc);
             if (arrowHead[i] != null)
                 map.removeLayer(arrowHead[i]);
 
@@ -684,22 +705,6 @@ function changeFloor(e) {
 
     }
 
-    for (var l in floor_x.labels) {
-//BLINK CAMBIO
-        layersControl.addOverlay(floor_x.labels[l].layer, '<i class="icon-' + floors[i].labels[l].fields.icon + ' icon-white"></i>');
-        if (checked[l] === true) {
-            map.addLayer(floor_x.labels[l].layer);
-        }
-    }
-
-    for (var l in floor_x.labels) {
-        if (checked[l] === true) {
-            jQuery('input[type=checkbox].leaflet-control-layers-selector:eq(' + l + ')').css('background', floors[i].labels[l].fields.color);
-            jQuery('input[type=checkbox].leaflet-control-layers-selector:eq(' + l + ')').prop("checked", true);
-        }
-    }
-    map.addLayer(floor_x.photo);
-    map.addLayer(floor_x.layer);
 
 
 //map.setMaxBounds(floor_x.bounds);
