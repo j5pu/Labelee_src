@@ -659,12 +659,12 @@ function changeFloor(e) {
                 }
             }
 
-            for (var l in floor_x.labels)
+            for (var lab in floor_x.labels)
             {
-                if (checked[l]===true)
+                if (checked[lab]===true)
                 {
-                    jQuery('input[type=checkbox].leaflet-control-layers-selector:eq('+l+')').css('background', floors[i].labels[l].fields.color);
-                    jQuery('input[type=checkbox].leaflet-control-layers-selector:eq('+l+')').prop("checked", true);
+                    jQuery('input[type=checkbox].leaflet-control-layers-selector:eq('+lab+')').css('background', floors[i].labels[lab].fields.color);
+                    jQuery('input[type=checkbox].leaflet-control-layers-selector:eq('+lab+')').prop("checked", true);
                 }
             }
             map.addLayer(floor_x.photo);
@@ -678,7 +678,7 @@ function changeFloor(e) {
 //                map.setZoom(0);
 
             } else {
-                map.setView(qrFloor.bounds.getCenter(), 0);
+                map.setView(floor_x.bounds.getCenter(), 0);
             }
 
         } else {
@@ -715,8 +715,14 @@ $(function () {
     LocalStorageHandler.init();
 
     $('span#location').click(function(){
+        for (var i in floors)
+        {
+            map.removeLayer(floors[i].layer);
+        }
         map.addLayer(qrFloor.photo);
         map.addLayer(qrFloor.layer);
+        qrMarker._bringToFront();
+        qrMarker.openPopup();
         map.setView(qrLoc, 0);
     });
 
