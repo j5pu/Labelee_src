@@ -263,10 +263,6 @@ var LocalStorageHandler = {
 };
 
 
-$(function () {
-    LocalStorageHandler.init();
-});
-
 
 //Variables globales
 var mapH = $(document).height(),//Altura de la pantalla
@@ -363,9 +359,6 @@ function loadPOIs() {
 
                 floors[fl].pois[j].marker = new L.Marker(new L.latLng(loc), {icon: loadIcon(colorIcon, shapeIcon), title: descriptionIcon});
                 floors[fl].pois[j].marker.options.icon.options.color = colorIcon;
-
-//IMPORTANTE- CAMBIO DE ICONOS DINÁMICO
-// floors[fl].pois[j].marker.options.icon.options.icon='star';
                 floors[fl].pois[j].marker.poid = id;
                 floors[fl].pois[j].marker.psX = sX;
                 floors[fl].pois[j].marker.psY = sY;
@@ -475,6 +468,7 @@ function loadPOIs() {
 
 }
 
+/*
 
 //Configuración de la lupa
 var mobileOpts = {
@@ -497,6 +491,9 @@ var mobileOpts = {
     delayType: 800	//with mobile device typing is more slow
 };
 
+*/
+/*
+
 function loadColor() {
     //¡¡POR HACER!!
 }
@@ -515,6 +512,7 @@ function customTip(text, color) {
     subtip.style.backgroundColor = loadColor() || 'red';
     return tip;
 }
+*/
 
 //Configuración inicial del mapa
 var map = L.map('map', {
@@ -564,6 +562,7 @@ function initMap(qrPoint) {
 
     map.invalidateSize();
 }
+
 
 
 //EVENTOS - Añadir layer
@@ -706,11 +705,26 @@ function changeFloor(e) {
     }
 
 
-
 //map.setMaxBounds(floor_x.bounds);
 //map.setView(qrPoint, 0);
 }
 
+
+
+$(function () {
+    LocalStorageHandler.init();
+
+    $('span#location').click(function(){
+        map.addLayer(qrFloor.photo);
+        map.addLayer(qrFloor.layer);
+        map.setView(qrLoc, 0);
+    });
+
+});
+
+
+
+/* Función que controla el localizador de Search
 
 function drawLocator() {
 //    for (var i in floors)
@@ -719,6 +733,7 @@ function drawLocator() {
 //        if floors[i].pois[j].la
 //    }
 }
+*/
 
 //Creación de las rutas (con subrutas correspondientes), desde el origen hasta el POI destino usando
 // solamente el id de los puntos y las plantas
