@@ -1,7 +1,7 @@
 //Configuración de iconos
 var OriginIcon = L.AwesomeMarkers.icon({
         icon: 'star',
-        color: 'blue'
+        color: 'darkblue'
         //spin: true
 
     }),
@@ -11,9 +11,10 @@ var OriginIcon = L.AwesomeMarkers.icon({
         //spin: true
 
     }),
-    cadetblue = L.AwesomeMarkers.icon({
-        icon: 'retweet',
+    CarIcon = L.AwesomeMarkers.icon({
+        icon: 'truck',
         color: 'cadetblue'
+        //spin: true
 
     }),
     green = L.AwesomeMarkers.icon({
@@ -107,7 +108,31 @@ var LocalStorageHandler = {
             if (confirm('¿Desea recordar su plaza?')) {
                 var miCoche = {
                     dest: qrPoint,
-                    prevDate: new Date().getTime()
+                    marker: new L.marker(qrLoc, { bounceOnAdd: false,
+                    //bounceOnAddHeight: 20,
+                    icon: CarIcon})
+                    .bindPopup("Escanea un QR para llegar hasta aquí: " + qrPoint.point.description +
+                        " (planta " + qrFloor.name + "," + qrPoint.enclosure.name + ")"
+                        )
+                    .on('click', function () {
+
+                        if (searchMarker._markerLoc)
+                            map.removeLayer(searchMarker._markerLoc._circleLoc);
+
+                        if (qr_type == 'dest') {
+                            this.bindPopup("Escanea un QR para llegar hasta " + qrPoint.point.description).openPopup();
+                            return;
+                        }
+
+                        LocalStorageHandler.setPrevDest(this);
+
+                        drawRoute(qrPoint.point.id, qrFloor.sX, qrFloor.sY, this.poid, this.psX, this.psY);
+
+                    }),
+
+
+
+                prevDate: new Date().getTime()
                 };
                 localStorage.setItem('miCoche', JSON.stringify(miCoche));
             } else {
@@ -369,17 +394,17 @@ function loadPOIs() {
                 }
 
 
-                if (floors[fl].pois[j].marker.category !== "Aristas")
+                if (floors[fl].pois[j].marker.category !== "Aristas" && floors[fl].pois[j].marker.category !== "Aseos")
                     totalPois.addLayer(floors[fl].pois[j].marker);
             }
         } catch (e) {
 
         }
 
-        for (var l in floors[fl].labels) {
-            if (floors[fl].labels[l].fields.name === "Aristas" || floors[fl].labels[l].fields.name === "Aseos") {
-                floors[fl].layer.addLayer(floors[fl].labels[l].layer);
-                floors[fl].labels.splice(l, 1);
+        for (var la in floors[fl].labels) {
+            if (floors[fl].labels[la].fields.name === "Aristas" || floors[fl].labels[la].fields.name === "Aseos") {
+                floors[fl].layer.addLayer(floors[fl].labels[la].layer);
+                floors[fl].labels.splice(la, 1);
             }
         }
 
@@ -553,44 +578,54 @@ map.on('baselayerchange', function (e) {
 });
 
 
+
+
+ /*jQuery('span#location').click(function(){
+     alert ('Hola');
+ map.setView(qrLoc, 0);
+ });*/
+
 /*
-
- $('a#location').on('click', function(e){
+ $('span#myCar').on('click', function(e){
  e.preventDefault();
  });
+*/
 
- $('a#myCar').on('click', function(e){
- e.preventDefault();
- });
- */
 
-function addCategory(e) {
-    // Si existe una layer de POIs de esta categoría
-    if (e.layer._layers) {
-        var keyPoi = Object.keys(e.layer._layers).pop();
-        if (e.layer._layers[keyPoi]) {
-            for (var i in floors) {
-                for (var l in floors[i].labels) {
-                    var checkbox = jQuery('input[type=checkbox].leaflet-control-layers-selector:eq(' + l + ')');
-                    if (floors[i].labels[l] && checkbox.is(':checked')) {
-                        checkbox.css('background', floors[i].labels[l].fields.color);
+function addCategory(e)
+{
+    if(e.layer._layers)
+    {
+        var keyPoi= Object.keys(e.layer._layers).pop();
+        if (e.layer._layers[keyPoi])
+        {
+            for (var i in floors)
+            {
+                for (var l in floors[i].labels)
+                {
+                    if (map.hasLayer(floors[i].labels[l].layer) &&
+                        jQuery('input[type=checkbox].leaflet-control-layers-selector:eq(' + l + ')').is(':checked'))
+                    {
+                        jQuery('input[type=checkbox].leaflet-control-layers-selector:eq(' + l + ')').css('background', floors[i].labels[l].fields.color);
                     }
                 }
 
             }
         }
-        else {
-
-        }
     }
 }
 
-function removeCategory(e) {
-    if (e.layer._layers) {
-        for (var i in floors) {
-            for (var l in floors[i].labels) {
-                if (!(jQuery('input[type=checkbox].leaflet-control-layers-selector:eq(' + l + ')').is(':checked'))) {
-                    jQuery('input[type=checkbox].leaflet-control-layers-selector:eq(' + l + ')').css('background', '#333');
+function removeCategory(e)
+{
+    if(e.layer._layers)
+    {
+        for (var i in floors)
+        {
+            for (var l in floors[i].labels)
+            {
+                if (!(jQuery('input[type=checkbox].leaflet-control-layers-selector:eq('+l+')').is(':checked')))
+                {
+                    jQuery('input[type=checkbox].leaflet-control-layers-selector:eq('+l+')').css('background', '#333');
                 }
 
             }
@@ -636,7 +671,8 @@ function changeFloor(e) {
             }
 
             for (var l in floors[i].labels) {
-//BLINK CAMBIO                //layersControl.removeLayer(floors[i].labels[l].layer);
+//BLINK CAMBIO
+               layersControl.removeLayer(floors[i].labels[l].layer);
                 map.removeLayer(floors[i].labels[l].layer);
             }
 
@@ -649,7 +685,8 @@ function changeFloor(e) {
     }
 
     for (var l in floor_x.labels) {
-//BLINK CAMBIO        layersControl.addOverlay(floor_x.labels[l].layer, '<i class="icon-' + floors[i].labels[l].fields.icon + ' icon-white"></i>');
+//BLINK CAMBIO
+        layersControl.addOverlay(floor_x.labels[l].layer, '<i class="icon-' + floors[i].labels[l].fields.icon + ' icon-white"></i>');
         if (checked[l] === true) {
             map.addLayer(floor_x.labels[l].layer);
         }
@@ -851,7 +888,7 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
                     }
                     map.addLayer(floors[f].layer);
                     map.addLayer(floors[f].photo);
-                    map.panTo(arrow[i].getBounds().getCenter(), 0);
+//                    map.panTo(arrow[i].getBounds().getCenter(), 0);
                     map.addLayer(arrowHead[f]);
                     flechita = arrowHead[f];
                     arrowAnim(flechita, floors[f].name);
@@ -883,7 +920,7 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
 
                     map.addLayer(floors[f].layer);
                     map.addLayer(floors[f].photo);
-                    //map.panTo(arrow[i].getBounds().getCenter(), 0);
+                    map.setView(arrow[f].getBounds().getCenter(), 0);
                     map.addLayer(arrowHead[f]);
                     flechita = arrowHead[f];
                     arrowAnim(flechita, floors[f].name);

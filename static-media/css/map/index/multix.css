@@ -787,7 +787,7 @@ span>span>i
 }
 
 
-button.locator
+span.locator
 {
     width: 36px;
     height: 36px;
@@ -804,21 +804,24 @@ button.locator
     -webkit-box-shadow: 2px 2px 8px rgba(0,0,0,0.5) !important;
     box-shadow: 2px 2px 8px rgba(0,0,0,0.5) !important;
     border: none;
+    display: block;
+    text-align: center;
+    line-height: 36px;
 }
 
 #myCar
 {
-    background-color: darkred;
+    background-color: cadetblue;
     top: 189px;
 }
 
 #location
 {
-    background-color: deepskyblue;
+    background-color: darkblue;
     top: 146px;
 }
 
-#location:active, #myCar:active
+#location:hover, #myCar:hover
 {
     background-color: white;
     color: dimgrey;
