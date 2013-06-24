@@ -1,7 +1,7 @@
 //Configuración de iconos
 var OriginIcon = L.AwesomeMarkers.icon({
         icon: 'star',
-        color: 'blue'
+        color: 'darkblue'
         //spin: true
 
     }),
@@ -11,9 +11,10 @@ var OriginIcon = L.AwesomeMarkers.icon({
         //spin: true
 
     }),
-    cadetblue = L.AwesomeMarkers.icon({
-        icon: 'retweet',
+    CarIcon = L.AwesomeMarkers.icon({
+        icon: 'truck',
         color: 'cadetblue'
+        //spin: true
 
     }),
     green = L.AwesomeMarkers.icon({
@@ -107,7 +108,33 @@ var LocalStorageHandler = {
             if (confirm('¿Desea recordar su plaza?')) {
                 var miCoche = {
                     dest: qrPoint,
-                    prevDate: new Date().getTime()
+/*
+                    marker: new L.marker(qrLoc, { bounceOnAdd: false,
+                    //bounceOnAddHeight: 20,
+                    icon: CarIcon})
+                    .bindPopup("Escanea un QR para llegar hasta aquí: " + qrPoint.point.description +
+                        " (planta " + qrFloor.name + "," + qrPoint.enclosure.name + ")"
+                        )
+                    .on('click', function () {
+
+                        //if (searchMarker._markerLoc)
+                            //map.removeLayer(searchMarker._markerLoc._circleLoc);
+
+                        if (qr_type == 'dest') {
+                            this.bindPopup("Escanea un QR para llegar hasta " + qrPoint.point.description).openPopup();
+                            return;
+                        }
+
+                        LocalStorageHandler.setPrevDest(this);
+
+                        drawRoute(qrPoint.point.id, qrFloor.sX, qrFloor.sY, this.poid, this.psX, this.psY);
+
+                    }),
+
+
+
+*/
+                prevDate: new Date().getTime()
                 };
                 localStorage.setItem('miCoche', JSON.stringify(miCoche));
             } else {
@@ -236,10 +263,6 @@ var LocalStorageHandler = {
 };
 
 
-$(function () {
-    LocalStorageHandler.init();
-});
-
 
 //Variables globales
 var mapH = $(document).height(),//Altura de la pantalla
@@ -336,9 +359,6 @@ function loadPOIs() {
 
                 floors[fl].pois[j].marker = new L.Marker(new L.latLng(loc), {icon: loadIcon(colorIcon, shapeIcon), title: descriptionIcon});
                 floors[fl].pois[j].marker.options.icon.options.color = colorIcon;
-
-//IMPORTANTE- CAMBIO DE ICONOS DINÁMICO
-// floors[fl].pois[j].marker.options.icon.options.icon='star';
                 floors[fl].pois[j].marker.poid = id;
                 floors[fl].pois[j].marker.psX = sX;
                 floors[fl].pois[j].marker.psY = sY;
@@ -349,8 +369,8 @@ function loadPOIs() {
                 floors[fl].pois[j].marker.bindPopup(descriptionIcon)
                     .on('click', function () {
 
-                        if (searchMarker._markerLoc)
-                            map.removeLayer(searchMarker._markerLoc._circleLoc);
+                        //if (searchMarker._markerLoc)
+                          //  map.removeLayer(searchMarker._markerLoc._circleLoc);
 
                         if (qr_type == 'dest') {
                             this.bindPopup("Escanea un QR para llegar hasta " + qrPoint.point.description).openPopup();
@@ -369,17 +389,17 @@ function loadPOIs() {
                 }
 
 
-                if (floors[fl].pois[j].marker.category !== "Aristas")
+                if (floors[fl].pois[j].marker.category !== "Aristas" && floors[fl].pois[j].marker.category !== "Aseos")
                     totalPois.addLayer(floors[fl].pois[j].marker);
             }
         } catch (e) {
 
         }
 
-        for (var l in floors[fl].labels) {
-            if (floors[fl].labels[l].fields.name === "Aristas" || floors[fl].labels[l].fields.name === "Aseos") {
-                floors[fl].layer.addLayer(floors[fl].labels[l].layer);
-                floors[fl].labels.splice(l, 1);
+        for (var la in floors[fl].labels) {
+            if (floors[fl].labels[la].fields.name === "Aristas" || floors[fl].labels[la].fields.name === "Aseos") {
+                floors[fl].layer.addLayer(floors[fl].labels[la].layer);
+                floors[fl].labels.splice(la, 1);
             }
         }
 
@@ -423,8 +443,8 @@ function loadPOIs() {
                 qrMarker
                     .on('click', function () {
 
-                        if (searchMarker._markerLoc)
-                            map.removeLayer(searchMarker._markerLoc._circleLoc);
+                        //if (searchMarker._markerLoc)
+                            //map.removeLayer(searchMarker._markerLoc._circleLoc);
 
                         if (qr_type == 'dest') {
                             this.bindPopup("Escanea un QR para llegar hasta " + qrPoint.point.description).openPopup();
@@ -448,6 +468,7 @@ function loadPOIs() {
 
 }
 
+/*
 
 //Configuración de la lupa
 var mobileOpts = {
@@ -470,6 +491,9 @@ var mobileOpts = {
     delayType: 800	//with mobile device typing is more slow
 };
 
+*/
+/*
+
 function loadColor() {
     //¡¡POR HACER!!
 }
@@ -488,6 +512,7 @@ function customTip(text, color) {
     subtip.style.backgroundColor = loadColor() || 'red';
     return tip;
 }
+*/
 
 //Configuración inicial del mapa
 var map = L.map('map', {
@@ -499,12 +524,12 @@ var map = L.map('map', {
 
 
 //Localización del origen (QR) y carga del mapa
-var searchMarker = new L.Control.Search(mobileOpts);
+//var searchMarker = new L.Control.Search(mobileOpts);
 
 
 function initMap(qrPoint) {
 
-    map.addControl(searchMarker);
+//    map.addControl(searchMarker);
     map.addControl(new L.Control.Zoom());
     layersControl.addTo(map);
 
@@ -539,6 +564,7 @@ function initMap(qrPoint) {
 }
 
 
+
 //EVENTOS - Añadir layer
 map.on('layeradd', function (e) {
     addCategory(e);
@@ -553,44 +579,54 @@ map.on('baselayerchange', function (e) {
 });
 
 
+
+
+ /*jQuery('span#location').click(function(){
+     alert ('Hola');
+ map.setView(qrLoc, 0);
+ });*/
+
 /*
-
- $('a#location').on('click', function(e){
+ $('span#myCar').on('click', function(e){
  e.preventDefault();
  });
+*/
 
- $('a#myCar').on('click', function(e){
- e.preventDefault();
- });
- */
 
-function addCategory(e) {
-    // Si existe una layer de POIs de esta categoría
-    if (e.layer._layers) {
-        var keyPoi = Object.keys(e.layer._layers).pop();
-        if (e.layer._layers[keyPoi]) {
-            for (var i in floors) {
-                for (var l in floors[i].labels) {
-                    var checkbox = jQuery('input[type=checkbox].leaflet-control-layers-selector:eq(' + l + ')');
-                    if (floors[i].labels[l] && checkbox.is(':checked')) {
-                        checkbox.css('background', floors[i].labels[l].fields.color);
+function addCategory(e)
+{
+    if(e.layer._layers)
+    {
+        var keyPoi= Object.keys(e.layer._layers).pop();
+        if (e.layer._layers[keyPoi])
+        {
+            for (var i in floors)
+            {
+                for (var l in floors[i].labels)
+                {
+                    if (map.hasLayer(floors[i].labels[l].layer) &&
+                        jQuery('input[type=checkbox].leaflet-control-layers-selector:eq(' + l + ')').is(':checked'))
+                    {
+                        jQuery('input[type=checkbox].leaflet-control-layers-selector:eq(' + l + ')').css('background', floors[i].labels[l].fields.color);
                     }
                 }
 
             }
         }
-        else {
-
-        }
     }
 }
 
-function removeCategory(e) {
-    if (e.layer._layers) {
-        for (var i in floors) {
-            for (var l in floors[i].labels) {
-                if (!(jQuery('input[type=checkbox].leaflet-control-layers-selector:eq(' + l + ')').is(':checked'))) {
-                    jQuery('input[type=checkbox].leaflet-control-layers-selector:eq(' + l + ')').css('background', '#333');
+function removeCategory(e)
+{
+    if(e.layer._layers)
+    {
+        for (var i in floors)
+        {
+            for (var l in floors[i].labels)
+            {
+                if (!(jQuery('input[type=checkbox].leaflet-control-layers-selector:eq('+l+')').is(':checked')))
+                {
+                    jQuery('input[type=checkbox].leaflet-control-layers-selector:eq('+l+')').css('background', '#333');
                 }
 
             }
@@ -606,14 +642,34 @@ function changeFloor(e) {
     if (map.hasLayer(qrFloor.layer)) {
         map.removeLayer(qrFloor.layer);
     }
-    map.removeLayer(searchMarker._markerLoc._circleLoc);
+    //map.removeLayer(searchMarker._markerLoc._circleLoc);
 
     var floor_x;
     for (var i in floors) {
         if ((e.layer && (e.layer._url === floors[i].photo._url)) || (e._url === floors[i].photo._url)) {
             floor_x = floors[i];
-            map.addLayer(searchMarker._markerLoc._circleLoc);
+//            map.addLayer(searchMarker._markerLoc._circleLoc);
+            //map.addLayer(floor_x.photo);
+            for (var l in floor_x.labels)
+            {
+                layersControl.addOverlay(floor_x.labels[l].layer,   '<i class="icon-' +floors[i].labels[l].fields.icon +' icon-white"></i>');
+                if (checked[l]===true)
+                {
+                    map.addLayer(floor_x.labels[l].layer);
+                }
+            }
+
+            for (var lab in floor_x.labels)
+            {
+                if (checked[lab]===true)
+                {
+                    jQuery('input[type=checkbox].leaflet-control-layers-selector:eq('+lab+')').css('background', floors[i].labels[lab].fields.color);
+                    jQuery('input[type=checkbox].leaflet-control-layers-selector:eq('+lab+')').prop("checked", true);
+                }
+            }
             map.addLayer(floor_x.photo);
+            map.addLayer(floor_x.layer);
+
             if (arrowHead[i] && subarrow[i]) {
                 map.addLayer(arrowHead[i]);
                 flechita = arrowHead[i];
@@ -622,25 +678,25 @@ function changeFloor(e) {
 //                map.setZoom(0);
 
             } else {
-                map.setView(qrFloor.bounds.getCenter(), 0);
+                map.setView(floor_x.bounds.getCenter(), 0);
             }
 
         } else {
             map.removeLayer(floors[i].layer);
             for (var l in floors[i].labels) {
-                if (jQuery('input[type=checkbox].leaflet-control-layers-selector:eq(' + l + ')').is(':checked')) {
+                if (jQuery('input[type=checkbox].leaflet-control-layers-selector:eq('+l+')').is(':checked')){
                     checked[l] = true;
-                } else {
+                }else{
                     checked[l] = false;
                 }
             }
 
             for (var l in floors[i].labels) {
-//BLINK CAMBIO                //layersControl.removeLayer(floors[i].labels[l].layer);
+                layersControl.removeLayer(floors[i].labels[l].layer);
                 map.removeLayer(floors[i].labels[l].layer);
             }
 
-            map.removeLayer(searchMarker._markerLoc._circleLoc);
+            //map.removeLayer(searchMarker._markerLoc._circleLoc);
             if (arrowHead[i] != null)
                 map.removeLayer(arrowHead[i]);
 
@@ -648,27 +704,33 @@ function changeFloor(e) {
 
     }
 
-    for (var l in floor_x.labels) {
-//BLINK CAMBIO        layersControl.addOverlay(floor_x.labels[l].layer, '<i class="icon-' + floors[i].labels[l].fields.icon + ' icon-white"></i>');
-        if (checked[l] === true) {
-            map.addLayer(floor_x.labels[l].layer);
-        }
-    }
-
-    for (var l in floor_x.labels) {
-        if (checked[l] === true) {
-            jQuery('input[type=checkbox].leaflet-control-layers-selector:eq(' + l + ')').css('background', floors[i].labels[l].fields.color);
-            jQuery('input[type=checkbox].leaflet-control-layers-selector:eq(' + l + ')').prop("checked", true);
-        }
-    }
-    map.addLayer(floor_x.photo);
-    map.addLayer(floor_x.layer);
-
 
 //map.setMaxBounds(floor_x.bounds);
 //map.setView(qrPoint, 0);
 }
 
+
+
+$(function () {
+    LocalStorageHandler.init();
+
+    $('span#location').click(function(){
+        for (var i in floors)
+        {
+            map.removeLayer(floors[i].layer);
+        }
+        map.addLayer(qrFloor.photo);
+        map.addLayer(qrFloor.layer);
+        qrMarker._bringToFront();
+        qrMarker.openPopup();
+        map.setView(qrLoc, 0);
+    });
+
+});
+
+
+
+/* Función que controla el localizador de Search
 
 function drawLocator() {
 //    for (var i in floors)
@@ -677,6 +739,7 @@ function drawLocator() {
 //        if floors[i].pois[j].la
 //    }
 }
+*/
 
 //Creación de las rutas (con subrutas correspondientes), desde el origen hasta el POI destino usando
 // solamente el id de los puntos y las plantas
@@ -851,7 +914,7 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
                     }
                     map.addLayer(floors[f].layer);
                     map.addLayer(floors[f].photo);
-                    map.panTo(arrow[i].getBounds().getCenter(), 0);
+//                    map.panTo(arrow[i].getBounds().getCenter(), 0);
                     map.addLayer(arrowHead[f]);
                     flechita = arrowHead[f];
                     arrowAnim(flechita, floors[f].name);
@@ -883,7 +946,7 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
 
                     map.addLayer(floors[f].layer);
                     map.addLayer(floors[f].photo);
-                    //map.panTo(arrow[i].getBounds().getCenter(), 0);
+                    map.setView(arrow[f].getBounds().getCenter(), 0);
                     map.addLayer(arrowHead[f]);
                     flechita = arrowHead[f];
                     arrowAnim(flechita, floors[f].name);

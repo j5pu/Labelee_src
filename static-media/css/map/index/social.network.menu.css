@@ -132,8 +132,8 @@ ul.navi {
     height:40px;
 }
 ul.navi > li {
-    width:32px;
-    height:32px;
+    width:30px;
+    height:30px;
     position:absolute;
     left:0;
     top:0;
@@ -147,12 +147,12 @@ ul.navi > li {
 }
 ul.navi a {
     display:block;
-    width:35px;
-    height:35px;
+    width:30px;
+    height:30px;
     position:absolute;
     left:0;
     top:0;
-    line-height:38px;
+    line-height:37px;
     text-align:center;
     text-decoration:none;
     -webkit-border-radius: 6px;
@@ -226,7 +226,7 @@ span#social
     z-index: 10000;
     position: absolute;
     bottom: 62px;
-    left: 10px;
+    left: 5px;
 }
 
 a span i
