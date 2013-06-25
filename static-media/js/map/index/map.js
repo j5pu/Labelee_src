@@ -504,7 +504,7 @@ function addCategory(e)
                     if (map.hasLayer(floors[i].labels[l].layer) &&
                         jQuery('input[type=checkbox].leaflet-control-layers-selector:eq(' + l + ')').is(':checked'))
                     {
-                        jQuery('input[type=checkbox].leaflet-control-layers-selector:eq(' + l + ')').css('background', floors[i].labels[l].fields.color || 'rgb(62, 52, 121)');
+                        jQuery('input[type=checkbox].leaflet-control-layers-selector:eq(' + l + ')').css('background', floors[i].labels[l].fields.color);
                     }
                 }
 
@@ -597,7 +597,7 @@ function changeFloor(e) {
     {
         if (checked[lab]===true)
         {
-            jQuery('input[type=checkbox].leaflet-control-layers-selector:eq('+lab+')').css('background', floor_x.labels[lab].fields.color  || 'rgb(62, 52, 121)');
+            jQuery('input[type=checkbox].leaflet-control-layers-selector:eq('+lab+')').css('background', floor_x.labels[lab].fields.color);
             jQuery('input[type=checkbox].leaflet-control-layers-selector:eq('+lab+')').prop("checked", true);
         }
     }
@@ -794,7 +794,7 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
 
                     for (var l in floors[f].labels) {
                         if (checked[l] === true) {
-                            jQuery('input[type=checkbox].leaflet-control-layers-selector:eq(' + l + ')').css('background', floors[f].labels[l].fields.color  || 'rgb(62, 52, 121)');
+                            jQuery('input[type=checkbox].leaflet-control-layers-selector:eq(' + l + ')').css('background', floors[f].labels[l].fields.color);
                             jQuery('input[type=checkbox].leaflet-control-layers-selector:eq(' + l + ')').prop("checked", true);
                         }
                     }
