@@ -540,8 +540,7 @@ var Floor = {
 
         if(Floor.points.length > 0)
         {
-            if(confirm(gettext('Changing number of rows will erase all points on the floor. ' +
-                'Continue?')))
+            if(confirm(gettext('Changing number of rows will erase all points on the floor. Continue?')))
             {
                 Floor.rows_changing = true;
                 new PointResource().deletePoints(Floor.points);

@@ -2,7 +2,6 @@
 
 {% load i18n %}
 
-
 {% block css %}
     <link rel="stylesheet" href="{{ STATIC_URL }}css/map_editor/styles.css"/>
     <link rel="stylesheet" href="{{ STATIC_URL }}css/map_editor/index/styles.css"/>
@@ -10,6 +9,11 @@
 
 
 {% block js %}
+    {% get_current_language as LANGUAGE_CODE %}
+    <script>
+        var lang_code = "{{ LANGUAGE_CODE }}";
+    </script>
+
     <script src="{{ STATIC_URL }}vendor/bootstrap/bootstrap.file-input.js"></script>
     <script src="{{ STATIC_URL }}js/map_editor/index/main.js"></script>
 {% endblock js %}
@@ -19,19 +23,23 @@
 
     {% csrf_token %}
 
-    <form action="/i18n/setlang/" method="post">
-        {% csrf_token %}
-        <input name="next" type="hidden" value="{{ redirect_to }}" />
-        <select name="language">
-            {% get_language_info_list for LANGUAGES as languages %}
-            {% for language in languages %}
-                <option value="{{ language.code }}">{{ language.name_local }} ({{ language.code }})</option>
-            {% endfor %}
-        </select>
-        <input type="submit" value="Go" />
-    </form>
+    <h1>
+        {% trans "Administración de recintos" %}
 
-    <h1>{% trans "Administración de recintos" %}</h1>
+        <form id="choose-lang" action="/i18n/setlang/" method="post">
+            {% csrf_token %}
+            <input name="next" type="hidden" value="{{ redirect_to }}" />
+            <img id="es" src="{{ STATIC_URL }}img/country_flags/Spain_32.png">
+            <img id="en" src="{{ STATIC_URL }}img/country_flags/United-States_32.png">
+            <select name="language">
+                {% get_language_info_list for LANGUAGES as languages %}
+                {% for language in languages %}
+                    <option value="{{ language.code }}">{{ language.name_local }} ({{ language.code }})</option>
+                {% endfor %}
+            </select>
+            {#        <input type="submit" value="Go" />#}
+        </form>
+    </h1>
 
     <div id="enclosures" class="box box-0" ng-controller="EnclosuresCtrl">
 
@@ -61,8 +69,8 @@
 
                 <div class="botones-enclosure" ng-hide="editing">
                     <div class="action_box">
-                        <i class="icon-edit" ng-click="update()"></i>
-                        <i class="icon-remove" ng-click="del()"></i>
+                        <span><i class="icon-edit" ng-click="update()"></i></span>
+                        <span><i class="icon-remove" ng-click="del()"></i></span>
                     </div>
 
                     <div class="btn-group">
@@ -196,7 +204,7 @@
                                                type="file"
                                                name="img"
                                                 {#                                   onchange="angular.element(this).scope().setFile(this)"#}
-                                               title="{% trans "Cambiar imágen" %}..">
+                                               title="{% trans "Cambiar imagen" %}..">
                                     </div>
 
                                     <button class="btn" ng-click="cancelUpdate()">{% trans "Cancelar" %}</button>
