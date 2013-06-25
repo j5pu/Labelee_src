@@ -101,8 +101,11 @@ html.mmenu-left.mmenu-opened #mmenu-blocker
 html.mmenu-left.mmenu-opening .mmenu-page,
 html.mmenu-left.mmenu-opening #mmenu-blocker
 {
+/*
     margin-left: -65px;
+*/
     left: 100%;
+    margin-left: -35%;
 /*border: 2px solid #cfcfcf;*/
 z-index: 90;
 
@@ -763,6 +766,7 @@ html.mmenu-opened .mmenu-page
     border-top-color: #fff;
     border-bottom-color: #ddd;
     position: relative;
+    padding-left: 1em;
 }
 .mmenu li > a,
 .mmenu li > span,
@@ -840,6 +844,7 @@ span.locator
 {
     background-color: cadetblue;
     left:40px;
+    display:none;
 }
 
 #location
