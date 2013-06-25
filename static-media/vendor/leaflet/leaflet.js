@@ -3,7 +3,7 @@
  (c) 2010-2013, Vladimir Agafonkin, CloudMade
  */
 window.L_DISABLE_3D=true;
-
+var floorChecks = [];
 (function (t, e, i) {
     var n, o;
     typeof exports != i + "" ? n = exports : (o = t.L, n = {}, n.noConflict = function () {
@@ -1908,10 +1908,10 @@ window.L_DISABLE_3D=true;
         t.overlay ? (i = e.createElement("input"), i.type = "checkbox", i.className = "leaflet-control-layers-selector", i.defaultChecked = s) : i = this._createRadioElement("leaflet-base-layers", s), i.layerId = n.stamp(t.layer), n.DomEvent.on(i, "click", this._onInputClick, this);
         var a = e.createElement("span");
         a.innerHTML = " " + t.name, o.appendChild(i), o.appendChild(a);
- /*       floorChecks.push(t.name);
+        floorChecks.push(t.name);
         floorChecks[t.name] = i;
         if(blinkingMode!=null && blinkingMode== t.name)
-            blinker(i);*/
+            blinker(i);
         //toggleColor(i);
         var r = t.overlay ? this._overlaysList : this._baseLayersList;
         return r.appendChild(o), o
@@ -2029,4 +2029,21 @@ window.L_DISABLE_3D=true;
         this.fire("locationfound", {latlng: a, bounds: l, accuracy: t.coords.accuracy})
     }})
 })(this, document);
-
+//Parpadeo a la planta del POI destino
+var blinkingMode = null;
+function blinker(element) {
+    if (blinkingMode!=null) {
+        var color = element.style.background;
+        if (color == "red") {
+            element.style.background = "";
+        } else {
+            element.style.background = "red";
+        }
+        window.setTimeout(function () {
+            blinker(element);
+        }, 1000);
+    }else
+    {
+    element.style.background="";
+    }
+}

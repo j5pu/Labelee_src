@@ -578,7 +578,7 @@ html{
     left: -187px;
     float: left;
     height: 36px;
-    width: 210px;
+    width: 185px;
     display: block;
 }
 
@@ -609,7 +609,7 @@ html{
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance:      none;
-    background:#bbb;
+    background:#333;
     width: 100%;
     height: 100%;
     position: absolute;

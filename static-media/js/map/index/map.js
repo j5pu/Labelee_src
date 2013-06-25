@@ -42,9 +42,12 @@ var OriginIcon = L.AwesomeMarkers.icon({
         color: 'red'
     });
 
+
+var loadedLabels = false;
+
 var anim = null;
 var flechita = null;
-var floorChecks = [];
+/*var floorChecks = [];
 //Parpadeo a la planta del POI destino
 var blinkingMode = null;
 function blinker(element) {
@@ -61,7 +64,7 @@ function blinker(element) {
     } else {
         element.css('background-color','');
     }
-}
+}*/
 
 
 function loadIcon(color, shape) {
@@ -472,6 +475,8 @@ function initMap(qrPoint) {
     qrMarker._bringToFront();
 
     map.invalidateSize();
+
+    loadedLabels = true;
 }
 
 
@@ -480,6 +485,7 @@ function initMap(qrPoint) {
 map.on('layeradd', function (e) {
     addCategory(e);
 });
+
 //EVENTOS - Añadir layer
 map.on('layerremove', function (e) {
     removeCategory(e);
@@ -492,25 +498,19 @@ map.on('baselayerchange', function (e) {
 
 function addCategory(e)
 {
-    if(e.layer._layers)
+    for (var i in floors)
     {
-        var keyPoi= Object.keys(e.layer._layers).pop();
-        if (e.layer._layers[keyPoi])
+        for (var l in floors[i].labels)
         {
-            for (var i in floors)
+            if (map.hasLayer(floors[i].labels[l].layer) &&
+                $('input[type=checkbox].leaflet-control-layers-selector:eq(' + l + ')').is(':checked'))
             {
-                for (var l in floors[i].labels)
-                {
-                    if (map.hasLayer(floors[i].labels[l].layer) &&
-                        jQuery('input[type=checkbox].leaflet-control-layers-selector:eq(' + l + ')').is(':checked'))
-                    {
-                        jQuery('input[type=checkbox].leaflet-control-layers-selector:eq(' + l + ')').css('background', floors[i].labels[l].fields.color);
-                    }
-                }
-
+                $('input[type=checkbox].leaflet-control-layers-selector:eq(' + l + ')').css('background', floors[i].labels[l].fields.color);
             }
         }
+
     }
+
 }
 
 function removeCategory(e)
@@ -573,7 +573,7 @@ function changeFloor(e) {
                 map.addLayer(arrowHead[i]);
                 flechita = arrowHead[i];
                 arrowAnim(flechita, floor_x.name);
-                map.setView(arrow[i].getBounds().getCenter, 0);
+                map.setView(arrow[i].getBounds().getCenter(), 0);
 
             } else {
                 map.setView(floor_x.bounds.getCenter(), 0);
@@ -609,14 +609,68 @@ function changeFloor(e) {
 }
 
 
-
 $(function () {
     LocalStorageHandler.init();
 
-    $('span#location').click(function(){
-        for (var i in floors)
+    $('span#location').click(function () {
+        for (pos = 0; pos < $('input[type=checkbox].leaflet-control-layers-selector').length; pos++)
         {
-            map.removeLayer(floors[i].layer);
+            if ($('input[type=checkbox].leaflet-control-layers-selector:eq('+pos+')').is(':checked')){
+                checked[pos] = true;
+            }else{
+                checked[pos] = false;
+            }
+        }
+
+        var floor_x = {};
+        for (var i in floors) {
+            if (floors[i].id === qrFloor.id) {
+                floor_x = floors[i];
+
+                //map.addLayer(floor_x.photo);
+                for (var l in floors[i].labels)
+                {
+                    layersControl.addOverlay(floor_x.labels[l].layer,   '<i class="icon-' +floors[i].labels[l].fields.icon +' icon-white"></i>');
+                    if (checked[l]===true)
+                    {
+                        map.addLayer(floor_x.labels[l].layer);
+                    }
+                }
+
+                map.addLayer(floor_x.photo);
+                map.addLayer(floor_x.layer);
+
+                if (arrowHead[i] && subarrow[i]) {
+                    map.addLayer(arrowHead[i]);
+                    flechita = arrowHead[i];
+                    arrowAnim(flechita, floor_x.name);
+                    map.setView(arrow[i].getBounds().getCenter(), 0);
+
+                } else {
+                    map.setView(qrLoc, 0);
+                }
+
+            } else {
+                map.removeLayer(floors[i].layer);
+
+                for (var l in floors[i].labels) {
+                    layersControl.removeLayer(floors[i].labels[l].layer);
+                    map.removeLayer(floors[i].labels[l].layer);
+                }
+
+                if (arrowHead[i] != null)
+                    map.removeLayer(arrowHead[i]);
+            }
+
+        }
+
+        for (var lab in qrFloor.labels)
+        {
+            if (checked[lab]===true)
+            {
+                jQuery('input[type=checkbox].leaflet-control-layers-selector:eq('+lab+')').css('background', floor_x.labels[lab].fields.color);
+                jQuery('input[type=checkbox].leaflet-control-layers-selector:eq('+lab+')').prop("checked", true);
+            }
         }
         map.addLayer(qrFloor.photo);
         map.addLayer(qrFloor.layer);
@@ -624,6 +678,8 @@ $(function () {
         qrMarker.openPopup();
         map.setView(qrLoc, 0);
     });
+
+
 
 });
 
@@ -727,20 +783,20 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
             if (arrow[i] && subarrow[i]) {
                 floors[i].layer.addLayer(arrow[i]);
                 if (floors[i].id === route.fields.destiny.fields.floor) {
- /*                   if (route.fields.origin.fields.floor !== route.fields.destiny.fields.floor)
-                    {
-                        *//* var check = floorChecks[floors[i].name];
+               /* if (route.fields.origin.fields.floor !== route.fields.destiny.fields.floor)
+                    {*/
+                         var check = floorChecks[floors[i].name];
                          blinkingMode = floors[i].name;
-                         blinker(check);*//*
-                        for (index = 0; index < floors.length; index++) {
+                         blinker(check);
+                       /* for (index = 0; index < floors.length; index++) {
                             var check = $('input[type=radio].leaflet-control-layers-selector:eq(' + index + ')');
                             if (check.parent().find('span').html().trim() == floors[i].name) {
                                 blinkingMode = floors[i].name;
                                 blinker(check);
                             }
-                        }
-                    }
- */                   map.addLayer(arrowHead[i]);
+                        }*/
+                 //   }
+                  map.addLayer(arrowHead[i]);
                     flechita = arrowHead[i];
                     arrowAnim(flechita, floors[i].name);
                     /*
@@ -844,15 +900,6 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
             }
         }
 
-        for (var i in floors) {
-            if (route.fields.destiny.fields.floor === floors[i].id) {
-                var check = $('input[type=radio].leaflet-control-layers-selector:eq(' + i + ')');
-                if (check.parent().find('span').html().trim() == floors[i].name) {
-                    blinkingMode = floors[i].name;
-                    blinker(check);
-                }
-            }
-        }
 
     } else {
         alert('No existe esa ruta');
@@ -870,9 +917,10 @@ function arrowAnim(arrow, idFloor) {
 
 }
 
-//Función que define la animación (en este caso, flecha azul) que marca la ruta
 var arrowsOffset = 0;
+////Función que define la animación (en este caso, flecha azul) que marca la ruta
 var setArrow = function (flecha, idFloor) {
+
     flecha.setPatterns([
         {offset: arrowsOffset + '%', repeat: 0, symbol: new L.Symbol.ArrowHead({pixelSize: 15, polygon: false, pathOptions: { stroke: true}})}
     ]);
