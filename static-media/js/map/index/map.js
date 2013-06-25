@@ -489,6 +489,17 @@ map.on('baselayerchange', function (e) {
     changeFloor(e);
 });
 
+/*
+
+$('input[type=checkbox].leaflet-control-layers-selector').click(function()
+{
+   if (this.css('background') === "rgb(51,51,51)")
+   {
+       this.css('background', floors[0].labels[l].fields.color);
+   }
+
+});
+*/
 
 function addCategory(e)
 {
@@ -573,7 +584,7 @@ function changeFloor(e) {
                 map.addLayer(arrowHead[i]);
                 flechita = arrowHead[i];
                 arrowAnim(flechita, floor_x.name);
-                map.setView(arrow[i].getBounds().getCenter, 0);
+                map.setView(arrow[i].getBounds().getCenter(), 0);
 
             } else {
                 map.setView(floor_x.bounds.getCenter(), 0);
@@ -870,9 +881,10 @@ function arrowAnim(arrow, idFloor) {
 
 }
 
-//Función que define la animación (en este caso, flecha azul) que marca la ruta
 var arrowsOffset = 0;
+////Función que define la animación (en este caso, flecha azul) que marca la ruta
 var setArrow = function (flecha, idFloor) {
+
     flecha.setPatterns([
         {offset: arrowsOffset + '%', repeat: 0, symbol: new L.Symbol.ArrowHead({pixelSize: 15, polygon: false, pathOptions: { stroke: true}})}
     ]);
