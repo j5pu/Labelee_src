@@ -613,8 +613,64 @@ $(function () {
     LocalStorageHandler.init();
 
     $('span#location').click(function () {
+        for (pos = 0; pos < $('input[type=checkbox].leaflet-control-layers-selector').length; pos++)
+        {
+            if ($('input[type=checkbox].leaflet-control-layers-selector:eq('+pos+')').is(':checked')){
+                checked[pos] = true;
+            }else{
+                checked[pos] = false;
+            }
+        }
+
+        var floor_x = {};
         for (var i in floors) {
-            map.removeLayer(floors[i].layer);
+            if (floors[i].id === qrFloor.id) {
+                floor_x = floors[i];
+
+                //map.addLayer(floor_x.photo);
+                for (var l in floors[i].labels)
+                {
+                    layersControl.addOverlay(floor_x.labels[l].layer,   '<i class="icon-' +floors[i].labels[l].fields.icon +' icon-white"></i>');
+                    if (checked[l]===true)
+                    {
+                        map.addLayer(floor_x.labels[l].layer);
+                    }
+                }
+
+                map.addLayer(floor_x.photo);
+                map.addLayer(floor_x.layer);
+
+                if (arrowHead[i] && subarrow[i]) {
+                    map.addLayer(arrowHead[i]);
+                    flechita = arrowHead[i];
+                    arrowAnim(flechita, floor_x.name);
+                    map.setView(arrow[i].getBounds().getCenter(), 0);
+
+                } else {
+                    map.setView(qrLoc, 0);
+                }
+
+            } else {
+                map.removeLayer(floors[i].layer);
+
+                for (var l in floors[i].labels) {
+                    layersControl.removeLayer(floors[i].labels[l].layer);
+                    map.removeLayer(floors[i].labels[l].layer);
+                }
+
+                if (arrowHead[i] != null)
+                    map.removeLayer(arrowHead[i]);
+            }
+
+        }
+
+        for (var lab in qrFloor.labels)
+        {
+            if (checked[lab]===true)
+            {
+                jQuery('input[type=checkbox].leaflet-control-layers-selector:eq('+lab+')').css('background', floor_x.labels[lab].fields.color);
+                jQuery('input[type=checkbox].leaflet-control-layers-selector:eq('+lab+')').prop("checked", true);
+            }
         }
         map.addLayer(qrFloor.photo);
         map.addLayer(qrFloor.layer);
@@ -623,15 +679,6 @@ $(function () {
         map.setView(qrLoc, 0);
     });
 
-
-    $('input').change(function () {
-        alert('Hola');
-        /*
-         if (this.css('background') === "rgb(51,51,51)") {
-         this.css('background', floors[0].labels[l].fields.color);
-         }
-         */
-    });
 
 
 });
@@ -853,15 +900,6 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
             }
         }
 
-/*        for (var i in floors) {
-            if (route.fields.destiny.fields.floor === floors[i].id) {
-                var check = $('input[type=radio].leaflet-control-layers-selector:eq(' + i + ')');
-                if (check.parent().find('span').html().trim() == floors[i].name) {
-                    blinkingMode = floors[i].name;
-                    blinker(check);
-                }
-            }
-        }*/
 
     } else {
         alert('No existe esa ruta');
