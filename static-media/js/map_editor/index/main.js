@@ -1,5 +1,4 @@
 $(function() {
-
 });
 
 
@@ -36,20 +35,27 @@ function EnclosureCtrl($scope)
 			// guardamos el nuevo nombre en la BD
 
 			var data = {
-				name : $scope.enclosure_name
+				name : $scope.enclosure_name,
+                twitter_account : $scope.twitter_account
 			};
 
-			$scope.enclosure_resource.update(data, $scope.enclosure.id);
+			var updated_enclosure = $scope.enclosure_resource.update(data, $scope.enclosure.id);
 
 			$scope.editing = false;
 
-			$scope.$parent.enclosure.name = $scope.enclosure_resource.read($scope.enclosure.id).name;
+			$scope.$parent.enclosure.name = updated_enclosure.name;
+			$scope.$parent.enclosure.twitter_account = updated_enclosure.twitter_account;
 		}
 	};
 
+    $scope.cancelUpdate = function() {
+        $scope.editing = false;
+    };
+
 	$scope.del = function() {
 
-		var confirm_msg = '¿Seguro que desea eliminar el recinto? (también se perderán todas sus plantas)';
+		var confirm_msg = gettext('Are you sure you want to remove this enclosure? ' +
+            '(this will erase all their floors)');
 
 		$scope.enclosure_resource.del($scope.enclosure.id, confirm_msg);
 
@@ -72,17 +78,28 @@ function FloorsCtrl($scope, $element)
 {
 	$scope.sending_img = false;
 
-    $scope.floor_resource = new Resource('floor');
-	
-	$scope.floors = $scope.floor_resource.readAllFiltered('?enclosure__id=' + $scope.enclosure.id);
+    $scope.floor_resource = new FloorResource();
 
+    $scope.loadFloorList = function() {
+        $scope.floors = $scope.floor_resource.readFromEnclosure($scope.enclosure.id);
+    };
+
+    $scope.loadFloorList();
 
 	$scope.createFloor = function() {
+
+        var img = $($element).find('input[name="img"]');
+        if(!img.val())
+        {
+            alert(gettext('You must specify the floor image too'));
+            return;
+        }
 		
 		//
 		// 1: Creamos el registro en B.D.
 		var floor_data = {
 			name : $scope.floor_name,
+			floor_number : parseInt($scope.floor_number),
 			enclosure : $scope.enclosure.resource_uri
 		};
 		
@@ -101,7 +118,9 @@ function FloorsCtrl($scope, $element)
 				// Una vez se sube la imágen se limpia el formulario y se actualiza
 				// la lista de mapas para el lugar
 				$scope.floor_name = '';
+				$scope.floor_number = '';
 				img_form.find('input[name="img"]').val('');
+                img_form.find('.file-input-name').remove();
 				$scope.floors =
 					$scope.floor_resource.readAllFiltered('?enclosure__id=' + $scope.enclosure.id);
 				
@@ -119,8 +138,7 @@ function FloorCtrl($scope, $element)
 	
 	$scope.update = function() {
 		var img = $($element).find('input[name="img"]');
-		var img_val = img.val();
-		
+
 		if (!$scope.editing)
         {
 			$scope.editing = true;
@@ -132,8 +150,9 @@ function FloorCtrl($scope, $element)
 			// guardamos el nuevo nombre en la BD
 
 			var floor_data = {
-				name : $scope.floor_name
-			}
+				name : $scope.floor_name,
+				floor_number : $scope.floor_number
+			};
 
 			$scope.floor_resource.update(floor_data, $scope.floor.id);
 			
@@ -157,18 +176,21 @@ function FloorCtrl($scope, $element)
 
 			$scope.editing = false;
 
-			$scope.$parent.floor.name = $scope.floor_resource.read($scope.floor.id).name;
+            $scope.loadFloorList();
 		}
 	};
 
+    $scope.cancelUpdate = function() {
+        $scope.editing = false;
+    };
+
 	$scope.del = function() {
 
-		var confirm_msg = '¿Seguro que desea eliminar la planta? (también se perderá toda la información relativa a ella)';
+		var confirm_msg = gettext('Are you sure you want to remove this floor?');
 
 		$scope.floor_resource.del($scope.floor.id, confirm_msg);
 
-		$scope.$parent.$parent.floors =
-			$scope.floor_resource.readAllFiltered('?enclosure__id=' + $scope.enclosure.id);
+        $scope.loadFloorList();
 	};
 }
 

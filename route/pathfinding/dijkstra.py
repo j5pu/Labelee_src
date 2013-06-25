@@ -1,4 +1,5 @@
 import sys
+import heapq
 
 
 class Dijkstra():
@@ -59,6 +60,58 @@ class Dijkstra():
 
         return self.__shortestpath__(graph, closestnode, end, visited, distances, predecessors)
 
+
+    def __dijkstraUsingHeap__(self, adj, s, t):
+        ''' Return predecessors and min distance if there exists a shortest path
+            from s to t; Otherwise, return None '''
+        Q = []     # priority queue of items; note item is mutable.
+        d = {s: 0} # vertex -> minimal distance
+        Qd = {}    # vertex -> [d[v], parent_v, v]
+        p = {}     # predecessor
+        visited_set = set([s])
+        cost = 1
+
+        for v in adj.get(s, []):
+            d[v] = cost
+            item = [d[v], s, v]
+            heapq.heappush(Q, item)
+            Qd[v] = item
+
+        while Q:
+
+            cost, parent, u = heapq.heappop(Q)
+            if u not in visited_set:
+                p[u] = parent
+                visited_set.add(u)
+                if u == t:
+                    return p, d[u]
+                for v in adj.get(u, []):
+                    if d.get(v):
+                        if d[v] > cost + d[u]:
+                            d[v] = cost + d[u]
+                            Qd[v][0] = d[v]    # decrease key
+                            Qd[v][1] = u       # update predecessor
+                            heapq._siftdown(Q, 0, Q.index(Qd[v]))
+                    else:
+                        d[v] = cost + d[u]
+                        item = [d[v], u, v]
+                        heapq.heappush(Q, item)
+                        Qd[v] = item
+
+        return None
+
+    def __shortestpathUsingHeap__(self, graph, start, end, visited=[], distances={}, predecessors={}):
+
+        predecessors, min_cost = self.__dijkstraUsingHeap__(graph, start, end)
+        c = end
+        path = [c]
+
+        while predecessors.get(c):
+            path.insert(0, predecessors[c])
+            c = predecessors[c]
+
+        return [len(path), path]
+
     def __createMap__(self):
         map = {}
         for floor in self.floors:
@@ -89,14 +142,15 @@ class Dijkstra():
         """
 
         connection = {}
-        keys = [self.getKey(row - 1, column, numfloor), #North 0
-                self.getKey(row, column + 1, numfloor), #East 90
-                self.getKey(row + 1, column, numfloor), #South 180
-                self.getKey(row, column - 1, numfloor), #West 270
-                self.getKey(row-1, column +1, numfloor), #Northeast  45
-                self.getKey(row+1, column +1, numfloor), #Southeast 135
-                self.getKey(row+1, column -1, numfloor), #Southwest 225
-                self.getKey(row-1, column -1, numfloor), #Northwest 315
+        keys = [
+           # self.getKey(row - 1, column + 1, numfloor), #Northeast  45
+           # self.getKey(row + 1, column + 1, numfloor), #Southeast 135
+           # self.getKey(row + 1, column - 1, numfloor), #Southwest 225
+           # self.getKey(row - 1, column - 1, numfloor), #Northwest 315
+            self.getKey(row, column - 1, numfloor), #West 270
+            self.getKey(row + 1, column, numfloor), #South 180
+            self.getKey(row, column + 1, numfloor), #East 90
+            self.getKey(row - 1, column, numfloor), #North 0
         ]
         for key in keys:
             if self.__existConnection__(map, key):
@@ -119,7 +173,7 @@ class Dijkstra():
 
         return graph
 
-    def calculateDijkstra(self):
+    def calculateDijkstra(self, errors=[]):
         map = self.__createMap__()
         graph = self.__createGraph__(map)
         result = []
@@ -127,13 +181,23 @@ class Dijkstra():
         for origin in self.qr:
             for destination in self.qr:
                 if origin.point.id != destination.point.id:
-                    path = self.__shortestpath__(graph, self.getKey(origin.point.row, origin.point.col,
-                                                                    origin.point.floor.id),
-                                                 self.getKey(destination.point.row, destination.point.col,
-                                                             destination.point.floor.id), visited=[], distances={}
-                        , predecessors={})
-                    result.append([origin, destination, path])
+                    try:
+                        keyorigin = self.getKey(origin.point.row, origin.point.col, origin.point.floor.id)
+                        keydestination = self.getKey(destination.point.row, destination.point.col,
+                                                     destination.point.floor.id)
+                        path = self.__shortestpathUsingHeap__(graph, keyorigin, keydestination
+                            , visited=[], distances={}
+                            , predecessors={})
+                    except Exception as ex:
+                        errors.append(
+                            '--Imposible encontrar camino entre camino entre {0} y {1} ex: {2}--'.format(keyorigin,
+                                                                                                         keydestination,
+                                                                                                         ex.args))
+                        print type(ex)
+                        print ex.args
+                    else:
+                        if path is not None:
+                            result.append([origin, destination, path])
 
         return result
-
 

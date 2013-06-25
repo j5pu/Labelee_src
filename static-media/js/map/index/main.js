@@ -1,10 +1,16 @@
 //Pantalla completa
-//new line
-
+/*
 function hideAddressBar()
 {
-    var android_version = parseFloat(device.version);
-    if (!(android_version >= 2.3)) return;
+    var ua = navigator.userAgent;
+    if( ua.indexOf("Android") >= 0 )
+    {
+        var androidversion = parseFloat(ua.slice(ua.indexOf("Android")+8));
+        if (androidversion < 2.3)
+        {
+            return;
+        }
+    }
 
     if(!window.location.hash)
     {
@@ -19,15 +25,20 @@ function hideAddressBar()
 
 window.addEventListener("load", function(){ if(!window.pageYOffset){ hideAddressBar(); } } );
 window.addEventListener("orientationchange", hideAddressBar );
+*/
 
 
 
-
-//	Activación y configuración del menú
+///	Activación y configuración del menú
 $(function() {
 
-    var $menu = $('nav#menu-right');
 
+
+    //SwipeMenu.init();
+    ScrollMenu.init();
+
+
+    var $menu = $('nav#menu-right');
     $menu.mmenu({
         position: 'left',
         slideDuration    : 300
@@ -98,4 +109,127 @@ $(function() {
         }
     );
 });
+
+
+var ScrollMenu = {
+
+    init: function()
+    {
+        this.$listMenu = $('#scrollMenu');
+        this.$wrapper = $('nav');
+        this.top = this.$listMenu.position().top;
+
+        this.scrollEvent();
+    },
+
+    scroll: function(ev)
+    {
+        var self = ScrollMenu;
+
+        ev.preventDefault();
+
+        self.top_new = self.top + ev.gesture['deltaY'];
+        self.$listMenu.css({
+            'top': parseInt(self.top_new) + 'px'
+        });
+    },
+
+    scrollEnd: function(ev)
+    {
+        var self = ScrollMenu;
+
+        ev.preventDefault();
+
+        if(self.top_new > 0 || self.$listMenu.height() < self.$wrapper.height())
+            self.top_new = 0;
+        else if(Math.abs(self.top_new) > self.$listMenu.height() - self.$wrapper.height())
+            self.top_new = $('nav').height() - self.$listMenu.height();
+
+
+        // map.css({
+        // 	'transition': 'top 1s linear 2s, left 1s linear 2s'
+        // });
+
+        self.$listMenu.css({
+            'top': self.top_new + 'px'
+        });
+
+        self.top = self.top_new;
+    },
+
+    scrollEvent: function()
+    {
+        var self = this;
+
+        self.$listMenu
+            .hammer()
+
+            // SCROLL
+            .bind('drag', self.scroll)
+            .bind('dragend', self.scrollEnd)
+    }
+};
+
+
+var SwipeMenu = {
+
+    init: function()
+    {
+        this.$swipeTab = $('#menuTab');
+        this.left = this.$swipeTab.position().left;
+
+        this.swipeEvent();
+    },
+
+
+
+    // SWIPE
+    swipe: function(ev)
+    {
+        var self = SwipeMenu;
+
+        var i = this;
+
+        self.left_new = self.left + ev.gesture['deltaX'];
+        self.$swipeTab.css({
+            'left': parseInt(self.left_new) + 'px'
+        });
+        $('.mmenu-page').css({
+            'left': parseInt(self.left_new) + 'px'
+        })
+    },
+
+    swipeEnd: function()
+    {
+        var self = SwipeMenu;
+
+        var limit = $(document).width() * 0.8;
+        if(self.left_new > limit)
+            self.left_new = limit;
+        else if(self.left_new < 0 || self.left_new < limit *  0.5)
+            self.left_new = 0;
+
+        // map.css({
+        // 	'transition': 'top 1s linear 2s, left 1s linear 2s'
+        // });
+
+        self.$swipeTab.css({
+            'left': self.left_new + 'px'
+        });
+
+        self.left = self.left_new;
+    },
+
+    swipeEvent: function()
+    {
+        var self = this;
+
+        self.$swipeTab
+            .hammer({prevent_default: true})
+
+            // SCROLL
+            .bind('drag', self.swipe)
+            .bind('dragend', self.swipeEnd)
+    }
+};
 

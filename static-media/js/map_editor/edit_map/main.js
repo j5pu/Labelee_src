@@ -1,13 +1,18 @@
 
 $(function(){
 
-    // mapeamos lo que nos interesa del DOM
-    $e.init();
+    // Cargamos todas las imágenes
 
-    //cargamos la planta
-    Floor.init();
-//
-//            Painter.init()
-//        });
-//    }
+    WaitingDialog.init();
+
+    setTimeout(function(){
+        // mapeamos lo que nos interesa del DOM
+        $e.init();
+
+        //cargamos la planta
+        Floor.init();
+    }, 200);
+
+
+
 });

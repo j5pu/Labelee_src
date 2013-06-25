@@ -5,7 +5,21 @@ var Floor = {
 
     loading: false,
     updating: false,
+    redrawing_grid: false,
+    rows_changing: false,
+    show_only_qrs: false,
+    point_count: {
+        to_save: 0,
+        saved: 0,
+        to_delete: 0,
+        connectors: 0,
+        total: 0
+    },
     points_to_delete: [],
+    painted_connectors: null,
+
+    //Planta1_escalera_1
+    connector_index: 1,
 
 
     init: function()
@@ -17,11 +31,6 @@ var Floor = {
             //
             // Una vez cargada la imágen de su plano cargamos el grid y hacemos lo demás
             Floor.loadGrid();
-
-            Menu.init();
-
-            // Cargamos los atajos
-            Events.shortcuts.bind();
         };
     },
 
@@ -47,12 +56,12 @@ var Floor = {
             'background-size': Floor.grid_width + 'px' + ' ' + Floor.grid_height + 'px'
         });
 
-        $e.floor.num_blocks.html((Floor.num_rows * Floor.num_cols) + ' bloques');
+        $e.floor.num_blocks.html((Floor.num_rows * Floor.num_cols) + ' ' + gettext('blocks'));
 
         // Limpiamos el grid si estaba creado
         $grid.empty();
 
-        for(var row = 0; row < Floor.num_rows; row++)
+        for(var row = Floor.num_rows-1; row >= 0; row--)
         {
             // Crea fila
             $grid.append('<div class="row"></div>');
@@ -93,9 +102,6 @@ var Floor = {
         // Vemos si el checkbox para ver la rejilla está activado
         Menu.toggleBorders();
 
-        //
-        // Añadimos los eventos al grid
-        Events.grid.bind();
 
         //
         // Vaciamos la lista de puntos a eliminar
@@ -109,12 +115,17 @@ var Floor = {
 
     update: function()
     {
-        loadingMsg.show('Actualizando planta..');
+
+        if(Floor.redrawing_grid)
+            return;
+
+//        loadingMsg.show('Actualizando planta..');
 
         // Tomamos todas las etiquetas pintadas sobre el plano hasta el momento
         Floor._getPaintedLabels();
 
         var new_points = [];
+        var points_to_update = [];
 
         $('#grid .row').each(function(){
             var row = $(this).data('row');
@@ -130,16 +141,50 @@ var Floor = {
 
                 var col = $(this).data('col');
 
-                var point_data = {
-                    row: row,
-                    col: col,
-                    floor: Floor.data.id,
-                    label: Floor.painted_labels[block_label].id
-                };
+                var descr = $(this).find('.descr input[type="text"]').val();
+                var checked_qr = $(this).find('.qr input[type="checkbox"]').is(":checked");
 
-                // Guardaremos los bloques que aparecen pintados y no han sido cargados desde la BD
-                if(block_label && !from_db)
-                    new_points.push(point_data);
+                // Guardaremos aquellos bloques que:
+                //      aparecen pintados y no han sido cargados desde la BD
+                //      ||
+                //      han sido cargados desde BD y se les modificó el QR
+
+                var is_new = block_label && !from_db;
+                var has_qr_modified =
+                    from_db
+                    &&
+                    (
+                        ($(this).data('qr-id') && !checked_qr)
+                        ||
+                        (!$(this).data('qr-id') && checked_qr)
+                    );
+                var has_descr_modified =
+                    from_db && ($(this).data('saved-descr') != descr);
+                var is_modified = has_qr_modified || has_descr_modified;
+
+
+                if(is_new)
+                {
+                    var new_point = {
+                        description: descr,
+                        row: row,
+                        col: col,
+                        floor: Floor.data.id,
+                        label: Floor.painted_labels[block_label].id
+                    };
+
+                    new_points.push(new_point);
+                }
+                else if(is_modified)
+                {
+                    var point_to_update = {
+                        id: $(this).data('point-id'),
+                        description: descr,
+                        qr: checked_qr
+                    };
+
+                    points_to_update.push(point_to_update);
+                }
             });
         });
 
@@ -151,6 +196,7 @@ var Floor = {
         // Enviamos al servidor primero los puntos a eliminar y luego los nuevos
         var pr = new PointResource();
         pr.deletePoints(Floor.points_to_delete);
+        pr.updatePoints(points_to_update);
         pr.createPoints(new_points);
 
         // Vaciamos la lista de puntos eliminados
@@ -160,7 +206,7 @@ var Floor = {
         Floor.reloading = true;
         Floor.loadGrid();
 
-        loadingMsg.hide();
+//        loadingMsg.hide();
     },
 
 
@@ -170,6 +216,23 @@ var Floor = {
             .find('.block[data-col="' + col + '"]');
     },
 
+
+    _loopPointsEnd: function()
+    {
+        if(!Floor.reloading)
+        {
+            // Si no se está recargando la planta de haberle dado a guardar entonces conservamos
+            // los valores
+            Painter.label = null;
+            Painter.label_prev = null;
+            Painter.icon = null;
+        }
+        Floor.i = 0;
+
+        //
+        // Una vez cargados todos los puntos vamos con los QRs..
+        Floor._loadQRs();
+    },
 
     _loopPoints: function()
     {
@@ -184,22 +247,10 @@ var Floor = {
         var all_points_painted = !Floor.points || Floor.i >= Floor.points.length;
         if(all_points_painted)
         {
-            if(!Floor.reloading)
-            {
-                // Si no se está recargando la planta de haberle dado a guardar entonces conservamos
-                // los valores
-                Painter.label = null;
-                Painter.label_prev = null;
-                Painter.icon = null;
-            }
-            Floor.i = 0;
-            Floor.dfd.resolve();
+            Floor._loopPointsEnd();
             return;
         }
 
-        // Si venimos de haber pintado ya al menos una etiqueta..
-        if(Painter.label)
-            Painter.label_prev = Painter.label;
 
         //
         // Para pintar el punto, el pintor necesita:
@@ -224,32 +275,54 @@ var Floor = {
     },
 
 
+    _loopQRsEnd: function()
+    {
+        // Esto es lo que se hace una vez cargado completamente el plano, con sus etiquetas
+        // y sus QRs
+
+        if(Floor.reloading)
+        {
+            Menu.setPointStats();
+            Menu.toggleEraseMode();
+            Floor.reloading = false;
+//            alert('Plano actualizado');
+        }
+
+        $e.floor.labeled_blocks = $e.floor.grid.find('[data-label]');
+
+        Menu.init();
+
+        // Cargamos todos eventos
+        Events.bindAll();
+
+        Floor.loading = false;
+
+        // Cerramos el mensaje de espera
+        WaitingDialog.close();
+    },
+
+
     _loopQRs: function()
     {
         // Itera por toda la lista de QRs
 
         if(Painter.i >= Menu.qr_list.length)
         {
-            Floor.loading = false;
-            Painter.icon = null;
-            if(Floor.reloading)
-            {
-                alert('Plano actualizado');
-                Floor.reloading = false;
-            }
+            Floor._loopQRsEnd();
             return;
         }
 
 
         // Si no se cargó el icono del qr..
-        if(!Painter.icon)
+        if(!Painter.qr_icon)
         {
             // No hacemos lo demás hasta que se haya cargado el QR
-            $.when(Painter._loadIcon('/static/img/qr_code.png'))
-                .then(function(){
-                    Floor._loopQRs();
-                }
-            );
+            Painter.qr_icon = new Image();
+            Painter.qr_icon.src = '/static/img/qr_code.png';
+            Painter.qr_icon.onload = function()
+            {
+                Floor._loopQRs();
+            };
         }
         else
         {
@@ -260,30 +333,78 @@ var Floor = {
 
             Painter.paintQR();
 
+            // Dejamos a 'checked' el campo QR para el bloque
+            Painter.checkQRForMenu(Painter.block);
+
             Painter.i++;
             Floor._loopQRs();
         }
     },
 
 
-    _loadLabels: function()
+    _loopLabelsEnd: function()
     {
-        // Pintamos cada etiqueta almacenada para la planta (muro, POI, etc)
-
-        Floor.points = new PointResource().readAllFiltered('?floor__id=' + Floor.data.id);
-
-        // Obtenemos todas las etiquetas que contiene la planta a cargar, y así evitar
-        // llamar a BD cada vez que queramos pedir la etiqueta de cada punto
-        Floor.saved_labels = new LabelResource().readFromFloor(Floor.data.id);
-
         // Iteraremos por cada punto, no pintando el siguiente hasta que se haya cargado
         // la imágen para la etiqueta del anterior
         //        http://www.bitstorm.org/weblog/2012-1/Deferred_and_promise_in_jQuery.html
         //        http://stackoverflow.com/a/14408887/1260374
         Floor.i = 0;
-        Floor.dfd = $.Deferred();
         Floor._loopPoints();
-        return Floor.dfd.promise();
+    },
+
+
+    _loopLabels: function()
+    {
+        if(Label.i == Label.keys.length)
+        {
+            Floor._loopLabelsEnd();
+            Label.i = 0;
+            return;
+        }
+
+        var label = Floor.saved_labels[Label.keys[Label.i]];
+
+        // Si la etiqueta contiene imágen
+        if(label.img)
+        {
+            var img = new Image();
+            img.src = label.img;
+            img.onload = function(){
+                Floor.saved_labels[Label.keys[Label.i]].loaded_img = null;
+                Floor.saved_labels[Label.keys[Label.i]].loaded_img = img;
+                Label.i++;
+                Floor._loopLabels();
+            };
+        }
+        else
+        {
+            Floor.saved_labels[Label.keys[Label.i]].loaded_img = null;
+            Label.i++;
+            Floor._loopLabels();
+        }
+    },
+
+
+    _loadLabels: function()
+    {
+        // Cargamos cada etiqueta almacenada para la planta (muro, POI, etc)
+
+        if(Floor.show_only_qrs)
+            Floor.points = new PointResource().readQRsFromFloor(Floor.data.id);
+        else
+        {
+            Floor.points = new PointResource().readAllFiltered('?floor__id=' + Floor.data.id);
+            Floor.painted_connectors = new PointResource().readConnectionsFromFloor(Floor.data.id)
+        }
+
+        // Obtenemos todas las etiquetas que contiene la planta a cargar, y así evitar
+        // llamar a BD cada vez que queramos pedir la etiqueta de cada punto
+        Floor.saved_labels = new LabelResource().readFromFloor(Floor.data.id);
+
+        // Carga todas las imágenes para
+        Label.i = 0;
+        Label.keys = Object.keys(Floor.saved_labels);
+        Floor._loopLabels();
     },
 
 
@@ -300,23 +421,13 @@ var Floor = {
 
         Floor.painted_labels = [];
 
-        $e.floor.grid.find('.row').each(function(){
-            var row = $(this).data('row');
-            //Recorremos cada bloque de la fila
-            $(this).find('.block').each(function(){
+        $e.floor.grid.find('.block[data-label]').each(function(){
+            var block_label = $(this).data('label');
 
-                var block_label = $(this).data('label');
+            if(Floor.painted_labels[block_label])
+                return;
 
-                // Si:
-                //      el bloque no tiene etiqueta
-                //      ||
-                //      la etiqueta ya está en la lista
-                // Entonces: saltamos a la siguiente iteración
-                if(!block_label || Floor.painted_labels[block_label])
-                    return;
-
-                Floor.painted_labels[block_label] = new LabelResource().readFromUri(block_label);
-            });
+            Floor.painted_labels[block_label] = new LabelResource().readFromUri(block_label);
         });
     },
 
@@ -325,16 +436,14 @@ var Floor = {
     {
         // Pintamos los QRs de las etiquetas que lo contengan
 
-        if(!Menu.qr_list)
-            Menu.fillQrList();
-
         Painter.i = 0;
+        Menu.qr_list = new Resource('qr-code').readAllFiltered('?point__floor__id=' + Floor.data.id);
 
         Floor._loopQRs();
     },
 
 
-    drawSaved: function()
+    loadSaved: function()
     {
         //
         //  1. Dibujamos el grid vacío con el nro. de filas y columnas almacenado en BD
@@ -350,12 +459,14 @@ var Floor = {
 
         Floor._drawGrid();
 
-        $.when(Floor._loadLabels()).then(Floor._loadQRs);
+        Floor._loadLabels();
     },
 
 
-    drawEmpty: function()
+    loadEmpty: function()
     {
+        Floor.loading = true;
+
         Floor.num_rows = parseInt($e.floor.num_rows.val(), 10);
         Floor.grid_height = resize(Floor.img.height, Floor.num_rows);
         Floor.block_height = Floor.grid_height / Floor.num_rows;
@@ -368,20 +479,42 @@ var Floor = {
 
         Floor._drawGrid();
 
+        Floor.painted_connectors = [];
+
+        if(!Floor.reloading)
+        {
+            Menu.init();
+            Events.bindAll();
+        }
+
         Floor.loading = false;
+        Floor.reloading = false;
+
+        WaitingDialog.close();
     },
 
 
     loadGrid: function()
     {
+        WaitingDialog.open(gettext('Loading floor grid') + '..');
+
         Floor.loading = true;
 
-        // Si la planta no tiene todavía un número de filas entonces
-        // 'tirará' de lo indicado en el formulario de la página
-        if(Floor.data.num_rows)
-            Floor.drawSaved();
-        else
-            Floor.drawEmpty();
+        Floor.point_count.saved = 0;
+        Floor.point_count.to_save = 0;
+        Floor.point_count.to_delete = 0;
+        Floor.point_count.connectors = 0;
+
+        Floor.painted_connectors = [];
+        Painter.erase_mode = false;
+
+        setTimeout(function(){
+            if(Floor.data.num_rows)
+                Floor.loadSaved();
+            else
+                Floor.loadEmpty();
+        }, 200);
+
     },
 
 
@@ -397,6 +530,37 @@ var Floor = {
 //        FloorResource().del(this.data., confirm_msg);
 //        setGridSelector();
 //        loadEmptyGrid();
+    },
+
+
+    changeNumRows: function(e)
+    {
+        if(Floor.rows_changing)
+            return;
+
+        if(Floor.points.length > 0)
+        {
+            if(confirm(gettext('Changing number of rows will erase all points on the floor. ' +
+                'Continue?')))
+            {
+                Floor.rows_changing = true;
+                new PointResource().deletePoints(Floor.points);
+                WaitingDialog.open(gettext('Redrawing grid') + '..');
+                Floor.reloading = true;
+                Floor.loadEmpty();
+            }
+            else
+            {
+                $e.floor.num_rows.val(Floor.data.num_rows || 20);
+            }
+        }
+        else
+        {
+            WaitingDialog.open(gettext('Redrawing grid') + '..');
+            setTimeout(Floor.loadEmpty, 200);
+        }
+
+        Floor.rows_changing = false;
     }
 };
 

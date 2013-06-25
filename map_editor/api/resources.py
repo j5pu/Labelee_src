@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+#sfrom StdSuites.QuickDraw_Graphics_Suite import _Prop_ordering
 
 from django.contrib.auth.models import User
 
@@ -18,6 +19,8 @@ from tastypie.resources import ModelResource, ALL, ALL_WITH_RELATIONS
 from tastypie import fields
 
 from map_editor.models import *
+from route.models import *
+from log.models import *
 from map_editor.forms import EnclosureForm
 
 
@@ -25,10 +28,9 @@ class UserResource(ModelResource):
     class Meta:
         resource_name = 'user'
         queryset = User.objects.all()
-
+        authorization = DjangoAuthorization()
         # excludes = ['email', 'password', 'is_staff', 'is_superuser']
     # allowed_methods = ['get']
-    # authorization = DjangoAuthorization()
     # authentication = BasicAuthentication()
     # include_resource_uri = False
 
@@ -49,7 +51,7 @@ class EnclosureResource(ModelResource):
         queryset = Enclosure.objects.all()
         include_resource_uri = True
         authorization = DjangoAuthorization()
-        authentication = BasicAuthentication()
+        # authentication = BasicAuthentication()
         # 		validation = FormValidation(form_class=EnclosureForm)
         filtering = {
             'name': ALL,
@@ -73,11 +75,14 @@ class FloorResource(ModelResource):
     class Meta:
         queryset = Floor.objects.all()
         authorization = DjangoAuthorization()
-        authentication = BasicAuthentication()
+        # authentication = BasicAuthentication()
         include_resource_uri = True
         filtering = {
             'enclosure': ALL_WITH_RELATIONS,
-            'id': ALL
+            'id': ALL,
+        }
+        ordering = {
+            'floor_number': ALL
         }
         always_return_data = True
         max_limit = 5000
@@ -90,11 +95,18 @@ class PointResource(ModelResource):
     floor = fields.ToOneField(FloorResource, 'floor')
     label = fields.ToOneField('map_editor.api.resources.LabelResource', 'label')
     qr_code = fields.ToOneField('map_editor.api.resources.QRCodeResource', 'qr_code', null=True)
+    # connection_init = fields.ToOneField('map_editor.api.resources.ConnectionResource', 'connection_init', null=True)
+    # connection_end = fields.ToOneField('map_editor.api.resources.ConnectionResource', 'connection_end', null=True)
+    # qr_code = fields.ToOneField('map_editor.api.resources.QRCodeResource', 'qr_code', null=True)
+    # route = fields.ToOneField('map_editor.api.resources.RouteResource', 'route', null=True)
+    # connections = fields.ToManyField('map_editor.api.resources.ConnectionResource', 'connections', null=True)
+    # connections2 = fields.ToManyField('map_editor.api.resources.ConnectionResource', 'connections2', null=True)
+
 
     class Meta:
         queryset = Point.objects.all()
         authorization = DjangoAuthorization()
-        authentication = BasicAuthentication()
+        # authentication = BasicAuthentication()
         # usando apikey:
         # authentication = ApiKeyAuthentication()
         always_return_data = True
@@ -103,7 +115,11 @@ class PointResource(ModelResource):
             'label': ALL_WITH_RELATIONS,
             'id': ALL,
             'row': ALL,
-            'col': ALL
+            'col': ALL,
+            'description': ALL
+        }
+        ordering = {
+            'description': ALL
         }
         max_limit = 5000
 
@@ -118,10 +134,11 @@ class LabelResource(ModelResource):
     class Meta:
         queryset = Label.objects.all()
         authorization = DjangoAuthorization()
-        authentication = BasicAuthentication()
+        # authentication = BasicAuthentication()
         always_return_data = True
         filtering = {
             'id': ALL,
+            'name': ALL,
             'category': ALL_WITH_RELATIONS,
             'points': ALL_WITH_RELATIONS
         }
@@ -138,12 +155,13 @@ class LabelCategoryResource(ModelResource):
         resource_name = 'label-category'
         queryset = LabelCategory.objects.all()
         authorization = DjangoAuthorization()
-        authentication = BasicAuthentication()
+        # authentication = BasicAuthentication()
         always_return_data = True
         filtering = {
             'id': ALL,
             'name': ALL,
             'color': ALL,
+            'icon': ALL,
             'labels': ALL_WITH_RELATIONS,
         }
 
@@ -158,7 +176,7 @@ class QRCodeResource(ModelResource):
         resource_name = 'qr-code'
         queryset = QR_Code.objects.all()
         authorization = DjangoAuthorization()
-        authentication = BasicAuthentication()
+        # authentication = BasicAuthentication()
         always_return_data = True
         filtering = {
             'id': ALL,
@@ -169,21 +187,85 @@ class QRCodeResource(ModelResource):
         return 'application/json'
 
 
-# class ConnectionResource(ModelResource):
-#     init = fields.ToOneField('map_editor.api.resources.PointResource', 'init', full=True)
-#     init = fields.ToOneField('map_editor.api.resources.PointResource', 'init', full=True)
-#
-#     class Meta:
-#         resource_name = 'qr-code'
-#         queryset = QR_Code.objects.all()
-#         authorization = DjangoAuthorization()
-#         authentication = BasicAuthentication()
-#         always_return_data = True
-#         filtering = {
-#             'id': ALL,
-#             'point': ALL_WITH_RELATIONS,
-#             }
-#
-#     def determine_format(self, request):
-#         return 'application/json'
-#
+class ConnectionResource(ModelResource):
+    init = fields.ToOneField('map_editor.api.resources.PointResource', 'init', full=True)
+    end = fields.ToOneField('map_editor.api.resources.PointResource', 'end', full=True)
+
+    class Meta:
+        resource_name = 'connection'
+        queryset = Connection.objects.all()
+        authorization = DjangoAuthorization()
+        # authentication = BasicAuthentication()
+        always_return_data = True
+        filtering = {
+            'id': ALL,
+            'init': ALL_WITH_RELATIONS,
+            'end': ALL_WITH_RELATIONS,
+            }
+
+    def determine_format(self, request):
+        return 'application/json'
+
+
+class RouteResource(ModelResource):
+    origin = fields.ToOneField('map_editor.api.resources.PointResource', 'origin', full=True)
+    destiny = fields.ToOneField('map_editor.api.resources.PointResource', 'destiny', full=True)
+    steps = fields.ToManyField('map_editor.api.resources.StepResource', 'steps', null=True, full=True)
+
+
+
+# Comentario
+
+    class Meta:
+        resource_name = 'route'
+        queryset = Route.objects.all()
+        authorization = DjangoAuthorization()
+        # authentication = BasicAuthentication()
+        always_return_data = True
+        filtering = {
+            'id': ALL,
+            'origin': ALL_WITH_RELATIONS,
+            'destiny': ALL_WITH_RELATIONS
+            }
+
+    def determine_format(self, request):
+        return 'application/json'
+
+
+class StepResource(ModelResource):
+    route = fields.ToOneField('map_editor.api.resources.RouteResource', 'route')
+    floor = fields.ToOneField('map_editor.api.resources.FloorResource', 'floor')
+
+    class Meta:
+        resource_name = 'step'
+        queryset = Step.objects.all()
+        authorization = DjangoAuthorization()
+        # authentication = BasicAuthentication()
+        always_return_data = True
+        filtering = {
+            'id': ALL,
+            'origin': ALL_WITH_RELATIONS,
+            'destiny': ALL_WITH_RELATIONS
+        }
+
+    def determine_format(self, request):
+        return 'application/json'
+
+
+class LogEntryResource(ModelResource):
+
+    class Meta:
+        resource_name = 'log-entry'
+        queryset = LogEntry.objects.all()
+        authorization = DjangoAuthorization()
+        # authentication = BasicAuthentication()
+        always_return_data = True
+        filtering = {
+            'id': ALL,
+            'category': ALL,
+            'message': ALL,
+            'when': ALL
+        }
+
+    def determine_format(self, request):
+        return 'application/json'

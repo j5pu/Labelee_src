@@ -4,8 +4,8 @@ from django.db import models
 
 
 class Route(models.Model):
-    origin = models.ForeignKey('map_editor.Point', related_name='+', on_delete=models.CASCADE)
-    destiny = models.ForeignKey('map_editor.Point', related_name='+', on_delete=models.CASCADE)
+    origin = models.ForeignKey('map_editor.Point', related_name='+')
+    destiny = models.ForeignKey('map_editor.Point', related_name='+')
 
     def __unicode__(self):
         return 'tabla ruta'
@@ -24,13 +24,13 @@ class Step(models.Model):
     step_number = models.PositiveIntegerField()
     row = models.PositiveIntegerField()
     column = models.PositiveIntegerField()
-    route = models.ForeignKey(Route, on_delete=models.CASCADE)
-    floor = models.ForeignKey('map_editor.Floor', on_delete=models.CASCADE)
+    route = models.ForeignKey(Route, related_name='steps')
+    floor = models.ForeignKey('map_editor.Floor', related_name='steps')
 
 
 class Connection(models.Model):
-    init = models.OneToOneField('map_editor.Point', related_name='map_connection', on_delete=models.CASCADE)
-    end = models.ForeignKey('map_editor.Point', related_name='+', on_delete=models.CASCADE)
+    init = models.OneToOneField('map_editor.Point', related_name='connection_init', on_delete=models.CASCADE)
+    end = models.OneToOneField('map_editor.Point', related_name='connection_end', on_delete=models.CASCADE)
 
 
 

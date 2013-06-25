@@ -1,6 +1,8 @@
-django
+django>=1.5
 mysql-python
 django-tastypie
 simplejson
 south
 docutils
+tweepy>=2.0
+django-modeltranslation

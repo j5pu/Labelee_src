@@ -1,23 +1,39 @@
 # coding=utf-8
 import threading
+
+from django.core.mail import EmailMessage
 from django.db import transaction
-from map_editor.models import *
 from django.http import *
+from django.utils.translation import gettext as _
+
+from map_editor.models import *
 from route.models import *
-from route.pathfinding.dijkstra import *
-from django.db import connection
-from threading import Thread
+from route.pathfinding.Dijkstra import *
+
 #from django.core import serializers
 
 
 def calculate_routes(request, enclosure_id):
-# t1 = threading.Thread(target=threadCalculateRoute, args=[enclosure_id])
-# t1.start()
-    threadCalculateRoute(enclosure_id)
-    return HttpResponse('La operación se ha realizado correctamente')
+
+    # t1 = threading.Thread(target=threadCalculateRoute, args=[enclosure_id])
+    # t1.start()
+    try:
+        t1 = threading.Thread(target=threadCalculateRoute, args=[enclosure_id])
+        t1.start()
+        #threadCalculateRoute(enclosure_id)
+    except Exception as ex:
+       print type(ex)
+       print ex.args
+
+    return HttpResponse(_('Se están calculando las rutas'))
 
 
 def threadCalculateRoute(enclosure_id):
+    try:
+        email = EmailMessage('Cálculo de rutas','Se están calculando rutas', to=['alvaro.gutierrez@mnopi.com'])
+        email.send()
+    except:
+        pass
     sql = "select * from route_route where origin_id in  " \
           "( SELECT id FROM map_editor_point where floor_id in " \
           "(select id from map_editor_floor where map_editor_floor.enclosure_id = %s))" % enclosure_id
@@ -41,7 +57,7 @@ def threadCalculateRoute(enclosure_id):
         if hasattr(point, 'qr_code'):
             qrlist.append(point.qr_code)
 
-        if point.label.category.name.upper() in CATEGORIAS_FIJAS[0].upper():
+        if point.label.category.name_es.upper() in CATEGORIAS_FIJAS[0].upper():
             walls.append(Dijkstra.getKey(point.row, point.col, point.floor.id))
 
         pmapconnections = Connection.objects.filter(init__id=point.id)
@@ -54,26 +70,41 @@ def threadCalculateRoute(enclosure_id):
                 mapConnections[keyinit] = [keyend]
 
     pathfinder = Dijkstra(floors, walls, qrlist, mapConnections)
-    paths = pathfinder.calculateDijkstra()
+    errors = []
+    paths = pathfinder.calculateDijkstra(errors)
+    try:
+        with transaction.commit_on_success():
+            for path in paths:
+                origin = path[0]
+                destination = path[1]
+                steps = path[2][1]
+                calculatedRoute = Route()
+                calculatedRoute.origin = origin.point
+                calculatedRoute.destiny = destination.point
+                calculatedRoute.save()
+                for index in range(1, len(steps)):
+                    routeStep = Step()
+                    stepElements = steps[index].split('_')
+                    routeStep.row = stepElements[0]
+                    routeStep.column = stepElements[1]
+                    routeStep.step_number = index
+                    routeStep.step_category = routeStep.NORMAL
+                    routeStep.floor = floors.filter(id=stepElements[2])[0]
+                    routeStep.route = calculatedRoute
+                    routeStep.save()
+    except Exception as ex:
+        errors.append('Se ha producido un error al insertar los datos en la BBDD')
+    mensaje='Se ha realizado la operación correctamente'
+    if len(errors) > 0:
+        mensaje = 'Se han producido los siguientes errores: '
+        for error in errors:
+            mensaje += error + '--'
 
-    with transaction.commit_on_success():
-        for path in paths:
-            origin = path[0]
-            destination = path[1]
-            steps = path[2][1]
-            calculatedRoute = Route()
-            calculatedRoute.origin = origin.point
-            calculatedRoute.destiny = destination.point
-            calculatedRoute.save()
-            for index in range(1, len(steps)):
-                routeStep = Step()
-                stepElements = steps[index].split('_')
-                routeStep.row = stepElements[0]
-                routeStep.column = stepElements[1]
-                routeStep.step_number = index
-                routeStep.step_category = routeStep.NORMAL
-                routeStep.floor = floors.filter(id=stepElements[2])[0]
-                routeStep.route = calculatedRoute
-                routeStep.save()
+    try:
+        email = EmailMessage('Informe cálculo de rutas',mensaje, to=['alvaro.gutierrez@mnopi.com'])
+        email.send()
+    except:
+        pass
 
-    print paths
+
+

@@ -2,7 +2,7 @@
 // Elementos del DOM
 //
 
-var $e = {
+$e = {
 
     init: function()
     {
@@ -17,7 +17,8 @@ var $e = {
                 img: $('#category-form input[name=img]'),
                 name: $('#category-form input[name=name]'),
                 color: $('#category-form input[name=color]'),
-                create: $('#category-form button[name=create]')
+                create: $('#category-form button[name=create]'),
+                cancel: $('#category-form button[name=cancel]')
             }
         };
 
@@ -32,7 +33,8 @@ var $e = {
                 img: $('#label-form input[name=img]'),
                 name: $('#label-form input[name=name]'),
                 category: $('#label-form select'),
-                create: $('#label-form button[name=create]')
+                create: $('#label-form button[name=create]'),
+                cancel: $('#label-form button[name=cancel]')
             }
         };
 
@@ -41,14 +43,25 @@ var $e = {
             num_rows: $('#num_rows'),
             num_blocks: $('#num_blocks'),
             toggle_border: $('#toggle_border'),
+            toggle_erase_mode: $('input[name=toggle_erase_mode]'),
+            toggle_erase_mode_checked: $('input[name=toggle_erase_mode]:checked'),
             blocks: null,
             update: $('#update_floor'),
-            clear: $('#clear_floor')
+            clear: $('#clear_floor'),
+            labeled_blocks: null,
+            poi_menu: $('#poi_menu')
         };
 
         this.qr = {
             list: $('#qr_list ul'),
             toggle: $('#toggle_qrs')
         };
+
+        this.point_count = {
+            saved: $('#num_saved_points'),
+            to_save: $('#num_points_to_save'),
+            to_delete: $('#num_points_to_delete'),
+            total: $('#num_total_points')
+        }
     }
 };

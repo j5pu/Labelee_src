@@ -1,4 +1,6 @@
 
+var $e = {};
+var Events = {};
 
 function listenIframe(form, callback)
 {
@@ -90,14 +92,13 @@ function divideInGroups(arr, group_size)
     //      [{point0}, {point1}, .., {point9}]
     //      => [ [{point0}, {point1}], [{point2}, {point3}], ..]
     var group_counter = 0;
-    var GROUP_SIZE = group_size;
 
     var group = [];
     var groups = [];
 
     for(var i in arr)
     {
-        if(group_counter >= GROUP_SIZE)
+        if(group_counter >= group_size)
         {
             groups.push(group);
             group = [];
@@ -115,17 +116,104 @@ function divideInGroups(arr, group_size)
 }
 
 
-var loadingMsg = {
-    // Se muestra un mensaje mientras se está haciendo algo
+// http://stackoverflow.com/a/6700/1260374
+Object.size = function(obj) {
+    var size = 0, key;
+    for (key in obj) {
+        if (obj.hasOwnProperty(key)) size++;
+    }
+    return size;
+};
 
-    show: function(msg)
-    {
-        var background =
-        $('body').append
+
+var WaitingDialog = {
+    init: function(){
+        $("#loadingScreen").dialog({
+            autoOpen: false,    // set this to false so we can manually open it
+            dialogClass: "loadingScreenWindow",
+            closeOnEscape: false,
+            draggable: false,
+            width: 460,
+            minHeight: 50,
+            modal: true,
+            buttons: {},
+            resizable: false,
+            open: function() {
+                // scrollbar fix for IE
+                $('body').css('overflow','hidden');
+            },
+            close: function() {
+                // reset overflow
+                $('body').css('overflow','auto');
+            }
+        }); // end of dialog
     },
 
-    hide: function()
-    {
+    open: function(msg){
+        $("#loadingScreen").html(msg);
+        $("#loadingScreen").dialog('open');
+    },
 
+    close: function(){
+        $("#loadingScreen").dialog('close');
     }
 };
+
+
+var ImgLoader = {
+
+    // {
+    //      '/media/img/label/kichi.png': (correspondiente objeto Image() cargado),
+    //      ...
+    // }
+
+    imgs: {},
+    i: 0,
+    src_list: [],
+    callback: null,
+
+    load: function(src_list, callback){
+        var self = this;
+
+        if(src_list && callback)
+        {
+            self.src_list = src_list;
+            self.callback = callback;
+        }
+
+        // Si se han cargardo todos los src ejecutamos el callback..
+        if(self.i == self.src_list.length)
+        {
+            self.callback();
+            self.i = 0;
+            return;
+        }
+
+        if(self.src_list[self.i])
+        {
+            var img = new Image();
+            img.src = self.src_list[self.i];
+            img.onload = function(){
+                self.imgs[self.src_list[self.i]] = img;
+            };
+        }
+        else
+            self.imgs[self.src_list[self.i]] = null;
+
+        self.i++;
+
+        // Cargamos el siguiente src..
+        self.load();
+    },
+
+    get: function(img_src){
+        return this.imgs[img_src]
+    },
+
+    push: function(img_src){
+        this.src_list.push(img_src);
+    }
+};
+
+
+

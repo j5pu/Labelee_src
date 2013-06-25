@@ -1,12 +1,18 @@
 {% extends "base.html" %}
 
+{% load i18n %}
+
 {% block css %}
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/map_editor/styles.css"/>
     <link rel="stylesheet" href="{{ STATIC_URL }}css/map_editor/edit_map/styles.css"/>
-    <link rel="stylesheet" media = "print" href="{{ STATIC_URL }}css/map_editor/edit_map/print.css"/>
+    {#    <link rel="stylesheet" media = "print" href="{{ STATIC_URL }}css/map_editor/edit_map/print.css"/>#}
+
 {% endblock css %}
 
 {# prueba cambio#}
 {% block js %}
+    <script src="{{ STATIC_URL }}vendor/bootstrap/bootstrap.file-input.js"></script>
+
     <script src="{{ STATIC_URL }}js/map_editor/edit_map/menu.js"></script>
     <script src="{{ STATIC_URL }}js/map_editor/edit_map/painter.js"></script>
     <script src="{{ STATIC_URL }}js/map_editor/edit_map/events.js"></script>
@@ -26,110 +32,166 @@
     {% csrf_token %}
 
     <!-- GRID PARA EL PLANO DE LA PLANTA -->
-    <img src = "http://127.0.0.1:8000/media/img/enclosures/Recinto1/floors/27.jpg" id = "fake">
+    <!--<img src = "/media/img/enclosures/Arista_Prueba/floors/28.jpg" id = "fake"> -->
     <div id="grid"></div>
 
-    <div class="box box-0 alert">Antes de poner un QR guardar el plano</div>
+    <div class="box box-0 alert">
+        <ul>
+            <li>{% trans "Antes de poner un QR o cambiar la descripción guardar el plano" %}</li>
+            <li>{% trans "No aumentar el tamaño de la página" %}</li>
+        </ul>
+    </div>
 
     <!--MENU-->
-    <div id="menu" class="box box-0">
-        <a href="{% url 'map_editor.views.index' %}">Volver al menú</a>
+    <div id="menu">
+        <div class="box box-0">
+            <!-- NUMERO DE FILAS Y GUARDAR FLOOR -->
+            <div class="box box-1">
+                <span class="num_rows">
+                    {% trans "Filas" %}:
+                    <input type="text"
+                           id="num_rows"
+                           value="20">
+                    =
+                </span>
+                <span id="num_blocks"></span>
 
-        <input type="checkbox" id="toggle_border" checked>Ver rejilla
+                <button class="btn" id="update_floor">{% trans "Guardar" %}</button><br>
+                <!--<button class="btn" id="clear_floor">{% trans "Limpiar" %}</button>-->
 
-        Filas:
-            <input type="text"
-                   id="num_rows"
-                   value="20">
-            = <span id="num_blocks"></span>
+                <a class="link-1" href="{% url 'map_editor.views.index' %}">{% trans "Volver al menú" %}</a>
+            </div><br>
 
-        <button id="update_floor">Guardar</button>
-        <button id="clear_floor">Limpiar</button>
+            <!-- STATS CHECKBOXES Y QR LIST -->
+            <div class="box box-1">
+                <div id="puntos" class="box box-2">
+                    <h4>{% trans "Puntos" %}:</h4>
+                    <ul>
+                        <li>
+                            <span class="txt">{% trans "Guardados" %}:</span>
+                            <span id="num_saved_points" class="num"></span>
+                        </li>
+                        <li>
+                            <span class="txt">{% trans "Por guardar" %}:</span>
+                            <span id="num_points_to_save" class="num"></span>
+                        </li>
+                        <li>
+                            <span class="txt">{% trans "Por elminar" %}:</span>
+                            <span id="num_points_to_delete" class="num"></span>
+                        </li>
+                    </ul>
+                    <!--Total: <span id="num_total_points"></span> <br>-->
+                </div>
 
-        <!-- MENU POI -->
-        <div class="box box-1">
-            <span class="title">Elegir POI:</span>
-            <br>
+                <div class="box box-2">
+                    <label class="checkbox">
+                        <input type="checkbox" id="toggle_border" checked>{% trans "Ver rejilla" %}
+                    </label>
+                    <label class="checkbox">
+                        <input type="checkbox" name="toggle_erase_mode">{% trans "Modo borrar" %}<br>
+                    </label>
+                </div><br>
 
-            <div id="category" class="box box-2">
-                Categoría:
-                <br>
-                <select></select>
-                <a class="new" href=''>Nueva</a>
-                <!--<a class="edit" href=''>Editar</a>-->
-                <a class="delete" href=''>Eliminar</a>
+                <!-- LISTA DE QRs -->
+                <div id="qr_list" class="box box-2">
+                    <h4>{% trans "Lista de QRs" %}:</h4>
+                    <label class="checkbox">
+                        <input type="checkbox" id="toggle_qrs">{% trans "Resaltar todos" %}
+                    </label>
+                    <ul></ul>
+                </div>
             </div>
+        </div>
 
-            <div id="label" class="box box-2">
-                POI:
-                <br>
-                <select></select>
-                <a class="new" href=''>Nuevo</a>
-                <!--<a class="edit" href=''>Editar</a>-->
-                <a class="delete" href=''>Eliminar</a>
+        <div class="box box-0">
+            <!-- WRAPPER MENU POI-->
+            <div class="box box-1">
+                <!-- MENU -->
+                <div id="poi_menu" class="box box-2">
+                    <span class="title">{% trans "Elegir POI" %}:</span>
+                    <br>
+
+                    <div id="category" class="box box-2">
+                        {% trans "Categoría" %}:
+                        <br>
+                        <select></select>
+                        <a class="new" href=''>{% trans "Nueva" %}</a>
+                        <!--<a class="edit" href=''>Editar</a>-->
+                        <a class="delete" href=''>{% trans "Eliminar" %}</a>
+                    </div><br>
+
+                    <div id="label" class="box box-2">
+                        POI:
+                        <br>
+                        <select></select>
+                        <a class="new" href=''>{% trans "Nuevo" %}</a>
+                        <!--<a class="edit" href=''>Editar</a>-->
+                        <a class="delete" href=''>{% trans "Eliminar" %}</a>
+                    </div>
+                </div>
+
+                <!--
+                    Cajas para crear objeto o categoría
+                -->
+                <div id="category-form" class="box box-2">
+
+                    <span class="title">{% trans "Crear categoría" %}:</span>
+                    <br>
+
+                    <form action=""
+                          method="post"
+                          enctype="multipart/form-data"
+                          target="upload_target">
+                        <input type="text" name="name"
+                               placeholder="{% trans "Nombre para la categoría" %}.."/>
+                        <br>
+
+                        <!-- Campo para la imágen -->
+                        <input class="btn"
+                               type="file"
+                               name="img"
+                               title="{% trans "Elegir icono" %}..">
+                        <br>
+
+                        {% trans "Color de bloque" %}:
+                        <input type="text" name="color"
+                               placeholder="{% trans "Color" %}.."/>
+                        <br>
+
+                        <button name="create">{% trans "Crear" %}</button>
+                        <button name="cancel">{% trans "Cancelar" %}</button>
+                    </form>
+                </div>
+
+                <div id="label-form" class="box box-2">
+                    <span class="title">{% trans "Crear POI" %}:</span>
+                    <br>
+
+                    <form action=""
+                          method="post" enctype="multipart/form-data"
+                          target="upload_target">
+                        <input type="text" name="name"
+                               placeholder="{% trans "Nombre para el POI" %}.."/><br>
+
+                        {% trans "Para la categoría" %}:
+                        <select></select><br>
+
+                        {% trans "Imágen para el POI" %}:
+                        <input class="btn"
+                               type="file"
+                               name="img"
+                               title="{% trans "Elegir imágen" %}.."><br>
+
+                        <button name="create">{% trans "Crear" %}</button>
+                        <button name="cancel">{% trans "Cancelar" %}</button>
+                    </form>
+                </div>
             </div>
-        </div>
-
-        <!--
-        Cajas para crear objeto o categoría
-        -->
-
-        <div id="category-form" class="box box-1">
-
-            <span class="title">Crear categoría:</span>
-            <br>
-
-            <form action=""
-                  method="post" enctype="multipart/form-data"
-                  target="upload_target">
-                <input type="text" name="name"
-                       placeholder="Nombre para la categoría.."/>
-                <br>
-
-                <!-- Campo para la imágen -->
-                Icono para la categoría:
-                <input type="file" name="img" title="Elegir imágen..">
-                <br>
-
-                Color de bloque:
-                <input type="text" name="color"
-                       placeholder="Color.."/>
-                <br>
-
-                <button name="create">Crear</button>
-            </form>
-        </div>
-
-        <div id="label-form" class="box box-1">
-            <span class="title">Crear POI:</span>
-            <br>
-
-            <form action=""
-                  method="post" enctype="multipart/form-data"
-                  target="upload_target">
-                <input type="text" name="name"
-                       placeholder="Nombre para el POI.."/>
-                <br>
-
-                Para la categoría:
-                <select></select>
-
-                Imágen del objeto:
-                <input type="file" name="img" title="Elegir imágen..">
-
-                <button name="create">Crear</button>
-            </form>
-        </div>
-
-        <!-- LISTA DE QRs -->
-        <div id="qr_list" class="box box-0">
-            <h4>Lista de QRs:</h4>
-            <input type="checkbox" id="toggle_qrs" checked>Resaltar todos
-            <ul></ul>
         </div>
     </div>
 
 
+    <div id="loadingScreen"></div>
 
     {% include "_uploading_iframe.html" %}
 

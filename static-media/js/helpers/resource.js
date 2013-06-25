@@ -129,6 +129,7 @@ function Resource(resource_name) {
 
 
 	this.update = function(data, element_id) {
+        var element;
 		$.ajax({
 			url : this.api1_url + element_id + '/',
 			type : 'put',
@@ -139,12 +140,14 @@ function Resource(resource_name) {
 			dataType : 'json', // esto indica que la respuesta vendrá en formato json
 			async : false,
 			success : function(data) {
-				var j = 1;
+				element = data;
 			},
 			error : function(respuesta) {
 				var i = 4;
 			}
 		});
+
+        return element;
 	};
 
 	this.del = function(element_id, confirm_msg) {
@@ -186,11 +189,115 @@ function Resource(resource_name) {
 		// dejamos escuchando al iframe con la respuesta del servidor
 		listenIframe(form, callback);
 	};
+
+
+    this.delImg = function(element_id){
+
+        //		DELETE -> /api-2/floor/16/img
+
+        $.ajax({
+            url : this.api2_url + element_id + '/img',
+            type : 'delete',
+            headers : {
+                'Content-Type' : 'application/json'
+            },
+            dataType : 'json', // esto indica que la respuesta vendrá en formato json
+            async : false,
+            success : function(response) {
+                var i = response;
+            },
+            error : function(response) {
+                var j = response;
+            }
+        });
+    };
 }
 
 function FloorResource()
 {
     Resource.call(this, 'floor');
+
+    this.readFromEnclosure = function(enclosure_id) {
+
+        var elements;
+        $.ajax({
+            url : this.api1_url + '?enclosure__id=' + enclosure_id + '&order_by=floor_number',
+            type : 'get',
+            headers : {
+                'Content-Type' : 'application/json'
+            },
+            dataType : 'json', // esto indica que la respuesta vendrá en formato json
+            async : false,
+            success : function(response) {
+                elements = response.objects;
+            },
+            error : function(response) {
+                var j = response;
+            }
+        });
+
+        return elements;
+    };
+
+
+    this.del = function(floor_id, confirm_msg) {
+
+        if (!confirm(confirm_msg))
+            return;
+
+        // Primero eliminamos todos los puntos para el plano, de forma que no
+        // puedan quedar aristas sueltas
+//        var filter = '?floor__id=' + floor_id;
+//        var point_list = new PointResource().readAllFiltered(filter);
+//        new PointResource().deletePoints(point_list);
+
+        // Eliminamos la imágen para el plano
+        //
+        // POR CORREGIR
+//        this.delImg(floor_id);
+
+        // Eliminamos la planta
+        $.ajax({
+            url : this.api1_url + floor_id + '/',
+            type : 'delete',
+            headers : {
+                'Content-Type' : 'application/json'
+            },
+            dataType : 'json', // esto indica que la respuesta vendrá en formato json
+            async : false,
+            success : function(response) {
+                var i = response;
+            },
+            error : function(response) {
+                var j = response;
+            }
+        });
+    };
+
+
+    this.renderGrid = function(floor_id){
+        // Obtenemos el código html del grid renderizado de lado del servidor para
+        // el plano de la planta
+
+        var gridHtml;
+        $.ajax({
+            url : this.api2_url + 'floor/' + floor_id + '/render-grid',
+            type : 'get',
+            headers : {
+                'Content-Type' : 'application/json'
+            },
+            dataType : 'json', // esto indica que la respuesta vendrá en formato json
+            async : false,
+            success : function(response) {
+                elements = response;
+            },
+            error : function(response) {
+                var j = response;
+            }
+        });
+
+        return elements;
+    };
 }
 
 function LabelResource()
@@ -199,24 +306,7 @@ function LabelResource()
 
 	this.readFromFloor = function(floor_id) {
 
-		// Para obtener todos los objetos de un grid, agrupados por id:
-		// 		uri = /api-2/object/grid/4
-        //
-        // -> objects = {
-        // 		'api/v1/object/1': {
-        //			category_id: 1
-        //			category_name: builder
-	    //			id: 1
-	    //			img: "img/objects/builders/wall.png"
-	    //			name: "wall"
-	    //			total: 6
-	    //			resource_uri: api/v1/object/1
-	    //			from_db: True
-        // 		},
-        //      ..
-        //   }
-
-		var element;
+		var elements;
 		$.ajax({
 			url : this.api2_url + 'floor/' + floor_id,
 			type : 'get',
@@ -226,21 +316,46 @@ function LabelResource()
 			dataType : 'json', // esto indica que la respuesta vendrá en formato json
 			async : false,
 			success : function(response) {
-				element = response;
+				elements = response;
 			},
 			error : function(response) {
 				var j = response;
 			}
 		});
 
-		return element;
+		return elements;
 	};
+
+    this.readGrouped = function() {
+        var elements;
+        $.ajax({
+            url : this.api2_url + 'read-grouped',
+            type : 'get',
+            headers : {
+                'Content-Type' : 'application/json'
+            },
+            dataType : 'json', // esto indica que la respuesta vendrá en formato json
+            async : false,
+            success : function(response) {
+                elements = response.objects;
+            },
+            error : function(response) {
+                var j = response;
+            }
+        });
+
+        return elements;
+    }
 }
 
 
 function LabelCategoryResource()
 {
     Resource.call(this, 'label-category');
+
+    this.readValidAsPois = function(enclosure_id){
+        return ajaxGetElements(this.api2_url, 'valid/' + enclosure_id);
+    };
 }
 
 
@@ -256,7 +371,7 @@ function PointResource()
         //      row: 12,
         //      col: 33,
         //      grid: "/api/v1/grid/35/",
-        //      object: "/api/v1/object/1/"
+        //      label: "/api/v1/object/1/"
         // }
         //
         // points_data = [{point0}, {point1}..]
@@ -290,6 +405,39 @@ function PointResource()
 			});
 		}
 	};
+
+
+    this.updatePoints = function(points_data){
+        // Divido los puntos en grupos de 500 y envío cada grupo
+        // vía POST -> /api-2/point/update-from-list
+
+        if(points_data.length === 0)
+            return;
+
+        var groups = divideInGroups(points_data, 500);
+
+        for(var i in groups)
+        {
+            var data = groups[i];
+
+            $.ajax({
+                url : this.api2_url + 'update-from-list',
+                type : 'post',
+                headers : {
+                    'Content-Type' : 'application/json'
+                },
+                data : JSON.stringify(data),
+                dataType : 'json', // esto indica que la respuesta vendrá en formato json
+                async : false,
+                success : function(response) {
+                    new_element = response;
+                },
+                error : function(response) {
+                    var j = response;
+                }
+            });
+        }
+    };
 
 
     this.deletePoints = function(points_data){
@@ -349,7 +497,32 @@ function PointResource()
         });
 
         return element;
-    }
+    };
+
+    this.readConnectionsFromEnclosure = function(enclosure_id)
+    {
+        return this.readAllFiltered(
+            '?label__category__name__icontains=arista' +
+                '&floor__enclosure__id=' + enclosure_id +
+                '&order_by=description'
+        );
+    };
+
+    this.readConnectionsFromFloor = function(floor_id)
+    {
+        return this.readAllFiltered('?label__category__name__icontains=arista&floor__id=' + floor_id);
+    };
+
+    this.readQRsFromFloor = function(floor_id)
+    {
+        qr_codes = new Resource('qr-code').readAllFiltered('?point__floor__id=' + floor_id);
+
+        points = [];
+        for(i in qr_codes)
+            points.push(qr_codes[i].point);
+
+        return points;
+    };
 }
 
 
@@ -377,9 +550,56 @@ function EnclosureResource()
 }
 
 
+function ConnectionResource()
+{
+    Resource.call(this, 'connection');
+
+    this.readFromEnclosure = function(enclosure_id)
+    {
+        return this.readAllFiltered('?init__floor__enclosure__id=' + enclosure_id);
+    };
+}
+
+
+function RouteResource()
+{
+    Resource.call(this, 'route');
+
+    this.getRoute = function(origin, destiny)
+    {
+        var elements;
+        $.ajax({
+            url : '/get-route/' + origin + '_' + destiny,
+            type : 'get',
+            headers : {
+                'Content-Type' : 'application/json'
+            },
+            dataType : 'json', // esto indica que la respuesta vendrá en formato json
+            async : false,
+            success : function(response) {
+                elements = response;
+            },
+            error : function(response) {
+                var j = response;
+            }
+        });
+
+        return elements;
+    };
+}
+
+
+function StepResource()
+{
+    Resource.call(this, 'step');
+}
+
+
 FloorResource.prototype = new Resource;
 LabelResource.prototype = new Resource;
 LabelCategoryResource.prototype = new Resource;
 PointResource.prototype = new Resource;
 EnclosureResource.prototype = new Resource;
-//RouteResource.prototype = new Resource;
+ConnectionResource.prototype = new Resource;
+RouteResource.prototype = new Resource;
+StepResource.prototype = new Resource;
