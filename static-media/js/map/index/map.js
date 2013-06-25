@@ -42,6 +42,9 @@ var OriginIcon = L.AwesomeMarkers.icon({
         color: 'red'
     });
 
+
+var loadedLabels = false;
+
 var anim = null;
 var flechita = null;
 /*var floorChecks = [];
@@ -472,6 +475,8 @@ function initMap(qrPoint) {
     qrMarker._bringToFront();
 
     map.invalidateSize();
+
+    loadedLabels = true;
 }
 
 
@@ -480,6 +485,7 @@ function initMap(qrPoint) {
 map.on('layeradd', function (e) {
     addCategory(e);
 });
+
 //EVENTOS - Añadir layer
 map.on('layerremove', function (e) {
     removeCategory(e);
@@ -489,39 +495,22 @@ map.on('baselayerchange', function (e) {
     changeFloor(e);
 });
 
-/*
-
-$('input[type=checkbox].leaflet-control-layers-selector').click(function()
-{
-   if (this.css('background') === "rgb(51,51,51)")
-   {
-       this.css('background', floors[0].labels[l].fields.color);
-   }
-
-});
-*/
 
 function addCategory(e)
 {
-    if(e.layer._layers)
+    for (var i in floors)
     {
-        var keyPoi= Object.keys(e.layer._layers).pop();
-        if (e.layer._layers[keyPoi])
+        for (var l in floors[i].labels)
         {
-            for (var i in floors)
+            if (map.hasLayer(floors[i].labels[l].layer) &&
+                $('input[type=checkbox].leaflet-control-layers-selector:eq(' + l + ')').is(':checked'))
             {
-                for (var l in floors[i].labels)
-                {
-                    if (map.hasLayer(floors[i].labels[l].layer) &&
-                        $('input[type=checkbox].leaflet-control-layers-selector:eq(' + l + ')').is(':checked'))
-                    {
-                        $('input[type=checkbox].leaflet-control-layers-selector:eq(' + l + ')').css('background', floors[i].labels[l].fields.color);
-                    }
-                }
-
+                $('input[type=checkbox].leaflet-control-layers-selector:eq(' + l + ')').css('background', floors[i].labels[l].fields.color);
             }
         }
+
     }
+
 }
 
 function removeCategory(e)
@@ -620,13 +609,11 @@ function changeFloor(e) {
 }
 
 
-
 $(function () {
     LocalStorageHandler.init();
 
-    $('span#location').click(function(){
-        for (var i in floors)
-        {
+    $('span#location').click(function () {
+        for (var i in floors) {
             map.removeLayer(floors[i].layer);
         }
         map.addLayer(qrFloor.photo);
@@ -635,6 +622,17 @@ $(function () {
         qrMarker.openPopup();
         map.setView(qrLoc, 0);
     });
+
+
+    $('input').change(function () {
+        alert('Hola');
+        /*
+         if (this.css('background') === "rgb(51,51,51)") {
+         this.css('background', floors[0].labels[l].fields.color);
+         }
+         */
+    });
+
 
 });
 
