@@ -1,4 +1,13 @@
 $(function() {
+
+    $('#choose-lang img').on('click', function(){
+        $(this).parent().find('select').val($(this).attr('id'));
+        $(this).parent().submit();
+    });
+
+    $('#choose-lang img').not(document.getElementById(lang_code))
+        .css({'opacity':0.4});
+
 });
 
 

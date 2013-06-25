@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-06-20 16:12+0200\n"
+"POT-Creation-Date: 2013-06-25 11:53+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,7 +18,11 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: static-media/js/map_editor/connections/main.js:103
+#: static-media/js/map_editor/connections/main.js:55
+msgid "No saved connections at the moment for this enclosure"
+msgstr "De momento no hay conexiones guardadas para este recinto"
+
+#: static-media/js/map_editor/connections/main.js:112
 msgid "Delete connection?"
 msgstr "¿Eliminar esta conexión?"
 
@@ -26,41 +30,51 @@ msgstr "¿Eliminar esta conexión?"
 msgid "Updating floor"
 msgstr "Actualizando planta"
 
-#: static-media/js/map_editor/edit_map/floor.js:57
+#: static-media/js/map_editor/edit_map/floor.js:59
 msgid "blocks"
 msgstr "bloques"
 
-#: static-media/js/map_editor/edit_map/floor.js:489
+#: static-media/js/map_editor/edit_map/floor.js:499
 msgid "Loading floor grid"
 msgstr "Cargando grid para la planta"
 
-#: static-media/js/map_editor/edit_map/menu.js:80
+#: static-media/js/map_editor/edit_map/floor.js:543
+msgid "Changing number of rows will erase all points on the floor. Continue?"
+msgstr ""
+"Al cambiar el número de filas se eliminarán todos los puntos. ¿Continuar?"
+
+#: static-media/js/map_editor/edit_map/floor.js:547
+#: static-media/js/map_editor/edit_map/floor.js:558
+msgid "Redrawing grid"
+msgstr "Redibujando grid"
+
+#: static-media/js/map_editor/edit_map/menu.js:82
 msgid "Delete category? (all its labels will be removed)"
 msgstr "¿Eliminar categoría? (se eliminarán todas sus etiquetas)"
 
-#: static-media/js/map_editor/edit_map/menu.js:202
+#: static-media/js/map_editor/edit_map/menu.js:206
 msgid "Delete label?"
 msgstr "¿Eliminar etiqueta?"
 
-#: static-media/js/map_editor/edit_map/menu.js:327
+#: static-media/js/map_editor/edit_map/menu.js:331
 msgid "Select category"
 msgstr "Selecc. categoría"
 
-#: static-media/js/map_editor/edit_map/menu.js:348
-#: static-media/js/map_editor/edit_map/menu.js:355
+#: static-media/js/map_editor/edit_map/menu.js:352
+#: static-media/js/map_editor/edit_map/menu.js:359
 msgid "Select label"
 msgstr "Selecc. etiqueta"
 
-#: static-media/js/map_editor/index/main.js:53
-msgid "Are you sure you want to remove this enclosure? (this will erase all their floors)"
-msgstr "¿Seguro que desea eliminar el recinto? (también se perderán todas sus "
-        "plantas)"
+#: static-media/js/map_editor/index/main.js:62
+msgid "Are you sure you want to remove this enclosure? "
+msgstr "¿Seguro que desea eliminar este recinto? "
 
-#: static-media/js/map_editor/index/main.js:89
+#: static-media/js/map_editor/index/main.js:99
 msgid "You must specify the floor image too"
 msgstr "También debe subir la imágen del plano para la planta"
 
-#: static-media/js/map_editor/index/main.js:179
+#: static-media/js/map_editor/index/main.js:194
 msgid "Are you sure you want to remove this floor?"
-msgstr "¿Seguro que desea eliminar la planta? (también se perderá toda la "
-        "información relativa a ella)"
+msgstr ""
+"¿Seguro que desea eliminar la planta? (también se perderá toda la "
+"información relativa a ella)"

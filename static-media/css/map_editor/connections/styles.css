@@ -131,12 +131,12 @@ h4
 span.connector
 {
     background: rgb(173, 157, 101);
-    padding: 0.7em;
+    padding: 0.6em 0.8em;
     border-radius: 1.2em;
     color: whitesmoke;
 }
 
-span.arrow
+i.icon-arrow-right
 {
     margin: 0 0.4em;
 }

@@ -52,7 +52,7 @@ var Connections = {
 
         if(connections.length == 0)
         {
-            Connections.$e.lista_connections[0].innerHTML = gettext('Sin conexiones de momento');
+            Connections.$e.lista_connections[0].innerHTML = gettext('No saved connections at the moment for this enclosure');
             return;
         }
 
@@ -66,7 +66,7 @@ var Connections = {
             var init = connection.init;
             var end = connection.end;
             var text = ' <span class="connector">' + init.description + '</span>' +
-                '<span class="arrow">-></span>' +
+                '<i class="icon-arrow-right icon-white"></i>' +
                 '<span class="connector">' + end.description + '</span>';
 
             //create new li element
