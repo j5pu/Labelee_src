@@ -44,7 +44,7 @@ var OriginIcon = L.AwesomeMarkers.icon({
 
 var anim = null;
 var flechita = null;
-var floorChecks = [];
+/*var floorChecks = [];
 //Parpadeo a la planta del POI destino
 var blinkingMode = null;
 function blinker(element) {
@@ -61,7 +61,7 @@ function blinker(element) {
     } else {
         element.css('background-color','');
     }
-}
+}*/
 
 
 function loadIcon(color, shape) {
@@ -738,11 +738,11 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
             if (arrow[i] && subarrow[i]) {
                 floors[i].layer.addLayer(arrow[i]);
                 if (floors[i].id === route.fields.destiny.fields.floor) {
- /*                   if (route.fields.origin.fields.floor !== route.fields.destiny.fields.floor)
-                    {
-                        *//* var check = floorChecks[floors[i].name];
+               /* if (route.fields.origin.fields.floor !== route.fields.destiny.fields.floor)
+                    {*/
+                         var check = floorChecks[floors[i].name];
                          blinkingMode = floors[i].name;
-                         blinker(check);*//*
+                         blinker(check);
                         for (index = 0; index < floors.length; index++) {
                             var check = $('input[type=radio].leaflet-control-layers-selector:eq(' + index + ')');
                             if (check.parent().find('span').html().trim() == floors[i].name) {
@@ -750,8 +750,8 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
                                 blinker(check);
                             }
                         }
-                    }
- */                   map.addLayer(arrowHead[i]);
+                 //   }
+                  map.addLayer(arrowHead[i]);
                     flechita = arrowHead[i];
                     arrowAnim(flechita, floors[i].name);
                     /*
@@ -855,7 +855,7 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
             }
         }
 
-        for (var i in floors) {
+/*        for (var i in floors) {
             if (route.fields.destiny.fields.floor === floors[i].id) {
                 var check = $('input[type=radio].leaflet-control-layers-selector:eq(' + i + ')');
                 if (check.parent().find('span').html().trim() == floors[i].name) {
@@ -863,7 +863,7 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
                     blinker(check);
                 }
             }
-        }
+        }*/
 
     } else {
         alert('No existe esa ruta');
