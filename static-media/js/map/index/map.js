@@ -652,6 +652,8 @@ $(function () {
 
             } else {
                 map.removeLayer(floors[i].layer);
+                map.removeLayer(floors[i].photo);
+
 
                 for (var l in floors[i].labels) {
                     layersControl.removeLayer(floors[i].labels[l].layer);
@@ -676,7 +678,6 @@ $(function () {
         map.addLayer(qrFloor.layer);
         qrMarker._bringToFront();
         qrMarker.openPopup();
-        map.setView(qrLoc, 0);
     });
 
 
