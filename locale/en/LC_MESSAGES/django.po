@@ -1,0 +1,234 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-06-25 11:43+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: route/calculateRoutes.py:28
+msgid "Se están calculando las rutas"
+msgstr "Routes are being processed"
+
+#: sandbox/i18n/test.html:13
+msgid "Esto es un titulo"
+msgstr "This is a title"
+
+#: templates/map_editor/connections.html:23 templates/map_editor/index.html:77
+msgid "Gestión de aristas"
+msgstr "Connections manager"
+
+#: templates/map_editor/connections.html:25 templates/map_editor/edit.html:62
+msgid "Volver al menú"
+msgstr "Back to menu"
+
+#: templates/map_editor/connections.html:30
+msgid "Arista1"
+msgstr "Connector1"
+
+#: templates/map_editor/connections.html:36
+msgid "Arista2"
+msgstr "Connector2"
+
+#: templates/map_editor/connections.html:41
+msgid "Guardar connection"
+msgstr "Save connection"
+
+#: templates/map_editor/connections.html:46
+msgid "Lista de conexiones"
+msgstr "Connection list"
+
+#: templates/map_editor/edit.html:40
+msgid "Antes de poner un QR o cambiar la descripción guardar el plano"
+msgstr ""
+"You need to save the floor before assign QR or changing description for a "
+"point"
+
+#: templates/map_editor/edit.html:41
+msgid "No aumentar el tamaño de la página"
+msgstr "Don't zooming on this page"
+
+#: templates/map_editor/edit.html:51
+msgid "Filas"
+msgstr "Rows"
+
+#: templates/map_editor/edit.html:59
+msgid "Guardar"
+msgstr "Save"
+
+#: templates/map_editor/edit.html:60
+msgid "Limpiar"
+msgstr "Clear"
+
+#: templates/map_editor/edit.html:68
+msgid "Puntos"
+msgstr "Points"
+
+#: templates/map_editor/edit.html:71
+msgid "Guardados"
+msgstr "Saved"
+
+#: templates/map_editor/edit.html:75
+msgid "Por guardar"
+msgstr "To save"
+
+#: templates/map_editor/edit.html:79
+msgid "Por elminar"
+msgstr "To delete"
+
+#: templates/map_editor/edit.html:88
+msgid "Ver rejilla"
+msgstr "View block borders"
+
+#: templates/map_editor/edit.html:91
+msgid "Modo borrar"
+msgstr "Erase mode"
+
+#: templates/map_editor/edit.html:97
+msgid "Lista de QRs"
+msgstr "QR list"
+
+#: templates/map_editor/edit.html:99
+msgid "Resaltar todos"
+msgstr "Highlight all"
+
+#: templates/map_editor/edit.html:111
+msgid "Elegir POI"
+msgstr "Choose POI"
+
+#: templates/map_editor/edit.html:115
+msgid "Categoría"
+msgstr "Category"
+
+#: templates/map_editor/edit.html:118
+msgid "Nueva"
+msgstr "New"
+
+#: templates/map_editor/edit.html:120 templates/map_editor/edit.html.py:129
+msgid "Eliminar"
+msgstr "Delete"
+
+#: templates/map_editor/edit.html:127
+msgid "Nuevo"
+msgstr "New"
+
+#: templates/map_editor/edit.html:138
+msgid "Crear categoría"
+msgstr "Create category"
+
+#: templates/map_editor/edit.html:146
+msgid "Nombre para la categoría"
+msgstr "Category name"
+
+#: templates/map_editor/edit.html:153
+msgid "Elegir icono"
+msgstr "Choose icon"
+
+#: templates/map_editor/edit.html:156
+msgid "Color de bloque"
+msgstr "Block color"
+
+#: templates/map_editor/edit.html:158
+msgid "Color"
+msgstr ""
+
+#: templates/map_editor/edit.html:161 templates/map_editor/edit.html.py:185
+msgid "Crear"
+msgstr "Create"
+
+#: templates/map_editor/edit.html:162 templates/map_editor/edit.html.py:186
+#: templates/map_editor/index.html:105 templates/map_editor/index.html:206
+msgid "Cancelar"
+msgstr "Cancel"
+
+#: templates/map_editor/edit.html:167
+msgid "Crear POI"
+msgstr "Create POI"
+
+#: templates/map_editor/edit.html:174
+msgid "Nombre para el POI"
+msgstr "POI name"
+
+#: templates/map_editor/edit.html:176
+msgid "Para la categoría"
+msgstr "For category"
+
+#: templates/map_editor/edit.html:179
+msgid "Imágen para el POI"
+msgstr "POI image"
+
+#: templates/map_editor/edit.html:183 templates/map_editor/index.html:138
+msgid "Elegir imagen"
+msgstr "Choose image"
+
+#: templates/map_editor/index.html:23
+msgid "Administración de recintos"
+msgstr "Enclosure manager"
+
+#: templates/map_editor/index.html:49
+msgid "Nombre del recinto"
+msgstr "Enclosure name"
+
+#: templates/map_editor/index.html:51
+msgid "Añadir recinto"
+msgstr "Add enclosure"
+
+#: templates/map_editor/index.html:74
+msgid "Calcular rutas"
+msgstr "Calculate routes"
+
+#: templates/map_editor/index.html:92
+msgid "Nuevo nombre para el recinto"
+msgstr "New name for the enclosure"
+
+#: templates/map_editor/index.html:101
+msgid "Cuenta de twitter"
+msgstr "Twitter account"
+
+#: templates/map_editor/index.html:106 templates/map_editor/index.html:207
+msgid "Editar"
+msgstr "Edit"
+
+#: templates/map_editor/index.html:120
+msgid "Nueva planta"
+msgstr "New floor"
+
+#: templates/map_editor/index.html:130
+msgid "Nombre de planta"
+msgstr "Enclosure name"
+
+#: templates/map_editor/index.html:133 templates/map_editor/index.html:191
+#: templates/map_editor/index.html:197
+msgid "Número"
+msgstr "Number"
+
+#: templates/map_editor/index.html:141
+msgid "Añadir planta"
+msgstr "Add floor"
+
+#: templates/map_editor/index.html:149
+msgid "Plantas"
+msgstr "Floors"
+
+#: templates/map_editor/index.html:183
+msgid "Nombre"
+msgstr "Name"
+
+#: templates/map_editor/index.html:188
+msgid "Nuevo nombre para la planta"
+msgstr "New name for the floor"
+
+#: templates/map_editor/index.html:203
+msgid "Cambiar imagen"
+msgstr "Change image"

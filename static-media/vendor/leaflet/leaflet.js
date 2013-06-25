@@ -3,7 +3,6 @@
  (c) 2010-2013, Vladimir Agafonkin, CloudMade
  */
 window.L_DISABLE_3D=true;
-//L.Browser.webkit3d = false;
 var floorChecks = [];
 (function (t, e, i) {
     var n, o;
@@ -2030,7 +2029,7 @@ var floorChecks = [];
         this.fire("locationfound", {latlng: a, bounds: l, accuracy: t.coords.accuracy})
     }})
 })(this, document);
-
+//Parpadeo a la planta del POI destino
 var blinkingMode = null;
 function blinker(element) {
     if (blinkingMode!=null) {

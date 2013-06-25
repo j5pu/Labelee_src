@@ -1,4 +1,5 @@
-# -*- coding: utf8 -*-
+# -*- coding: utf-8 -*-
+from django.db.models import Sum
 
 from tastypie.models import ApiKey
 from django.http import HttpResponse
@@ -68,6 +69,10 @@ def to_dict(model_object):
     raw = serialize('json', [model_object])
     obj = simplejson.loads(raw)
     return obj[0]
+
+
+def group_by_pk(queryset_response):
+    return queryset_response.values().annotate(total=Sum('id'))
 
 
 if __name__ == "__main__":

@@ -39,3 +39,24 @@ function ajaxSetup() {
 		}
 	});
 }
+
+
+function ajaxGetElements(prefix_url, sufix_url) {
+    var elements;
+    $.ajax({
+        url : prefix_url + sufix_url,
+        type : 'get',
+        headers : {
+            'Content-Type' : 'application/json'
+        },
+        dataType : 'json', // esto indica que la respuesta vendrá en formato json
+        async : false,
+        success : function(response) {
+            elements = response;
+        },
+        error : function(response) {
+            var j = response;
+        }
+    });
+    return elements;
+}

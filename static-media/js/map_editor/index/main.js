@@ -1,5 +1,13 @@
 $(function() {
 
+    $('#choose-lang img').on('click', function(){
+        $(this).parent().find('select').val($(this).attr('id'));
+        $(this).parent().submit();
+    });
+
+    $('#choose-lang img').not(document.getElementById(lang_code))
+        .css({'opacity':0.4});
+
 });
 
 
@@ -49,9 +57,14 @@ function EnclosureCtrl($scope)
 		}
 	};
 
+    $scope.cancelUpdate = function() {
+        $scope.editing = false;
+    };
+
 	$scope.del = function() {
 
-		var confirm_msg = '¿Seguro que desea eliminar el recinto? (también se perderán todas sus plantas)';
+		var confirm_msg = gettext('Are you sure you want to remove this enclosure? ' +
+            '(this will erase all their floors)');
 
 		$scope.enclosure_resource.del($scope.enclosure.id, confirm_msg);
 
@@ -87,7 +100,7 @@ function FloorsCtrl($scope, $element)
         var img = $($element).find('input[name="img"]');
         if(!img.val())
         {
-            alert('También debe subir la imágen del plano para la planta');
+            alert(gettext('You must specify the floor image too'));
             return;
         }
 		
@@ -116,6 +129,7 @@ function FloorsCtrl($scope, $element)
 				$scope.floor_name = '';
 				$scope.floor_number = '';
 				img_form.find('input[name="img"]').val('');
+                img_form.find('.file-input-name').remove();
 				$scope.floors =
 					$scope.floor_resource.readAllFiltered('?enclosure__id=' + $scope.enclosure.id);
 				
@@ -175,9 +189,13 @@ function FloorCtrl($scope, $element)
 		}
 	};
 
+    $scope.cancelUpdate = function() {
+        $scope.editing = false;
+    };
+
 	$scope.del = function() {
 
-		var confirm_msg = '¿Seguro que desea eliminar la planta? (también se perderá toda la información relativa a ella)';
+		var confirm_msg = gettext('Are you sure you want to remove this floor?');
 
 		$scope.floor_resource.del($scope.floor.id, confirm_msg);
 

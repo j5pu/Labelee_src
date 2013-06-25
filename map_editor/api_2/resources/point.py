@@ -1,4 +1,4 @@
-# -*- coding: utf8 -*-
+# -*- coding: utf-8 -*-
 from django.core import serializers
 
 from django.http import HttpResponse
@@ -119,6 +119,7 @@ def readOnlyPois(request, floor_id):
             'color': categ.color,
             'img': categ.img.name,
             'name': categ.name,
+            'icon': categ.icon,
         }
         label = poi.label
         label_json = {

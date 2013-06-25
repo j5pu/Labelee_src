@@ -5,7 +5,7 @@
 	padding:0;
 	//overflow: hidden;
 
-    min-width:100%;
+    width:100%;
     height:100%;
     z-index:10000;
     position: absolute;
@@ -39,15 +39,18 @@
 	-moz-animation: none;
 	animation: none;
 	color: transparent;
+
 }
 .splash .sp-container div.frame-5 img {
 	-webkit-animation: blurFadeIn 1s;
 	-moz-animation: blurFadeIn 1s;
 	animation: blurFadeIn 1s;
+    width: 100%;
+
 }
 
 #find {
-	top: 70%;
+	top: 80%;
 	font-family: 'Just Me Again Down Here';
 	//font-size: 60px;
 	-webkit-animation: fadeInBackF 1s;
@@ -59,18 +62,18 @@
 }
 
 #your{
-	top: 70%;
+	top: 80%;
 	font-family: 'Just Me Again Down Here';
 	//font-size: 60px;
-	-webkit-animation: fadeInBackY 5s;
-	-moz-animation: fadeInBack2 5s;
-	animation: fadeInBack2 5s;
+	-webkit-animation: fadeInBackY 4s;
+	-moz-animation: fadeInBack2 4s;
+	animation: fadeInBack2 4s;
 	color: black;
 	transform: rotate(-7deg);
 	-webkit-transform: rotate(-7deg); /* Safari and Chrome */
 }
 #way{
-	top: 70%;
+	top: 80%;
 	font-family: 'Just Me Again Down Here';
 	//font-size: 60px;
 	-webkit-animation: fadeInBackW 3s;
@@ -140,26 +143,32 @@
 @media only screen
 and (min-width : 320px)
 and (max-width : 480px) {
-.splash .frame-6 span, .splash .frame-6 div{
+.splash .frame-6 span, .splash .frame-6{
    font-size: 45px !important;
+
+
   }
+
 }
 
 
 /* Smartphones (portrait) ----------- */
 @media only screen
 and (max-width : 320px) {
-.splash .frame-6 span, .splash .frame-6 div{
+.splash .frame-6 span, .splash .frame-6{
    font-size: 35px !important;
+
   }
+}
 
 
 /* Smartphones (portrait and landscape) ----------- */
 @media only screen
 and (min-width : 481px)
 and (max-width : 767px) {
-.splash .frame-6 span, .splash .frame-6 div{
+.splash .frame-6 span, .splash .frame-6{
    font-size: 50px !important;
+
   }
 }
 
@@ -167,8 +176,9 @@ and (max-width : 767px) {
 @media only screen
 and (min-width : 768px)
 and (max-width : 1900px) {
-.splash .frame-6 span, .splash .frame-6div{
+.splash .frame-6 span, .splash .frame-6{
    font-size: 50px !important;
+
   }
 }
 
@@ -177,8 +187,8 @@ and (max-width : 1900px) {
 @media
 only screen and (-webkit-min-device-pixel-ratio : 1.5),
 only screen and (min-device-pixel-ratio : 1.5) {
-.splash .frame-6 span,.splash .frame-6 div{
+.splash .frame-6 span,.splash .frame-6{
    font-size: 60px !important;
+
   }
-}
 }

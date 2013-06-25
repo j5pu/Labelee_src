@@ -1,0 +1,235 @@
+.mjn-tab1
+{
+background: no-repeat center #4d90fe;
+}
+.tab1:hover
+{
+background: no-repeat center #3682FC;
+}
+.mjn-fb
+{
+background: no-repeat center center #2A82D9;
+}
+.mjn-fb:hover
+{
+background: no-repeat center center #1f69b3;
+}
+.mjn-tw
+{
+background: no-repeat center center #0CA8F0;
+}
+.mjn-tw:hover
+{
+background: no-repeat center center #43b3e5;
+}
+.mjn-g
+{
+background: no-repeat center center #DC321E;
+}
+.mjn-g:hover
+{
+background: no-repeat center center #c53727;
+}
+.mjn-rss
+{
+background: no-repeat center center #E9A01C;
+}
+.mjn-rss:hover
+{
+background:no-repeat center center #F9A914;
+}
+.mjn-tab2
+{
+background: no-repeat center center#35aa47;
+}
+.mjn-tab2:hover{
+background: no-repeat center center#1d943b;
+}
+.mjn-tab2sub
+{
+background: #35aa47;
+}
+.mjn-tab2sub:hover{
+background: #1d943b;
+}
+.mjn-tab3
+{
+background: no-repeat center center #852b99;
+}
+.mjn-tab3:hover
+{
+background: no-repeat center center #6d1b81;
+}
+.mjn-tab3sub
+{
+background: #852b99;
+height:32px;
+}
+.mjn-tab3sub:hover
+{
+background: #6d1b81;
+}
+.mjn-tab4
+{
+background: no-repeat center center #d84a38;;
+}
+.mjn-tab4:hover{
+background: no-repeat center center #c53727;
+}
+.mjn-tab4sub
+{
+background: #d84a38;;
+}
+.mjn-tab4sub:hover{
+background: #c53727;
+}
+
+
+
+.mjn-tab5
+{
+background: no-repeat center center #34d8d7;;
+}
+.mjn-tab5:hover{
+background: no-repeat center center #3890c5;
+}
+
+.mjn-tab6
+{
+background: no-repeat center center#555;
+opacity: 1 !important;
+}
+.mjn-tab6:hover
+{
+background: no-repeat center center#222;
+opacity: 0.8 !important;
+
+}
+
+
+.mjn-metro-menu {
+    position:relative;
+    background:none;
+    width:500px;
+    height:90px;
+    border:none;
+    margin:20px auto;
+    padding:20px;
+float:left;
+}
+
+/* navigation menu styles - main styles */
+ul.navi {
+    position:relative;
+    z-index:100;
+    padding:0;
+    margin:0;
+    width:40px !important;
+/*
+    margin:0 0 0 60px;
+*/
+    list-style:none;
+    height:40px;
+}
+ul.navi > li {
+    width:30px;
+    height:30px;
+    position:absolute;
+    left:0;
+    top:0;
+    -webkit-border-radius: 4px;
+    border-radius: 4px;
+    -moz-transition: -moz-transform 0.5s ease-in-out;
+    -ms-transition: -ms-transform 0.5s ease-in-out;
+    -o-transition: -o-transform 0.5s ease-in-out;
+    -webkit-transition: -webkit-transform 0.5s ease-in-out;
+    transition: transform 0.5s ease-in-out;
+}
+ul.navi a {
+    display:block;
+    width:30px;
+    height:30px;
+    position:absolute;
+    left:0;
+    top:0;
+    line-height:37px;
+    text-align:center;
+    text-decoration:none;
+    -webkit-border-radius: 6px;
+    border-radius: 6px;
+    opacity:0.8;
+    -webkit-box-shadow: 2px 2px 8px rgba(0,0,0,0.3) !important;
+    box-shadow: 2px 2px 8px rgba(0,0,0,0.3) !important;
+}
+ul.navi a img {
+    border:0;
+}
+ul.navi a span {
+    position:relative;
+/*
+    top:30%;
+*/
+    font: 14px Segoe UI, Helvetica, Arial, sans-serif;
+    color:#fff;
+}
+
+/* top line - hover styles */
+/*
+ul.navi:hover {
+    height:200px;
+}
+*/
+ul.navi:hover li#n1, .n1.fake-active {
+    -moz-transform: translatex(0px);
+    -ms-transform: translatex(0px);
+    -o-transform: translatex(0px);
+    -webkit-transform: translatex(40px);
+    transform: translatex(40px);
+}
+ul.navi:hover li#n2, .n2.fake-active {
+    -moz-transform: translatex(90px);
+    -ms-transform: translatex(90px);
+    -o-transform: translatex(90px);
+    -webkit-transform: translatex(80px);
+    transform: translatex(80px);
+}
+ul.navi:hover li#n3, .n3.fake-active {
+    -moz-transform: translatex(180px);
+    -ms-transform: translatex(160px);
+    -o-transform: translatex(160px);
+    -webkit-transform: translatex(120px);
+    transform: translatex(120px);
+}
+ul.navi:hover li#n4, .n4.fake-active {
+    -moz-transform: translatex(260px);
+    -ms-transform: translatex(270px);
+    -o-transform: translatex(270px);
+    -webkit-transform: translatex(160px);
+    transform: translatex(160px);
+}
+
+ul.navi a:hover li#n6, .n6.fake-active {
+    -moz-transform: translatex(450px);
+    -ms-transform: translatex(450px);
+    -o-transform: translatex(450px);
+    -webkit-transform: translatex(0px);
+    transform: translatex(0px);
+    //display:none;
+}
+
+
+
+
+span#social
+{
+    width:  240px;
+    z-index: 10000;
+    position: absolute;
+    bottom: 62px;
+    left: 5px;
+}
+
+a span i
+{
+    font-size: 20px;
+}

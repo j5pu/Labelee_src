@@ -20,6 +20,7 @@ from tastypie import fields
 
 from map_editor.models import *
 from route.models import *
+from log.models import *
 from map_editor.forms import EnclosureForm
 
 
@@ -94,8 +95,8 @@ class PointResource(ModelResource):
     floor = fields.ToOneField(FloorResource, 'floor')
     label = fields.ToOneField('map_editor.api.resources.LabelResource', 'label')
     qr_code = fields.ToOneField('map_editor.api.resources.QRCodeResource', 'qr_code', null=True)
-    connection_init = fields.ToOneField('map_editor.api.resources.ConnectionResource', 'connection_init', null=True)
-    connection_end = fields.ToOneField('map_editor.api.resources.ConnectionResource', 'connection_end', null=True)
+    # connection_init = fields.ToOneField('map_editor.api.resources.ConnectionResource', 'connection_init', null=True)
+    # connection_end = fields.ToOneField('map_editor.api.resources.ConnectionResource', 'connection_end', null=True)
     # qr_code = fields.ToOneField('map_editor.api.resources.QRCodeResource', 'qr_code', null=True)
     # route = fields.ToOneField('map_editor.api.resources.RouteResource', 'route', null=True)
     # connections = fields.ToManyField('map_editor.api.resources.ConnectionResource', 'connections', null=True)
@@ -137,6 +138,7 @@ class LabelResource(ModelResource):
         always_return_data = True
         filtering = {
             'id': ALL,
+            'name': ALL,
             'category': ALL_WITH_RELATIONS,
             'points': ALL_WITH_RELATIONS
         }
@@ -159,6 +161,7 @@ class LabelCategoryResource(ModelResource):
             'id': ALL,
             'name': ALL,
             'color': ALL,
+            'icon': ALL,
             'labels': ALL_WITH_RELATIONS,
         }
 
@@ -243,6 +246,25 @@ class StepResource(ModelResource):
             'id': ALL,
             'origin': ALL_WITH_RELATIONS,
             'destiny': ALL_WITH_RELATIONS
+        }
+
+    def determine_format(self, request):
+        return 'application/json'
+
+
+class LogEntryResource(ModelResource):
+
+    class Meta:
+        resource_name = 'log-entry'
+        queryset = LogEntry.objects.all()
+        authorization = DjangoAuthorization()
+        # authentication = BasicAuthentication()
+        always_return_data = True
+        filtering = {
+            'id': ALL,
+            'category': ALL,
+            'message': ALL,
+            'when': ALL
         }
 
     def determine_format(self, request):
