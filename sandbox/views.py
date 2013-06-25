@@ -41,3 +41,9 @@ def tlouder(request):
 
 def multix(request):
     return render_to_response('labelee/multix.html', context_instance=RequestContext(request))
+
+def c(request):
+	return render_to_response('c/index.html', context_instance=RequestContext(request))
+
+def d(request):
+	return render_to_response('d/index.html', context_instance=RequestContext(request))

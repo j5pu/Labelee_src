@@ -14,6 +14,8 @@ urlpatterns = patterns('sandbox.views',
 
 	url(r'^vcap-info$', 'show_vinfo'),
 
+    url(r'^c/index.html', 'c'),
+    url(r'^d/index.html', 'd'),
 
 	url(r'^tlouder$', 'tlouder'),
 	url(r'^multix$', 'multix'),
