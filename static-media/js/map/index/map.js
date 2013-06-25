@@ -743,13 +743,13 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
                          var check = floorChecks[floors[i].name];
                          blinkingMode = floors[i].name;
                          blinker(check);
-                        for (index = 0; index < floors.length; index++) {
+                       /* for (index = 0; index < floors.length; index++) {
                             var check = $('input[type=radio].leaflet-control-layers-selector:eq(' + index + ')');
                             if (check.parent().find('span').html().trim() == floors[i].name) {
                                 blinkingMode = floors[i].name;
                                 blinker(check);
                             }
-                        }
+                        }*/
                  //   }
                   map.addLayer(arrowHead[i]);
                     flechita = arrowHead[i];
