@@ -84,7 +84,14 @@ h2 {
 .action_box i {
     cursor: pointer;
     margin-left: 1px;
+    opacity: 0.7;
 }
+
+.action_box span
+{
+
+}
+
 #templates {
     display: none;
 }
