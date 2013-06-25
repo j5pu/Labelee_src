@@ -502,9 +502,9 @@ function addCategory(e)
                 for (var l in floors[i].labels)
                 {
                     if (map.hasLayer(floors[i].labels[l].layer) &&
-                        jQuery('input[type=checkbox].leaflet-control-layers-selector:eq(' + l + ')').is(':checked'))
+                        $('input[type=checkbox].leaflet-control-layers-selector:eq(' + l + ')').is(':checked'))
                     {
-                        jQuery('input[type=checkbox].leaflet-control-layers-selector:eq(' + l + ')').css('background', floors[i].labels[l].fields.color);
+                        $('input[type=checkbox].leaflet-control-layers-selector:eq(' + l + ')').css('background', floors[i].labels[l].fields.color);
                     }
                 }
 
