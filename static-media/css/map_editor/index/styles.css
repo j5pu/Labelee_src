@@ -251,3 +251,28 @@ a.link-1
 {
 
 }
+
+h1
+{
+    position: relative;
+}
+
+#choose-lang
+{
+    position: absolute;
+    right: -76px;
+    top: 1px;
+}
+
+
+#choose-lang img
+{
+    margin-right: 0.2em;
+    cursor: pointer;
+}
+
+#choose-lang select
+{
+    display: none;
+}
+
