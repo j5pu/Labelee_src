@@ -48,6 +48,10 @@ function EnclosureCtrl($scope)
 		}
 	};
 
+    $scope.cancelUpdate = function() {
+        $scope.editing = false;
+    };
+
 	$scope.del = function() {
 
 		var confirm_msg = gettext('Are you sure you want to remove this enclosure? ' +
@@ -116,6 +120,7 @@ function FloorsCtrl($scope, $element)
 				$scope.floor_name = '';
 				$scope.floor_number = '';
 				img_form.find('input[name="img"]').val('');
+                img_form.find('.file-input-name').remove();
 				$scope.floors =
 					$scope.floor_resource.readAllFiltered('?enclosure__id=' + $scope.enclosure.id);
 				
@@ -174,6 +179,10 @@ function FloorCtrl($scope, $element)
             $scope.loadFloorList();
 		}
 	};
+
+    $scope.cancelUpdate = function() {
+        $scope.editing = false;
+    };
 
 	$scope.del = function() {
 

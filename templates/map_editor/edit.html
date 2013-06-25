@@ -3,9 +3,9 @@
 {% load i18n %}
 
 {% block css %}
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/map_editor/styles.css"/>
     <link rel="stylesheet" href="{{ STATIC_URL }}css/map_editor/edit_map/styles.css"/>
     {#    <link rel="stylesheet" media = "print" href="{{ STATIC_URL }}css/map_editor/edit_map/print.css"/>#}
-    <link href='http://fonts.googleapis.com/css?family=Raleway:200' rel='stylesheet' type='text/css'>
 
 {% endblock css %}
 
@@ -47,42 +47,57 @@
         <div class="box box-0">
             <!-- NUMERO DE FILAS Y GUARDAR FLOOR -->
             <div class="box box-1">
-            <span class="num_rows">
-                {% trans "Filas" %}:
-                <input type="text"
-                       id="num_rows"
-                       value="20">
-                =
-            </span>
+                <span class="num_rows">
+                    {% trans "Filas" %}:
+                    <input type="text"
+                           id="num_rows"
+                           value="20">
+                    =
+                </span>
                 <span id="num_blocks"></span>
 
                 <button class="btn" id="update_floor">{% trans "Guardar" %}</button><br>
                 <!--<button class="btn" id="clear_floor">{% trans "Limpiar" %}</button>-->
 
-                <div class="back_button box-2">
-                    <a href="{% url 'map_editor.views.index' %}">{% trans "Volver al menú" %}</a>
-                </div>
+                <a class="link-1" href="{% url 'map_editor.views.index' %}">{% trans "Volver al menú" %}</a>
             </div><br>
 
             <!-- STATS CHECKBOXES Y QR LIST -->
             <div class="box box-1">
                 <div id="puntos" class="box box-2">
                     <h4>{% trans "Puntos" %}:</h4>
-                    {% trans "Guardados" %}: <span id="num_saved_points"></span> <br>
-                    {% trans "Por guardar" %}: <span id="num_points_to_save"></span> <br>
-                    {% trans "Por elminar" %}: <span id="num_points_to_delete"></span> <br>
+                    <ul>
+                        <li>
+                            <span class="txt">{% trans "Guardados" %}:</span>
+                            <span id="num_saved_points" class="num"></span>
+                        </li>
+                        <li>
+                            <span class="txt">{% trans "Por guardar" %}:</span>
+                            <span id="num_points_to_save" class="num"></span>
+                        </li>
+                        <li>
+                            <span class="txt">{% trans "Por elminar" %}:</span>
+                            <span id="num_points_to_delete" class="num"></span>
+                        </li>
+                    </ul>
                     <!--Total: <span id="num_total_points"></span> <br>-->
                 </div>
 
                 <div class="box box-2">
-                    <input type="checkbox" id="toggle_border" checked>{% trans "Ver rejilla" %}<br>
-                    <input type="checkbox" name="toggle_erase_mode">{% trans "Modo borrar" %}<br>
+                    <label class="checkbox">
+                        <input type="checkbox" id="toggle_border" checked>{% trans "Ver rejilla" %}
+                    </label>
+                    <label class="checkbox">
+                        <input type="checkbox" name="toggle_erase_mode">{% trans "Modo borrar" %}<br>
+                    </label>
                 </div><br>
 
                 <!-- LISTA DE QRs -->
                 <div id="qr_list" class="box box-2">
                     <h4>{% trans "Lista de QRs" %}:</h4>
-                    <input type="checkbox" id="toggle_qrs">{% trans "Resaltar todos" %}
+                    <label class="checkbox">
+                        <input type="checkbox" id="toggle_qrs">{% trans "Resaltar todos" %}
+                    </label>
                     <ul></ul>
                 </div>
             </div>

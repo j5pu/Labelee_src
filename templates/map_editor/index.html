@@ -4,8 +4,8 @@
 
 
 {% block css %}
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/map_editor/styles.css"/>
     <link rel="stylesheet" href="{{ STATIC_URL }}css/map_editor/index/styles.css"/>
-    <link href='http://fonts.googleapis.com/css?family=Raleway:200' rel='stylesheet' type='text/css'>
 {% endblock css %}
 
 
@@ -57,33 +57,49 @@
 
             <div class="editable_element">
                <h2>[[enclosure.name]]</h2>
-               <h4>[[enclosure.twitter_account]]</h4>
+               <h4 ng-show="enclosure.twitter_account">@ [[enclosure.twitter_account]]</h4>
 
-                <div id="botones-enclosure" ng-hide="editing">
+                <div class="botones-enclosure" ng-hide="editing">
                     <div class="action_box">
                         <i class="icon-edit" ng-click="update()"></i>
                         <i class="icon-remove" ng-click="del()"></i>
                     </div>
 
-                    <button class= 'btn' ng-click="calculateRoutes()">{% trans "Calcular rutas" %}</button>
-
-                    <a id='aristas' href="edit/connections/[[enclosure.id]]">{% trans "Gestión de aristas" %}</a>
+                    <div class="btn-group">
+                        <a class="btn link-2" ng-click="calculateRoutes()">
+                            <i class="icon-road icon-white"></i> {% trans "Calcular rutas" %}
+                        </a>
+                        <a class="btn link-2" id="aristas" href='edit/connections/[[enclosure.id]]'>
+                            <i class="icon-pencil icon-white"></i> {% trans "Gestión de aristas" %}
+                        </a>
+                    </div>
+{#                    <a class='btn link-3' ng-click="calculateRoutes()">{% trans "Calcular rutas" %}</a>#}
+{#                    <a class="btn link-3" id='aristas' href="edit/connections/[[enclosure.id]]">{% trans "Gestión de aristas" %}</a>#}
 
                 </div>
                 <div ng-show="editing">
                     <form>
-                        <input type="text"
-                               ng-init="enclosure_name=enclosure.name"
-                               ng-model="enclosure_name"
-                               ng-change="validate()"
-                               placeholder="{% trans "Nuevo nombre para el recinto" %}.."
-                               autofocus>
-                        <input type="text"
-                               ng-init="twitter_account=enclosure.twitter_account"
-                               ng-model="twitter_account"
-                               ng-change="validate()"
-                               placeholder="{% trans "Cuenta de twitter" %}..">
-                        <button ng-click="update()">{% trans "Editar" %}</button>
+                        <div class="box-2 editing-place">
+                            <label>Nuevo nombre:
+                                <input type="text"
+                                       ng-init="enclosure_name=enclosure.name"
+                                       ng-model="enclosure_name"
+                                       ng-change="validate()"
+                                       placeholder="{% trans "Nuevo nombre para el recinto" %}.."
+                                       autofocus>
+                            </label>
+                            <label>
+                                Cuenta de Twitter:
+                                <input type="text"
+                                       ng-init="twitter_account=enclosure.twitter_account"
+                                       ng-model="twitter_account"
+                                       ng-change="validate()"
+                                       placeholder="{% trans "Cuenta de twitter" %}..">
+                            </label>
+                        </div>
+
+                        <button class="btn" ng-click="cancelUpdate()">{% trans "Cancelar" %}</button>
+                        <button class="btn" ng-click="update()">{% trans "Editar" %}</button>
                     </form>
                     <div class="action_box">
                         <i class="icon-remove"
@@ -104,16 +120,19 @@
                       target="upload_target">
 
                     <div class="form_content" ng-hide="sending_img">
-                        <input class="btn"
-                                type="file"
-                               name="img"
-                               title="{% trans "Elegir imágen" %}..">
-                        <input type="text"
-                               ng-model="floor_name"
-                               placeholder="{% trans "Nombre de planta" %}..">
-                        <input type="text"
-                               ng-model="floor_number"
-                               placeholder="{% trans "Número" %}..">
+                        <div class="box-3">
+                            <input type="text"
+                                   ng-model="floor_name"
+                                   placeholder="{% trans "Nombre de planta" %}..">
+                            <input type="text"
+                                   ng-model="floor_number"
+                                   placeholder="{% trans "Número" %}..">
+                            <input class="btn floor_img"
+                                   type="file"
+                                   name="img"
+{#                                   onchange="angular.element(this).scope().setFile(this)"#}
+                                   title="{% trans "Elegir imagen" %}..">
+                        </div>
 
                         <button class="btn" ng-click="createFloor()">{% trans "Añadir planta" %}</button>
                     </div>
@@ -126,7 +145,7 @@
                 <h4 ng-show="floors">{% trans "Plantas" %}:</h4>
 
                 <!--CADA PLANTA-->
-                <div class="floor"
+                <div class="floor box-3"
                      fadey="1000"
                      ng-repeat="floor in floors"
                      ng-controller="FloorCtrl">
@@ -134,10 +153,11 @@
                     <div class="editable_element">
                         <div ng-hide="editing">
 
-                            <h3>
-                                ([[floor.floor_number]])
+                            <div class="floor-number"><h2>[[floor.floor_number]]</h2></div>
 
-                                <a href="[[urls.map_editor.edit]]/[[floor.id]]">
+                            <h3>
+
+                                <a class="link-2" href="[[urls.map_editor.edit]]/[[floor.id]]">
                                     [[floor.name]]
                                 </a>
                             </h3>
@@ -155,21 +175,31 @@
                                       target="upload_target">
 
                                     <!--<div ng-include src="_form_alert_box"></div>-->
-                                    Descr:
-                                    <input type="text"
-                                           ng-init="floor_name=floor.name"
-                                           ng-model="floor_name"
-                                           ng-change="validate()"
-                                           placeholder="{% trans "Nuevo nombre para la planta" %}.."
-                                           autofocus><br>
-                                    Número:
-                                    <input type="text"
-                                           ng-init="floor_number=floor.floor_number"
-                                           ng-model="floor_number"
-                                           ng-change="validate()"
-                                           placeholder="{% trans "Número" %}.."><br>
-                                    <input type="file" name="img" title="{% trans "Cambiar imágen" %}..">
+                                    <div class="box-2 editing-floor">
+                                        <label class="txt">{% trans "Nombre" %}:
+                                            <input type="text"
+                                                   ng-init="floor_name=floor.name"
+                                                   ng-model="floor_name"
+                                                   ng-change="validate()"
+                                                   placeholder="{% trans "Nuevo nombre para la planta" %}.."
+                                                   autofocus>
+                                        </label>
+                                        <label class="txt">{% trans "Número" %}:
+{#                                        <span class="txt">{% trans "Número" %}:</span>#}
+                                            <input type="text"
+                                                   ng-init="floor_number=floor.floor_number"
+                                                   ng-model="floor_number"
+                                                   ng-change="validate()"
+                                                   placeholder="{% trans "Número" %}..">
+                                        </label>
+                                        <input class="btn"
+                                               type="file"
+                                               name="img"
+                                                {#                                   onchange="angular.element(this).scope().setFile(this)"#}
+                                               title="{% trans "Cambiar imágen" %}..">
+                                    </div>
 
+                                    <button class="btn" ng-click="cancelUpdate()">{% trans "Cancelar" %}</button>
                                     <button class="btn" ng-click="update()">{% trans "Editar" %}</button>
                                 </form>
                             </div>
