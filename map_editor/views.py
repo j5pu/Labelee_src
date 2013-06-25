@@ -3,6 +3,7 @@
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.http import HttpResponseRedirect
+from map_editor.models import Enclosure
 
 import settings
 
@@ -16,6 +17,9 @@ def index(request):
             '3': 'Intermedias',
         }
     }
+
+    enc = Enclosure.objects.filter(name='Equinoccio')
+
     return render_to_response('map_editor/index.html', ctx, context_instance=RequestContext(request))
 
 

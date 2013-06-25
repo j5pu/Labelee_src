@@ -94,8 +94,8 @@ class PointResource(ModelResource):
     floor = fields.ToOneField(FloorResource, 'floor')
     label = fields.ToOneField('map_editor.api.resources.LabelResource', 'label')
     qr_code = fields.ToOneField('map_editor.api.resources.QRCodeResource', 'qr_code', null=True)
-    connection_init = fields.ToOneField('map_editor.api.resources.ConnectionResource', 'connection_init', null=True)
-    connection_end = fields.ToOneField('map_editor.api.resources.ConnectionResource', 'connection_end', null=True)
+    # connection_init = fields.ToOneField('map_editor.api.resources.ConnectionResource', 'connection_init', null=True)
+    # connection_end = fields.ToOneField('map_editor.api.resources.ConnectionResource', 'connection_end', null=True)
     # qr_code = fields.ToOneField('map_editor.api.resources.QRCodeResource', 'qr_code', null=True)
     # route = fields.ToOneField('map_editor.api.resources.RouteResource', 'route', null=True)
     # connections = fields.ToManyField('map_editor.api.resources.ConnectionResource', 'connections', null=True)
@@ -128,7 +128,7 @@ class PointResource(ModelResource):
 
 class LabelResource(ModelResource):
     category = fields.ToOneField('map_editor.api.resources.LabelCategoryResource', 'category')
-    points = fields.ToManyField('map_editor.api.resources.PointResource', 'points', null=True)
+    # points = fields.ToManyField('map_editor.api.resources.PointResource', 'points', null=True)
 
     class Meta:
         queryset = Label.objects.all()

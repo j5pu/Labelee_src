@@ -25,4 +25,7 @@ urlpatterns = patterns('sandbox.views',
 	url(r'^imgloader$', 'imgLoader'),
 
 
+	url(r'^alfredo_test$', 'test_alfredo'),
+
+
 )

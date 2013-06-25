@@ -58,3 +58,9 @@ def multix(request):
 
 def imgLoader(request):
     return render_to_response('imgLoader/imgloader.html', context_instance=RequestContext(request))
+
+def test_alfredo(request):
+    ctx = {
+        'genero': 'hombre super man'
+    }
+    return render_to_response('alfredo_test/test.html', ctx, context_instance=RequestContext(request))

@@ -27,7 +27,7 @@ def floor_filename(instance, filename):
 	xej: img/enclosures/25/floors/167.png
 	"""
     fileName, fileExtension = os.path.splitext(filename)
-    return 'img/enclosures/' + str(instance.enclosure.id) + '/floors/' + str(instance.id) + fileExtension
+    return "img/enclosures/" + str(instance.enclosure.id) + '/floors/' + str(instance.id) + fileExtension
 
 
 #Se crea el modelo para los productos
