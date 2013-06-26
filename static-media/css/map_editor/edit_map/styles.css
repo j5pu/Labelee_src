@@ -149,7 +149,7 @@ button[name="create"], button[name="cancel"] {
 
 .box-2 ul li .txt
 {
-    float: left;
+    /*float: left;*/
 }
 
 .box-2 ul li .num

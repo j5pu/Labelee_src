@@ -20,8 +20,7 @@ class Enclosure(models.Model):
     def __unicode__(self):
         return self.name
 
-#         def get_path(instance, filename):
-# return 'photos/%s/%s' % (instance.stock_number, filename)
+
 def get_path(instance, filename):
     """
     img/enclosures/[encl_id]/floors/[floor_id].ext

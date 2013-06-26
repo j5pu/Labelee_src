@@ -278,6 +278,8 @@ function loopFloors() {
 
         LocalStorageHandler.draw();
 
+        Coupon.init();
+
         // fin de loopFloors
         return;
     }
