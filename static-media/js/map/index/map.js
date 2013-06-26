@@ -536,12 +536,7 @@ function removeCategory(e)
 var checked = [];
 
 function changeFloor(e) {
-/*
-    if (map.hasLayer(qrFloor.layer)) {
-        map.removeLayer(qrFloor.layer);
-    }
-*/
-  //  for (var pos in $('input[type=checkbox].leaflet-control-layers-selector'))
+
       for (pos = 0; pos < $('input[type=checkbox].leaflet-control-layers-selector').length; pos++)
     {
         if ($('input[type=checkbox].leaflet-control-layers-selector:eq('+pos+')').is(':checked')){
@@ -556,7 +551,6 @@ function changeFloor(e) {
         if ((e.layer && (e.layer._url === floors[i].photo._url)) || (e._url === floors[i].photo._url)) {
             floor_x = floors[i];
 
-            //map.addLayer(floor_x.photo);
             for (var l in floors[i].labels)
             {
                 layersControl.addOverlay(floor_x.labels[l].layer,   '<i class="icon-' +floors[i].labels[l].fields.icon +' icon-white"></i>');
@@ -601,11 +595,6 @@ function changeFloor(e) {
             jQuery('input[type=checkbox].leaflet-control-layers-selector:eq('+lab+')').prop("checked", true);
         }
     }
-
-
-
-//map.setMaxBounds(floor_x.bounds);
-//map.setView(qrPoint, 0);
 }
 
 
@@ -626,8 +615,6 @@ $(function () {
         for (var i in floors) {
             if (floors[i].id === qrFloor.id) {
                 floor_x = floors[i];
-
-                //map.addLayer(floor_x.photo);
                 for (var l in floors[i].labels)
                 {
                     layersControl.addOverlay(floor_x.labels[l].layer,   '<i class="icon-' +floors[i].labels[l].fields.icon +' icon-white"></i>');
@@ -683,9 +670,6 @@ $(function () {
     $('span#myCar').click(function () {
         var miCoche = JSON.parse(localStorage.getItem('miCoche')).dest;
 
-//        if (miCoche) {
-
-
             for (pos = 0; pos < $('input[type=checkbox].leaflet-control-layers-selector').length; pos++)
         {
             if ($('input[type=checkbox].leaflet-control-layers-selector:eq('+pos+')').is(':checked')){
@@ -711,7 +695,6 @@ $(function () {
 
                 });
                 floor_x.layer.addLayer(carMarker);
-                //map.addLayer(floor_x.photo);
                 for (var l in floors[i].labels)
                 {
                     layersControl.addOverlay(floor_x.labels[l].layer,   '<i class="icon-' +floors[i].labels[l].fields.icon +' icon-white"></i>');
@@ -758,15 +741,10 @@ $(function () {
                 jQuery('input[type=checkbox].leaflet-control-layers-selector:eq('+lab+')').prop("checked", true);
             }
         }
-/*
-        map.addLayer(floor_x.photo);
-        map.addLayer(floor_x.layer);
-*/
         carMarker.openPopup();
         carMarker._bringToFront();
         map.setView(carLoc, 0);
     });
-
 
 });
 
@@ -870,26 +848,12 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
             if (arrow[i] && subarrow[i]) {
                 floors[i].layer.addLayer(arrow[i]);
                 if (floors[i].id === route.fields.destiny.fields.floor) {
-               /* if (route.fields.origin.fields.floor !== route.fields.destiny.fields.floor)
-                    {*/
-                         var check = floorChecks[floors[i].name];
+                        var check = floorChecks[floors[i].name];
                          blinkingMode = floors[i].name;
                          blinker(check);
-                       /* for (index = 0; index < floors.length; index++) {
-                            var check = $('input[type=radio].leaflet-control-layers-selector:eq(' + index + ')');
-                            if (check.parent().find('span').html().trim() == floors[i].name) {
-                                blinkingMode = floors[i].name;
-                                blinker(check);
-                            }
-                        }*/
-                 //   }
-                  map.addLayer(arrowHead[i]);
+                      map.addLayer(arrowHead[i]);
                     flechita = arrowHead[i];
                     arrowAnim(flechita, floors[i].name);
-                    /*
-                     map.fitBounds(arrow[i].getBounds());
-                     map.setZoom(0);
-                     */
 
                 }
             }
@@ -928,7 +892,6 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
                     }
 
                     for (var l in floors[f].labels) {
-//CONTROL BLINKING
                        layersControl.addOverlay(floors[f].labels[l].layer, '<i class="icon-' + floors[i].labels[l].fields.icon + ' icon-white"></i>');
                         if (checked[l] === true) {
                             map.addLayer(floors[f].labels[l].layer);
@@ -957,7 +920,6 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
                     map.removeLayer(floors[f].layer);
                     map.removeLayer(floors[f].photo);
                     for (var l in floors[f].labels) {
-                        //layersControl.removeLayer(floors[f].labels[l].layer);
                         map.removeLayer(floors[f].labels[l].layer);
                     }
 
@@ -972,16 +934,13 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
                         }
                     }
 
-
                     map.addLayer(floors[f].layer);
                     map.addLayer(floors[f].photo);
                     map.setView(arrow[f].getBounds().getCenter(), 0);
                     map.addLayer(arrowHead[f]);
                     flechita = arrowHead[f];
                     arrowAnim(flechita, floors[f].name);
-//                    map.fitBounds(arrow[f].getBounds());
-//                    map.setZoom(0);
-
+                    map.setView(arrow[f].getBounds().getCenter(),0);
 
                 }
             }
