@@ -859,6 +859,8 @@ span.locator
     color: dimgrey;
 }
 
+/*
+
 #map{
     background-image: -webkit-gradient(linear, left top, right bottom, color-stop(0, #FFFFFF), color-stop(1, rgba(113, 190, 226, 0.64))) !important;
 }
@@ -870,3 +872,4 @@ span.locator
     transform: perspective(167) rotateX(20deg) rotateZ(0deg) !important;
     transform-origin: 300px 300px !important;
     }
+*/

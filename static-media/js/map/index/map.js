@@ -250,6 +250,8 @@ var mapH = $(document).height(),//Altura de la pantalla
     totalPois = new L.LayerGroup(),
     qrFloor,
     qrLoc,
+    carLoc,
+    carMarker,
     route = {},
     arrow = [],
     arrowHead = [],
@@ -680,6 +682,83 @@ $(function () {
         qrMarker.openPopup();
     });
 
+    $('span#myCar').click(function () {
+        var miCoche = JSON.parse(localStorage.getItem('miCoche')).dest;
+
+//        if (miCoche) {
+
+
+            for (pos = 0; pos < $('input[type=checkbox].leaflet-control-layers-selector').length; pos++)
+        {
+            if ($('input[type=checkbox].leaflet-control-layers-selector:eq('+pos+')').is(':checked')){
+                checked[pos] = true;
+            }else{
+                checked[pos] = false;
+            }
+        }
+
+        var floor_x = {};
+        for (var i in floors) {
+            if (floors[i].id === miCoche.floor.id) {
+                floor_x = floors[i];
+                carLoc = [((miCoche.point.row) * floor_x.scaleY) + floor_x.scaleY,
+                    (miCoche.point.col * floor_x.scaleX) + floor_x.scaleX];
+                carMarker = new L.marker(carLoc, { bounceOnAdd: false,
+                    icon: CarIcon})
+                    .bindPopup("Mi coche");
+                floor_x.layer.addLayer(carMarker);
+                //map.addLayer(floor_x.photo);
+                for (var l in floors[i].labels)
+                {
+                    layersControl.addOverlay(floor_x.labels[l].layer,   '<i class="icon-' +floors[i].labels[l].fields.icon +' icon-white"></i>');
+                    if (checked[l]===true)
+                    {
+                        map.addLayer(floor_x.labels[l].layer);
+                    }
+                }
+
+                map.addLayer(floor_x.photo);
+                map.addLayer(floor_x.layer);
+
+                if (arrowHead[i] && subarrow[i]) {
+                    map.addLayer(arrowHead[i]);
+                    flechita = arrowHead[i];
+                    arrowAnim(flechita, floor_x.name);
+                    map.setView(arrow[i].getBounds().getCenter(), 0);
+
+                } else {
+                    map.setView(carLoc, 0);
+                }
+
+            } else {
+                map.removeLayer(floors[i].layer);
+                map.removeLayer(floors[i].photo);
+
+
+                for (var l in floors[i].labels) {
+                    layersControl.removeLayer(floors[i].labels[l].layer);
+                    map.removeLayer(floors[i].labels[l].layer);
+                }
+
+                if (arrowHead[i] != null)
+                    map.removeLayer(arrowHead[i]);
+            }
+
+        }
+
+        for (var lab in floor_x.labels)
+        {
+            if (checked[lab]===true)
+            {
+                jQuery('input[type=checkbox].leaflet-control-layers-selector:eq('+lab+')').css('background', floor_x.labels[lab].fields.color);
+                jQuery('input[type=checkbox].leaflet-control-layers-selector:eq('+lab+')').prop("checked", true);
+            }
+        }
+        map.addLayer(floor_x.photo);
+        map.addLayer(floor_x.layer);
+        carMarker._bringToFront();
+        carMarker.openPopup();
+    });
 
 
 });
