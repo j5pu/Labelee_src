@@ -298,7 +298,6 @@ function loopFloors() {
         floors[floor_index].photo = new L.imageOverlay(img, bounds);
 
         baseLayers[name] = new L.imageOverlay(img, bounds);
-
         floor_index++;
         loopFloors();
     };
@@ -323,9 +322,7 @@ function loadPOIs() {
                 }
                 var colorIcon = floors[fl].pois[j].label.category.color,
                     nameIcon = floors[fl].pois[j].label.name,
-                //shapeIcon = floors[fl].pois[j].label.icon,
                     shapeIcon = floors[fl].pois[j].label.category.icon,
-                //shapeIcon = "bolt",
                     id = floors[fl].pois[j].id,
                     descriptionIcon = floors[fl].pois[j].description,
                     sX = floors[fl].scaleX,
