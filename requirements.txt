@@ -3,3 +3,4 @@ mysql-python
 django-tastypie
 simplejson
 tweepy>=2.0
+django-modeltranslation

@@ -21,22 +21,19 @@ function google_click() {
 function mail_click() {
     var subject = "Labelee";
     var body = get_url();
-    body += window.location.href;
-    body += ">";
     var uri = "mailto:?subject=";
     uri += encodeURIComponent(subject);
     uri += "&body=";
     uri += encodeURIComponent(body);
+    alert(uri);
     window.open(uri);
 }
 
 /*function sms_click() {
-
     var body = get_url();
-    body += window.location.href;
-    body += ">";
     var uri = "sms:?body=";
     uri += encodeURIComponent(body);
+    alert(uri);
     window.open(uri);
 }*/
 
@@ -51,8 +48,8 @@ function get_url() {
         for (var sfl in floors) {
             for (var poi in floors[sfl].pois) {
                 if (searchMarker._markerLoc._circleLoc._latlng == floors[sfl].pois[poi].marker._latlng) {
-                      urlstring += 'dest/' + qrPoint.enclosure.id + '_' +  floors[sfl].id + '_' + floors[sfl].pois[poi].id;
-                      return urlstring;
+                    urlstring += 'dest/' + qrPoint.enclosure.id + '_' + floors[sfl].id + '_' + floors[sfl].pois[poi].id;
+                    return urlstring;
                 }
             }
         }
@@ -60,3 +57,30 @@ function get_url() {
 
     return location.href;
 }
+
+$(document).ready(function() {
+
+	if (Modernizr.touch) {
+       
+
+			/* ok we have a touch device so we will grab the touch events now */
+			$(".navi").click(function() {
+				/* for the first ul which is our list of other items display it */
+				$(".n1").show();
+                $(".n2").show();
+                $(".n3").show();
+                $(".n4").show();
+                //$(".n6").hide();
+			});
+
+			/* if the user touches the content of the page then hide all the nav items */
+			$("#content").click(function() {
+				$(".n1").hide();
+                $(".n2").hide();
+                $(".n3").hide();
+                $(".n4").hide();
+                //$(".n6").show();
+            })
+	}
+
+});

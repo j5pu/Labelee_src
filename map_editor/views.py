@@ -1,12 +1,9 @@
-# -*- coding: utf8 -*-
+# -*- coding: utf-8 -*-
 
 from django.shortcuts import render_to_response
 from django.template import RequestContext
-from django.http import HttpResponseRedirect
-from map_editor.models import Enclosure
 
 import settings
-
 
 def index(request):
     ctx = {
@@ -18,7 +15,7 @@ def index(request):
         }
     }
 
-    enc = Enclosure.objects.filter(name='Equinoccio')
+    # translation.activate(request.session['django_language'])
 
     return render_to_response('map_editor/index.html', ctx, context_instance=RequestContext(request))
 

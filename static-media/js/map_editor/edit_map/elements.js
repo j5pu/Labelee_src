@@ -17,7 +17,8 @@ $e = {
                 img: $('#category-form input[name=img]'),
                 name: $('#category-form input[name=name]'),
                 color: $('#category-form input[name=color]'),
-                create: $('#category-form button[name=create]')
+                create: $('#category-form button[name=create]'),
+                cancel: $('#category-form button[name=cancel]')
             }
         };
 
@@ -32,7 +33,8 @@ $e = {
                 img: $('#label-form input[name=img]'),
                 name: $('#label-form input[name=name]'),
                 category: $('#label-form select'),
-                create: $('#label-form button[name=create]')
+                create: $('#label-form button[name=create]'),
+                cancel: $('#label-form button[name=cancel]')
             }
         };
 
@@ -46,7 +48,8 @@ $e = {
             blocks: null,
             update: $('#update_floor'),
             clear: $('#clear_floor'),
-            labeled_blocks: null
+            labeled_blocks: null,
+            poi_menu: $('#poi_menu')
         };
 
         this.qr = {

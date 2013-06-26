@@ -5,6 +5,8 @@ var Floor = {
 
     loading: false,
     updating: false,
+    redrawing_grid: false,
+    rows_changing: false,
     show_only_qrs: false,
     point_count: {
         to_save: 0,
@@ -54,7 +56,7 @@ var Floor = {
             'background-size': Floor.grid_width + 'px' + ' ' + Floor.grid_height + 'px'
         });
 
-        $e.floor.num_blocks.html((Floor.num_rows * Floor.num_cols) + ' bloques');
+        $e.floor.num_blocks.html((Floor.num_rows * Floor.num_cols) + ' ' + gettext('blocks'));
 
         // Limpiamos el grid si estaba creado
         $grid.empty();
@@ -113,6 +115,9 @@ var Floor = {
 
     update: function()
     {
+
+        if(Floor.redrawing_grid)
+            return;
 
 //        loadingMsg.show('Actualizando planta..');
 
@@ -460,6 +465,8 @@ var Floor = {
 
     loadEmpty: function()
     {
+        Floor.loading = true;
+
         Floor.num_rows = parseInt($e.floor.num_rows.val(), 10);
         Floor.grid_height = resize(Floor.img.height, Floor.num_rows);
         Floor.block_height = Floor.grid_height / Floor.num_rows;
@@ -474,11 +481,14 @@ var Floor = {
 
         Floor.painted_connectors = [];
 
-        Menu.init();
-
-        Events.bindAll();
+        if(!Floor.reloading)
+        {
+            Menu.init();
+            Events.bindAll();
+        }
 
         Floor.loading = false;
+        Floor.reloading = false;
 
         WaitingDialog.close();
     },
@@ -486,7 +496,7 @@ var Floor = {
 
     loadGrid: function()
     {
-        WaitingDialog.open('Cargando grid para la planta..');
+        WaitingDialog.open(gettext('Loading floor grid') + '..');
 
         Floor.loading = true;
 
@@ -520,6 +530,36 @@ var Floor = {
 //        FloorResource().del(this.data., confirm_msg);
 //        setGridSelector();
 //        loadEmptyGrid();
+    },
+
+
+    changeNumRows: function(e)
+    {
+        if(Floor.rows_changing)
+            return;
+
+        if(Floor.points.length > 0)
+        {
+            if(confirm(gettext('Changing number of rows will erase all points on the floor. Continue?')))
+            {
+                Floor.rows_changing = true;
+                new PointResource().deletePoints(Floor.points);
+                WaitingDialog.open(gettext('Redrawing grid') + '..');
+                Floor.reloading = true;
+                Floor.loadEmpty();
+            }
+            else
+            {
+                $e.floor.num_rows.val(Floor.data.num_rows || 20);
+            }
+        }
+        else
+        {
+            WaitingDialog.open(gettext('Redrawing grid') + '..');
+            setTimeout(Floor.loadEmpty, 200);
+        }
+
+        Floor.rows_changing = false;
     }
 };
 

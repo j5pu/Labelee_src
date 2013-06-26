@@ -63,9 +63,10 @@ class Floor(models.Model):
 
 
 class LabelCategory(models.Model):
-    name = models.CharField(max_length=200, unique=True, blank=False)
+    name = models.CharField(max_length=200, unique=True, blank=False, null=False)
     color = models.CharField(max_length=50, blank=False)
     img = models.FileField(upload_to="img/label_categories", blank=True, null=True)
+    icon = models.CharField(max_length=50, blank=True, null=True)
 
     class Meta:
         verbose_name_plural = 'Label categories'
@@ -99,7 +100,7 @@ def label_filename(instance, filename):
 
 
 class Label(models.Model):
-    name = models.CharField(max_length=200)
+    name = models.CharField(max_length=200, blank=False, null=False)
     img = models.FileField(upload_to=label_filename, blank=True, null=True)
 
     # ponemos '_objects_' en lugar de 'objects' para no confundirlo con la

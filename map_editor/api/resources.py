@@ -20,6 +20,7 @@ from tastypie import fields
 
 from map_editor.models import *
 from route.models import *
+from log.models import *
 from map_editor.forms import EnclosureForm
 
 
@@ -160,6 +161,7 @@ class LabelCategoryResource(ModelResource):
             'id': ALL,
             'name': ALL,
             'color': ALL,
+            'icon': ALL,
             'labels': ALL_WITH_RELATIONS,
         }
 
@@ -244,6 +246,25 @@ class StepResource(ModelResource):
             'id': ALL,
             'origin': ALL_WITH_RELATIONS,
             'destiny': ALL_WITH_RELATIONS
+        }
+
+    def determine_format(self, request):
+        return 'application/json'
+
+
+class LogEntryResource(ModelResource):
+
+    class Meta:
+        resource_name = 'log-entry'
+        queryset = LogEntry.objects.all()
+        authorization = DjangoAuthorization()
+        # authentication = BasicAuthentication()
+        always_return_data = True
+        filtering = {
+            'id': ALL,
+            'category': ALL,
+            'message': ALL,
+            'when': ALL
         }
 
     def determine_format(self, request):
