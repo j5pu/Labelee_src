@@ -465,9 +465,7 @@ function initMap(qrPoint) {
         }
     }
 
-//    for (i in floors) {
-//        map.removeLayer(floors[i].layer);
-//    }
+
 
     map.removeLayer(totalPois);
     map.addLayer(qrFloor.layer);
@@ -595,6 +593,7 @@ function changeFloor(e) {
             jQuery('input[type=checkbox].leaflet-control-layers-selector:eq('+lab+')').prop("checked", true);
         }
     }
+    if (map.hasLayer(destMarker)) destMarker.openPopup();
 }
 
 
@@ -906,12 +905,10 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
                     }
                     map.addLayer(floors[f].layer);
                     map.addLayer(floors[f].photo);
-//                    map.panTo(arrow[i].getBounds().getCenter(), 0);
                     map.addLayer(arrowHead[f]);
                     flechita = arrowHead[f];
                     arrowAnim(flechita, floors[f].name);
-//                    map.fitBounds(arrow[f].getBounds());
-//                    map.setZoom(0);
+                    map.setView(arrow[f].getBounds().getCenter(), 0);
 
                 }
 
@@ -964,7 +961,7 @@ function arrowAnim(arrow, idFloor) {
 }
 
 var arrowsOffset = 0;
-////Función que define la animación (en este caso, flecha azul) que marca la ruta
+//Función que define la animación (en este caso, flecha azul) que marca la ruta
 var setArrow = function (flecha, idFloor) {
 
     flecha.setPatterns([
