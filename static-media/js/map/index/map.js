@@ -398,9 +398,7 @@ function loadPOIs() {
             if (qr_type == 'origin') {
                 qrMarker = new L.marker(qrLoc, { bounceOnAdd: false,
                     icon: OriginIcon})
-                    .bindPopup("Estás aquí: " + qrPoint.point.description +
-                        " (planta " + qrFloor.name + "," + qrPoint.enclosure.name + ")"
-                    );
+                    .bindPopup("Estás aquí: " + qrPoint.point.description);
 
 
             }
@@ -706,6 +704,12 @@ $(function () {
                 carMarker = new L.marker(carLoc, { bounceOnAdd: false,
                     icon: CarIcon})
                     .bindPopup("Mi coche");
+
+                carMarker.on('click', function () {
+                    LocalStorageHandler.setPrevDest(this);
+                    drawRoute(qrPoint.point.id, qrFloor.sX, qrFloor.sY, miCoche.point.id, floor_x.scaleX, floor_x.scaleY);
+
+                });
                 floor_x.layer.addLayer(carMarker);
                 //map.addLayer(floor_x.photo);
                 for (var l in floors[i].labels)
@@ -754,10 +758,13 @@ $(function () {
                 jQuery('input[type=checkbox].leaflet-control-layers-selector:eq('+lab+')').prop("checked", true);
             }
         }
+/*
         map.addLayer(floor_x.photo);
         map.addLayer(floor_x.layer);
-        carMarker._bringToFront();
+*/
         carMarker.openPopup();
+        carMarker._bringToFront();
+        map.setView(carLoc, 0);
     });
 
 
