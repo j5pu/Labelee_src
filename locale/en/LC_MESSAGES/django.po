@@ -206,7 +206,7 @@ msgstr "New floor"
 
 #: templates/map_editor/index.html:130
 msgid "Nombre de planta"
-msgstr "Enclosure name"
+msgstr "Floor name"
 
 #: templates/map_editor/index.html:133 templates/map_editor/index.html:191
 #: templates/map_editor/index.html:197

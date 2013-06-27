@@ -20,20 +20,21 @@ class Enclosure(models.Model):
     def __unicode__(self):
         return self.name
 
-
-def floor_filename(instance, filename):
+#         def get_path(instance, filename):
+# return 'photos/%s/%s' % (instance.stock_number, filename)
+def get_path(instance, filename):
     """
     img/enclosures/[encl_id]/floors/[floor_id].ext
 	xej: img/enclosures/25/floors/167.png
 	"""
     fileName, fileExtension = os.path.splitext(filename)
-    return 'img/enclosures/' + str(instance.enclosure.id) + '/floors/' + str(instance.id) + fileExtension
+    return 'img/enclosures/%s/floors/%s%s' % (instance.enclosure.id, instance.id, fileExtension)
 
 
 #Se crea el modelo para los productos
 class Floor(models.Model):
     name = models.CharField(max_length=200, null=False, blank=False)
-    img = models.FileField(upload_to=floor_filename, null=True, blank=True)
+    img = models.FileField(upload_to=get_path, null=True, blank=True)
     num_rows = models.PositiveIntegerField(null=True, blank=True)
     num_cols = models.PositiveIntegerField(null=True, blank=True)
     floor_number = models.IntegerField(null=True, blank=True)

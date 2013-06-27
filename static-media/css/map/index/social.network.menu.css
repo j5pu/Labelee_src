@@ -223,7 +223,7 @@ ul.navi a:hover li#n6, .n6.fake-active {
 span#social
 {
     width:  240px;
-    z-index: 10000;
+    z-index: 9999;
     position: absolute;
     bottom: 62px;
     left: 5px;

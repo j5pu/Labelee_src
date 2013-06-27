@@ -26,6 +26,8 @@
    <script src="{{ STATIC_URL }}vendor/jquery-1.9.1.min.js"></script>
     <script src="{{ STATIC_URL }}vendor/hammer.js_v1.0.3/dist/hammer.min.js"></script>
     <script src="{{ STATIC_URL }}vendor/hammer.js_v1.0.3/dist/jquery.hammer.min.js"></script>
+    <script src="{{ STATIC_URL }}js/map/index/coupon.js"></script>
+
 
     <!--script type="text/javascript" src="http://code.jquery.com/jquery-1.9.1.min.js"></script-->
     <!--script src="http://cdn.leafletjs.com/leaflet-0.5.1/leaflet.js"></script-->
@@ -158,18 +160,12 @@
     $(function () {       
         $('div#page').hide();
         $('body').prepend('<div class="splash">    <div class="container">        <div class="sp-container"             >            <div class="frame-5"><span><img src="/media/logo-labelee-sin-slogan.png"></span></div>            <div id="find" class="frame-6">find<span id="your"> your<span id="way"> way!</span></span></div>        </div>    </div></div>')
-        setTimeout(hideSplash, 4000);
-
-
-        $('span#myCar').click(function(){
-            map.setView(qrLoc, 0);
-        });
+        setTimeout(hideSplash, 3000);
     });
     function hideSplash() {
         $('div.splash').hide();      
         $('div#page').show();
         loopFloors(floor_index);
-
     }
 
 </script>
