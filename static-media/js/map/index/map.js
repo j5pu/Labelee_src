@@ -279,7 +279,7 @@ function loopFloors() {
         initMap(qrPoint);
 
         LocalStorageHandler.draw();
-        if(( ua.indexOf("Android") >= 0 ) && (androidversion >=3))
+//       if(( ua.indexOf("Android") >= 0 ) && (androidversion >=3.0))
 
                 Coupon.init();
 

@@ -429,9 +429,8 @@ pre
     line-height: 36px;
     height: 36px;
     padding: 0 50px;
+    top:6px;
     left:0;
-    position: absolute;
-    top: 94.4%;
 }
 
 #header a {
@@ -859,17 +858,24 @@ span.locator
     background-color: white;
     color: dimgrey;
 }
-
-
 /*
-label span>span>i
-{
-    margin-left:12px;
-}*/
+
+#map{
+    background-image: -webkit-gradient(linear, left top, right bottom, color-stop(0, #FFFFFF), color-stop(1, rgba(113, 190, 226, 0.64))) !important;
+}
+
+
+.leaflet-overlay-pane{
+	-webkit-transform: perspective(167) rotateX(20deg) rotateZ(0deg) !important;
+	-webkit-transform-origin: 300px 300px !important;
+    transform: perspective(167) rotateX(20deg) rotateZ(0deg) !important;
+    transform-origin: 300px 300px !important;
+    }
+*/
 
 #coupon
 {
-    margin-top: 126%;
+    margin-top: 106%;
     position: relative;
     width: 100%;
     z-index: 9999;
