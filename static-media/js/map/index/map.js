@@ -250,6 +250,8 @@ var mapH = $(document).height(),//Altura de la pantalla
     totalPois = new L.LayerGroup(),
     qrFloor,
     qrLoc,
+    carLoc,
+    carMarker,
     route = {},
     arrow = [],
     arrowHead = [],
@@ -277,6 +279,9 @@ function loopFloors() {
         initMap(qrPoint);
 
         LocalStorageHandler.draw();
+        if(( ua.indexOf("Android") >= 0 ) && (androidversion >=3))
+
+                Coupon.init();
 
         // fin de loopFloors
         return;
@@ -321,9 +326,7 @@ function loadPOIs() {
                 }
                 var colorIcon = floors[fl].pois[j].label.category.color,
                     nameIcon = floors[fl].pois[j].label.name,
-                //shapeIcon = floors[fl].pois[j].label.icon,
                     shapeIcon = floors[fl].pois[j].label.category.icon,
-                //shapeIcon = "bolt",
                     id = floors[fl].pois[j].id,
                     descriptionIcon = floors[fl].pois[j].description,
                     sX = floors[fl].scaleX,
@@ -396,9 +399,7 @@ function loadPOIs() {
             if (qr_type == 'origin') {
                 qrMarker = new L.marker(qrLoc, { bounceOnAdd: false,
                     icon: OriginIcon})
-                    .bindPopup("Estás aquí: " + qrPoint.point.description +
-                        " (planta " + qrFloor.name + "," + qrPoint.enclosure.name + ")"
-                    );
+                    .bindPopup("Estás aquí: " + qrPoint.point.description);
 
 
             }
@@ -465,9 +466,7 @@ function initMap(qrPoint) {
         }
     }
 
-//    for (i in floors) {
-//        map.removeLayer(floors[i].layer);
-//    }
+
 
     map.removeLayer(totalPois);
     map.addLayer(qrFloor.layer);
@@ -536,12 +535,7 @@ function removeCategory(e)
 var checked = [];
 
 function changeFloor(e) {
-/*
-    if (map.hasLayer(qrFloor.layer)) {
-        map.removeLayer(qrFloor.layer);
-    }
-*/
-  //  for (var pos in $('input[type=checkbox].leaflet-control-layers-selector'))
+
       for (pos = 0; pos < $('input[type=checkbox].leaflet-control-layers-selector').length; pos++)
     {
         if ($('input[type=checkbox].leaflet-control-layers-selector:eq('+pos+')').is(':checked')){
@@ -556,7 +550,6 @@ function changeFloor(e) {
         if ((e.layer && (e.layer._url === floors[i].photo._url)) || (e._url === floors[i].photo._url)) {
             floor_x = floors[i];
 
-            //map.addLayer(floor_x.photo);
             for (var l in floors[i].labels)
             {
                 layersControl.addOverlay(floor_x.labels[l].layer,   '<i class="icon-' +floors[i].labels[l].fields.icon +' icon-white"></i>');
@@ -601,11 +594,7 @@ function changeFloor(e) {
             jQuery('input[type=checkbox].leaflet-control-layers-selector:eq('+lab+')').prop("checked", true);
         }
     }
-
-
-
-//map.setMaxBounds(floor_x.bounds);
-//map.setView(qrPoint, 0);
+    if (map.hasLayer(destMarker)) destMarker.openPopup();
 }
 
 
@@ -626,8 +615,6 @@ $(function () {
         for (var i in floors) {
             if (floors[i].id === qrFloor.id) {
                 floor_x = floors[i];
-
-                //map.addLayer(floor_x.photo);
                 for (var l in floors[i].labels)
                 {
                     layersControl.addOverlay(floor_x.labels[l].layer,   '<i class="icon-' +floors[i].labels[l].fields.icon +' icon-white"></i>');
@@ -652,6 +639,8 @@ $(function () {
 
             } else {
                 map.removeLayer(floors[i].layer);
+                map.removeLayer(floors[i].photo);
+
 
                 for (var l in floors[i].labels) {
                     layersControl.removeLayer(floors[i].labels[l].layer);
@@ -676,10 +665,86 @@ $(function () {
         map.addLayer(qrFloor.layer);
         qrMarker._bringToFront();
         qrMarker.openPopup();
-        map.setView(qrLoc, 0);
     });
 
+    $('span#myCar').click(function () {
+        var miCoche = JSON.parse(localStorage.getItem('miCoche')).dest;
 
+            for (pos = 0; pos < $('input[type=checkbox].leaflet-control-layers-selector').length; pos++)
+        {
+            if ($('input[type=checkbox].leaflet-control-layers-selector:eq('+pos+')').is(':checked')){
+                checked[pos] = true;
+            }else{
+                checked[pos] = false;
+            }
+        }
+
+        var floor_x = {};
+        for (var i in floors) {
+            if (floors[i].id === miCoche.floor.id) {
+                floor_x = floors[i];
+                carLoc = [((miCoche.point.row) * floor_x.scaleY) + floor_x.scaleY,
+                    (miCoche.point.col * floor_x.scaleX) + floor_x.scaleX];
+                carMarker = new L.marker(carLoc, { bounceOnAdd: false,
+                    icon: CarIcon})
+                    .bindPopup("Mi coche");
+
+                carMarker.on('click', function () {
+                    LocalStorageHandler.setPrevDest(this);
+                    drawRoute(qrPoint.point.id, qrFloor.sX, qrFloor.sY, miCoche.point.id, floor_x.scaleX, floor_x.scaleY);
+
+                });
+                floor_x.layer.addLayer(carMarker);
+                for (var l in floors[i].labels)
+                {
+                    layersControl.addOverlay(floor_x.labels[l].layer,   '<i class="icon-' +floors[i].labels[l].fields.icon +' icon-white"></i>');
+                    if (checked[l]===true)
+                    {
+                        map.addLayer(floor_x.labels[l].layer);
+                    }
+                }
+
+                map.addLayer(floor_x.photo);
+                map.addLayer(floor_x.layer);
+
+                if (arrowHead[i] && subarrow[i]) {
+                    map.addLayer(arrowHead[i]);
+                    flechita = arrowHead[i];
+                    arrowAnim(flechita, floor_x.name);
+                    map.setView(arrow[i].getBounds().getCenter(), 0);
+
+                } else {
+                    map.setView(carLoc, 0);
+                }
+
+            } else {
+                map.removeLayer(floors[i].layer);
+                map.removeLayer(floors[i].photo);
+
+
+                for (var l in floors[i].labels) {
+                    layersControl.removeLayer(floors[i].labels[l].layer);
+                    map.removeLayer(floors[i].labels[l].layer);
+                }
+
+                if (arrowHead[i] != null)
+                    map.removeLayer(arrowHead[i]);
+            }
+
+        }
+
+        for (var lab in floor_x.labels)
+        {
+            if (checked[lab]===true)
+            {
+                jQuery('input[type=checkbox].leaflet-control-layers-selector:eq('+lab+')').css('background', floor_x.labels[lab].fields.color);
+                jQuery('input[type=checkbox].leaflet-control-layers-selector:eq('+lab+')').prop("checked", true);
+            }
+        }
+        carMarker.openPopup();
+        carMarker._bringToFront();
+        map.setView(carLoc, 0);
+    });
 
 });
 
@@ -783,26 +848,12 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
             if (arrow[i] && subarrow[i]) {
                 floors[i].layer.addLayer(arrow[i]);
                 if (floors[i].id === route.fields.destiny.fields.floor) {
-               /* if (route.fields.origin.fields.floor !== route.fields.destiny.fields.floor)
-                    {*/
-                         var check = floorChecks[floors[i].name];
+                        var check = floorChecks[floors[i].name];
                          blinkingMode = floors[i].name;
                          blinker(check);
-                       /* for (index = 0; index < floors.length; index++) {
-                            var check = $('input[type=radio].leaflet-control-layers-selector:eq(' + index + ')');
-                            if (check.parent().find('span').html().trim() == floors[i].name) {
-                                blinkingMode = floors[i].name;
-                                blinker(check);
-                            }
-                        }*/
-                 //   }
-                  map.addLayer(arrowHead[i]);
+                      map.addLayer(arrowHead[i]);
                     flechita = arrowHead[i];
                     arrowAnim(flechita, floors[i].name);
-                    /*
-                     map.fitBounds(arrow[i].getBounds());
-                     map.setZoom(0);
-                     */
 
                 }
             }
@@ -841,7 +892,6 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
                     }
 
                     for (var l in floors[f].labels) {
-//CONTROL BLINKING
                        layersControl.addOverlay(floors[f].labels[l].layer, '<i class="icon-' + floors[i].labels[l].fields.icon + ' icon-white"></i>');
                         if (checked[l] === true) {
                             map.addLayer(floors[f].labels[l].layer);
@@ -856,12 +906,10 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
                     }
                     map.addLayer(floors[f].layer);
                     map.addLayer(floors[f].photo);
-//                    map.panTo(arrow[i].getBounds().getCenter(), 0);
                     map.addLayer(arrowHead[f]);
                     flechita = arrowHead[f];
                     arrowAnim(flechita, floors[f].name);
-//                    map.fitBounds(arrow[f].getBounds());
-//                    map.setZoom(0);
+                    map.setView(arrow[f].getBounds().getCenter(), 0);
 
                 }
 
@@ -870,7 +918,6 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
                     map.removeLayer(floors[f].layer);
                     map.removeLayer(floors[f].photo);
                     for (var l in floors[f].labels) {
-                        //layersControl.removeLayer(floors[f].labels[l].layer);
                         map.removeLayer(floors[f].labels[l].layer);
                     }
 
@@ -885,16 +932,13 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
                         }
                     }
 
-
                     map.addLayer(floors[f].layer);
                     map.addLayer(floors[f].photo);
                     map.setView(arrow[f].getBounds().getCenter(), 0);
                     map.addLayer(arrowHead[f]);
                     flechita = arrowHead[f];
                     arrowAnim(flechita, floors[f].name);
-//                    map.fitBounds(arrow[f].getBounds());
-//                    map.setZoom(0);
-
+                    map.setView(arrow[f].getBounds().getCenter(),0);
 
                 }
             }
@@ -918,7 +962,7 @@ function arrowAnim(arrow, idFloor) {
 }
 
 var arrowsOffset = 0;
-////Función que define la animación (en este caso, flecha azul) que marca la ruta
+//Función que define la animación (en este caso, flecha azul) que marca la ruta
 var setArrow = function (flecha, idFloor) {
 
     flecha.setPatterns([

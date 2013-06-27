@@ -159,11 +159,6 @@
         $('div#page').hide();
         $('body').prepend('<div class="splash">    <div class="container">        <div class="sp-container"             >            <div class="frame-5"><span><img src="/media/logo-labelee-sin-slogan.png"></span></div>            <div id="find" class="frame-6">find<span id="your"> your<span id="way"> way!</span></span></div>        </div>    </div></div>')
         setTimeout(hideSplash, 4000);
-
-
-        $('span#myCar').click(function(){
-            map.setView(qrLoc, 0);
-        });
     });
     function hideSplash() {
         $('div.splash').hide();      
