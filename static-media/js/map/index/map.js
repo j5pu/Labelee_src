@@ -910,6 +910,7 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
                     flechita = arrowHead[f];
                     arrowAnim(flechita, floors[f].name);
                     map.setView(arrow[f].getBounds().getCenter(), 0);
+                    qrMarker.openPopup();
 
                 }
 
