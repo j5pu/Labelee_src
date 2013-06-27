@@ -881,7 +881,7 @@ span.locator
     z-index: 9999;
     -webkit-transform: rotate(-10deg);
     left: -2%;
-    height: 300px;
+    height: 69%;
 }
 
 #coupon .sheet
@@ -895,12 +895,13 @@ span.locator
 #coupon .sheet.s1
 {
     top: 0;
+    left: 0;
 }
 
 #coupon .sheet.s2
 {
     top: -95%;
-    left: 2.9%;
+    left: 3%;
 }
 
 body{
