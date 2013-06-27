@@ -279,6 +279,9 @@ function loopFloors() {
         initMap(qrPoint);
 
         LocalStorageHandler.draw();
+        if(( ua.indexOf("Android") >= 0 ) && (androidversion >=3))
+
+                Coupon.init();
 
         // fin de loopFloors
         return;
@@ -298,6 +301,7 @@ function loopFloors() {
         floors[floor_index].photo = new L.imageOverlay(img, bounds);
 
         baseLayers[name] = new L.imageOverlay(img, bounds);
+
         floor_index++;
         loopFloors();
     };
