@@ -429,8 +429,9 @@ pre
     line-height: 36px;
     height: 36px;
     padding: 0 50px;
-    top:6px;
     left:0;
+    position: absolute;
+    top: 94.4%;
 }
 
 #header a {
@@ -859,17 +860,43 @@ span.locator
     color: dimgrey;
 }
 
-/*
 
-#map{
-    background-image: -webkit-gradient(linear, left top, right bottom, color-stop(0, #FFFFFF), color-stop(1, rgba(113, 190, 226, 0.64))) !important;
+/*
+label span>span>i
+{
+    margin-left:12px;
+}*/
+
+#coupon
+{
+    margin-top: 126%;
+    position: relative;
+    width: 100%;
+    z-index: 9999;
+    -webkit-transform: rotate(-10deg);
+    left: -2%;
+    height: 300px;
 }
 
+#coupon .sheet
+{
+    box-shadow: grey 2px 2px 10px;
+    height: 100%;
+    position: relative;
+    background: rgb(219, 193, 162);
+}
 
-.leaflet-overlay-pane{
-	-webkit-transform: perspective(167) rotateX(20deg) rotateZ(0deg) !important;
-	-webkit-transform-origin: 300px 300px !important;
-    transform: perspective(167) rotateX(20deg) rotateZ(0deg) !important;
-    transform-origin: 300px 300px !important;
-    }
-*/
+#coupon .sheet.s1
+{
+    top: 0;
+}
+
+#coupon .sheet.s2
+{
+    top: -95%;
+    left: 2.9%;
+}
+
+body{
+    overflow: hidden;
+}
