@@ -543,8 +543,10 @@ html{
 
 }
 .leaflet-control-layers {
+/*
     box-shadow: 0 1px 7px rgba(0,0,0,0.4);
     -webkit-box-shadow: 0 1px 7px rgba(0,0,0,0.4);
+*/
     background: #f8f8f8;
     top: -2px;
     opacity: .85;
@@ -557,8 +559,10 @@ html{
 }
 
 .leaflet-control {
+/*
     -webkit-box-shadow: 2px 2px 8px rgba(0,0,0,0.3) !important;
     box-shadow: 2px 2px 8px rgba(0,0,0,0.3) !important;
+*/
 }
 
 .leaflet-control-layers-expanded {
@@ -566,8 +570,8 @@ html{
     color: #333;
     background: transparent;
     width: 36px;
-    -webkit-box-shadow: none !important;
-    box-shadow: none !important;
+/*    -webkit-box-shadow: none !important;
+    box-shadow: none !important;*/
 }
 
 
@@ -669,9 +673,18 @@ span>span{
     z-index: -1;
 }
 
-.leaflet-popup-pane, .leaflet-control {
+.leaflet-popup-pane, .leaflet-control, .leaflet-bar {
     opacity: 0.7;
+    border: none;
 }
+
+.leaflet-popup-pane, .leaflet-control a {
+    border-color:   transparent;
+    box-shadow: none;
+    background-color: #333333;
+    color: #eee;
+}
+
 /*ESTILOS DEL MENU LATERAL
 ///////////////////////////*/
 .mmenu div.search
@@ -732,7 +745,9 @@ html.mmenu-right .mmenu div.search
 {
     border-radius: 4px;
     background: #cfcfcf;
-//    box-shadow: 0 0 2px rgba( 0, 0, 0, 0.2 );
+/*
+    box-shadow: 0 0 2px rgba( 0, 0, 0, 0.2 );
+*/
     font-size: 11px;
     font-weight: bold;
     font-style: normal;
@@ -751,7 +766,9 @@ html.mmenu-right .mmenu div.search
 
 html.mmenu-opened .mmenu-page
 {
-//box-shadow: 0 0 15px rgba( 0, 0, 0, 0.2 );
+/*
+box-shadow: 0 0 15px rgba( 0, 0, 0, 0.2 );
+*/
 }
 .mmenu
 {
@@ -830,14 +847,16 @@ span.locator
     opacity: 0.7;
     color: white;
     font-size: 1.1em;
+/*
     -webkit-box-shadow: 2px 2px 8px rgba(0,0,0,0.5) !important;
     box-shadow: 2px 2px 8px rgba(0,0,0,0.5) !important;
+*/
     border: none;
     display: inline-block;
     text-align: center;
     line-height: 31px;
     margin-left: 2px;
-    margin-top: 8px;
+    margin-top: 12px;
 }
 
 #myCar
@@ -888,6 +907,7 @@ span.locator
 
 #coupon .sheet
 {
+    -webkit-box-shadow: grey 2px 2px 10px;
     box-shadow: grey 2px 2px 10px;
     border: 2px solid #999;
     height: 100%;
@@ -946,4 +966,9 @@ body{
         top: -95%;
         left: 15%;
     }
+}
+
+.leaflet-control-zoom a.leaflet-control-zoom-disabled {
+    background-color: #bbb;
+    color:#333
 }
