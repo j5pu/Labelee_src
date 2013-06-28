@@ -599,7 +599,7 @@ function changeFloor(e) {
 
 
 $(function () {
-    LocalStorageHandler.init();
+
 
     $('span#location').click(function () {
         for (pos = 0; pos < $('input[type=checkbox].leaflet-control-layers-selector').length; pos++)
