@@ -26,7 +26,7 @@
    <script src="{{ STATIC_URL }}vendor/jquery-1.9.1.min.js"></script>
     <script src="{{ STATIC_URL }}vendor/hammer.js_v1.0.3/dist/hammer.min.js"></script>
     <script src="{{ STATIC_URL }}vendor/hammer.js_v1.0.3/dist/jquery.hammer.min.js"></script>
-    <script src="{{ STATIC_URL }}js/map/index/coupon.js"></script>
+    <!--script src="{{ STATIC_URL }}js/map/index/coupon.js"></script-->
 
 
     <!--script type="text/javascript" src="http://code.jquery.com/jquery-1.9.1.min.js"></script-->
@@ -96,7 +96,7 @@
     </script>
     <script src="{{ STATIC_URL }}js/map/index/map.js"></script>
 
-    <nav id="menu-right">
+    <nav id="menu-right" >
         <!--
         <div class="search">
             <input type="text" name="search" placeholder="Buscar..." autocomplete="off" />
@@ -166,6 +166,7 @@
         $('div.splash').hide();      
         $('div#page').show();
         loopFloors(floor_index);
+        LocalStorageHandler.init();
     }
 
 </script>

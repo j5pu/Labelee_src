@@ -33,7 +33,7 @@ var Coupon = {
     {
         drag: function(ev)
         {
-            var self = Coupon
+            var self = Coupon;
 
             if(self.opened && ev.gesture['deltaY'] < 0)
                 return;
@@ -109,7 +109,7 @@ var Coupon = {
             var self = Coupon;
 
             self.$el.hammer({ prevent_default: true })
-                .bind('touch dragdown dragup', self.handlers.drag)
+                .bind('drag', self.handlers.drag)
                 .bind('dragend', self.handlers.dragEnd)
         },
 
@@ -118,7 +118,7 @@ var Coupon = {
             var self = Coupon;
 
             self.$el.find('span').hammer({prevent_default: true })
-                .bind('click touch tap', function(){
+                .bind('tap', function(){
                     preDrawRoute(qrPoint.point.id, qrFloor.id, 5894, 41);
                     self.top_new = self.initial_top;
                     self.$el.css({'margin-top': self.top_new + 'px'});
@@ -132,12 +132,13 @@ var Coupon = {
             var self = Coupon;
 
             self.$el.find('.sheet').hammer({prevent_default: true })
-                .bind('click touch tap', function(){
+                .bind('tap', function(){
 
                     var lastSheet = $(this).is(':last-child');
                     if(lastSheet)
                     {
-                        $(this).hammer().unbind('touch click tap dragdown dragup dragend');
+//                        $(this).hammer({stop_propagation: true}).unbind('touch click tap');
+////                        $(this).siblings().hammer({stop_propagation: true}).unbind('drag');
                         return;
                     }
 
@@ -145,14 +146,14 @@ var Coupon = {
 
                     $coupon = $(this).parent();
                     $this= $(this).clone().css({
-                        'top': '-90%',
-                        'left': '3%'
+                        'top': '-95%',
+                        'left': '20%'
                     });
                     $(this).remove();
                     $coupon.append($this);
                     $this.siblings().css({
                         'top': 0,
-                        'left': 0
+                        'left': '10%'
                     });
 
 
@@ -164,8 +165,7 @@ var Coupon = {
         {
             var self = Coupon;
             self.$el.off();
-            self.$el.find('*').off();
-//            self.$el.find('*').hammer().unbind('touch click tap dragdown dragup dragend');
+            self.$el.find('.sheet').hammer().unbind('tap');
 
             self.events.drag();
             self.events.clickCoupon();

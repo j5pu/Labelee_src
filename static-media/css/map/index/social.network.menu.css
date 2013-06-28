@@ -158,8 +158,10 @@ ul.navi a {
     -webkit-border-radius: 6px;
     border-radius: 6px;
     opacity:0.8;
+/*
     -webkit-box-shadow: 2px 2px 8px rgba(0,0,0,0.3) !important;
     box-shadow: 2px 2px 8px rgba(0,0,0,0.3) !important;
+*/
 }
 ul.navi a img {
     border:0;
