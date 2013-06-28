@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-06-25 11:53+0200\n"
+"POT-Creation-Date: 2013-06-28 18:05+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -65,15 +65,23 @@ msgstr "Selecc. categoría"
 msgid "Select label"
 msgstr "Selecc. etiqueta"
 
-#: static-media/js/map_editor/index/main.js:62
+#: static-media/js/map_editor/edit_map/painter.js:192
+msgid "Change panorama"
+msgstr "Cambiar panorama"
+
+#: static-media/js/map_editor/edit_map/painter.js:192
+msgid "Add panorama"
+msgstr "Añadir panorama"
+
+#: static-media/js/map_editor/index/main.js:73
 msgid "Are you sure you want to remove this enclosure? "
 msgstr "¿Seguro que desea eliminar este recinto? "
 
-#: static-media/js/map_editor/index/main.js:99
+#: static-media/js/map_editor/index/main.js:110
 msgid "You must specify the floor image too"
 msgstr "También debe subir la imágen del plano para la planta"
 
-#: static-media/js/map_editor/index/main.js:194
+#: static-media/js/map_editor/index/main.js:205
 msgid "Are you sure you want to remove this floor?"
 msgstr ""
 "¿Seguro que desea eliminar la planta? (también se perderá toda la "

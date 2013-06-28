@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-06-25 11:43+0200\n"
+"POT-Creation-Date: 2013-06-28 18:04+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -25,7 +25,7 @@ msgstr "Routes are being processed"
 msgid "Esto es un titulo"
 msgstr "This is a title"
 
-#: templates/map_editor/connections.html:23 templates/map_editor/index.html:77
+#: templates/map_editor/connections.html:23 templates/map_editor/index.html:81
 msgid "Gestión de aristas"
 msgstr "Connections manager"
 
@@ -148,7 +148,7 @@ msgid "Crear"
 msgstr "Create"
 
 #: templates/map_editor/edit.html:162 templates/map_editor/edit.html.py:186
-#: templates/map_editor/index.html:105 templates/map_editor/index.html:206
+#: templates/map_editor/index.html:109 templates/map_editor/index.html:210
 msgid "Cancelar"
 msgstr "Cancel"
 
@@ -168,67 +168,67 @@ msgstr "For category"
 msgid "Imágen para el POI"
 msgstr "POI image"
 
-#: templates/map_editor/edit.html:183 templates/map_editor/index.html:138
+#: templates/map_editor/edit.html:183 templates/map_editor/index.html:142
 msgid "Elegir imagen"
 msgstr "Choose image"
 
-#: templates/map_editor/index.html:23
+#: templates/map_editor/index.html:27
 msgid "Administración de recintos"
 msgstr "Enclosure manager"
 
-#: templates/map_editor/index.html:49
+#: templates/map_editor/index.html:53
 msgid "Nombre del recinto"
 msgstr "Enclosure name"
 
-#: templates/map_editor/index.html:51
+#: templates/map_editor/index.html:55
 msgid "Añadir recinto"
 msgstr "Add enclosure"
 
-#: templates/map_editor/index.html:74
+#: templates/map_editor/index.html:78
 msgid "Calcular rutas"
 msgstr "Calculate routes"
 
-#: templates/map_editor/index.html:92
+#: templates/map_editor/index.html:96
 msgid "Nuevo nombre para el recinto"
 msgstr "New name for the enclosure"
 
-#: templates/map_editor/index.html:101
+#: templates/map_editor/index.html:105
 msgid "Cuenta de twitter"
 msgstr "Twitter account"
 
-#: templates/map_editor/index.html:106 templates/map_editor/index.html:207
+#: templates/map_editor/index.html:110 templates/map_editor/index.html:211
 msgid "Editar"
 msgstr "Edit"
 
-#: templates/map_editor/index.html:120
+#: templates/map_editor/index.html:124
 msgid "Nueva planta"
 msgstr "New floor"
 
-#: templates/map_editor/index.html:130
+#: templates/map_editor/index.html:134
 msgid "Nombre de planta"
 msgstr "Floor name"
 
-#: templates/map_editor/index.html:133 templates/map_editor/index.html:191
-#: templates/map_editor/index.html:197
+#: templates/map_editor/index.html:137 templates/map_editor/index.html:195
+#: templates/map_editor/index.html:201
 msgid "Número"
 msgstr "Number"
 
-#: templates/map_editor/index.html:141
+#: templates/map_editor/index.html:145
 msgid "Añadir planta"
 msgstr "Add floor"
 
-#: templates/map_editor/index.html:149
+#: templates/map_editor/index.html:153
 msgid "Plantas"
 msgstr "Floors"
 
-#: templates/map_editor/index.html:183
+#: templates/map_editor/index.html:187
 msgid "Nombre"
 msgstr "Name"
 
-#: templates/map_editor/index.html:188
+#: templates/map_editor/index.html:192
 msgid "Nuevo nombre para la planta"
 msgstr "New name for the floor"
 
-#: templates/map_editor/index.html:203
+#: templates/map_editor/index.html:207
 msgid "Cambiar imagen"
 msgstr "Change image"
