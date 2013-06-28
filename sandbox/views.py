@@ -86,3 +86,13 @@ def dblog(request):
     Logger.critical('fallo!!!')
 
     return HttpResponse('ok')
+
+# streetview
+
+def streetView(request):
+
+    ctx = {
+        'img': 'img/enclosures/24/panoramas/6190.jpg'
+    }
+
+    return render_to_response('streetView/streetView.html',ctx, context_instance=RequestContext(request))

@@ -16,6 +16,10 @@ urlpatterns = patterns('sandbox.views',
 
 	url(r'^vcap-info$', 'show_vinfo'),
 
+    # url(r'^formulario$', 'formulario'),
+
+    url(r'^street$', 'streetView'),
+
 
 	# url(r'^tlouder$', 'tlouder'),
 	# url(r'^multix$', 'multix'),

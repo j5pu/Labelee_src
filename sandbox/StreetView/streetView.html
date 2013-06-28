@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+</head>
+<body>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"> </script>
+    <script type="text/javascript" src="{{ STATIC_URL }}streetview/jquery.ba-outside-events.min.js"> </script>
+    <script type="text/javascript" src="{{ STATIC_URL }}streetview/ddpanorama.js"> </script>
+    <script type="text/javascript" src="{{ STATIC_URL }}streetview/ddpanorama.gensample.js"> </script>
+    <script
+            >
+        addSamplePano("{{ MEDIA_URL }}{{ img }}",{width:480, height:270});
+    </script>
+
+</body>
+</html>
