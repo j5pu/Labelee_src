@@ -44,7 +44,9 @@ function get_url() {
     if (prevDest) {
         urlstring += 'dest/' + prevDest.enclosureid + '_' + prevDest.floorid + '_' + prevDest.poid;
         return urlstring;
-    } else {
+    }
+    //CAPADO HASTA QUE ACTIVEMOS LA LUPA DE BUSQUEDA
+    /* else {
         for (var sfl in floors) {
             for (var poi in floors[sfl].pois) {
                 if (searchMarker._markerLoc._circleLoc._latlng == floors[sfl].pois[poi].marker._latlng) {
@@ -53,7 +55,7 @@ function get_url() {
                 }
             }
         }
-    }
+    }*/
 
     return location.href;
 }
