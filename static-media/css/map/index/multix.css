@@ -814,6 +814,7 @@ box-shadow: 0 0 15px rgba( 0, 0, 0, 0.2 );
 nav
 {
     position: absolute;
+    display:none;
 }
 
 span>span>i
@@ -847,25 +848,25 @@ span.locator
     text-align: center;
     line-height: 31px;
     margin-left: 2px;
-    margin-top: 12px;
+    margin-top: 11px;
 }
 
 #myCar
 {
     background-color: cadetblue;
-    left:40px;
+    left:45px;
     display:none;
 }
 
 #location
 {
-    background-color: darkblue;
-    left: 5px;
+    background-color: rgb(6, 84, 150);
+    left: 10px;
 }
 
 #location:hover, #myCar:hover
 {
-    background-color: white;
+    background-color: #bbb;
     color: dimgrey;
 }
 
@@ -957,4 +958,27 @@ body{
         top: -95%;
         left: 15%;
     }
+}
+
+
+.leaflet-popup-content-wrapper,.leaflet-popup-tip-container  {
+    border: .5px solid #000;
+}
+
+.leaflet-popup-tip-container {
+border-top: white;
+}
+
+div#cupones{
+    position: absolute;
+    left: 60%;
+    bottom: 0;
+    z-index:9999;
+    width: 40%;
+
+}
+#cupones img{
+    width: 100%;
+    position: absolute;
+    bottom: 0;
 }
