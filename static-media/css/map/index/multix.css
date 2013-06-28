@@ -673,18 +673,9 @@ span>span{
     z-index: -1;
 }
 
-.leaflet-popup-pane, .leaflet-control, .leaflet-bar {
-    opacity: 0.7;
-    border: none;
+.leaflet-popup-pane, .leaflet-control {
+    opacity: 0.85;
 }
-
-.leaflet-popup-pane, .leaflet-control a {
-    border-color:   transparent;
-    box-shadow: none;
-    background-color: #333333;
-    color: #eee;
-}
-
 /*ESTILOS DEL MENU LATERAL
 ///////////////////////////*/
 .mmenu div.search
@@ -966,9 +957,4 @@ body{
         top: -95%;
         left: 15%;
     }
-}
-
-.leaflet-control-zoom a.leaflet-control-zoom-disabled {
-    background-color: #bbb;
-    color:#333
 }
