@@ -858,8 +858,8 @@ span.locator
     background-color: white;
     color: dimgrey;
 }
-/*
 
+/*
 #map{
     background-image: -webkit-gradient(linear, left top, right bottom, color-stop(0, #FFFFFF), color-stop(1, rgba(113, 190, 226, 0.64))) !important;
 }
@@ -875,33 +875,36 @@ span.locator
 
 #coupon
 {
-    margin-top: 106%;
+    margin-top: 85%;
     position: relative;
-    width: 100%;
+    width: 65%;
     z-index: 9999;
-    -webkit-transform: rotate(-10deg);
-    left: -2%;
+    -webkit-transform: rotate(-25deg);
+    left: 0;
+    margin-left: 20%;
     height: 69%;
 }
 
 #coupon .sheet
 {
     box-shadow: grey 2px 2px 10px;
+    border: 2px solid #999;
     height: 100%;
     position: relative;
-    background: rgb(219, 193, 162);
+    background: #ddd;
+    padding: 5%;
 }
 
 #coupon .sheet.s1
 {
     top: 0;
-    left: 0;
+    left: 10%;
 }
 
 #coupon .sheet.s2
 {
-    top: -95%;
-    left: 3%;
+    top: -100%;
+    left: 20%;
 }
 
 body{
