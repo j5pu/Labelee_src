@@ -146,7 +146,7 @@ var Coupon = {
 
                     $coupon = $(this).parent();
                     $this= $(this).clone().css({
-                        'top': '-100%',
+                        'top': '-95%',
                         'left': '20%'
                     });
                     $(this).remove();
