@@ -99,6 +99,11 @@ class LabelCategory(models.Model):
         else:
             super(LabelCategory, self).delete(*args, **kwargs)
 
+    def qr_can_be_assigned(self):
+        # Comprueba si la categoría no es ni bloqueante ni arista
+        return self.name_es.upper() != CATEGORIAS_FIJAS[0].upper() \
+            and self.name_es.upper() != CATEGORIAS_FIJAS[1].upper()
+
 
 def label_filename(instance, filename):
     """
@@ -152,6 +157,11 @@ class Point(models.Model):
 
     def __unicode__(self):
         return self.floor.name + ' (' + str(self.row) + ', ' + str(self.col) + ')'
+
+    def assign_qr(self):
+        qr_code = str(self.floor.enclosure.id) + '_' + str(self.floor.id) + '_' + str(self.id)
+        qr = QR_Code(code=qr_code, point=self)
+        qr.save()
 
 
 class QR_Code(models.Model):
