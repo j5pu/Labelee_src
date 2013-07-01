@@ -75,7 +75,8 @@ def update_from_list(request):
         elif not point['qr'] and hasattr(point_obj, 'qr_code'):
             point_obj.qr_code.delete()
 
-        point_obj.description = point['description']
+        if 'description' in point:
+            point_obj.description = point['description']
         point_obj.save()
 
     return HttpResponse(simplejson.dumps('ok'))
