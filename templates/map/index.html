@@ -166,17 +166,20 @@
             <div class="swiper-wrapper">
                 <div class="swiper-slide">
                     <p class="title">Cupón 1</p>
-                    <p>Oferta 3 x 2 en la Botellita, ¡solo hasta las 20.00h! Pulsa aquí para llegar...</p>
+                    <p>Oferta 3 x 2 en la Botellita, ¡solo hasta las 20.00h!</p>
+                    <a href="#">Pulsa aquí</a>
                     <!--img src="/media/slider1-1.png"-->
                 </div>
                 <div class="swiper-slide">
                     <p class="title">Cupón2 </p>
-                    <p>Promoción 20% de descuento en ropa de señora, válida hasta el 14-7-2013.</p>
-                    <!--img src="/media/slider1-2.png"--> </div>
+                    <p>Promoción 20% de descuento en ropa de señora</p>
+                    <a href="#">Pulsa aquí</a>
+                    <!--img src="/media/slider1-2.png"-->
+                </div>
                 <div class="swiper-slide">
                     <p class="title">Cupón 3</p>
-
-                    <p>¡Entradas gratis para los niños en Cinesa! Miércoles y Jueves hasta el 1 de Agosto</p>
+                    <p>¡Entradas gratis para los niños en Cinesa! Miércoles y Jueves</p>
+                    <a href="#">Pulsa aquí</a>
                 </div>
             </div>
         </div>
@@ -228,6 +231,11 @@
         $('body').prepend('<div class="splash">    <div class="container">        <div class="sp-container"             >            <div class="frame-5"><span><img src="/media/logo-labelee-sin-slogan.png"></span></div>            <div id="find" class="frame-6">find<span id="your"> your<span id="way"> way!</span></span></div>        </div>    </div></div>')
         setTimeout(hideSplash, 3500);
 
+        $('div.swiper-slide a').on('click', function (e) {
+            e.preventDefault();
+            $('div.device').hide();
+            preDrawRoute(qrPoint.point.id, qrFloor.id, 5894, 41);
+        });
 
     });
 
