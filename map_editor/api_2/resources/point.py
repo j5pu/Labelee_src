@@ -109,7 +109,10 @@ def readOnlyPois(request, floor_id):
         label__category__name = 'Intermedias'
     ).exclude(
         label__category__name = 'Parquing'
+    ).exclude(
+        qr_code = None
     )
+
 
     json_pois = []
 
