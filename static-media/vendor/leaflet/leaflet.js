@@ -2032,7 +2032,7 @@ var floorChecks = [];
 //Parpadeo a la planta del POI destino
 var blinkingMode = null;
 function blinker(element) {
-    if (blinkingMode!=null) {
+     if (blinkingMode!=null && element.parentElement.innerText.trimLeft()==blinkingMode) {
         var color = element.style.background;
         if (color == "red") {
             element.style.background = "";
