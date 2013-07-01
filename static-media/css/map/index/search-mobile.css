@@ -78,6 +78,7 @@ h3,h4 {
 	width: 31px;
 	height: 31px;
     color: white;
+    border-color: white;;
 }
 .leaflet-touch .leaflet-control-zoom-out {
 	line-height: 24px;	
