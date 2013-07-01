@@ -158,7 +158,32 @@
 
     </div>
 
-Ø
+
+    <div class="device">
+        <a class="arrow-left" href="#"></a>
+        <a class="arrow-right" href="#"></a>
+        <div class="swiper-container">
+            <div class="swiper-wrapper">
+                <div class="swiper-slide">
+                    <p class="title">Cupón 1</p>
+                    <p>Oferta 3 x 2 en la Botellita, ¡solo hasta las 20.00h! Pulsa aquí para llegar...</p>
+                    <!--img src="/media/slider1-1.png"-->
+                </div>
+                <div class="swiper-slide">
+                    <p class="title">Cupón2 </p>
+                    <p>Promoción 20% de descuento en ropa de señora, válida hasta el 14-7-2013.</p>
+                    <!--img src="/media/slider1-2.png"--> </div>
+                <div class="swiper-slide">
+                    <p class="title">Cupón 3</p>
+
+                    <p>¡Entradas gratis para los niños en Cinesa! Miércoles y Jueves hasta el 1 de Agosto</p>
+                </div>
+            </div>
+        </div>
+        <div class="pagination"></div>
+    </div>
+
+
     <div style="background: rgb(17, 17, 17); background:rgba(17, 17, 17, 0.4); padding:0">
         <marquee align="center" direction="left" loop="40"
                  style="width:100%; z-index: 10000; position: absolute;bottom: 0;background:rgba(17, 17, 17, 0.4);color: #ddd">
@@ -222,7 +247,7 @@
     }
 
     function launchCarousel() {
-        alert('Cupon');
+        $('div.device').toggle();
     }
 
     function hideSplash() {

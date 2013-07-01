@@ -834,7 +834,7 @@ span.locator
     top: .01%;
     -webkit-border-radius: 4px;
     border-radius: 4px;
-    z-index: 10000;
+    z-index: 9998;
     position: absolute;
     opacity: 0.7;
     color: white;
@@ -973,7 +973,7 @@ div#cupones{
     position: absolute;
     left: 60%;
     bottom: 0;
-    z-index:9999;
+    z-index:10000;
     width: 40%;
 
 }
@@ -984,16 +984,18 @@ div#cupones{
 }
 
 .device {
-    width: 78%;
+    width: 86%;
     height: 40%;
-    padding: 10%;
+    padding: 5%;
     border-radius: 1em;
     background: #111;
     border: 3px solid white;
-    margin: 5px auto;
+    margin: 15px auto;
+    margin-top:-15px;
     position: relative;
     box-shadow: 0px 0px 5px #000;
     z-index:9999;
+    display:none;
 }
 .device .arrow-left {
     background: url(images/arrows.png) no-repeat left top;
@@ -1014,20 +1016,26 @@ div#cupones{
     height: 30px;
 }
 .swiper-container {
-    width: 78%;
-    height: 40%;
+    width: 220px;
+    height: 9em;
 
 }
 .content-slide {
-    padding: 20px;
+    padding: 10em;
     color: #fff;
+
 }
 .title {
     font-size: 25px;
     margin-bottom: 10px;
 }
 
-div.content-slide p {
+div.swiper-slide {
+    background-color: #aaa;
+    width:100%;
+    height: 90%;
+}
+div.swiper-slide p {
     color: snow;
 }
 .pagination {
@@ -1036,6 +1044,7 @@ div.content-slide p {
     text-align: center;
     bottom:5px;
     width: 100%;
+    display:none;
 }
 .swiper-pagination-switch {
     display: inline-block;
