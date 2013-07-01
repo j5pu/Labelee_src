@@ -405,8 +405,9 @@ p
 }
 a, a:link, a:active, a:visited, a:hover
 {
-    color: #999;
+    color: #333;
     text-decoration: none;
+    line-height:31px;
 }
 pre
 {
@@ -636,6 +637,15 @@ html{
     display:none;
 }
 
+.leaflet-bar{
+    border:none;
+    background-color: #bbb;
+}
+
+.leaflet-bara {
+    color:white;
+
+}
 input[type=checkbox].leaflet-control-layers-selector:active, input[type=checkbox].leaflet-control-layers-selector:checked {
    // background:transparent;
     -webkit-border-radius: 4px;
@@ -678,6 +688,10 @@ span>span{
 }
 /*ESTILOS DEL MENU LATERAL
 ///////////////////////////*/
+
+.leaflet-bar {
+    box-shadow: none;
+}
 .mmenu div.search
 {
     background: #eee;
@@ -884,6 +898,7 @@ span.locator
     }
 */
 
+/*
 #coupon
 {
     margin-top: 85%;
@@ -923,7 +938,9 @@ span.locator
 body{
     overflow: hidden;
 }
+*/
 
+/*
 @media only screen and (min-width: 321px) and (max-width: 490px) {
     #coupon
     {
@@ -960,6 +977,7 @@ body{
     }
 }
 
+*/
 
 .leaflet-popup-content-wrapper,.leaflet-popup-tip-container  {
     border: .5px solid #000;
@@ -971,10 +989,10 @@ border-top: white;
 
 div#cupones{
     position: absolute;
-    left: 60%;
+    left: 58%;
     bottom: 0;
     z-index:10000;
-    width: 40%;
+    width: 35%;
 
 }
 #cupones img{
