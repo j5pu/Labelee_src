@@ -150,7 +150,7 @@
         <img src="/media/cupones_lab.png"
         alt="Cupones" usemap="#cupon">
         <map name="cupon">
-            <area  shape="rect" coords="0,0,128,39" href="#" alt="Cupones" title="Cupon">
+            <area  shape="rect" coords="0,0,200,100" href="#" alt="Cupones" title="Cupon">
         </map>
 
     </div>
@@ -171,11 +171,12 @@
             var $this=$(this),
                 ancho= $this.parent().parent().find('img').width(),
                 alto= $this.parent().parent().find('img').height();
-            console.log(ancho +":"+ alto);
 
             $this.attr({'coords': "0,0,"+ ancho + "," + alto});
-            //360,0 sobre 469x284
-            alert("acabas de pulsar en:" + $this.attr('alt'));
+            $this.attr({'shape': 'poly'});
+            var vert= 360/469*ancho,
+                coords= $this.attr({'coords': "0," +alto+","+ ancho + "," + alto+ ","+ vert + ",0,0," +alto});
+            console.log( "0," +alto+","+ ancho + "," + alto+ ","+ vert + ",0,0," +alto);
         });
 
         $('div#page').hide();
