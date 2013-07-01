@@ -147,10 +147,10 @@
     <span class="locator" id="location"><i class="icon-screenshot icon-white"></i></span>
     <span class="locator" id="myCar"><i class="icon-truck icon-white"></i></span>
     <div id="cupones">
-        <img src="/media/cupones_lab.png"
+        <img id="cupon-img" src="/media/cupones_lab.png"
         alt="Cupones" usemap="#cupon">
         <map name="cupon">
-            <area  shape="rect" coords="0,0,200,100" href="#" alt="Cupones" title="Cupon">
+            <area  shape="poly" coords="" href="#" alt="Cupones" title="Cupon">
         </map>
 
     </div>
@@ -167,16 +167,18 @@
 <script type='text/javascript'>
 
     $(function () {
-        $('div#cupones area').click(function () {
-            var $this=$(this),
-                ancho= $this.parent().parent().find('img').width(),
-                alto= $this.parent().parent().find('img').height();
+        var $img=$('img#cupon-img'),
+            ancho= $img.width(),
+            alto= $img.height(),
+            vert= 360/469*ancho,
+            imgCoords= "0," +alto+","+ ancho + "," + alto+ ","+ vert + ",0,0," +alto,
+            $area=$('div#cupones area');
 
-            $this.attr({'coords': "0,0,"+ ancho + "," + alto});
-            $this.attr({'shape': 'poly'});
-            var vert= 360/469*ancho,
-                coords= $this.attr({'coords': "0," +alto+","+ ancho + "," + alto+ ","+ vert + ",0,0," +alto});
-            console.log( "0," +alto+","+ ancho + "," + alto+ ","+ vert + ",0,0," +alto);
+        $area.attr({'coords': imgCoords});
+
+
+        $('div#cupones area').click(function () {
+            alert('Hola, nuevo cupon');
         });
 
         $('div#page').hide();
