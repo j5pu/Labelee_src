@@ -249,9 +249,6 @@ a.link-1
 .editing-floor
 {
     margin-top: 2em;
-    text-align: left;
-    padding: 1em 3em;
-    width: 15em;
 }
 
 .editing-floor input
@@ -283,3 +280,15 @@ h1
     display: none;
 }
 
+.floors form .txt
+{
+    display: inline-block;
+    margin-bottom: 5px;
+    text-align: left;
+    margin-right: 5px;
+}
+
+.floors form label input
+{
+    display: block;
+}

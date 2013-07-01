@@ -1,6 +1,6 @@
 //Configuración de iconos
 var OriginIcon = L.AwesomeMarkers.icon({
-        icon: 'star',
+        icon: 'screenshot',
         color: 'darkblue'
         //spin: true
 
@@ -281,7 +281,7 @@ function loopFloors() {
         LocalStorageHandler.draw();
 //       if(( ua.indexOf("Android") >= 0 ) && (androidversion >=3.0))
 
-                Coupon.init();
+                //Coupon.init();
 
         // fin de loopFloors
         return;
