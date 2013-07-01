@@ -44,7 +44,11 @@ class ImgService:
         filename = self.request.FILES['img'].name.replace(" ", "_")
         fileName, fileExtension = os.path.splitext(filename)
         fileName = str(resource_obj.id) + fileExtension
-        resource_obj.img.save(fileName, file_content)
+        try:
+            resource_obj.img.save(fileName, file_content)
+        except:
+            return responseJSON(errors='yes')
+
         saved_obj = resource_obj.save()
 
         # respuesta en el iframe

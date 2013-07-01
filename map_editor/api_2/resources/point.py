@@ -33,14 +33,15 @@ def create_from_list(request):
     for point in point_list:
         # bundle = pr.build_bundle(data=point, request=request)
         # pr.obj_create(bundle)
-        point = Point(
-            description=point['description'],
+        point_obj = Point(
             row=point['row'],
             col=point['col'],
             label=Label.objects.get(id=point['label']),
             floor=Floor.objects.get(id=point['floor'])
         )
-        point.save()
+        if 'description' in point:
+            point_obj.description = point['description']
+        point_obj.save()
 
     return HttpResponse(simplejson.dumps('ok'))
 

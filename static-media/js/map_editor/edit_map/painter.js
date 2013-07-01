@@ -188,7 +188,13 @@ var Painter = {
 
     _paintMenu: function(block){
         // Pinta un menú con el checkbox para el QR aún sin setear conforme a lo que haya en BD
+
+        // Si se trata de un bloqueante entonces no le pintamos el menú
+        if(LabelCategory.isBlocker(Painter.label.category))
+            return;
+
         var block_description = Floor.loading ? Painter.point.description : Painter.label.name;
+//            img_btn_title = Painter.point.panorama ? gettext('Change panorama') : gettext('Add panorama')
         var block_menu =
             '<div class="menu">' +
                 '<div class="descr">' +
@@ -197,6 +203,12 @@ var Painter = {
                         'value="' + block_description + '" ' +
                         'placeholder="Descripción para el punto..">' +
                 '</div>' +
+//                    '<div class="panorama">' +
+//                        '<input class="btn" ' +
+//                            'type="file" ' +
+//                            'name="img" ' +
+//                            'title="' + img_btn_title + '"/>' +
+//                    '</div>' +
                 '<div class="qr">' +
                     '<input type="checkbox"/> QR' +
                 '</div>' +
