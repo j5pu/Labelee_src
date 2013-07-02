@@ -191,7 +191,11 @@ var Floor = {
         // Guardamos las filas y columnas
         Floor.data.num_rows = Floor.num_rows;
         Floor.data.num_cols = Floor.num_cols;
-        new FloorResource().update(Floor.data, Floor.data.id);
+        var data = {
+            num_rows: Floor.num_rows,
+            num_cols: Floor.num_cols
+        };
+        new FloorResource().update(data, Floor.data.id);
 
         // Enviamos al servidor primero los puntos a eliminar y luego los nuevos
         var pr = new PointResource();
