@@ -165,18 +165,21 @@
         <div class="swiper-container">
             <div class="swiper-wrapper">
                 <div class="swiper-slide">
-                    <p class="title">Cupón 1</p>
-                    <p>Oferta 3 x 2 en la Botellita, ¡solo hasta las 20.00h! Pulsa aquí para llegar...</p>
+                    <p class="title">LA BOTELLITA</p>
+                    <p>Oferta 3 x 2, ¡solo hasta las 20.00h!</p>
+                    <button id="cup1">PULSA AQUÍ</button>
                     <!--img src="/media/slider1-1.png"-->
                 </div>
                 <div class="swiper-slide">
-                    <p class="title">Cupón2 </p>
-                    <p>Promoción 20% de descuento en ropa de señora, válida hasta el 14-7-2013.</p>
-                    <!--img src="/media/slider1-2.png"--> </div>
+                    <p class="title">PAÍS DE LAS MARAVILLAS</p>
+                    <p>20% de descuento en todos los artículos.</p>
+                    <button id="cup2">PULSA AQUÍ</button>
+                    <!--img src="/media/slider1-2.png"-->
+                </div>
                 <div class="swiper-slide">
-                    <p class="title">Cupón 3</p>
-
-                    <p>¡Entradas gratis para los niños en Cinesa! Miércoles y Jueves hasta el 1 de Agosto</p>
+                    <p class="title">CINESA</p>
+                    <p>¡Entradas gratis para los niños! Miércoles y Jueves</p>
+                    <button id="cup3">PULSA AQUÍ</button>
                 </div>
             </div>
         </div>
@@ -228,6 +231,15 @@
         $('body').prepend('<div class="splash">    <div class="container">        <div class="sp-container"             >            <div class="frame-5"><span><img src="/media/logo-labelee-sin-slogan.png"></span></div>            <div id="find" class="frame-6">find<span id="your"> your<span id="way"> way!</span></span></div>        </div>    </div></div>')
         setTimeout(hideSplash, 3500);
 
+        $('div.swiper-slide button').on('click', function (e) {
+            e.preventDefault();
+            var $id= $(this).prop('id');
+            if ($id==="cup1") preDrawRoute(qrPoint.point.id, qrFloor.id, 5894, 41);
+            else if ($id==="cup2") preDrawRoute(qrPoint.point.id, qrFloor.id, 2440, 27);
+            else preDrawRoute(qrPoint.point.id, qrFloor.id, 5896, 41);
+            $('div.device').fadeOut();
+
+        });
 
     });
 
@@ -247,12 +259,12 @@
     }
 
     function launchCarousel() {
-        $('div.device').toggle();
+        $('div.device').fadeToggle();
     }
 
     function hideSplash() {
-        $('div.splash').hide();
-        $('div#page').show();
+        $('div#page').fadeIn(50);
+        $('div.splash').fadeOut(500);
         loopFloors(floor_index);
         LocalStorageHandler.init();
     }

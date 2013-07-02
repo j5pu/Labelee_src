@@ -25,7 +25,6 @@ function mail_click() {
     uri += encodeURIComponent(subject);
     uri += "&body=";
     uri += encodeURIComponent(body);
-    alert(uri);
     window.open(uri);
 }
 
