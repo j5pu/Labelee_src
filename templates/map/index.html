@@ -107,10 +107,11 @@
         -->
         <ul id="scrollMenu">
             <li class="Label"><span>Selecciona tu destino</span></li>
-            {% for category, pois in categories.items %}
+
+            {% for category in categories %}
                 <li>
-                <li class="Label">{{ category }}</li>
-                {% for destination in pois %}
+                <li class="Label">{{ category.name }}</li>
+                {% for destination in category.items %}
                     <li onclick="$('#menu-right').trigger( 'close' );preDrawRoute({{ poi_id }},floor_id,{{ destination.id }},{{ destination.floor_id }})">{{ destination.description }}</li>
                 {% endfor %}
 

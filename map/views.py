@@ -22,14 +22,28 @@ def show_map(request, qr_type, enclosure_id, floor_id, poi_id):
     """
     enclosure = Enclosure.objects.filter(id=enclosure_id)
     categories = {}
-    points = Point.objects.filter(~Q(label__category__name__in=CATEGORIAS_FIJAS.values()),
-                                  floor__enclosure__id=enclosure_id)
+    points = Point.objects\
+        .filter(~Q(label__category__name__in=CATEGORIAS_FIJAS.values()),
+                floor__enclosure__id=enclosure_id)\
+        .order_by('label__category__name', 'label__name')
+
     for point in points:
         if point.label.category.name not in CATEGORIAS_FIJAS.values():
             if point.label.category.name in categories:
                 categories[point.label.category.name].append(point)
             else:
                 categories[point.label.category.name] = [point]
+
+    categories_list = []  # [{'name': 'toilets', 'items': [...]}, ...]
+    for key, value in categories.iteritems():
+        d = {
+            'name': key,
+            'items': value
+        }
+        categories_list.append(d)
+
+    from operator import itemgetter
+    ordered_categories = sorted(categories_list, key=itemgetter('name'))
 
     marquee = []
     twitterhelper = TwitterHelper(enclosure[0].twitter_account)
@@ -42,7 +56,7 @@ def show_map(request, qr_type, enclosure_id, floor_id, poi_id):
         'enclosure_id': enclosure_id,
         'floor_id': floor_id,
         'poi_id': poi_id,
-        'categories': categories,
+        'categories': ordered_categories,
         'marquee': marquee,
         'qr_type': qr_type,
     }
