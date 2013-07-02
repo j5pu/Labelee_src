@@ -137,6 +137,7 @@ INSTALLED_APPS = (
     'route',
     'modeltranslation',
     'log',
+    'analytics',
 )
 
 # A sample logging configuration. The only tangible logging
@@ -190,7 +191,7 @@ if 'VCAP_SERVICES' in os.environ:
             'PORT': cred['port'],
             }
         }
-    
+    # Para obtener los datos de la BBDD desde appfog usar: http://rutaappfog/sandbox/vcap-info
 #     De momento dejamos el debugger activo (DEBUG=True)..
 #     DEBUG = TEMPLATE_DEBUG = False
 
