@@ -39,7 +39,7 @@
 }
 
 .opciones{
- color: inherit;
+    color: #555555 ;
     font-family: inherit;
     font-weight: bold;
     margin: 10px 0;
@@ -51,12 +51,13 @@ li{
      /*background-color: #7FADBE;*/
     text-align: left;
     width: auto;
-    color: black;
+    color: #555555 ;
+    text-rendering: optimizelegibility;
 
 }
 
 h4{
-    color: #D9D4C7;
+    color: #F2EFE4;
 }
 
 
