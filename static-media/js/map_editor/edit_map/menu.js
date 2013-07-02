@@ -273,6 +273,9 @@ var Menu = {
         Menu._setSelectors();
         Menu.setQrList();
         Menu.setPointStats();
+
+        if($e.floor.num_rows.val() == Floor.data.num_rows)
+            $e.floor.change_num_rows.attr('disabled', 'disabled');
 //        Events.menu.bind();
     },
 
@@ -296,6 +299,13 @@ var Menu = {
 
     setPointStats: function()
     {
+        if(!Floor.hasPoints())
+        {
+            Floor.point_count.to_save = 0;
+            Floor.point_count.saved = 0;
+            Floor.point_count.to_delete = 0;
+            Floor.point_count.total = 0;
+        }
         $e.point_count.to_save.html(Floor.point_count.to_save);
         $e.point_count.saved.html(Floor.point_count.saved);
         $e.point_count.to_delete.html(Floor.point_count.to_delete);

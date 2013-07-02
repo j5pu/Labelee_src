@@ -162,15 +162,10 @@ function FloorCtrl($scope, $element)
 
 
 	$scope.update = function() {
-        FileInput.draw();
-
 		var img = $($element).find('input[name="img"]');
 
 		if (!$scope.editing)
-        {
 			$scope.editing = true;
-			img.val('');
-		}
         else
         {
 			// Si ya se estaba editando cuando hemos invocado update() entonces
@@ -202,9 +197,10 @@ function FloorCtrl($scope, $element)
 			}
 
 			$scope.editing = false;
-
             $scope.loadFloorList();
 		}
+
+        FileInput.draw();
 	};
 
     $scope.cancelUpdate = function() {
