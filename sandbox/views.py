@@ -5,6 +5,7 @@ from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.http import HttpResponse
 import sys
+from map_editor.models import Point
 
 
 def angular(request):
@@ -91,8 +92,10 @@ def dblog(request):
 
 def streetView(request):
 
+    p = Point.objects.get(id=2850)
+
     ctx = {
-        'img': 'img/enclosures/24/panoramas/6190.jpg'
+        'img': p.panorama
     }
 
     return render_to_response('streetView/streetView.html',ctx, context_instance=RequestContext(request))
