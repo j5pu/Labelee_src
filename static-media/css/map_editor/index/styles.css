@@ -2,7 +2,6 @@
 body {
     margin: 4em auto;
     max-width: 35em;
-    background-color: #bababa;
 }
 h3 {
     display: inline-block;
@@ -263,9 +262,10 @@ h1
 
 #choose-lang
 {
-    position: absolute;
-    right: -76px;
-    top: 1px;
+    position: fixed;
+    top: 5%;
+    left: 5%;
+    z-index: 5;
 }
 
 
