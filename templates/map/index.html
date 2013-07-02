@@ -237,7 +237,7 @@
             if ($id==="cup1") preDrawRoute(qrPoint.point.id, qrFloor.id, 5894, 41);
             else if ($id==="cup2") preDrawRoute(qrPoint.point.id, qrFloor.id, 2440, 27);
             else preDrawRoute(qrPoint.point.id, qrFloor.id, 5896, 41);
-            $('div.device').hide();
+            $('div.device').fadeOut();
 
         });
 
@@ -259,12 +259,12 @@
     }
 
     function launchCarousel() {
-        $('div.device').toggle();
+        $('div.device').fadeToggle();
     }
 
     function hideSplash() {
-        $('div.splash').hide();
-        $('div#page').show();
+        $('div#page').fadeIn(50);
+        $('div.splash').fadeOut(500);
         loopFloors(floor_index);
         LocalStorageHandler.init();
     }
