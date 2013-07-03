@@ -1080,3 +1080,14 @@ div.swiper-slide p {
 .swiper-active-switch {
     background: #fff;
 }
+
+.leaflet-popup-content {
+    text-align: center;
+}
+button{
+    -webkit-appearance: none;
+    border: none;
+    font-size: 1.2em;
+    background-color: transparent;
+    color:#333;
+}
