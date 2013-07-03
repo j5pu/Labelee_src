@@ -544,18 +544,19 @@ var Floor = {
 
     changeNumRows: function(ev)
     {
-        // Si pulsamos alguna tecla que no sea intro no hacemos nada
-        if(ev.keyCode && ev.keyCode != 13)
+        // Si pulsamos alguna tecla que no sea intro no hacemos nada,
+        // sólo comprobamos
+        if($e.floor.num_rows.val() == Floor.data.num_rows ||
+            $e.floor.num_rows.val() < 20)
         {
-            if($e.floor.num_rows.val() == Floor.data.num_rows ||
-                $e.floor.num_rows.val() < 20)
-                $e.floor.change_num_rows.attr('disabled', 'disabled');
-            else
-                $e.floor.change_num_rows.removeAttr('disabled');
-
+            $e.floor.change_num_rows.attr('disabled', 'disabled');
             return;
         }
+        else
+            $e.floor.change_num_rows.removeAttr('disabled');
 
+        if(ev.keyCode && ev.keyCode != 13)
+            return;
 
         // Si el número de filas no varia tampoco hacemos nada
         if($e.floor.num_rows.val() == Floor.data.num_rows)

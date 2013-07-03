@@ -101,8 +101,8 @@ class LabelCategory(models.Model):
 
     def qr_can_be_assigned(self):
         # Comprueba si la categoría no es ni bloqueante ni arista
-        return self.name_es.upper() != CATEGORIAS_FIJAS[0].upper() \
-            and self.name_es.upper() != CATEGORIAS_FIJAS[1].upper()
+        return not self.name_es or (self.name_es.upper() != CATEGORIAS_FIJAS[0].upper() and \
+            self.name_es.upper() != CATEGORIAS_FIJAS[1].upper())
 
 
 def label_filename(instance, filename):
