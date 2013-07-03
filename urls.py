@@ -64,6 +64,7 @@ urlpatterns = patterns('',
 
     # PANORAMA
     # (r'^panoramas/', include('panorama.urls')),
+    (r'^analytics/services/users$', 'analytics.Services.Users.GetUserAnalytics'),
 )
 
 
