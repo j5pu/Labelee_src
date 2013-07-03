@@ -108,7 +108,7 @@ var LocalStorageHandler = {
 
     setValues: function () {
         if (qrPoint.isParquing()) {
-            if (confirm('¿Desea recordar su plaza?')) {
+            if (confirm('Do you want to remember your parking space?')) {
                 var miCoche = {
                     dest: qrPoint,
                 prevDate: new Date().getTime()
@@ -133,7 +133,7 @@ var LocalStorageHandler = {
             var sharedDest = JSON.parse(localStorage.getItem('sharedDest'));
             if (sharedDest) {
                 localStorage.removeItem('sharedDest');
-                sharedDest.mesg = '¿Todavía quieres ir al destino anterior?';
+                sharedDest.mesg = 'Do you still want to go to the previous destination?';
                 sharedDest.with_predraw = true;
 
                 localStorage.setItem('prevDest', JSON.stringify(sharedDest));
@@ -202,7 +202,7 @@ var LocalStorageHandler = {
             'enclosureid': qrPoint.enclosure.id,
             'psX': marker.psX,
             'psY': marker.psY,
-            'mesg': '¿Todavía quieres ir a ' + marker.title + '?',
+            'mesg': 'Do you still want to go to ' + marker.title + '?',
             'description': marker.title,
             'with_predraw': false
         };
@@ -1010,7 +1010,7 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
 
 
     } else {
-        alert('No existe esa ruta');
+        alert('We are sorry, that route does not exist.');
     }
 }
 //Función que gestiona la animación de la flecha
