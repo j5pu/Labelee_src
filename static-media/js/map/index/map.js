@@ -328,20 +328,24 @@ function loadPOIs() {
                     nameIcon = floors[fl].pois[j].label.name,
                     shapeIcon = floors[fl].pois[j].label.category.icon,
                     id = floors[fl].pois[j].id,
-                    descriptionIcon = floors[fl].pois[j].description +
-                        '<button data-pan="' + id + '">' +
-                            '<i class="icon-camera"></i>' +
-                        '</button>',
+                    descriptionIcon = floors[fl].pois[j].description,
                     sX = floors[fl].scaleX,
                     sY = floors[fl].scaleY,
                     loc = [(floors[fl].pois[j].row) * sY + (sY),
                         floors[fl].pois[j].col * sX + (sY)],
                     enclosureid = qrPoint.enclosure.id,
-                    labelid = floors[fl].pois[j].label.id
-                category = floors[fl].pois[j].label.category.name;
+                    labelid = floors[fl].pois[j].label.id,
+                    category = floors[fl].pois[j].label.category.name;
+
+                if (new PointResource().read(id).panorama){
+                    descriptionIcon = descriptionIcon +
+                        '<button data-pan="' + id + '">' +
+                        '<i class="icon-camera"></i>' +
+                        '</button>';
+                }
 
 
-                floors[fl].pois[j].marker = new L.Marker(new L.latLng(loc), {icon: loadIcon(colorIcon, shapeIcon), title: descriptionIcon});
+                floors[fl].pois[j].marker = new L.Marker(new L.latLng(loc), {icon: loadIcon(colorIcon, shapeIcon), title: floors[fl].pois[j].description});
                 floors[fl].pois[j].marker.options.icon.options.color = colorIcon;
                 floors[fl].pois[j].marker.poid = id;
                 floors[fl].pois[j].marker.psX = sX;
@@ -409,10 +413,19 @@ function loadPOIs() {
                 (qrPoint.point.col * qrFloor.scaleX) + qrFloor.scaleX];
 
             if (qr_type == 'origin') {
+                var originLegend="Estás aquí: " + qrPoint.point.description;
+
+                if (new PointResource().read(qrPoint.point.id).panorama){
+                    originLegend = originLegend +
+                        '<button data-pan="' + qrPoint.point.id + '">' +
+                        '<i class="icon-camera"></i>' +
+                        '</button>';
+
+                }
+
                 qrMarker = new L.marker(qrLoc, { bounceOnAdd: false,
                     icon: OriginIcon})
-                    .bindPopup("Estás aquí: " + qrPoint.point.description);
-
+                    .bindPopup(originLegend);
 
             }
             else {
@@ -483,6 +496,15 @@ function initMap(qrPoint) {
     map.removeLayer(totalPois);
     map.addLayer(qrFloor.layer);
     qrMarker.openPopup();
+    $('.leaflet-popup-content button').on('click', function (e) {
+        e.preventDefault();
+        var point_id = $(this).data('pan');
+        var point = new PointResource().read(point_id);
+        addSamplePano(
+            point.panorama,
+            {width: $(window).width() * 0.7, height: $(window).height() * 0.4}
+        );
+    });
     qrMarker._bringToFront();
 
     map.invalidateSize();
@@ -795,7 +817,8 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
         }
     }
 
-    var check = null;
+    var check = null,
+        destLegend;
     subpath = [];
     subarrow = [];
     blinkingMode = null;
@@ -809,10 +832,21 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
             }
 
         }
+        destLegend=route.fields.destiny.fields.description;
+
+        if (new PointResource().read(dst).panorama){
+            destLegend = destLegend +
+                '<button data-pan="' + dst + '">' +
+                '<i class="icon-camera"></i>' +
+                '</button>';
+
+        }
+
         destLoc = [(route.fields.destiny.fields.row) * sY + sY, route.fields.destiny.fields.col * sX + sX];
         destMarker = L.marker(destLoc, { bounceOnAdd: false,
             icon: DestinyIcon})
-            .bindPopup(route.fields.destiny.fields.description);
+            .bindPopup(destLegend);
+
 
         for (var i in floors) {
             if (route.fields.destiny.fields.floor == floors[i].id) {
@@ -957,6 +991,17 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
                 }
             }
         }
+
+        if (map.hasLayer(destMarker)) destMarker.openPopup();
+        $('.leaflet-popup-content button').on('click', function (e) {
+            e.preventDefault();
+            var point_id = $(this).data('pan');
+            var point = new PointResource().read(point_id);
+            addSamplePano(
+                point.panorama,
+                {width: $(window).width() * 0.7, height: $(window).height() * 0.4}
+            );
+        });
 
 
     } else {
