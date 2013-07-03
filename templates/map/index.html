@@ -24,7 +24,7 @@
 
 
     <script src="{{ STATIC_URL }}vendor/leaflet/plugins/scale.fix.js"></script>
-   <script src="{{ STATIC_URL }}vendor/jquery-1.9.1.min.js"></script>
+    <script src="{{ STATIC_URL }}vendor/jquery-1.9.1.min.js"></script>
     <script src="{{ STATIC_URL }}vendor/hammer.js_v1.0.3/dist/hammer.min.js"></script>
     <script src="{{ STATIC_URL }}vendor/hammer.js_v1.0.3/dist/jquery.hammer.min.js"></script>
     <!--script src="{{ STATIC_URL }}js/map/index/coupon.js"></script-->
@@ -119,7 +119,7 @@
             <li class="no-results"><span>Lo sentimos, no se ha encontrado ningún resultado.</span></li>
         </ul>
     </nav>
-<!--Inicio menú social networks -->
+    <!--Inicio menú social networks -->
  <span id="social" align="center">
      <ul class="navi">
          <li id="n1" class="n1"><a class="mjn-tab1" href="#" title="Compartir con Facebook" onclick="fbs_click()"><span> <i
@@ -129,21 +129,28 @@
          <li id="n2" class="n2"><a class="mjn-tab2" href="#" title="Compartir con Twitter" onclick="twt_click()"><span>  <i
                  class="icon-twitter-sign"></i></span></a>
          </li>
-         <li id="n3" class="n3"><a class="mjn-tab3" href="#" title="Compartir con google" onclick="google_click()"><span>  <i
+         <li id="n3" class="n3"><a class="mjn-tab3" href="#" title="Compartir con google"
+                                   onclick="google_click()"><span>  <i
                  class="icon-google-plus-sign"></i></span></a>
 
          </li>
-         <li id="n4" class="n4"><a class="mjn-tab4" href="#" title="Compartirlo por mail" onclick="mail_click()"><span>  <i
-                 class="icon-envelope"></i></span></a>
-        </li>
+         <script>
+             var iphone =  navigator.userAgent.match(/iPhone/i) || navigator.userAgent.match(/iPad/i) ||  navigator.userAgent.match(/iPod/i);
+             if (!iphone) {
+                 $('ul.navi').append('<li id="n4" class="n4"><a class="mjn-tab4" href="#" title="Compartirlo por mail" onclick="mail_click()"><span>  <i class="icon-envelope"></i></span></a></li>');
+             }
+           
+         </script>
+
          <li id="n6" class="n6"><a class="mjn-tab6" href="#"><span>   <i class="icon-share-alt"></i></span></a>
          </li>
+
      </ul>
         <!--     <i class="icon-facebook-sign"></i>
             <i class="icon-twitter-sign"></i>
             <i class="icon-plus-sign"></i>-->
         </span>
-<!--Fin menú social networks -->
+    <!--Fin menú social networks -->
 
 
     <span class="locator" id="location"><i class="icon-screenshot icon-white"></i></span>
@@ -151,9 +158,9 @@
 
     <div id="cupones">
         <img id="cupon-img" src="/media/cupones_lab.png"
-        alt="Cupones" usemap="#cupon">
+             alt="Cupones" usemap="#cupon">
         <map name="cupon">
-            <area  shape="poly" coords="" href="#" alt="Cupones" title="Cupon">
+            <area shape="poly" coords="" href="#" alt="Cupones" title="Cupon">
         </map>
 
     </div>
@@ -162,22 +169,26 @@
     <div class="device">
         <a class="arrow-left" href="#"></a>
         <a class="arrow-right" href="#"></a>
+
         <div class="swiper-container">
             <div class="swiper-wrapper">
                 <div class="swiper-slide">
                     <p class="title">LA BOTELLITA</p>
+
                     <p>Oferta 3 x 2, ¡solo hasta las 20.00h!</p>
                     <button id="cup1">PULSA AQUÍ</button>
                     <!--img src="/media/slider1-1.png"-->
                 </div>
                 <div class="swiper-slide">
                     <p class="title">PAÍS DE LAS MARAVILLAS</p>
+
                     <p>20% de descuento en todos los artículos.</p>
                     <button id="cup2">PULSA AQUÍ</button>
                     <!--img src="/media/slider1-2.png"-->
                 </div>
                 <div class="swiper-slide">
                     <p class="title">CINESA</p>
+
                     <p>¡Entradas gratis para los niños! Miércoles y Jueves</p>
                     <button id="cup3">PULSA AQUÍ</button>
                 </div>
@@ -202,24 +213,24 @@
         if (window.DeviceOrientationEvent) {
             window.addEventListener('orientationchange', myOrientResizeFunction, false);
         }
-        $(window).resize( function() {
+        $(window).resize(function () {
             myOrientResizeFunction()
         });
         $('div#cupones area').on('click', function () {
             launchCarousel()
         });
 
-        var mySwiper = new Swiper('.swiper-container',{
+        var mySwiper = new Swiper('.swiper-container', {
             pagination: '.pagination',
-            loop:true,
+            loop: true,
             grabCursor: true,
             paginationClickable: true
         });
-        $('.arrow-left').on('click', function(e){
+        $('.arrow-left').on('click', function (e) {
             e.preventDefault();
             mySwiper.swipePrev();
         });
-        $('.arrow-right').on('click', function(e){
+        $('.arrow-right').on('click', function (e) {
             e.preventDefault();
             mySwiper.swipeNext();
         });
@@ -233,9 +244,9 @@
 
         $('div.swiper-slide button').on('click', function (e) {
             e.preventDefault();
-            var $id= $(this).prop('id');
-            if ($id==="cup1") preDrawRoute(qrPoint.point.id, qrFloor.id, 5894, 41);
-            else if ($id==="cup2") preDrawRoute(qrPoint.point.id, qrFloor.id, 2440, 27);
+            var $id = $(this).prop('id');
+            if ($id === "cup1") preDrawRoute(qrPoint.point.id, qrFloor.id, 5894, 41);
+            else if ($id === "cup2") preDrawRoute(qrPoint.point.id, qrFloor.id, 2440, 27);
             else preDrawRoute(qrPoint.point.id, qrFloor.id, 5896, 41);
             $('div.device').fadeOut();
 
@@ -243,17 +254,17 @@
 
     });
 
-    function myOrientResizeFunction(){
+    function myOrientResizeFunction() {
         calculateCoords()
     }
 
     function calculateCoords() {
-        var $img=$('img#cupon-img'),
-                ancho= $img.width(),
-                alto= $img.height(),
-                vert= 360/469*ancho,
-                imgCoords= "0," +alto+","+ ancho + "," + alto+ ","+ vert + ",0,0," +alto,
-                $area=$('div#cupones area');
+        var $img = $('img#cupon-img'),
+                ancho = $img.width(),
+                alto = $img.height(),
+                vert = 360 / 469 * ancho,
+                imgCoords = "0," + alto + "," + ancho + "," + alto + "," + vert + ",0,0," + alto,
+                $area = $('div#cupones area');
 
         $area.attr({'coords': imgCoords});
     }
