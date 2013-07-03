@@ -357,7 +357,7 @@ function loadPOIs() {
                 floors[fl].pois[j].marker.bindPopup(descriptionIcon)
                     .on('click', function () {
                         if (qr_type == 'dest') {
-                            this.bindPopup("Escanea un QR para llegar hasta " + qrPoint.point.description).openPopup();
+                            this.bindPopup(gettext("Scan a QR code to get here:") + " " + qrPoint.point.description).openPopup();
                             return;
                         }
                         LocalStorageHandler.setPrevDest(this);
@@ -413,7 +413,7 @@ function loadPOIs() {
                 (qrPoint.point.col * qrFloor.scaleX) + qrFloor.scaleX];
 
             if (qr_type == 'origin') {
-                var originLegend="Estás aquí: " + qrPoint.point.description;
+                var originLegend="You are right here: " + qrPoint.point.description;
 
                 if (new PointResource().read(qrPoint.point.id).panorama){
                     originLegend = originLegend +
@@ -431,14 +431,14 @@ function loadPOIs() {
             else {
                 qrMarker = new L.marker(qrLoc, { bounceOnAdd: false,
                     icon: DestinyIcon})
-                    .bindPopup("Escanea un QR para llegar hasta aquí: " + qrPoint.point.description +
-                        " (planta " + qrFloor.name + "," + qrPoint.enclosure.name + ")"
+                    .bindPopup("Please, scan a QR code to get here: " + qrPoint.point.description +
+                        " (floor " + qrFloor.name + "," + qrPoint.enclosure.name + ")"
                     );
 
                 qrMarker
                     .on('click', function () {
                        if (qr_type == 'dest') {
-                            this.bindPopup("Escanea un QR para llegar hasta " + qrPoint.point.description).openPopup();
+                            this.bindPopup("Please, scan a QR code to get here: " + qrPoint.point.description).openPopup();
                             return;
                         }
 
@@ -722,7 +722,7 @@ $(function () {
                     (miCoche.point.col * floor_x.scaleX) + floor_x.scaleX];
                 carMarker = new L.marker(carLoc, { bounceOnAdd: false,
                     icon: CarIcon})
-                    .bindPopup("Mi coche");
+                    .bindPopup("My car");
 
                 carMarker.on('click', function () {
                     LocalStorageHandler.setPrevDest(this);
