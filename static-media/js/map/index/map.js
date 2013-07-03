@@ -328,7 +328,10 @@ function loadPOIs() {
                     nameIcon = floors[fl].pois[j].label.name,
                     shapeIcon = floors[fl].pois[j].label.category.icon,
                     id = floors[fl].pois[j].id,
-                    descriptionIcon = floors[fl].pois[j].description,
+                    descriptionIcon = floors[fl].pois[j].description +
+                        '<button data-pan="' + id + '">' +
+                            '<i class="icon-camera"></i>' +
+                        '</button>',
                     sX = floors[fl].scaleX,
                     sY = floors[fl].scaleY,
                     loc = [(floors[fl].pois[j].row) * sY + (sY),
@@ -356,6 +359,15 @@ function loadPOIs() {
                         LocalStorageHandler.setPrevDest(this);
                         drawRoute(qrPoint.point.id, qrFloor.sX, qrFloor.sY, this.poid, this.psX, this.psY);
 
+                        $('.leaflet-popup-content button').on('click', function (e) {
+                            e.preventDefault();
+                            var point_id = $(this).data('pan');
+                            var point = new PointResource().read(point_id);
+                            addSamplePano(
+                                point.panorama,
+                                {width: $(window).width() * 0.7, height: $(window).height() * 0.4}
+                            );
+                        });
                     });
 
                 for (var l in floors[fl].labels) {
@@ -494,6 +506,7 @@ map.on('baselayerchange', function (e) {
     changeFloor(e);
 });
 
+// Sacar panorámica para el punto
 
 function addCategory(e)
 {

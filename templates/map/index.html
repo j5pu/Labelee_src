@@ -44,6 +44,10 @@
     <script src="{{ STATIC_URL }}vendor/leaflet/plugins/leaflet-search.js"></script>
     <script src="{{ STATIC_URL }}vendor/leaflet/plugins/jquery.mmenu.js"></script>
     <script src="{{ STATIC_URL }}vendor/leaflet/plugins/idangerous.swiper-2.0.min.js"></script>
+    <script type="text/javascript"
+            src="{{ STATIC_URL }}vendor/leaflet/plugins/jquery.ba-outside-events.min.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}vendor/leaflet/plugins/ddpanorama.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}vendor/leaflet/plugins/ddpanorama.gensample.js"></script>
     <script src="{{ STATIC_URL }}js/helpers/base.js"></script>
     <script src="{{ STATIC_URL }}js/helpers/ajax_helpers.js"></script>
     <script src="{{ STATIC_URL }}js/helpers/resource.js"></script>
@@ -107,10 +111,11 @@
         -->
         <ul id="scrollMenu">
             <li class="Label"><span>Selecciona tu destino</span></li>
-            {% for category, pois in categories.items %}
+
+            {% for category in categories %}
                 <li>
-                <li class="Label">{{ category }}</li>
-                {% for destination in pois %}
+                <li class="Label">{{ category.name }}</li>
+                {% for destination in category.items %}
                     <li onclick="$('#menu-right').trigger( 'close' );preDrawRoute({{ poi_id }},floor_id,{{ destination.id }},{{ destination.floor_id }})">{{ destination.description }}</li>
                 {% endfor %}
 
@@ -252,6 +257,16 @@
 
         });
 
+        console.log($('.leaflet-popup-content button'));
+
+        $('.leaflet-popup-content button').on('click', function (e) {
+            e.preventDefault();
+            var point_id = $(this).data('pan');
+            var point = PointResource().read(point_id);
+            addSamplePano(point.panorama, {width: 80 + '%', height: 20 + '%'});
+    });
+
+
     });
 
     function myOrientResizeFunction() {
@@ -281,6 +296,7 @@
     }
 
 </script>
+
 
 
 </body>
