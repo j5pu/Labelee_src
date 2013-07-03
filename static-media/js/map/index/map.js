@@ -871,19 +871,22 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
                 }
             }
         }
-
- //PINTADO DE CAPAS
-        for (f in floors) {
-            if (route.fields.origin.fields.floor !== route.fields.destiny.fields.floor) {
-                if (route.fields.destiny.fields.floor === floors[f].id) {
-                    map.removeLayer(floors[f].layer);
-                    for (var l in floors[f].labels) {
+       for (f in floors)
+       {
+           for (var l in floors[f].labels) {
                         if (jQuery('input[type=checkbox].leaflet-control-layers-selector:eq(' + l + ')').is(':checked')) {
                             checked[l] = true;
                         } else {
                             checked[l] = false;
                         }
                     }
+       }
+ //PINTADO DE CAPAS
+        for (f in floors) {
+            if (route.fields.origin.fields.floor !== route.fields.destiny.fields.floor) {
+                if (route.fields.destiny.fields.floor === floors[f].id) {
+                    map.removeLayer(floors[f].layer);
+
 
                     for (var l in floors[f].labels) {
                         layersControl.removeLayer(floors[f].labels[l].layer);
@@ -892,18 +895,8 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
 
                      map.removeLayer(floors[f].photo);
 
-                }
-
-
-                if (route.fields.origin.fields.floor === floors[f].id) {
-                    for (var l in floors[f].labels) {
-                        if (jQuery('input[type=checkbox].leaflet-control-layers-selector:eq(' + l + ')').is(':checked')) {
-                            checked[l] = true;
-                        } else {
-                            checked[l] = false;
-                        }
-                    }
-
+                }else  if (route.fields.origin.fields.floor === floors[f].id) {
+                   
                     for (var l in floors[f].labels) {
                        layersControl.addOverlay(floors[f].labels[l].layer, '<i class="icon-' + floors[i].labels[l].fields.icon + ' icon-white"></i>');
                         if (checked[l] === true) {
@@ -925,6 +918,15 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
                     map.setView(arrow[f].getBounds().getCenter(), 0);
                     qrMarker.openPopup();
 
+                }else
+                {
+
+                    for (var l in floors[f].labels) {
+                        layersControl.removeLayer(floors[f].labels[l].layer);
+                        map.removeLayer(floors[f].labels[l].layer);
+                    }
+
+                     map.removeLayer(floors[f].photo);
                 }
 
             } else {
