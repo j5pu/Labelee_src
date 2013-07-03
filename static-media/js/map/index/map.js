@@ -962,7 +962,7 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
 
                      map.removeLayer(floors[f].photo);
                 }
-
+//MONOPLANTA
             } else {
                 if (route.fields.destiny.fields.floor !== floors[f].id) {
                     map.removeLayer(floors[f].layer);
@@ -974,7 +974,7 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
 
                 }
                 else {
-                    for (var l in floors[i].labels) {
+                    for (var l in floors[f].labels) {
                         if (jQuery('input[type=checkbox].leaflet-control-layers-selector:eq(' + l + ')').is(':checked')) {
                             checked[l] = true;
                         } else {
@@ -994,16 +994,19 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
             }
         }
 
-        if (map.hasLayer(destMarker)) destMarker.openPopup();
-        $('.leaflet-popup-content button').on('click', function (e) {
-            e.preventDefault();
-            var point_id = $(this).data('pan');
-            var point = new PointResource().read(point_id);
-            addSamplePano(
-                point.panorama,
-                {width: $(window).width() * 0.7, height: $(window).height() * 0.4}
-            );
-        });
+        if (map.hasLayer(destMarker))
+        {
+            destMarker.openPopup();
+            $('.leaflet-popup-content button').on('click', function (e) {
+                e.preventDefault();
+                var point_id = $(this).data('pan');
+                var point = new PointResource().read(point_id);
+                addSamplePano(
+                    point.panorama,
+                    {width: $(window).width() * 0.7, height: $(window).height() * 0.4}
+                );
+            });
+        }
 
 
     } else {
