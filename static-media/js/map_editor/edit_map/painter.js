@@ -142,8 +142,8 @@ var Painter = {
 
         // Ponemos el bloque de un color según la categoría de la etiqueta..
         block.css({
-            'background': Painter.label.category.color
-//            'opacity': '0.5'
+            'background': Painter.label.category.color,
+            'opacity': '0.5'
         });
 
         // Si la etiqueta tiene imágen se la añadimos escondida para que se muestre

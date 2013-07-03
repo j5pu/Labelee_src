@@ -84,7 +84,7 @@ msgid "Por guardar"
 msgstr "To save"
 
 #: templates/map_editor/edit.html:79
-msgid "Por elminar"
+msgid "Por eliminar"
 msgstr "To delete"
 
 #: templates/map_editor/edit.html:88

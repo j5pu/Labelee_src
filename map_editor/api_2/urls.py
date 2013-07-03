@@ -2,7 +2,6 @@ from django.conf.urls.defaults import *
 
 
 # /api-2/..
-
 urlpatterns = patterns('map_editor.api_2',
 
 	# /api-2/map/16/img
@@ -10,6 +9,7 @@ urlpatterns = patterns('map_editor.api_2',
 
     #FLOOR
 	url(r'^floor/(?P<floor_id>.*)/render-grid$', 'resources.floor.render_grid'),
+    url(r'^floor/(?P<floor_id>.*)/generate-map$', 'resources.floor.generate_map'),
 
 
 	# LABEL
@@ -25,13 +25,6 @@ urlpatterns = patterns('map_editor.api_2',
 	url(r'^point/update-from-list', 'resources.point.update_from_list'),
 	url(r'^point/delete-from-list', 'resources.point.delete_from_list'),
 	url(r'^point/pois/(?P<floor_id>\d+)$', 'resources.point.readOnlyPois'),
-
-
-	
-
-	
-	
-	
 	
 	# 	/api-2/grid/1/point/object/*/*..
 		#'(?P<related_resources>(?:\w+/)+)$', 'services.views.get_related'),

@@ -60,3 +60,22 @@ function ajaxGetElements(prefix_url, sufix_url) {
     });
     return elements;
 }
+
+/*
+* Creates a url of the type url?param1=value&?param2=value for Get requests
+* Uses the values and keys in the parameters dictionary
+ */
+function composeGetUrl(base_url, parameters) {
+
+    var getParams = "?";
+    var isFirst = true;
+    for (var param in parameters){
+        if (! isFirst){
+            getParams += "&";
+        }
+        getParams += param + "=" + parameters[param];
+        isFirst = false;
+    }
+
+    return base_url + getParams
+}

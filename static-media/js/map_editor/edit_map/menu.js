@@ -251,6 +251,8 @@ var Menu = {
         Menu._setSelectors();
         Menu.setQrList();
         Menu.setPointStats();
+        Menu._initSliders();
+        Menu._initTooltips();
 //        Events.menu.bind();
     },
 
@@ -430,5 +432,41 @@ var Menu = {
         Floor.reloading = true;
 
         Floor.loadGrid();
+    },
+
+    // Inits jQuery sliders
+    _initSliders: function()
+    {
+        $e.floor.slider_canny.slider({
+            range: true,
+            min: 0,
+            max: 1000,
+            values: [100, 300]
+        });
+
+        $e.floor.slider_threshold.slider({
+            min: 0,
+            max: 500,
+            value: 50
+        });
+
+        $e.floor.slider_line_length.slider({
+            min: 0,
+            max: 200,
+            value: 10
+        });
+
+        $e.floor.slider_gap.slider({
+            min: 0,
+            max: 100,
+            value: 10
+        });
+
+    },
+
+    // Sets jQuery tooltips
+    _initTooltips: function()
+    {
+        $( document ).tooltip();
     }
 };

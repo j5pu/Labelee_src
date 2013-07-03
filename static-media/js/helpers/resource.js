@@ -275,6 +275,30 @@ function FloorResource()
     };
 
 
+    this.autoGenerateMap = function(floor_id, hough_parameters){
+
+        var get_url = composeGetUrl(this.api2_url + floor_id + "/generate-map", hough_parameters)
+        var lines;
+        $.ajax({
+            url : get_url,
+            type : 'get',
+            headers : {
+                'Content-Type' : 'application/json'
+            },
+            dataType : 'json',
+            async : false,
+            success : function(response) {
+                lines = response;
+            },
+            error : function(response) {
+                var j = response;
+            }
+        });
+
+        return lines
+    };
+
+
     this.renderGrid = function(floor_id){
         // Obtenemos el código html del grid renderizado de lado del servidor para
         // el plano de la planta

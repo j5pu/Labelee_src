@@ -265,12 +265,19 @@ var Events = {
         },
 
 
+        _autoGenerateMap: function()
+        {
+            $e.floor.auto_generate.on('click', Floor.autoGenerateMap);
+        },
+
+
         bind: function()
         {
             var self = this;
-            $('#menu *').off();
+            $('#menu *:not(.slider)').off();
             self._changeNumRows();
             self._manageLabel();
+            self._autoGenerateMap();
             self._manageLabelCategory();
             self._selectLabel();
             self._selectLabelCategory();

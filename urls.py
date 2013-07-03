@@ -45,6 +45,9 @@ urlpatterns = patterns('',
     url(r'^calculate-routes/(?P<enclosure_id>\d+)', 'route.calculateRoutes.calculate_routes'),
     url(r'^get-route/(?P<origin>\d+)_(?P<destiny>\d+)', 'route.services.get_route'),
 
+
+
+
     # Para poder crear un superusuario en appfog
     # Allow for a superuser to be created if one does not exist.
     # You're basically asking to be hacked by leaving this uncommented.
