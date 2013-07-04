@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-07-04 16:12+0200\n"
+"POT-Creation-Date: 2013-07-04 17:30+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -24,6 +24,14 @@ msgstr "Routes are being processed"
 #: sandbox/i18n/test.html:13
 msgid "Esto es un titulo"
 msgstr "This is a title"
+
+#: templates/map/index.html:116
+msgid "Selecciona tu destino"
+msgstr "Select destination"
+
+#: templates/map/index.html:127
+msgid "Lo sentimos, no se ha encontrado ningún resultado."
+msgstr "No results found, sorry."
 
 #: templates/map/index.html:133 templates/map/index.html.py:137
 #: templates/map/index.html:140
