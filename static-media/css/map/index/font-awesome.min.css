@@ -303,7 +303,7 @@ a .icon-rotate-90:before,a .icon-rotate-180:before,a .icon-rotate-270:before,a .
 .icon-reply-all:before{content:"\f122";}
 .icon-mail-reply-all:before{content:"\f122";}
 .icon-star-half-full:before,.icon-star-half-empty:before{content:"\f123";}
-.icon-location-arrow:before{content:"\f124";}
+.icon-location-arrow:before{content:"\f124"; -webkit-transform: rotate(-45deg);}
 .icon-crop:before{content:"\f125";}
 .icon-code-fork:before{content:"\f126";}
 .icon-unlink:before{content:"\f127";}
