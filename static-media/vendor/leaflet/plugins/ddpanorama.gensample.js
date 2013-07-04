@@ -56,14 +56,14 @@ function addSamplePano(options)
             catch(e){}
 
             ++panoIndex;
+            var $width = $(window).width();
 
             jQuery('canvas').css({
                 'position': 'absolute',
                 'z-index': 99999,
                 'top': 0,
-                'height': 80+'%',
                 'margin': 8+'%',
-                'width':84+'%',
+                'width':$width * 0.84,
                 'border-radius':'.5em',
                 'border': '2px solid rgb(196, 190, 170)'
             });
@@ -72,7 +72,7 @@ function addSamplePano(options)
                 'position': 'absolute',
                 'z-index': 100000,
                 'top': 0,
-                'margin': 5+'%',
+                'margin': 6+'%',
                 'font-size':'1.2em',
                 'background-color':'#333',
                 'color':'rgb(196, 190, 170)',

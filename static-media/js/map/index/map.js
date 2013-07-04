@@ -508,9 +508,7 @@ function initMap(qrPoint) {
         e.preventDefault();
         var point_id = $(this).data('pan');
         var point = new PointResource().read(point_id);
-        addSamplePano(
-            point.panorama,
-            {width: $(window).width() * 0.7, height: $(window).height() * 0.4}
+        addSamplePano(point.panorama,{ratio:9/16}
         );
     });
     qrMarker._bringToFront();
