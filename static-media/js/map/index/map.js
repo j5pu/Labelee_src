@@ -111,7 +111,7 @@ var LocalStorageHandler = {
 
     setValues: function () {
         if (qrPoint.isParquing()) {
-            if (confirm('Do you want to remember your parking space?')) {
+            if (confirm(gettext('Do you want to remember your parking space?'))) {
                 var miCoche = {
                     dest: qrPoint,
                 prevDate: new Date().getTime()
@@ -136,7 +136,7 @@ var LocalStorageHandler = {
             var sharedDest = JSON.parse(localStorage.getItem('sharedDest'));
             if (sharedDest) {
                 localStorage.removeItem('sharedDest');
-                sharedDest.mesg = 'Do you still want to go to the previous destination?';
+                sharedDest.mesg = gettext('Do you still want to go to the previous destination?');
                 sharedDest.with_predraw = true;
 
                 localStorage.setItem('prevDest', JSON.stringify(sharedDest));
@@ -205,7 +205,7 @@ var LocalStorageHandler = {
             'enclosureid': qrPoint.enclosure.id,
             'psX': marker.psX,
             'psY': marker.psY,
-            'mesg': 'Do you still want to go to ' + marker.title + '?',
+            'mesg': gettext('Do you still want to go to') + ' ' + marker.title + '?',
             'description': marker.title,
             'with_predraw': false
         };
@@ -416,7 +416,7 @@ function loadPOIs() {
                 (qrPoint.point.col * qrFloor.scaleX) + qrFloor.scaleX];
 
             if (qr_type == 'origin') {
-                var originLegend="You are right here: " + qrPoint.point.description;
+                var originLegend=gettext("You are right here:") + ' ' + qrPoint.point.description;
 
                 if (qrPoint.point.panorama){
                     originLegend = originLegend +
@@ -432,16 +432,17 @@ function loadPOIs() {
 
             }
             else {
+                var msg = gettext("Please, scan a QR code to get here:") + ' ';
                 qrMarker = new L.marker(qrLoc, { bounceOnAdd: false,
                     icon: DestinyIcon})
-                    .bindPopup("Please, scan a QR code to get here: " + qrPoint.point.description +
+                    .bindPopup(msg + qrPoint.point.description +
                         " (floor " + qrFloor.name + "," + qrPoint.enclosure.name + ")"
                     );
 
                 qrMarker
                     .on('click', function () {
                        if (qr_type == 'dest') {
-                            this.bindPopup("Please, scan a QR code to get here: " + qrPoint.point.description).openPopup();
+                            this.bindPopup(msg + qrPoint.point.description).openPopup();
                             return;
                         }
 
@@ -728,7 +729,7 @@ $(function () {
                     (miCoche.point.col * floor_x.scaleX) + floor_x.scaleX];
                 carMarker = new L.marker(carLoc, { bounceOnAdd: false,
                     icon: CarIcon})
-                    .bindPopup("My car");
+                    .bindPopup(gettext("My car"));
 
                 carMarker.on('click', function () {
                     LocalStorageHandler.setPrevDest(this);
@@ -1016,7 +1017,7 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
 
 
     } else {
-        alert('We are sorry, that route does not exist.');
+        alert(gettext('We are sorry, that route does not exist.'));
     }
 }
 //Función que gestiona la animación de la flecha

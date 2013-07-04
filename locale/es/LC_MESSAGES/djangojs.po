@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-06-30 16:33+0200\n"
+"POT-Creation-Date: 2013-07-04 15:58+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,6 +17,38 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: static-media/js/map/index/map.js:114
+msgid "Do you want to remember your parking space?"
+msgstr "¿Desea recordar su plaza de parquing?"
+
+#: static-media/js/map/index/map.js:139
+msgid "Do you still want to go to the previous destination?"
+msgstr "¿Todavía quieres llegar al destino anterior?"
+
+#: static-media/js/map/index/map.js:208
+msgid "Do you still want to go to"
+msgstr "¿Todavía quieres llegar a"
+
+#: static-media/js/map/index/map.js:363
+msgid "Scan a QR code to get here:"
+msgstr "Escanea un código QR para llegar hasta aquí:"
+
+#: static-media/js/map/index/map.js:419
+msgid "You are right here:"
+msgstr "Estás justo aquí:"
+
+#: static-media/js/map/index/map.js:435
+msgid "Please, scan a QR code to get here:"
+msgstr "Por favor, escanee un código QR para llegar hasta aquí:"
+
+#: static-media/js/map/index/map.js:732
+msgid "My car"
+msgstr "Mi coche"
+
+#: static-media/js/map/index/map.js:1020
+msgid "We are sorry, that route does not exist."
+msgstr "Lo sentimos, esa ruta no existe."
 
 #: static-media/js/map_editor/connections/main.js:55
 msgid "No saved connections at the moment for this enclosure"
@@ -34,17 +66,17 @@ msgstr "Actualizando planta"
 msgid "blocks"
 msgstr "bloques"
 
-#: static-media/js/map_editor/edit_map/floor.js:499
+#: static-media/js/map_editor/edit_map/floor.js:508
 msgid "Loading floor grid"
 msgstr "Cargando grid para la planta"
 
-#: static-media/js/map_editor/edit_map/floor.js:543
+#: static-media/js/map_editor/edit_map/floor.js:580
 msgid "Changing number of rows will erase all points on the floor. Continue?"
 msgstr ""
 "Al cambiar el número de filas se eliminarán todos los puntos. ¿Continuar?"
 
-#: static-media/js/map_editor/edit_map/floor.js:547
-#: static-media/js/map_editor/edit_map/floor.js:558
+#: static-media/js/map_editor/edit_map/floor.js:583
+#: static-media/js/map_editor/edit_map/floor.js:595
 msgid "Redrawing grid"
 msgstr "Redibujando grid"
 
@@ -52,37 +84,40 @@ msgstr "Redibujando grid"
 msgid "Delete category? (all its labels will be removed)"
 msgstr "¿Eliminar categoría? (se eliminarán todas sus etiquetas)"
 
-#: static-media/js/map_editor/edit_map/menu.js:214
+#: static-media/js/map_editor/edit_map/menu.js:220
 msgid "Delete label?"
 msgstr "¿Eliminar etiqueta?"
 
-#: static-media/js/map_editor/edit_map/menu.js:339
+#: static-media/js/map_editor/edit_map/menu.js:363
 msgid "Select category"
 msgstr "Selecc. categoría"
 
-#: static-media/js/map_editor/edit_map/menu.js:360
-#: static-media/js/map_editor/edit_map/menu.js:367
+#: static-media/js/map_editor/edit_map/menu.js:384
+#: static-media/js/map_editor/edit_map/menu.js:391
 msgid "Select label"
 msgstr "Selecc. etiqueta"
 
-#: static-media/js/map_editor/index/main.js:75
+#: static-media/js/map_editor/edit_map/painter.js:199
+msgid "Change panorama"
+msgstr "Cambiar panorama"
+
+#: static-media/js/map_editor/edit_map/painter.js:199
+#: static-media/js/map_editor/edit_map/painter.js:201
+msgid "Add panorama"
+msgstr "Añadir panorama"
+
+#: static-media/js/map_editor/index/main.js:81
 msgid ""
 "Are you sure you want to remove this enclosure? (this will erase all their "
 "floors)"
 msgstr "¿Seguro que desea eliminar este recinto? "
 
-#: static-media/js/map_editor/index/main.js:111
+#: static-media/js/map_editor/index/main.js:120
 msgid "You must specify the floor image too"
 msgstr "También debe subir la imágen del plano para la planta"
 
-#: static-media/js/map_editor/index/main.js:206
+#: static-media/js/map_editor/index/main.js:218
 msgid "Are you sure you want to remove this floor?"
 msgstr ""
 "¿Seguro que desea eliminar la planta? (también se perderá toda la "
 "información relativa a ella)"
-
-#~ msgid "Change panorama"
-#~ msgstr "Cambiar panorama"
-
-#~ msgid "Add panorama"
-#~ msgstr "Añadir panorama"
