@@ -87,18 +87,11 @@ function addSamplePano(options)
                 })
             ;
 
-            $(window).resize(function(){
-                var $newWidth = $(this).width;
-                $('canvas').css({
-                    'width':$newWidth * 0.84
 
-                });
-
-            });
 
             clearInterval(listener);
 
-            $('canvas').trigger('click');
+            $('canvas').trigger('click tap touch swipe drag');
 
 
             // What you want to do after it loads

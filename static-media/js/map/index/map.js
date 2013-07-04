@@ -459,7 +459,7 @@ var map = L.map('map', {
     crs: L.CRS.Simple,
     zoom: 0,
     minZoom: 0,
-    maxZoom: 4,
+    maxZoom: 3,
     zoomControl: false,
     tapTolerance:30,
     inertiaThreshold: 5,
