@@ -60,21 +60,24 @@ function addSamplePano(options)
             jQuery('canvas').css({
                 'position': 'absolute',
                 'z-index': 99999,
-                'top': 12+'%',
-                'height': 60+'%',
-                'margin': 12+'%',
-                'width':100+'%',
-                'border-radius':'.5em'
+                'top': 0,
+                'height': 80+'%',
+                'margin': 8+'%',
+                'width':84+'%',
+                'border-radius':'.5em',
+                'border': '2px solid rgb(196, 190, 170)'
             });
             jQuery('body').prepend('<button id="close">X</button>');
             $('button#close').css({
                 'position': 'absolute',
                 'z-index': 100000,
-                'top': 6+'%',
-                'margin': 15+'%',
+                'top': 0,
+                'margin': 5+'%',
                 'font-size':'1.2em',
                 'background-color':'#333',
-                'color':'white'
+                'color':'rgb(196, 190, 170)',
+                'border-radius':'.5em',
+                'border': '2px solid rgb(196, 190, 170)'
 
             })
                 .on('click', function(){

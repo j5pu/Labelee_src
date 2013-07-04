@@ -464,7 +464,11 @@ var map = L.map('map', {
     zoom: 0,
     minZoom: 0,
     maxZoom: 4,
-    zoomControl: false
+    zoomControl: false,
+    tapTolerance:30,
+    inertiaThreshold: 5,
+    inertiaDeceleration:2000,
+    inertiaMaxSpeed:1000
 });
 
 
