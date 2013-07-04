@@ -185,7 +185,7 @@ var LocalStorageHandler = {
 
             $('#scrollMenu').prepend(
                 '<li>' +
-                    '<li class="Label mmenu-label">DESTINO PREVIO</li>' +
+                    '<li class="Label mmenu-label">' + gettext('PREVIOUS DESTINATION') + '</li>' +
                     '<li ' +
                     'onclick="' + "$('#menu-right').trigger( 'close' );" +
                     "preDrawRoute(" + qrPoint.point.id + ', ' + floor_id + ', ' + point_dest_id + ', ' + floor_dest_id + ');">' +
@@ -365,16 +365,6 @@ function loadPOIs() {
                         }
                         LocalStorageHandler.setPrevDest(this);
                         drawRoute(qrPoint.point.id, qrFloor.sX, qrFloor.sY, this.poid, this.psX, this.psY);
-
-                        $('.leaflet-popup-content button').on('click', function (e) {
-                            e.preventDefault();
-                            var point_id = $(this).data('pan');
-                            var point = new PointResource().read(point_id);
-                            addSamplePano(
-                                point.panorama,
-                                {width: $(window).width() * 0.7, height: $(window).height() * 0.4}
-                            );
-                        });
                     });
 
                 for (var l in floors[fl].labels) {
@@ -428,7 +418,9 @@ function loadPOIs() {
 
                 qrMarker = new L.marker(qrLoc, { bounceOnAdd: false,
                     icon: OriginIcon})
-                    .bindPopup(originLegend);
+                    .bindPopup(originLegend).on('click', function(){
+                        console.log('click');
+                    });
 
             }
             else {
@@ -706,7 +698,9 @@ $(function () {
         map.addLayer(qrFloor.photo);
         map.addLayer(qrFloor.layer);
         qrMarker._bringToFront();
-        qrMarker.openPopup();
+        qrMarker.openPopup().on('click', function(){
+            console.log('click');
+        });
     });
 
     $('span#myCar').click(function () {
@@ -852,7 +846,17 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
         destLoc = [(route.fields.destiny.fields.row) * sY + sY, route.fields.destiny.fields.col * sX + sX];
         destMarker = L.marker(destLoc, { bounceOnAdd: false,
             icon: DestinyIcon})
-            .bindPopup(destLegend);
+            .bindPopup(destLegend).on('click', function(){
+                $('.leaflet-popup-content button').on('click', function (e) {
+                    e.preventDefault();
+                    var point_id = $(this).data('pan');
+                    var point = new PointResource().read(point_id);
+                    addSamplePano(
+                        point.panorama,
+                        {width: $(window).width() * 0.7, height: $(window).height() * 0.4}
+                    );
+                });
+            });
 
 
         for (var i in floors) {
