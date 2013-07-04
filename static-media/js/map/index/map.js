@@ -1,12 +1,12 @@
 //Configuración de iconos
 var OriginIcon = L.AwesomeMarkers.icon({
-        icon: 'screenshot',
+        icon: 'location-arrow',
         color: 'darkblue'
         //spin: true
 
     }),
     DestinyIcon = L.AwesomeMarkers.icon({
-        icon: 'star',
+        icon: 'screenshot',
         color: 'red'
         //spin: true
 

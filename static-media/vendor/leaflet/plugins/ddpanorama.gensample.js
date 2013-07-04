@@ -87,7 +87,7 @@ function addSamplePano(options)
                 })
             ;
 
-            $(window).on('orientationchange', function(){
+            $(window).resize(function(){
                 var $newWidth = $(this).width;
                 $('canvas').css({
                     'width':$newWidth * 0.84
