@@ -272,6 +272,8 @@ var Menu = {
         Menu._setSelectors();
         Menu.setQrList();
         Menu.setPointStats();
+        Menu._initSliders();
+        Menu._initTooltips();
 
         if($e.floor.num_rows.val() == Floor.data.num_rows)
             $e.floor.change_num_rows.attr('disabled', 'disabled');

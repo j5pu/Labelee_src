@@ -1,5 +1,4 @@
-import cv2
-import cv
+from opencv import cv2
 import numpy as np
 
 # Default parameters

@@ -5,6 +5,7 @@ var Floor = {
 
     loading: false,
     updating: false,
+    generating_map: false,
     redrawing_grid: false,
     rows_changing: false,
     show_only_qrs: false,
@@ -482,8 +483,6 @@ var Floor = {
 
         Floor.painted_connectors = [];
 
-        Menu.init();
-
         Events.bindAll();
 
         Floor.loading = false;
@@ -517,12 +516,16 @@ var Floor = {
         Floor.painted_connectors = [];
         Painter.erase_mode = false;
 
-        setTimeout(function(){
-            if(Floor.hasPoints())
-                Floor.loadSaved();
-            else
-                Floor.loadEmpty();
-        }, 200);
+        if (Floor.generating_map){
+            Floor.loadEmpty();
+        } else {
+            setTimeout(function(){
+                if(Floor.hasPoints())
+                    Floor.loadSaved();
+                else
+                    Floor.loadEmpty();
+            }, 200);
+        }
 
     },
 
@@ -599,8 +602,7 @@ var Floor = {
      */
     _translateToBlockXY: function(x,y)
     {
-        var temp;
-        var temp = x;
+        // Transform coordinates to our coordinate system
         var y = Floor.img.height - y;
 
         // First transform to grid size (original image has been resized)
@@ -629,7 +631,7 @@ var Floor = {
          performance
          Differences in x and y are normalized with the line length
           */
-        if (diff_x == 0 ||diff_y == 0){
+        if (diff_x == 0 || diff_y == 0){
             var R = 1 // horizontal or vertical line, just increment the block size
         } else {
             var R = 5 // allow more precision
@@ -679,9 +681,18 @@ var Floor = {
         return true;
     },
 
-    // TODO: Revisar si alguna funcion va mejor en los helpers
     autoGenerateMap: function()
     {
+        Floor.generating_map = true;
+
+        // Save previous selected category and POI
+        var previous_label = Painter.label;
+        var previous_category = Painter.label_category;
+
+        Painter.setLabel(Painter.BLOCKERS_ID, Painter.WALL_ID);
+
+        Floor.loadGrid();
+
         hough_parameters = {
             canny1: $e.floor.slider_canny.slider("values", 0),
             canny2: $e.floor.slider_canny.slider("values", 1),
@@ -714,14 +725,22 @@ var Floor = {
                     block_coordinate.y_block != previous_block.y_block)
                 {
                     var block = Floor.findBlock (block_coordinate.y_block, block_coordinate.x_block);
-                    // TODO: ojo hacerlo bien
                     Painter.paintLabel(block);
                 }
                 previous_block = block_coordinate;
 
             }
         }
+
+        Floor.generating_map = false;
+
+        // Recover old category and label
+        Painter.label = previous_label;
+        Painter.label_category = previous_category;
+
+        WaitingDialog.close();
     }
+
 };
 
 

@@ -68,11 +68,11 @@
             <div class="box box-1" style="width:280px">
                 <p>
                     {% trans "Rango de contraste " %}
-                    <img src="{{  STATIC_URL }}img/info.png" title="El selector superior indica el contraste a partir
+                    <img src="{{  STATIC_URL }}img/info.png" title={%  trans "El selector superior indica el contraste a partir
                     del cual se buscan líneas. El selector inferior indica hasta qué punto se continúa una linea según
                     su contraste.
-                    Un valor grande del selector superior resultará en menos líneas pero más precisas en mapas con
-                    que presentan ruido como carteles y dibujos.">
+                    Un valor grande del selector superior resultará en menos líneas pero más precisas en mapas
+                    que presentan ruido como carteles y dibujos." %}>
                 </p>
                 <div id="slider_canny" class="slider"></div>
                 <p>

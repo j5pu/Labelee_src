@@ -43,12 +43,14 @@ def generate_map(request, floor_id):
     gap = int(request.GET.get("gap", houghLines.INITIAL_MAX_LINE_GAP))
 
     file_path = floor.img.path
-    print repr(HoughLines(file_path,
-                    threshold=threshold,
-                    min_line_length=length,
-                    max_line_gap=gap,
-                    canny_threshold_1=canny_thres1,
-                    canny_threshold_2=canny_thres2)) #TODO: Qutiar
+
+    # print repr(HoughLines(file_path,
+    #                threshold=threshold,
+    #                min_line_length=length,
+    #                max_line_gap=gap,
+    #                canny_threshold_1=canny_thres1,
+    #                canny_threshold_2=canny_thres2))
+
     map_lines = HoughLines(file_path,
                            threshold=threshold,
                            min_line_length=length,
