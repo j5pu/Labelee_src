@@ -160,8 +160,11 @@ var Floor = {
                     );
                 var has_descr_modified =
                     from_db && ($(this).data('saved-descr') != descr);
-                var is_modified = has_qr_modified || has_descr_modified;
 
+                var panorama_input = $(this).find('input[type=file]');
+                var has_panorama_attached = from_db && (panorama_input.length > 0 && panorama_input.val() != "")
+
+                var is_modified = has_qr_modified || has_descr_modified || has_panorama_attached;
 
                 if(is_new)
                 {
@@ -182,6 +185,9 @@ var Floor = {
                         description: descr,
                         qr: checked_qr
                     };
+
+                    if(has_panorama_attached)
+                        new PointResource().addImg($(this).find('form'), $(this).data('point-id'), function(){});
 
                     points_to_update.push(point_to_update);
                 }
@@ -288,6 +294,7 @@ var Floor = {
         {
             Menu.setPointStats();
             Menu.toggleEraseMode();
+            FileInput.draw();
             Floor.reloading = false;
 //            alert('Plano actualizado');
         }
