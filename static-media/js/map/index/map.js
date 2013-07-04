@@ -341,10 +341,7 @@ function loadPOIs() {
                     category = floors[fl].pois[j].label.category.name;
 
                 if (floors[fl].pois[j].panorama){
-                    descriptionIcon = descriptionIcon +
-                        '<button data-pan="' + id + '">' +
-                        '<i class="icon-camera"></i>' +
-                        '</button>';
+                    descriptionIcon = descriptionIcon + Panorama.renderIcon(id);
                 }
 
 
@@ -408,13 +405,8 @@ function loadPOIs() {
             if (qr_type == 'origin') {
                 var originLegend=gettext("You are right here:") + ' ' + qrPoint.point.description;
 
-                if (qrPoint.point.panorama){
-                    originLegend = originLegend +
-                        '<button data-pan="' + qrPoint.point.id + '">' +
-                        '<i class="icon-camera"></i>' +
-                        '</button>';
-
-                }
+                if (qrPoint.point.panorama)
+                    originLegend = originLegend + Panorama.renderIcon(qrPoint.point.id);
 
                 qrMarker = new L.marker(qrLoc, { bounceOnAdd: false,
                     icon: OriginIcon})
@@ -425,16 +417,20 @@ function loadPOIs() {
             }
             else {
                 var msg = gettext("Please, scan a QR code to get here:") + ' ';
+                var photoIcon = qrPoint.point.panorama ? Panorama.renderIcon(qrPoint.point.id) : "";
                 qrMarker = new L.marker(qrLoc, { bounceOnAdd: false,
                     icon: DestinyIcon})
                     .bindPopup(msg + qrPoint.point.description +
-                        " (floor " + qrFloor.name + "," + qrPoint.enclosure.name + ")"
-                    );
+                        " (" + gettext('floor') + ' ' + qrFloor.name + ", " +
+                        qrPoint.enclosure.name + ')' + photoIcon)
+                    .on('click', Panorama.bindShow);
 
                 qrMarker
                     .on('click', function () {
                        if (qr_type == 'dest') {
-                            this.bindPopup(msg + qrPoint.point.description).openPopup();
+                            this.bindPopup(msg + qrPoint.point.description + photoIcon)
+                                .openPopup()
+                                .on('click', Panorama.bindShow);
                             return;
                         }
 
@@ -497,13 +493,7 @@ function initMap(qrPoint) {
     map.removeLayer(totalPois);
     map.addLayer(qrFloor.layer);
     qrMarker.openPopup();
-    $('.leaflet-popup-content button').on('click', function (e) {
-        e.preventDefault();
-        var point_id = $(this).data('pan');
-        var point = new PointResource().read(point_id);
-        addSamplePano(point.panorama,{ratio:9/16}
-        );
-    });
+    Panorama.bindShow();
     qrMarker._bringToFront();
 
     map.invalidateSize();
@@ -1045,4 +1035,4 @@ var setArrow = function (flecha, idFloor) {
     ]);
     if (++arrowsOffset > 100)
         arrowsOffset = 0;
-}
+};

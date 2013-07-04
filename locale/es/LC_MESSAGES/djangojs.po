@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-07-04 17:33+0200\n"
+"POT-Creation-Date: 2013-07-04 17:56+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -46,11 +46,15 @@ msgstr "Estás justo aquí:"
 msgid "Please, scan a QR code to get here:"
 msgstr "Por favor, escanee un código QR para llegar hasta aquí:"
 
+#: static-media/js/map/index/map.js:431
+msgid "floor"
+msgstr "planta"
+
 #: static-media/js/map/index/map.js:726
 msgid "My car"
 msgstr "Mi coche"
 
-#: static-media/js/map/index/map.js:1016
+#: static-media/js/map/index/map.js:1024
 msgid "We are sorry, that route does not exist."
 msgstr "Lo sentimos, esa ruta no existe."
 
