@@ -97,6 +97,9 @@ var LocalStorageHandler = {
 
     checkExpire: function () {
         for (index = 0; index < localStorage.length; index++) {
+            if(localStorage.key(index) != 'prevDest' && localStorage.key(index) != 'miCoche')
+                continue;
+
             var obj = JSON.parse(localStorage.getItem(localStorage.key(index)));
             var delay = 86400000; // 24h
             var expired = new Date().getMilliseconds() > obj.prevDate + delay;
@@ -337,7 +340,7 @@ function loadPOIs() {
                     labelid = floors[fl].pois[j].label.id,
                     category = floors[fl].pois[j].label.category.name;
 
-                if (new PointResource().read(id).panorama){
+                if (floors[fl].pois[j].panorama){
                     descriptionIcon = descriptionIcon +
                         '<button data-pan="' + id + '">' +
                         '<i class="icon-camera"></i>' +
@@ -415,7 +418,7 @@ function loadPOIs() {
             if (qr_type == 'origin') {
                 var originLegend="You are right here: " + qrPoint.point.description;
 
-                if (new PointResource().read(qrPoint.point.id).panorama){
+                if (qrPoint.point.panorama){
                     originLegend = originLegend +
                         '<button data-pan="' + qrPoint.point.id + '">' +
                         '<i class="icon-camera"></i>' +

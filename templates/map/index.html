@@ -23,6 +23,7 @@
     <link rel="stylesheet" href="{{ STATIC_URL }}css/map/index/idangerous.swiper.css">
 
 
+    <script src="{% url 'django.views.i18n.javascript_catalog' %}"></script>
     <script src="{{ STATIC_URL }}vendor/leaflet/plugins/scale.fix.js"></script>
     <script src="{{ STATIC_URL }}vendor/jquery-1.9.1.min.js"></script>
     <script src="{{ STATIC_URL }}vendor/hammer.js_v1.0.3/dist/hammer.min.js"></script>
@@ -251,12 +252,12 @@
 
         });
 
-        $('.leaflet-popup-content button').on('click', function (e) {
-            e.preventDefault();
-            var point_id = $(this).data('pan');
-            var point = PointResource().read(point_id);
-            addSamplePano(point.panorama, {width: 80 + '%', height: 20 + '%'});
-        });
+{#        $('.leaflet-popup-content button').on('click', function (e) {#}
+{#            e.preventDefault();#}
+{#            var point_id = $(this).data('pan');#}
+{#            var point = PointResource().read(point_id);#}
+{#            addSamplePano(point.panorama, {width: 80 + '%', height: 20 + '%'});#}
+{#        });#}
 
 
     });

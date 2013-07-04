@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.core import serializers
+from django.core.serializers import serialize
 
 from django.http import HttpResponse
 from django.db.models import Q
@@ -8,6 +9,7 @@ import simplejson
 from map_editor.api.resources import PointResource
 from map_editor.models import Point, Label, Floor, QR_Code
 from django.contrib.auth.models import User
+from utils.helpers import tx_serialized_json_list
 
 
 def create_from_list(request):
@@ -117,37 +119,16 @@ def readOnlyPois(request, floor_id):
         qr_code = None
     )
 
+    json_pois = serialize('json', pois)
+    tx_pois = tx_serialized_json_list(json_pois)
 
-    json_pois = []
+    for i in range(len(pois)):
+        label = serialize('json', [pois[i].label])
+        tx_label = tx_serialized_json_list(label)[0]
+        tx_pois[i]['label'] = tx_label
+        categ = serialize('json', [pois[i].label.category])
+        tx_categ = tx_serialized_json_list(categ)[0]
+        tx_pois[i]['label']['category'] = tx_categ
 
-    for poi in pois:
-        categ = poi.label.category
-        category_json = {
-            'id': categ.id,
-            'color': categ.color,
-            'img': categ.img.name,
-            'name': categ.name,
-            'icon': categ.icon,
-        }
-        label = poi.label
-        label_json = {
-            'id': label.id,
-            'category': category_json,
-            'img': label.img.name,
-            'name': label.name,
-        }
-        json_poi = {
-            'id': poi.id,
-            'row': poi.row,
-            'col': poi.col,
-            'description': poi.description,
-            'label': label_json,
-            'floor': poi.floor.id
-        }
-        json_pois.append(json_poi)
-
-
-
-    # return HttpResponse(simplejson.dumps(pois), mimetype='application/json')
-    return HttpResponse(simplejson.dumps(json_pois), mimetype='application/json')
+    return HttpResponse(simplejson.dumps(tx_pois), mimetype='application/json')
 
