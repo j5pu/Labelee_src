@@ -38,7 +38,7 @@
 
     <div class="box box-0 alert">
         <ul>
-            <li>{% trans "Antes de poner un QR o cambiar la descripción guardar el plano" %}</li>
+            <li>{% trans "Antes de cambiar la descripción o el QR de un punto guardar el plano" %}</li>
             <li>{% trans "No aumentar el tamaño de la página" %}</li>
         </ul>
     </div>
@@ -48,19 +48,20 @@
         <div class="box box-0">
             <!-- NUMERO DE FILAS Y GUARDAR FLOOR -->
             <div class="box box-1">
-                <span class="num_rows">
-                    {% trans "Filas" %}:
-                    <input type="text"
-                           id="num_rows"
-                           value="20">
-                    =
-                </span>
-                <span id="num_blocks"></span>
-
-                <button class="btn" id="update_floor">{% trans "Guardar" %}</button><br>
-                <!--<button class="btn" id="clear_floor">{% trans "Limpiar" %}</button>-->
+                <div class="box box-2" id="num_rows">
+                    <span class="txt">
+                        {% trans "Filas" %}:
+                        <input type="text" value="20">
+                        =
+                    </span>
+                    <span class="txt" id="num_blocks"></span>
+                    <button class="btn" id="change_num_rows">{% trans "Refrescar filas" %}</button>
+                </div>
 
                 <a class="link-1" href="{% url 'map_editor.views.index' %}">{% trans "Volver al menú" %}</a>
+                <button class="btn" id="update_floor">{% trans "Guardar" %}</button>
+                <!--<button class="btn" id="clear_floor">{% trans "Limpiar" %}</button>-->
+
             </div><br>
 
             <!-- AUTOMATIC MAP GENERATOR -->

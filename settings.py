@@ -137,6 +137,7 @@ INSTALLED_APPS = (
     'route',
     'modeltranslation',
     'log',
+    # 'panorama',
 )
 
 # A sample logging configuration. The only tangible logging
@@ -221,7 +222,7 @@ else:
         "default": {
             "ENGINE": "django.db.backends.mysql",
             "NAME": "labelee_dev",
-            "USER": "mnopi",
+             "USER": "mnopi",
             "PASSWORD": "1aragon1",
             "HOST": "192.168.1.201",
             "PORT": "3306",
@@ -260,6 +261,7 @@ LOCALE_PATHS = (
 
 TEMPLATE_CONTEXT_PROCESSORS = {
     'django.core.context_processors.static',
+    'django.core.context_processors.media',
     'django.contrib.auth.context_processors.auth',
     'django.core.context_processors.i18n',
 }

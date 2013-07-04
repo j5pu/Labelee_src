@@ -180,7 +180,7 @@ var Events = {
             self._showUpQRInfo();
             self._setHoveredBlock();
             self._toggleMousePointer();
-            if(Floor.data.num_rows )
+            if(Floor.hasPoints())
                 self._showPointMenu();
         }
     },
@@ -216,7 +216,8 @@ var Events = {
 
         _changeNumRows: function()
         {
-            $e.floor.num_rows.on('change', Floor.changeNumRows);
+            $e.floor.change_num_rows.on('click', Floor.changeNumRows);
+            $e.floor.num_rows.on('keyup', Floor.changeNumRows);
         },
 
 

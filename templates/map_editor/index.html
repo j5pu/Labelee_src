@@ -23,24 +23,24 @@
 
     {% csrf_token %}
 
+    <form id="choose-lang" action="/i18n/setlang/" method="post">
+        {% csrf_token %}
+        <input name="next" type="hidden" value="{{ redirect_to }}" />
+        <img id="es" src="{{ STATIC_URL }}img/country_flags/Spain_32.png">
+        <img id="en" src="{{ STATIC_URL }}img/country_flags/United-States_32.png">
+        <select name="language">
+            {% get_language_info_list for LANGUAGES as languages %}
+            {% for language in languages %}
+                <option value="{{ language.code }}">{{ language.name_local }} ({{ language.code }})</option>
+            {% endfor %}
+        </select>
+        {#        <input type="submit" value="Go" />#}
+    </form>
+
+
     <h1>
         {% trans "Administración de recintos" %}
-
-        <form id="choose-lang" action="/i18n/setlang/" method="post">
-            {% csrf_token %}
-            <input name="next" type="hidden" value="{{ redirect_to }}" />
-            <img id="es" src="{{ STATIC_URL }}img/country_flags/Spain_32.png">
-            <img id="en" src="{{ STATIC_URL }}img/country_flags/United-States_32.png">
-            <select name="language">
-                {% get_language_info_list for LANGUAGES as languages %}
-                {% for language in languages %}
-                    <option value="{{ language.code }}">{{ language.name_local }} ({{ language.code }})</option>
-                {% endfor %}
-            </select>
-            {#        <input type="submit" value="Go" />#}
-        </form>
     </h1>
-
     <div id="enclosures" class="box box-0" ng-controller="EnclosuresCtrl">
 
         <!--PARA AGREGAR LUGAR -->
@@ -70,7 +70,7 @@
                 <div class="botones-enclosure" ng-hide="editing">
                     <div class="action_box">
                         <span><i class="icon-edit" ng-click="update()"></i></span>
-                        <span><i class="icon-remove" ng-click="del()"></i></span>
+                        <span><i class="icon-remove" ng-click="del($index)"></i></span>
                     </div>
 
                     <div class="btn-group">
@@ -78,7 +78,7 @@
                             <i class="icon-road icon-white"></i> {% trans "Calcular rutas" %}
                         </a>
                         <a class="btn link-2" id="aristas" href='edit/connections/[[enclosure.id]]'>
-                            <i class="icon-pencil icon-white"></i> {% trans "Gestión de aristas" %}
+                            <i class="icon-pencil icon-white"></i> {% trans "Conexiones entre plantas" %}
                         </a>
                     </div>
 {#                    <a class='btn link-3' ng-click="calculateRoutes()">{% trans "Calcular rutas" %}</a>#}
@@ -88,7 +88,7 @@
                 <div ng-show="editing">
                     <form>
                         <div class="box-2 editing-place">
-                            <label>Nuevo nombre:
+                            <label class="txt">Nuevo nombre:
                                 <input type="text"
                                        ng-init="enclosure_name=enclosure.name"
                                        ng-model="enclosure_name"
@@ -96,7 +96,7 @@
                                        placeholder="{% trans "Nuevo nombre para el recinto" %}.."
                                        autofocus>
                             </label>
-                            <label>
+                            <label class="txt">
                                 Cuenta de Twitter:
                                 <input type="text"
                                        ng-init="twitter_account=enclosure.twitter_account"
@@ -129,17 +129,21 @@
 
                     <div class="form_content" ng-hide="sending_img">
                         <div class="box-3">
-                            <input type="text"
-                                   ng-model="floor_name"
-                                   placeholder="{% trans "Nombre de planta" %}..">
-                            <input type="text"
-                                   ng-model="floor_number"
-                                   placeholder="{% trans "Número" %}..">
+                            <label class="txt">{% trans "Nombre de planta" %}:
+                                <input type="text"
+                                       ng-model="floor_name"
+                                       placeholder="{% trans "Nombre de planta" %}..">
+                            </label>
+                            <label class="txt">{% trans "Número" %}:
+                                <input type="text"
+                                       ng-model="floor_number"
+                                       placeholder="{% trans "Número" %}..">
+                            </label>
                             <input class="btn floor_img"
                                    type="file"
                                    name="img"
 {#                                   onchange="angular.element(this).scope().setFile(this)"#}
-                                   title="{% trans "Elegir imagen" %}..">
+                                   title="{% trans "Elegir imagen" %}">
                         </div>
 
                         <button class="btn" ng-click="createFloor()">{% trans "Añadir planta" %}</button>
@@ -204,7 +208,7 @@
                                                type="file"
                                                name="img"
                                                 {#                                   onchange="angular.element(this).scope().setFile(this)"#}
-                                               title="{% trans "Cambiar imagen" %}..">
+                                               title="{% trans "Cambiar imagen" %}">
                                     </div>
 
                                     <button class="btn" ng-click="cancelUpdate()">{% trans "Cancelar" %}</button>

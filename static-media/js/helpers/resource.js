@@ -150,7 +150,7 @@ function Resource(resource_name) {
         return element;
 	};
 
-	this.del = function(element_id, confirm_msg) {
+	this.del = function(element_id, confirm_msg, callback) {
 		if (!confirm(confirm_msg))
 			return;
 
@@ -163,7 +163,8 @@ function Resource(resource_name) {
 			dataType : 'json', // esto indica que la respuesta vendrá en formato json
 			async : false,
 			success : function(response) {
-				var i = response;
+                if(callback)
+				    callback(response);
 			},
 			error : function(response) {
 				var j = response;

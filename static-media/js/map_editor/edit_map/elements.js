@@ -40,7 +40,7 @@ $e = {
 
         this.floor = {
             grid: $('#grid'),
-            num_rows: $('#num_rows'),
+            num_rows: $('#num_rows input[type=text]'),
             num_blocks: $('#num_blocks'),
             toggle_border: $('#toggle_border'),
             toggle_erase_mode: $('input[name=toggle_erase_mode]'),
@@ -53,6 +53,7 @@ $e = {
             slider_threshold: $('#slider_threshold'),
             slider_line_length: $('#slider_line_length'),
             slider_gap: $('#slider_gap'),
+            change_num_rows: $('#change_num_rows'),
             clear: $('#clear_floor'),
             labeled_blocks: null,
             poi_menu: $('#poi_menu')

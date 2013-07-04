@@ -9,6 +9,7 @@ from django.template import RequestContext
 from django.http import HttpResponse
 import sys
 from map_editor.models import Floor
+from map_editor.models import Point
 
 
 def angular(request):
@@ -96,3 +97,15 @@ def dblog(request):
     Logger.critical('fallo!!!')
 
     return HttpResponse('ok')
+
+# streetview
+
+def streetView(request):
+
+    p = Point.objects.get(id=2850)
+
+    ctx = {
+        'img': p.panorama
+    }
+
+    return render_to_response('streetView/streetView.html',ctx, context_instance=RequestContext(request))

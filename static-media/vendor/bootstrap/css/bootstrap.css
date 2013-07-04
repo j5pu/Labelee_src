@@ -171,9 +171,9 @@ textarea {
 
 @media print {
   * {
-    color: #000 !important;
+    /*color: #000 !important;*/
     text-shadow: none !important;
-    background: transparent !important;
+    /*background: transparent !important;*/
     box-shadow: none !important;
   }
   a,
@@ -3868,8 +3868,8 @@ input[type="submit"].btn.btn-mini {
   padding: 8px 35px 8px 14px;
   margin-bottom: 20px;
   text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
-  background-color: #fcf8e3;
-  border: 1px solid #fbeed5;
+  background-color: #C8C8F2;
+  border: 1px solid #848BFF;
   -webkit-border-radius: 4px;
      -moz-border-radius: 4px;
           border-radius: 4px;
@@ -3877,7 +3877,7 @@ input[type="submit"].btn.btn-mini {
 
 .alert,
 .alert h4 {
-  color: #c09853;
+  color: #0003BA;
 }
 
 .alert h4 {

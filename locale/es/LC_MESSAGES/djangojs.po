@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-06-25 11:53+0200\n"
+"POT-Creation-Date: 2013-06-30 16:33+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -52,29 +52,37 @@ msgstr "Redibujando grid"
 msgid "Delete category? (all its labels will be removed)"
 msgstr "¿Eliminar categoría? (se eliminarán todas sus etiquetas)"
 
-#: static-media/js/map_editor/edit_map/menu.js:206
+#: static-media/js/map_editor/edit_map/menu.js:214
 msgid "Delete label?"
 msgstr "¿Eliminar etiqueta?"
 
-#: static-media/js/map_editor/edit_map/menu.js:331
+#: static-media/js/map_editor/edit_map/menu.js:339
 msgid "Select category"
 msgstr "Selecc. categoría"
 
-#: static-media/js/map_editor/edit_map/menu.js:352
-#: static-media/js/map_editor/edit_map/menu.js:359
+#: static-media/js/map_editor/edit_map/menu.js:360
+#: static-media/js/map_editor/edit_map/menu.js:367
 msgid "Select label"
 msgstr "Selecc. etiqueta"
 
-#: static-media/js/map_editor/index/main.js:62
-msgid "Are you sure you want to remove this enclosure? "
+#: static-media/js/map_editor/index/main.js:75
+msgid ""
+"Are you sure you want to remove this enclosure? (this will erase all their "
+"floors)"
 msgstr "¿Seguro que desea eliminar este recinto? "
 
-#: static-media/js/map_editor/index/main.js:99
+#: static-media/js/map_editor/index/main.js:111
 msgid "You must specify the floor image too"
 msgstr "También debe subir la imágen del plano para la planta"
 
-#: static-media/js/map_editor/index/main.js:194
+#: static-media/js/map_editor/index/main.js:206
 msgid "Are you sure you want to remove this floor?"
 msgstr ""
 "¿Seguro que desea eliminar la planta? (también se perderá toda la "
 "información relativa a ella)"
+
+#~ msgid "Change panorama"
+#~ msgstr "Cambiar panorama"
+
+#~ msgid "Add panorama"
+#~ msgstr "Añadir panorama"

@@ -33,14 +33,20 @@ def create_from_list(request):
     for point in point_list:
         # bundle = pr.build_bundle(data=point, request=request)
         # pr.obj_create(bundle)
-        point = Point(
-            description=point['description'],
+        point_obj = Point(
             row=point['row'],
             col=point['col'],
             label=Label.objects.get(id=point['label']),
             floor=Floor.objects.get(id=point['floor'])
         )
-        point.save()
+        if 'description' in point:
+            point_obj.description = point['description']
+        point_obj.save()
+
+        # Si la categoría de la etiqueta para el punto no es bloqueante ni arista
+        label_category = Label.objects.get(id=point['label']).category
+        if label_category.qr_can_be_assigned():
+            point_obj.assign_qr()
 
     return HttpResponse(simplejson.dumps('ok'))
 
@@ -67,14 +73,13 @@ def update_from_list(request):
 
         # Si QR está checked y no hay un QR todavía para el punto
         if point['qr'] and not hasattr(point_obj, 'qr_code'):
-            qr_code = str(point_obj.floor.enclosure.id) + '_' + str(point_obj.floor.id) + '_' + str(point_obj.id)
-            qr = QR_Code(code=qr_code, point=point_obj)
-            qr.save()
+            point_obj.assign_qr()
         # Si QR unchecked y hay QR en BD..
         elif not point['qr'] and hasattr(point_obj, 'qr_code'):
             point_obj.qr_code.delete()
 
-        point_obj.description = point['description']
+        if 'description' in point:
+            point_obj.description = point['description']
         point_obj.save()
 
     return HttpResponse(simplejson.dumps('ok'))
@@ -108,7 +113,10 @@ def readOnlyPois(request, floor_id):
         label__category__name = 'Intermedias'
     ).exclude(
         label__category__name = 'Parquing'
+    ).exclude(
+        qr_code = None
     )
+
 
     json_pois = []
 

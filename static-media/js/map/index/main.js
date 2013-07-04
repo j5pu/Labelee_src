@@ -1,16 +1,13 @@
-//Pantalla completa
+var ua = navigator.userAgent;
+var androidversion = parseFloat(ua.slice(ua.indexOf("Android")+8));
+
 /*
+//Pantalla completa
 function hideAddressBar()
 {
-    var ua = navigator.userAgent;
-    if( ua.indexOf("Android") >= 0 )
-    {
-        var androidversion = parseFloat(ua.slice(ua.indexOf("Android")+8));
-        if (androidversion < 2.3)
-        {
+
+    if(( ua.indexOf("Android") >= 0 ) && (androidversion < 2.3))
             return;
-        }
-    }
 
     if(!window.location.hash)
     {

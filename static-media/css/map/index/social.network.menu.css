@@ -158,8 +158,10 @@ ul.navi a {
     -webkit-border-radius: 6px;
     border-radius: 6px;
     opacity:0.8;
+/*
     -webkit-box-shadow: 2px 2px 8px rgba(0,0,0,0.3) !important;
     box-shadow: 2px 2px 8px rgba(0,0,0,0.3) !important;
+*/
 }
 ul.navi a img {
     border:0;
@@ -223,10 +225,10 @@ ul.navi a:hover li#n6, .n6.fake-active {
 span#social
 {
     width:  240px;
-    z-index: 10000;
+    z-index: 9999;
     position: absolute;
-    bottom: 62px;
-    left: 5px;
+    bottom: 54px;
+    left: 12px;
 }
 
 a span i
