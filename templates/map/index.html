@@ -262,11 +262,26 @@
 {#            addSamplePano(point.panorama, {width: 80 + '%', height: 20 + '%'});#}
 {#        });#}
 
+        {% comment %}$(window).resize(function(){
+            var $newWidth = $(this).width;
+            $('canvas').css({
+                'width':$newWidth * 0.84
+            });
 
+        });{% endcomment %}
     });
 
     function myOrientResizeFunction() {
-        calculateCoords()
+        calculateCoords();
+        resizeCanvas();
+    }
+
+    function resizeCanvas() {
+            var newWidth=window.innerWidth * .85;
+            console.log(newWidth);
+{#            document.getElementsByTagName('canvas')[0].setAttribute('style', "width:"+ newWidth+"px;");#}
+        if(document.getElementsByTagName('canvas'))
+        document.getElementsByTagName('canvas')[0].width = newWidth;
     }
 
     function calculateCoords() {
