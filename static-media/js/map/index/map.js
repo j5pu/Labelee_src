@@ -462,8 +462,9 @@ function loadPOIs() {
 var map = L.map('map', {
     crs: L.CRS.Simple,
     zoom: 0,
+    minZoom: 0,
+    maxZoom: 4,
     zoomControl: false
-    //layer: qrFloor.layer
 });
 
 
