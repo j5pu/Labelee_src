@@ -294,7 +294,6 @@ var Floor = {
         {
             Menu.setPointStats();
             Menu.toggleEraseMode();
-            FileInput.draw();
             Floor.reloading = false;
 //            alert('Plano actualizado');
         }
@@ -307,6 +306,9 @@ var Floor = {
         Events.bindAll();
 
         Floor.loading = false;
+
+        // Dibujamos todos los botones para subir archivo
+        FileInput.draw();
 
         // Cerramos el mensaje de espera
         WaitingDialog.close();
