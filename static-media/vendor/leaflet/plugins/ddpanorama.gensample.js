@@ -86,6 +86,16 @@ function addSamplePano(options)
                     $(this).remove();
                 })
             ;
+
+            $(window).on('orientationchange', function(){
+                var $newWidth = $(this).width;
+                $('canvas').css({
+                    'width':$newWidth * 0.84
+
+                });
+
+            });
+
             clearInterval(listener);
 
             $('canvas').trigger('click');
