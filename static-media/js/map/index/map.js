@@ -108,7 +108,7 @@ var LocalStorageHandler = {
 
     setValues: function () {
         if (qrPoint.isParquing()) {
-            if (confirm('¿Desea recordar su plaza?')) {
+            if (confirm('Do you want to remember your parking space?')) {
                 var miCoche = {
                     dest: qrPoint,
                 prevDate: new Date().getTime()
@@ -133,7 +133,7 @@ var LocalStorageHandler = {
             var sharedDest = JSON.parse(localStorage.getItem('sharedDest'));
             if (sharedDest) {
                 localStorage.removeItem('sharedDest');
-                sharedDest.mesg = '¿Todavía quieres ir al destino anterior?';
+                sharedDest.mesg = 'Do you still want to go to the previous destination?';
                 sharedDest.with_predraw = true;
 
                 localStorage.setItem('prevDest', JSON.stringify(sharedDest));
@@ -202,7 +202,7 @@ var LocalStorageHandler = {
             'enclosureid': qrPoint.enclosure.id,
             'psX': marker.psX,
             'psY': marker.psY,
-            'mesg': '¿Todavía quieres ir a ' + marker.title + '?',
+            'mesg': 'Do you still want to go to ' + marker.title + '?',
             'description': marker.title,
             'with_predraw': false
         };
@@ -328,20 +328,24 @@ function loadPOIs() {
                     nameIcon = floors[fl].pois[j].label.name,
                     shapeIcon = floors[fl].pois[j].label.category.icon,
                     id = floors[fl].pois[j].id,
-                    descriptionIcon = floors[fl].pois[j].description +
-                        '<button data-pan="' + id + '">' +
-                            '<i class="icon-camera"></i>' +
-                        '</button>',
+                    descriptionIcon = floors[fl].pois[j].description,
                     sX = floors[fl].scaleX,
                     sY = floors[fl].scaleY,
                     loc = [(floors[fl].pois[j].row) * sY + (sY),
                         floors[fl].pois[j].col * sX + (sY)],
                     enclosureid = qrPoint.enclosure.id,
-                    labelid = floors[fl].pois[j].label.id
-                category = floors[fl].pois[j].label.category.name;
+                    labelid = floors[fl].pois[j].label.id,
+                    category = floors[fl].pois[j].label.category.name;
+
+                if (new PointResource().read(id).panorama){
+                    descriptionIcon = descriptionIcon +
+                        '<button data-pan="' + id + '">' +
+                        '<i class="icon-camera"></i>' +
+                        '</button>';
+                }
 
 
-                floors[fl].pois[j].marker = new L.Marker(new L.latLng(loc), {icon: loadIcon(colorIcon, shapeIcon), title: descriptionIcon});
+                floors[fl].pois[j].marker = new L.Marker(new L.latLng(loc), {icon: loadIcon(colorIcon, shapeIcon), title: floors[fl].pois[j].description});
                 floors[fl].pois[j].marker.options.icon.options.color = colorIcon;
                 floors[fl].pois[j].marker.poid = id;
                 floors[fl].pois[j].marker.psX = sX;
@@ -353,7 +357,7 @@ function loadPOIs() {
                 floors[fl].pois[j].marker.bindPopup(descriptionIcon)
                     .on('click', function () {
                         if (qr_type == 'dest') {
-                            this.bindPopup("Escanea un QR para llegar hasta " + qrPoint.point.description).openPopup();
+                            this.bindPopup(gettext("Scan a QR code to get here:") + " " + qrPoint.point.description).openPopup();
                             return;
                         }
                         LocalStorageHandler.setPrevDest(this);
@@ -409,23 +413,32 @@ function loadPOIs() {
                 (qrPoint.point.col * qrFloor.scaleX) + qrFloor.scaleX];
 
             if (qr_type == 'origin') {
+                var originLegend="You are right here: " + qrPoint.point.description;
+
+                if (new PointResource().read(qrPoint.point.id).panorama){
+                    originLegend = originLegend +
+                        '<button data-pan="' + qrPoint.point.id + '">' +
+                        '<i class="icon-camera"></i>' +
+                        '</button>';
+
+                }
+
                 qrMarker = new L.marker(qrLoc, { bounceOnAdd: false,
                     icon: OriginIcon})
-                    .bindPopup("Estás aquí: " + qrPoint.point.description);
-
+                    .bindPopup(originLegend);
 
             }
             else {
                 qrMarker = new L.marker(qrLoc, { bounceOnAdd: false,
                     icon: DestinyIcon})
-                    .bindPopup("Escanea un QR para llegar hasta aquí: " + qrPoint.point.description +
-                        " (planta " + qrFloor.name + "," + qrPoint.enclosure.name + ")"
+                    .bindPopup("Please, scan a QR code to get here: " + qrPoint.point.description +
+                        " (floor " + qrFloor.name + "," + qrPoint.enclosure.name + ")"
                     );
 
                 qrMarker
                     .on('click', function () {
                        if (qr_type == 'dest') {
-                            this.bindPopup("Escanea un QR para llegar hasta " + qrPoint.point.description).openPopup();
+                            this.bindPopup("Please, scan a QR code to get here: " + qrPoint.point.description).openPopup();
                             return;
                         }
 
@@ -483,6 +496,15 @@ function initMap(qrPoint) {
     map.removeLayer(totalPois);
     map.addLayer(qrFloor.layer);
     qrMarker.openPopup();
+    $('.leaflet-popup-content button').on('click', function (e) {
+        e.preventDefault();
+        var point_id = $(this).data('pan');
+        var point = new PointResource().read(point_id);
+        addSamplePano(
+            point.panorama,
+            {width: $(window).width() * 0.7, height: $(window).height() * 0.4}
+        );
+    });
     qrMarker._bringToFront();
 
     map.invalidateSize();
@@ -700,7 +722,7 @@ $(function () {
                     (miCoche.point.col * floor_x.scaleX) + floor_x.scaleX];
                 carMarker = new L.marker(carLoc, { bounceOnAdd: false,
                     icon: CarIcon})
-                    .bindPopup("Mi coche");
+                    .bindPopup("My car");
 
                 carMarker.on('click', function () {
                     LocalStorageHandler.setPrevDest(this);
@@ -795,7 +817,8 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
         }
     }
 
-    var check = null;
+    var check = null,
+        destLegend;
     subpath = [];
     subarrow = [];
     blinkingMode = null;
@@ -809,10 +832,21 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
             }
 
         }
+        destLegend=route.fields.destiny.fields.description;
+
+        if (new PointResource().read(dst).panorama){
+            destLegend = destLegend +
+                '<button data-pan="' + dst + '">' +
+                '<i class="icon-camera"></i>' +
+                '</button>';
+
+        }
+
         destLoc = [(route.fields.destiny.fields.row) * sY + sY, route.fields.destiny.fields.col * sX + sX];
         destMarker = L.marker(destLoc, { bounceOnAdd: false,
             icon: DestinyIcon})
-            .bindPopup(route.fields.destiny.fields.description);
+            .bindPopup(destLegend);
+
 
         for (var i in floors) {
             if (route.fields.destiny.fields.floor == floors[i].id) {
@@ -871,19 +905,22 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
                 }
             }
         }
-
- //PINTADO DE CAPAS
-        for (f in floors) {
-            if (route.fields.origin.fields.floor !== route.fields.destiny.fields.floor) {
-                if (route.fields.destiny.fields.floor === floors[f].id) {
-                    map.removeLayer(floors[f].layer);
-                    for (var l in floors[f].labels) {
+       for (f in floors)
+       {
+           for (var l in floors[f].labels) {
                         if (jQuery('input[type=checkbox].leaflet-control-layers-selector:eq(' + l + ')').is(':checked')) {
                             checked[l] = true;
                         } else {
                             checked[l] = false;
                         }
                     }
+       }
+ //PINTADO DE CAPAS
+        for (f in floors) {
+            if (route.fields.origin.fields.floor !== route.fields.destiny.fields.floor) {
+                if (route.fields.destiny.fields.floor === floors[f].id) {
+                    map.removeLayer(floors[f].layer);
+
 
                     for (var l in floors[f].labels) {
                         layersControl.removeLayer(floors[f].labels[l].layer);
@@ -892,18 +929,8 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
 
                      map.removeLayer(floors[f].photo);
 
-                }
-
-
-                if (route.fields.origin.fields.floor === floors[f].id) {
-                    for (var l in floors[f].labels) {
-                        if (jQuery('input[type=checkbox].leaflet-control-layers-selector:eq(' + l + ')').is(':checked')) {
-                            checked[l] = true;
-                        } else {
-                            checked[l] = false;
-                        }
-                    }
-
+                }else  if (route.fields.origin.fields.floor === floors[f].id) {
+                   
                     for (var l in floors[f].labels) {
                        layersControl.addOverlay(floors[f].labels[l].layer, '<i class="icon-' + floors[i].labels[l].fields.icon + ' icon-white"></i>');
                         if (checked[l] === true) {
@@ -925,8 +952,17 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
                     map.setView(arrow[f].getBounds().getCenter(), 0);
                     qrMarker.openPopup();
 
-                }
+                }else
+                {
 
+                    for (var l in floors[f].labels) {
+                        layersControl.removeLayer(floors[f].labels[l].layer);
+                        map.removeLayer(floors[f].labels[l].layer);
+                    }
+
+                     map.removeLayer(floors[f].photo);
+                }
+//MONOPLANTA
             } else {
                 if (route.fields.destiny.fields.floor !== floors[f].id) {
                     map.removeLayer(floors[f].layer);
@@ -938,7 +974,7 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
 
                 }
                 else {
-                    for (var l in floors[i].labels) {
+                    for (var l in floors[f].labels) {
                         if (jQuery('input[type=checkbox].leaflet-control-layers-selector:eq(' + l + ')').is(':checked')) {
                             checked[l] = true;
                         } else {
@@ -958,9 +994,23 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
             }
         }
 
+        if (map.hasLayer(destMarker))
+        {
+            destMarker.openPopup();
+            $('.leaflet-popup-content button').on('click', function (e) {
+                e.preventDefault();
+                var point_id = $(this).data('pan');
+                var point = new PointResource().read(point_id);
+                addSamplePano(
+                    point.panorama,
+                    {width: $(window).width() * 0.7, height: $(window).height() * 0.4}
+                );
+            });
+        }
+
 
     } else {
-        alert('No existe esa ruta');
+        alert('We are sorry, that route does not exist.');
     }
 }
 //Función que gestiona la animación de la flecha
