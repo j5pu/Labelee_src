@@ -848,7 +848,7 @@ span.locator
     top: .01%;
     -webkit-border-radius: 4px;
     border-radius: 4px;
-    z-index: 9998;
+    z-index: 6;
     position: absolute;
     opacity: 0.7;
     color: white;
@@ -992,7 +992,7 @@ div#cupones{
     position: absolute;
     left: 58%;
     bottom: 0;
-    z-index:10000;
+    z-index:6;
     width: 35%;
 
 }
@@ -1091,6 +1091,10 @@ button{
     font-size: 1.2em;
     background-color: transparent;
     color:#333;
+}
+
+.leaflet-top{
+    z-index:6;
 }
 
 @media only screen and (min-width: 321px) and (max-width: 490px) {
