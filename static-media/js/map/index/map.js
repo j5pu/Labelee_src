@@ -199,7 +199,7 @@ var LocalStorageHandler = {
             'enclosureid': qrPoint.enclosure.id,
             'psX': marker.psX,
             'psY': marker.psY,
-            'mesg': gettext('Do you still want to go to') + ' ' + qrPoint.point.description + '?',
+            'mesg': gettext('Do you still want to go to') + ' ' + marker.description + '?',
             'description': marker.title,
             'with_predraw': false
         };
@@ -338,7 +338,7 @@ function loadPOIs() {
                 nameIcon = floors[fl].pois[j].label.name,
                 shapeIcon = floors[fl].pois[j].label.category.icon,
                 id = floors[fl].pois[j].id,
-                descriptionIcon = floors[fl].pois[j].description,
+                panoramaIcon = floors[fl].pois[j].description,
                 panorama = floors[fl].pois[j].panorama,
                 sX = floors[fl].scaleX,
                 sY = floors[fl].scaleY,
@@ -348,11 +348,11 @@ function loadPOIs() {
                 category = floors[fl].pois[j].label.category.name;
 
             if (panorama){
-                descriptionIcon += Panorama.renderIcon(id);
+                panoramaIcon += Panorama.renderIcon(id);
             }
 
 
-            floors[fl].pois[j].marker = new L.Marker(new L.latLng(loc), {icon: loadIcon(colorIcon, shapeIcon), title: descriptionIcon});
+            floors[fl].pois[j].marker = new L.Marker(new L.latLng(loc), {icon: loadIcon(colorIcon, shapeIcon), title: panoramaIcon});
             floors[fl].pois[j].marker.options.icon.options.color = colorIcon;
             floors[fl].pois[j].marker.poid = id;
             floors[fl].pois[j].marker.psX = sX;
@@ -361,7 +361,8 @@ function loadPOIs() {
             floors[fl].pois[j].marker.category = category;
             floors[fl].pois[j].marker.label = labelid;
             floors[fl].pois[j].marker.panorama = panorama;
-            floors[fl].pois[j].marker.description = descriptionIcon;
+            floors[fl].pois[j].marker.panoramaIcon = panoramaIcon;
+            floors[fl].pois[j].marker.description = floors[fl].pois[j].description;
 
             floors[fl].pois[j].marker.changeTitle = function () {
                 this.bindPopup(gettext("Scan a QR code to get here:") + " " + this.description).openPopup();
