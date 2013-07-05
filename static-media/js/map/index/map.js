@@ -124,13 +124,7 @@ var LocalStorageHandler = {
 
 
         if (qr_type == 'dest') {
-            var sharedDest = {
-                dest: qrPoint,
-                'prevDate': new Date().getTime(),
-                'shooted_origin': false
-            };
-
-            localStorage.setItem('sharedDest', JSON.stringify(sharedDest));
+            this.setSharedDest();
         }
         else {
             var sharedDest = JSON.parse(localStorage.getItem('sharedDest'));
@@ -210,6 +204,18 @@ var LocalStorageHandler = {
             'with_predraw': false
         };
         localStorage.setItem('prevDest', JSON.stringify(prevDest));
+    },
+
+
+    setSharedDest: function()
+    {
+        var sharedDest = {
+            dest: qrPoint,
+            'prevDate': new Date().getTime(),
+            'shooted_origin': false
+        };
+
+        localStorage.setItem('sharedDest', JSON.stringify(sharedDest));
     },
 
 
@@ -333,20 +339,20 @@ function loadPOIs() {
                 shapeIcon = floors[fl].pois[j].label.category.icon,
                 id = floors[fl].pois[j].id,
                 descriptionIcon = floors[fl].pois[j].description,
+                panorama = floors[fl].pois[j].panorama,
                 sX = floors[fl].scaleX,
                 sY = floors[fl].scaleY,
                 loc = [(floors[fl].pois[j].row) * sY + (sY),
                     floors[fl].pois[j].col * sX + (sY)],
-                enclosureid = qrPoint.enclosure.id,
                 labelid = floors[fl].pois[j].label.id,
                 category = floors[fl].pois[j].label.category.name;
 
-            if (floors[fl].pois[j].panorama){
-                descriptionIcon = descriptionIcon + Panorama.renderIcon(id);
+            if (panorama){
+                descriptionIcon += Panorama.renderIcon(id);
             }
 
 
-            floors[fl].pois[j].marker = new L.Marker(new L.latLng(loc), {icon: loadIcon(colorIcon, shapeIcon), title: floors[fl].pois[j].description});
+            floors[fl].pois[j].marker = new L.Marker(new L.latLng(loc), {icon: loadIcon(colorIcon, shapeIcon), title: descriptionIcon});
             floors[fl].pois[j].marker.options.icon.options.color = colorIcon;
             floors[fl].pois[j].marker.poid = id;
             floors[fl].pois[j].marker.psX = sX;
@@ -354,15 +360,28 @@ function loadPOIs() {
             floors[fl].pois[j].marker.loc = loc;
             floors[fl].pois[j].marker.category = category;
             floors[fl].pois[j].marker.label = labelid;
+            floors[fl].pois[j].marker.panorama = panorama;
+            floors[fl].pois[j].marker.description = descriptionIcon;
 
-            floors[fl].pois[j].marker.bindPopup(descriptionIcon)
+            floors[fl].pois[j].marker.changeTitle = function () {
+                this.bindPopup(gettext("Scan a QR code to get here:") + " " + this.description).openPopup();
+                Panorama.bindShow();
+            };
+
+
+            floors[fl].pois[j].marker
+                .bindPopup(this.description)
                 .on('click', function () {
+
                     if (qr_type == 'dest') {
-                        this.bindPopup(gettext("Scan a QR code to get here:") + " " + qrPoint.point.description).openPopup();
+                        this.changeTitle();
                         return;
                     }
+
                     LocalStorageHandler.setPrevDest(this);
-                    drawRoute(qrPoint.point.id, qrFloor.sX, qrFloor.sY, this.poid, this.psX, this.psY);
+
+                    if(qrMarker)
+                        drawRoute(qrPoint.point.id, qrFloor.sX, qrFloor.sY, this.poid, this.psX, this.psY);
                 });
 
             for (var l in floors[fl].labels) {
@@ -374,6 +393,7 @@ function loadPOIs() {
                 totalPois.addLayer(floors[fl].pois[j].marker);
         }
 
+        // Cada label es un conjunto de POIs (restaurantes, cines..)
         for (var la in floors[fl].labels) {
             if (floors[fl].labels[la].fields.name === "Aristas" || floors[fl].labels[la].fields.name === "Aseos") {
                 floors[fl].layer.addLayer(floors[fl].labels[la].layer);
@@ -485,8 +505,6 @@ function initMap(qrPoint) {
             map.setView(qrLoc, 0);
         }
     }
-
-
 
     map.removeLayer(totalPois);
     map.addLayer(qrFloor.layer);
@@ -799,6 +817,9 @@ function preDrawRoute(origin, qrFloor, destination, destinationFloor) {
 
 //Creación de las rutas (con subrutas correspondientes), desde el origen hasta el POI destino
 function drawRoute(org, osX, osY, dst, sX, sY) {
+    if(org == dst)
+        return;
+
     for (var i in floors) {
         if (arrow[i]) {
             floors[i].layer.removeLayer(arrow[i]);
@@ -835,15 +856,7 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
         destMarker = L.marker(destLoc, { bounceOnAdd: false,
             icon: DestinyIcon})
             .bindPopup(destLegend).on('click', function(){
-                $('.leaflet-popup-content button').on('click', function (e) {
-                    e.preventDefault();
-                    var point_id = $(this).data('pan');
-                    var point = new PointResource().read(point_id);
-                    addSamplePano(
-                        point.panorama,
-                        {width: $(window).width() * 0.7, height: $(window).height() * 0.4}
-                    );
-                });
+                Panorama.bindShow();
             });
 
 
@@ -852,6 +865,10 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
                 floors[i].layer.addLayer(destMarker);
             }
         }
+
+        if(qr_type == 'dest')
+            return;
+
 //CALCULO DE SUBRUTAS
         for (var i in route.fields.subroutes) {
             if (route.fields.subroutes[i].floor.pk === route.fields.origin.fields.floor) {
@@ -996,15 +1013,7 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
         if (map.hasLayer(destMarker))
         {
             destMarker.openPopup();
-            $('.leaflet-popup-content button').on('click', function (e) {
-                e.preventDefault();
-                var point_id = $(this).data('pan');
-                var point = new PointResource().read(point_id);
-                addSamplePano(
-                    point.panorama,
-                    {width: $(window).width() * 0.7, height: $(window).height() * 0.4}
-                );
-            });
+            Panorama.bindShow();
         }
 
 
