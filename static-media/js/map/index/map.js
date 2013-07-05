@@ -429,7 +429,7 @@ function loadPOIs() {
                 qrMarker = new L.marker(qrLoc, { bounceOnAdd: false,
                     icon: OriginIcon})
                     .bindPopup(originLegend).on('click', function(){
-                        console.log('click');
+                        Panorama.bindShow()
                     });
 
             }
@@ -705,7 +705,7 @@ $(function () {
         map.addLayer(qrFloor.layer);
         qrMarker._bringToFront();
         qrMarker.openPopup().on('click', function(){
-            console.log('click');
+            Panorama.bindShow();
         });
     });
 
