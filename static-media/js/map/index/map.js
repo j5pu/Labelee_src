@@ -320,60 +320,58 @@ function loadPOIs() {
 
         floors[fl].layer = new L.LayerGroup();
 
-        try {
-            for (j = 0; j < floors[fl].pois.length; j++) {
-                if (floors[fl].pois[j].id === poi_id) {
+        for (j = 0; j < floors[fl].pois.length; j++) {
+            if (floors[fl].pois[j].id === poi_id) {
+                // Si es el último no hacemos nada. Si no, lo sacamos
+                if (j == floors[fl].pois.length)
+                    break;
+                else
                     floors[fl].pois.splice(j, 1);
-                    if (j == floors[fl].pois.length)
-                        break;
-                }
-                var colorIcon = floors[fl].pois[j].label.category.color,
-                    nameIcon = floors[fl].pois[j].label.name,
-                    shapeIcon = floors[fl].pois[j].label.category.icon,
-                    id = floors[fl].pois[j].id,
-                    descriptionIcon = floors[fl].pois[j].description,
-                    sX = floors[fl].scaleX,
-                    sY = floors[fl].scaleY,
-                    loc = [(floors[fl].pois[j].row) * sY + (sY),
-                        floors[fl].pois[j].col * sX + (sY)],
-                    enclosureid = qrPoint.enclosure.id,
-                    labelid = floors[fl].pois[j].label.id,
-                    category = floors[fl].pois[j].label.category.name;
-
-                if (floors[fl].pois[j].panorama){
-                    descriptionIcon = descriptionIcon + Panorama.renderIcon(id);
-                }
-
-
-                floors[fl].pois[j].marker = new L.Marker(new L.latLng(loc), {icon: loadIcon(colorIcon, shapeIcon), title: floors[fl].pois[j].description});
-                floors[fl].pois[j].marker.options.icon.options.color = colorIcon;
-                floors[fl].pois[j].marker.poid = id;
-                floors[fl].pois[j].marker.psX = sX;
-                floors[fl].pois[j].marker.psY = sY;
-                floors[fl].pois[j].marker.loc = loc;
-                floors[fl].pois[j].marker.category = category;
-                floors[fl].pois[j].marker.label = labelid;
-
-                floors[fl].pois[j].marker.bindPopup(descriptionIcon)
-                    .on('click', function () {
-                        if (qr_type == 'dest') {
-                            this.bindPopup(gettext("Scan a QR code to get here:") + " " + qrPoint.point.description).openPopup();
-                            return;
-                        }
-                        LocalStorageHandler.setPrevDest(this);
-                        drawRoute(qrPoint.point.id, qrFloor.sX, qrFloor.sY, this.poid, this.psX, this.psY);
-                    });
-
-                for (var l in floors[fl].labels) {
-                    if (floors[fl].pois[j].marker.category === floors[fl].labels[l].fields.name)
-                        floors[fl].labels[l].layer.addLayer(floors[fl].pois[j].marker);
-                }
-
-                if (floors[fl].pois[j].marker.category !== "Aristas" && floors[fl].pois[j].marker.category !== "Aseos")
-                    totalPois.addLayer(floors[fl].pois[j].marker);
             }
-        } catch (e) {
+            var colorIcon = floors[fl].pois[j].label.category.color,
+                nameIcon = floors[fl].pois[j].label.name,
+                shapeIcon = floors[fl].pois[j].label.category.icon,
+                id = floors[fl].pois[j].id,
+                descriptionIcon = floors[fl].pois[j].description,
+                sX = floors[fl].scaleX,
+                sY = floors[fl].scaleY,
+                loc = [(floors[fl].pois[j].row) * sY + (sY),
+                    floors[fl].pois[j].col * sX + (sY)],
+                enclosureid = qrPoint.enclosure.id,
+                labelid = floors[fl].pois[j].label.id,
+                category = floors[fl].pois[j].label.category.name;
 
+            if (floors[fl].pois[j].panorama){
+                descriptionIcon = descriptionIcon + Panorama.renderIcon(id);
+            }
+
+
+            floors[fl].pois[j].marker = new L.Marker(new L.latLng(loc), {icon: loadIcon(colorIcon, shapeIcon), title: floors[fl].pois[j].description});
+            floors[fl].pois[j].marker.options.icon.options.color = colorIcon;
+            floors[fl].pois[j].marker.poid = id;
+            floors[fl].pois[j].marker.psX = sX;
+            floors[fl].pois[j].marker.psY = sY;
+            floors[fl].pois[j].marker.loc = loc;
+            floors[fl].pois[j].marker.category = category;
+            floors[fl].pois[j].marker.label = labelid;
+
+            floors[fl].pois[j].marker.bindPopup(descriptionIcon)
+                .on('click', function () {
+                    if (qr_type == 'dest') {
+                        this.bindPopup(gettext("Scan a QR code to get here:") + " " + qrPoint.point.description).openPopup();
+                        return;
+                    }
+                    LocalStorageHandler.setPrevDest(this);
+                    drawRoute(qrPoint.point.id, qrFloor.sX, qrFloor.sY, this.poid, this.psX, this.psY);
+                });
+
+            for (var l in floors[fl].labels) {
+                if (floors[fl].pois[j].marker.category === floors[fl].labels[l].fields.name)
+                    floors[fl].labels[l].layer.addLayer(floors[fl].pois[j].marker);
+            }
+
+            if (floors[fl].pois[j].marker.category !== "Aristas" && floors[fl].pois[j].marker.category !== "Aseos")
+                totalPois.addLayer(floors[fl].pois[j].marker);
         }
 
         for (var la in floors[fl].labels) {
