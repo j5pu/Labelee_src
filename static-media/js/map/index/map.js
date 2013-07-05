@@ -199,7 +199,7 @@ var LocalStorageHandler = {
             'enclosureid': qrPoint.enclosure.id,
             'psX': marker.psX,
             'psY': marker.psY,
-            'mesg': gettext('Do you still want to go to') + ' ' + marker.title + '?',
+            'mesg': gettext('Do you still want to go to') + ' ' + qrPoint.point.description + '?',
             'description': marker.title,
             'with_predraw': false
         };
