@@ -436,9 +436,11 @@ pre
 
 #header a {
 /*background: center center no-repeat #f6f6f6;*/
+    /*
+        background-size: auto;
 
-    background-size: auto;
-    background: url(http://bradjasper.com/subtle-patterns-bookmarklet/patterns/squairy_light.png) repeat repeat;
+        background: url(http://bradjasper.com/subtle-patterns-bookmarklet/patterns/squairy_light.png) repeat repeat;
+    */
     /*background-image: url(logo.png);*/
 display: block;
 width: 55px;
@@ -491,8 +493,10 @@ body {
     margin: 0;
 /*background: #f6f6f6;*/
 
+/*
     background-size: auto;
     background: url(http://bradjasper.com/subtle-patterns-bookmarklet/patterns/squairy_light.png) repeat repeat;
+*/
 }
 
 body:before {
