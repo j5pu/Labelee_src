@@ -239,7 +239,7 @@
         });
 
 
-        calculateCoords();
+{#        calculateCoords();#}
 
         $('div#page').hide();
         $('body').prepend('<div class="splash">    <div class="container">        <div class="sp-container"             >            <div class="frame-5"><span><img src="/media/logo-labelee-sin-slogan.png"></span></div>            <div id="find" class="frame-6">find<span id="your"> your<span id="way"> way!</span></span></div>        </div>    </div></div>')
@@ -272,28 +272,20 @@
     });
 
     function myOrientResizeFunction() {
-        calculateCoords();
-        resizeCanvas();
+{#        calculateCoords();#}
+        Panorama.resize();
     }
 
-    function resizeCanvas() {
-            var newWidth=window.innerWidth * .85;
-            console.log(newWidth);
-{#            document.getElementsByTagName('canvas')[0].setAttribute('style', "width:"+ newWidth+"px;");#}
-        if(document.getElementsByTagName('canvas'))
-        document.getElementsByTagName('canvas')[0].width = newWidth;
-    }
-
-    function calculateCoords() {
-        var $img = $('img#cupon-img'),
-                ancho = $img.width(),
-                alto = $img.height(),
-                vert = 360 / 469 * ancho,
-                imgCoords = "0," + alto + "," + ancho + "," + alto + "," + vert + ",0,0," + alto,
-                $area = $('div#cupones area');
-
-        $area.attr({'coords': imgCoords});
-    }
+{#    function calculateCoords() {#}
+{#        var $img = $('img#cupon-img'),#}
+{#                ancho = $img.width(),#}
+{#                alto = $img.height(),#}
+{#                vert = 360 / 469 * ancho,#}
+{#                imgCoords = "0," + alto + "," + ancho + "," + alto + "," + vert + ",0,0," + alto,#}
+{#                $area = $('div#cupones area');#}
+{##}
+{#        $area.attr({'coords': imgCoords});#}
+{#    }#}
 
     function launchCarousel() {
         $('div.device').fadeToggle();
