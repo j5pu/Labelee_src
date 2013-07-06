@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>labelee v1</title>
+    <title>labelee_beta</title>
     <meta charset="utf-8"/>
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
@@ -162,6 +162,11 @@
     <span class="locator" id="myCar"><i class="icon-truck icon-white"></i></span>
 
     <div id="cupones">
+        <a href="#">
+            COUPONS
+        </a>
+    </div>
+ {% comment %}   <div id="cupones">
         <img id="cupon-img" src="/media/cupones_lab.png"
              alt="Cupones" usemap="#cupon">
         <map name="cupon">
@@ -169,7 +174,7 @@
         </map>
 
     </div>
-
+{% endcomment %}
 
     <div class="device">
         <a class="arrow-left" href="#"></a>
@@ -221,7 +226,8 @@
         $(window).resize(function () {
             myOrientResizeFunction()
         });
-        $('div#cupones area').on('click', function () {
+//        $('div#cupones area').on('click', function () {
+        $('div#cupones').on('click', function () {
             launchCarousel()
         });
 
