@@ -17,7 +17,8 @@
     <link rel="stylesheet" href="{{ STATIC_URL }}css/map/index/font-awesome.min.css">
     <link rel="stylesheet" href="{{ STATIC_URL }}css/map/index/leaflet.awesome-markers.css">
     <!--link rel="stylesheet" href="{{ STATIC_URL }}css/map/index/leaflet.rrose.css"-->
-    <link rel="stylesheet" href="{{ STATIC_URL }}css/map/index/leaflet-search.css">
+    <!--link rel="stylesheet" href="{{ STATIC_URL }}css/map/index/leaflet-search.css"-->
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/map/index/leaflet.label.css">
     <link rel="stylesheet" href="{{ STATIC_URL }}css/map/index/search-mobile.css">
     <link rel="stylesheet" href="{{ STATIC_URL }}css/map/index/multix.css">
     <link rel="stylesheet" href="{{ STATIC_URL }}css/map/index/social.network.menu.css">
@@ -27,8 +28,10 @@
 
     <script src="{% url 'django.views.i18n.javascript_catalog' %}"></script>
     <script src="{{ STATIC_URL }}vendor/leaflet/plugins/scale.fix.js"></script>
-    <script src="{{ STATIC_URL }}vendor/jquery-1.9.1.min.js"></script>
-    <script src="{{ STATIC_URL }}vendor/hammer.js_v1.0.3/dist/hammer.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>
+    <script>window.jQuery || document.write('<script src="{{ STATIC_URL }}vendor/jquery-2.0.3.min.js"><\/script>')</script>
+
+    <!--script src="{{ STATIC_URL }}vendor/hammer.js_v1.0.3/dist/hammer.min.js"></script-->
     <script src="{{ STATIC_URL }}vendor/hammer.js_v1.0.3/dist/jquery.hammer.min.js"></script>
     <!--script src="{{ STATIC_URL }}js/map/index/coupon.js"></script-->
     <script src="{{ STATIC_URL }}js/map/index/panorama.js"></script>
@@ -38,14 +41,15 @@
     <!--script src="http://cdn.leafletjs.com/leaflet-0.5.1/leaflet.js"></script-->
     <!-- <script>L_PREFER_CANVAS = true;</script>-->
     <script src="{{ STATIC_URL }}vendor/leaflet/leaflet.js"></script>
-    <script src="{{ STATIC_URL }}vendor/leaflet/plugins/bouncemarker.js"></script>
+    <!--script src="{{ STATIC_URL }}vendor/leaflet/plugins/bouncemarker.js"></script-->
     <script src="{{ STATIC_URL }}vendor/leaflet/plugins/leaflet.awesome-markers.js"></script>
     <script src="{{ STATIC_URL }}vendor/leaflet/plugins/L.GeometryUtil.js"></script>
     <script src="{{ STATIC_URL }}vendor/leaflet/plugins/L.RotatedMarker.js"></script>
     <script src="{{ STATIC_URL }}vendor/leaflet/plugins/L.Symbol.js"></script>
     <script src="{{ STATIC_URL }}vendor/leaflet/plugins/L.PolylineDecorator.js"></script>
     <!--script src="{{ STATIC_URL }}vendor/leaflet/plugins/rrose-src.js"></script-->
-    <script src="{{ STATIC_URL }}vendor/leaflet/plugins/leaflet-search.js"></script>
+    <!--script src="{{ STATIC_URL }}vendor/leaflet/plugins/leaflet-search.js"></script-->
+    <script src="{{ STATIC_URL }}vendor/leaflet/plugins/leaflet.label.js"></script>
     <script src="{{ STATIC_URL }}vendor/leaflet/plugins/jquery.mmenu.js"></script>
     <script src="{{ STATIC_URL }}vendor/leaflet/plugins/idangerous.swiper-2.0.min.js"></script>
     <script type="text/javascript"
@@ -237,7 +241,7 @@
         });
 
 
-        calculateCoords();
+{#        calculateCoords();#}
 
         $('div#page').hide();
         $('body').prepend('<div class="splash">    <div class="container">        <div class="sp-container"             >            <div class="frame-5"><span><img src="/media/logo-labelee-sin-slogan.png"></span></div>            <div id="find" class="frame-6">find<span id="your"> your<span id="way"> way!</span></span></div>        </div>    </div></div>')
@@ -270,28 +274,20 @@
     });
 
     function myOrientResizeFunction() {
-        calculateCoords();
-        resizeCanvas();
+{#        calculateCoords();#}
+        Panorama.resize();
     }
 
-    function resizeCanvas() {
-            var newWidth=window.innerWidth * .85;
-            console.log(newWidth);
-{#            document.getElementsByTagName('canvas')[0].setAttribute('style', "width:"+ newWidth+"px;");#}
-        if(document.getElementsByTagName('canvas'))
-        document.getElementsByTagName('canvas')[0].width = newWidth;
-    }
-
-    function calculateCoords() {
-        var $img = $('img#cupon-img'),
-                ancho = $img.width(),
-                alto = $img.height(),
-                vert = 360 / 469 * ancho,
-                imgCoords = "0," + alto + "," + ancho + "," + alto + "," + vert + ",0,0," + alto,
-                $area = $('div#cupones area');
-
-        $area.attr({'coords': imgCoords});
-    }
+{#    function calculateCoords() {#}
+{#        var $img = $('img#cupon-img'),#}
+{#                ancho = $img.width(),#}
+{#                alto = $img.height(),#}
+{#                vert = 360 / 469 * ancho,#}
+{#                imgCoords = "0," + alto + "," + ancho + "," + alto + "," + vert + ",0,0," + alto,#}
+{#                $area = $('div#cupones area');#}
+{##}
+{#        $area.attr({'coords': imgCoords});#}
+{#    }#}
 
     function launchCarousel() {
         $('div.device').fadeToggle();

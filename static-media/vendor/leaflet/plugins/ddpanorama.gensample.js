@@ -44,8 +44,8 @@ function addSamplePano(options)
             'position': 'absolute',
             'z-index': 99999,
             'top': 0,
-            'margin': 8+'%',
-            'width':$width * 0.84,
+            'margin': 5+'%',
+//            'width':$width * 0.74,
             'border-radius':'.5em',
             'border': '2px solid rgb(196, 190, 170)'
         });
@@ -63,15 +63,21 @@ function addSamplePano(options)
 
         })
             .on('click', function(){
-                jQuery('canvas').remove();
-                jQuery('body').find('img[id*=pano]').remove();
-                $(this).remove();
+                Panorama.close();
+//                jQuery('canvas').remove();
+//                jQuery('body').find('img[id*=pano]').remove();
+//                $(this).remove();
             })
         ;
 
-        $('canvas').trigger('click tap touch swipe drag');
+        Panorama.opened = true;
+
+//        $('canvas').trigger('click tap touch swipe drag');
     });
 }
+
+
+
 
 function setDefaultImagePano(img)
 {
