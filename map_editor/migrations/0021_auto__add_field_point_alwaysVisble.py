@@ -8,15 +8,15 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        # Adding field 'Point.panorama_thumbnail'
-        db.add_column(u'map_editor_point', 'panorama_thumbnail',
-                      self.gf('django.db.models.fields.files.FileField')(max_length=100, null=True, blank=True),
+        # Adding field 'Point.alwaysVisble'
+        db.add_column(u'map_editor_point', 'alwaysVisble',
+                      self.gf('django.db.models.fields.NullBooleanField')(null=True, blank=True),
                       keep_default=False)
 
 
     def backwards(self, orm):
-        # Deleting field 'Point.panorama_thumbnail'
-        db.delete_column(u'map_editor_point', 'panorama_thumbnail')
+        # Deleting field 'Point.alwaysVisble'
+        db.delete_column(u'map_editor_point', 'alwaysVisble')
 
 
     models = {
@@ -94,6 +94,7 @@ class Migration(SchemaMigration):
         },
         u'map_editor.point': {
             'Meta': {'object_name': 'Point'},
+            'alwaysVisble': ('django.db.models.fields.NullBooleanField', [], {'null': 'True', 'blank': 'True'}),
             'col': ('django.db.models.fields.PositiveIntegerField', [], {'null': 'True', 'blank': 'True'}),
             'description': ('django.db.models.fields.CharField', [], {'max_length': '2000', 'null': 'True', 'blank': 'True'}),
             'floor': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'points'", 'to': u"orm['map_editor.Floor']"}),

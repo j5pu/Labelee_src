@@ -1,5 +1,6 @@
 function fbs_click() {
     u = get_url();
+    if(u) return;
     t = document.title;
     window.open('http://www.facebook.com/sharer.php?u=' + encodeURIComponent(u) + '&t=' + encodeURIComponent(t), 'sharer', 'toolbar=0,status=0,width=626,height=436');
 
@@ -7,6 +8,7 @@ function fbs_click() {
 
 function twt_click() {
     u = get_url();
+    if(u) return;
     t = document.title;
     window.open('http://twitter.com/share?url=' + encodeURIComponent(u) + '&t=' + encodeURIComponent(t), 'sharer', 'toolbar=0,status=0,width=626,height=436');
 
@@ -14,6 +16,7 @@ function twt_click() {
 
 function google_click() {
     u = get_url();
+    if(u) return;
     window.open('https://plus.google.com/share?url=' + encodeURIComponent(u), 'sharer', 'toolbar=0,status=0,width=626,height=436');
 
 }
@@ -38,8 +41,15 @@ function mail_click() {
 
 
 function get_url() {
+
     var urlstring = location.origin + '/map/';
     var prevDest = JSON.parse(localStorage.getItem('prevDest'));
+    if(prevDest==null)
+    {   alert('Please select a destination to share.')
+        return true;
+    }
+    var result =confirm('Would you like to share the route to: '+ prevDest.description+ '?');
+    if(!result) return true;
     if (prevDest) {
         urlstring += 'dest/' + prevDest.enclosureid + '_' + prevDest.floorid + '_' + prevDest.poid;
         return urlstring;
