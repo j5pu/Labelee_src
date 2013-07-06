@@ -6,7 +6,7 @@
 {% endblock %}
 
 {% block content %}
-    <div id="login">
+    <div id="login" class="box box-1">
         <form class="form-horizontal"
               name="LoginForm"
               action="{% url 'django.contrib.auth.views.login' %}?next={{request.path}}"
