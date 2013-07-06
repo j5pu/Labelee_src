@@ -385,6 +385,13 @@ function loadPOIs() {
                         drawRoute(qrPoint.point.id, qrFloor.sX, qrFloor.sY, this.poid, this.psX, this.psY);
                 });
 
+            L.marker([-37.785, 175.263])
+                .bindLabel('A sweet static label!', { noHide: true })
+                .addTo(map)
+                .showLabel();
+
+
+
             for (var l in floors[fl].labels) {
                 if (floors[fl].pois[j].marker.category === floors[fl].labels[l].fields.name)
                     floors[fl].labels[l].layer.addLayer(floors[fl].pois[j].marker);
@@ -466,6 +473,9 @@ function loadPOIs() {
             break;
         }
     }
+
+
+
 
 }
 

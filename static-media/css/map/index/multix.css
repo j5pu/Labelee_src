@@ -432,6 +432,7 @@ pre
     padding: 0 50px;
     top:6px;
     left:0;
+    background-color: rgba(186, 186, 186, 0.23);
 }
 
 #header a {
@@ -451,12 +452,14 @@ bottom: 25px;
 left: 0;
 z-index: 99;
 opacity: 1;
--webkit-box-shadow: 3px 3px 3px rgba(0,0,0,0.2);
-box-shadow: 3px 3px 3px rgba(0,0,0,0.2);
-border: 3px solid #cfcfcf;
+-webkit-box-shadow: 2px 2px 2px rgba(0,0,0,0.2);
+box-shadow: 2px 2px 2px rgba(0,0,0,0.2);
+border: 3px solid #8C8C87;
 border-left: none;
 border-radius: 0 6px 6px 0;
-    }
+    background-color: white;
+
+}
 
 #header a img {
     margin-top: 5px;
@@ -522,9 +525,9 @@ html{
 
 #map{
     height: 100%;
-    border-left: 3px solid #cfcfcf;
-    -webkit-box-shadow: inset 3px 3px 5px rgba(0,0,0,0.4);
-    box-shadow: inset 3px 3px 5px rgba(0,0,0,0.4);
+    border-left:3px solid #8C8C87;
+    -webkit-box-shadow: inset 2px 2px 4px rgba(0,0,0,0.4);
+    box-shadow: inset 2px 2px 4px rgba(0,0,0,0.4);
 
 }
 
@@ -600,7 +603,7 @@ html{
 .leaflet-control-layers label {
     display: block;
     /*background:#ccc;*/
-    margin-bottom:6px;
+    margin-bottom:4px;
     height:31px;
     position:relative;
     color: white;
@@ -991,6 +994,7 @@ body{
 .leaflet-popup-tip-container {
 border-top: white;
 }
+/*
 
 div#cupones{
     position: absolute;
@@ -1005,7 +1009,36 @@ div#cupones{
     position: absolute;
     bottom: 0;
 }
+*/
 
+div#cupones {
+    position: absolute;
+    right: 0;
+    bottom: 25px;
+    z-index: 6;
+    width: 55px;
+    font-size: 0.7em;
+    text-align: center;
+    line-height: 36px;
+    height: 37px;
+    background-color: white;
+    border-radius: 6px 0 0 6px;
+
+}
+
+#cupones a {
+    display: block;
+    z-index: 99;
+    opacity: 1;
+    box-shadow: 2px 2px 2px rgba(0,0,0,0.2);
+    -webkit-box-shadow: 2px 2px 2px rgba(0,0,0,0.2);
+    border: 3px solid #8C8C87;
+    border-right: none;
+    border-radius: 6px 0 0 6px;
+    color: #70706D;
+    text-shadow: 1px 1px 1px rgba(0,0,0,0.2);
+    padding:0 2px;
+}
 .device {
     width: 86%;
     height: 40%;
@@ -1099,6 +1132,22 @@ button{
 
 .leaflet-top{
     z-index:6;
+}
+
+.leaflet-right .leaflet-control {
+    margin-right: 6px;
+}
+
+button#closeCoupon {
+position: absolute;
+top: -2%;
+right:-2%;
+margin: 6%;
+font-size:1.2em;
+background-color:#333;
+color:rgb(196, 190, 170);
+border-radius:.5em;
+border: 2px solid rgb(196, 190, 170);
 }
 
 @media only screen and (min-width: 320px) {

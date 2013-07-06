@@ -54,6 +54,7 @@ function addSamplePano(options)
             'position': 'absolute',
             'z-index': 100000,
             'top': 0,
+            'right':'16%',
             'margin': 6+'%',
             'font-size':'1.2em',
             'background-color':'#333',
