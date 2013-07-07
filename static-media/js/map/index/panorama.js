@@ -5,7 +5,7 @@ var Panorama = {
 
     renderIcon: function(pointId)
     {
-        return  '<button data-pan="' + pointId + '">' +
+        return  '<button class="panorama" data-pan="' + pointId + '">' +
             '<i class="icon-camera"></i>' +
             '</button>'
     },
@@ -13,7 +13,7 @@ var Panorama = {
     bindShow: function()
     {
 
-        $('.leaflet-popup-content button').on('click', function (e) {
+        $('.leaflet-popup-content button.panorama').on('click', function (e) {
             e.preventDefault();
             Panorama.opened = true;
             var point_id = $(this).data('pan');

@@ -5,10 +5,12 @@ background: no-repeat center #4d90fe;
 .tab1:hover
 {
 background: no-repeat center #3682FC;
+
 }
 .mjn-fb
 {
-background: no-repeat center center #2A82D9;
+
+    background: no-repeat center center #2A82D9;
 }
 .mjn-fb:hover
 {
@@ -120,11 +122,14 @@ float:left;
 
 /* navigation menu styles - main styles */
 ul.navi {
-    position:relative;
-    z-index:100;
-    padding:0;
-    margin:0;
-    width:40px !important;
+       position: relative;
+               z-index: 99999;
+               margin: 10px auto;
+               width: 100px;
+               border-radius: .5em;
+               border: 2px solid rgb(196, 190, 170);
+               background: White;
+               verticalAlign: middle;
 /*
     margin:0 0 0 60px;
 */
@@ -139,17 +144,17 @@ ul.navi > li {
     top:0;
     -webkit-border-radius: 4px;
     border-radius: 4px;
-    -moz-transition: -moz-transform 0.5s ease-in-out;
+/*    -moz-transition: -moz-transform 0.5s ease-in-out;
     -ms-transition: -ms-transform 0.5s ease-in-out;
     -o-transition: -o-transform 0.5s ease-in-out;
     -webkit-transition: -webkit-transform 0.5s ease-in-out;
-    transition: transform 0.5s ease-in-out;
+    transition: transform 0.5s ease-in-out;*/
 }
 ul.navi a {
     display:block;
     width:30px;
     height:30px;
-    position:absolute;
+    position:relative;
     left:0;
     top:0;
     line-height:37px;
@@ -158,6 +163,8 @@ ul.navi a {
     -webkit-border-radius: 6px;
     border-radius: 6px;
     opacity:0.8;
+
+    vertical-align:middle ;
 /*
     -webkit-box-shadow: 2px 2px 8px rgba(0,0,0,0.3) !important;
     box-shadow: 2px 2px 8px rgba(0,0,0,0.3) !important;
@@ -181,6 +188,7 @@ ul.navi:hover {
     height:200px;
 }
 */
+/*
 ul.navi:hover li#n1, .n1.fake-active {
     -moz-transform: translatex(0px);
     -ms-transform: translatex(0px);
@@ -218,6 +226,7 @@ ul.navi a:hover li#n6, .n6.fake-active {
     transform: translatex(0px);
     //display:none;
 }
+*/
 
 
 
@@ -229,9 +238,25 @@ span#social
     position: absolute;
     bottom: 54px;
     left: 12px;
+    top: 50%;
+    left: 30%;
 }
 
 a span i
 {
     font-size: 20px;
+}
+
+#closeSocial
+{
+     position: absolute;
+                z-index: 100000;
+               top:0px;
+               left: 40px;
+               margin: 0%;
+               font-size: 1.2em;
+               background-color: #333;
+               color: rgb(196, 190, 170);
+               border-radius: .5em;
+               border: 2px solid rgb(196, 190, 170);
 }
