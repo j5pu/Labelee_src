@@ -718,7 +718,7 @@ $(function () {
         var miCoche = JSON.parse(localStorage.getItem('miCoche'));
 
         if (!miCoche) {
-            alert('Please, scan the QR code at your parking place toyes' +
+            alert('Please, scan the QR code at your parking place to' +
                 ' locate your car.');
             return;
         }
