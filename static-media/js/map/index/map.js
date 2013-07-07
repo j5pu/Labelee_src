@@ -369,13 +369,7 @@ function loadPOIs() {
                 Panorama.bindShow();
             };
 
-        /*    if (floors[fl].pois[j].alwaysVisible)
-            {
-                floors[fl].pois[j].marker.bindLabel(floors[fl].pois[j].description, { noHide: true })
-                .addTo(map)
-                .showLabel();
-            }
-*/
+
 
             floors[fl].pois[j].marker
                 .bindPopup(this.description)
@@ -404,6 +398,13 @@ function loadPOIs() {
             for (var l in floors[fl].labels) {
                 if (floors[fl].pois[j].marker.category === floors[fl].labels[l].fields.name)
                     floors[fl].labels[l].layer.addLayer(floors[fl].pois[j].marker);
+
+                if (floors[fl].pois[j].alwaysVisible)
+                {
+                    floors[fl].labels[l].layer.addLayer(floors[fl].pois[j].marker.bindLabel(floors[fl].pois[j].description, { noHide: true, className: 'textLabel' }))
+                        //.addTo(map)
+                }
+
             }
 
             if (floors[fl].pois[j].marker.category !== "Aristas" && floors[fl].pois[j].marker.category !== "Aseos")
