@@ -349,7 +349,7 @@ function loadPOIs() {
                 nameIcon = floors[fl].pois[j].label.name,
                 shapeIcon = floors[fl].pois[j].label.category.icon,
                 id = floors[fl].pois[j].id,
-                panoramaIcon = floors[fl].pois[j].description,
+                description = floors[fl].pois[j].description,
                 panorama = floors[fl].pois[j].panorama,
                 sX = floors[fl].scaleX,
                 sY = floors[fl].scaleY,
@@ -359,12 +359,17 @@ function loadPOIs() {
                 category = floors[fl].pois[j].label.category.name,
                 category_es = floors[fl].pois[j].label.category.name_es;
 
+            var popupTitle = description;
             if (panorama) {
-                panoramaIcon += Panorama.renderIcon(id);
+                popupTitle += Panorama.renderIcon(id);
             }
+            popupTitle += SocialMenu.renderIcon(id);
 
 
-            floors[fl].pois[j].marker = new L.Marker(new L.latLng(loc), {icon: loadIcon(colorIcon, shapeIcon), title: panoramaIcon});
+            floors[fl].pois[j].marker = new L.Marker(new L.latLng(loc), {
+                icon: loadIcon(colorIcon, shapeIcon),
+                title: popupTitle
+            });
             floors[fl].pois[j].marker.options.icon.options.color = colorIcon;
             floors[fl].pois[j].marker.poid = id;
             floors[fl].pois[j].marker.psX = sX;
@@ -374,20 +379,20 @@ function loadPOIs() {
             floors[fl].pois[j].marker.category_es = category_es;
             floors[fl].pois[j].marker.label = labelid;
             floors[fl].pois[j].marker.panorama = panorama;
-            floors[fl].pois[j].marker.panoramaIcon = panoramaIcon;
-            floors[fl].pois[j].marker.description = floors[fl].pois[j].description;
+            floors[fl].pois[j].marker.description = description;
 
             floors[fl].pois[j].marker.changeTitle = function () {
-                this.bindPopup(gettext("Scan a QR code to get here:") + " " + this.description).openPopup();
+                this.popupTitle = gettext("Scan a QR code to get here:") + " " + this.description + this.panoramaIcon + SocialMenu.renderIcon(this.poid);
+                this.bindPopup(popupTitle).openPopup();
                 Panorama.bindShow();
+                SocialMenu.bindShow(this);
             };
 
 
 
             floors[fl].pois[j].marker
-                .bindPopup(this.description)
+                .bindPopup(popupTitle)
                 .on('click', function () {
-
                     if (qr_type == 'dest') {
                         this.changeTitle();
                         return;
@@ -397,6 +402,8 @@ function loadPOIs() {
 
                     if (qrMarker)
                         drawRoute(qrPoint.point.id, qrFloor.sX, qrFloor.sY, this.poid, this.psX, this.psY);
+
+                    SocialMenu.bindShow(this);
                 });
 
             /*
@@ -449,38 +456,33 @@ function loadPOIs() {
 
                 if (qrPoint.point.panorama)
                     originLegend = originLegend + Panorama.renderIcon(qrPoint.point.id);
-
+                originLegend+= SocialMenu.renderIcon(qrPoint.point.id);
                 qrMarker = new L.marker(qrLoc, { bounceOnAdd: false,
                     icon: OriginIcon})
                     .bindPopup(originLegend).on('click', function () {
-                        Panorama.bindShow()
+                        Panorama.bindShow();
+                        SocialMenu.bindShow(this);
                     });
 
             }
             else {
                 var msg = gettext("Please, scan a QR code to get here:") + ' ';
                 var photoIcon = qrPoint.point.panorama ? Panorama.renderIcon(qrPoint.point.id) : "";
-                qrMarker = new L.marker(qrLoc, { bounceOnAdd: false,
+                qrMarker = new L.marker(qrLoc, {
+                    bounceOnAdd: false,
                     icon: DestinyIcon})
                     .bindPopup(msg + qrPoint.point.description +
                         " (" + gettext('floor') + ' ' + qrFloor.name + ", " +
-                        qrPoint.enclosure.name + ')' + photoIcon)
-                    .on('click', Panorama.bindShow);
-
-                qrMarker
-                    .on('click', function () {
-                        if (qr_type == 'dest') {
-                            this.bindPopup(msg + qrPoint.point.description + photoIcon)
-                                .openPopup()
-                                .on('click', Panorama.bindShow);
-                            return;
-                        }
-
+                        qrPoint.enclosure.name + ')' + photoIcon + SocialMenu.renderIcon(qrPoint.point.id))
+                    .on('click', function(){
                         LocalStorageHandler.setPrevDest(this);
 
-                        drawRoute(qrPoint.point.id, qrFloor.sX, qrFloor.sY, this.poid, this.psX, this.psY);
-                    });
+//                        drawRoute(qrPoint.point.id, qrFloor.sX, qrFloor.sY, this.poid, this.psX, this.psY);
 
+                        if(photoIcon)
+                            Panorama.bindShow();
+                        SocialMenu.bindShow(this);
+                    });
             }
 
             qrMarker.addTo(floors[i].layer);
@@ -541,6 +543,7 @@ function initMap(qrPoint) {
     map.addLayer(qrFloor.layer);
     qrMarker.openPopup();
     Panorama.bindShow();
+    SocialMenu.bindShow(this);
     qrMarker._bringToFront();
 
     map.invalidateSize();
@@ -719,6 +722,7 @@ $(function () {
         qrMarker._bringToFront();
         qrMarker.openPopup().on('click', function () {
             Panorama.bindShow();
+            SocialMenu.bindShow();
         });
     });
 
@@ -867,12 +871,14 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
                 '</button>';
 
         }
+        destLegend += SocialMenu.renderIcon(dst);
 
         destLoc = [(route.fields.destiny.fields.row) * sY + sY, route.fields.destiny.fields.col * sX + sX];
         destMarker = L.marker(destLoc, { bounceOnAdd: false,
             icon: DestinyIcon})
             .bindPopup(destLegend).on('click', function () {
                 Panorama.bindShow();
+                SocialMenu.bindShow();
             });
 
 
@@ -1036,6 +1042,7 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
         if (map.hasLayer(destMarker)) {
             destMarker.openPopup();
             Panorama.bindShow();
+            SocialMenu.bindShow();
         }
 
 
