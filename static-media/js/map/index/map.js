@@ -525,6 +525,8 @@ function initMap(qrPoint) {
             map.setMaxBounds(qrFloor.bounds);
             map.setView(qrLoc, 0);
         }
+
+
     }
 
     map.removeLayer(totalPois);
