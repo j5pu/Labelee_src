@@ -730,11 +730,13 @@ $(function () {
     });
 
     $('span#myCar').click(function () {
-        var miCoche = JSON.parse(localStorage.getItem('miCoche')).dest;
+        var miCoche = JSON.parse(localStorage.getItem('miCoche'));
 
         if (!miCoche) {
             alert('Please, scan a QR code to locate your parking place.')
         }
+
+        miCoche=miCoche.dest;
 
             for (pos = 0; pos < $('input[type=checkbox].leaflet-control-layers-selector').length; pos++)
         {
