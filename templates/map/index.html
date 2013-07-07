@@ -180,6 +180,7 @@
     <div class="device">
         <a class="arrow-left" href="#"></a>
         <a class="arrow-right" href="#"></a>
+        <button id="closeCoupon">x</button>
 
         <div class="swiper-container">
             <div class="swiper-wrapper">
@@ -204,7 +205,6 @@
                     <button id="cup3">PULSA AQUÍ</button>
                 </div>
             </div>
-            <button id="closeCoupon">X</button>
 
         </div>
         <div class="pagination"></div>
@@ -234,6 +234,9 @@
             launchCarousel()
         });
 
+        $('button#closeCoupon').on('click', function () {
+            $('div.device').fadeOut();
+        });
         var mySwiper = new Swiper('.swiper-container', {
             pagination: '.pagination',
             loop: true,
