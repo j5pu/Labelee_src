@@ -1,35 +1,26 @@
-var Panorama = {
+var SocialMenu = {
 
     resizing: false,
     opened: false,
 
     renderIcon: function(pointId)
     {
-        return  '<button data-pan="' + pointId + '">' +
-            '<i class="icon-camera"></i>' +
+        return  '<button data-socialmenu="' + pointId + '">' +
+            '<i class="icon-share-alt"></i>' +
             '</button>'
     },
 
     bindShow: function()
     {
-        $('.leaflet-popup-content button').on('click', function (e) {
-            e.preventDefault();
-            Panorama.opened = true;
-            var point_id = $(this).data('pan');
-            var point = new PointResource().read(point_id);
-
-//            addSamplePano(point.panorama,{ratio:9/16});
-            addSamplePano(point.panorama,{ratio:9/16});
-//            addSamplePano(point.panorama,{height: 200, width: 4});
-        });
+       alert('hola');
     },
 
     resize: function()
     {
-        if(!Panorama.opened)
+        if(!SocialMenu.opened)
             return;
 
-        Panorama.resizing = true;
+        SocialMenu.resizing = true;
 
         $('.leaflet-popup-content button').trigger('click');
 
@@ -40,14 +31,13 @@ var Panorama = {
 //            $('canvas').trigger('click');
 //        document.getElementsByTagName('canvas')[0].width = newWidth;
 
-        Panorama.resizing = false;
+        SocialMenu.resizing = false;
     },
 
     close: function()
     {
-        jQuery('body').find('img[id*=pano]').remove();
         jQuery('canvas').remove();
         jQuery('button#close').remove();
-        Panorama.opened = false;
+        SocialMenu.opened = false;
     }
 };

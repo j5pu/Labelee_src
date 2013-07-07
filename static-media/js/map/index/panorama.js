@@ -12,6 +12,7 @@ var Panorama = {
 
     bindShow: function()
     {
+
         $('.leaflet-popup-content button').on('click', function (e) {
             e.preventDefault();
             Panorama.opened = true;
