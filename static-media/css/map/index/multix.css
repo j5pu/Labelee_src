@@ -877,7 +877,7 @@ span.locator
 {
     background-color: cadetblue;
     left:45px;
-    display:none;
+/**/    display:none;
 }
 
 #location

@@ -155,7 +155,7 @@ var LocalStorageHandler = {
                     '</li>' +
                     '</li>'
             );
-            $('span#myCar').show();
+//            $('span#myCar').show();
         }
 
         var prevDest = JSON.parse(localStorage.getItem('prevDest'));
@@ -369,6 +369,13 @@ function loadPOIs() {
                 Panorama.bindShow();
             };
 
+        /*    if (floors[fl].pois[j].alwaysVisible)
+            {
+                floors[fl].pois[j].marker.bindLabel(floors[fl].pois[j].description, { noHide: true })
+                .addTo(map)
+                .showLabel();
+            }
+*/
 
             floors[fl].pois[j].marker
                 .bindPopup(this.description)
@@ -385,10 +392,12 @@ function loadPOIs() {
                         drawRoute(qrPoint.point.id, qrFloor.sX, qrFloor.sY, this.poid, this.psX, this.psY);
                 });
 
+/*
             L.marker([-37.785, 175.263])
                 .bindLabel('A sweet static label!', { noHide: true })
                 .addTo(map)
                 .showLabel();
+*/
 
 
 
@@ -722,6 +731,10 @@ $(function () {
 
     $('span#myCar').click(function () {
         var miCoche = JSON.parse(localStorage.getItem('miCoche')).dest;
+
+        if (!miCoche) {
+            alert('Please, scan a QR code to locate your parking place.')
+        }
 
             for (pos = 0; pos < $('input[type=checkbox].leaflet-control-layers-selector').length; pos++)
         {
