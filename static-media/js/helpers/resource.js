@@ -320,6 +320,8 @@ function LabelCategoryResource()
     Resource.call(this, 'label-category');
 
     this.readValidAsPois = function(enclosure_id){
+        // /api-2/label-category/valid/16
+
         return ajaxGetElements(this.api2_url, 'valid/' + enclosure_id);
     };
 }

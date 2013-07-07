@@ -293,6 +293,12 @@ function loopFloors() {
         initMap(qrPoint);
 
         LocalStorageHandler.draw();
+
+        // Elimino el icono de categoría parquing en los botones de categoría
+        removeParkingBtn();
+
+
+
 //       if(( ua.indexOf("Android") >= 0 ) && (androidversion >=3.0))
 
         //Coupon.init();
@@ -350,7 +356,8 @@ function loadPOIs() {
                 loc = [(floors[fl].pois[j].row) * sY + (sY),
                     floors[fl].pois[j].col * sX + (sY)],
                 labelid = floors[fl].pois[j].label.id,
-                category = floors[fl].pois[j].label.category.name;
+                category = floors[fl].pois[j].label.category.name,
+                category_es = floors[fl].pois[j].label.category.name_es;
 
             var popupTitle = description;
             if (panorama) {
@@ -369,6 +376,7 @@ function loadPOIs() {
             floors[fl].pois[j].marker.psY = sY;
             floors[fl].pois[j].marker.loc = loc;
             floors[fl].pois[j].marker.category = category;
+            floors[fl].pois[j].marker.category_es = category_es;
             floors[fl].pois[j].marker.label = labelid;
             floors[fl].pois[j].marker.panorama = panorama;
             floors[fl].pois[j].marker.description = description;
@@ -412,13 +420,13 @@ function loadPOIs() {
 
             }
 
-            if (floors[fl].pois[j].marker.category !== "Aristas" && floors[fl].pois[j].marker.category !== "Aseos")
+            if (isCategoryVisibleOnButtons(floors[fl].pois[j].marker.category_es))
                 totalPois.addLayer(floors[fl].pois[j].marker);
         }
 
         // Cada label es un conjunto de POIs (restaurantes, cines..)
         for (var la in floors[fl].labels) {
-            if (floors[fl].labels[la].fields.name === "Aristas" || floors[fl].labels[la].fields.name === "Aseos") {
+            if (!isCategoryVisibleOnButtons(floors[fl].labels[la].fields.name_es)){
                 floors[fl].layer.addLayer(floors[fl].labels[la].layer);
                 floors[fl].labels.splice(la, 1);
             }
@@ -646,6 +654,8 @@ function changeFloor(e) {
         }
     }
     if (map.hasLayer(destMarker)) destMarker.openPopup();
+
+    removeParkingBtn();
 }
 
 
@@ -1062,3 +1072,18 @@ var setArrow = function (flecha, idFloor) {
     if (++arrowsOffset > 100)
         arrowsOffset = 0;
 };
+
+
+
+function removeParkingBtn()
+{
+//    $('.leaflet-control-layers-overlays i.icon-truck').closest('label').remove();
+}
+
+function isCategoryVisibleOnButtons(categ_name)
+{
+    return categ_name !== "Parquing" &&
+        categ_name !== "Bloqueantes" &&
+        categ_name !== "Aristas" &&
+        categ_name !== "Aseos";
+}
