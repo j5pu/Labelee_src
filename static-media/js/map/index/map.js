@@ -600,6 +600,8 @@ var checked = [];
 
 function changeFloor(e) {
 
+    SocialMenu.close();
+
     for (pos = 0; pos < $('input[type=checkbox].leaflet-control-layers-selector').length; pos++) {
         if ($('input[type=checkbox].leaflet-control-layers-selector:eq(' + pos + ')').is(':checked')) {
             checked[pos] = true;
