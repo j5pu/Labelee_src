@@ -44,12 +44,12 @@ function get_url() {
 
     var urlstring = location.origin + '/map/';
     var prevDest = JSON.parse(localStorage.getItem('prevDest'));
-    if(prevDest==null)
-    {   alert('Please select a destination to share.')
-        return true;
-    }
-    var result =confirm('Would you like to share the route to: '+ prevDest.description+ '?');
-    if(!result) return true;
+//    if(prevDest==null)
+//    {   alert('Please select a destination to share.')
+//        return true;
+//    }
+//    var result =confirm('Would you like to share the route to: '+ prevDest.description+ '?');
+//    if(!result) return true;
     if (prevDest) {
         urlstring += 'dest/' + prevDest.enclosureid + '_' + prevDest.floorid + '_' + prevDest.poid;
         return urlstring;
