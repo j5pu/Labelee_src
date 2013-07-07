@@ -20,7 +20,7 @@ var Panorama = {
             var point = new PointResource().read(point_id);
 
 //            addSamplePano(point.panorama,{ratio:9/16});
-            addSamplePano(point.panorama,{ratio:9/16});
+            addSamplePano(point.panorama,{ratio:9/16, minSpeed:30});
 //            addSamplePano(point.panorama,{height: 200, width: 4});
         });
     },

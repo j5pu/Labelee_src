@@ -275,6 +275,7 @@
 {#    }#}
 
     function launchCarousel() {
+        if(Panorama.opened) Panorama.close();
         $('div.device').fadeToggle();
     }
 
