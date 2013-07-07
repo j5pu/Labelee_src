@@ -234,6 +234,9 @@
             launchCarousel()
         });
 
+        $('button#closeCoupon').on('click', function () {
+            $('div.device').fadeOut();
+        });
         var mySwiper = new Swiper('.swiper-container', {
             pagination: '.pagination',
             loop: true,
