@@ -49,7 +49,7 @@ function addSamplePano(options)
             'border-radius':'.5em',
             'border': '2px solid rgb(196, 190, 170)'
         });
-        jQuery('body').prepend('<button id="close">X</button>');
+        jQuery('body').prepend('<button id="close">x</button>');
         $('button#close').css({
             'position': 'absolute',
             'z-index': 100000,

@@ -1140,8 +1140,8 @@ button{
 
 button#closeCoupon {
 position: absolute;
-top: -2%;
-right:-2%;
+top: -12%;
+right:-4%;
 margin: 6%;
 font-size:1.2em;
 background-color:#333;
