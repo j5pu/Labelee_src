@@ -14,7 +14,7 @@ var OriginIcon = L.AwesomeMarkers.icon({
 
     }),
     CarIcon = L.AwesomeMarkers.icon({
-        icon: 'truck',
+        icon: 'automobile',
         color: 'cadetblue'
         //spin: true
 
