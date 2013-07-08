@@ -14,7 +14,7 @@ var OriginIcon = L.AwesomeMarkers.icon({
 
     }),
     CarIcon = L.AwesomeMarkers.icon({
-        icon: 'truck',
+        icon: 'automobile',
         color: 'cadetblue'
         //spin: true
 
@@ -85,8 +85,8 @@ var qrPoint = {
 };
 qrPoint.label = new LabelCategoryResource().readFromUri(qrPoint.point.label)
 qrPoint.labelCategory = new LabelCategoryResource().readFromUri(qrPoint.label.category)
-qrPoint.isParquing = function () {
-    return this.labelCategory.name == 'Parquing';
+qrPoint.isParking = function () {
+    return this.labelCategory.name == 'Parking';
 };
 
 
@@ -112,7 +112,7 @@ var LocalStorageHandler = {
     },
 
     setValues: function () {
-        if (qrPoint.isParquing()) {
+        if (qrPoint.isParking()) {
             if (confirm(gettext('Do you want to remember your parking space?'))) {
                 var miCoche = {
                     dest: qrPoint,
@@ -869,10 +869,7 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
         destLegend = route.fields.destiny.fields.description;
 
         if (new PointResource().read(dst).panorama) {
-            destLegend = destLegend +
-                '<button data-pan="' + dst + '">' +
-                '<i class="icon-camera"></i>' +
-                '</button>';
+            destLegend = destLegend + Panorama.renderIcon(dst);
 
         }
         destLegend += SocialMenu.renderIcon(dst);

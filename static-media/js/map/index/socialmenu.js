@@ -4,13 +4,25 @@ var SocialMenu = {
     urlstring: location.origin + '/map/dest/',
 
     renderIcon: function (pointId) {
-        return '<button class="socialmenu" data-socialmenu="' + pointId + '">' +
-            '<i class="icon-share-alt"></i>' +
-            '</button>'
+           SocialMenu.point = new PointResource().read(pointId);
+            SocialMenu.floor = new FloorResource().readFromUri(SocialMenu.point.floor);
+            SocialMenu.enclosure = enclosure_id;
+            SocialMenu.url = SocialMenu.urlstring+ SocialMenu.enclosure+'_'+SocialMenu.floor.id+'_'+SocialMenu.point.id;
+            SocialMenu.urlTitle =  'would you like to go to'+SocialMenu.point.description +'?';
+        return '<p align="center"><button class="socialmenu" style=" left:0px; margin: 0%;" onclick="SocialMenu.fbs_click()" data-socialmenu="' + pointId + '">' +
+            '<i class="icon-facebook-sign"></i>' +
+            '</button>' +
+            '<button class="socialmenu" style=" left:0px; margin: 0%;"  onclick="SocialMenu.twt_click()" data-socialmenu="' + pointId + '">' +
+            '<i class="icon-twitter-sign"></i>' +
+            '</button>'+
+              '<button class="socialmenu" style=" left:0px; margin: 0%;" onclick="SocialMenu.google_click()" data-socialmenu="' + pointId + '">' +
+            '<i class="icon-google-plus-sign"></i>' +
+            '</button></p>'
+
     },
 
     bindShow: function () {
-        $('.leaflet-popup-content button.socialmenu').on('click', function () {
+       /* $('.leaflet-popup-content button.socialmenu').on('click', function () {
             // SocialMenu.marker.bindPopup(html).openPopup();
             if(SocialMenu.opened) SocialMenu.close();
             SocialMenu.opened = true;
@@ -43,7 +55,7 @@ var SocialMenu = {
               $(this).remove();
                 })
               ;*/
-        });
+      //  });
     },
 
     renderSocialPopup: function () {
