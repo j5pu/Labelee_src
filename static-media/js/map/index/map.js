@@ -175,7 +175,7 @@ var LocalStorageHandler = {
             else {
                 point_dest_id = prevDest.poid;
                 floor_dest_id = prevDest.floorid;
-                description = prevDest.description;
+                description = prevDest.description_for_menu;
             }
 
 
@@ -203,6 +203,7 @@ var LocalStorageHandler = {
             'psY': marker.psY,
             'mesg': gettext('Do you still want to go to') + ' ' + marker.description + '?',
             'description': marker.title,
+            'description_for_menu': marker.description,
             'with_predraw': false
         };
         localStorage.setItem('prevDest', JSON.stringify(prevDest));
