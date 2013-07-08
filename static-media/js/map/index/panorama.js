@@ -5,7 +5,7 @@ var Panorama = {
 
     renderIcon: function(pointId)
     {
-        return  '<button class="panorama" data-pan="' + pointId + '">' +
+        return  '<button onclick="Panorama.show(this)" class="panorama"  id="' + pointId + '">' +
             '<i class="icon-camera"></i>' +
             '</button>'
     },
@@ -13,7 +13,7 @@ var Panorama = {
     bindShow: function()
     {
 
-        $('.leaflet-popup-content button.panorama').on('click', function (e) {
+     /*   $('.leaflet-popup-content button.panorama').on('click', function (e) {
             e.preventDefault();
             Panorama.opened = true;
             var point_id = $(this).data('pan');
@@ -22,7 +22,16 @@ var Panorama = {
 //            addSamplePano(point.panorama,{ratio:9/16});
             addSamplePano(point.panorama,{ratio:9/16, minSpeed:30});
 //            addSamplePano(point.panorama,{height: 200, width: 4});
-        });
+        });*/
+    },
+     show: function(element)
+    {
+            Panorama.opened = true;
+            var point_id = element.id;
+            var point = new PointResource().read(point_id);
+
+//            addSamplePano(point.panorama,{ratio:9/16});
+            addSamplePano(point.panorama,{ratio:9/16, minSpeed:30});
     },
 
     resize: function()

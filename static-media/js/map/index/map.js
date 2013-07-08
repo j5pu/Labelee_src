@@ -867,10 +867,7 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
         destLegend = route.fields.destiny.fields.description;
 
         if (new PointResource().read(dst).panorama) {
-            destLegend = destLegend +
-                '<button data-pan="' + dst + '">' +
-                '<i class="icon-camera"></i>' +
-                '</button>';
+            destLegend = destLegend + Panorama.renderIcon(dst);
 
         }
         destLegend += SocialMenu.renderIcon(dst);
