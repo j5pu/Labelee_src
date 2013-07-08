@@ -162,22 +162,12 @@ var LocalStorageHandler = {
 
         var prevDest = JSON.parse(localStorage.getItem('prevDest'));
         if (prevDest) {
-            var enclosure_dest_id = prevDest.with_predraw ? prevDest.dest.enclosure.id : prevDest.enclosureid;
-            if (qrPoint.enclosure.id != enclosure_dest_id)
+            if (qrPoint.enclosure.id != prevDest.enclosureid)
                 return;
 
-            var point_dest_id, floor_dest_id, description, func;
-            if (prevDest.with_predraw) {
-                point_dest_id = prevDest.dest.point.id;
-                floor_dest_id = prevDest.dest.floor.id;
-                description = prevDest.dest.point.description;
-            }
-            else {
-                point_dest_id = prevDest.poid;
-                floor_dest_id = prevDest.floorid;
+            var point_dest_id = prevDest.poid,
+                floor_dest_id = prevDest.floorid,
                 description = prevDest.description_for_menu;
-            }
-
 
             $('#scrollMenu').prepend(
                 '<li>' +
@@ -197,14 +187,11 @@ var LocalStorageHandler = {
         var prevDest = {
             'prevDate': new Date().getTime(),
             'poid': marker.poid,
-            'floorid': qrPoint.floor.id,
+            'floorid': marker.floorid,
             'enclosureid': qrPoint.enclosure.id,
-            'psX': marker.psX,
-            'psY': marker.psY,
             'mesg': gettext('Do you still want to go to') + ' ' + marker.description + '?',
             'description': marker.title,
-            'description_for_menu': marker.description,
-            'with_predraw': false
+            'description_for_menu': marker.description
         };
         localStorage.setItem('prevDest', JSON.stringify(prevDest));
     },
@@ -346,6 +333,7 @@ function loadPOIs() {
                 nameIcon = floors[fl].pois[j].label.name,
                 shapeIcon = floors[fl].pois[j].label.category.icon,
                 id = floors[fl].pois[j].id,
+                floorid = floors[fl].pois[j].floor;
                 description = floors[fl].pois[j].description,
                 panorama = floors[fl].pois[j].panorama,
                 sX = floors[fl].scaleX,
@@ -369,6 +357,7 @@ function loadPOIs() {
             });
             floors[fl].pois[j].marker.options.icon.options.color = colorIcon;
             floors[fl].pois[j].marker.poid = id;
+            floors[fl].pois[j].marker.floorid = floorid;
             floors[fl].pois[j].marker.psX = sX;
             floors[fl].pois[j].marker.psY = sY;
             floors[fl].pois[j].marker.loc = loc;
@@ -384,7 +373,6 @@ function loadPOIs() {
                 Panorama.bindShow();
                 SocialMenu.bindShow(this);
             };
-
 
 
             floors[fl].pois[j].marker
