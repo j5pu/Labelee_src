@@ -4,27 +4,15 @@ var SocialMenu = {
     urlstring: location.origin + '/map/dest/',
 
     renderIcon: function (pointId) {
-           SocialMenu.point = pointId;
-            var selectedPoi =null;
-           for(var selectedFloor in floors)
-           {
-                 selectedPoi=  floors[selectedFloor].pois.filter(function(item){return (item.id==pointId);});
-                 if(selectedPoi !=null)
-                 {
-                    SocialMenu.floor = selectedFloor;
-                     break;
-                 }
-           }
-            SocialMenu.enclosure = enclosure_id;
-            SocialMenu.url = SocialMenu.urlstring+ SocialMenu.enclosure+'_'+SocialMenu.floor.id+'_'+SocialMenu.point.id;
-            SocialMenu.urlTitle =  'would you like to go to'+SocialMenu.point.description +'?';
-        return '<p align="center"><button class="socialmenu" style=" left:0px; margin: 0%;" onclick="SocialMenu.fbs_click()" data-socialmenu="' + pointId + '">' +
+
+
+        return '<p align="center"><button class="socialmenu" style=" left:0px; margin: 0%;" onclick="SocialMenu.fbs_click('+ pointId+')" data-socialmenu="' + pointId + '">' +
             '<i class="icon-facebook-sign"></i>' +
             '</button>' +
-            '<button class="socialmenu" style=" left:0px; margin: 0%;"  onclick="SocialMenu.twt_click()" data-socialmenu="' + pointId + '">' +
+            '<button class="socialmenu" style=" left:0px; margin: 0%;"  onclick="SocialMenu.twt_click('+ pointId+')" data-socialmenu="' + pointId + '">' +
             '<i class="icon-twitter-sign"></i>' +
             '</button>'+
-              '<button class="socialmenu" style=" left:0px; margin: 0%;" onclick="SocialMenu.google_click()" data-socialmenu="' + pointId + '">' +
+              '<button class="socialmenu" style=" left:0px; margin: 0%;" onclick="SocialMenu.google_click('+ pointId+')" data-socialmenu="' + pointId + '">' +
             '<i class="icon-google-plus-sign"></i>' +
             '</button></p>'
 
@@ -95,20 +83,52 @@ var SocialMenu = {
         SocialMenu.opened = false;
     },
 
-    fbs_click: function() {
+    fbs_click: function(point) {
 
-        window.open('http://www.facebook.com/sharer.php?u=' + encodeURIComponent(SocialMenu.url) + '&t=' + encodeURIComponent( SocialMenu.urlTitle ), 'sharer', 'toolbar=0,status=0,width=626,height=436');
+        var information = SocialMenu.getShareInformation(point);
+       window.open('http://www.facebook.com/sharer.php?u=' + encodeURIComponent(information[0]) + '&t=' + encodeURIComponent( information[1] ), 'sharer', 'toolbar=0,status=0,width=626,height=436');
 
 
     },
-    google_click: function() {
-
-         window.open('https://plus.google.com/share?url=' + encodeURIComponent(SocialMenu.url), 'sharer', 'toolbar=0,status=0,width=626,height=436');
+    google_click: function(point) {
+             var information = SocialMenu.getShareInformation(point);
+        window.open('https://plus.google.com/share?url=' + encodeURIComponent(information[0]), 'sharer', 'toolbar=0,status=0,width=626,height=436');
     },
-    twt_click: function()
+    twt_click: function(point)
     {
-          window.open('http://twitter.com/share?url=' + encodeURIComponent(SocialMenu.url) + '&text=' + encodeURIComponent(SocialMenu.urlTitle), 'sharer', 'toolbar=0,status=0,width=626,height=436');
+        var information = SocialMenu.getShareInformation(point);
+        window.open('http://twitter.com/share?url=' + encodeURIComponent(information[0]) + '&text=' + encodeURIComponent(information[1]), 'sharer', 'toolbar=0,status=0,width=626,height=436');
+    },
+
+    getShareInformation:function(pointId)
+    {
+
+            var selectedPoi =null;
+            var floor = -1
+           for(var selectedFloor in floors)
+           {
+                 selectedPoi=  floors[selectedFloor].pois.filter(function(item){return (item.id==pointId);});
+                 if(selectedPoi !=null)
+                 {
+                    floor = floors[selectedFloor].id;
+                     break;
+                 }
+           }
+            var enclosure = enclosure_id;
+            url = SocialMenu.urlstring+ enclosure +'_'+floor+'_'+pointId;
+         if(selectedPoi[0] && selectedPoi[0].description)
+         {
+              urlTitle =  'would you like to go to'+selectedPoi[0].description +'?';
+         }else
+         {
+              urlTitle =  'would you like to go to ?';
+         }
+        var result = new Array();
+        result[0]=url;
+        result[1] = urlTitle;
+        return result;
     }
+
 };
 
 
