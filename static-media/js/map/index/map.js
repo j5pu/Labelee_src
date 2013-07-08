@@ -85,8 +85,8 @@ var qrPoint = {
 };
 qrPoint.label = new LabelCategoryResource().readFromUri(qrPoint.point.label)
 qrPoint.labelCategory = new LabelCategoryResource().readFromUri(qrPoint.label.category)
-qrPoint.isParquing = function () {
-    return this.labelCategory.name == 'Parquing';
+qrPoint.isParking = function () {
+    return this.labelCategory.name == 'Parking';
 };
 
 
@@ -112,7 +112,7 @@ var LocalStorageHandler = {
     },
 
     setValues: function () {
-        if (qrPoint.isParquing()) {
+        if (qrPoint.isParking()) {
             if (confirm(gettext('Do you want to remember your parking space?'))) {
                 var miCoche = {
                     dest: qrPoint,
