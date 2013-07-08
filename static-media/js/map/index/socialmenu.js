@@ -4,13 +4,25 @@ var SocialMenu = {
     urlstring: location.origin + '/map/dest/',
 
     renderIcon: function (pointId) {
-        return '<button class="socialmenu" data-socialmenu="' + pointId + '">' +
-            '<i class="icon-share-alt"></i>' +
-            '</button>'
+           SocialMenu.point = new PointResource().read(pointId);
+            SocialMenu.floor = new FloorResource().readFromUri(SocialMenu.point.floor);
+            SocialMenu.enclosure = enclosure_id;
+            SocialMenu.url = SocialMenu.urlstring+ SocialMenu.enclosure+'_'+SocialMenu.floor.id+'_'+SocialMenu.point.id;
+            SocialMenu.urlTitle =  'would you like to go to'+SocialMenu.point.description +'?';
+        return '<p align="center"><button class="socialmenu" style=" left:0px; margin: 0%;" onclick="SocialMenu.fbs_click()" data-socialmenu="' + pointId + '">' +
+            '<i class="icon-facebook-sign"></i>' +
+            '</button>' +
+            '<button class="socialmenu" style=" left:0px; margin: 0%;"  onclick="SocialMenu.twt_click()" data-socialmenu="' + pointId + '">' +
+            '<i class="icon-twitter-sign"></i>' +
+            '</button>'+
+              '<button class="socialmenu" style=" left:0px; margin: 0%;" onclick="SocialMenu.google_click()" data-socialmenu="' + pointId + '">' +
+            '<i class="icon-google-plus-sign"></i>' +
+            '</button></p>'
+
     },
 
     bindShow: function () {
-        $('.leaflet-popup-content button.socialmenu').on('click', function () {
+       /* $('.leaflet-popup-content button.socialmenu').on('click', function () {
             // SocialMenu.marker.bindPopup(html).openPopup();
             SocialMenu.opened = true;
 
@@ -27,7 +39,7 @@ var SocialMenu = {
             html+='<li id="n3" class="n3"  style="left: 90px"><a class="mjn-tab3" href="#" title="{% trans "Compartir con" %} Google"    onclick="SocialMenu.google_click()"><span>  <i class="icon-google-plus-sign"></i></span></a>  <button id="closeSocial" class="button" onclick="SocialMenu.close()">x</button> </li>'
             html+='   </li>   </ul>   </span>'
 
-            jQuery('body').append(html);
+            jQuery('body').append(html);*/
 
 
 
@@ -42,7 +54,7 @@ var SocialMenu = {
               $(this).remove();
                 })
               ;*/
-        });
+      //  });
     },
 
     renderSocialPopup: function () {
