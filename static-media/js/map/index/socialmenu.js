@@ -4,8 +4,17 @@ var SocialMenu = {
     urlstring: location.origin + '/map/dest/',
 
     renderIcon: function (pointId) {
-           SocialMenu.point = new PointResource().read(pointId);
-            SocialMenu.floor = new FloorResource().readFromUri(SocialMenu.point.floor);
+           SocialMenu.point = pointId;
+            var selectedPoi =null;
+           for(var selectedFloor in floors)
+           {
+                 selectedPoi=  floors[selectedFloor].pois.filter(function(item){return (item.id==pointId);});
+                 if(selectedPoi !=null)
+                 {
+                    SocialMenu.floor = selectedFloor;
+                     break;
+                 }
+           }
             SocialMenu.enclosure = enclosure_id;
             SocialMenu.url = SocialMenu.urlstring+ SocialMenu.enclosure+'_'+SocialMenu.floor.id+'_'+SocialMenu.point.id;
             SocialMenu.urlTitle =  'would you like to go to'+SocialMenu.point.description +'?';
