@@ -846,7 +846,7 @@ span>span>i
 }
 
 
-span.locator
+a.locator
 {
     width: 31px;
     height: 31px;
@@ -886,6 +886,12 @@ span.locator
 }
 
 #location:hover, #myCar:hover
+{
+    background-color: #bbb;
+    color: dimgrey;
+}
+
+.locator:active
 {
     background-color: #bbb;
     color: dimgrey;
@@ -1178,6 +1184,11 @@ border: 2px solid rgb(196, 190, 170);
 .icon-car:before {
     content: "\32";
 }
+
+*:focus{
+    outline:none;
+}
+
 @media only screen and (min-width: 320px) {
     canvas
     {
