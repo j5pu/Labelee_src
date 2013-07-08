@@ -846,7 +846,7 @@ span>span>i
 }
 
 
-a.locator
+span.locator
 {
     width: 31px;
     height: 31px;
@@ -885,7 +885,7 @@ a.locator
     left: 10px;
 }
 
-#location:hover, #myCar:hover
+#location:focus, #myCar:focus
 {
     background-color: #bbb;
     color: dimgrey;
