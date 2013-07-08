@@ -294,9 +294,7 @@ function loopFloors() {
 
         LocalStorageHandler.draw();
 
-        // Elimino el icono de categoría parquing en los botones de categoría
-        removeParkingBtn();
-
+        calculateCoords();
 
 
 //       if(( ua.indexOf("Android") >= 0 ) && (androidversion >=3.0))
