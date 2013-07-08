@@ -24,6 +24,7 @@ var SocialMenu = {
     bindShow: function () {
        /* $('.leaflet-popup-content button.socialmenu').on('click', function () {
             // SocialMenu.marker.bindPopup(html).openPopup();
+            if(SocialMenu.opened) SocialMenu.close();
             SocialMenu.opened = true;
 
             var point_id = $(this).data('socialmenu');
@@ -39,7 +40,7 @@ var SocialMenu = {
             html+='<li id="n3" class="n3"  style="left: 90px"><a class="mjn-tab3" href="#" title="{% trans "Compartir con" %} Google"    onclick="SocialMenu.google_click()"><span>  <i class="icon-google-plus-sign"></i></span></a>  <button id="closeSocial" class="button" onclick="SocialMenu.close()">x</button> </li>'
             html+='   </li>   </ul>   </span>'
 
-            jQuery('body').append(html);*/
+            $(this).parent().append(html);
 
 
 

@@ -163,6 +163,7 @@ ul.navi a {
     -webkit-border-radius: 6px;
     border-radius: 6px;
     opacity:0.8;
+    margin-top: 5px;
 
     vertical-align:middle ;
 /*
@@ -237,9 +238,8 @@ span#social
     z-index: 6;
     position: absolute;
     bottom: 54px;
-    left: 12px;
-    top: 50%;
-    left: 30%;
+    top: 68%;
+    left: 40%;
 }
 
 a span i
