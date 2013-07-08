@@ -5,10 +5,12 @@ background: no-repeat center #4d90fe;
 .tab1:hover
 {
 background: no-repeat center #3682FC;
+
 }
 .mjn-fb
 {
-background: no-repeat center center #2A82D9;
+
+    background: no-repeat center center #2A82D9;
 }
 .mjn-fb:hover
 {
@@ -97,7 +99,7 @@ background: no-repeat center center #3890c5;
 .mjn-tab6
 {
 background: no-repeat center center#555;
-opacity: 0.9 !important;
+opacity: 1 !important;
 }
 .mjn-tab6:hover
 {
@@ -120,46 +122,54 @@ float:left;
 
 /* navigation menu styles - main styles */
 ul.navi {
-    position:relative;
-    z-index:100;
-    padding:0;
-    margin:0;
+       position: relative;
+               z-index: 99999;
+               margin: 10px auto;
+               width: 100px;
+               border-radius: .5em;
+               border: 2px solid rgb(196, 190, 170);
+               background: White;
+               verticalAlign: middle;
 /*
     margin:0 0 0 60px;
 */
     list-style:none;
-    width:auto;
-    height:30px;
+    height:40px;
 }
 ul.navi > li {
-    width:32px;
-    height:32px;
+    width:30px;
+    height:30px;
     position:absolute;
     left:0;
     top:0;
     -webkit-border-radius: 4px;
     border-radius: 4px;
-    -moz-transition: -moz-transform 0.5s ease-in-out;
+/*    -moz-transition: -moz-transform 0.5s ease-in-out;
     -ms-transition: -ms-transform 0.5s ease-in-out;
     -o-transition: -o-transform 0.5s ease-in-out;
     -webkit-transition: -webkit-transform 0.5s ease-in-out;
-    transition: transform 0.5s ease-in-out;
+    transition: transform 0.5s ease-in-out;*/
 }
 ul.navi a {
     display:block;
-    width:35px;
-    height:35px;
-    position:absolute;
+    width:30px;
+    height:30px;
+    position:relative;
     left:0;
     top:0;
-    line-height:38px;
+    line-height:37px;
     text-align:center;
     text-decoration:none;
     -webkit-border-radius: 6px;
     border-radius: 6px;
     opacity:0.8;
+    margin-top: 5px;
+
+    vertical-align:middle ;
+/*
     -webkit-box-shadow: 2px 2px 8px rgba(0,0,0,0.3) !important;
     box-shadow: 2px 2px 8px rgba(0,0,0,0.3) !important;
+*/
 }
 ul.navi a img {
     border:0;
@@ -179,28 +189,29 @@ ul.navi:hover {
     height:200px;
 }
 */
-ul.navi:hover li#n1 {
+/*
+ul.navi:hover li#n1, .n1.fake-active {
     -moz-transform: translatex(0px);
     -ms-transform: translatex(0px);
     -o-transform: translatex(0px);
     -webkit-transform: translatex(40px);
     transform: translatex(40px);
 }
-ul.navi:hover li#n2 {
+ul.navi:hover li#n2, .n2.fake-active {
     -moz-transform: translatex(90px);
     -ms-transform: translatex(90px);
     -o-transform: translatex(90px);
     -webkit-transform: translatex(80px);
     transform: translatex(80px);
 }
-ul.navi:hover li#n3 {
+ul.navi:hover li#n3, .n3.fake-active {
     -moz-transform: translatex(180px);
     -ms-transform: translatex(160px);
     -o-transform: translatex(160px);
     -webkit-transform: translatex(120px);
     transform: translatex(120px);
 }
-ul.navi:hover li#n4 {
+ul.navi:hover li#n4, .n4.fake-active {
     -moz-transform: translatex(260px);
     -ms-transform: translatex(270px);
     -o-transform: translatex(270px);
@@ -208,7 +219,7 @@ ul.navi:hover li#n4 {
     transform: translatex(160px);
 }
 
-ul.navi a:hover li#n6 {
+ul.navi a:hover li#n6, .n6.fake-active {
     -moz-transform: translatex(450px);
     -ms-transform: translatex(450px);
     -o-transform: translatex(450px);
@@ -216,89 +227,36 @@ ul.navi a:hover li#n6 {
     transform: translatex(0px);
     //display:none;
 }
+*/
 
-/* submenus - common styles */
-ul.sub {
-    padding:0;
-    margin:0;
-    list-style:none;
-    width:100%;
-    //height:200px;
-    position:absolute;
-    left:0;
-    top:0;
-    z-index:-1;
-    opacity:0;
 
-    -moz-transition: opacity 0s linear 1s;
-    -ms-transition: opacity 0s linear 1s;
-    -o-transition: opacity 0s linear 1s;
-    -webkit-transition: opacity 0s linear 1s;
-    transition: opacity 0s linear 1s;
-}
-ul.sub li {
-        width:80px;
-       height:80px;
-       position:absolute;
-       left:0;
-      top:0;
-      z-index:-1;
-    -moz-transition: -moz-transform 0.5s ease-in-out 0.5s;
-    -ms-transition: -ms-transform 0.5s ease-in-out 0.5s;
-    -o-transition: -o-transform 0.5s ease-in-out 0.5s;
-    -webkit-transition: -webkit-transform 0.5s ease-in-out 0.5s;
-    transition: transform 0.5s ease-in-out 0.5s;
-}
 
-/* submenus - hover styles */
-ul.navi > li:hover ul {
-    opacity:1;
-
-    -moz-transition: opacity 0s linear 0.5s;
-    -ms-transition: opacity 0s linear 0.5s;
-    -o-transition: opacity 0s linear 0.5s;
-    -webkit-transition: opacity 0s linear 0.5s;
-    transition: opacity 0s linear 0.5s;
-}
-ul.navi li:hover ul li.l {
-    -moz-transform: translatex(-32px) translatey(90px);
-    -ms-transform: translatex(-32px) translatey(90px);
-    -o-transform: translatex(-32px) translatey(90px);
-    -webkit-transform: translatex(-32px) translatey(90px);
-    transform: translatex(-32px) translatey(90px);
-}
-ul.navi li:hover ul li.c {
--moz-transform: translatex(2px) translatey(90px);
-    -ms-transform: translatex(2px) translatey(90px);
-    -o-transform: translatex(2px) translatey(90px);
-    -webkit-transform: translatex(2px) translatey(90px);
-    transform: translatex(2px) translatey(90px);
-}
-ul.navi li:hover ul li.r {
-    -moz-transform: translatex(74px) translatey(90px);
-    -ms-transform: translatex(74px) translatey(90px);
-    -o-transform: translatex(74px) translatey(90px);
-    -webkit-transform: translatex(74px) translatey(90px);
-    transform: translatex(74px) translatey(90px);
-}
-ul.navi li:hover ul li.r1 {
-    -moz-transform: translatex(146px) translatey(90px);
-    -ms-transform: translatex(146px) translatey(90px);
-    -o-transform: translatex(146px) translatey(90px);
-    -webkit-transform: translatex(146px) translatey(90px);
-    transform: translatex(146px) translatey(90px);
-}
 
 span#social
 {
-    width:  100%;
-    z-index: 10000;
+    width:  240px;
+    z-index: 6;
     position: absolute;
-    bottom: 72px;
-    left: 10px;
+    bottom: 54px;
+    top: 68%;
+    left: 40%;
 }
 
 a span i
 {
     font-size: 20px;
+}
+
+#closeSocial
+{
+     position: absolute;
+                z-index: 100000;
+               top:0px;
+               left: 40px;
+               margin: 0%;
+               font-size: 1.2em;
+               background-color: #333;
+               color: rgb(196, 190, 170);
+               border-radius: .5em;
+               border: 2px solid rgb(196, 190, 170);
 }

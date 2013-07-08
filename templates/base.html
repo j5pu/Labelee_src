@@ -16,6 +16,7 @@
     <link href='http://fonts.googleapis.com/css?family=Raleway:200' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="{{ STATIC_URL }}vendor/jquery-ui-1.10.2.custom/css/smoothness/jquery-ui-1.10.2.custom.min.css" type='text/css'>
     <link rel="stylesheet" href="{{ STATIC_URL }}vendor/bootstrap/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/map/index/font-awesome.min.css">
     <link rel="stylesheet" href="{{ STATIC_URL }}vendor/bootstrap/css/bootstrap-responsive.min.css" />
 
     <!-- Nuestro CSS -->
@@ -36,7 +37,7 @@
     <script src="{{ STATIC_URL }}vendor/jquery-1.9.1.min.js"></script>
 
     <script src="{{ STATIC_URL }}vendor/bootstrap/js/bootstrap.min.js"></script>
-    <script src="{{ STATIC_URL }}vendor/bootstrap/bootstrap-filestyle-0.1.0.min.js"></script>
+{#    <script src="{{ STATIC_URL }}vendor/bootstrap/bootstrap-filestyle-0.1.0.min.js"></script>#}
 
     <script src="{{ STATIC_URL }}vendor/jquery-ui-1.10.2.custom/js/jquery-ui-1.10.2.custom.min.js"></script>
 
@@ -51,7 +52,8 @@
     <script src="{{ STATIC_URL }}vendor/angularjs/angular.min.js"></script>
     <script src="{{ STATIC_URL }}vendor/angularjs/angular-sanitize.min.js"></script>
 
-
+    <!-- i18n -->
+    <script src="{% url 'django.views.i18n.javascript_catalog' %}"></script>
 
     <!--
     Nuestro JS

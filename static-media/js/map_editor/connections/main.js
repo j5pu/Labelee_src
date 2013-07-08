@@ -5,8 +5,6 @@ $(function () {
 
 var Connections = {
 
-
-
     init: function()
     {
         // Mapeamos el DOM
@@ -52,6 +50,12 @@ var Connections = {
         // Traemos todas las connections que hay en BD
         var connections = new ConnectionResource().readFromEnclosure(Connections.enclosure_id);
 
+        if(connections.length == 0)
+        {
+            Connections.$e.lista_connections[0].innerHTML = gettext('No saved connections at the moment for this enclosure');
+            return;
+        }
+
         // Vaciamos lo que haya dentro de <div id="lista_connections">
         Connections.$e.lista_connections[0].innerHTML = '';
 
@@ -61,13 +65,18 @@ var Connections = {
             var connection = connections[i];
             var init = connection.init;
             var end = connection.end;
-            var text = ' ' + init.description + ' -> ' + end.description;
+            var text = ' <span class="connector">' + init.description + '</span>' +
+                '<i class="icon-arrow-right icon-white"></i>' +
+                '<span class="connector">' + end.description + '</span>';
 
             //create new li element
             var elementoli = document.createElement("li");
             elementoli.setAttribute("class", "li");
-            elementoli.innerHTML = '<button class="btn eliminar_connection" ' +
-                'data-connection-id="' + connection.id + '"><i class="icon-remove"></i></button>' + text;
+            elementoli.innerHTML =
+                '<button class="btn eliminar_connection" data-connection-id="' + connection.id + '">' +
+                    '<i class="icon-remove"></i>' +
+                '</button>' +
+                text;
 
             Connections.$e.lista_connections[0].appendChild(elementoli);
         }
@@ -88,7 +97,7 @@ var Connections = {
         var data = {
             init: a1.value,
             end: a2.value
-        }
+        };
 
         new ConnectionResource().create(data);
 
@@ -100,7 +109,7 @@ var Connections = {
         var button = $(this);
         var connection_id = button.data('connection-id');
 
-        new ConnectionResource().del(connection_id, '¿Eliminar esta conexión?');
+        new ConnectionResource().del(connection_id, gettext('Delete connection?'));
 
         Connections.cargarConnections();
     }
@@ -116,7 +125,7 @@ Connections.$e = {
             select2: $('#select2')
         };
 
-        this.guardarConnection = $('input[value="Guardar connection"]');
+        this.guardarConnection = $('input.btn');
 
         this.lista_connections = $('#lista_connections');
 
@@ -145,7 +154,7 @@ Connections.Events = {
 
     agregaTodos: function () {
         Connections.Events._guardaConnection();
-        Connections.Events._eliminaConnection();
+//        Connections.Events._eliminaConnection();
     }
 
 };

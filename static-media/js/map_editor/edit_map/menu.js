@@ -1,9 +1,15 @@
 
 var LabelCategory = {
 
+    ids:{
+        blocker: 1,
+        connector: 3
+    },
+
     show_form_new: function(ev)
     {
         ev.preventDefault();
+        $e.floor.poi_menu.hide(400);
         $e.label.form.root_node.hide(400);
         $e.category.form.root_node.show(400);
     },
@@ -54,6 +60,7 @@ var LabelCategory = {
         $e.category.form.img.val('');
         $e.category.form.color.val('');
         $e.category.form.root_node.hide(400);
+        $e.floor.poi_menu.show(400);
 
         // volvemos a rellenar el selector con el nuevo dato
         Menu.setCategorySelector();
@@ -72,30 +79,52 @@ var LabelCategory = {
     {
         ev.preventDefault();
         var category_id = $e.category.selector.val();
-        var confirm_msg = '¿Eliminar categoría? (se eliminarán todas sus etiquetas)';
+        var confirm_msg = gettext('Delete category? (all its labels will be removed)');
+
+        // Eliminación en cascada: categoría -> etiqueta -> punto
         new LabelCategoryResource().del(category_id, confirm_msg);
+
         Menu.setCategorySelector();
+
+        // Recargamos el grid para evitar que la próxima vez que guardemos
+        // intente guardar puntos de una etiqueta que no existe
+        Floor.reloading = true;
+        Floor.loadGrid();
     },
 
 
     isBlocker: function(label_category)
     {
         // Nos indica si la categoría es bloqueante
-        var cat_name = null;
+
+        var self = this;
+        var cat_id;
 
         if(label_category)
+        {
+            cat_id = label_category.id;
             cat_name = label_category.name;
+        }
         else if(Painter.label.category)
+        {
+            cat_id = Painter.label.category.id;
             cat_name = Painter.label.category.name;
+        }
 
-        return cat_name.toUpperCase() === 'BLOQUEANTES';
+        // Nos aseguramos por el id o el nombre que es una bloqueante
+        return cat_id == self.ids.blocker ||
+            cat_name.toUpperCase() == 'BLOQUEANTES' ||
+            cat_name.toUpperCase() == 'BLOCKERS';
     },
 
 
     isConnector: function(label_category)
     {
         // Nos indica si la categoría es arista
-        return label_category.name.toUpperCase() === 'ARISTAS';
+        if(!label_category.name_es)
+            return false;
+
+        return label_category.name_es.toUpperCase() === 'ARISTAS';
     }
 };
 
@@ -110,6 +139,7 @@ var Label = {
 
     show_form_new: function(ev){
         ev.preventDefault();
+        $e.floor.poi_menu.hide(400);
         $e.label.form.root_node.show(400);
         $e.category.form.root_node.hide(400);
         var category = $e.category.selector.val();
@@ -171,6 +201,7 @@ var Label = {
 
         // Escondemos el formulario para crear la etiqueta
         $e.label.form.root_node.hide(400);
+        $e.floor.poi_menu.show(400);
 
         Menu.label_created = null;
     },
@@ -186,16 +217,24 @@ var Label = {
     {
         ev.preventDefault();
         var label_id = $e.label.selector.val();
-        var confirm_msg = '¿Eliminar etiqueta?';
+        var confirm_msg = gettext('Delete label?');
+        // Elimina en cascada: etiqueta -> punto
         new LabelResource().del(label_id, confirm_msg);
         Menu.setLabelSelector();
+
+        Floor.reloading = true;
+        Floor.loadGrid();
     },
 
 
     isWall: function(label)
     {
-        return label.name.toUpperCase() === 'MURO'
-            || label.name.toUpperCase() === 'WALL';
+        if(!label || !label.name)
+            return false;
+
+        return label.name.toUpperCase() === 'MURO' ||
+            label.name.toUpperCase() === 'WALL' ||
+            false;
     },
 
 
@@ -234,7 +273,10 @@ var Menu = {
         Menu._setSelectors();
         Menu.setQrList();
         Menu.setPointStats();
-        Events.menu.bind();
+
+        if($e.floor.num_rows.val() == Floor.data.num_rows)
+            $e.floor.change_num_rows.attr('disabled', 'disabled');
+//        Events.menu.bind();
     },
 
 
@@ -257,6 +299,13 @@ var Menu = {
 
     setPointStats: function()
     {
+        if(!Floor.hasPoints())
+        {
+            Floor.point_count.to_save = 0;
+            Floor.point_count.saved = 0;
+            Floor.point_count.to_delete = 0;
+            Floor.point_count.total = 0;
+        }
         $e.point_count.to_save.html(Floor.point_count.to_save);
         $e.point_count.saved.html(Floor.point_count.saved);
         $e.point_count.to_delete.html(Floor.point_count.to_delete);
@@ -311,7 +360,7 @@ var Menu = {
         // Recogemos de la B.D. todos los LabelCategory y los metemos en el selector
 
         Menu.categories = new LabelCategoryResource().readAll();
-        var prompt_opt = 'Selecc. categoría';
+        var prompt_opt = gettext('Select category');
         setSelector($e.category.selector, Menu.categories, prompt_opt);
         setSelector($e.label.form.category, Menu.categories, prompt_opt);
 
@@ -332,14 +381,14 @@ var Menu = {
 
         if(!category_id)
         {
-            setSelector($e.label.selector, null, 'Selecc. etiqueta');
+            setSelector($e.label.selector, null, gettext('Select label'));
             return;
         }
 
         Painter.label_category = new LabelCategoryResource().read(category_id);
         Menu.labels = new LabelResource().readAllFiltered('?category__id=' + category_id);
 
-        setSelector($e.label.selector, Menu.labels, 'Selecc. etiqueta');
+        setSelector($e.label.selector, Menu.labels, gettext('Select label'));
 
         // Si se viene de crear una etiqueta se elije esa
         if(Menu.label_created)

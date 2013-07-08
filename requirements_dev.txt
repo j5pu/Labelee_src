@@ -5,3 +5,4 @@ simplejson
 south
 docutils
 tweepy>=2.0
+django-modeltranslation

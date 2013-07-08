@@ -1,7 +1,8 @@
-# -*- coding: utf8 -*-
+# -*- coding: utf-8 -*-
 
 # Django settings for a generic project.
 import os
+from django.utils.translation import ugettext
 
 PROJECT_ROOT = os.path.abspath(os.path.dirname(__file__))
 
@@ -26,7 +27,7 @@ TIME_ZONE = 'Europe/Madrid'
 
 # Language code for this installation. All choices can be found here:
 # http://www.i18nguy.com/unicode/language-identifiers.html
-LANGUAGE_CODE = 'es-ES'
+LANGUAGE_CODE = 'en'
 
 SITE_ID = 1
 
@@ -94,10 +95,13 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     #
-    # Si queremos desactivar la protección csrf comentamos la línea de abajo..
+    # Si queremos desactivar la proteccion csrf comentamos la linea de abajo..
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
+    'utils.force_default_middleware.ForceDefaultLanguageMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
+
     # Uncomment the next line for simple clickjacking protection:
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
@@ -132,6 +136,9 @@ INSTALLED_APPS = (
     'map_editor',
     'map',
     'route',
+    'modeltranslation',
+    'log',
+    # 'panorama',
 )
 
 # A sample logging configuration. The only tangible logging
@@ -167,7 +174,7 @@ INSTALLED_APPS = (
 API_LIMIT_PER_PAGE = 5000
 
 #
-# Para ver si estamos en desarrollo o producción
+# Para ver si estamos en desarrollo o produccion
 ## Pull in CloudFoundry's production settings
 if 'VCAP_SERVICES' in os.environ:
     import json
@@ -211,7 +218,17 @@ else:
     #         "HOST": "192.168.1.201",
     #         "PORT": "3306",
     #         }
-    #  }
+    # }
+    # DATABASES = {
+    #     "default": {
+    #         "ENGINE": "django.db.backends.mysql",
+    #         "NAME": "labelee_dev",
+    #          "USER": "mnopi",
+    #         "PASSWORD": "1aragon1",
+    #         "HOST": "192.168.1.201",
+    #         "PORT": "3306",
+    #         }
+    # }
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.mysql",
@@ -219,11 +236,11 @@ else:
             "USER": "mnopi",
             "PASSWORD": "1aragon1",
             "HOST": "192.168.1.201",
-            "PORT": "3306",
+            "PORT": "",
             }
         }
 
-#     Estas aplicaciones sólo se usarán en desarrollo..
+#     Estas aplicaciones solo se usaran en desarrollo..
     INSTALLED_APPS += ('south', 'sandbox',)
 
 EMAIL_USE_TLS = True
@@ -232,3 +249,26 @@ EMAIL_HOST_USER = 'alvaro.gutierrez@mnopi.com'
 EMAIL_HOST_PASSWORD = '1aragon1'
 EMAIL_PORT = 587
 from utils.constants import *
+
+
+LANGUAGES = (
+    ('en', 'English'),
+    ('es', 'Spanish'),
+)
+
+LOCALE_PATHS = (
+    os.path.join(PROJECT_ROOT, 'locale'),
+)
+
+TEMPLATE_CONTEXT_PROCESSORS = {
+    'django.core.context_processors.static',
+    'django.core.context_processors.media',
+    'django.contrib.auth.context_processors.auth',
+    'django.core.context_processors.i18n',
+}
+
+
+MODELTRANSLATION_AUTO_POPULATE = True
+MODELTRANSLATION_FALLBACK_LANGUAGES = ('en', 'es')
+
+LOGIN_URL = '/accounts/login/'

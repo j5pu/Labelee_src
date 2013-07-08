@@ -17,7 +17,8 @@ $e = {
                 img: $('#category-form input[name=img]'),
                 name: $('#category-form input[name=name]'),
                 color: $('#category-form input[name=color]'),
-                create: $('#category-form button[name=create]')
+                create: $('#category-form button[name=create]'),
+                cancel: $('#category-form button[name=cancel]')
             }
         };
 
@@ -32,21 +33,24 @@ $e = {
                 img: $('#label-form input[name=img]'),
                 name: $('#label-form input[name=name]'),
                 category: $('#label-form select'),
-                create: $('#label-form button[name=create]')
+                create: $('#label-form button[name=create]'),
+                cancel: $('#label-form button[name=cancel]')
             }
         };
 
         this.floor = {
             grid: $('#grid'),
-            num_rows: $('#num_rows'),
+            num_rows: $('#num_rows input[type=text]'),
             num_blocks: $('#num_blocks'),
             toggle_border: $('#toggle_border'),
             toggle_erase_mode: $('input[name=toggle_erase_mode]'),
             toggle_erase_mode_checked: $('input[name=toggle_erase_mode]:checked'),
             blocks: null,
             update: $('#update_floor'),
+            change_num_rows: $('#change_num_rows'),
             clear: $('#clear_floor'),
-            labeled_blocks: null
+            labeled_blocks: null,
+            poi_menu: $('#poi_menu')
         };
 
         this.qr = {

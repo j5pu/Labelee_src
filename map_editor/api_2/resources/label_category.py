@@ -1,4 +1,4 @@
-# -*- coding: utf8 -*-
+# -*- coding: utf-8 -*-
 from django.core.serializers import serialize
 from django.db.models import Sum
 from django.http.response import HttpResponse

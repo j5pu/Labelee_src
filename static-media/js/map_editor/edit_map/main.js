@@ -1,8 +1,5 @@
 
 $(function(){
-
-    // Cargamos todas las imágenes
-
     WaitingDialog.init();
 
     setTimeout(function(){

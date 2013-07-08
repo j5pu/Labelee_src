@@ -5,6 +5,8 @@ var Floor = {
 
     loading: false,
     updating: false,
+    redrawing_grid: false,
+    rows_changing: false,
     show_only_qrs: false,
     point_count: {
         to_save: 0,
@@ -54,7 +56,7 @@ var Floor = {
             'background-size': Floor.grid_width + 'px' + ' ' + Floor.grid_height + 'px'
         });
 
-        $e.floor.num_blocks.html((Floor.num_rows * Floor.num_cols) + ' bloques');
+        $e.floor.num_blocks.html((Floor.num_rows * Floor.num_cols) + ' ' + gettext('blocks'));
 
         // Limpiamos el grid si estaba creado
         $grid.empty();
@@ -114,6 +116,9 @@ var Floor = {
     update: function()
     {
 
+        if(Floor.redrawing_grid)
+            return;
+
 //        loadingMsg.show('Actualizando planta..');
 
         // Tomamos todas las etiquetas pintadas sobre el plano hasta el momento
@@ -155,8 +160,11 @@ var Floor = {
                     );
                 var has_descr_modified =
                     from_db && ($(this).data('saved-descr') != descr);
-                var is_modified = has_qr_modified || has_descr_modified;
 
+                var panorama_input = $(this).find('input[type=file]');
+                var has_panorama_attached = from_db && (panorama_input.length > 0 && panorama_input.val() != "")
+
+                var is_modified = has_qr_modified || has_descr_modified || has_panorama_attached;
 
                 if(is_new)
                 {
@@ -178,6 +186,9 @@ var Floor = {
                         qr: checked_qr
                     };
 
+                    if(has_panorama_attached)
+                        new PointResource().addImg($(this).find('form'), $(this).data('point-id'), function(){});
+
                     points_to_update.push(point_to_update);
                 }
             });
@@ -186,7 +197,11 @@ var Floor = {
         // Guardamos las filas y columnas
         Floor.data.num_rows = Floor.num_rows;
         Floor.data.num_cols = Floor.num_cols;
-        new FloorResource().update(Floor.data, Floor.data.id);
+        var data = {
+            num_rows: Floor.num_rows,
+            num_cols: Floor.num_cols
+        };
+        new FloorResource().update(data, Floor.data.id);
 
         // Enviamos al servidor primero los puntos a eliminar y luego los nuevos
         var pr = new PointResource();
@@ -292,6 +307,9 @@ var Floor = {
 
         Floor.loading = false;
 
+        // Dibujamos todos los botones para subir archivo
+        FileInput.draw();
+
         // Cerramos el mensaje de espera
         WaitingDialog.close();
     },
@@ -382,16 +400,6 @@ var Floor = {
 
     _loadLabels: function()
     {
-        // Cargamos cada etiqueta almacenada para la planta (muro, POI, etc)
-
-        if(Floor.show_only_qrs)
-            Floor.points = new PointResource().readQRsFromFloor(Floor.data.id);
-        else
-        {
-            Floor.points = new PointResource().readAllFiltered('?floor__id=' + Floor.data.id);
-            Floor.painted_connectors = new PointResource().readConnectionsFromFloor(Floor.data.id)
-        }
-
         // Obtenemos todas las etiquetas que contiene la planta a cargar, y así evitar
         // llamar a BD cada vez que queramos pedir la etiqueta de cada punto
         Floor.saved_labels = new LabelResource().readFromFloor(Floor.data.id);
@@ -460,7 +468,16 @@ var Floor = {
 
     loadEmpty: function()
     {
-        Floor.num_rows = parseInt($e.floor.num_rows.val(), 10);
+        Floor.loading = true;
+
+        if(Floor.points)
+            Floor.points = null;
+
+        if(Floor.rows_changing)
+            Floor.num_rows = parseInt($e.floor.num_rows.val(), 10);
+        else
+            Floor.num_rows = Floor.data.num_rows || parseInt($e.floor.num_rows.val(), 10);
+
         Floor.grid_height = resize(Floor.img.height, Floor.num_rows);
         Floor.block_height = Floor.grid_height / Floor.num_rows;
 
@@ -479,6 +496,8 @@ var Floor = {
         Events.bindAll();
 
         Floor.loading = false;
+        Floor.reloading = false;
+        Floor.rows_changing = false;
 
         WaitingDialog.close();
     },
@@ -486,9 +505,18 @@ var Floor = {
 
     loadGrid: function()
     {
-        WaitingDialog.open('Cargando grid para la planta..');
+        WaitingDialog.open(gettext('Loading floor grid') + '..');
 
         Floor.loading = true;
+
+        // Cargamos cada etiqueta almacenada para la planta (muro, POI, etc)
+        if(Floor.show_only_qrs)
+            Floor.points = new PointResource().readQRsFromFloor(Floor.data.id);
+        else
+        {
+            Floor.points = new PointResource().readAllFiltered('?floor__id=' + Floor.data.id);
+            Floor.painted_connectors = new PointResource().readConnectionsFromFloor(Floor.data.id)
+        }
 
         Floor.point_count.saved = 0;
         Floor.point_count.to_save = 0;
@@ -499,7 +527,7 @@ var Floor = {
         Painter.erase_mode = false;
 
         setTimeout(function(){
-            if(Floor.data.num_rows)
+            if(Floor.hasPoints())
                 Floor.loadSaved();
             else
                 Floor.loadEmpty();
@@ -520,6 +548,58 @@ var Floor = {
 //        FloorResource().del(this.data., confirm_msg);
 //        setGridSelector();
 //        loadEmptyGrid();
+    },
+
+
+    changeNumRows: function(ev)
+    {
+        // Si pulsamos alguna tecla que no sea intro no hacemos nada,
+        // sólo comprobamos
+        if($e.floor.num_rows.val() == Floor.data.num_rows ||
+            $e.floor.num_rows.val() < 20)
+        {
+            $e.floor.change_num_rows.attr('disabled', 'disabled');
+            return;
+        }
+        else
+            $e.floor.change_num_rows.removeAttr('disabled');
+
+        if(ev.keyCode && ev.keyCode != 13)
+            return;
+
+        // Si el número de filas no varia tampoco hacemos nada
+        if($e.floor.num_rows.val() == Floor.data.num_rows)
+            return;
+
+        ev.preventDefault();
+
+        Floor.rows_changing = true;
+
+        if(Floor.hasPoints())
+        {
+            if(confirm(gettext('Changing number of rows will erase all points on the floor. Continue?')))
+            {
+                new PointResource().deletePoints(Floor.points);
+                WaitingDialog.open(gettext('Redrawing grid') + '..');
+                Floor.reloading = true;
+                setTimeout(Floor.loadEmpty, 500);
+            }
+            else
+            {
+                $e.floor.num_rows.val(Floor.data.num_rows || 20);
+                $e.floor.change_num_rows.attr('disabled', 'disabled');
+            }
+        }
+        else
+        {
+            WaitingDialog.open(gettext('Redrawing grid') + '..');
+            setTimeout(Floor.loadEmpty, 200);
+        }
+    },
+
+    hasPoints: function()
+    {
+        return Floor.points && Floor.points.length > 0;
     }
 };
 

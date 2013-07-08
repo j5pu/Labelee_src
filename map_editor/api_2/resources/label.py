@@ -1,4 +1,4 @@
-# -*- coding: utf8 -*-
+# -*- coding: utf-8 -*-
 
 from django.db.models import Sum
 from django.http import HttpResponse
@@ -44,6 +44,8 @@ def read_from_floor(request, floor_id):
         label['category'] = {
             'id': label_category.id,
             'name': label_category.name,
+            'name_es': label_category.name_es,
+            'name_en': label_category.name_en,
             'color': label_category.color,
             'img': label_category.img.name,
             'resource_uri': '/api/v1/label-category/' + str(label_category.id)

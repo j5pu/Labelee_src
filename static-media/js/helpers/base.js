@@ -214,3 +214,19 @@ var ImgLoader = {
         this.src_list.push(img_src);
     }
 };
+
+
+var I18n = {
+    selectLang: function(lang_code)
+    {
+        $('#choose-lang img').on('click', function(){
+            $(this).parent().find('select').val($(this).attr('id'));
+            $(this).parent().submit();
+        });
+
+        $('#' + lang_code).css({'display':'none'});
+    }
+};
+
+
+
