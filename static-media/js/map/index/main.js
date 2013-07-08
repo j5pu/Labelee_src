@@ -152,31 +152,11 @@ $(function() {
 
 
 function myOrientResizeFunction() {
-    calculateCoords();
+    Coupon.calculateCouponArea();
     Panorama.resize();
 }
 
-function calculateCoords() {
-    var $img = $('img#cupon-img');
 
-    var ancho = $img.width(),
-            alto = $img.height(),
-            vert = 360 / 469 * ancho,
-            imgCoords = "0," + alto + "," + ancho + "," + alto + "," + vert + ",0,0," + alto,
-            $area = $('div#cupones area');
-
-        $area.attr({'coords': imgCoords});
-        $('div#cupones area').on('click', function () {
-//        $('div#cupones').on('click', function () {
-            launchCarousel()
-        });
-
-}
-
-function launchCarousel() {
-    if(Panorama.opened) Panorama.close();
-    $('div.device').fadeToggle();
-}
 
 function hideSplash() {
     var d = new Date();
@@ -186,6 +166,55 @@ function hideSplash() {
     LocalStorageHandler.init();
     $('span#myCar').show();
 }
+
+var Coupon = {
+    opened: false,
+
+    open: function()
+    {
+        if(Panorama.opened) Panorama.close();
+
+        if(Coupon.opened){
+            Coupon.close();
+            return;
+        }
+
+        $('div.device').fadeIn(300);
+
+        $(document).on('click', function(ev){
+            ev.stopPropagation();
+            console.log('click: '+ Coupon.opened);
+            if(Coupon.opened && $('div.device').has($(ev.target)).length === 0)
+                Coupon.close();
+        });
+
+        Coupon.opened = true;
+
+    },
+
+    calculateCouponArea: function()
+    {
+        var $img = $('img#cupon-img');
+
+        var ancho = $img.width(),
+            alto = $img.height(),
+            vert = 360 / 469 * ancho,
+            imgCoords = "0," + alto + "," + ancho + "," + alto + "," + vert + ",0,0," + alto,
+            $area = $('div#cupones area');
+
+        $area.attr({'coords': imgCoords});
+        $('div#cupones area').on('click', function (ev) {
+            ev.stopPropagation();
+            Coupon.open();
+        });
+    },
+
+    close: function()
+    {
+        Coupon.opened = false;
+        $('div.device').fadeOut(200);
+    }
+};
 
 
 

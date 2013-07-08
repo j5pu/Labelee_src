@@ -32,6 +32,11 @@ var Panorama = {
 
 //            addSamplePano(point.panorama,{ratio:9/16});
             addSamplePano(point.panorama,{ratio:9/16, minSpeed:30});
+
+         $(document).on('click', function(ev){
+             if(ev.target.tagName !== 'CANVAS')
+                Panorama.close();
+         });
     },
 
     resize: function()

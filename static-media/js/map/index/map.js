@@ -243,7 +243,7 @@ var LocalStorageHandler = {
                 else if (prevDest.enclosureid == qrPoint.enclosure.id) {
                     if (confirm(prevDest.mesg)) {
                         showOrigin = true;
-                        drawRoute(qrPoint.point.id, qrFloor.sX, qrFloor.sY, prevDest.poid, prevDest.psX, prevDest.psY);
+                        preDrawRoute(qrPoint.point.id, qrPoint.floor.id, prevDest.poid, prevDest.floorid);
                     }
                     else
                         localStorage.removeItem('prevDest');
@@ -293,8 +293,6 @@ function loopFloors() {
         initMap(qrPoint);
 
         LocalStorageHandler.draw();
-
-        calculateCoords();
 
 
 //       if(( ua.indexOf("Android") >= 0 ) && (androidversion >=3.0))
@@ -547,6 +545,8 @@ function initMap(qrPoint) {
     qrMarker._bringToFront();
 
     map.invalidateSize();
+
+    Coupon.calculateCouponArea();
 
     loadedLabels = true;
 }
