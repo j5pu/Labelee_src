@@ -679,7 +679,7 @@ label > span {
 .leaflet-control-layers-base span{
     margin-left:1px;
     font-size: 17px;
-    text-shadow: 2px 2px 2px #ccc;
+    text-shadow: 1px 1px 1px #bbb;
 }
 span>span{
     color: green;
@@ -1005,7 +1005,6 @@ body{
 .leaflet-popup-tip-container {
 border-top: white;
 }
-/*
 
 div#cupones{
     position: absolute;
@@ -1020,8 +1019,8 @@ div#cupones{
     position: absolute;
     bottom: 0;
 }
-*/
 
+/*
 div#cupones {
     position: absolute;
     right: 0;
@@ -1036,7 +1035,9 @@ div#cupones {
     border-radius: 6px 0 0 6px;
 
 }
+*/
 
+/*
 #cupones a {
     display: block;
     z-index: 99;
@@ -1050,6 +1051,7 @@ div#cupones {
     text-shadow: 1px 1px 1px rgba(0,0,0,0.2);
     padding:0 2px;
 }
+*/
 .device {
     width: 86%;
     height: 40%;

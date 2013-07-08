@@ -143,12 +143,14 @@
     <!--span class="locator" id="myCar"><i class="icon-truck icon-white"></i></span-->
     <span class="locator icon-automobile" id="myCar"></span>
 
+{% comment %}
     <div id="cupones">
         <a href="#">
             COUPONS
         </a>
     </div>
- {% comment %}   <div id="cupones">
+{% endcomment %}
+    <div id="cupones">
         <img id="cupon-img" src="/media/cupones_lab.png"
              alt="Cupones" usemap="#cupon">
         <map name="cupon">
@@ -156,7 +158,6 @@
         </map>
 
     </div>
-{% endcomment %}
 
     <div class="device">
         <a class="arrow-left" href="#"></a>
@@ -203,8 +204,8 @@
         $(window).resize(function () {
             myOrientResizeFunction()
         });
-//        $('div#cupones area').on('click', function () {
-        $('div#cupones').on('click', function () {
+        $('div#cupones area').on('click', function () {
+//        $('div#cupones').on('click', function () {
             launchCarousel()
         });
 
@@ -260,20 +261,20 @@
     });
 
     function myOrientResizeFunction() {
-{#        calculateCoords();#}
+        calculateCoords();
         Panorama.resize();
     }
 
-{#    function calculateCoords() {#}
-{#        var $img = $('img#cupon-img'),#}
-{#                ancho = $img.width(),#}
-{#                alto = $img.height(),#}
-{#                vert = 360 / 469 * ancho,#}
-{#                imgCoords = "0," + alto + "," + ancho + "," + alto + "," + vert + ",0,0," + alto,#}
-{#                $area = $('div#cupones area');#}
-{##}
-{#        $area.attr({'coords': imgCoords});#}
-{#    }#}
+    function calculateCoords() {
+        var $img = $('img#cupon-img'),
+                ancho = $img.width(),
+                alto = $img.height(),
+                vert = 360 / 469 * ancho,
+                imgCoords = "0," + alto + "," + ancho + "," + alto + "," + vert + ",0,0," + alto,
+                $area = $('div#cupones area');
+
+        $area.attr({'coords': imgCoords});
+    }
 
     function launchCarousel() {
         if(Panorama.opened) Panorama.close();
