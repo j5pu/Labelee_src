@@ -676,6 +676,9 @@ label > span {
     font-weight: bold;
 }
 
+.leaflet-control-layers-base span{
+    margin-left:1px;
+}
 span>span{
     color: green;
     font: 20px bolder;
