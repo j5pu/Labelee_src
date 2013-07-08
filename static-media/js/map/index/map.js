@@ -452,7 +452,9 @@ function loadPOIs() {
                 (qrPoint.point.col * qrFloor.scaleX) + qrFloor.scaleX];
 
             if (qr_type == 'origin') {
-                var originLegend = gettext("You are right here:") + ' ' + qrPoint.point.description;
+                var point_description = qrPoint.label.name_en == 'My car' ?
+                    qrPoint.label.name : qrPoint.point.description;
+                var originLegend = gettext("You are right here:") + ' ' + point_description;
 
                 if (qrPoint.point.panorama)
                     originLegend = originLegend + Panorama.renderIcon(qrPoint.point.id);
