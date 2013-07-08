@@ -30,7 +30,7 @@ html.mmenu-opened body
 .mmenu *
 {
     -webkit-text-size-adjust: none;
-    font-family: Arial, Helvetica, Garuda, sans-serif;
+    font-family: 'Noto Sans', Arial, Helvetica, Garuda, sans-serif;
     font-size: 14px;
 }
 .mmenu ul,
@@ -377,7 +377,7 @@ body {
     }
 body, div, p
 {
-    font-family: Arial, Helvetica, Verdana;
+    font-family: 'Noto Sans', Arial, Helvetica, Verdana;
     font-size: 14px;
     line-height: 22px;
     color: #333;
