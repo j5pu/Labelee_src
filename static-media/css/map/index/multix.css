@@ -679,6 +679,7 @@ label > span {
 .leaflet-control-layers-base span{
     margin-left:1px;
     font-size: 17px;
+    text-shadow: 1px 1px 1px #bbb;
 }
 span>span{
     color: green;
@@ -874,6 +875,7 @@ span.locator
     line-height: 31px;
     margin-left: 2px;
     margin-top: 11px;
+    text-shadow: 1px 1px 1px #aaa;
 }
 
 #myCar
@@ -1003,7 +1005,6 @@ body{
 .leaflet-popup-tip-container {
 border-top: white;
 }
-/*
 
 div#cupones{
     position: absolute;
@@ -1018,8 +1019,8 @@ div#cupones{
     position: absolute;
     bottom: 0;
 }
-*/
 
+/*
 div#cupones {
     position: absolute;
     right: 0;
@@ -1034,7 +1035,9 @@ div#cupones {
     border-radius: 6px 0 0 6px;
 
 }
+*/
 
+/*
 #cupones a {
     display: block;
     z-index: 99;
@@ -1048,6 +1051,7 @@ div#cupones {
     text-shadow: 1px 1px 1px rgba(0,0,0,0.2);
     padding:0 2px;
 }
+*/
 .device {
     width: 86%;
     height: 40%;
@@ -1148,16 +1152,11 @@ button{
 
 button#closeCoupon {
 position: absolute;
-
 top: -2%;
-
 right:-4%;
 margin: 6%;
 font-size:1.2em;
-background-color:#333;
-color:rgb(196, 190, 170);
-border-radius:.5em;
-border: 2px solid rgb(196, 190, 170);
+color:rgba(255, 255, 255, 0.8);
 }
 
 

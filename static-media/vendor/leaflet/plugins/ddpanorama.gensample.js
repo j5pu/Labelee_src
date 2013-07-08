@@ -57,11 +57,8 @@ function addSamplePano(options)
             'right':'16%',
             'margin': 6+'%',
             'font-size':'1.2em',
-            'background-color':'#333',
-            'color':'rgb(196, 190, 170)',
-            'border-radius':'.5em',
-            'border': '2px solid rgb(196, 190, 170)'
-
+            'color':'rgba(255, 255, 255, 0.9)',
+            'text-shadow': '2px 2px 2px #555'
         })
             .on('click', function(){
                 Panorama.close();
