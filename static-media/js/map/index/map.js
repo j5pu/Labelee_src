@@ -546,7 +546,7 @@ function initMap(qrPoint) {
 
     map.invalidateSize();
 
-    Coupon.calculateCouponArea();
+    Coupon.init();
 
     loadedLabels = true;
 }

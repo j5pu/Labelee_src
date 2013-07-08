@@ -170,6 +170,22 @@ function hideSplash() {
 var Coupon = {
     opened: false,
 
+    init: function()
+    {
+        Coupon.calculateCouponArea();
+        Coupon.bindOpen();
+    },
+
+
+    bindOpen: function()
+    {
+        $('div#cupones area').on('click', function (ev) {
+            ev.stopPropagation();
+            Coupon.open();
+        });
+    },
+
+
     open: function()
     {
         if(Panorama.opened) Panorama.close();
@@ -192,6 +208,7 @@ var Coupon = {
 
     },
 
+
     calculateCouponArea: function()
     {
         var $img = $('img#cupon-img');
@@ -203,11 +220,8 @@ var Coupon = {
             $area = $('div#cupones area');
 
         $area.attr({'coords': imgCoords});
-        $('div#cupones area').on('click', function (ev) {
-            ev.stopPropagation();
-            Coupon.open();
-        });
     },
+
 
     close: function()
     {
