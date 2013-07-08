@@ -1172,6 +1172,12 @@ border: 2px solid rgb(196, 190, 170);
     line-height: 1;
     -webkit-font-smoothing: antialiased;
 }
+.icon-automobile:before {
+    content: "\31";
+}
+.icon-car:before {
+    content: "\32";
+}
 @media only screen and (min-width: 320px) {
     canvas
     {
