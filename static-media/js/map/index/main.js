@@ -200,7 +200,9 @@ var Coupon = {
         $(document).on('click', function(ev){
             ev.stopPropagation();
             console.log('click: '+ Coupon.opened);
-            if(Coupon.opened && $('div.device').has($(ev.target)).length === 0)
+            if(Coupon.opened &&
+                ($('div.device').has($(ev.target)).length === 0 &&
+                    !$(ev.target).hasClass('device')))
                 Coupon.close();
         });
 
