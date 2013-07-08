@@ -885,13 +885,13 @@ span.locator
     left: 10px;
 }
 
-#location:focus, #myCar:focus
+#location:hover, #myCar:hover
 {
     background-color: #bbb;
     color: dimgrey;
 }
 
-.locator:active
+.locatorActive
 {
     background-color: #bbb;
     color: dimgrey;
