@@ -1,6 +1,7 @@
 var ua = navigator.userAgent;
 var androidversion = parseFloat(ua.slice(ua.indexOf("Android")+8));
 
+EVENTS = 'click touch tap';
 /*
 //Pantalla completa
 function hideAddressBar()
@@ -33,6 +34,7 @@ $(function() {
 
     //SwipeMenu.init();
     ScrollMenu.init();
+    Panorama.init();
 
 
     var $menu = $('nav#menu-right');
@@ -115,7 +117,7 @@ $(function() {
     });
 
 
-    $('button#closeCoupon').on('click', function () {
+    $('button#closeCoupon').on(EVENTS, function () {
         $('div.device').fadeOut();
     });
     var mySwiper = new Swiper('.swiper-container', {
@@ -124,11 +126,11 @@ $(function() {
         grabCursor: true,
         paginationClickable: true
     });
-    $('.arrow-left').on('click', function (e) {
+    $('.arrow-left').on(EVENTS, function (e) {
         e.preventDefault();
         mySwiper.swipePrev();
     });
-    $('.arrow-right').on('click', function (e) {
+    $('.arrow-right').on(EVENTS, function (e) {
         e.preventDefault();
         mySwiper.swipeNext();
     });
@@ -137,7 +139,7 @@ $(function() {
     $('body').prepend('<div class="splash">    <div class="container">        <div class="sp-container"             >            <div class="frame-5"><span><img src="/media/logo-labelee-sin-slogan.png"></span></div>            <div id="find" class="frame-6">find<span id="your"> your<span id="way"> way!</span></span></div>        </div>    </div></div>')
     setTimeout(hideSplash, 3000);
 
-    $('div.swiper-slide img').on('click', function (e) {
+    $('div.swiper-slide img').on(EVENTS, function (e) {
         e.preventDefault();
         var $id = $(this).prop('id');
         if ($id === "cup1") preDrawRoute(qrPoint.point.id, qrFloor.id, 2850, 28);
@@ -179,7 +181,7 @@ var Coupon = {
 
     bindOpen: function()
     {
-        $('div#cupones area').on('click', function (ev) {
+        $('div#cupones area').on(EVENTS, function (ev) {
             ev.stopPropagation();
             Coupon.open();
         });
@@ -197,9 +199,9 @@ var Coupon = {
 
         $('div.device').fadeIn(300);
 
-        $(document).on('click', function(ev){
+        $(document).on(EVENTS, function(ev){
             ev.stopPropagation();
-            console.log('click: '+ Coupon.opened);
+            //console.log('click: '+ Coupon.opened);
             if(Coupon.opened &&
                 ($('div.device').has($(ev.target)).length === 0 &&
                     !$(ev.target).hasClass('device')))
