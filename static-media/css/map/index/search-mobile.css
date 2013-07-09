@@ -75,10 +75,11 @@ h3,h4 {
 .leaflet-touch .leaflet-bar a {
 	background-color: #bbb;
     opacity:0.8;
-	width: 31px;
-	height: 31px;
+    width: 29px;
+    height: 29px;
     color: white;
-    border-color: white;;
+    border: 2px solid white;
+}
 }
 .leaflet-touch .leaflet-control-zoom-out {
 	line-height: 24px;	
