@@ -38,9 +38,11 @@ var Panorama = {
             Panorama.opened = true;
             var point_id = element.id;
             var point = new PointResource().read(point_id);
+            var newWidth=window.innerWidth * 0.8,
+                newHeight=newWidth*9/16;
 
 //            addSamplePano(point.panorama,{ratio:9/16});
-            addSamplePano(point.panorama,{ratio:9/16, minSpeed:30});
+            addSamplePano(point.panorama,{height: newHeight, ratio:9/16, minSpeed:30});
     },
 
     resize: function()

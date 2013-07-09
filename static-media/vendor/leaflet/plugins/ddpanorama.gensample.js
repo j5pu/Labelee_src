@@ -40,11 +40,13 @@ function addSamplePano(options)
         ++panoIndex;
         var $width = $(window).width();
 
+
         jQuery('canvas').css({
             'position': 'absolute',
             'z-index': 99999,
             'top': 0,
-            'margin': 5+'%',
+//            'box-sizing':'content-box',
+            'margin':'15px auto',
 //            'width':$width * 0.74,
             'border-radius':'.5em',
             'border': '2px solid rgb(196, 190, 170)'

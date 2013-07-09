@@ -1197,9 +1197,14 @@ color:rgba(255, 255, 255, 0.8);
     outline:none;
 }
 
+img[id*=pano]{
+    height:200%;
+    width: auto;
+}
+/*
 @media only screen and (min-width: 320px) {
     canvas
     {
         width: 74% !important;
     }
-}
+}*/
