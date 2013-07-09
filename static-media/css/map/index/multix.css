@@ -675,13 +675,12 @@ label > span {
     font-size: 14px;
     font-weight: bold;
     text-shadow: 1px 1px 1px #bbb;
-
 }
 
 .leaflet-control-layers-base span{
     margin-left:1px;
     font-size: 17px;
-    text-shadow: 1px 1px 1px #bbb;
+
 }
 span>span{
     color: green;
@@ -1191,16 +1190,11 @@ color:rgba(255, 255, 255, 0.8);
     content: "\32";
 }
 
+.icon-smile:before {
+    content: "\f182|\f183";
+}
 *:focus{
     outline:none;
-}
-
-.icon-smile:before {
-    content: "\f182|\f183" !important;
-}
-
-.leaflet-popup-content {
-    margin: 2px 20px;
 }
 
 @media only screen and (min-width: 320px) {
