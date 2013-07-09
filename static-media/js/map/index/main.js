@@ -1,6 +1,7 @@
 var ua = navigator.userAgent;
 var androidversion = parseFloat(ua.slice(ua.indexOf("Android")+8));
 
+EVENTS = 'click touch tap';
 /*
 //Pantalla completa
 function hideAddressBar()
@@ -33,6 +34,7 @@ $(function() {
 
     //SwipeMenu.init();
     ScrollMenu.init();
+    Panorama.init();
 
 
     var $menu = $('nav#menu-right');
@@ -105,7 +107,136 @@ $(function() {
             $('#menu-right').trigger( 'close' );
         }
     );
+
+
+    if (window.DeviceOrientationEvent) {
+        window.addEventListener('orientationchange', myOrientResizeFunction, false);
+    }
+    $(window).resize(function () {
+        myOrientResizeFunction()
+    });
+
+
+    $('button#closeCoupon').on(EVENTS, function () {
+        $('div.device').fadeOut();
+    });
+    var mySwiper = new Swiper('.swiper-container', {
+        pagination: '.pagination',
+        loop: true,
+        grabCursor: true,
+        paginationClickable: true
+    });
+    $('.arrow-left').on(EVENTS, function (e) {
+        e.preventDefault();
+        mySwiper.swipePrev();
+    });
+    $('.arrow-right').on(EVENTS, function (e) {
+        e.preventDefault();
+        mySwiper.swipeNext();
+    });
+
+    $('div#page').hide();
+    $('body').prepend('<div class="splash">    <div class="container">        <div class="sp-container"             >            <div class="frame-5"><span><img src="/media/logo-labelee-sin-slogan.png"></span></div>            <div id="find" class="frame-6">find<span id="your"> your<span id="way"> way!</span></span></div>        </div>    </div></div>')
+    setTimeout(hideSplash, 3000);
+
+    $('div.swiper-slide img').on(EVENTS, function (e) {
+        e.preventDefault();
+        var $id = $(this).prop('id');
+        if ($id === "cup1") preDrawRoute(qrPoint.point.id, qrFloor.id, 2850, 28);
+        else if ($id === "cup2") preDrawRoute(qrPoint.point.id, qrFloor.id, 2842, 28);
+        else preDrawRoute(qrPoint.point.id, qrFloor.id, 5655, 40);
+        $('div.device').fadeOut();
+
+    });
+
 });
+
+
+
+function myOrientResizeFunction() {
+    Coupon.calculateCouponArea();
+    Panorama.resize();
+}
+
+
+
+function hideSplash() {
+    var d = new Date();
+    $('div#page').fadeIn(100);
+    $('div.splash').fadeOut(200);
+    loopFloors(floor_index);
+    LocalStorageHandler.init();
+    $('span#myCar').show();
+}
+
+var Coupon = {
+    opened: false,
+
+    init: function()
+    {
+        Coupon.calculateCouponArea();
+        Coupon.bindOpen();
+    },
+
+
+    bindOpen: function()
+    {
+        $('div#cupones area').on(EVENTS, function (ev) {
+            ev.stopPropagation();
+            Coupon.open();
+        });
+    },
+
+
+    open: function()
+    {
+        if(Panorama.opened) Panorama.close();
+
+        if(Coupon.opened){
+            Coupon.close();
+            return;
+        }
+
+        $('div.device').fadeIn(300);
+
+        $(document).on(EVENTS, function(ev){
+            ev.stopPropagation();
+            //console.log('click: '+ Coupon.opened);
+            if(Coupon.opened &&
+                ($('div.device').has($(ev.target)).length === 0 &&
+                    !$(ev.target).hasClass('device')))
+                Coupon.close();
+        });
+
+        Coupon.opened = true;
+
+    },
+
+
+    calculateCouponArea: function()
+    {
+        var $img = $('img#cupon-img');
+
+        var ancho = $img.width(),
+            alto = $img.height(),
+            vert = 360 / 469 * ancho,
+            imgCoords = "0," + alto + "," + ancho + "," + alto + "," + vert + ",0,0," + alto,
+            $area = $('div#cupones area');
+
+        $area.attr({'coords': imgCoords});
+    },
+
+
+    close: function()
+    {
+        Coupon.opened = false;
+        $('div.device').fadeOut(200);
+    }
+};
+
+
+
+
 
 
 var ScrollMenu = {

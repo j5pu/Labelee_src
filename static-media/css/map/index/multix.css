@@ -674,11 +674,13 @@ label > span {
     left: 12px;
     font-size: 14px;
     font-weight: bold;
+    text-shadow: 1px 1px 1px #bbb;
 }
 
 .leaflet-control-layers-base span{
     margin-left:1px;
     font-size: 17px;
+
 }
 span>span{
     color: green;
@@ -874,6 +876,7 @@ span.locator
     line-height: 31px;
     margin-left: 2px;
     margin-top: 11px;
+    text-shadow: 1px 1px 1px #aaa;
 }
 
 #myCar
@@ -1003,14 +1006,13 @@ body{
 .leaflet-popup-tip-container {
 border-top: white;
 }
-/*
 
 div#cupones{
     position: absolute;
     left: 58%;
     bottom: 0;
     z-index:6;
-    width: 35%;
+    width: 28%;
 
 }
 #cupones img{
@@ -1018,8 +1020,8 @@ div#cupones{
     position: absolute;
     bottom: 0;
 }
-*/
 
+/*
 div#cupones {
     position: absolute;
     right: 0;
@@ -1034,7 +1036,9 @@ div#cupones {
     border-radius: 6px 0 0 6px;
 
 }
+*/
 
+/*
 #cupones a {
     display: block;
     z-index: 99;
@@ -1048,6 +1052,7 @@ div#cupones {
     text-shadow: 1px 1px 1px rgba(0,0,0,0.2);
     padding:0 2px;
 }
+*/
 .device {
     width: 86%;
     height: 40%;
@@ -1065,7 +1070,7 @@ div#cupones {
 .device .arrow-left {
     background: url(images/arrows.png) no-repeat left top;
     position: absolute;
-    left: 10px;
+    left: 20px;
     top: 50%;
     margin-top: -15px;
     width: 17px;
@@ -1074,7 +1079,7 @@ div#cupones {
 .device .arrow-right {
     background: url(images/arrows.png) no-repeat left bottom;
     position: absolute;
-    right: 10px;
+    right: 20px;
     top: 50%;
     margin-top: -15px;
     width: 17px;
@@ -1149,15 +1154,11 @@ button{
 button#closeCoupon {
 position: absolute;
 
-top: -2%;
-
-right:-4%;
+top: 0;
+right:-4px;
 margin: 6%;
 font-size:1.2em;
-background-color:#333;
-color:rgb(196, 190, 170);
-border-radius:.5em;
-border: 2px solid rgb(196, 190, 170);
+color:rgba(255, 255, 255, 0.8);
 }
 
 
@@ -1189,6 +1190,9 @@ border: 2px solid rgb(196, 190, 170);
     content: "\32";
 }
 
+.icon-smile:before {
+    content: "\f182|\f183";
+}
 *:focus{
     outline:none;
 }

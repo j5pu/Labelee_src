@@ -28,9 +28,10 @@
 
     <script src="{% url 'django.views.i18n.javascript_catalog' %}"></script>
     <script src="{{ STATIC_URL }}vendor/leaflet/plugins/scale.fix.js"></script>
-    <!--script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>
-    <script>window.jQuery || document.write('<script src="{{ STATIC_URL }}vendor/jquery-2.0.3.min.js"><\/script>')</script-->
-    <script src="{{ STATIC_URL }}vendor/jquery-1.10.2.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>
+    <!--script>window.jQuery || document.write('<script src="{{ STATIC_URL }}vendor/jquery-2.0.3.min.js"><\/script>')</script-->
+    <!--script src="{{ STATIC_URL }}vendor/jquery-1.10.2.min.js"></script-->
+    <script src="{{ STATIC_URL }}vendor/jquery-1.9.1.min.js"></script>
 
     <!--script src="{{ STATIC_URL }}vendor/hammer.js_v1.0.3/dist/hammer.min.js"></script-->
     <script src="{{ STATIC_URL }}vendor/hammer.js_v1.0.3/dist/jquery.hammer.min.js"></script>
@@ -64,7 +65,6 @@
 
 
     <script src="{{ STATIC_URL }}js/map/index/main.js"></script>
-    <script src="{{ STATIC_URL }}js/map/index/social.network.menu.js"></script>
     <script src="{{ STATIC_URL }}js/map/index/modernizr.js"></script>
 
     <script>
@@ -145,12 +145,12 @@
     <!--span class="locator" id="myCar"><i class="icon-truck icon-white"></i></span-->
     <span class="locator icon-automobile" id="myCar"></span>
 
-    <div id="cupones">
+ {% comment %}   <div id="cupones">
         <a href="#">
             COUPONS
         </a>
-    </div>
- {% comment %}   <div id="cupones">
+    </div>{% endcomment %}
+    <div id="cupones">
         <img id="cupon-img" src="/media/cupones_lab.png"
              alt="Cupones" usemap="#cupon">
         <map name="cupon">
@@ -158,8 +158,6 @@
         </map>
 
     </div>
-{% endcomment %}
-
     <div class="device">
         <a class="arrow-left" href="#"></a>
         <a class="arrow-right" href="#"></a>
@@ -172,10 +170,10 @@
 {#                    <p>Oferta 3 x 2, ¡solo hasta las 20.00h!</p>#}
 {#                    <button id="cup1">PULSA AQUÍ</button>#}
 
-                    <img id="cup1" src="/media/buffalogrill.jpg">
+                    <img id="cup1" src="/media/cup1.jpg">
                 </div>
                 <div class="swiper-slide">
-                    <img id="cup2" src="/media/worten.jpg">
+                    <img id="cup2" src="/media/cup2.jpg">
                 </div>
                 <div class="swiper-slide">
                     <img id="cup3"src="/media/ingles.jpg">
@@ -189,110 +187,13 @@
 
     <div style="background: rgb(17, 17, 17); background:rgba(17, 17, 17, 0.4); padding:0">
         <marquee align="center" direction="left" loop="40"
-                 style="width:100%; z-index: 10000; position: absolute;bottom: 0;background:rgba(17, 17, 17, 0.4);color: #ddd">
+                 style="width:100%; z-index: 10000; font-size:14px;line-height:16px; position: absolute;bottom: 0;background:rgba(17, 17, 17, 0.4);color: #ddd">
             {% for text in marquee %}
                 <span>{{ text }}</span>
             {% endfor %}
         </marquee>
     </div>
 </div>
-<script type='text/javascript'>
-
-    $(function () {
-        if (window.DeviceOrientationEvent) {
-            window.addEventListener('orientationchange', myOrientResizeFunction, false);
-        }
-        $(window).resize(function () {
-            myOrientResizeFunction()
-        });
-//        $('div#cupones area').on('click', function () {
-        $('div#cupones').on('click', function () {
-            launchCarousel()
-        });
-
-        $('button#closeCoupon').on('click', function () {
-            $('div.device').fadeOut();
-        });
-        var mySwiper = new Swiper('.swiper-container', {
-            pagination: '.pagination',
-            loop: true,
-            grabCursor: true,
-            paginationClickable: true
-        });
-        $('.arrow-left').on('click', function (e) {
-            e.preventDefault();
-            mySwiper.swipePrev();
-        });
-        $('.arrow-right').on('click', function (e) {
-            e.preventDefault();
-            mySwiper.swipeNext();
-        });
-
-
-{#        calculateCoords();#}
-
-        $('div#page').hide();
-        $('body').prepend('<div class="splash">    <div class="container">        <div class="sp-container"             >            <div class="frame-5"><span><img src="/media/logo-labelee-sin-slogan.png"></span></div>            <div id="find" class="frame-6">find<span id="your"> your<span id="way"> way!</span></span></div>        </div>    </div></div>')
-        setTimeout(hideSplash, 3000);
-
-        $('div.swiper-slide img').on('click', function (e) {
-            e.preventDefault();
-            var $id = $(this).prop('id');
-            if ($id === "cup1") preDrawRoute(qrPoint.point.id, qrFloor.id, 2850, 28);
-            else if ($id === "cup2") preDrawRoute(qrPoint.point.id, qrFloor.id, 2842, 28);
-            else preDrawRoute(qrPoint.point.id, qrFloor.id, 5655, 40);
-            $('div.device').fadeOut();
-
-        });
-
-{#        $('.leaflet-popup-content button').on('click', function (e) {#}
-{#            e.preventDefault();#}
-{#            var point_id = $(this).data('pan');#}
-{#            var point = PointResource().read(point_id);#}
-{#            addSamplePano(point.panorama, {width: 80 + '%', height: 20 + '%'});#}
-{#        });#}
-
-        {% comment %}$(window).resize(function(){
-            var $newWidth = $(this).width;
-            $('canvas').css({
-                'width':$newWidth * 0.84
-            });
-
-        });{% endcomment %}
-    });
-
-    function myOrientResizeFunction() {
-{#        calculateCoords();#}
-        Panorama.resize();
-    }
-
-{#    function calculateCoords() {#}
-{#        var $img = $('img#cupon-img'),#}
-{#                ancho = $img.width(),#}
-{#                alto = $img.height(),#}
-{#                vert = 360 / 469 * ancho,#}
-{#                imgCoords = "0," + alto + "," + ancho + "," + alto + "," + vert + ",0,0," + alto,#}
-{#                $area = $('div#cupones area');#}
-{##}
-{#        $area.attr({'coords': imgCoords});#}
-{#    }#}
-
-    function launchCarousel() {
-        if(Panorama.opened) Panorama.close();
-        $('div.device').fadeToggle();
-    }
-
-    function hideSplash() {
-        var d = new Date();
-        $('div#page').fadeIn(100);
-        $('div.splash').fadeOut(200);
-        loopFloors(floor_index);
-        LocalStorageHandler.init();
-        $('span#myCar').show();
-    }
-
-</script>
-
 
 </body>
 </html>

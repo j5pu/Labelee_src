@@ -162,22 +162,12 @@ var LocalStorageHandler = {
 
         var prevDest = JSON.parse(localStorage.getItem('prevDest'));
         if (prevDest) {
-            var enclosure_dest_id = prevDest.with_predraw ? prevDest.dest.enclosure.id : prevDest.enclosureid;
-            if (qrPoint.enclosure.id != enclosure_dest_id)
+            if (qrPoint.enclosure.id != prevDest.enclosureid)
                 return;
 
-            var point_dest_id, floor_dest_id, description, func;
-            if (prevDest.with_predraw) {
-                point_dest_id = prevDest.dest.point.id;
-                floor_dest_id = prevDest.dest.floor.id;
-                description = prevDest.dest.point.description;
-            }
-            else {
-                point_dest_id = prevDest.poid;
-                floor_dest_id = prevDest.floorid;
-                description = prevDest.description;
-            }
-
+            var point_dest_id = prevDest.poid,
+                floor_dest_id = prevDest.floorid,
+                description = prevDest.description_for_menu;
 
             $('#scrollMenu').prepend(
                 '<li>' +
@@ -197,13 +187,11 @@ var LocalStorageHandler = {
         var prevDest = {
             'prevDate': new Date().getTime(),
             'poid': marker.poid,
-            'floorid': qrPoint.floor.id,
+            'floorid': marker.floorid,
             'enclosureid': qrPoint.enclosure.id,
-            'psX': marker.psX,
-            'psY': marker.psY,
             'mesg': gettext('Do you still want to go to') + ' ' + marker.description + '?',
             'description': marker.title,
-            'with_predraw': false
+            'description_for_menu': marker.description
         };
         localStorage.setItem('prevDest', JSON.stringify(prevDest));
     },
@@ -243,7 +231,7 @@ var LocalStorageHandler = {
                 else if (prevDest.enclosureid == qrPoint.enclosure.id) {
                     if (confirm(prevDest.mesg)) {
                         showOrigin = true;
-                        drawRoute(qrPoint.point.id, qrFloor.sX, qrFloor.sY, prevDest.poid, prevDest.psX, prevDest.psY);
+                        preDrawRoute(qrPoint.point.id, qrPoint.floor.id, prevDest.poid, prevDest.floorid);
                     }
                     else
                         localStorage.removeItem('prevDest');
@@ -293,10 +281,6 @@ function loopFloors() {
         initMap(qrPoint);
 
         LocalStorageHandler.draw();
-
-        // Elimino el icono de categoría parquing en los botones de categoría
-        removeParkingBtn();
-
 
 
 //       if(( ua.indexOf("Android") >= 0 ) && (androidversion >=3.0))
@@ -349,6 +333,7 @@ function loadPOIs() {
                 nameIcon = floors[fl].pois[j].label.name,
                 shapeIcon = floors[fl].pois[j].label.category.icon,
                 id = floors[fl].pois[j].id,
+                floorid = floors[fl].pois[j].floor;
                 description = floors[fl].pois[j].description,
                 panorama = floors[fl].pois[j].panorama,
                 sX = floors[fl].scaleX,
@@ -372,6 +357,7 @@ function loadPOIs() {
             });
             floors[fl].pois[j].marker.options.icon.options.color = colorIcon;
             floors[fl].pois[j].marker.poid = id;
+            floors[fl].pois[j].marker.floorid = floorid;
             floors[fl].pois[j].marker.psX = sX;
             floors[fl].pois[j].marker.psY = sY;
             floors[fl].pois[j].marker.loc = loc;
@@ -389,17 +375,16 @@ function loadPOIs() {
             };
 
 
-
             floors[fl].pois[j].marker
                 .bindPopup(popupTitle)
-                .on('click', function () {
+                .on(EVENTS, function () {
                     if (qr_type == 'dest') {
                         this.changeTitle();
                         return;
                     }
 
                     LocalStorageHandler.setPrevDest(this);
-
+                    if(Panorama.opened) Panorama.close();
                     if (qrMarker)
                         drawRoute(qrPoint.point.id, qrFloor.sX, qrFloor.sY, this.poid, this.psX, this.psY);
 
@@ -452,14 +437,16 @@ function loadPOIs() {
                 (qrPoint.point.col * qrFloor.scaleX) + qrFloor.scaleX];
 
             if (qr_type == 'origin') {
-                var originLegend = gettext("You are right here:") + ' ' + qrPoint.point.description;
+                var point_description = qrPoint.label.name_en == 'My car' ?
+                    qrPoint.label.name : qrPoint.point.description;
+                var originLegend = gettext("You are right here:") + ' ' + point_description;
 
                 if (qrPoint.point.panorama)
                     originLegend = originLegend + Panorama.renderIcon(qrPoint.point.id);
                 originLegend+= SocialMenu.renderIcon(qrPoint.point.id);
                 qrMarker = new L.marker(qrLoc, { bounceOnAdd: false,
                     icon: OriginIcon})
-                    .bindPopup(originLegend).on('click', function () {
+                    .bindPopup((originLegend), function () {
                         Panorama.bindShow();
                         SocialMenu.bindShow(this);
                     });
@@ -474,7 +461,7 @@ function loadPOIs() {
                     .bindPopup(msg + qrPoint.point.description +
                         " (" + gettext('floor') + ' ' + qrFloor.name + ", " +
                         qrPoint.enclosure.name + ')' + photoIcon + SocialMenu.renderIcon(qrPoint.point.id))
-                    .on('click', function(){
+                    .on(EVENTS, function(){
                         LocalStorageHandler.setPrevDest(this);
 
 //                        drawRoute(qrPoint.point.id, qrFloor.sX, qrFloor.sY, this.poid, this.psX, this.psY);
@@ -547,6 +534,8 @@ function initMap(qrPoint) {
     qrMarker._bringToFront();
 
     map.invalidateSize();
+
+    Coupon.init();
 
     loadedLabels = true;
 }
@@ -722,7 +711,7 @@ $(function () {
         map.addLayer(qrFloor.photo);
         map.addLayer(qrFloor.layer);
         qrMarker._bringToFront();
-        qrMarker.openPopup().on('click', function () {
+        qrMarker.openPopup().on(EVENTS, function () {
             Panorama.bindShow();
             SocialMenu.bindShow();
         });
@@ -757,8 +746,9 @@ $(function () {
                     icon: CarIcon})
                     .bindPopup(gettext("My car"));
 
-                carMarker.on('click', function () {
+                carMarker.on(EVENTS, function () {
                     LocalStorageHandler.setPrevDest(this);
+                    if(Panorama.opened) Panorama.close();
                     drawRoute(qrPoint.point.id, qrFloor.sX, qrFloor.sY, miCoche.point.id, floor_x.scaleX, floor_x.scaleY);
 
                 });
@@ -875,7 +865,7 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
         destLoc = [(route.fields.destiny.fields.row) * sY + sY, route.fields.destiny.fields.col * sX + sX];
         destMarker = L.marker(destLoc, { bounceOnAdd: false,
             icon: DestinyIcon})
-            .bindPopup(destLegend).on('click', function () {
+            .bindPopup(destLegend).on(EVENTS, function () {
                 Panorama.bindShow();
                 SocialMenu.bindShow();
             });

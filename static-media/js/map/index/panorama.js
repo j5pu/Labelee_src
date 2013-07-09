@@ -3,6 +3,15 @@ var Panorama = {
     resizing: false,
     opened: false,
 
+    init: function()
+    {
+        $(document).on('click tap touch', function(ev){
+            //alert('tap!!');
+            if(ev.target.tagName !== 'CANVAS')
+                Panorama.close();
+        });
+    },
+
     renderIcon: function(pointId)
     {
         return  '<button onclick="Panorama.show(this)" class="panorama"  id="' + pointId + '">' +
@@ -41,7 +50,7 @@ var Panorama = {
 
         Panorama.resizing = true;
 
-        $('.leaflet-popup-content button').trigger('click');
+//        $('.leaflet-popup-content button.panorama').trigger('click');
 
 //        var newWidth=window.innerWidth * .85;
 //        console.log(newWidth);
