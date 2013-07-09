@@ -38,25 +38,25 @@ function addSamplePano(options)
         catch(e){}
 
         ++panoIndex;
-        var $width = $(window).width();
+        var newWidth = window.innerWidth;
 
 
         jQuery('canvas').css({
             'position': 'absolute',
             'z-index': 99999,
-            'top': 0,
+            'top': -20+'px',
 //            'box-sizing':'content-box',
-            'margin':'15px auto',
+            'margin':newWidth *0.049 +'px',
 //            'width':$width * 0.74,
             'border-radius':'.5em',
-            'border': '2px solid rgb(196, 190, 170)'
+            'border': '2px solid rgba(255, 255, 255, 0.9)'
         });
         jQuery('body').prepend('<button id="close">x</button>');
         $('button#close').css({
             'position': 'absolute',
             'z-index': 100000,
-            'top': 0,
-            'right':'16%',
+            'top': '-15px',
+            'right':'3%',
             'margin': 6+'%',
             'font-size':'1.2em',
             'color':'rgba(255, 255, 255, 0.9)',
