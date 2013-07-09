@@ -62,6 +62,7 @@
     <script src="{{ STATIC_URL }}js/helpers/base.js"></script>
     <script src="{{ STATIC_URL }}js/helpers/ajax_helpers.js"></script>
     <script src="{{ STATIC_URL }}js/helpers/resource.js"></script>
+    <script src="{{ STATIC_URL }}js/log/logger.js"></script>
 
 
     <script src="{{ STATIC_URL }}js/map/index/main.js"></script>
@@ -88,15 +89,10 @@
 </head>
 
 
-<body itemscope itemtype="http://schema.org/Product">
+<body>
 
-<!-- schema.org needed for Google+ Snippet -->
-<h1 id="schema_name" itemprop="name">Labelee</h1>
-<img id="schema_image" itemprop="image" src="{{ MEDIA_URL }}labelee-square-logo.png" />
-<p id="schema_description" itemprop="description"></p>
+{% csrf_token %}
 
-<!-- Facebook SDK content -->
-<!--<div id="fb-root"></div>-->
 
 <div id="page">
 

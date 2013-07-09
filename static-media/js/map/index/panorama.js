@@ -6,7 +6,6 @@ var Panorama = {
     init: function()
     {
         $(document).on('click tap touch', function(ev){
-            //alert('tap!!');
             if(ev.target.tagName !== 'CANVAS')
                 Panorama.close();
         });
