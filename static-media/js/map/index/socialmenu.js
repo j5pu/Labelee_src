@@ -1,3 +1,38 @@
+// Load Facebook Javascript SDK
+$(document).ready(function() {
+
+    window.fbAsyncInit = function() {
+    // init the FB JS SDK
+    FB.init({
+      appId      : '339218882878284',                        // App ID from the app dashboard
+      //channelUrl : '//WWW.YOUR_DOMAIN.COM/channel.html', // Channel file for x-domain comms
+      status     : true,                                 // Check Facebook Login status
+      xfbml      : true                                  // Look for social plugins on the page
+    });
+
+    // Additional initialization code such as adding Event Listeners goes here
+  };
+
+  // Load the SDK asynchronously
+  (function(d, s, id){
+     var js, fjs = d.getElementsByTagName(s)[0];
+     if (d.getElementById(id)) {return;}
+     js = d.createElement(s); js.id = id;
+     js.src = "//connect.facebook.net/en_US/all.js";
+     fjs.parentNode.insertBefore(js, fjs);
+   }(document, 'script', 'facebook-jssdk'));
+
+    /*$.ajaxSetup({ cache: true });
+    $.getScript('//connect.facebook.net/en_US/all.js', function(){
+        FB.init({
+            appId: '339218882878284'
+            //channelUrl: '//yourapp.com/channel.html',
+        });
+        $('#loginbutton, #feedbutton').removeAttr('disabled');
+        FB.getLoginStatus(updateStatusCallback);
+    });*/
+});
+
 var SocialMenu = {
 
     opened: false,
@@ -86,8 +121,15 @@ var SocialMenu = {
     fbs_click: function (point) {
 
         var information = SocialMenu.getShareInformation(point);
-        window.open('http://www.facebook.com/sharer.php?u=' + encodeURIComponent(information[0]) + '&t=' + encodeURIComponent(information[1]), 'sharer', 'toolbar=0,status=0,width=626,height=436');
 
+        FB.ui({
+            method: 'feed',
+            link: information[0],
+            picture: location.origin + '/media/labelee-square-logo.png',
+            name: 'Labelee',
+            caption: information[1]
+            //description: '',
+        }, function(response){});
 
     },
     google_click: function (point) {
@@ -122,7 +164,7 @@ var SocialMenu = {
         }
         var enclosure = enclosure_id;
         url = SocialMenu.urlstring + enclosure + '_' + floor + '_' + pointId;
-        urlTitle = 'would you like to go to ' + description + '?';
+        urlTitle = 'Click here to go to ' + description;
         var result = new Array();
         result[0] = url;
         result[1] = urlTitle;
