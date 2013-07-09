@@ -1193,6 +1193,9 @@ color:rgba(255, 255, 255, 0.8);
     outline:none;
 }
 
+.icon-smile:before {
+    content: "wc" !important;
+}
 @media only screen and (min-width: 320px) {
     canvas
     {
