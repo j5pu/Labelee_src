@@ -6,13 +6,13 @@ var SocialMenu = {
     renderIcon: function (pointId) {
 
 
-        return '<p align="center"><button class="socialmenu" style=" left:0px; margin: 0%;" onclick="SocialMenu.fbs_click(' + pointId + ')" data-socialmenu="' + pointId + '">' +
+        return '<p align="center" id="socialsharing" ><button class="socialmenu" style=" left:0px; margin:0 -2px;" onclick="SocialMenu.fbs_click(' + pointId + ')" data-socialmenu="' + pointId + '">' +
             '<i class="icon-facebook-sign"></i>' +
             '</button>' +
-            '<button class="socialmenu" style=" left:0px; margin: 0%;"  onclick="SocialMenu.twt_click(' + pointId + ')" data-socialmenu="' + pointId + '">' +
+            '<button class="socialmenu" style=" left:0px; margin:0 -2px;"  onclick="SocialMenu.twt_click(' + pointId + ')" data-socialmenu="' + pointId + '">' +
             '<i class="icon-twitter-sign"></i>' +
             '</button>' +
-            '<button class="socialmenu" style=" left:0px; margin: 0%;" onclick="SocialMenu.google_click(' + pointId + ')" data-socialmenu="' + pointId + '">' +
+            '<button class="socialmenu" style=" left:0px; margin:0 -2px;" onclick="SocialMenu.google_click(' + pointId + ')" data-socialmenu="' + pointId + '">' +
             '<i class="icon-google-plus-sign"></i>' +
             '</button></p>'
 
@@ -130,6 +130,42 @@ var SocialMenu = {
     }
 
 };
+
+
+/*
+$(document).ready(function() {
+
+	if (Modernizr.touch) {
+
+
+			*/
+/* ok we have a touch device so we will grab the touch events now *//*
+
+			$(".navi").click(function() {
+				*/
+/* for the first ul which is our list of other items display it *//*
+
+				$(".n1").show();
+                $(".n2").show();
+                $(".n3").show();
+                $(".n4").show();
+                //$(".n6").hide();
+			});
+
+			*/
+/* if the user touches the content of the page then hide all the nav items *//*
+
+			$("#content").click(function() {
+				$(".n1").hide();
+                $(".n2").hide();
+                $(".n3").hide();
+                $(".n4").hide();
+                //$(".n6").show();
+            })
+	}
+
+});
+*/
 
 
 
