@@ -1,3 +1,4 @@
+/*
 // Load Facebook Javascript SDK
 $(document).ready(function() {
 
@@ -22,7 +23,8 @@ $(document).ready(function() {
      fjs.parentNode.insertBefore(js, fjs);
    }(document, 'script', 'facebook-jssdk'));
 
-    /*$.ajaxSetup({ cache: true });
+    */
+/*$.ajaxSetup({ cache: true });
     $.getScript('//connect.facebook.net/en_US/all.js', function(){
         FB.init({
             appId: '339218882878284'
@@ -30,8 +32,10 @@ $(document).ready(function() {
         });
         $('#loginbutton, #feedbutton').removeAttr('disabled');
         FB.getLoginStatus(updateStatusCallback);
-    });*/
+    });*//*
+
 });
+*/
 
 var SocialMenu = {
 
@@ -122,18 +126,30 @@ var SocialMenu = {
 
         var information = SocialMenu.getShareInformation(point);
 
-        FB.ui({
-            method: 'feed',
-            link: information[0],
-            picture: location.origin + '/media/labelee-square-logo.png',
-            name: 'Labelee',
-            caption: information[1]
-            //description: '',
-        }, function(response){});
+        window.open('https://www.facebook.com/dialog/feed?' +
+            'app_id=339218882878284' +
+            '&link=' + information[0] +
+            '&picture=' + location.origin + '/media/labelee-square-logo.png' +
+            '&caption=' + information[1] +
+            '&name=Labelee' +
+            '&redirect_uri=' + information[0], 'sharer', 'toolbar=0,status=0,width=626,height=436');
+
+//        FB.ui({
+//            method: 'feed',
+//            link: information[0],
+//            picture: location.origin + '/media/labelee-square-logo.png',
+//            name: 'Labelee',
+//            caption: information[1]
+//            //description: '',
+//        }, function(response){});
 
     },
     google_click: function (point) {
         var information = SocialMenu.getShareInformation(point);
+
+        // Schema properties necessary to customize Google+ share
+        $('#schema_description').text(information[1]);
+
         window.open('https://plus.google.com/share?url=' + encodeURIComponent(information[0]), 'sharer', 'toolbar=0,status=0,width=626,height=436');
     },
     twt_click: function (point) {
