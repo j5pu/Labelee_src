@@ -1201,6 +1201,11 @@ img[id*=pano]{
     height:200%;
     width: auto;
 }
+
+.leaflet-popup-content
+{
+    margin: 2px 20px;
+}
 /*
 @media only screen and (min-width: 320px) {
     canvas

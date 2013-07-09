@@ -502,7 +502,7 @@ var Floor = {
         WaitingDialog.close();
     },
 
-v
+
     loadGrid: function()
     {
         WaitingDialog.open(gettext('Loading floor grid') + '..');
