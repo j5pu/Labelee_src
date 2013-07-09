@@ -1,3 +1,38 @@
+// Load Facebook Javascript SDK
+$(document).ready(function() {
+
+    window.fbAsyncInit = function() {
+    // init the FB JS SDK
+    FB.init({
+      appId      : '339218882878284',                        // App ID from the app dashboard
+      //channelUrl : '//WWW.YOUR_DOMAIN.COM/channel.html', // Channel file for x-domain comms
+      status     : true,                                 // Check Facebook Login status
+      xfbml      : true                                  // Look for social plugins on the page
+    });
+
+    // Additional initialization code such as adding Event Listeners goes here
+  };
+
+  // Load the SDK asynchronously
+  (function(d, s, id){
+     var js, fjs = d.getElementsByTagName(s)[0];
+     if (d.getElementById(id)) {return;}
+     js = d.createElement(s); js.id = id;
+     js.src = "//connect.facebook.net/en_US/all.js";
+     fjs.parentNode.insertBefore(js, fjs);
+   }(document, 'script', 'facebook-jssdk'));
+
+    /*$.ajaxSetup({ cache: true });
+    $.getScript('//connect.facebook.net/en_US/all.js', function(){
+        FB.init({
+            appId: '339218882878284'
+            //channelUrl: '//yourapp.com/channel.html',
+        });
+        $('#loginbutton, #feedbutton').removeAttr('disabled');
+        FB.getLoginStatus(updateStatusCallback);
+    });*/
+});
+
 var SocialMenu = {
 
     opened: false,
@@ -8,7 +43,7 @@ var SocialMenu = {
             SocialMenu.floor = new FloorResource().readFromUri(SocialMenu.point.floor);
             SocialMenu.enclosure = enclosure_id;
             SocialMenu.url = SocialMenu.urlstring+ SocialMenu.enclosure+'_'+SocialMenu.floor.id+'_'+SocialMenu.point.id;
-            SocialMenu.urlTitle =  'would you like to go to'+SocialMenu.point.description +'?';
+            SocialMenu.urlTitle =  'Click here to go to '+SocialMenu.point.description;
         return '<p align="center"><button class="socialmenu" style=" left:0px; margin: 0%;" onclick="SocialMenu.fbs_click()" data-socialmenu="' + pointId + '">' +
             '<i class="icon-facebook-sign"></i>' +
             '</button>' +
@@ -88,12 +123,19 @@ var SocialMenu = {
 
     fbs_click: function() {
 
-        window.open('http://www.facebook.com/sharer.php?u=' + encodeURIComponent(SocialMenu.url) + '&t=' + encodeURIComponent( SocialMenu.urlTitle ), 'sharer', 'toolbar=0,status=0,width=626,height=436');
-
+        FB.ui({
+            method: 'feed',
+            link: SocialMenu.url,
+            picture: location.origin + '/media/labelee-square-logo.png',
+            name: 'Labelee',
+            caption: SocialMenu.urlTitle
+            //description: '',
+        }, function(response){});
 
     },
     google_click: function() {
 
+        // Google doesn't show local URLs, the behaviour in development environments is normal
          window.open('https://plus.google.com/share?url=' + encodeURIComponent(SocialMenu.url), 'sharer', 'toolbar=0,status=0,width=626,height=436');
     },
     twt_click: function()
