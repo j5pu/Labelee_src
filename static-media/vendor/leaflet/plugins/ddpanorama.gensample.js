@@ -43,10 +43,11 @@ function addSamplePano(options)
 
         jQuery('canvas').css({
             'position': 'absolute',
-            'z-index': 99999,
-            'top': -20+'px',
+            'z-index': 9,
+            'top': '5px',
+            'left':newWidth *0.049 +'px',
 //            'box-sizing':'content-box',
-            'margin':newWidth *0.049 +'px',
+//            'margin':'0px, ' +(newWidth *0.049) +'px, 0px, ' +(newWidth *0.049) +'px',
 //            'width':$width * 0.74,
             'border-radius':'.5em',
             'border': '2px solid rgba(255, 255, 255, 0.9)'

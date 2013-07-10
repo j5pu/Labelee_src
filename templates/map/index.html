@@ -26,6 +26,12 @@
     <link rel="stylesheet" href="{{ STATIC_URL }}css/map/index/idangerous.swiper.css">
 
 
+
+
+{% comment %}
+    <script src="http://192.168.1.150:8500/aardwolf.js" type="text/javascript"></script>
+{% endcomment %}
+
     <script src="{% url 'django.views.i18n.javascript_catalog' %}"></script>
     <script src="{{ STATIC_URL }}vendor/leaflet/plugins/scale.fix.js"></script>
     <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>
@@ -64,8 +70,13 @@
     <script src="{{ STATIC_URL }}js/helpers/resource.js"></script>
     <script src="{{ STATIC_URL }}js/log/logger.js"></script>
 
+{#    {% include "_aardwolf.html" %}#}
 
     <script src="{{ STATIC_URL }}js/map/index/main.js"></script>
+{% comment %}
+        <script src="http://192.168.1.150:8500/main.js" type="text/javascript"></script>
+{% endcomment %}
+
     <script src="{{ STATIC_URL }}js/map/index/modernizr.js"></script>
 
     <script>
@@ -114,6 +125,8 @@
         var qr_type = "{{ qr_type }}";
     </script>
     <script src="{{ STATIC_URL }}js/map/index/map.js"></script>
+{#    <script src="http://192.168.1.150:8500/map.js" type="text/javascript"></script>#}
+
 
     <nav id="menu-right">
         <!--
