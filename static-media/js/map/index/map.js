@@ -377,7 +377,7 @@ function loadPOIs() {
 
             floors[fl].pois[j].marker
                 .bindPopup(popupTitle)
-                .on(EVENTS, function () {
+                .on('click', function () {
                     if (qr_type == 'dest') {
                         this.changeTitle();
                         return;
@@ -387,6 +387,7 @@ function loadPOIs() {
                     if(Panorama.opened) Panorama.close();
                     if (qrMarker)
                         drawRoute(qrPoint.point.id, qrFloor.sX, qrFloor.sY, this.poid, this.psX, this.psY);
+                    map.invalidateSize();
 
                     SocialMenu.bindShow(this);
                 });
@@ -461,7 +462,7 @@ function loadPOIs() {
                     .bindPopup(msg + qrPoint.point.description +
                         " (" + gettext('floor') + ' ' + qrFloor.name + ", " +
                         qrPoint.enclosure.name + ')' + photoIcon + SocialMenu.renderIcon(qrPoint.point.id))
-                    .on(EVENTS, function(){
+                    .on('click', function(){
                         LocalStorageHandler.setPrevDest(this);
 
 //                        drawRoute(qrPoint.point.id, qrFloor.sX, qrFloor.sY, this.poid, this.psX, this.psY);
@@ -711,7 +712,7 @@ $(function () {
         map.addLayer(qrFloor.photo);
         map.addLayer(qrFloor.layer);
         qrMarker._bringToFront();
-        qrMarker.openPopup().on(EVENTS, function () {
+        qrMarker.openPopup().on('click', function () {
             Panorama.bindShow();
             SocialMenu.bindShow();
         });
@@ -746,10 +747,11 @@ $(function () {
                     icon: CarIcon})
                     .bindPopup(gettext("My car"));
 
-                carMarker.on(EVENTS, function () {
+                carMarker.on('click', function () {
                     LocalStorageHandler.setPrevDest(this);
                     if(Panorama.opened) Panorama.close();
                     drawRoute(qrPoint.point.id, qrFloor.sX, qrFloor.sY, miCoche.point.id, floor_x.scaleX, floor_x.scaleY);
+                    map.invalidateSize();
 
                 });
                 floor_x.layer.addLayer(carMarker);
@@ -823,6 +825,7 @@ function preDrawRoute(origin, qrFloor, destination, destinationFloor) {
         }
     }
     drawRoute(origin, osX, osY, destination, dsX, dsY);
+    map.invalidateSize();
 
 }
 
@@ -865,7 +868,7 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
         destLoc = [(route.fields.destiny.fields.row) * sY + sY, route.fields.destiny.fields.col * sX + sX];
         destMarker = L.marker(destLoc, { bounceOnAdd: false,
             icon: DestinyIcon})
-            .bindPopup(destLegend).on(EVENTS, function () {
+            .bindPopup(destLegend).on('click', function () {
                 Panorama.bindShow();
                 SocialMenu.bindShow();
             });
