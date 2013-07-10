@@ -1206,6 +1206,10 @@ img[id*=pano]{
 {
     margin: 2px 20px;
 }
+
+.socialmenu {
+    font-size: 22px;
+}
 /*
 @media only screen and (min-width: 320px) {
     canvas

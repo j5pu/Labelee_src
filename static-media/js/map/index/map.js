@@ -378,7 +378,7 @@ function loadPOIs() {
 
             floors[fl].pois[j].marker
                 .bindPopup(popupTitle)
-                .on(EVENTS, function () {
+                .on('click', function () {
                     if (qr_type == 'dest') {
                         this.changeTitle();
                         return;
@@ -388,6 +388,7 @@ function loadPOIs() {
                     if(Panorama.opened) Panorama.close();
                     if (qrMarker)
                         drawRoute(qrPoint.point.id, qrFloor.sX, qrFloor.sY, this.poid, this.psX, this.psY);
+                    map.invalidateSize();
 
                     SocialMenu.bindShow(this);
                 });
@@ -462,7 +463,7 @@ function loadPOIs() {
                     .bindPopup(msg + qrPoint.point.description +
                         " (" + gettext('floor') + ' ' + qrFloor.name + ", " +
                         qrPoint.enclosure.name + ')' + photoIcon + SocialMenu.renderIcon(qrPoint.point.id))
-                    .on(EVENTS, function(){
+                    .on('click', function(){
                         LocalStorageHandler.setPrevDest(this);
 
 //                        drawRoute(qrPoint.point.id, qrFloor.sX, qrFloor.sY, this.poid, this.psX, this.psY);
@@ -669,6 +670,7 @@ function preDrawRoute(origin, qrFloor, destination, destinationFloor) {
         }
     }
     drawRoute(origin, osX, osY, destination, dsX, dsY);
+    map.invalidateSize();
 
 }
 
@@ -723,9 +725,9 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
 
     if (new PointResource().read(dst).panorama) {
         destLegend = destLegend + Panorama.renderIcon(dst);
-
     }
     destLegend += SocialMenu.renderIcon(dst);
+        
 
     destLoc = [(route.fields.destiny.fields.row) * sY + sY, route.fields.destiny.fields.col * sX + sX];
     destMarker = L.marker(destLoc, { bounceOnAdd: false,

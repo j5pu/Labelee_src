@@ -1,11 +1,16 @@
 /*
-// Load Facebook Javascript SDK
+** Loads Facebook Javascript SDK. Currently interaction with Facebook is performed via URL
+** If needed, we can go back to the complete API by uncommenting this block
+** Watch out! Facebook div must be included in index.html as well
+**
+
+
 $(document).ready(function() {
 
     window.fbAsyncInit = function() {
     // init the FB JS SDK
     FB.init({
-      appId      : '339218882878284',                        // App ID from the app dashboard
+      appId      : SocialMenu.FACEBOOK_APP_ID              // App ID from the app dashboard
       //channelUrl : '//WWW.YOUR_DOMAIN.COM/channel.html', // Channel file for x-domain comms
       status     : true,                                 // Check Facebook Login status
       xfbml      : true                                  // Look for social plugins on the page
@@ -23,17 +28,6 @@ $(document).ready(function() {
      fjs.parentNode.insertBefore(js, fjs);
    }(document, 'script', 'facebook-jssdk'));
 
-    */
-/*$.ajaxSetup({ cache: true });
-    $.getScript('//connect.facebook.net/en_US/all.js', function(){
-        FB.init({
-            appId: '339218882878284'
-            //channelUrl: '//yourapp.com/channel.html',
-        });
-        $('#loginbutton, #feedbutton').removeAttr('disabled');
-        FB.getLoginStatus(updateStatusCallback);
-    });*//*
-
 });
 */
 
@@ -41,11 +35,12 @@ var SocialMenu = {
 
     opened: false,
     urlstring: location.origin + '/map/dest/',
+    FACEBOOK_APP_ID: 151420028386535,
 
     renderIcon: function (pointId) {
 
 
-        return '<p align="center" id="socialsharing" ><button class="socialmenu" style=" left:0px; margin:0 -2px;" onclick="SocialMenu.fbs_click(' + pointId + ')" data-socialmenu="' + pointId + '">' +
+        return '<g:plus action="share"></g:plus>' + '<p align="center" id="socialsharing" ><button class="socialmenu" style=" left:0px; margin:0 -2px;" onclick="SocialMenu.fbs_click(' + pointId + ')" data-socialmenu="' + pointId + '">' +
             '<i class="icon-facebook-sign"></i>' +
             '</button>' +
             '<button class="socialmenu" style=" left:0px; margin:0 -2px;"  onclick="SocialMenu.twt_click(' + pointId + ')" data-socialmenu="' + pointId + '">' +
@@ -127,28 +122,31 @@ var SocialMenu = {
         var information = SocialMenu.getShareInformation(point);
 
         window.open('https://www.facebook.com/dialog/feed?' +
-            'app_id=339218882878284' +
+            'app_id=' + SocialMenu.FACEBOOK_APP_ID +
             '&link=' + information[0] +
             '&picture=' + location.origin + '/media/labelee-square-logo.png' +
             '&caption=' + information[1] +
             '&name=Labelee' +
-            '&redirect_uri=' + information[0], 'sharer', 'toolbar=0,status=0,width=626,height=436');
+            '&redirect_uri=' + document.URL,
+            'sharer', 'toolbar=0,status=0,width=900,height=436');
 
-//        FB.ui({
-//            method: 'feed',
-//            link: information[0],
-//            picture: location.origin + '/media/labelee-square-logo.png',
-//            name: 'Labelee',
-//            caption: information[1]
-//            //description: '',
-//        }, function(response){});
+        // Uncomment to use Javascript SDK instead of URL call to API
+/*        FB.ui({
+            method: 'feed',
+            link: information[0],
+            picture: location.origin + '/media/labelee-square-logo.png',
+            name: 'Labelee',
+            caption: information[1]
+            //description: '',
+        }, function(response){});*/
 
     },
     google_click: function (point) {
         var information = SocialMenu.getShareInformation(point);
 
+        // Not used at the moment !!!!
         // Schema properties necessary to customize Google+ share
-        $('#schema_description').text(information[1]);
+        //$('#snippet_description').prop('content', information[1]);
 
         window.open('https://plus.google.com/share?url=' + encodeURIComponent(information[0]), 'sharer', 'toolbar=0,status=0,width=626,height=436');
     },
