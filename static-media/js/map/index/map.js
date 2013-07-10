@@ -388,7 +388,7 @@ function loadPOIs() {
                     if(Panorama.opened) Panorama.close();
                     if (qrMarker)
                         drawRoute(qrPoint.point.id, qrFloor.sX, qrFloor.sY, this.poid, this.psX, this.psY);
-                    map.invalidateSize();
+//                    map.invalidateSize();
 
                     SocialMenu.bindShow(this);
                 });
@@ -732,7 +732,7 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
     destLoc = [(route.fields.destiny.fields.row) * sY + sY, route.fields.destiny.fields.col * sX + sX];
     destMarker = L.marker(destLoc, { bounceOnAdd: false,
         icon: DestinyIcon})
-        .bindPopup(destLegend).on(EVENTS, function () {
+        .bindPopup(destLegend).on('click', function () {
             Panorama.bindShow();
             SocialMenu.bindShow();
         });
@@ -964,7 +964,7 @@ Map.locateCar = function()
                 icon: CarIcon})
                 .bindPopup(gettext("My car"));
 
-            carMarker.on(EVENTS, function () {
+            carMarker.on('click', function () {
                 LocalStorageHandler.setPrevDest(this);
                 if(Panorama.opened) Panorama.close();
                 drawRoute(qrPoint.point.id, qrFloor.sX, qrFloor.sY, miCoche.point.id, floor_x.scaleX, floor_x.scaleY);
@@ -1080,7 +1080,7 @@ Map.locatePosition = function()
 //        map.addLayer(qrFloor.photo);
     map.addLayer(qrFloor.layer);
     qrMarker._bringToFront();
-    qrMarker.openPopup().on(EVENTS, function () {
+    qrMarker.openPopup().on('click', function () {
         Panorama.bindShow();
         SocialMenu.bindShow();
     });
