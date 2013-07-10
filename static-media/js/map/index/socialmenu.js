@@ -127,7 +127,7 @@ var SocialMenu = {
             '&picture=' + location.origin + '/media/labelee-square-logo.png' +
             '&caption=' + information[1] +
             '&name=Labelee' +
-            '&redirect_uri=' + Document.URL,
+            '&redirect_uri=' + document.URL,
             'sharer', 'toolbar=0,status=0,width=900,height=436');
 
         // Uncomment to use Javascript SDK instead of URL call to API
