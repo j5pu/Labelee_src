@@ -154,6 +154,7 @@ class Point(models.Model):
     panorama_thumbnail = models.FileField(upload_to=get_panorama_thumbnail_path, null=True, blank=True)
     label = models.ForeignKey(Label, related_name='points', on_delete=models.CASCADE)
     floor = models.ForeignKey(Floor, related_name='points', on_delete=models.CASCADE)
+    alwaysVisible = models.NullBooleanField()
 
     def __unicode__(self):
         return self.floor.name + ' (' + str(self.row) + ', ' + str(self.col) + ')'

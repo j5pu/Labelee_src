@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block css %}
+
+     <link rel="stylesheet" href="{{ STATIC_URL }}main.css">
+{% endblock  %}
+
+{% block js %}
+
+    <script src="{{ STATIC_URL }}main.js"></script>
+
+{% endblock %}
+
+{% block content %}
+
+    {% if enviado %}
+        <div> Enviado </div>
+    {% endif %}
+
+<div id="formulario">
+			<!-- Formulario -->
+		 <form name="form1" action="{% url "sandbox.views.formulario" %}" method="post" enctype="multipart/form-data">
+
+            {% csrf_token %}
+			<div id= "datos">
+					<label>Nombre</label>
+					<input type="text" name= "Nombre" placeholder= "Nombre">
+					<label>Apellidos</label>
+					<input type="text" name= "Apellidos" placeholder= "Apellidos">
+					<label>Correo Electronico</label>
+					<input type="email" name= "Correo" placeholder= "correo@xxxx.com">
+			</div>
+
+			<div id= "imagen">
+
+				    <label>Elegir imágen..</label>
+					<input class="btn"
+                           type="file"
+                           name="img"
+                           title="Elegir mapa..">
+
+			</div>
+
+			<div id="puntos">
+				<label>Introduce el numero de puntos</label>
+				<input type="number" name= "numPuntos" placeholder= "1">
+				<a>Precio por punto 100€</a>
+
+		    </div>
+
+		    <input class="btn" id="borrar" type="reset" value="Borrar formulario">
+			<input class="btn" id="enviar" type="submit" value="Enviar">
+
+			</form>
+		</div>
+
+
+{% endblock %}

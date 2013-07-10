@@ -30,7 +30,7 @@ html.mmenu-opened body
 .mmenu *
 {
     -webkit-text-size-adjust: none;
-    font-family: Arial, Helvetica, Garuda, sans-serif;
+    font-family: 'Noto Sans', Arial, Helvetica, Garuda, sans-serif;
     font-size: 14px;
 }
 .mmenu ul,
@@ -286,7 +286,6 @@ html.mmenu-right .mmenu a.mmenu-subopen
     font-size: 14px;
     color: #ccc;
     text-transform: uppercase;
-    text-indent: 20px;
     line-height: 20px;
 }
 
@@ -378,7 +377,7 @@ body {
     }
 body, div, p
 {
-    font-family: Arial, Helvetica, Verdana;
+    font-family: 'Noto Sans', Arial, Helvetica, Verdana;
     font-size: 14px;
     line-height: 22px;
     color: #333;
@@ -432,13 +431,16 @@ pre
     padding: 0 50px;
     top:6px;
     left:0;
+    background-color: rgba(186, 186, 186, 0.23);
 }
 
 #header a {
 /*background: center center no-repeat #f6f6f6;*/
+    /*
+        background-size: auto;
 
-    background-size: auto;
-    background: url(http://bradjasper.com/subtle-patterns-bookmarklet/patterns/squairy_light.png) repeat repeat;
+        background: url(http://bradjasper.com/subtle-patterns-bookmarklet/patterns/squairy_light.png) repeat repeat;
+    */
     /*background-image: url(logo.png);*/
 display: block;
 width: 55px;
@@ -449,12 +451,14 @@ bottom: 25px;
 left: 0;
 z-index: 99;
 opacity: 1;
--webkit-box-shadow: 3px 3px 3px rgba(0,0,0,0.2);
-box-shadow: 3px 3px 3px rgba(0,0,0,0.2);
-border: 3px solid #cfcfcf;
+-webkit-box-shadow: 2px 2px 2px rgba(0,0,0,0.2);
+box-shadow: 2px 2px 2px rgba(0,0,0,0.2);
+border: 3px solid #8C8C87;
 border-left: none;
 border-radius: 0 6px 6px 0;
-    }
+    background-color: white;
+
+}
 
 #header a img {
     margin-top: 5px;
@@ -491,8 +495,10 @@ body {
     margin: 0;
 /*background: #f6f6f6;*/
 
+/*
     background-size: auto;
     background: url(http://bradjasper.com/subtle-patterns-bookmarklet/patterns/squairy_light.png) repeat repeat;
+*/
 }
 
 body:before {
@@ -518,9 +524,9 @@ html{
 
 #map{
     height: 100%;
-    border-left: 3px solid #cfcfcf;
-    -webkit-box-shadow: inset 3px 3px 5px rgba(0,0,0,0.4);
-    box-shadow: inset 3px 3px 5px rgba(0,0,0,0.4);
+    border-left:3px solid #8C8C87;
+    -webkit-box-shadow: inset 2px 2px 4px rgba(0,0,0,0.4);
+    box-shadow: inset 2px 2px 4px rgba(0,0,0,0.4);
 
 }
 
@@ -596,7 +602,7 @@ html{
 .leaflet-control-layers label {
     display: block;
     /*background:#ccc;*/
-    margin-bottom:6px;
+    margin-bottom:4px;
     height:31px;
     position:relative;
     color: white;
@@ -665,11 +671,17 @@ label > span {
     position:absolute;
     top:0;
     line-height:36px;
-    left: 13px;
+    left: 12px;
     font-size: 14px;
     font-weight: bold;
+    text-shadow: 1px 1px 1px #bbb;
 }
 
+.leaflet-control-layers-base span{
+    margin-left:1px;
+    font-size: 17px;
+
+}
 span>span{
     color: green;
     font: 20px bolder;
@@ -864,13 +876,14 @@ span.locator
     line-height: 31px;
     margin-left: 2px;
     margin-top: 11px;
+    text-shadow: 1px 1px 1px #aaa;
 }
 
 #myCar
 {
     background-color: cadetblue;
     left:45px;
-    display:none;
+/**/    display:none;
 }
 
 #location
@@ -880,6 +893,12 @@ span.locator
 }
 
 #location:hover, #myCar:hover
+{
+    background-color: #bbb;
+    color: dimgrey;
+}
+
+.locatorActive
 {
     background-color: #bbb;
     color: dimgrey;
@@ -993,7 +1012,7 @@ div#cupones{
     left: 58%;
     bottom: 0;
     z-index:6;
-    width: 35%;
+    width: 28%;
 
 }
 #cupones img{
@@ -1002,6 +1021,38 @@ div#cupones{
     bottom: 0;
 }
 
+/*
+div#cupones {
+    position: absolute;
+    right: 0;
+    bottom: 25px;
+    z-index: 6;
+    width: 55px;
+    font-size: 0.7em;
+    text-align: center;
+    line-height: 36px;
+    height: 37px;
+    background-color: white;
+    border-radius: 6px 0 0 6px;
+
+}
+*/
+
+/*
+#cupones a {
+    display: block;
+    z-index: 99;
+    opacity: 1;
+    box-shadow: 2px 2px 2px rgba(0,0,0,0.2);
+    -webkit-box-shadow: 2px 2px 2px rgba(0,0,0,0.2);
+    border: 3px solid #8C8C87;
+    border-right: none;
+    border-radius: 6px 0 0 6px;
+    color: #70706D;
+    text-shadow: 1px 1px 1px rgba(0,0,0,0.2);
+    padding:0 2px;
+}
+*/
 .device {
     width: 86%;
     height: 40%;
@@ -1019,7 +1070,7 @@ div#cupones{
 .device .arrow-left {
     background: url(images/arrows.png) no-repeat left top;
     position: absolute;
-    left: 10px;
+    left: 20px;
     top: 50%;
     margin-top: -15px;
     width: 17px;
@@ -1028,15 +1079,15 @@ div#cupones{
 .device .arrow-right {
     background: url(images/arrows.png) no-repeat left bottom;
     position: absolute;
-    right: 10px;
+    right: 20px;
     top: 50%;
     margin-top: -15px;
     width: 17px;
     height: 30px;
 }
 .swiper-container {
-    width: 220px;
-    height: 9em;
+    width: 200px;
+    height: 100px;
 
 }
 .content-slide {
@@ -1052,10 +1103,9 @@ div#cupones{
 div.swiper-slide {
     background-color: #aaa;
     width:100%;
-    height: 90%;
+
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
-    padding:0.5em;
 }
 div.swiper-slide p {
     color: snow;
@@ -1097,9 +1147,69 @@ button{
     z-index:6;
 }
 
+.leaflet-right .leaflet-control {
+    margin-right: 6px;
+}
+
+button#closeCoupon {
+position: absolute;
+
+top: 0;
+right:-4px;
+margin: 6%;
+font-size:1.2em;
+color:rgba(255, 255, 255, 0.8);
+}
+
+
+@font-face {
+    font-family: 'carFont';
+    src:url('../font/carFont.eot');
+    src:url('../font/carFont.eot?#iefix') format('embedded-opentype'),
+    url('../font/carFont.woff') format('woff'),
+    url('../font/carFont.ttf') format('truetype'),
+    url('../font/carFont.svg#carFont') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+.icon-automobile, .icon-car {
+    font-family: 'carFont';
+    speak: none;
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+    -webkit-font-smoothing: antialiased;
+}
+.icon-automobile:before {
+    content: "\31";
+}
+.icon-car:before {
+    content: "\32";
+}
+
+.icon-smile:before {
+    content: "\f182|\f183";
+}
+*:focus{
+    outline:none;
+}
+
+img[id*=pano]{
+    height:200%;
+    width: auto;
+}
+
+.leaflet-popup-content
+{
+    margin: 2px 20px;
+}
+/*
 @media only screen and (min-width: 320px) {
     canvas
     {
         width: 74% !important;
     }
-}
+}*/

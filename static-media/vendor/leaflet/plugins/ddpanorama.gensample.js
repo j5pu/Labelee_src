@@ -4,7 +4,7 @@ function addSamplePano(options)
 {
     var panoId="pano"+panoIndex;
 
-    if(jQuery('body').find('img[id*=pano]').length > 0)
+    if(jQuery('div#page').find('img[id*=pano]').length > 0)
         return;
 
     var optionStr;
@@ -29,38 +29,38 @@ function addSamplePano(options)
     
 
 //    document.write("<h2>"+ optionStr + "</h2>");
-    jQuery('body').prepend('<img id="'+panoId+'" src="'+ src + '" alt="" />');
+    jQuery('div#page').prepend('<img id="'+panoId+'" src="'+ src + '" alt="" />');
 
-    jQuery('body').find('img[id*=pano]').on('load', function(){
+    jQuery('div#page').find('img[id*=pano]').on('load', function(){
         try{
-            jQuery('body').find('img[id*=pano]').ddpanorama(options);
+            jQuery('div#page').find('img[id*=pano]').ddpanorama(options);
         }
         catch(e){}
 
         ++panoIndex;
-        var $width = $(window).width();
+        var newWidth = window.innerWidth;
+
 
         jQuery('canvas').css({
             'position': 'absolute',
             'z-index': 99999,
-            'top': 0,
-            'margin': 5+'%',
+            'top': -20+'px',
+//            'box-sizing':'content-box',
+            'margin':newWidth *0.049 +'px',
 //            'width':$width * 0.74,
             'border-radius':'.5em',
-            'border': '2px solid rgb(196, 190, 170)'
+            'border': '2px solid rgba(255, 255, 255, 0.9)'
         });
-        jQuery('body').prepend('<button id="close">X</button>');
+        jQuery('div#page').prepend('<button id="close">x</button>');
         $('button#close').css({
             'position': 'absolute',
             'z-index': 100000,
-            'top': 0,
+            'top': '-15px',
+            'right':'3%',
             'margin': 6+'%',
             'font-size':'1.2em',
-            'background-color':'#333',
-            'color':'rgb(196, 190, 170)',
-            'border-radius':'.5em',
-            'border': '2px solid rgb(196, 190, 170)'
-
+            'color':'rgba(255, 255, 255, 0.9)',
+            'text-shadow': '2px 2px 2px #555'
         })
             .on('click', function(){
                 Panorama.close();
