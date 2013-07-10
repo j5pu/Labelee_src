@@ -8,12 +8,13 @@ var Logger = {
     // 3. Interactuar con el dispositivo
     // 4. Podemos ver las salidas en la página /log/mobile abierta
 
-    url: '/log/mobile',
+    url: '/log/mobile/',
     logs: [],
     renderedLogs: [],
     paused: false,
 
     initReceiver: function () {
+
         setInterval(this.getLogs, 1000);
 
         Mousetrap.bind('space', function () {
@@ -31,6 +32,27 @@ var Logger = {
                 Logger.resume();
         });
     },
+
+
+    initSender: function()
+    {
+        $.ajax({
+            url: this.url + '?init_sender=true',
+            type: 'get',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            dataType: 'json', // esto indica que la respuesta vendrá en formato json
+            async: false,
+            success: function (response) {
+                var i = response;
+            },
+            error: function (response) {
+                var j = response;
+            }
+        });
+    },
+
 
     pause: function () {
         if (!Logger.paused)
@@ -59,8 +81,6 @@ var Logger = {
     },
 
     postLogs: function () {
-        console.log('post');
-        ajaxSetup();
         $.ajax({
             url: this.url,
             type: 'post',
@@ -92,7 +112,8 @@ var Logger = {
             async: false,
             success: function (response) {
                 Logger.logs = response;
-                if(Logger.logs.length > Logger.renderedLogs.length)
+                if(Logger.logs.length > Logger.renderedLogs.length ||
+                    Logger.logs.length == 0)
                     Logger.renderLogs();
             },
             error: function (response) {

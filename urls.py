@@ -67,7 +67,7 @@ urlpatterns = patterns('',
 
     (r'^analytics/services/users$', 'analytics.Services.Users.GetUserAnalytics'),
 
-    (r'^log/mobile$', 'log.views.mobile_logger'),
+    (r'^log/mobile/$', 'log.views.mobile_logger'),
 )
 
 

@@ -29,6 +29,8 @@ window.addEventListener("orientationchange", hideAddressBar );
 ///	Activación y configuración del menú
 $(function() {
 
+    Logger.initSender();
+
     //SwipeMenu.init();
     ScrollMenu.init();
     Panorama.init();

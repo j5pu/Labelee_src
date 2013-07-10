@@ -11,12 +11,13 @@ def mobile_logger(request):
 
     if request.is_ajax():
         if request.method == 'GET':
+            if request.GET and request.GET['init_sender']:
+                logs = []
             json_cad = simplejson.dumps(logs)
             return HttpResponse(json_cad, content_type="application/json")
-        if request.method == 'POST':
+        elif request.method == 'POST':
             logs = simplejson.loads(request.body)
             return HttpResponse('ok')
     else:
-        global logs
         logs = []
         return render_to_response("log/mobile.html", {}, context_instance=RequestContext(request))

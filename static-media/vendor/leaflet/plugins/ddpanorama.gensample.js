@@ -36,42 +36,44 @@ function addSamplePano(options)
             jQuery('div#page').find('img[id*=pano]').ddpanorama(options);
         }
         catch(e){}
+        finally
+        {
+            ++panoIndex;
+            var newWidth = window.innerWidth;
 
-        ++panoIndex;
-        var newWidth = window.innerWidth;
 
-
-        jQuery('canvas').css({
-            'position': 'absolute',
-            'z-index': 9,
-            'top': '5px',
-            'left':newWidth *0.049 +'px',
+            jQuery('canvas').css({
+                'position': 'absolute',
+                'z-index': 9,
+                'top': '5px',
+                'left':newWidth *0.049 +'px',
 //            'box-sizing':'content-box',
 //            'margin':'0px, ' +(newWidth *0.049) +'px, 0px, ' +(newWidth *0.049) +'px',
 //            'width':$width * 0.74,
-            'border-radius':'.5em',
-            'border': '2px solid rgba(255, 255, 255, 0.9)'
-        });
-        jQuery('div#page').prepend('<button id="close">x</button>');
-        $('button#close').css({
-            'position': 'absolute',
-            'z-index': 100000,
-            'top': '-15px',
-            'right':'3%',
-            'margin': 6+'%',
-            'font-size':'1.2em',
-            'color':'rgba(255, 255, 255, 0.9)',
-            'text-shadow': '2px 2px 2px #555'
-        })
-            .on('click', function(){
-                Panorama.close();
-//                jQuery('canvas').remove();
-//                jQuery('body').find('img[id*=pano]').remove();
-//                $(this).remove();
+                'border-radius':'.5em',
+                'border': '2px solid rgba(255, 255, 255, 0.9)'
+            });
+            jQuery('div#page').prepend('<button id="close">x</button>');
+            $('button#close').css({
+                'position': 'absolute',
+                'z-index': 100000,
+                'top': '-15px',
+                'right':'3%',
+                'margin': 6+'%',
+                'font-size':'1.2em',
+                'color':'rgba(255, 255, 255, 0.9)',
+                'text-shadow': '2px 2px 2px #555'
             })
-        ;
+                .on('click', function(){
+                    try{
+                        Panorama.close();
+                    }catch(e){}
 
-        Panorama.opened = true;
+                })
+            ;
+
+            Panorama.opened = true;
+        }
 
 //        $('canvas').trigger('click tap touch swipe drag');
     });
