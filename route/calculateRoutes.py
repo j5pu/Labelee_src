@@ -8,7 +8,7 @@ from django.utils.translation import gettext as _
 
 from map_editor.models import *
 from route.models import *
-from route.pathfinding.dijkstra import *
+from route.pathfinding.Dijkstra import *
 
 #from django.core import serializers
 

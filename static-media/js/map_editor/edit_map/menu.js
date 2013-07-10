@@ -343,9 +343,9 @@ var Menu = {
                     '<a href="#" class="point"' +
                     'data-point-row="' + qr.point.row + '"' +
                     'data-point-col="' + qr.point.col + '">' + qr.code + '</a>' + ' - ' +
-                    '<a href="javascript:void(window.open(\'http://localhost:8000/api-2/url_to_qr/' + url_to_code +
+                    '<a href="javascript:void(window.open(\''+ location.origin +'/api-2/url_to_qr/' + url_to_code +
                     '\',\'mywindowtitle\',\'width=250,height=250\'))">Preview</a>' + ' - ' +
-                    '<a href="http://localhost:8000/api-2/url_to_qr/' + url_to_code + '" download="' + qr.code + '">' +
+                    '<a href="'+location.origin+'/api-2/url_to_qr/' + url_to_code + '" download="' + qr.code + '">' +
                     ' Download ' + '</a>' +
                 '</li>'
             );
