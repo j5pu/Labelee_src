@@ -1,6 +1,8 @@
 var Logger = {
 
     //
+    // USO:
+    //
     // 1. Definir qué cosas queremos registrar con Logger.log('cadena'), en lugar usar console.log
     // 2. Abrir página con URL ..../log/mobile
     // 3. Interactuar con el dispositivo
@@ -103,7 +105,6 @@ var Logger = {
         $('#logs').empty();
 
         var counter = 1;
-        var prevLog = null;
 
         for (var i in this.logs) {
             var log = this.logs[i];
