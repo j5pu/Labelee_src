@@ -34,6 +34,7 @@ $(function() {
     ScrollMenu.init();
     Panorama.init();
 
+    Map.events.bindAll();
 
     var $menu = $('nav#menu-right');
     $menu.mmenu({
@@ -107,12 +108,7 @@ $(function() {
     );
 
 
-    if (window.DeviceOrientationEvent) {
-        window.addEventListener('orientationchange', myOrientResizeFunction, false);
-    }
-    $(window).resize(function () {
-        myOrientResizeFunction()
-    });
+
 
 
     $('button#closeCoupon').on(EVENTS, function () {
@@ -149,12 +145,6 @@ $(function() {
 
 });
 
-
-
-function myOrientResizeFunction() {
-    Coupon.calculateCouponArea();
-    Panorama.resize();
-}
 
 
 
@@ -358,4 +348,3 @@ var SwipeMenu = {
             .bind('dragend', self.swipeEnd)
     }
 };
-
