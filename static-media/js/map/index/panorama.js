@@ -1,12 +1,12 @@
 var Panorama = {
 
-    resizing: false,
     opened: false,
+    point: null,
+    resizing: false,
 
     init: function()
     {
         $(document).on('click tap touch', function(ev){
-            //alert('tap!!');
             if(ev.target.tagName !== 'CANVAS')
                 Panorama.close();
         });
@@ -35,14 +35,17 @@ var Panorama = {
     },
      show: function(element)
     {
-            Panorama.opened = true;
-            var point_id = element.id;
-            var point = new PointResource().read(point_id);
-            var newWidth=window.innerWidth * 0.8,
-                newHeight=newWidth*9/16;
+        Panorama.opened = true;
+
+        Panorama.element = element;
+        var point_id = element.id;
+        var point = new PointResource().read(point_id);
+
+        var newWidth=window.innerWidth*0.9,
+            newHeight=newWidth*9/16;
 
 //            addSamplePano(point.panorama,{ratio:9/16});
-            addSamplePano(point.panorama,{height: newHeight, ratio:9/16, minSpeed:30});
+        addSamplePano(point.panorama,{height: newHeight, ratio:9/16, minSpeed:30});
     },
 
     resize: function()
@@ -51,16 +54,8 @@ var Panorama = {
             return;
 
         Panorama.resizing = true;
-
-//        $('.leaflet-popup-content button.panorama').trigger('click');
-
-//        var newWidth=window.innerWidth * .85;
-//        console.log(newWidth);
-//        if(document.getElementsByTagName('canvas'))
-//        //Panorama.bindShow();
-//            $('canvas').trigger('click');
-//        document.getElementsByTagName('canvas')[0].width = newWidth;
-
+        Panorama.close();
+        Panorama.show(Panorama.element);
         Panorama.resizing = false;
     },
 
@@ -70,5 +65,6 @@ var Panorama = {
         jQuery('canvas').remove();
         jQuery('button#close').remove();
         Panorama.opened = false;
+
     }
 };
