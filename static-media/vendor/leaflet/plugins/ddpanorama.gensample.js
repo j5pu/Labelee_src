@@ -4,7 +4,7 @@ function addSamplePano(options)
 {
     var panoId="pano"+panoIndex;
 
-    if(jQuery('body').find('img[id*=pano]').length > 0)
+    if(jQuery('div#page').find('img[id*=pano]').length > 0)
         return;
 
     var optionStr;
@@ -29,11 +29,11 @@ function addSamplePano(options)
     
 
 //    document.write("<h2>"+ optionStr + "</h2>");
-    jQuery('body').prepend('<img id="'+panoId+'" src="'+ src + '" alt="" />');
+    jQuery('div#page').prepend('<img id="'+panoId+'" src="'+ src + '" alt="" />');
 
-    jQuery('body').find('img[id*=pano]').on('load', function(){
+    jQuery('div#page').find('img[id*=pano]').on('load', function(){
         try{
-            jQuery('body').find('img[id*=pano]').ddpanorama(options);
+            jQuery('div#page').find('img[id*=pano]').ddpanorama(options);
         }
         catch(e){}
 
@@ -51,7 +51,7 @@ function addSamplePano(options)
             'border-radius':'.5em',
             'border': '2px solid rgba(255, 255, 255, 0.9)'
         });
-        jQuery('body').prepend('<button id="close">x</button>');
+        jQuery('div#page').prepend('<button id="close">x</button>');
         $('button#close').css({
             'position': 'absolute',
             'z-index': 100000,
