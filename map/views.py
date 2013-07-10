@@ -22,14 +22,28 @@ def show_map(request, qr_type, enclosure_id, floor_id, poi_id):
     """
     enclosure = Enclosure.objects.filter(id=enclosure_id)
     categories = {}
-    points = Point.objects.filter(~Q(label__category__name__in=CATEGORIAS_FIJAS.values()),
-                                  floor__enclosure__id=enclosure_id)
+    points = Point.objects\
+        .filter(~Q(label__category__name__in=CATEGORIAS_FIJAS.values()),
+                floor__enclosure__id=enclosure_id)\
+        .order_by('label__category__name', 'label__name')
+
     for point in points:
         if point.label.category.name not in CATEGORIAS_FIJAS.values():
             if point.label.category.name in categories:
                 categories[point.label.category.name].append(point)
             else:
                 categories[point.label.category.name] = [point]
+
+    categories_list = []  # [{'name': 'toilets', 'items': [...]}, ...]
+    for key, value in categories.iteritems():
+        d = {
+            'name': key,
+            'items': value
+        }
+        categories_list.append(d)
+
+    from operator import itemgetter
+    ordered_categories = sorted(categories_list, key=itemgetter('name'))
 
     marquee = []
     twitterhelper = TwitterHelper(enclosure[0].twitter_account)
@@ -42,19 +56,11 @@ def show_map(request, qr_type, enclosure_id, floor_id, poi_id):
         'enclosure_id': enclosure_id,
         'floor_id': floor_id,
         'poi_id': poi_id,
-        'categories': categories,
+        'categories': ordered_categories,
         'marquee': marquee,
         'qr_type': qr_type,
     }
     return render_to_response('map/index.html', ctx, context_instance=RequestContext(request))
-
-
-events = []
-
-
-# def index(request):
-# 	# No implementado aún
-# 	return render_to_response('map/index.html', context_instance=RequestContext(request))
 
 
 def your_position(request, label_id):
@@ -76,34 +82,6 @@ def your_position(request, label_id):
     }
 
     return render_to_response('map/your_position.html', ctx, context_instance=RequestContext(request))
-
-
-def event_log(request):
-    global events
-
-    # print 'holaaa'
-
-    if request.is_ajax():
-        if request.method == 'GET':
-            json_cad = json.dumps(events)
-            # print json_cad
-            return HttpResponse(json_cad, content_type="application/json")
-        if request.method == 'POST':
-            events = json.loads(request.POST['events'])
-            # print events[7]
-            # print 'holaa'
-            return HttpResponse('aa')
-
-    # return a new page otherwise
-    return render_to_response("map/event_log.html", {}, context_instance=RequestContext(request))
-
-
-# def touchingLog(request):
-# 	return HttpResponse(json.dumps(response_data), content_type="application/json")
-
-
-# def showLog(request):
-# 	return render_to_response('map/touching_log.html', ctx, context_instance=RequestContext(request))
 
 
 def fuera(request, id, row, column):

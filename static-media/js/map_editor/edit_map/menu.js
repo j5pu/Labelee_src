@@ -80,36 +80,50 @@ var LabelCategory = {
         ev.preventDefault();
         var category_id = $e.category.selector.val();
         var confirm_msg = gettext('Delete category? (all its labels will be removed)');
+
+        // Eliminación en cascada: categoría -> etiqueta -> punto
         new LabelCategoryResource().del(category_id, confirm_msg);
+
         Menu.setCategorySelector();
+
+        // Recargamos el grid para evitar que la próxima vez que guardemos
+        // intente guardar puntos de una etiqueta que no existe
+        Floor.reloading = true;
+        Floor.loadGrid();
     },
 
 
     isBlocker: function(label_category)
     {
         // Nos indica si la categoría es bloqueante
+
         var self = this;
         var cat_id;
 
         if(label_category)
         {
             cat_id = label_category.id;
-            cat_name = label_category.name_es;
+            cat_name = label_category.name;
         }
         else if(Painter.label.category)
         {
             cat_id = Painter.label.category.id;
-            cat_name = Painter.label.category.name_es;
+            cat_name = Painter.label.category.name;
         }
 
         // Nos aseguramos por el id o el nombre que es una bloqueante
-        return cat_id == self.ids.blocker || cat_name.toUpperCase() == 'BLOQUEANTES';
+        return cat_id == self.ids.blocker ||
+            cat_name.toUpperCase() == 'BLOQUEANTES' ||
+            cat_name.toUpperCase() == 'BLOCKERS';
     },
 
 
     isConnector: function(label_category)
     {
         // Nos indica si la categoría es arista
+        if(!label_category.name_es)
+            return false;
+
         return label_category.name_es.toUpperCase() === 'ARISTAS';
     }
 };
@@ -204,15 +218,23 @@ var Label = {
         ev.preventDefault();
         var label_id = $e.label.selector.val();
         var confirm_msg = gettext('Delete label?');
+        // Elimina en cascada: etiqueta -> punto
         new LabelResource().del(label_id, confirm_msg);
         Menu.setLabelSelector();
+
+        Floor.reloading = true;
+        Floor.loadGrid();
     },
 
 
     isWall: function(label)
     {
-        return label.name.toUpperCase() === 'MURO'
-            || label.name.toUpperCase() === 'WALL';
+        if(!label || !label.name)
+            return false;
+
+        return label.name.toUpperCase() === 'MURO' ||
+            label.name.toUpperCase() === 'WALL' ||
+            false;
     },
 
 
@@ -251,6 +273,9 @@ var Menu = {
         Menu._setSelectors();
         Menu.setQrList();
         Menu.setPointStats();
+
+        if($e.floor.num_rows.val() == Floor.data.num_rows)
+            $e.floor.change_num_rows.attr('disabled', 'disabled');
 //        Events.menu.bind();
     },
 
@@ -274,6 +299,13 @@ var Menu = {
 
     setPointStats: function()
     {
+        if(!Floor.hasPoints())
+        {
+            Floor.point_count.to_save = 0;
+            Floor.point_count.saved = 0;
+            Floor.point_count.to_delete = 0;
+            Floor.point_count.total = 0;
+        }
         $e.point_count.to_save.html(Floor.point_count.to_save);
         $e.point_count.saved.html(Floor.point_count.saved);
         $e.point_count.to_delete.html(Floor.point_count.to_delete);

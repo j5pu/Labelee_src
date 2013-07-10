@@ -1,26 +1,13 @@
 $(function() {
-
-    setTimeout(function(){window.scrollTo(0, 0);}, 1000);
-
-    $('#choose-lang img').on('click', function(){
-        $(this).parent().find('select').val($(this).attr('id'));
-        $(this).parent().submit();
-    });
-
-    $('#choose-lang img').not(document.getElementById(lang_code))
-        .css({'opacity':0.4});
-
-
-    // Corrige el alto de la caja para el número de planta
-//    var floor_box_height = $('.floor').height();
-//    $('.floor .floor-number').height(floor_box_height);
-
+    I18n.selectLang(lang_code);
 });
 
 
 function EnclosuresCtrl($scope, UrlService)
 {
 	$scope.enclosure_resource = new Resource('enclosure');
+
+    $scope.$watch('enclosures', function(){FileInput.draw();});
 
 	$scope.enclosures = $scope.enclosure_resource.readAll();
 
@@ -31,15 +18,21 @@ function EnclosuresCtrl($scope, UrlService)
 		};
 
 		$scope.enclosure_resource.create(data);
-
 		$scope.enclosures = $scope.enclosure_resource.readAll();
 		
 		$scope.enclosure_name = '';
+
+        setTimeout(function(){
+            $('html, body').animate({
+                scrollTop: $(document).height()
+            }, 2000);
+        }, 300);
+
 	};
 }
 
 
-function EnclosureCtrl($scope)
+function EnclosureCtrl($scope, $element)
 {
 	$scope.editing = false;
 
@@ -70,17 +63,15 @@ function EnclosureCtrl($scope)
 
 	$scope.del = function() {
 
-		var confirm_msg = gettext('Are you sure you want to remove this enclosure? ' +
-            '(this will erase all their floors)');
+		var confirm_msg = gettext('Are you sure you want to remove this enclosure? (this will erase all their floors)');
 
-		$scope.enclosure_resource.del($scope.enclosure.id, confirm_msg);
-
-		// Al ir en un ng-include el botón que llama a esta función,
-		// tenemos que subir dos niveles para cambiar la lista $scope.enclosures:
-		//	- subir del $scope de la plantilla
-		//	- del $scope del EnclosureCtrl (controlador hijo) al $scope de EnclosuresCtrl (padre)
-		$scope.$parent.$parent.enclosures = $scope.enclosure_resource.readAll();
-
+		$scope.enclosure_resource.del(
+            $scope.enclosure.id,
+            confirm_msg,
+            function(){
+                $($element).fadeOut(200);
+            }
+        );
 	};
 
 
@@ -95,6 +86,10 @@ function FloorsCtrl($scope, $element)
 	$scope.sending_img = false;
 
     $scope.floor_resource = new FloorResource();
+
+    $scope.$watch('floors', function(){
+        FileInput.draw();
+    });
 
     $scope.loadFloorList = function() {
         $scope.floors = $scope.floor_resource.readFromEnclosure($scope.enclosure.id);
@@ -138,28 +133,28 @@ function FloorsCtrl($scope, $element)
 				img_form.find('input[name="img"]').val('');
                 img_form.find('.file-input-name').remove();
 				$scope.floors =
-					$scope.floor_resource.readAllFiltered('?enclosure__id=' + $scope.enclosure.id);
+					$scope.floor_resource.readAllFiltered('?enclosure__id=' + $scope.enclosure.id + '&order_by=floor_number');
 				
 				$scope.sending_img = false;
 				
 				$scope.$apply();
 			}
 		);
+
+
 	};
 }
 
 function FloorCtrl($scope, $element)
 {
 	$scope.editing = false;
-	
+
+
 	$scope.update = function() {
 		var img = $($element).find('input[name="img"]');
 
 		if (!$scope.editing)
-        {
 			$scope.editing = true;
-			img.val('');
-		}
         else
         {
 			// Si ya se estaba editando cuando hemos invocado update() entonces
@@ -191,22 +186,30 @@ function FloorCtrl($scope, $element)
 			}
 
 			$scope.editing = false;
-
             $scope.loadFloorList();
 		}
+
+        FileInput.draw();
 	};
 
     $scope.cancelUpdate = function() {
         $scope.editing = false;
+
+        $scope.loadFloorList();
     };
 
 	$scope.del = function() {
 
 		var confirm_msg = gettext('Are you sure you want to remove this floor?');
 
-		$scope.floor_resource.del($scope.floor.id, confirm_msg);
-
-        $scope.loadFloorList();
+		$scope.floor_resource.del(
+            $scope.floor.id,
+            confirm_msg,
+            function(){
+                $($element).fadeOut(200);
+                setTimeout($scope.loadFloorList, 200);
+            }
+        );
 	};
 }
 

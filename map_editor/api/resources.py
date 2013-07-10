@@ -116,7 +116,8 @@ class PointResource(ModelResource):
             'id': ALL,
             'row': ALL,
             'col': ALL,
-            'description': ALL
+            'description': ALL,
+            'panorama': ALL
         }
         ordering = {
             'description': ALL

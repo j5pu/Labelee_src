@@ -206,7 +206,9 @@
 .leaflet-bar-part-bottom {
 	-webkit-border-radius: 0 0 4px 4px;
 	        border-radius: 0 0 4px 4px;
+/*
 	border-bottom: none;
+*/
 	}
 
 .leaflet-touch .leaflet-bar {
@@ -223,7 +225,9 @@
 .leaflet-touch .leaflet-bar-part-bottom {
 	-webkit-border-radius: 0 0 7px 7px;
 	        border-radius: 0 0 7px 7px;
+/*
 	border-bottom: none;
+*/
 	}
 
 

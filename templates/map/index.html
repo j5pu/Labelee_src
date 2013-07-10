@@ -1,7 +1,9 @@
+{% load i18n %}
+
 <!DOCTYPE html>
 <html>
 <head>
-    <title>labelee v1</title>
+    <title>labelee_beta</title>
     <meta charset="utf-8"/>
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
@@ -15,38 +17,55 @@
     <link rel="stylesheet" href="{{ STATIC_URL }}css/map/index/font-awesome.min.css">
     <link rel="stylesheet" href="{{ STATIC_URL }}css/map/index/leaflet.awesome-markers.css">
     <!--link rel="stylesheet" href="{{ STATIC_URL }}css/map/index/leaflet.rrose.css"-->
-    <link rel="stylesheet" href="{{ STATIC_URL }}css/map/index/leaflet-search.css">
+    <!--link rel="stylesheet" href="{{ STATIC_URL }}css/map/index/leaflet-search.css"-->
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/map/index/leaflet.label.css">
     <link rel="stylesheet" href="{{ STATIC_URL }}css/map/index/search-mobile.css">
     <link rel="stylesheet" href="{{ STATIC_URL }}css/map/index/multix.css">
     <link rel="stylesheet" href="{{ STATIC_URL }}css/map/index/social.network.menu.css">
     <link rel="stylesheet" href="{{ STATIC_URL }}css/map/index/animation.css">
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/map/index/idangerous.swiper.css">
 
 
+    <script src="{% url 'django.views.i18n.javascript_catalog' %}"></script>
     <script src="{{ STATIC_URL }}vendor/leaflet/plugins/scale.fix.js"></script>
-   <script src="{{ STATIC_URL }}vendor/jquery-1.9.1.min.js"></script>
-    <script src="{{ STATIC_URL }}vendor/hammer.js_v1.0.3/dist/hammer.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>
+    <!--script>window.jQuery || document.write('<script src="{{ STATIC_URL }}vendor/jquery-2.0.3.min.js"><\/script>')</script-->
+    <!--script src="{{ STATIC_URL }}vendor/jquery-1.10.2.min.js"></script-->
+    <script src="{{ STATIC_URL }}vendor/jquery-1.9.1.min.js"></script>
+
+    <!--script src="{{ STATIC_URL }}vendor/hammer.js_v1.0.3/dist/hammer.min.js"></script-->
     <script src="{{ STATIC_URL }}vendor/hammer.js_v1.0.3/dist/jquery.hammer.min.js"></script>
+    <!--script src="{{ STATIC_URL }}js/map/index/coupon.js"></script-->
+    <script src="{{ STATIC_URL }}js/map/index/panorama.js"></script>
+    <script src="{{ STATIC_URL }}js/map/index/socialmenu.js"></script>
+
 
     <!--script type="text/javascript" src="http://code.jquery.com/jquery-1.9.1.min.js"></script-->
     <!--script src="http://cdn.leafletjs.com/leaflet-0.5.1/leaflet.js"></script-->
-    <!-- <script>L_PREFER_CANVAS = true;</script>-->
+    <!--script>L_PREFER_CANVAS = true;</script-->
     <script src="{{ STATIC_URL }}vendor/leaflet/leaflet.js"></script>
-    <script src="{{ STATIC_URL }}vendor/leaflet/plugins/bouncemarker.js"></script>
+    <!--script src="{{ STATIC_URL }}vendor/leaflet/plugins/bouncemarker.js"></script-->
     <script src="{{ STATIC_URL }}vendor/leaflet/plugins/leaflet.awesome-markers.js"></script>
     <script src="{{ STATIC_URL }}vendor/leaflet/plugins/L.GeometryUtil.js"></script>
     <script src="{{ STATIC_URL }}vendor/leaflet/plugins/L.RotatedMarker.js"></script>
     <script src="{{ STATIC_URL }}vendor/leaflet/plugins/L.Symbol.js"></script>
     <script src="{{ STATIC_URL }}vendor/leaflet/plugins/L.PolylineDecorator.js"></script>
     <!--script src="{{ STATIC_URL }}vendor/leaflet/plugins/rrose-src.js"></script-->
-    <script src="{{ STATIC_URL }}vendor/leaflet/plugins/leaflet-search.js"></script>
+    <!--script src="{{ STATIC_URL }}vendor/leaflet/plugins/leaflet-search.js"></script-->
+    <script src="{{ STATIC_URL }}vendor/leaflet/plugins/leaflet.label.js"></script>
     <script src="{{ STATIC_URL }}vendor/leaflet/plugins/jquery.mmenu.js"></script>
+    <script src="{{ STATIC_URL }}vendor/leaflet/plugins/idangerous.swiper-2.0.min.js"></script>
+    <script type="text/javascript"
+            src="{{ STATIC_URL }}vendor/leaflet/plugins/jquery.ba-outside-events.min.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}vendor/leaflet/plugins/ddpanorama.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}vendor/leaflet/plugins/ddpanorama.gensample.js"></script>
     <script src="{{ STATIC_URL }}js/helpers/base.js"></script>
     <script src="{{ STATIC_URL }}js/helpers/ajax_helpers.js"></script>
     <script src="{{ STATIC_URL }}js/helpers/resource.js"></script>
+    <script src="{{ STATIC_URL }}js/log/logger.js"></script>
 
 
     <script src="{{ STATIC_URL }}js/map/index/main.js"></script>
-    <script src="{{ STATIC_URL }}js/map/index/social.network.menu.js"></script>
     <script src="{{ STATIC_URL }}js/map/index/modernizr.js"></script>
 
     <script>
@@ -69,8 +88,11 @@
 
 </head>
 
-
 <body>
+<!-- Facebook SDK content -->
+<!--<div id="fb-root"></div>-->
+
+{% csrf_token %}
 
 
 <div id="page">
@@ -79,8 +101,9 @@
         <a href="#menu-right">
             <img src="{{ STATIC_URL }}css/map/index/images/logo.png"/>
         </a>
+        <!--
         <span id="fake"></span>
-        labelee
+        labelee-->
     </div>
     <div id="content" class="container">
         <div id="map"></div>
@@ -102,79 +125,78 @@
         </div>
         -->
         <ul id="scrollMenu">
-            <li class="Label"><span>Selecciona tu destino</span></li>
-            {% for category, pois in categories.items %}
+            <li class="Label">{% trans "Selecciona tu destino"%}</li>
+
+            {% for category in categories %}
                 <li>
-                <li class="Label">{{ category }}</li>
-                {% for destination in pois %}
+                <li class="Label">{{ category.name }}</li>
+                {% for destination in category.items %}
                     <li onclick="$('#menu-right').trigger( 'close' );preDrawRoute({{ poi_id }},floor_id,{{ destination.id }},{{ destination.floor_id }})">{{ destination.description }}</li>
                 {% endfor %}
 
                 </li>
             {% endfor %}
-            <li class="no-results"><span>Lo sentimos, no se ha encontrado ningún resultado.</span></li>
+            <li class="no-results"><span>{% trans "Lo sentimos, no se ha encontrado ningún resultado."%}</span></li>
         </ul>
     </nav>
-<!--Inicio menú social networks -->
- <span id="social" align="center">
-     <ul class="navi">
-         <li id="n1" class="n1"><a class="mjn-tab1" href="#" title="Compartir con Facebook" onclick="fbs_click()"><span> <i
-                 class="icon-facebook-sign"></i></span></a>
+    <!--Inicio menú social networks -->
 
-         </li>
-         <li id="n2" class="n2"><a class="mjn-tab2" href="#" title="Compartir con Twitter" onclick="twt_click()"><span>  <i
-                 class="icon-twitter-sign"></i></span></a>
-         </li>
-         <li id="n3" class="n3"><a class="mjn-tab3" href="#" title="Compartir con google" onclick="google_click()"><span>  <i
-                 class="icon-google-plus-sign"></i></span></a>
-
-         </li>
-         <li id="n4" class="n4"><a class="mjn-tab4" href="#" title="Compartirlo por mail" onclick="mail_click()"><span>  <i
-                 class="icon-envelope"></i></span></a>
-        </li>
-         <li id="n6" class="n6"><a class="mjn-tab6" href="#"><span>   <i class="icon-share-alt"></i></span></a>
-         </li>
-     </ul>
-        <!--     <i class="icon-facebook-sign"></i>
-            <i class="icon-twitter-sign"></i>
-            <i class="icon-plus-sign"></i>-->
-        </span>
-<!--Fin menú social networks -->
+    <!--Fin menú social networks -->
 
 
-    <span class="locator" id="location"><i class="icon-screenshot icon-white"></i></span>
-    <span class="locator" id="myCar"><i class="icon-truck icon-white"></i></span>
+    <span class="locator" id="location"><i class="icon-location-arrow icon-white"></i></span>
+    <!--span class="locator" id="myCar"><i class="icon-truck icon-white"></i></span-->
+    <span class="locator icon-automobile" id="myCar"></span>
+
+ {% comment %}   <div id="cupones">
+        <a href="#">
+            COUPONS
+        </a>
+    </div>{% endcomment %}
+    <div id="cupones">
+        <img id="cupon-img" src="/media/cupones_lab.png"
+             alt="Cupones" usemap="#cupon">
+        <map name="cupon">
+            <area shape="poly" coords="" href="#" alt="{% trans "Cupones" %}" title="Cupon">
+        </map>
+
+    </div>
+    <div class="device">
+        <a class="arrow-left" href="#"></a>
+        <a class="arrow-right" href="#"></a>
+        <button id="closeCoupon">x</button>
+
+        <div class="swiper-container">
+            <div class="swiper-wrapper">
+                <div class="swiper-slide">
+{#                    <p class="title">LA BOTELLITA</p>#}
+{#                    <p>Oferta 3 x 2, ¡solo hasta las 20.00h!</p>#}
+{#                    <button id="cup1">PULSA AQUÍ</button>#}
+
+                    <img id="cup1" src="/media/cup1.jpg">
+                </div>
+                <div class="swiper-slide">
+                    <img id="cup2" src="/media/cup2.jpg">
+                </div>
+                <div class="swiper-slide">
+                    <img id="cup3"src="/media/ingles.jpg">
+                </div>
+            </div>
+
+        </div>
+        <div class="pagination"></div>
+    </div>
+
 
     <div style="background: rgb(17, 17, 17); background:rgba(17, 17, 17, 0.4); padding:0">
         <marquee align="center" direction="left" loop="40"
-                 style="width:100%; z-index: 10000; position: absolute;bottom: 0;background:rgba(17, 17, 17, 0.4);color: #ddd">
+                 style="width:100%; z-index: 10000; font-size:14px;line-height:16px; position: absolute;bottom: 0;background:rgba(17, 17, 17, 0.4);color: #ddd">
             {% for text in marquee %}
                 <span>{{ text }}</span>
             {% endfor %}
         </marquee>
     </div>
 </div>
-<script type='text/javascript'>
-
-    $(function () {       
-        $('div#page').hide();
-        $('body').prepend('<div class="splash">    <div class="container">        <div class="sp-container"             >            <div class="frame-5"><span><img src="/media/logo-labelee-sin-slogan.png"></span></div>            <div id="find" class="frame-6">find<span id="your"> your<span id="way"> way!</span></span></div>        </div>    </div></div>')
-        setTimeout(hideSplash, 4000);
-
-
-        $('span#myCar').click(function(){
-            map.setView(qrLoc, 0);
-        });
-    });
-    function hideSplash() {
-        $('div.splash').hide();      
-        $('div#page').show();
-        loopFloors(floor_index);
-
-    }
-
-</script>
-
 
 </body>
 </html>

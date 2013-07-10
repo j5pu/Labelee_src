@@ -71,6 +71,31 @@ def to_dict(model_object):
     return obj[0]
 
 
+def tx_serialized_json_list(json_list):
+    """
+    Devuelve un diccionario con {
+        id: 12214,
+        row: 34,
+        ...
+    en lugar de {
+        pk: 253125,
+        fields: {
+            row: 34,
+            ...
+    """
+    list = simplejson.loads(json_list)
+    tx_list = []
+    for el in list:
+        d = {}
+        d['id'] = el['pk']
+        for key,val in el['fields'].items():
+            d[key] = val
+        tx_list.append(d)
+
+    return tx_list
+
+
+
 def group_by_pk(queryset_response):
     return queryset_response.values().annotate(total=Sum('id'))
 

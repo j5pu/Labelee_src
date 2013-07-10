@@ -25,12 +25,6 @@
     top: 0;
 }
 
-#menu #num_rows {
-    width: 2em;
-    text-align: right;
-    margin-top: 0.5em;
-}
-
 #toggle_erase_mode {
     margin-left: 4%;
 }
@@ -116,8 +110,10 @@ ul {
     z-index: 3;
 }
 
-button#update_floor {
-    margin-left: 2em;
+#update_floor {
+    display: inline-block;
+    float: right;
+    margin-right: 3em;
 }
 
 
@@ -149,7 +145,7 @@ button[name="create"], button[name="cancel"] {
 
 .box-2 ul li .txt
 {
-    float: left;
+    /*float: left;*/
 }
 
 .box-2 ul li .num
@@ -165,6 +161,27 @@ button[name="create"], button[name="cancel"] {
 
 a.link-1
 {
-    margin: 0.1em 5em 0.3em;
+    display: inline-block;
+    margin-left: 3em;
+    float: left;
+}
+
+#num_rows
+{
+    padding: 0em 1em;
+    margin-bottom: 1em;
+    display: block;
+}
+
+#num_rows input[type="text"]
+{
+    width: 1.8em;
+    margin-top: 0.6em;
+    text-align: right;
+}
+
+#num_blocks
+{
+    margin-right: 1em;
 }
 

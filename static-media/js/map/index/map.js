@@ -1,18 +1,20 @@
+var showOrigin = false;
+
 //Configuración de iconos
 var OriginIcon = L.AwesomeMarkers.icon({
-        icon: 'star',
+        icon: 'location-arrow',
         color: 'darkblue'
         //spin: true
 
     }),
     DestinyIcon = L.AwesomeMarkers.icon({
-        icon: 'star',
+        icon: 'screenshot',
         color: 'red'
         //spin: true
 
     }),
     CarIcon = L.AwesomeMarkers.icon({
-        icon: 'truck',
+        icon: 'automobile',
         color: 'cadetblue'
         //spin: true
 
@@ -48,23 +50,23 @@ var loadedLabels = false;
 var anim = null;
 var flechita = null;
 /*var floorChecks = [];
-//Parpadeo a la planta del POI destino
-var blinkingMode = null;
-function blinker(element) {
-    if (blinkingMode != null) {
-        var color = element.css('background-color');
-        if (color == "rgb(255, 0, 0)") {
-            element.css('background-color','');
-        } else {
-            element.css('background-color','rgb(255, 0, 0)');
-        }
-        window.setTimeout(function () {
-            blinker(element);
-        }, 1000);
-    } else {
-        element.css('background-color','');
-    }
-}*/
+ //Parpadeo a la planta del POI destino
+ var blinkingMode = null;
+ function blinker(element) {
+ if (blinkingMode != null) {
+ var color = element.css('background-color');
+ if (color == "rgb(255, 0, 0)") {
+ element.css('background-color','');
+ } else {
+ element.css('background-color','rgb(255, 0, 0)');
+ }
+ window.setTimeout(function () {
+ blinker(element);
+ }, 1000);
+ } else {
+ element.css('background-color','');
+ }
+ }*/
 
 
 function loadIcon(color, shape) {
@@ -83,8 +85,8 @@ var qrPoint = {
 };
 qrPoint.label = new LabelCategoryResource().readFromUri(qrPoint.point.label)
 qrPoint.labelCategory = new LabelCategoryResource().readFromUri(qrPoint.label.category)
-qrPoint.isParquing = function () {
-    return this.labelCategory.name == 'Parquing';
+qrPoint.isParking = function () {
+    return this.labelCategory.name == 'Parking';
 };
 
 
@@ -97,6 +99,9 @@ var LocalStorageHandler = {
 
     checkExpire: function () {
         for (index = 0; index < localStorage.length; index++) {
+            if (localStorage.key(index) != 'prevDest' && localStorage.key(index) != 'miCoche')
+                continue;
+
             var obj = JSON.parse(localStorage.getItem(localStorage.key(index)));
             var delay = 86400000; // 24h
             var expired = new Date().getMilliseconds() > obj.prevDate + delay;
@@ -107,11 +112,11 @@ var LocalStorageHandler = {
     },
 
     setValues: function () {
-        if (qrPoint.isParquing()) {
-            if (confirm('¿Desea recordar su plaza?')) {
+        if (qrPoint.isParking()) {
+            if (confirm(gettext('Do you want to remember your parking space?'))) {
                 var miCoche = {
                     dest: qrPoint,
-                prevDate: new Date().getTime()
+                    prevDate: new Date().getTime()
                 };
                 localStorage.setItem('miCoche', JSON.stringify(miCoche));
             } else {
@@ -121,19 +126,13 @@ var LocalStorageHandler = {
 
 
         if (qr_type == 'dest') {
-            var sharedDest = {
-                dest: qrPoint,
-                'prevDate': new Date().getTime(),
-                'shooted_origin': false
-            };
-
-            localStorage.setItem('sharedDest', JSON.stringify(sharedDest));
+            this.setSharedDest();
         }
         else {
             var sharedDest = JSON.parse(localStorage.getItem('sharedDest'));
             if (sharedDest) {
                 localStorage.removeItem('sharedDest');
-                sharedDest.mesg = '¿Todavía quieres ir al destino anterior?';
+                sharedDest.mesg = gettext('Do you still want to go to the previous destination?');
                 sharedDest.with_predraw = true;
 
                 localStorage.setItem('prevDest', JSON.stringify(sharedDest));
@@ -158,31 +157,21 @@ var LocalStorageHandler = {
                     '</li>' +
                     '</li>'
             );
-            $('span#myCar').show();
+//            $('span#myCar').show();
         }
 
         var prevDest = JSON.parse(localStorage.getItem('prevDest'));
         if (prevDest) {
-            var enclosure_dest_id = prevDest.with_predraw ? prevDest.dest.enclosure.id : prevDest.enclosureid;
-            if (qrPoint.enclosure.id != enclosure_dest_id)
+            if (qrPoint.enclosure.id != prevDest.enclosureid)
                 return;
 
-            var point_dest_id, floor_dest_id, description, func;
-            if (prevDest.with_predraw) {
-                point_dest_id = prevDest.dest.point.id;
-                floor_dest_id = prevDest.dest.floor.id;
-                description = prevDest.dest.point.description;
-            }
-            else {
-                point_dest_id = prevDest.poid;
-                floor_dest_id = prevDest.floorid;
-                description = prevDest.description;
-            }
-
+            var point_dest_id = prevDest.poid,
+                floor_dest_id = prevDest.floorid,
+                description = prevDest.description_for_menu;
 
             $('#scrollMenu').prepend(
                 '<li>' +
-                    '<li class="Label mmenu-label">DESTINO PREVIO</li>' +
+                    '<li class="Label mmenu-label">' + gettext('PREVIOUS DESTINATION') + '</li>' +
                     '<li ' +
                     'onclick="' + "$('#menu-right').trigger( 'close' );" +
                     "preDrawRoute(" + qrPoint.point.id + ', ' + floor_id + ', ' + point_dest_id + ', ' + floor_dest_id + ');">' +
@@ -198,15 +187,24 @@ var LocalStorageHandler = {
         var prevDest = {
             'prevDate': new Date().getTime(),
             'poid': marker.poid,
-            'floorid': qrPoint.floor.id,
+            'floorid': marker.floorid,
             'enclosureid': qrPoint.enclosure.id,
-            'psX': marker.psX,
-            'psY': marker.psY,
-            'mesg': '¿Todavía quieres ir a ' + marker.title + '?',
+            'mesg': gettext('Do you still want to go to') + ' ' + marker.description + '?',
             'description': marker.title,
-            'with_predraw': false
+            'description_for_menu': marker.description
         };
         localStorage.setItem('prevDest', JSON.stringify(prevDest));
+    },
+
+
+    setSharedDest: function () {
+        var sharedDest = {
+            dest: qrPoint,
+            'prevDate': new Date().getTime(),
+            'shooted_origin': false
+        };
+
+        localStorage.setItem('sharedDest', JSON.stringify(sharedDest));
     },
 
 
@@ -217,19 +215,24 @@ var LocalStorageHandler = {
             if (prevDest) {
                 if (prevDest.with_predraw && prevDest.dest.enclosure.id == qrPoint.enclosure.id) {
                     if (prevDest.shooted_origin)
-                        if (confirm(prevDest.mesg))
+                        if (confirm(prevDest.mesg)) {
+                            showOrigin = true;
                             preDrawRoute(qrPoint.point.id, qrPoint.floor.id, prevDest.dest.point.id, prevDest.dest.floor.id);
+                        }
                         else
                             localStorage.removeItem('prevDest');
                     else {
+                        showOrigin = true;
                         preDrawRoute(qrPoint.point.id, qrPoint.floor.id, prevDest.dest.point.id, prevDest.dest.floor.id);
                         prevDest.shooted_origin = true;
                         localStorage.setItem('prevDest', JSON.stringify(prevDest));
                     }
                 }
                 else if (prevDest.enclosureid == qrPoint.enclosure.id) {
-                    if (confirm(prevDest.mesg))
-                        drawRoute(qrPoint.point.id, qrFloor.sX, qrFloor.sY, prevDest.poid, prevDest.psX, prevDest.psY);
+                    if (confirm(prevDest.mesg)) {
+                        showOrigin = true;
+                        preDrawRoute(qrPoint.point.id, qrPoint.floor.id, prevDest.poid, prevDest.floorid);
+                    }
                     else
                         localStorage.removeItem('prevDest');
                 }
@@ -241,7 +244,6 @@ var LocalStorageHandler = {
 };
 
 
-
 //Variables globales
 var mapH = $(document).height(),//Altura de la pantalla
     baseLayers = {},
@@ -250,6 +252,8 @@ var mapH = $(document).height(),//Altura de la pantalla
     totalPois = new L.LayerGroup(),
     qrFloor,
     qrLoc,
+    carLoc,
+    carMarker,
     route = {},
     arrow = [],
     arrowHead = [],
@@ -277,6 +281,11 @@ function loopFloors() {
         initMap(qrPoint);
 
         LocalStorageHandler.draw();
+
+
+//       if(( ua.indexOf("Android") >= 0 ) && (androidversion >=3.0))
+
+        //Coupon.init();
 
         // fin de loopFloors
         return;
@@ -312,63 +321,97 @@ function loadPOIs() {
 
         floors[fl].layer = new L.LayerGroup();
 
-        try {
-            for (j = 0; j < floors[fl].pois.length; j++) {
-                if (floors[fl].pois[j].id === poi_id) {
+        for (j = 0; j < floors[fl].pois.length; j++) {
+            if (floors[fl].pois[j].id === poi_id) {
+                // Si es el último no hacemos nada. Si no, lo sacamos
+                if (j == floors[fl].pois.length)
+                    break;
+                else
                     floors[fl].pois.splice(j, 1);
-                    if (j == floors[fl].pois.length)
-                        break;
-                }
-                var colorIcon = floors[fl].pois[j].label.category.color,
-                    nameIcon = floors[fl].pois[j].label.name,
-                //shapeIcon = floors[fl].pois[j].label.icon,
-                    shapeIcon = floors[fl].pois[j].label.category.icon,
-                //shapeIcon = "bolt",
-                    id = floors[fl].pois[j].id,
-                    descriptionIcon = floors[fl].pois[j].description,
-                    sX = floors[fl].scaleX,
-                    sY = floors[fl].scaleY,
-                    loc = [(floors[fl].pois[j].row) * sY + (sY),
-                        floors[fl].pois[j].col * sX + (sY)],
-                    enclosureid = qrPoint.enclosure.id,
-                    labelid = floors[fl].pois[j].label.id
-                category = floors[fl].pois[j].label.category.name;
+            }
+            var colorIcon = floors[fl].pois[j].label.category.color,
+                nameIcon = floors[fl].pois[j].label.name,
+                shapeIcon = floors[fl].pois[j].label.category.icon,
+                id = floors[fl].pois[j].id,
+                floorid = floors[fl].pois[j].floor;
+                description = floors[fl].pois[j].description,
+                panorama = floors[fl].pois[j].panorama,
+                sX = floors[fl].scaleX,
+                sY = floors[fl].scaleY,
+                loc = [(floors[fl].pois[j].row) * sY + (sY),
+                    floors[fl].pois[j].col * sX + (sY)],
+                labelid = floors[fl].pois[j].label.id,
+                category = floors[fl].pois[j].label.category.name,
+                category_es = floors[fl].pois[j].label.category.name_es;
+
+            var popupTitle = description;
+            if (panorama) {
+                popupTitle += Panorama.renderIcon(id);
+            }
+            popupTitle += SocialMenu.renderIcon(id);
 
 
-                floors[fl].pois[j].marker = new L.Marker(new L.latLng(loc), {icon: loadIcon(colorIcon, shapeIcon), title: descriptionIcon});
-                floors[fl].pois[j].marker.options.icon.options.color = colorIcon;
-                floors[fl].pois[j].marker.poid = id;
-                floors[fl].pois[j].marker.psX = sX;
-                floors[fl].pois[j].marker.psY = sY;
-                floors[fl].pois[j].marker.loc = loc;
-                floors[fl].pois[j].marker.category = category;
-                floors[fl].pois[j].marker.label = labelid;
+            floors[fl].pois[j].marker = new L.Marker(new L.latLng(loc), {
+                icon: loadIcon(colorIcon, shapeIcon),
+                title: popupTitle
+            });
+            floors[fl].pois[j].marker.options.icon.options.color = colorIcon;
+            floors[fl].pois[j].marker.poid = id;
+            floors[fl].pois[j].marker.floorid = floorid;
+            floors[fl].pois[j].marker.psX = sX;
+            floors[fl].pois[j].marker.psY = sY;
+            floors[fl].pois[j].marker.loc = loc;
+            floors[fl].pois[j].marker.category = category;
+            floors[fl].pois[j].marker.category_es = category_es;
+            floors[fl].pois[j].marker.label = labelid;
+            floors[fl].pois[j].marker.panorama = panorama;
+            floors[fl].pois[j].marker.description = description;
 
-                floors[fl].pois[j].marker.bindPopup(descriptionIcon)
-                    .on('click', function () {
-                        if (qr_type == 'dest') {
-                            this.bindPopup("Escanea un QR para llegar hasta " + qrPoint.point.description).openPopup();
-                            return;
-                        }
-                        LocalStorageHandler.setPrevDest(this);
+            floors[fl].pois[j].marker.changeTitle = function () {
+                this.popupTitle = gettext("Scan a QR code to get here:") + " " + this.description + this.panoramaIcon + SocialMenu.renderIcon(this.poid);
+                this.bindPopup(popupTitle).openPopup();
+                Panorama.bindShow();
+                SocialMenu.bindShow(this);
+            };
+
+
+            floors[fl].pois[j].marker
+                .bindPopup(popupTitle)
+                .on(EVENTS, function () {
+                    if (qr_type == 'dest') {
+                        this.changeTitle();
+                        return;
+                    }
+
+                    LocalStorageHandler.setPrevDest(this);
+                    if(Panorama.opened) Panorama.close();
+                    if (qrMarker)
                         drawRoute(qrPoint.point.id, qrFloor.sX, qrFloor.sY, this.poid, this.psX, this.psY);
 
-                    });
+                    SocialMenu.bindShow(this);
+                });
 
-                for (var l in floors[fl].labels) {
-                    if (floors[fl].pois[j].marker.category === floors[fl].labels[l].fields.name)
-                        floors[fl].labels[l].layer.addLayer(floors[fl].pois[j].marker);
-                }
+            /*
+             L.marker([-37.785, 175.263])
+             .bindLabel('A sweet static label!', { noHide: true })
+             .addTo(map)
+             .showLabel();
+             */
 
-                if (floors[fl].pois[j].marker.category !== "Aristas" && floors[fl].pois[j].marker.category !== "Aseos")
-                    totalPois.addLayer(floors[fl].pois[j].marker);
+
+            for (var l in floors[fl].labels) {
+                if (floors[fl].pois[j].marker.category === floors[fl].labels[l].fields.name)
+                    floors[fl].labels[l].layer.addLayer(floors[fl].pois[j].marker);
+
             }
-        } catch (e) {
 
+            if (isCategoryVisibleOnButtons(floors[fl].pois[j].marker.category_es))
+                totalPois.addLayer(floors[fl].pois[j].marker);
         }
 
+        // Cada label es un conjunto de POIs (restaurantes, cines..)
         for (var la in floors[fl].labels) {
-            if (floors[fl].labels[la].fields.name === "Aristas" || floors[fl].labels[la].fields.name === "Aseos") {
+            if (!isCategoryVisibleOnButtons(floors[fl].labels[la].fields.name_es)){
                 floors[fl].layer.addLayer(floors[fl].labels[la].layer);
                 floors[fl].labels.splice(la, 1);
             }
@@ -394,34 +437,39 @@ function loadPOIs() {
                 (qrPoint.point.col * qrFloor.scaleX) + qrFloor.scaleX];
 
             if (qr_type == 'origin') {
+                var point_description = qrPoint.label.name_en == 'My car' ?
+                    qrPoint.label.name : qrPoint.point.description;
+                var originLegend = gettext("You are right here:") + ' ' + point_description;
+
+                if (qrPoint.point.panorama)
+                    originLegend = originLegend + Panorama.renderIcon(qrPoint.point.id);
+                originLegend+= SocialMenu.renderIcon(qrPoint.point.id);
                 qrMarker = new L.marker(qrLoc, { bounceOnAdd: false,
                     icon: OriginIcon})
-                    .bindPopup("Estás aquí: " + qrPoint.point.description +
-                        " (planta " + qrFloor.name + "," + qrPoint.enclosure.name + ")"
-                    );
-
+                    .bindPopup((originLegend), function () {
+                        Panorama.bindShow();
+                        SocialMenu.bindShow(this);
+                    });
 
             }
             else {
-                qrMarker = new L.marker(qrLoc, { bounceOnAdd: false,
+                var msg = gettext("Please, scan a QR code to get here:") + ' ';
+                var photoIcon = qrPoint.point.panorama ? Panorama.renderIcon(qrPoint.point.id) : "";
+                qrMarker = new L.marker(qrLoc, {
+                    bounceOnAdd: false,
                     icon: DestinyIcon})
-                    .bindPopup("Escanea un QR para llegar hasta aquí: " + qrPoint.point.description +
-                        " (planta " + qrFloor.name + "," + qrPoint.enclosure.name + ")"
-                    );
-
-                qrMarker
-                    .on('click', function () {
-                       if (qr_type == 'dest') {
-                            this.bindPopup("Escanea un QR para llegar hasta " + qrPoint.point.description).openPopup();
-                            return;
-                        }
-
+                    .bindPopup(msg + qrPoint.point.description +
+                        " (" + gettext('floor') + ' ' + qrFloor.name + ", " +
+                        qrPoint.enclosure.name + ')' + photoIcon + SocialMenu.renderIcon(qrPoint.point.id))
+                    .on(EVENTS, function(){
                         LocalStorageHandler.setPrevDest(this);
 
-                        drawRoute(qrPoint.point.id, qrFloor.sX, qrFloor.sY, this.poid, this.psX, this.psY);
+//                        drawRoute(qrPoint.point.id, qrFloor.sX, qrFloor.sY, this.poid, this.psX, this.psY);
 
+                        if(photoIcon)
+                            Panorama.bindShow();
+                        SocialMenu.bindShow(this);
                     });
-
             }
 
             qrMarker.addTo(floors[i].layer);
@@ -430,14 +478,20 @@ function loadPOIs() {
         }
     }
 
+
 }
 
 //Configuración inicial del mapa
 var map = L.map('map', {
     crs: L.CRS.Simple,
     zoom: 0,
-    zoomControl: false
-    //layer: qrFloor.layer
+    minZoom: 0,
+    maxZoom: 3,
+    zoomControl: false,
+    tapTolerance: 30,
+    inertiaThreshold: 5,
+    inertiaDeceleration: 2000,
+    inertiaMaxSpeed: 1000
 });
 
 
@@ -448,7 +502,7 @@ function initMap(qrPoint) {
     layersControl.addTo(map);
 
 
-    for (i = (floors.length) - 1; i >= 0; i--) {
+    for (var i = (floors.length) - 1; i >= 0; i--) {
         layersControl.addBaseLayer(floors[i].photo, floors[i].name);
 
         if (floors[i].id === qrPoint.floor.id) {
@@ -463,22 +517,28 @@ function initMap(qrPoint) {
             map.setMaxBounds(qrFloor.bounds);
             map.setView(qrLoc, 0);
         }
-    }
 
-//    for (i in floors) {
-//        map.removeLayer(floors[i].layer);
-//    }
+
+//        if (floors[i].pois[j].alwaysVisible) {
+//            floors[i].labels[l].layer.addLayer(floors[fl].pois[j].marker.bindLabel(floors[fl].pois[j].description, { noHide: true, className: 'textLabel' }))
+//            //.addTo(map)
+//        }
+
+    }
 
     map.removeLayer(totalPois);
     map.addLayer(qrFloor.layer);
     qrMarker.openPopup();
+    Panorama.bindShow();
+    SocialMenu.bindShow(this);
     qrMarker._bringToFront();
 
     map.invalidateSize();
 
+    Coupon.init();
+
     loadedLabels = true;
 }
-
 
 
 //EVENTOS - Añadir layer
@@ -495,16 +555,13 @@ map.on('baselayerchange', function (e) {
     changeFloor(e);
 });
 
+// Sacar panorámica para el punto
 
-function addCategory(e)
-{
-    for (var i in floors)
-    {
-        for (var l in floors[i].labels)
-        {
+function addCategory(e) {
+    for (var i in floors) {
+        for (var l in floors[i].labels) {
             if (map.hasLayer(floors[i].labels[l].layer) &&
-                $('input[type=checkbox].leaflet-control-layers-selector:eq(' + l + ')').is(':checked'))
-            {
+                $('input[type=checkbox].leaflet-control-layers-selector:eq(' + l + ')').is(':checked')) {
                 $('input[type=checkbox].leaflet-control-layers-selector:eq(' + l + ')').css('background', floors[i].labels[l].fields.color);
             }
         }
@@ -513,17 +570,12 @@ function addCategory(e)
 
 }
 
-function removeCategory(e)
-{
-    if(e.layer._layers)
-    {
-        for (var i in floors)
-        {
-            for (var l in floors[i].labels)
-            {
-                if (!(jQuery('input[type=checkbox].leaflet-control-layers-selector:eq('+l+')').is(':checked')))
-                {
-                    jQuery('input[type=checkbox].leaflet-control-layers-selector:eq('+l+')').css('background', '#333');
+function removeCategory(e) {
+    if (e.layer._layers) {
+        for (var i in floors) {
+            for (var l in floors[i].labels) {
+                if (!(jQuery('input[type=checkbox].leaflet-control-layers-selector:eq(' + l + ')').is(':checked'))) {
+                    jQuery('input[type=checkbox].leaflet-control-layers-selector:eq(' + l + ')').css('background', '#333');
                 }
 
             }
@@ -536,17 +588,13 @@ function removeCategory(e)
 var checked = [];
 
 function changeFloor(e) {
-/*
-    if (map.hasLayer(qrFloor.layer)) {
-        map.removeLayer(qrFloor.layer);
-    }
-*/
-  //  for (var pos in $('input[type=checkbox].leaflet-control-layers-selector'))
-      for (pos = 0; pos < $('input[type=checkbox].leaflet-control-layers-selector').length; pos++)
-    {
-        if ($('input[type=checkbox].leaflet-control-layers-selector:eq('+pos+')').is(':checked')){
+
+    SocialMenu.close();
+
+    for (pos = 0; pos < $('input[type=checkbox].leaflet-control-layers-selector').length; pos++) {
+        if ($('input[type=checkbox].leaflet-control-layers-selector:eq(' + pos + ')').is(':checked')) {
             checked[pos] = true;
-        }else{
+        } else {
             checked[pos] = false;
         }
     }
@@ -556,12 +604,9 @@ function changeFloor(e) {
         if ((e.layer && (e.layer._url === floors[i].photo._url)) || (e._url === floors[i].photo._url)) {
             floor_x = floors[i];
 
-            //map.addLayer(floor_x.photo);
-            for (var l in floors[i].labels)
-            {
-                layersControl.addOverlay(floor_x.labels[l].layer,   '<i class="icon-' +floors[i].labels[l].fields.icon +' icon-white"></i>');
-                if (checked[l]===true)
-                {
+            for (var l in floors[i].labels) {
+                layersControl.addOverlay(floor_x.labels[l].layer, '<i class="icon-' + floors[i].labels[l].fields.icon + ' icon-white"></i>');
+                if (checked[l] === true) {
                     map.addLayer(floor_x.labels[l].layer);
                 }
             }
@@ -593,31 +638,26 @@ function changeFloor(e) {
 
     }
 
-    for (var lab in floor_x.labels)
-    {
-        if (checked[lab]===true)
-        {
-            jQuery('input[type=checkbox].leaflet-control-layers-selector:eq('+lab+')').css('background', floor_x.labels[lab].fields.color);
-            jQuery('input[type=checkbox].leaflet-control-layers-selector:eq('+lab+')').prop("checked", true);
+    for (var lab in floor_x.labels) {
+        if (checked[lab] === true) {
+            jQuery('input[type=checkbox].leaflet-control-layers-selector:eq(' + lab + ')').css('background', floor_x.labels[lab].fields.color);
+            jQuery('input[type=checkbox].leaflet-control-layers-selector:eq(' + lab + ')').prop("checked", true);
         }
     }
+    if (map.hasLayer(destMarker)) destMarker.openPopup();
 
-
-
-//map.setMaxBounds(floor_x.bounds);
-//map.setView(qrPoint, 0);
+    removeParkingBtn();
 }
 
 
 $(function () {
-    LocalStorageHandler.init();
+
 
     $('span#location').click(function () {
-        for (pos = 0; pos < $('input[type=checkbox].leaflet-control-layers-selector').length; pos++)
-        {
-            if ($('input[type=checkbox].leaflet-control-layers-selector:eq('+pos+')').is(':checked')){
+        for (pos = 0; pos < $('input[type=checkbox].leaflet-control-layers-selector').length; pos++) {
+            if ($('input[type=checkbox].leaflet-control-layers-selector:eq(' + pos + ')').is(':checked')) {
                 checked[pos] = true;
-            }else{
+            } else {
                 checked[pos] = false;
             }
         }
@@ -626,13 +666,9 @@ $(function () {
         for (var i in floors) {
             if (floors[i].id === qrFloor.id) {
                 floor_x = floors[i];
-
-                //map.addLayer(floor_x.photo);
-                for (var l in floors[i].labels)
-                {
-                    layersControl.addOverlay(floor_x.labels[l].layer,   '<i class="icon-' +floors[i].labels[l].fields.icon +' icon-white"></i>');
-                    if (checked[l]===true)
-                    {
+                for (var l in floors[i].labels) {
+                    layersControl.addOverlay(floor_x.labels[l].layer, '<i class="icon-' + floors[i].labels[l].fields.icon + ' icon-white"></i>');
+                    if (checked[l] === true) {
                         map.addLayer(floor_x.labels[l].layer);
                     }
                 }
@@ -666,21 +702,103 @@ $(function () {
 
         }
 
-        for (var lab in qrFloor.labels)
-        {
-            if (checked[lab]===true)
-            {
-                jQuery('input[type=checkbox].leaflet-control-layers-selector:eq('+lab+')').css('background', floor_x.labels[lab].fields.color);
-                jQuery('input[type=checkbox].leaflet-control-layers-selector:eq('+lab+')').prop("checked", true);
+        for (var lab in qrFloor.labels) {
+            if (checked[lab] === true) {
+                jQuery('input[type=checkbox].leaflet-control-layers-selector:eq(' + lab + ')').css('background', floor_x.labels[lab].fields.color);
+                jQuery('input[type=checkbox].leaflet-control-layers-selector:eq(' + lab + ')').prop("checked", true);
             }
         }
         map.addLayer(qrFloor.photo);
         map.addLayer(qrFloor.layer);
         qrMarker._bringToFront();
-        qrMarker.openPopup();
+        qrMarker.openPopup().on(EVENTS, function () {
+            Panorama.bindShow();
+            SocialMenu.bindShow();
+        });
     });
 
+    $('span#myCar').click(function () {
+        var miCoche = JSON.parse(localStorage.getItem('miCoche'));
 
+        if (!miCoche) {
+            alert('Please, scan the QR code at your parking place to' +
+                ' locate your car.');
+            return;
+        }
+
+        miCoche = miCoche.dest;
+
+        for (pos = 0; pos < $('input[type=checkbox].leaflet-control-layers-selector').length; pos++) {
+            if ($('input[type=checkbox].leaflet-control-layers-selector:eq(' + pos + ')').is(':checked')) {
+                checked[pos] = true;
+            } else {
+                checked[pos] = false;
+            }
+        }
+
+        var floor_x = {};
+        for (var i in floors) {
+            if (floors[i].id === miCoche.floor.id) {
+                floor_x = floors[i];
+                carLoc = [((miCoche.point.row) * floor_x.scaleY) + floor_x.scaleY,
+                    (miCoche.point.col * floor_x.scaleX) + floor_x.scaleX];
+                carMarker = new L.marker(carLoc, { bounceOnAdd: false,
+                    icon: CarIcon})
+                    .bindPopup(gettext("My car"));
+
+                carMarker.on(EVENTS, function () {
+                    LocalStorageHandler.setPrevDest(this);
+                    if(Panorama.opened) Panorama.close();
+                    drawRoute(qrPoint.point.id, qrFloor.sX, qrFloor.sY, miCoche.point.id, floor_x.scaleX, floor_x.scaleY);
+
+                });
+                floor_x.layer.addLayer(carMarker);
+                for (var l in floors[i].labels) {
+                    layersControl.addOverlay(floor_x.labels[l].layer, '<i class="icon-' + floors[i].labels[l].fields.icon + ' icon-white"></i>');
+                    if (checked[l] === true) {
+                        map.addLayer(floor_x.labels[l].layer);
+                    }
+                }
+
+                map.addLayer(floor_x.photo);
+                map.addLayer(floor_x.layer);
+
+                if (arrowHead[i] && subarrow[i]) {
+                    map.addLayer(arrowHead[i]);
+                    flechita = arrowHead[i];
+                    arrowAnim(flechita, floor_x.name);
+                    map.setView(arrow[i].getBounds().getCenter(), 0);
+
+                } else {
+                    map.setView(carLoc, 0);
+                }
+
+            } else {
+                map.removeLayer(floors[i].layer);
+                map.removeLayer(floors[i].photo);
+
+
+                for (var l in floors[i].labels) {
+                    layersControl.removeLayer(floors[i].labels[l].layer);
+                    map.removeLayer(floors[i].labels[l].layer);
+                }
+
+                if (arrowHead[i] != null)
+                    map.removeLayer(arrowHead[i]);
+            }
+
+        }
+
+        for (var lab in floor_x.labels) {
+            if (checked[lab] === true) {
+                jQuery('input[type=checkbox].leaflet-control-layers-selector:eq(' + lab + ')').css('background', floor_x.labels[lab].fields.color);
+                jQuery('input[type=checkbox].leaflet-control-layers-selector:eq(' + lab + ')').prop("checked", true);
+            }
+        }
+        carMarker.openPopup();
+        carMarker._bringToFront();
+        map.setView(carLoc, 0);
+    });
 
 });
 
@@ -711,6 +829,9 @@ function preDrawRoute(origin, qrFloor, destination, destinationFloor) {
 
 //Creación de las rutas (con subrutas correspondientes), desde el origen hasta el POI destino
 function drawRoute(org, osX, osY, dst, sX, sY) {
+    if (org == dst)
+        return;
+
     for (var i in floors) {
         if (arrow[i]) {
             floors[i].layer.removeLayer(arrow[i]);
@@ -718,7 +839,8 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
         }
     }
 
-    var check = null;
+    var check = null,
+        destLegend;
     subpath = [];
     subarrow = [];
     blinkingMode = null;
@@ -732,16 +854,32 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
             }
 
         }
+        destLegend = route.fields.destiny.fields.description;
+
+        if (new PointResource().read(dst).panorama) {
+            destLegend = destLegend + Panorama.renderIcon(dst);
+
+        }
+        destLegend += SocialMenu.renderIcon(dst);
+
         destLoc = [(route.fields.destiny.fields.row) * sY + sY, route.fields.destiny.fields.col * sX + sX];
         destMarker = L.marker(destLoc, { bounceOnAdd: false,
             icon: DestinyIcon})
-            .bindPopup(route.fields.destiny.fields.description);
+            .bindPopup(destLegend).on(EVENTS, function () {
+                Panorama.bindShow();
+                SocialMenu.bindShow();
+            });
+
 
         for (var i in floors) {
             if (route.fields.destiny.fields.floor == floors[i].id) {
                 floors[i].layer.addLayer(destMarker);
             }
         }
+
+        if (qr_type == 'dest')
+            return;
+
 //CALCULO DE SUBRUTAS
         for (var i in route.fields.subroutes) {
             if (route.fields.subroutes[i].floor.pk === route.fields.origin.fields.floor) {
@@ -784,66 +922,52 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
             if (arrow[i] && subarrow[i]) {
                 floors[i].layer.addLayer(arrow[i]);
                 if (floors[i].id === route.fields.destiny.fields.floor) {
-               /* if (route.fields.origin.fields.floor !== route.fields.destiny.fields.floor)
-                    {*/
-                         var check = floorChecks[floors[i].name];
-                         blinkingMode = floors[i].name;
-                         blinker(check);
-                       /* for (index = 0; index < floors.length; index++) {
-                            var check = $('input[type=radio].leaflet-control-layers-selector:eq(' + index + ')');
-                            if (check.parent().find('span').html().trim() == floors[i].name) {
-                                blinkingMode = floors[i].name;
-                                blinker(check);
-                            }
-                        }*/
-                 //   }
-                  map.addLayer(arrowHead[i]);
+                    var check = floorChecks[floors[i].name];
+                    blinkingMode = floors[i].name;
+                    blinker(check);
+                    map.addLayer(arrowHead[i]);
                     flechita = arrowHead[i];
                     arrowAnim(flechita, floors[i].name);
-                    /*
-                     map.fitBounds(arrow[i].getBounds());
-                     map.setZoom(0);
-                     */
 
                 }
             }
         }
+        for (f in floors) {
+            for (var l in floors[f].labels) {
+                if (jQuery('input[type=checkbox].leaflet-control-layers-selector:eq(' + l + ')').is(':checked')) {
+                    checked[l] = true;
+                } else {
+                    checked[l] = false;
+                }
+            }
+        }
+        var floorToShow = route.fields.destiny.fields.floor;
+        var floorToHide = route.fields.origin.fields.floor;
+        if (showOrigin) {
+            var floorToShow = route.fields.origin.fields.floor;
+            var floorToHide = route.fields.destiny.fields.floor;
+            showOrigin = false;
 
- //PINTADO DE CAPAS
+        }
+        //PINTADO DE CAPAS
         for (f in floors) {
             if (route.fields.origin.fields.floor !== route.fields.destiny.fields.floor) {
-                if (route.fields.destiny.fields.floor === floors[f].id) {
+
+                if (floorToHide === floors[f].id) {
                     map.removeLayer(floors[f].layer);
-                    for (var l in floors[f].labels) {
-                        if (jQuery('input[type=checkbox].leaflet-control-layers-selector:eq(' + l + ')').is(':checked')) {
-                            checked[l] = true;
-                        } else {
-                            checked[l] = false;
-                        }
-                    }
+
 
                     for (var l in floors[f].labels) {
                         layersControl.removeLayer(floors[f].labels[l].layer);
                         map.removeLayer(floors[f].labels[l].layer);
                     }
 
-                     map.removeLayer(floors[f].photo);
+                    map.removeLayer(floors[f].photo);
 
-                }
-
-
-                if (route.fields.origin.fields.floor === floors[f].id) {
-                    for (var l in floors[f].labels) {
-                        if (jQuery('input[type=checkbox].leaflet-control-layers-selector:eq(' + l + ')').is(':checked')) {
-                            checked[l] = true;
-                        } else {
-                            checked[l] = false;
-                        }
-                    }
+                } else if (floorToShow === floors[f].id) {
 
                     for (var l in floors[f].labels) {
-//CONTROL BLINKING
-                       layersControl.addOverlay(floors[f].labels[l].layer, '<i class="icon-' + floors[i].labels[l].fields.icon + ' icon-white"></i>');
+                        layersControl.addOverlay(floors[f].labels[l].layer, '<i class="icon-' + floors[i].labels[l].fields.icon + ' icon-white"></i>');
                         if (checked[l] === true) {
                             map.addLayer(floors[f].labels[l].layer);
                         }
@@ -857,28 +981,34 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
                     }
                     map.addLayer(floors[f].layer);
                     map.addLayer(floors[f].photo);
-//                    map.panTo(arrow[i].getBounds().getCenter(), 0);
                     map.addLayer(arrowHead[f]);
                     flechita = arrowHead[f];
                     arrowAnim(flechita, floors[f].name);
-//                    map.fitBounds(arrow[f].getBounds());
-//                    map.setZoom(0);
+                    map.setView(arrow[f].getBounds().getCenter(), 0);
+                    qrMarker.openPopup();
 
+                } else {
+
+                    for (var l in floors[f].labels) {
+                        layersControl.removeLayer(floors[f].labels[l].layer);
+                        map.removeLayer(floors[f].labels[l].layer);
+                    }
+
+                    map.removeLayer(floors[f].photo);
                 }
-
+//MONOPLANTA
             } else {
                 if (route.fields.destiny.fields.floor !== floors[f].id) {
                     map.removeLayer(floors[f].layer);
                     map.removeLayer(floors[f].photo);
                     for (var l in floors[f].labels) {
-                        //layersControl.removeLayer(floors[f].labels[l].layer);
                         map.removeLayer(floors[f].labels[l].layer);
                     }
 
 
                 }
                 else {
-                    for (var l in floors[i].labels) {
+                    for (var l in floors[f].labels) {
                         if (jQuery('input[type=checkbox].leaflet-control-layers-selector:eq(' + l + ')').is(':checked')) {
                             checked[l] = true;
                         } else {
@@ -886,24 +1016,27 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
                         }
                     }
 
-
                     map.addLayer(floors[f].layer);
                     map.addLayer(floors[f].photo);
                     map.setView(arrow[f].getBounds().getCenter(), 0);
                     map.addLayer(arrowHead[f]);
                     flechita = arrowHead[f];
                     arrowAnim(flechita, floors[f].name);
-//                    map.fitBounds(arrow[f].getBounds());
-//                    map.setZoom(0);
-
+                    map.setView(arrow[f].getBounds().getCenter(), 0);
 
                 }
             }
         }
 
+        if (map.hasLayer(destMarker)) {
+            destMarker.openPopup();
+            Panorama.bindShow();
+            SocialMenu.bindShow();
+        }
+
 
     } else {
-        alert('No existe esa ruta');
+        alert(gettext('We are sorry, that route does not exist.'));
     }
 }
 //Función que gestiona la animación de la flecha
@@ -919,7 +1052,7 @@ function arrowAnim(arrow, idFloor) {
 }
 
 var arrowsOffset = 0;
-////Función que define la animación (en este caso, flecha azul) que marca la ruta
+//Función que define la animación (en este caso, flecha azul) que marca la ruta
 var setArrow = function (flecha, idFloor) {
 
     flecha.setPatterns([
@@ -927,4 +1060,19 @@ var setArrow = function (flecha, idFloor) {
     ]);
     if (++arrowsOffset > 100)
         arrowsOffset = 0;
+};
+
+
+
+function removeParkingBtn()
+{
+//    $('.leaflet-control-layers-overlays i.icon-truck').closest('label').remove();
+}
+
+function isCategoryVisibleOnButtons(categ_name)
+{
+    return categ_name !== "Parquing" &&
+        categ_name !== "Bloqueantes" &&
+        categ_name !== "Aristas" &&
+        categ_name !== "Aseos";
 }

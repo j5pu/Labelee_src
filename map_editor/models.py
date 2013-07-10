@@ -20,20 +20,30 @@ class Enclosure(models.Model):
     def __unicode__(self):
         return self.name
 
+    def delete(self, *args, **kwargs):
+        """
+		Al eliminar cada recinto también eliminamos cada imagen de planta
+		"""
+        for floor in self.floors.all():
+            floor.delete()
 
-def floor_filename(instance, filename):
+        super(Enclosure, self).delete(*args, **kwargs)
+
+#         def get_path(instance, filename):
+# return 'photos/%s/%s' % (instance.stock_number, filename)
+def get_floor_path(instance, filename):
     """
     img/enclosures/[encl_id]/floors/[floor_id].ext
 	xej: img/enclosures/25/floors/167.png
 	"""
     fileName, fileExtension = os.path.splitext(filename)
-    return 'img/enclosures/' + str(instance.enclosure.id) + '/floors/' + str(instance.id) + fileExtension
+    return 'img/enclosures/%s/floors/%s%s' % (instance.enclosure.id, instance.id, fileExtension)
 
 
 #Se crea el modelo para los productos
 class Floor(models.Model):
     name = models.CharField(max_length=200, null=False, blank=False)
-    img = models.FileField(upload_to=floor_filename, null=True, blank=True)
+    img = models.FileField(upload_to=get_floor_path, null=True, blank=True)
     num_rows = models.PositiveIntegerField(null=True, blank=True)
     num_cols = models.PositiveIntegerField(null=True, blank=True)
     floor_number = models.IntegerField(null=True, blank=True)
@@ -47,20 +57,24 @@ class Floor(models.Model):
     def __unicode__(self):
         return self.name
 
-    # def delete(self, *args, **kwargs):
-    #     """
-		# Sobreescribimos el método delete() para también eliminar la imágen del mapa
-		# """
-    #     if self.img:
-    #         # You have to prepare what you need before delete the model
-    #         storage, path = self.img.storage, self.img.path
-    #         # Delete the model before the file
-    #         super(Floor, self).delete(*args, **kwargs)
-    #         # Delete the file after the model
-    #         storage.delete(path)
-    #     else:
-    #         super(Floor, self).delete(*args, **kwargs)
+    def delete(self, *args, **kwargs):
+        """
+		Sobreescribimos el método delete() para también eliminar su imagen del disco duro
+		"""
+        if self.img:
+            # You have to prepare what you need before delete the model
+            storage, path = self.img.storage, self.img.path
+            # Delete the model before the file
+            super(Floor, self).delete(*args, **kwargs)
+            # Delete the file after the model
+            storage.delete(path)
+        else:
+            super(Floor, self).delete(*args, **kwargs)
 
+
+def category_filename(instance, filename):
+    fileName, fileExtension = os.path.splitext(filename)
+    return 'img/label_categories/%s%s' % (instance.name, fileExtension)
 
 class LabelCategory(models.Model):
     name = models.CharField(max_length=200, unique=True, blank=False, null=False)
@@ -85,18 +99,18 @@ class LabelCategory(models.Model):
         else:
             super(LabelCategory, self).delete(*args, **kwargs)
 
+    def qr_can_be_assigned(self):
+        # Comprueba si la categoría no es ni bloqueante ni arista
+        return not self.name_es or (self.name_es.upper() != CATEGORIAS_FIJAS[0].upper() and \
+            self.name_es.upper() != CATEGORIAS_FIJAS[1].upper())
+
 
 def label_filename(instance, filename):
     """
-	Aquí indicaremos cómo guardaremos la imágen para el objeto.
-	En este caso se creará una carpeta para cada categoría.
-
-
-	Xej: img/objects/restaurante/rodilla.png
-
-	http://stackoverflow.com/questions/1190697/django-filefield-with-upload-to-determined-at-runtime/1190866#1190866
-	"""
-    return 'img/labels/' + instance.category.name + '/' + filename
+    img/labels/restaurante/rodilla.png
+    """
+    fileName, fileExtension = os.path.splitext(filename)
+    return 'img/labels/%s/%s%s' % (instance.category.name, instance.name, fileExtension)
 
 
 class Label(models.Model):
@@ -123,15 +137,32 @@ class Label(models.Model):
             super(Label, self).delete(*args, **kwargs)
 
 
+def get_panorama_path(instance, filename):
+    fileName, fileExtension = os.path.splitext(filename)
+    return 'img/enclosures/%s/panoramas/%s%s' % (instance.floor.enclosure.id, instance.id, fileExtension)
+
+def get_panorama_thumbnail_path(instance, filename):
+    fileName, fileExtension = os.path.splitext(filename)
+    return 'img/enclosures/%s/panoramas/thumbnails/%s%s' % (instance.floor.enclosure.id, instance.id, fileExtension)
+
+
 class Point(models.Model):
     description = models.CharField(max_length=2000, null=True, blank=True)
     row = models.PositiveIntegerField(null=True, blank=True)
     col = models.PositiveIntegerField(null=True, blank=True)
+    panorama = models.FileField(upload_to=get_panorama_path, null=True, blank=True)
+    panorama_thumbnail = models.FileField(upload_to=get_panorama_thumbnail_path, null=True, blank=True)
     label = models.ForeignKey(Label, related_name='points', on_delete=models.CASCADE)
     floor = models.ForeignKey(Floor, related_name='points', on_delete=models.CASCADE)
+    alwaysVisible = models.NullBooleanField()
 
     def __unicode__(self):
         return self.floor.name + ' (' + str(self.row) + ', ' + str(self.col) + ')'
+
+    def assign_qr(self):
+        qr_code = str(self.floor.enclosure.id) + '_' + str(self.floor.id) + '_' + str(self.id)
+        qr = QR_Code(code=qr_code, point=self)
+        qr.save()
 
 
 class QR_Code(models.Model):

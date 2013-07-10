@@ -41,6 +41,9 @@ urlpatterns = patterns('',
     # Uncomment the next line to enable the admin:
     url(r'^admin/', include(admin.site.urls)),
 
+    # PAGINA DE LOGIN
+    (r'^accounts/login/$', 'django.contrib.auth.views.login'),
+
     # Calculo de rutas
     url(r'^calculate-routes/(?P<enclosure_id>\d+)', 'route.calculateRoutes.calculate_routes'),
     url(r'^get-route/(?P<origin>\d+)_(?P<destiny>\d+)', 'route.services.get_route'),
@@ -61,6 +64,10 @@ urlpatterns = patterns('',
     # I18N
     (r'^i18n/', include('django.conf.urls.i18n')),
     (r'^jsi18n/$', 'django.views.i18n.javascript_catalog'),
+
+    (r'^analytics/services/users$', 'analytics.Services.Users.GetUserAnalytics'),
+
+    (r'^log/mobile$', 'log.views.mobile_logger'),
 )
 
 

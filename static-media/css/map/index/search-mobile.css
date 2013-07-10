@@ -17,12 +17,16 @@ h3,h4 {
 }
 #map {
 	position:absolute;
-//	top:22px;
+/*
+	top:22px;
+*/
 	left:0;
 	right:0;
 	bottom:0;
 	border:none;
-//	border-top:1px solid #1978cf;
+/*
+	border-top:1px solid #1978cf;
+*/
 	height:auto;
 	width:auto;
 }
@@ -40,14 +44,18 @@ h3,h4 {
 /* CONTROLS */
 .leaflet-bottom .leaflet-control,
 .leaflet-left .leaflet-control {
+/*
 	box-shadow: 0 0 8px rgba(0,0,0,0.4);
+*/
+/*
 //	border: 1px solid #cfcfcf;
+*/
 	border-radius:4px;
 }
 .leaflet-left.leaflet-top .leaflet-control,
 .leaflet-touch .leaflet-left .leaflet-control {
-	margin-left: 4px;
-	margin-top: 40px;
+	margin-left: 9px;
+	margin-top: 42px;
 	margin-bottom: 0;
 }
 .leaflet-left.leaflet-bottom .leaflet-control {
@@ -65,18 +73,23 @@ h3,h4 {
 .leaflet-touch .leaflet-control-zoom a,
 .leaflet-bar a,
 .leaflet-touch .leaflet-bar a {
-	background-color: rgba(255, 255, 255, 0.8);	
-	width: 28px;
-	height: 26px;
+	background-color: #bbb;
+    opacity:0.8;
+    width: 29px;
+    height: 29px;
+    color: white;
+    border: 2px solid white;
 }
+
 .leaflet-touch .leaflet-control-zoom-out {
 	line-height: 24px;	
 }
-.leaflet-control-zoom a;hover,
+.leaflet-control-zoom a:hover,
 .leaflet-touch .leaflet-control-zoom a:hover,
 .leaflet-bar a:hover,
 .leaflet-touch .leaflet-bar a:hover {
 	background-color: #fff;
+    color:#333;
 }
 
 .leaflet-touch .leaflet-bar a:first-child {
@@ -90,7 +103,9 @@ h3,h4 {
 	        border-bottom-left-radius: 4px;
 	-webkit-border-bottom-right-radius: 4px;
 	        border-bottom-right-radius: 4px;
+/*
 	border-bottom: none;
+*/
 }
 
 
