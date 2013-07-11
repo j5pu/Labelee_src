@@ -22,10 +22,10 @@ def show_map(request, qr_type, enclosure_id, floor_id, poi_id):
     """
     enclosure = Enclosure.objects.filter(id=enclosure_id)
     categories = {}
-    coupons ={}
-    points = Point.objects\
+    coupons = {}
+    points = Point.objects \
         .filter(~Q(label__category__name__in=CATEGORIAS_FIJAS.values()),
-                floor__enclosure__id=enclosure_id)\
+                floor__enclosure__id=enclosure_id) \
         .order_by('label__category__name', 'label__name')
 
     for point in points:
@@ -36,8 +36,11 @@ def show_map(request, qr_type, enclosure_id, floor_id, poi_id):
                 categories[point.label.category.name] = [point]
 
         if point.coupon.name is not None:
-                coupons[point.id] = point.coupon.url
-
+            try:
+                if point.coupon.name != "":
+                    coupons[point.id] = point.coupon.url
+            except Exception as ex:
+                pass
 
     categories_list = []  # [{'name': 'toilets', 'items': [...]}, ...]
     for key, value in categories.iteritems():
@@ -48,6 +51,7 @@ def show_map(request, qr_type, enclosure_id, floor_id, poi_id):
         categories_list.append(d)
 
     from operator import itemgetter
+
     ordered_categories = sorted(categories_list, key=itemgetter('name'))
 
     marquee = []
@@ -56,7 +60,6 @@ def show_map(request, qr_type, enclosure_id, floor_id, poi_id):
     for tweet in tweets:
         marquee.append(tweet.text)
         break
-
 
     ctx = {
         'enclosure_id': enclosure_id,
@@ -75,17 +78,17 @@ def your_position(request, label_id):
     Muestra el mapa justo donde haces la foto al qr
     """
     labels = {
-    '001': [0, 0],
-    '002': [8, 8],
-    '003': [25, 40],
-    '004': [1, 1],
-    '005': [20, 10]
+        '001': [0, 0],
+        '002': [8, 8],
+        '003': [25, 40],
+        '004': [1, 1],
+        '005': [20, 10]
     }
 
     ctx = {
-    'label': labels[label_id],
-    'block_size': 10,
-    'map_img': '/static/img/map.jpg'
+        'label': labels[label_id],
+        'block_size': 10,
+        'map_img': '/static/img/map.jpg'
     }
 
     return render_to_response('map/your_position.html', ctx, context_instance=RequestContext(request))
