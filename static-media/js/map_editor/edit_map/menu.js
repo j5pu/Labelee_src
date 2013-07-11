@@ -40,14 +40,14 @@ var LabelCategory = {
             return;
         }
 
-        Menu.sending_img = true;
+        Menu.waiting_response = true;
 
         new LabelCategoryResource().addImg(
             img_form,
             Menu.category_created.id,
             function(server_response){
                 LabelCategory._post_create();
-                Menu.sending_img = false;
+                Menu.waiting_response = false;
             }
         );
     },
@@ -176,7 +176,7 @@ var Label = {
             return;
         }
 
-        Menu.sending_img = true;
+        Menu.waiting_response = true;
 
         label_resource.addImg(
             img_form,
@@ -184,7 +184,7 @@ var Label = {
             function(server_response){
                 // Una vez que se sube la imágen al servidor..
                 Label._post_create();
-                Menu.sending_img = false;
+                Menu.waiting_response = false;
             }
         );
     },
@@ -266,7 +266,7 @@ var Label = {
 //
 
 var Menu = {
-    sending_img: false,
+    waiting_response: false,
 
     init: function(){
         Menu.labels = new LabelResource().readGrouped();

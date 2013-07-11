@@ -80,7 +80,7 @@ function Resource(resource_name) {
 
 	this.readAllFiltered = function(filter) {
 
-		// xej: /api/v1/map/?place__id=1
+		// xej: /api/v1/floor/?enclosure__id=1
 
 		var elements;
 		$.ajax({
@@ -455,6 +455,29 @@ function PointResource()
                 'Content-Type' : 'application/json'
             },
             dataType : 'json', // esto indica que la respuesta vendrá en formato json
+            async : false,
+            success : function(response) {
+                element = response;
+            },
+            error : function(response) {
+                var j = response;
+            }
+        });
+
+        return element;
+    };
+
+
+    this.countPois = function(enclosure_id)
+    {
+        // Lee todas las etiquetas que sean consideradas POIs, es decir, que
+        // no sean bloqueantes ni intermedias
+
+        // api-2/point/pois/enclosure/16/count
+        var element;
+        $.ajax({
+            url : this.api2_url + 'pois/enclosure/' + enclosure_id + '/count',
+            type : 'get',
             async : false,
             success : function(response) {
                 element = response;

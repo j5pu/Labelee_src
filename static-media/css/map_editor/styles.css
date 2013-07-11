@@ -112,3 +112,7 @@ form .txt
 {
     color: rgb(122, 113, 81);
 }
+
+iframe {
+    display: none;
+}

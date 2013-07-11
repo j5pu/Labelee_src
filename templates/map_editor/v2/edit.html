@@ -1,0 +1,199 @@
+{% extends "base.html" %}
+
+{% load i18n %}
+
+{% block css %}
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/map_editor/styles.css"/>
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/map_editor/edit_map/styles.css"/>
+    {#    <link rel="stylesheet" media = "print" href="{{ STATIC_URL }}css/map_editor/edit_map/print.css"/>#}
+
+{% endblock css %}
+
+{# prueba cambio#}
+{% block js %}
+    <script src="{{ STATIC_URL }}vendor/bootstrap/bootstrap.file-input.js"></script>
+
+    <script src="{{ STATIC_URL }}js/map_editor/edit_map/menu.js"></script>
+    <script src="{{ STATIC_URL }}js/map_editor/edit_map/painter.js"></script>
+    <script src="{{ STATIC_URL }}js/map_editor/edit_map/events.js"></script>
+    <script src="{{ STATIC_URL }}js/map_editor/edit_map/floor.js"></script>
+    <script src="{{ STATIC_URL }}js/map_editor/edit_map/elements.js"></script>
+    <script src="{{ STATIC_URL }}js/map_editor/edit_map/paint_historial.js"></script>
+
+    <script src="{{ STATIC_URL }}js/map_editor/edit_map/main.js"></script>
+
+    <script>
+        var floor_id = "{{ floor_id }}";
+    </script>
+{% endblock js %}
+
+{% block content %}
+
+    {% csrf_token %}
+
+    <!-- GRID PARA EL PLANO DE LA PLANTA -->
+    <!--<img src = "/media/img/enclosures/Arista_Prueba/floors/28.jpg" id = "fake"> -->
+    <div id="grid"></div>
+
+    <div class="box box-0 alert">
+        <ul>
+            <li>{% trans "Antes de cambiar la descripción o el QR de un punto guardar el plano" %}</li>
+            <li>{% trans "No aumentar el tamaño de la página" %}</li>
+        </ul>
+    </div>
+
+    <!--MENU-->
+    <div id="menu">
+        <div class="box box-0">
+            <!-- NUMERO DE FILAS Y GUARDAR FLOOR -->
+            <div class="box box-1">
+                <div class="box box-2" id="num_rows">
+                    <span class="txt">
+                        {% trans "Filas" %}:
+                        <input type="text" value="20">
+                        =
+                    </span>
+                    <span class="txt" id="num_blocks"></span>
+                    <button class="btn" id="change_num_rows">{% trans "Refrescar filas" %}</button>
+                </div>
+
+                <a class="link-1" href="{% url 'map_editor.views.index' %}">{% trans "Volver al menú" %}</a>
+                <button class="btn" id="update_floor">{% trans "Guardar" %}</button>
+                <!--<button class="btn" id="clear_floor">{% trans "Limpiar" %}</button>-->
+
+            </div><br>
+
+            <!-- STATS CHECKBOXES Y QR LIST -->
+            <div class="box box-1">
+                <div id="puntos" class="box box-2">
+                    <h4>{% trans "Puntos" %}:</h4>
+                    <ul>
+                        <li>
+                            <span class="txt">{% trans "Guardados" %}:</span>
+                            <span id="num_saved_points" class="num"></span>
+                        </li>
+                        <li>
+                            <span class="txt">{% trans "Por guardar" %}:</span>
+                            <span id="num_points_to_save" class="num"></span>
+                        </li>
+                        <li>
+                            <span class="txt">{% trans "Por elminar" %}:</span>
+                            <span id="num_points_to_delete" class="num"></span>
+                        </li>
+                    </ul>
+                    <!--Total: <span id="num_total_points"></span> <br>-->
+                </div>
+
+                <div class="box box-2">
+                    <label class="checkbox">
+                        <input type="checkbox" id="toggle_border" checked>{% trans "Ver rejilla" %}
+                    </label>
+                    <label class="checkbox">
+                        <input type="checkbox" name="toggle_erase_mode">{% trans "Modo borrar" %}<br>
+                    </label>
+                </div><br>
+
+                <!-- LISTA DE QRs -->
+                <div id="qr_list" class="box box-2">
+                    <h4>{% trans "Lista de QRs" %}:</h4>
+                    <label class="checkbox">
+                        <input type="checkbox" id="toggle_qrs">{% trans "Resaltar todos" %}
+                    </label>
+                    <ul></ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="box box-0">
+            <!-- WRAPPER MENU POI-->
+            <div class="box box-1">
+                <!-- MENU -->
+                <div id="poi_menu" class="box box-2">
+                    <span class="title">{% trans "Elegir POI" %}:</span>
+                    <br>
+
+                    <div id="category" class="box box-2">
+                        {% trans "Categoría" %}:
+                        <br>
+                        <select></select>
+                        <a class="new" href=''>{% trans "Nueva" %}</a>
+                        <!--<a class="edit" href=''>Editar</a>-->
+                        <a class="delete" href=''>{% trans "Eliminar" %}</a>
+                    </div><br>
+
+                    <div id="label" class="box box-2">
+                        POI:
+                        <br>
+                        <select></select>
+                        <a class="new" href=''>{% trans "Nuevo" %}</a>
+                        <!--<a class="edit" href=''>Editar</a>-->
+                        <a class="delete" href=''>{% trans "Eliminar" %}</a>
+                    </div>
+                </div>
+
+                <!--
+                    Cajas para crear objeto o categoría
+                -->
+                <div id="category-form" class="box box-2">
+
+                    <span class="title">{% trans "Crear categoría" %}:</span>
+                    <br>
+
+                    <form action=""
+                          method="post"
+                          enctype="multipart/form-data"
+                          target="upload_target">
+                        <input type="text" name="name"
+                               placeholder="{% trans "Nombre para la categoría" %}.."/>
+                        <br>
+
+                        <!-- Campo para la imágen -->
+                        <input class="btn"
+                               type="file"
+                               name="img"
+                               title="{% trans "Elegir icono" %}..">
+                        <br>
+
+                        {% trans "Color de bloque" %}:
+                        <input type="text" name="color"
+                               placeholder="{% trans "Color" %}.."/>
+                        <br>
+
+                        <button name="create">{% trans "Crear" %}</button>
+                        <button name="cancel">{% trans "Cancelar" %}</button>
+                    </form>
+                </div>
+
+                <div id="label-form" class="box box-2">
+                    <span class="title">{% trans "Crear POI" %}:</span>
+                    <br>
+
+                    <form action=""
+                          method="post" enctype="multipart/form-data"
+                          target="upload_target">
+                        <input type="text" name="name"
+                               placeholder="{% trans "Nombre para el POI" %}.."/><br>
+
+                        {% trans "Para la categoría" %}:
+                        <select></select><br>
+
+                        {% trans "Imágen para el POI" %}:
+                        <input class="btn"
+                               type="file"
+                               name="img"
+                               title="{% trans "Elegir imagen" %}.."><br>
+
+                        <button name="create">{% trans "Crear" %}</button>
+                        <button name="cancel">{% trans "Cancelar" %}</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div id="loadingScreen"></div>
+
+    {% include "_uploading_iframe.html" %}
+
+{% endblock content %}

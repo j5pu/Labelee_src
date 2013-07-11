@@ -3,7 +3,7 @@ $(function() {
 });
 
 
-function EnclosuresCtrl($scope, UrlService)
+function EnclosureListCtrl($scope, UrlService)
 {
 	$scope.enclosure_resource = new Resource('enclosure');
 
@@ -11,30 +11,41 @@ function EnclosuresCtrl($scope, UrlService)
 
 	$scope.enclosures = $scope.enclosure_resource.readAll();
 
-	$scope.createEnclosure = function() {
-		var data = {
-			name: $scope.enclosure_name,
-            owner: '/api/v1/user/1/'
-		};
+    // Orden en que aparecerán los recintos
+    $scope.reverse = false;
 
-		$scope.enclosure_resource.create(data);
-		$scope.enclosures = $scope.enclosure_resource.readAll();
-		
-		$scope.enclosure_name = '';
 
-        setTimeout(function(){
-            $('html, body').animate({
-                scrollTop: $(document).height()
-            }, 2000);
-        }, 300);
-
-	};
+    $scope.show_create_form = function() {
+        $("#enc_create").dialog({
+            autoOpen: false,    // set this to false so we can manually open it
+            dialogClass: "loadingScreenWindow",
+            closeOnEscape: false,
+            draggable: false,
+            width: 460,
+            minHeight: 50,
+            modal: true,
+            buttons: {},
+            resizable: false,
+            open: function() {
+                // scrollbar fix for IE
+                $('body').css('overflow','hidden');
+            },
+            close: function() {
+                // reset overflow
+                $('body').css('overflow','auto');
+            }
+        }); // end of dialog
+        $('#enc_create').dialog('open');
+    };
 }
 
 
 function EnclosureCtrl($scope, $element)
 {
 	$scope.editing = false;
+    $scope.hovered = false;
+
+    $scope.poiCount = new PointResource().countPois($scope.enclosure.id);
 
 	$scope.update = function() {
 		if (!$scope.editing) {
@@ -81,10 +92,10 @@ function EnclosureCtrl($scope, $element)
     };
 }
 
-function FloorsCtrl($scope, $element)
+function FloorListCtrl($scope, $element)
 {
-	$scope.sending_img = false;
-
+	$scope.waiting_response = false;
+    $scope.hovered = false;
     $scope.floor_resource = new FloorResource();
 
     $scope.$watch('floors', function(){
@@ -120,7 +131,7 @@ function FloorsCtrl($scope, $element)
 		// 2: Una vez creado subimos la imágen para el nuevo mapa creado	
 		var img_form = $($element).find('form').first();
 		
-		$scope.sending_img = true;
+		$scope.waiting_response = true;
 		
 		$scope.floor_resource.addImg(
 			img_form, 
@@ -135,7 +146,7 @@ function FloorsCtrl($scope, $element)
 				$scope.floors =
 					$scope.floor_resource.readAllFiltered('?enclosure__id=' + $scope.enclosure.id + '&order_by=floor_number');
 				
-				$scope.sending_img = false;
+				$scope.waiting_response = false;
 				
 				$scope.$apply();
 			}
@@ -172,7 +183,7 @@ function FloorCtrl($scope, $element)
 			{					
 				var img_form = $($element).find('form');
 				
-				$scope.sending_img = true;
+				$scope.waiting_response = true;
 				
 				$scope.floor_resource.addImg(
 					img_form, 
@@ -180,7 +191,7 @@ function FloorCtrl($scope, $element)
 					function(server_response){
 						// Una vez se sube la imágen se limpia el formulario y se actualiza
 						// la lista de plantas para el recinto
-						$scope.sending_img = false;						
+						$scope.waiting_response = false;
 					}
 				);
 			}
@@ -211,6 +222,47 @@ function FloorCtrl($scope, $element)
             }
         );
 	};
+}
+
+
+function CategoriesCtrl($scope, UrlService)
+{
+    $scope.category_resource = new LabelCategoryResource();
+
+    $scope.loadCategoryList = function() {
+        var enclosure_id = $scope.$parent.$parent.enclosure.id;
+        $scope.categories = $scope.category_resource.readAllFiltered('?label__point__floor__enclosure__id=' + enclosure_id);
+    };
+
+    $scope.loadCategoryList();
+}
+
+
+function EnclosureFormsCtrl($scope)
+{
+    $scope.create = function() {
+        var data = {
+            name: $scope.enclosure_name,
+            owner: '/api/v1/user/1/'
+        };
+
+        $scope.enclosure_resource.create(data);
+        $scope.enclosures = $scope.enclosure_resource.readAll();
+
+        $scope.enclosure_name = '';
+
+        setTimeout(function(){
+            $('html, body').animate({
+                scrollTop: $(document).height()
+            }, 2000);
+        }, 300);
+
+    };
+}
+
+function FloorFormsCtrl($scope)
+{
+
 }
 
 

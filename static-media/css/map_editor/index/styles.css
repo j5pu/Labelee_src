@@ -1,264 +1,8 @@
 
 body {
-    margin: 4em auto;
-    max-width: 35em;
-}
-h3 {
-    display: inline-block;
-    position: relative;
-}
-input[type="text"] {
-    margin-bottom: 0;
-    width: 9em;
-}
-.file-input-wrapper {
-    margin: 5px auto;
-}
-.file-input-name {
-    background: none repeat scroll 0 0 whitesmoke;
-    border-radius: 7px 7px 7px 7px; font-family: 'raleway';
-    display: block;
-    margin: 4px auto 8px !important;
-    opacity: 0.7;
-    padding: 5px;
-}
-#botones-enclosure{
-    margin-bottom: 4px;
-}
-.element-box {
-    border: 1px solid;
-    border-radius: 5px 5px 5px 5px;
-    margin: 0.3em 0;
-    padding: 1em 0;
-}
-#enclosures {
-    /*border: 3px solid #8C665E;*/
-    padding: 21px 3px 5px;
-}
-.enclosure, .box-1 {
-    margin: 22px 15px;
-    overflow: hidden;
-    padding: 1.2em;
-}
-.floor, .box-3 {
-    display: block;
-    margin-top: 0.1em;
-    padding: 5px 16px;
-    position: relative;
-    text-align: center;
-}
-.floors .action_box {
-    display: inline-block;
-}
-.floors, .box-2 {
-    margin: 0.8em auto;
-    padding: 5px;
-    position: relative;
-    text-align: center;
-    width: 93%;
-}
-.floor .floor_name {
-    float: left;
-}
-#aristas{
-    /*color: black;*/
-}
-#aristas:hover, #aristas:focus{
-   /*color: #005580;*/
+    max-width: 80%;
 }
 
-
-
-h2 {
-     color: #8C8C87;
-    font-family: 'raleway';
-    margin-bottom: 6%;
-}
-
-.action_box {
-    position: absolute;
-    right: 0;
-    top: 0;
-}
-.action_box i {
-    cursor: pointer;
-    margin-left: 1px;
-    opacity: 0.7;
-}
-
-.action_box span
-{
-
-}
-
-#templates {
-    display: none;
-}
-.errorList {
-    display: inline-block;
-}
-.errorList .error {
-    border: 0.1em solid #CD1818;
-    border-radius: 0.3em 0.3em 0.3em 0.3em;
-    margin: 0.6em;
-    padding: 0.7em;
-    text-align: left;
-}
-li.error {
-    background: none repeat scroll 0 0 #CB9393;
-    border-radius: 0.5em 0.5em 0.5em 0.5em;
-    color: white;
-    margin: 0;
-    padding: 1em 1em 1em 2em;
-    text-shadow: none;
-    text-align: left;
-}
-iframe {
-    display: none;
-}
-.form {
-    padding: 0;
-    position: relative;
-    text-align: center;
-}
-.form .alert {
-    left: 0em;
-    opacity: 0.94;
-    position: absolute;
-    top: 2.4em;
-    z-index: 1;
-}
-.editable_text {
-    position: relative;
-}
-.form .alert .field {
-    font-weight: bold;
-    margin-left: -0.7em;
-}
-.form .alert > ul {
-    list-style: none outside none;
-    margin-left: 0;
-}
-
-.editable_element {
-    position: relative;
-}
-
-.floor a.link-2
-{
-    display: inline;
-    padding: 0.3em 1em;
-}
-
-.floor-number
-{
-    position: absolute;
-    height: 116%;
-    background: #D9D4C7;
-    width: 4em;
-    margin: -5px 0 0px -16px;
-    border-radius: 0.4em 0 0 0.4em;
-}
-
-.floor-number h2
-{
-    margin-top: 0.5em;
-    color: whitesmoke;
-}
-
-.floor
-{
-    border-radius: 0.4em;
-}
-
-a.link-1
-{
-    width: 1em;
-}
-
-.btn-group a.link-2
-{
-    display: inline-block;
-    color: whitesmoke;
-    text-shadow: none;
-}
-
-.enclosure
-{
-    border: 3px solid rgb(175, 170, 155);
-}
-
-.form_content input
-{
-    display: inline-block;
-}
-
-.form_content input[ng-model="floor_number"]
-{
-    width: 5em;
-}
-
-.form_content .box-3
-{
-    padding: 0.7em 0 0.4em;
-    margin-bottom: 0.7em;
-    border-radius: 0.4em;
-}
-
-.editing-place
-{
-    text-align: left;
-    padding: 1em 3em 0.2em;
-    width: 15em;
-    display: block;
-    margin-bottom: 1em;
-}
-
-.editing-place input
-{
-    margin-bottom: 0.5em;
-}
-
-.editing-place input[ng-model="enclosure_name"]
-{
-    width: 14em;
-}
-
-.enclosure
-{
-    padding-top: 2em;
-    display: block;
-    min-width: 420px;
-    max-width: 600px;
-    margin: 3em auto;
-}
-
-.enclosure .editable_element h4
-{
-    margin: -1.1em auto 1em;
-}
-
-.botones-enclosure .action_box
-{
-    top: -21px;
-    right: 3px;
-}
-
-
-.editing-floor
-{
-    margin-top: 2em;
-}
-
-.editing-floor input
-{
-
-}
-
-h1
-{
-    position: relative;
-}
 
 #choose-lang
 {
@@ -280,15 +24,97 @@ h1
     display: none;
 }
 
-.floors form .txt
+
+
+
+
+table th, table td
 {
-    display: inline-block;
-    margin-bottom: 5px;
-    text-align: left;
-    margin-right: 5px;
+    border: 1px solid grey;
 }
 
-.floors form label input
+#enclosures
+{
+    width: 100%;
+}
+
+td.enclosure
+{
+    width: 40%;
+}
+
+td.floors
+{
+    width: 16%;
+}
+
+td.categories
+{
+    width: 16%;
+}
+
+td.pois
+{
+    width: 10%;
+}
+
+.floor
+{
+    text-align: center;
+}
+
+.floor:hover
+{
+    background: rgb(219, 212, 207);
+}
+
+.floor .icon-edit-wrapper
+{
+    float: right;
+    margin-top: 1em;
+    margin-right: 1em;
+    width: 1em;
+}
+
+.floor .icon-edit
+{
+}
+
+.floor .icon-edit-wrapper
+{
+}
+
+.floors a.link-2
+{
+    font-size: 1.4em;
+    margin: 0.2em auto;
+    margin-left: 1.3em;
+    display: inline-block;
+}
+
+.poi_count
 {
     display: block;
 }
+
+.enclosure h2
+{
+    display: inline-block;
+}
+
+.enclosure h4
+{
+    color: #5C5035;
+}
+
+.enclosure .btn.link-2 {
+    display: inline-block;
+    color: white;
+    text-shadow: none;
+}
+
+#enclosure-forms, #floor-forms
+{
+    display: none;
+}
+
