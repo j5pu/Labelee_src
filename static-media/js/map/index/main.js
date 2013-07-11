@@ -147,8 +147,6 @@ $(function() {
 });
 
 
-
-
 function hideSplash() {
     var d = new Date();
     $('div#page').fadeIn(100);
@@ -173,6 +171,18 @@ var Coupon = {
         $('div#cupones area').on('click', function (ev) {
             ev.stopPropagation();
             Coupon.open();
+        });
+    },
+
+
+    bindShowFromMarker: function()
+    {
+        $('div.leaflet-popup-content-wrapper').on('click', function (e) {
+            console.log(e.clientX + e.clientY );
+            /*            if (e.clientX > $(this).offset().left + 90 &&
+             e.clientY < $(this).offset().top + 10) {
+             e.stopPropagation();
+             Coupon.open();            }*/
         });
     },
 
