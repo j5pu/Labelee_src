@@ -998,6 +998,7 @@ body{
 }
 
 */
+/*
 
 .leaflet-popup-content-wrapper,.leaflet-popup-tip-container  {
     border: .5px solid #000;
@@ -1006,6 +1007,7 @@ body{
 .leaflet-popup-tip-container {
 border-top: white;
 }
+*/
 
 div#cupones{
     position: absolute;
@@ -1204,7 +1206,7 @@ img[id*=pano]{
 
 .leaflet-popup-content
 {
-    margin: 2px 20px;
+    margin: 2px 15px 1px 15px;
 }
 
 .socialmenu {

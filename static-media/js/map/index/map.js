@@ -517,8 +517,16 @@ function initMap(qrPoint) {
             }
 
             map.setMaxBounds(qrFloor.bounds);
-            map.setView(qrLoc, 0);
+//            if (!destMarker) {
+                map.setView(qrLoc, 0);
+                qrMarker.openPopup();
+ /*           } else {
+                //destMarker.openPopup({autoPanPadding:(10,10)});
+                map.setView(destMarker.loc, 0);
+
+            }*/
         }
+
 
 
 //        if (floors[i].pois[j].alwaysVisible) {
@@ -530,16 +538,19 @@ function initMap(qrPoint) {
 
     map.removeLayer(totalPois);
     map.addLayer(qrFloor.layer);
-    qrMarker.openPopup();
     Panorama.bindShow();
     SocialMenu.bindShow(this);
     qrMarker._bringToFront();
 
-    map.invalidateSize();
 
     Coupon.init();
 
+    if (map.hasLayer(destMarker)) {
+        destMarker.openPopup();
+    }
     loadedLabels = true;
+    map.invalidateSize();
+
 }
 
 
@@ -727,17 +738,18 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
         destLegend = destLegend + Panorama.renderIcon(dst);
     }
     destLegend += SocialMenu.renderIcon(dst);
-        
+
 
     destLoc = [(route.fields.destiny.fields.row) * sY + sY, route.fields.destiny.fields.col * sX + sX];
     destMarker = L.marker(destLoc, { bounceOnAdd: false,
         icon: DestinyIcon})
-        .bindPopup(destLegend).on('click', function () {
+        .bindPopup(destLegend, {autoPanPadding: new L.Point(0, 1)}).on('click', function () {
             Panorama.bindShow();
             SocialMenu.bindShow();
         });
 
-
+//autoPanPadding: new L.Point(0, 10),
+//offset: new L.Point(0, -24)
     for (var i in floors) {
         if (route.fields.destiny.fields.floor == floors[i].id) {
             floors[i].layer.addLayer(destMarker);
