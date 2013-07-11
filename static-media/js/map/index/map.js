@@ -743,7 +743,7 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
     destLoc = [(route.fields.destiny.fields.row) * sY + sY, route.fields.destiny.fields.col * sX + sX];
     destMarker = L.marker(destLoc, { bounceOnAdd: false,
         icon: DestinyIcon})
-        .bindPopup(destLegend, {autoPanPadding: new L.Point(0, 1)}).on('click', function () {
+        .bindPopup(destLegend, {autoPanPadding: new L.Point(0, 10)}).on('click', function () {
             Panorama.bindShow();
             SocialMenu.bindShow();
         });
