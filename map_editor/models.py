@@ -143,7 +143,7 @@ def get_panorama_path(instance, filename):
 
 def get_coupon_path(instance, filename):
     fileName, fileExtension = os.path.splitext(filename)
-    return 'img/enclosures/%s/coupon/%s%s' % (instance.floor.enclosure.id, instance.id, fileExtension)
+    return 'img/enclosures/%s/coupons/%s%s' % (instance.floor.enclosure.id, instance.id, fileExtension)
 
 
 def get_panorama_thumbnail_path(instance, filename):
