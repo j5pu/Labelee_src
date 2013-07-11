@@ -22,6 +22,7 @@ def show_map(request, qr_type, enclosure_id, floor_id, poi_id):
     """
     enclosure = Enclosure.objects.filter(id=enclosure_id)
     categories = {}
+    coupons ={}
     points = Point.objects\
         .filter(~Q(label__category__name__in=CATEGORIAS_FIJAS.values()),
                 floor__enclosure__id=enclosure_id)\
@@ -33,6 +34,10 @@ def show_map(request, qr_type, enclosure_id, floor_id, poi_id):
                 categories[point.label.category.name].append(point)
             else:
                 categories[point.label.category.name] = [point]
+
+        if point.coupon.name is not None:
+                coupons[point.id] = point.coupon.url
+
 
     categories_list = []  # [{'name': 'toilets', 'items': [...]}, ...]
     for key, value in categories.iteritems():
@@ -52,6 +57,7 @@ def show_map(request, qr_type, enclosure_id, floor_id, poi_id):
         marquee.append(tweet.text)
         break
 
+
     ctx = {
         'enclosure_id': enclosure_id,
         'floor_id': floor_id,
@@ -59,6 +65,7 @@ def show_map(request, qr_type, enclosure_id, floor_id, poi_id):
         'categories': ordered_categories,
         'marquee': marquee,
         'qr_type': qr_type,
+        'coupons': coupons
     }
     return render_to_response('map/index.html', ctx, context_instance=RequestContext(request))
 

@@ -29,6 +29,7 @@ def calculate_routes(request, enclosure_id):
 
 
 def threadCalculateRoute(enclosure_id):
+    errors = []
     try:
         email = EmailMessage('Cálculo de rutas','Se están calculando rutas', to=['alvaro.gutierrez@mnopi.com'])
         email.send()
@@ -70,7 +71,7 @@ def threadCalculateRoute(enclosure_id):
                     mapConnections[keyinit] = [keyend]
 
         pathfinder = Dijkstra(floors, walls, qrlist, mapConnections)
-        errors = []
+
         paths = pathfinder.calculateDijkstra(errors)
     except Exception as ex:
         errors.append('Se ha producido un error al intentas calcular las rutas')
