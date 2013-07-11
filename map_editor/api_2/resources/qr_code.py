@@ -7,6 +7,10 @@ import simplejson
 from map_editor.api.resources import LabelResource
 from map_editor.models import Label, LabelCategory
 
+from map_editor.url_to_qr import PyQRNative
+
+GENERATED_FROM_URL_QR_TYPE = 4
+GENERATED_FROM_URL_QR_CORRECTION_LEVEL = PyQRNative.QRErrorCorrectLevel.L
 
 def read_from_floor(request, floor_id):
     """
@@ -60,3 +64,15 @@ def read_from_floor(request, floor_id):
         resp[resource_uri] = label
 
     return HttpResponse(simplejson.dumps(resp), mimetype='application/json')
+
+def generate_qr_from_url (request, url):
+
+    qr = PyQRNative.QRCode(GENERATED_FROM_URL_QR_TYPE, GENERATED_FROM_URL_QR_CORRECTION_LEVEL)
+    qr.addData(url)
+    qr.make()
+
+    im = qr.makeImage()
+
+    response = HttpResponse(mimetype="image/png")
+    im.save(response, "PNG")
+    return response

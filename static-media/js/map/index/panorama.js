@@ -6,10 +6,10 @@ var Panorama = {
 
     init: function()
     {
-        $(document).on('click tap touch', function(ev){
-            if(ev.target.tagName !== 'CANVAS')
-                Panorama.close();
-        });
+//        $(document).on('click tap touch', function(ev){
+//            if(ev.target.tagName !== 'CANVAS')
+//                Panorama.close();
+//        });
     },
 
     renderIcon: function(pointId)
@@ -61,10 +61,11 @@ var Panorama = {
 
     close: function()
     {
-        jQuery('body').find('img[id*=pano]').remove();
-        jQuery('canvas').remove();
-        jQuery('button#close').remove();
+        jQuery('div#page').find('img[id*=pano]').hide();
+        jQuery('canvas').hide();
+        jQuery('button#close').hide();
         Panorama.opened = false;
 
+        Logger.log('panorama cerradoxxxxxx');
     }
 };
