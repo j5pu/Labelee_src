@@ -1,12 +1,15 @@
+var formDialog,
+    enclosureResource = new EnclosureResource();
+
 $(function() {
     I18n.selectLang(lang_code);
+
+
 });
 
 
 function EnclosureListCtrl($scope, UrlService)
 {
-	$scope.enclosure_resource = new Resource('enclosure');
-
     $scope.$watch('enclosures', function(){FileInput.draw();});
 
 	$scope.enclosures = $scope.enclosure_resource.readAll();
@@ -14,29 +17,14 @@ function EnclosureListCtrl($scope, UrlService)
     // Orden en que aparecerán los recintos
     $scope.reverse = false;
 
-
     $scope.show_create_form = function() {
-        $("#enc_create").dialog({
-            autoOpen: false,    // set this to false so we can manually open it
-            dialogClass: "loadingScreenWindow",
-            closeOnEscape: false,
-            draggable: false,
-            width: 460,
-            minHeight: 50,
-            modal: true,
-            buttons: {},
-            resizable: false,
-            open: function() {
-                // scrollbar fix for IE
-                $('body').css('overflow','hidden');
-            },
-            close: function() {
-                // reset overflow
-                $('body').css('overflow','auto');
-            }
-        }); // end of dialog
-        $('#enc_create').dialog('open');
+        formDialog = new FormDialog('#enc_create');
+        formDialog.open();
     };
+
+    $scope.$on('enclosure_created', function() {
+        $scope.enclosures.push(enclosure);
+    });
 }
 
 
@@ -238,7 +226,7 @@ function CategoriesCtrl($scope, UrlService)
 }
 
 
-function EnclosureFormsCtrl($scope)
+function EnclosureFormsCtrl($scope, $rootScope)
 {
     $scope.create = function() {
         var data = {
@@ -246,8 +234,7 @@ function EnclosureFormsCtrl($scope)
             owner: '/api/v1/user/1/'
         };
 
-        $scope.enclosure_resource.create(data);
-        $scope.enclosures = $scope.enclosure_resource.readAll();
+        var enclosure = new EnclosureResource().create(data);
 
         $scope.enclosure_name = '';
 
@@ -257,6 +244,10 @@ function EnclosureFormsCtrl($scope)
             }, 2000);
         }, 300);
 
+        formDialog.close();
+
+//        http://stackoverflow.com/questions/14502006/scope-emit-and-on-angularjs/14502755#14502755
+        $rootScope.$broadcast('enclosure_created', enclosure);
     };
 }
 

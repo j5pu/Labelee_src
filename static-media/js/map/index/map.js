@@ -317,11 +317,14 @@ function loopFloors() {
 function loadPOIs() {
     for (var fl in floors) {
         for (var l in floors[fl].labels) {
+            // Crea un grupo de layers para cada categoría de etiqueta (Restaurantes, Aseos..)
+            // Ojo, cada floors[fl].labels[l] es un grupo de categorías de etiquetas, y no las etiquetas en sí
             floors[fl].labels[l].layer = new L.LayerGroup();
         }
 
         floors[fl].layer = new L.LayerGroup();
 
+        // floors[fl].pois son todos los puntos que son considerados POIs
         for (j = 0; j < floors[fl].pois.length; j++) {
             if (floors[fl].pois[j].id === poi_id) {
                 // Si es el último no hacemos nada. Si no, lo sacamos
@@ -404,7 +407,6 @@ function loadPOIs() {
             for (var l in floors[fl].labels) {
                 if (floors[fl].pois[j].marker.category === floors[fl].labels[l].fields.name)
                     floors[fl].labels[l].layer.addLayer(floors[fl].pois[j].marker);
-
             }
 
             if (isCategoryVisibleOnButtons(floors[fl].pois[j].marker.category_es))
@@ -732,8 +734,8 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
         }
 
     }
-    destLegend = route.fields.destiny.fields.description;
 
+    destLegend = route.fields.destiny.fields.description;
     if (new PointResource().read(dst).panorama) {
         destLegend = destLegend + Panorama.renderIcon(dst);
     }

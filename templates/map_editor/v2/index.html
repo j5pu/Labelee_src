@@ -104,41 +104,39 @@
     <!--
         FORMULARIOS
                     -->
-    <div id="enclosure-forms" ng-controller="EnclosureFormsCtrl">
-        <div id="enc_create">
-            <form class="create">
-                <input type="text"
-                       ng-model="enclosure_name"
+    <div id="enc_create">
+        <form class="create" ng-controller="EnclosureFormsCtrl">
+            <input type="text"
+                   ng-model="enclosure_name"
 {#                       ng-change="validate()"#}
-                       placeholder="{% trans "Nombre del recinto" %}..">
+                   placeholder="{% trans "Nombre del recinto" %}..">
 
-                <button class="btn" ng-click="create()">{% trans "Añadir recinto" %}</button>
-            </form>
-        </div>
+            <button class="btn" ng-click="create()">{% trans "Añadir recinto" %}</button>
+        </form>
+    </div>
 
-        <div id="enc_edit">
-            <form class="edit">
-                <label class="txt">Nuevo nombre:
-                    <input type="text"
-                           ng-init="enclosure_name=enclosure.name"
-                           ng-model="enclosure_name"
-                           ng-change="validate()"
-                           placeholder="{% trans "Nuevo nombre para el recinto" %}.."
-                           autofocus>
-                </label>
-                <label class="txt">
-                    Cuenta de Twitter:
-                    <input type="text"
-                           ng-init="twitter_account=enclosure.twitter_account"
-                           ng-model="twitter_account"
-                           ng-change="validate()"
-                           placeholder="{% trans "Cuenta de twitter" %}..">
-                </label>
+    <div id="enc_edit">
+        <form class="edit">
+            <label class="txt">Nuevo nombre:
+                <input type="text"
+                       ng-init="enclosure_name=enclosure.name"
+                       ng-model="enclosure_name"
+                       ng-change="validate()"
+                       placeholder="{% trans "Nuevo nombre para el recinto" %}.."
+                       autofocus>
+            </label>
+            <label class="txt">
+                Cuenta de Twitter:
+                <input type="text"
+                       ng-init="twitter_account=enclosure.twitter_account"
+                       ng-model="twitter_account"
+                       ng-change="validate()"
+                       placeholder="{% trans "Cuenta de twitter" %}..">
+            </label>
 
-                <button class="btn" ng-click="cancelUpdate()">{% trans "Cancelar" %}</button>
-                <button class="btn" ng-click="update()">{% trans "Editar" %}</button>
-            </form>
-        </div>
+            <button class="btn" ng-click="cancelUpdate()">{% trans "Cancelar" %}</button>
+            <button class="btn" ng-click="update()">{% trans "Editar" %}</button>
+        </form>
     </div>
 
 
