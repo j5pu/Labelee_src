@@ -259,6 +259,7 @@ var mapH = $(document).height(),//Altura de la pantalla
     arrow = [],
     arrowHead = [],
     arrowOffset = 0,
+    qrMarker = new L.Marker(),
     destMarker = new L.Marker(),
     subpath = [],
     subarrow = [],
@@ -371,8 +372,7 @@ function loadPOIs() {
             floors[fl].pois[j].marker.changeTitle = function () {
                 this.popupTitle = gettext("Scan a QR code to get here:") + " " + this.description + this.panoramaIcon + SocialMenu.renderIcon(this.poid);
                 this.bindPopup(popupTitle).openPopup();
-                Panorama.bindShow();
-                SocialMenu.bindShow(this);
+                bindContent(this);
             };
 
 
@@ -390,7 +390,7 @@ function loadPOIs() {
                         drawRoute(qrPoint.point.id, qrFloor.sX, qrFloor.sY, this.poid, this.psX, this.psY);
 //                    map.invalidateSize();
 
-                    SocialMenu.bindShow(this);
+                    bindContent(qrMarker);
                 });
 
             /*
@@ -443,21 +443,20 @@ function loadPOIs() {
                     qrPoint.label.name : qrPoint.point.description;
                 var originLegend = gettext("You are right here:") + ' ' + point_description;
 
-                if (qrPoint.point.panorama)
+                 if (qrPoint.point.panorama)
                     originLegend = originLegend + Panorama.renderIcon(qrPoint.point.id);
                 originLegend+= SocialMenu.renderIcon(qrPoint.point.id);
-                qrMarker = new L.marker(qrLoc, { bounceOnAdd: false,
+                qrMarker = L.marker(qrLoc, { bounceOnAdd: false,
                     icon: OriginIcon})
                     .bindPopup((originLegend), function () {
-                        Panorama.bindShow();
-                        SocialMenu.bindShow(this);
+
                     });
 
             }
             else {
                 var msg = gettext("Please, scan a QR code to get here:") + ' ';
                 var photoIcon = qrPoint.point.panorama ? Panorama.renderIcon(qrPoint.point.id) : "";
-                qrMarker = new L.marker(qrLoc, {
+                qrMarker = L.marker(qrLoc, {
                     bounceOnAdd: false,
                     icon: DestinyIcon})
                     .bindPopup(msg + qrPoint.point.description +
@@ -518,8 +517,10 @@ function initMap(qrPoint) {
 
             map.setMaxBounds(qrFloor.bounds);
 //            if (!destMarker) {
-                map.setView(qrLoc, 0);
-                qrMarker.openPopup();
+            map.setView(qrLoc, 0);
+            qrMarker.openPopup();
+            bindContent(qrMarker);
+
  /*           } else {
                 //destMarker.openPopup({autoPanPadding:(10,10)});
                 map.setView(destMarker.loc, 0);
@@ -547,6 +548,7 @@ function initMap(qrPoint) {
 
     if (map.hasLayer(destMarker)) {
         destMarker.openPopup();
+        bindContent(destMarker);
     }
     loadedLabels = true;
     map.invalidateSize();
@@ -735,18 +737,24 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
     destLegend = route.fields.destiny.fields.description;
 
     if (new PointResource().read(dst).panorama) {
-        destLegend = destLegend + Panorama.renderIcon(dst);
+        destLegend += Panorama.renderIcon(dst);
     }
     destLegend += SocialMenu.renderIcon(dst);
+
+/*
+    if (new PointResource().read(dst).coupon) {
+        destLegend += '<button class="icon-tags"></button>';
+    }
+*/
 
 
     destLoc = [(route.fields.destiny.fields.row) * sY + sY, route.fields.destiny.fields.col * sX + sX];
     destMarker = L.marker(destLoc, { bounceOnAdd: false,
         icon: DestinyIcon})
-        .bindPopup(destLegend, {autoPanPadding: new L.Point(0, 10)}).on('click', function () {
-            Panorama.bindShow();
-            SocialMenu.bindShow();
-        });
+        .bindPopup(destLegend, {autoPanPadding: new L.Point(0, 10)});
+
+    bindContent(destMarker);
+
 
 //autoPanPadding: new L.Point(0, 10),
 //offset: new L.Point(0, -24)
@@ -909,8 +917,7 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
 
     if (map.hasLayer(destMarker)) {
         destMarker.openPopup();
-        Panorama.bindShow();
-        SocialMenu.bindShow();
+        bindContent(destMarker);
     }
 }
 //Función que gestiona la animación de la flecha
@@ -1133,3 +1140,13 @@ Map.events =
         Map.events.resizeWindow();
     }
 };
+
+
+function bindContent(marker)
+{
+    // Se bindea el contenido del popup abierto para el marker
+    Panorama.bindShow();
+    SocialMenu.bindShow(marker);
+    Coupon.bindShowFromMarker(marker);
+};
+
