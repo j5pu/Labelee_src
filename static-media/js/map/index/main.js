@@ -178,7 +178,7 @@ var Coupon = {
     bindShowFromMarker: function()
     {
         $('div.leaflet-popup-content-wrapper').on('click', function (e) {
-            console.log(e.clientX + e.clientY );
+            console.log(e.clientX +'y: '+ e.clientY );
             /*            if (e.clientX > $(this).offset().left + 90 &&
              e.clientY < $(this).offset().top + 10) {
              e.stopPropagation();

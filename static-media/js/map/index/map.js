@@ -741,11 +741,6 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
     }
     destLegend += SocialMenu.renderIcon(dst);
 
-/*
-    if (new PointResource().read(dst).coupon) {
-        destLegend += '<button class="icon-tags"></button>';
-    }
-*/
 
 
     destLoc = [(route.fields.destiny.fields.row) * sY + sY, route.fields.destiny.fields.col * sX + sX];
@@ -917,6 +912,9 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
 
     if (map.hasLayer(destMarker)) {
         destMarker.openPopup();
+        if (new PointResource().read(dst).coupon) {
+            $('div.leaflet-popup-content-wrapper').addClass('withCoupon');
+        }
         bindContent(destMarker);
     }
 }
