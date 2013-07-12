@@ -10,7 +10,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes"/>
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
 
-    <link href="http://fonts.googleapis.com/css?family=Noto+Sans|Just+Me+Again+Down+Here" rel="stylesheet"
+    <link href="http://fonts.googleapis.com/css?family=Raleway|Noto+Sans|Just+Me+Again+Down+Here" rel="stylesheet"
           type="text/css">
 
     <link rel="stylesheet" href="{{ STATIC_URL }}vendor/leaflet/leaflet.css"/>
@@ -60,7 +60,7 @@
     <!--script src="{{ STATIC_URL }}vendor/leaflet/plugins/leaflet-search.js"></script-->
     <script src="{{ STATIC_URL }}vendor/leaflet/plugins/leaflet.label.js"></script>
     <script src="{{ STATIC_URL }}vendor/leaflet/plugins/jquery.mmenu.js"></script>
-    <script src="{{ STATIC_URL }}vendor/leaflet/plugins/idangerous.swiper-2.0.min.js"></script>
+   <script src="{{ STATIC_URL }}vendor/leaflet/plugins/idangerous.swiper-2.0.min.js"></script>
     <script type="text/javascript"
             src="{{ STATIC_URL }}vendor/leaflet/plugins/jquery.ba-outside-events.min.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}vendor/leaflet/plugins/ddpanorama.js"></script>
@@ -178,25 +178,18 @@
 
         <div class="swiper-container">
             <div class="swiper-wrapper">
-                <div class="swiper-slide">
-{#                    <p class="title">LA BOTELLITA</p>#}
-{#                    <p>Oferta 3 x 2, ¡solo hasta las 20.00h!</p>#}
-{#                    <button id="cup1">PULSA AQUÍ</button>#}
+                 {% for point,img in coupons.items %}
 
-                    <img id="cup1" src="/media/cup1.jpg">
-                </div>
-                <div class="swiper-slide">
-                    <img id="cup2" src="/media/cup2.jpg">
-                </div>
-                <div class="swiper-slide">
-                    <img id="cup3"src="/media/ingles.jpg">
-                </div>
+                   <div class="swiper-slide">
+                    <img id="cup_{{ point }}" src="{{ img }}">
+                   </div>
+                {% endfor %}
+
             </div>
 
         </div>
         <div class="pagination"></div>
     </div>
-
 
     <div style="background: rgb(17, 17, 17); background:rgba(17, 17, 17, 0.4); padding:0">
         <marquee align="center" direction="left" loop="40"

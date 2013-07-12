@@ -30,7 +30,7 @@ html.mmenu-opened body
 .mmenu *
 {
     -webkit-text-size-adjust: none;
-    font-family: 'Noto Sans', Arial, Helvetica, Garuda, sans-serif;
+    font-family: 'Raleway', 'Noto Sans', Arial, Helvetica, Garuda, sans-serif;
     font-size: 14px;
 }
 .mmenu ul,
@@ -377,7 +377,7 @@ body {
     }
 body, div, p
 {
-    font-family: 'Noto Sans', Arial, Helvetica, Verdana;
+    font-family: 'Raleway','Noto Sans', Arial, Helvetica, Verdana;
     font-size: 14px;
     line-height: 22px;
     color: #333;
@@ -998,6 +998,7 @@ body{
 }
 
 */
+/*
 
 .leaflet-popup-content-wrapper,.leaflet-popup-tip-container  {
     border: .5px solid #000;
@@ -1006,6 +1007,7 @@ body{
 .leaflet-popup-tip-container {
 border-top: white;
 }
+*/
 
 div#cupones{
     position: absolute;
@@ -1156,7 +1158,7 @@ position: absolute;
 
 top: 0;
 right:-4px;
-margin: 6%;
+margin: 2%;
 font-size:1.2em;
 color:rgba(255, 255, 255, 0.8);
 }
@@ -1204,11 +1206,16 @@ img[id*=pano]{
 
 .leaflet-popup-content
 {
-    margin: 2px 20px;
+    margin: 2px 15px 3px 15px;
+    font-size: 13px;
 }
 
 .socialmenu {
-    font-size: 22px;
+    font-size: 21px;
+}
+.leaflet-popup-tip{
+    width: 10px;
+    height: 12px;
 }
 /*
 @media only screen and (min-width: 320px) {

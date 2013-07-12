@@ -115,7 +115,7 @@ $(function() {
     $('button#closeCoupon').on('click', function () {
         $('div.device').fadeOut();
     });
-    var mySwiper = new Swiper('.swiper-container', {
+   var mySwiper = new Swiper('.swiper-container', {
         pagination: '.pagination',
         loop: true,
         grabCursor: true,
@@ -134,7 +134,7 @@ $(function() {
     $('body').prepend('<div class="splash">    <div class="container">        <div class="sp-container"             >            <div class="frame-5"><span><img src="/media/logo-labelee-sin-slogan.png"></span></div>            <div id="find" class="frame-6">find<span id="your"> your<span id="way"> way!</span></span></div>        </div>    </div></div>')
     setTimeout(hideSplash, 3000);
 
-    $('div.swiper-slide img').on('click', function (e) {
+/*    $('div.swiper-slide img').on('click', function (e) {
         e.preventDefault();
         var $id = $(this).prop('id');
         if ($id === "cup1") preDrawRoute(qrPoint.point.id, qrFloor.id, 2850, 28);
@@ -142,11 +142,9 @@ $(function() {
         else preDrawRoute(qrPoint.point.id, qrFloor.id, 5655, 40);
         $('div.device').fadeOut();
 
-    });
+    });*/
 
 });
-
-
 
 
 function hideSplash() {
@@ -173,6 +171,18 @@ var Coupon = {
         $('div#cupones area').on('click', function (ev) {
             ev.stopPropagation();
             Coupon.open();
+        });
+    },
+
+
+    bindShowFromMarker: function()
+    {
+        $('div.leaflet-popup-content-wrapper').on('click', function (e) {
+            console.log(e.clientX + e.clientY );
+            /*            if (e.clientX > $(this).offset().left + 90 &&
+             e.clientY < $(this).offset().top + 10) {
+             e.stopPropagation();
+             Coupon.open();            }*/
         });
     },
 
