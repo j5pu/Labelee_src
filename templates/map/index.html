@@ -1,4 +1,5 @@
 {% load i18n %}
+{% load map_tags %}
 
 <!DOCTYPE html>
 <html>
@@ -139,7 +140,7 @@
 
             {% for category in categories %}
                 <li>
-                <li class="Label">{{ category.name }}</li>
+                <li class="Label" style="background:{{colors|get_item:category.name}};">{{ category.name }}</li>
                 {% for destination in category.items %}
                     <li onclick="$('#menu-right').trigger( 'close' );preDrawRoute({{ poi_id }},floor_id,{{ destination.id }},{{ destination.floor_id }})">{{ destination.description }}</li>
                 {% endfor %}

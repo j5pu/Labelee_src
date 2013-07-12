@@ -22,6 +22,7 @@ def show_map(request, qr_type, enclosure_id, floor_id, poi_id):
     """
     enclosure = Enclosure.objects.filter(id=enclosure_id)
     categories = {}
+    colors = {}
     coupons = {}
     points = Point.objects \
         .filter(~Q(label__category__name__in=CATEGORIAS_FIJAS.values()),
@@ -33,6 +34,7 @@ def show_map(request, qr_type, enclosure_id, floor_id, poi_id):
             if point.label.category.name in categories:
                 categories[point.label.category.name].append(point)
             else:
+                colors[point.label.category.name] = point.label.category.color
                 categories[point.label.category.name] = [point]
 
         if point.coupon.name is not None:
@@ -68,7 +70,8 @@ def show_map(request, qr_type, enclosure_id, floor_id, poi_id):
         'categories': ordered_categories,
         'marquee': marquee,
         'qr_type': qr_type,
-        'coupons': coupons
+        'coupons': coupons,
+        'colors': colors
     }
     return render_to_response('map/index.html', ctx, context_instance=RequestContext(request))
 
@@ -98,7 +101,6 @@ def fuera(request, id, row, column):
     url = 'http://inmap.eu01.aws.af.cm/routesFrom.php?id=' + id + \
           '&row=' + row + '&column=' + column
     return HttpResponseRedirect(url)
-
 
 
 
