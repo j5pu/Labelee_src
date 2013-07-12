@@ -19,32 +19,24 @@ var Panorama = {
             '</button>'
     },
 
-    bindShow: function()
+    bindShow: function(marker)
     {
-
-     /*   $('.leaflet-popup-content button.panorama').on('click', function (e) {
+        $('.leaflet-popup-content button.panorama').on('click', function (e) {
             e.preventDefault();
-            Panorama.opened = true;
-            var point_id = $(this).data('pan');
-            var point = new PointResource().read(point_id);
-
-//            addSamplePano(point.panorama,{ratio:9/16});
-            addSamplePano(point.panorama,{ratio:9/16, minSpeed:30});
-//            addSamplePano(point.panorama,{height: 200, width: 4});
-        });*/
+            Panorama.show(marker);
+        });
     },
-     show: function(element)
+
+    show: function(marker)
     {
         Panorama.opened = true;
 
-        Panorama.element = element;
-        var point_id = element.id;
+        Panorama.element = marker;
+        var point_id = marker.poid;
         var point = new PointResource().read(point_id);
 
         var newWidth=window.innerWidth*0.9,
             newHeight=newWidth*9/16;
-
-//            addSamplePano(point.panorama,{ratio:9/16});
         addSamplePano(point.panorama,{height: newHeight, ratio:9/16, minSpeed:30});
     },
 

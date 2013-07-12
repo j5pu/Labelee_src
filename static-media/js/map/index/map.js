@@ -388,8 +388,6 @@ function loadPOIs() {
 
                     LocalStorageHandler.setPrevDest(this);
                     if(Panorama.opened) Panorama.close();
-                    Map.destHasPanorama = this.panorama;
-                    Map.destHasCoupon = this.coupon;
                     if (qrMarker)
                         drawRoute(qrPoint.point.id, qrFloor.sX, qrFloor.sY, this.poid, this.psX, this.psY);
 //                    map.invalidateSize();
@@ -736,11 +734,10 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
         if (destMarker) {
             floors[i].layer.removeLayer(destMarker);
         }
-
     }
     destLegend = route.fields.destiny.fields.description;
 
-    if (Map.destHasPanorama) {
+    if (route.fields.destiny.fields.panorama) {
         destLegend += Panorama.renderIcon(dst);
     }
     destLegend += SocialMenu.renderIcon(dst);
@@ -750,10 +747,12 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
     destLoc = [(route.fields.destiny.fields.row) * sY + sY, route.fields.destiny.fields.col * sX + sX];
     destMarker = L.marker(destLoc, { bounceOnAdd: false,
         icon: DestinyIcon})
-        .bindPopup(destLegend, {autoPanPadding: new L.Point(0, 10)});
+        .bindPopup(destLegend, {autoPanPadding: new L.Point(0, 10)})
+        .on('click', function(){
+            bindContent(this);
+        });
 
-    bindContent(destMarker);
-
+    destMarker.panorama = route.fields.destiny.fields.panorama;
 
 //autoPanPadding: new L.Point(0, 10),
 //offset: new L.Point(0, -24)
@@ -916,7 +915,7 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
 
     if (map.hasLayer(destMarker)) {
         destMarker.openPopup();
-        if (Map.destHasCoupon) {
+        if (route.fields.destiny.fields.coupon) {
             $('div.leaflet-popup-content-wrapper').addClass('withCoupon');
         }
         bindContent(destMarker);
@@ -1147,7 +1146,7 @@ Map.events =
 function bindContent(marker)
 {
     // Se bindea el contenido del popup abierto para el marker
-    Panorama.bindShow();
+    Panorama.bindShow(marker);
     SocialMenu.bindShow(marker);
     Coupon.bindShowFromMarker(marker);
 };
