@@ -113,7 +113,7 @@ td.pois
     text-shadow: none;
 }
 
-#enclosure-forms, #floor-forms
+#enc_create, #enc_edit, #floor_create, #floor_edit
 {
     display: none;
 }

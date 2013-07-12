@@ -1,5 +1,4 @@
-var formDialog,
-    enclosureResource = new EnclosureResource();
+var formDialog;
 
 $(function() {
     I18n.selectLang(lang_code);
@@ -12,7 +11,7 @@ function EnclosureListCtrl($scope, UrlService)
 {
     $scope.$watch('enclosures', function(){FileInput.draw();});
 
-	$scope.enclosures = $scope.enclosure_resource.readAll();
+	$scope.enclosures = enclosureResource.readAll();
 
     // Orden en que aparecerán los recintos
     $scope.reverse = false;
@@ -22,61 +21,29 @@ function EnclosureListCtrl($scope, UrlService)
         formDialog.open();
     };
 
-    $scope.$on('enclosure_created', function() {
+    $scope.$on('enclosure_created', function(ev, enclosure) {
         $scope.enclosures.push(enclosure);
     });
 }
 
 
-function EnclosureCtrl($scope, $element)
+function EnclosureCtrl($scope, $rootScope, $element)
 {
 	$scope.editing = false;
     $scope.hovered = false;
 
-    $scope.poiCount = new PointResource().countPois($scope.enclosure.id);
+    $scope.poiCount = pointResource.countPois($scope.enclosure.id);
 
-	$scope.update = function() {
-		if (!$scope.editing) {
-			$scope.editing = true;
-		} else {
-			// Si ya se estaba editando cuando hemos invocado update() entonces
-			// guardamos el nuevo nombre en la BD
-
-			var data = {
-				name : $scope.enclosure_name,
-                twitter_account : $scope.twitter_account
-			};
-
-			var updated_enclosure = $scope.enclosure_resource.update(data, $scope.enclosure.id);
-
-			$scope.editing = false;
-
-			$scope.$parent.enclosure.name = updated_enclosure.name;
-			$scope.$parent.enclosure.twitter_account = updated_enclosure.twitter_account;
-		}
-	};
-
-    $scope.cancelUpdate = function() {
-        $scope.editing = false;
+    $scope.update = function()
+    {
+        // Abre el diálogo con el formulario para la edición del recinto
+        $rootScope.$broadcast('edit_enclosure', $scope.enclosure);
     };
-
-	$scope.del = function() {
-
-		var confirm_msg = gettext('Are you sure you want to remove this enclosure? (this will erase all their floors)');
-
-		$scope.enclosure_resource.del(
-            $scope.enclosure.id,
-            confirm_msg,
-            function(){
-                $($element).fadeOut(200);
-            }
-        );
-	};
-
 
     $scope.calculateRoutes = function()
     {
-        new EnclosureResource().calculateRoutes($scope.enclosure.id);
+        if(confirm(gettext('Previous routes will be removed for this enclosure. Do you want to continue?')))
+            enclosureResource.calculateRoutes($scope.enclosure.id);
     };
 }
 
@@ -84,14 +51,13 @@ function FloorListCtrl($scope, $element)
 {
 	$scope.waiting_response = false;
     $scope.hovered = false;
-    $scope.floor_resource = new FloorResource();
 
     $scope.$watch('floors', function(){
         FileInput.draw();
     });
 
     $scope.loadFloorList = function() {
-        $scope.floors = $scope.floor_resource.readFromEnclosure($scope.enclosure.id);
+        $scope.floors = floorResource.readFromEnclosure($scope.enclosure.id);
     };
 
     $scope.loadFloorList();
@@ -213,7 +179,7 @@ function FloorCtrl($scope, $element)
 }
 
 
-function CategoriesCtrl($scope, UrlService)
+function CategoryListCtrl($scope, UrlService)
 {
     $scope.category_resource = new LabelCategoryResource();
 
@@ -234,7 +200,7 @@ function EnclosureFormsCtrl($scope, $rootScope)
             owner: '/api/v1/user/1/'
         };
 
-        var enclosure = new EnclosureResource().create(data);
+        var enclosure = enclosureResource.create(data);
 
         $scope.enclosure_name = '';
 
@@ -248,6 +214,41 @@ function EnclosureFormsCtrl($scope, $rootScope)
 
 //        http://stackoverflow.com/questions/14502006/scope-emit-and-on-angularjs/14502755#14502755
         $rootScope.$broadcast('enclosure_created', enclosure);
+    };
+
+    $scope.update = function(enclosure) {
+
+        $scope.enclosure_name = enclosure.name;
+        $scope.twitter_account = enclosure.twitter_account;
+
+        var data = {
+            name : $scope.enclosure_name,
+            twitter_account : $scope.twitter_account
+        };
+
+        var updated_enclosure = enclosureResource.update(data, $scope.enclosure.id);
+
+        $scope.editing = false;
+
+        $scope.$parent.enclosure.name = updated_enclosure.name;
+        $scope.$parent.enclosure.twitter_account = updated_enclosure.twitter_account;
+    };
+
+    $scope.cancelUpdate = function() {
+        $scope.editing = false;
+    };
+
+    $scope.del = function() {
+
+        var confirm_msg = gettext('Are you sure you want to remove this enclosure? (this will erase all their floors)');
+
+        enclosureResource.del(
+            $scope.enclosure.id,
+            confirm_msg,
+            function(){
+                $($element).fadeOut(200);
+            }
+        );
     };
 }
 

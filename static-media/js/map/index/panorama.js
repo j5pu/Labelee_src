@@ -66,6 +66,6 @@ var Panorama = {
         jQuery('button#close').hide();
         Panorama.opened = false;
 
-        Logger.log('panorama cerradoxxxxxx');
+//        Logger.log('panorama cerradoxxxxxx');
     }
 };

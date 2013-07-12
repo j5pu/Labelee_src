@@ -587,10 +587,13 @@ function StepResource()
 
 
 FloorResource.prototype = new Resource;
+var floorResource = new FloorResource();
 LabelResource.prototype = new Resource;
 LabelCategoryResource.prototype = new Resource;
 PointResource.prototype = new Resource;
+var pointResource = new PointResource();
 EnclosureResource.prototype = new Resource;
+var enclosureResource = new EnclosureResource();
 ConnectionResource.prototype = new Resource;
 RouteResource.prototype = new Resource;
 StepResource.prototype = new Resource;

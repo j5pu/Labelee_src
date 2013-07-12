@@ -89,7 +89,7 @@
                     </div>
                 </td>
 
-                <td class="categories" ng-controller="CategoriesCtrl">
+                <td class="categories" ng-controller="CategoryListCtrl">
                     <ul>
                         <li ng-repeat="category in categories | orderBy:'name'">
                             [[category.name]]
@@ -140,76 +140,73 @@
     </div>
 
 
-    <div id="floor-forms" ng-controller="FloorFormsCtrl">
-        <div id="floor_create">
-            <form class="create"
-                  action=""
-                  method="post"
-                  enctype="multipart/form-data"
-                  target="upload_target">
+    <div id="floor_create">
+        <form class="create"
+              action=""
+              method="post"
+              enctype="multipart/form-data"
+              target="upload_target">
 
-                <div class="form_content" ng-hide="sending_img">
-                    <div class="box-3">
-                        <label class="txt">{% trans "Nombre de planta" %}:
-                            <input type="text"
-                                   ng-model="floor_name"
-                                   placeholder="{% trans "Nombre de planta" %}..">
-                        </label>
-                        <label class="txt">{% trans "Número" %}:
-                            <input type="text"
-                                   ng-model="floor_number"
-                                   placeholder="{% trans "Número" %}..">
-                        </label>
-                        <input class="btn floor_img"
-                               type="file"
-                               name="img"
-                                {#                                   onchange="angular.element(this).scope().setFile(this)"#}
-                               title="{% trans "Elegir imagen" %}">
-                    </div>
-
-                    <button class="btn" ng-click="createFloor()">{% trans "Añadir planta" %}</button>
-                </div>
-
-                {% include "_waiting_gif.html" %}
-            </form>
-        </div>
-
-        <div id="floor_edit">
-            <form class="edit"
-                  action=""
-                  method="post" enctype="multipart/form-data"
-                  target="upload_target">
-
-                <!--<div ng-include src="_form_alert_box"></div>-->
-                <div class="box-2 editing-floor">
-                    <label class="txt">{% trans "Nombre" %}:
+            <div class="form_content" ng-hide="sending_img">
+                <div class="box-3">
+                    <label class="txt">{% trans "Nombre de planta" %}:
                         <input type="text"
-                               ng-init="floor_name=floor.name"
                                ng-model="floor_name"
-                               ng-change="validate()"
-                               placeholder="{% trans "Nuevo nombre para la planta" %}.."
-                               autofocus>
+                               placeholder="{% trans "Nombre de planta" %}..">
                     </label>
                     <label class="txt">{% trans "Número" %}:
-                        {#                                        <span class="txt">{% trans "Número" %}:</span>#}
                         <input type="text"
-                               ng-init="floor_number=floor.floor_number"
                                ng-model="floor_number"
-                               ng-change="validate()"
                                placeholder="{% trans "Número" %}..">
                     </label>
-                    <input class="btn"
+                    <input class="btn floor_img"
                            type="file"
                            name="img"
                             {#                                   onchange="angular.element(this).scope().setFile(this)"#}
-                           title="{% trans "Cambiar imagen" %}">
+                           title="{% trans "Elegir imagen" %}">
                 </div>
 
-                <button class="btn" ng-click="cancelUpdate()">{% trans "Cancelar" %}</button>
-                <button class="btn" ng-click="update()">{% trans "Editar" %}</button>
-            </form>
-        </div>
+                <button class="btn" ng-click="createFloor()">{% trans "Añadir planta" %}</button>
+            </div>
 
+            {% include "_waiting_gif.html" %}
+        </form>
+    </div>
+
+    <div id="floor_edit">
+        <form class="edit"
+              action=""
+              method="post" enctype="multipart/form-data"
+              target="upload_target">
+
+            <!--<div ng-include src="_form_alert_box"></div>-->
+            <div class="box-2 editing-floor">
+                <label class="txt">{% trans "Nombre" %}:
+                    <input type="text"
+                           ng-init="floor_name=floor.name"
+                           ng-model="floor_name"
+                           ng-change="validate()"
+                           placeholder="{% trans "Nuevo nombre para la planta" %}.."
+                           autofocus>
+                </label>
+                <label class="txt">{% trans "Número" %}:
+                    {#                                        <span class="txt">{% trans "Número" %}:</span>#}
+                    <input type="text"
+                           ng-init="floor_number=floor.floor_number"
+                           ng-model="floor_number"
+                           ng-change="validate()"
+                           placeholder="{% trans "Número" %}..">
+                </label>
+                <input class="btn"
+                       type="file"
+                       name="img"
+                        {#                                   onchange="angular.element(this).scope().setFile(this)"#}
+                       title="{% trans "Cambiar imagen" %}">
+            </div>
+
+            <button class="btn" ng-click="cancelUpdate()">{% trans "Cancelar" %}</button>
+            <button class="btn" ng-click="update()">{% trans "Editar" %}</button>
+        </form>
     </div>
 
 
