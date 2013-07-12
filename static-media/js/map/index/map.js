@@ -338,6 +338,7 @@ function loadPOIs() {
                 floorid = floors[fl].pois[j].floor;
                 description = floors[fl].pois[j].description,
                 panorama = floors[fl].pois[j].panorama,
+                coupon = floors[fl].pois[j].coupon,
                 sX = floors[fl].scaleX,
                 sY = floors[fl].scaleY,
                 loc = [(floors[fl].pois[j].row) * sY + (sY),
@@ -367,6 +368,7 @@ function loadPOIs() {
             floors[fl].pois[j].marker.category_es = category_es;
             floors[fl].pois[j].marker.label = labelid;
             floors[fl].pois[j].marker.panorama = panorama;
+            floors[fl].pois[j].marker.coupon = coupon;
             floors[fl].pois[j].marker.description = description;
 
             floors[fl].pois[j].marker.changeTitle = function () {
@@ -386,6 +388,8 @@ function loadPOIs() {
 
                     LocalStorageHandler.setPrevDest(this);
                     if(Panorama.opened) Panorama.close();
+                    Map.destHasPanorama = this.panorama;
+                    Map.destHasCoupon = this.coupon;
                     if (qrMarker)
                         drawRoute(qrPoint.point.id, qrFloor.sX, qrFloor.sY, this.poid, this.psX, this.psY);
 //                    map.invalidateSize();
@@ -691,8 +695,8 @@ function preDrawRoute(origin, qrFloor, destination, destinationFloor) {
 //Creación de las rutas (con subrutas correspondientes), desde el origen hasta el POI destino
 function drawRoute(org, osX, osY, dst, sX, sY) {
 
-    Logger.log('calculando ruta..');
-    Logger.log('--------------');
+//    Logger.log('calculando ruta..');
+//    Logger.log('--------------');
 
     if (org == dst)
         return;
@@ -705,14 +709,14 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
     }
 
 
-    Logger.log('DESTINO:');
-    Logger.log('org: ' + org);
-    Logger.log('osX: ' + osX);
-    Logger.log('osY: ' + osY);
-    Logger.log('dst: ' + dst);
-    Logger.log('sX: ' + sX);
-    Logger.log('sY: ' + sY);
-    Logger.log('-------');
+//    Logger.log('DESTINO:');
+//    Logger.log('org: ' + org);
+//    Logger.log('osX: ' + osX);
+//    Logger.log('osY: ' + osY);
+//    Logger.log('dst: ' + dst);
+//    Logger.log('sX: ' + sX);
+//    Logger.log('sY: ' + sY);
+//    Logger.log('-------');
 
     for (var i in floors) {
         if (arrow[i]) {
@@ -736,7 +740,7 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
     }
     destLegend = route.fields.destiny.fields.description;
 
-    if (new PointResource().read(dst).panorama) {
+    if (Map.destHasPanorama) {
         destLegend += Panorama.renderIcon(dst);
     }
     destLegend += SocialMenu.renderIcon(dst);
@@ -912,7 +916,7 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
 
     if (map.hasLayer(destMarker)) {
         destMarker.openPopup();
-        if (new PointResource().read(dst).coupon) {
+        if (Map.destHasCoupon) {
             $('div.leaflet-popup-content-wrapper').addClass('withCoupon');
         }
         bindContent(destMarker);
