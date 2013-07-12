@@ -392,6 +392,7 @@ function loadPOIs() {
                         drawRoute(qrPoint.point.id, qrFloor.sX, qrFloor.sY, this.poid, this.psX, this.psY);
 //                    map.invalidateSize();
 
+                    qrMarker.contentBinded = false;
                     bindContent(qrMarker);
                 });
 
@@ -436,24 +437,27 @@ function loadPOIs() {
             qrFloor.sY = floors[i].scaleY;
             qrFloor.layer = floors[i].layer;
 
-
             qrLoc = [((qrPoint.point.row) * qrFloor.scaleY) + qrFloor.scaleY,
                 (qrPoint.point.col * qrFloor.scaleX) + qrFloor.scaleX];
 
             if (qr_type == 'origin') {
                 var point_description = qrPoint.label.name_en == 'My car' ?
                     qrPoint.label.name : qrPoint.point.description;
-                var originLegend = gettext("You are right here:") + ' ' + point_description;
 
+                var originLegend = gettext("You are right here:") + ' ' + point_description;
                  if (qrPoint.point.panorama)
                     originLegend = originLegend + Panorama.renderIcon(qrPoint.point.id);
                 originLegend+= SocialMenu.renderIcon(qrPoint.point.id);
+
                 qrMarker = L.marker(qrLoc, { bounceOnAdd: false,
                     icon: OriginIcon})
-                    .bindPopup((originLegend), function () {
-
+                    .bindPopup(originLegend)
+                    .on('click', function(){
+                        bindContent(this);
                     });
 
+                qrMarker.panorama = qrPoint.point.panorama;
+                qrMarker.coupon = qrPoint.point.coupon;
             }
             else {
                 var msg = gettext("Please, scan a QR code to get here:") + ' ';
@@ -469,9 +473,7 @@ function loadPOIs() {
 
 //                        drawRoute(qrPoint.point.id, qrFloor.sX, qrFloor.sY, this.poid, this.psX, this.psY);
 
-                        if(photoIcon)
-                            Panorama.bindShow();
-                        SocialMenu.bindShow(this);
+                        bindContent(this);
                     });
             }
 
@@ -541,8 +543,6 @@ function initMap(qrPoint) {
 
     map.removeLayer(totalPois);
     map.addLayer(qrFloor.layer);
-    Panorama.bindShow();
-    SocialMenu.bindShow(this);
     qrMarker._bringToFront();
 
 
@@ -752,7 +752,7 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
             bindContent(this);
         });
 
-    destMarker.panorama = route.fields.destiny.fields.panorama;
+    destMarker.panorama = '/media/' + route.fields.destiny.fields.panorama;
 
 //autoPanPadding: new L.Point(0, 10),
 //offset: new L.Point(0, -24)
@@ -1101,8 +1101,7 @@ Map.locatePosition = function()
     map.addLayer(qrFloor.layer);
     qrMarker._bringToFront();
     qrMarker.openPopup().on('click', function () {
-        Panorama.bindShow();
-        SocialMenu.bindShow();
+        bindContent(qrMarker);
     });
 };
 
@@ -1145,9 +1144,14 @@ Map.events =
 
 function bindContent(marker)
 {
+    if(marker.contentBinded)
+        return;
+
     // Se bindea el contenido del popup abierto para el marker
     Panorama.bindShow(marker);
     SocialMenu.bindShow(marker);
     Coupon.bindShowFromMarker(marker);
-};
+
+    marker.contentBinded = true;
+}
 
