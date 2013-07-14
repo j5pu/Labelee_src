@@ -110,8 +110,6 @@ $(function() {
 
 
 
-
-
     $('button#closeCoupon').on('click', function () {
         $('div.device').fadeOut(100);
     });
