@@ -1153,7 +1153,7 @@ button.panorama{
 }
 
 .leaflet-right .leaflet-control {
-    margin-right: 6px;
+    margin-right: 8px;
 }
 
 button#closeCoupon {
@@ -1229,9 +1229,6 @@ img[id*=pano]{
 
 .withCoupon:after {
     content: 'COUPON!';
-/*
-    margin-left: 94%;
-*/
     right: -70%;
     bottom: 0px;
     background: orange;

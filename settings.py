@@ -233,10 +233,10 @@ else:
         "default": {
             "ENGINE": "django.db.backends.mysql",
             "NAME": "labelee_dev",
-            "USER": "mnopi",
-            "PASSWORD": "1aragon1",
-            "HOST": "192.168.1.201",
-            "PORT": "",
+            "USER": "root",
+            "PASSWORD": "",
+            "HOST": "localhost",
+            "PORT": "3306",
             }
         }
 
