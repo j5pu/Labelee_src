@@ -118,8 +118,7 @@ $(function() {
         pagination: '.pagination',
         loop: true,
         grabCursor: true,
-        paginationClickable: true,
-        initialSlide:1
+        paginationClickable: true
     });
     $('.arrow-left').on('click', function (e) {
         e.preventDefault();
@@ -184,13 +183,31 @@ var Coupon = {
             if (e.clientX > $(this).offset().left + 105 &&
                 e.clientY > $(this).offset().top + 45)
             {
+                $('div.swiper-wrapper').find('div.swiper-slide:nth-last-child(-n+2)').remove();
                 var imgID=$(this).find('p>button').data('socialmenu'),
                     myImg="img[id='"+imgID+"']",
                     myPos=$(myImg).parent()[0].index(this);
 
-                //mySwiper.swipeTo(myPos);
+                var innerSwiper = new Swiper('.swiper-container', {
+                    pagination: '.pagination',
+                    loop: true,
+                    grabCursor: true,
+                    paginationClickable: true,
+                    initialSlide:myPos
+                });
+                $('.arrow-left').on('click', function (e) {
+                    e.preventDefault();
+                    innerSwiper.swipePrev();
+                });
+                $('.arrow-right').on('click', function (e) {
+                    e.preventDefault();
+                    innerSwiper.swipeNext();
+                });
+
                 e.stopPropagation();
-                Coupon.open();
+                //Coupon.open();
+                $('div.device').fadeIn(100);
+
             }
 
         });
@@ -201,10 +218,10 @@ var Coupon = {
     {
         if(Panorama.opened) Panorama.close();
 
-        if(Coupon.opened){
-            Coupon.close();
-            return;
-        }
+//        if(Coupon.opened){
+//            Coupon.close();
+//            return;
+//        }
 
         $('div.device').fadeIn(100);
 
