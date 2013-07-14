@@ -188,9 +188,7 @@ var Coupon = {
                     myImg="img[id='"+imgID+"']",
                     myPos=$(myImg).parent()[0].index(this);
 
-                mySwiper.swipeTo(myPos);
-
-                console.log();
+                //mySwiper.swipeTo(myPos);
                 e.stopPropagation();
                 Coupon.open();
             }
