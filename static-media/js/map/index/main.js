@@ -207,6 +207,30 @@ var Coupon = {
                 e.stopPropagation();
                 //Coupon.open();
                 $('div.device').fadeIn(100);
+                $(document).on('click', function(ev){
+                    ev.stopPropagation();
+                    //console.log('click: '+ Coupon.opened);
+                    if(Coupon.opened &&
+                        ($('div.device').has($(ev.target)).length === 0 &&
+                            !$(ev.target).hasClass('device')))
+                        Coupon.close();
+                });
+
+                Coupon.opened = true;
+
+                $('div.swiper-slide img').on('click', function (e) {
+                    e.preventDefault();
+                    var cupPoint = parseInt($(this).prop('id')),
+                        cupFloor = new PointResource().read(cupPoint).floor,
+                        strL = cupFloor.length,
+                        cupFloor = parseInt(cupFloor.substring(strL-3, strL-1));
+
+
+                    preDrawRoute(qrPoint.point.id, qrFloor.id, cupPoint, cupFloor);
+                    $('div.device').fadeOut();
+
+                });
+
 
             }
 
