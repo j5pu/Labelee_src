@@ -1070,7 +1070,7 @@ Map.locatePosition = function()
 //                    map.setView(arrow[i].getBounds().getCenter(), 0);
                 map.invalidateSize();
             } else {
-                Logger.log('No ruta..');
+//                Logger.log('No ruta..');
 //                    map.setView(qrLoc, 0);
                 map.invalidateSize();
             }
