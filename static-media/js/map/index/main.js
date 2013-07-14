@@ -182,8 +182,10 @@ var Coupon = {
         $('div.leaflet-popup-content-wrapper').on('click', function (e) {
             if (e.clientX > $(this).offset().left + 105 &&
                 e.clientY > $(this).offset().top + 45)
+
             {
-                $('div.swiper-wrapper').find('div.swiper-slide:nth-last-child(-n+2)').remove();
+                var itemsToRemove = Math.floor($('div.swiper-wrapper .swiper-slide').length/2);
+                $('div.swiper-wrapper').find('div.swiper-slide:nth-last-child(-n+'+itemsToRemove+')').remove();
                 var imgID=$(this).find('p>button').data('socialmenu'),
                     myImg="img[id='"+imgID+"']",
                     myPos=$(myImg).parent()[0].index(this);
