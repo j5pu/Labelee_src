@@ -29,6 +29,7 @@ def show_map(request, qr_type, enclosure_id, floor_id, poi_id):
                 floor__enclosure__id=enclosure_id) \
         .order_by('label__category__name', 'label__name')
 
+
     for point in points:
         if point.label.category.name not in CATEGORIAS_FIJAS.values():
             if point.label.category.name in categories:
@@ -36,6 +37,9 @@ def show_map(request, qr_type, enclosure_id, floor_id, poi_id):
             else:
                 colors[point.label.category.name] = point.label.category.color
                 categories[point.label.category.name] = [point]
+
+
+
 
         if point.coupon.name is not None:
             try:
