@@ -1127,10 +1127,21 @@ Map.locatePosition = function()
 //        map.addLayer(qrFloor.photo);
     map.addLayer(qrFloor.layer);
     qrMarker._bringToFront();
-    qrMarker.openPopup().on('click', function () {
+    qrMarker.openPopup();
+    qrMarker.on('click', function () {
         bindContent(qrMarker);
     });
 };
+
+
+if (map.hasLayer(destMarker)) {
+    destMarker.openPopup();
+    if (route.fields.destiny.fields.coupon) {
+        $('div.leaflet-popup-content-wrapper').addClass('withCoupon');
+    }
+    bindContent(destMarker);
+}
+
 
 Map.resize = function()
 {
