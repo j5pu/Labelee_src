@@ -461,7 +461,7 @@ border-radius: 0 6px 6px 0;
 
 #header a img {
     width: 53%;
-    margin-top: 1px;
+    margin-top: 2px;
 }
 span#fake{
     bottom:0;
@@ -1244,12 +1244,15 @@ img[id*=pano]{
     cursor:pointer;
 }
 
-.icon-gamepad, .icon-film, .icon-glass {
+.icon-gamepad, .icon-glass {
     margin-left: -1px;
+}
+.icon-film {
+    margin-left: -2px;
 }
 
 .icon-location-arrow{
-    margin-left: -3px;
+    margin-left: -1px;
     bottom: -2px;
     position: relative;
 }
