@@ -938,15 +938,32 @@ function arrowAnim(arrow, idFloor) {
 }
 
 var arrowsOffset = 0;
+
 //Función que define la animación (en este caso, flecha azul) que marca la ruta
-var setArrow = function (flecha, idFloor) {
+/*var setArrow = function (flecha, idFloor) {
 
     flecha.setPatterns([
         {offset: arrowsOffset + '%', repeat: 0, symbol: new L.Symbol.ArrowHead({pixelSize: 15, polygon: false, pathOptions: { stroke: true}})}
     ]);
     if (++arrowsOffset > 100)
         arrowsOffset = 0;
+};*/
+
+var setArrow = function (flecha, idFloor) {
+
+    flecha.setPatterns([
+        {offset: arrowsOffset + '%', repeat: 0, symbol: new L.Symbol.Marker({rotate: true, markerOptions: {
+            icon: L.icon({
+                iconUrl: '/media/arrow1.png',
+                iconAnchor: [12, 12]
+            })
+        }})}]);
+    if (++arrowsOffset > 100)
+        arrowsOffset = 0;
 };
+
+
+
 
 
 function isCategoryVisibleOnButtons(categ_name)
