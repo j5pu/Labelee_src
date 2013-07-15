@@ -93,6 +93,7 @@
                                 href="[[urls.map_editor.edit]]/[[floor.id]]">
                             <span>[[floor.name]]</span>
                         </a>
+                        <span>[[floor.poi_count]]</span>
                         <div class="icon-edit-wrapper">
                             <i class="icon-edit"
                                ng-show="hovered"
@@ -104,7 +105,7 @@
                 <td class="categories" ng-controller="CategoryListCtrl">
                     <ul>
                         <li ng-repeat="category in enclosure.label_categories | orderBy:'name'">
-                            [[category.name]]
+                            [[category.name]] ([[category.poi_count]])
                         </li>
                     </ul>
                 </td>

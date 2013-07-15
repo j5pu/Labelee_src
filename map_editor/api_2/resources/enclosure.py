@@ -2,8 +2,8 @@
 from django.db.models import Sum
 from django.http import HttpResponse
 import simplejson
-from map_editor.models import Enclosure, LabelCategory
-from utils.helpers import queryset_to_dict, group_by_pk, filterAsValidCategories
+from map_editor.models import Enclosure, LabelCategory, Point
+from utils.helpers import *
 
 
 def manager(request):
@@ -19,14 +19,20 @@ def manager(request):
         enclosure_dict['floors'] = []
         for floor in enclosure.floors.all():
             floor_dict = queryset_to_dict([floor])[0]
+            points = Point.objects.filter(floor__id=floor.id)
+            floor_dict['poi_count'] = filterAsPois(points).count()
             enclosure_dict['floors'].append(floor_dict)
 
         enclosure_dict['poi_count'] = enclosure.count_pois()
 
+
         categories = LabelCategory.objects.filter(labels__points__floor__enclosure__id=enclosure.id)
         categories_valid_grouped = filterAsValidCategories(categories).annotate(total=Sum('id'))
-
         enclosure_dict['label_categories'] = queryset_to_dict(categories_valid_grouped)
+
+        for i in range(len(enclosure_dict['label_categories'])):
+            enclosure_dict['label_categories'][i]['poi_count'] =\
+                Point.objects.filter(label__category__id=enclosure_dict['label_categories'][i]['id']).count()
 
 
         enclosures.append(enclosure_dict)
