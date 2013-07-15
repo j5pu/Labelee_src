@@ -950,7 +950,7 @@ function isCategoryVisibleOnButtons(categ_name)
     return categ_name !== "Parquing" &&
         categ_name !== "Bloqueantes" &&
         categ_name !== "Aristas" &&
-        categ_name !== "Aseos";
+        categ_name !== "Toilet";
 }
 
 

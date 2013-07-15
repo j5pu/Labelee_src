@@ -875,7 +875,7 @@ span.locator
     display: inline-block;
     text-align: center;
     line-height: 31px;
-    margin-left: 2px;
+    margin-left: 3px;
     margin-top: 11px;
     text-shadow: 1px 1px 1px #aaa;
 }
@@ -1243,6 +1243,15 @@ img[id*=pano]{
     cursor:pointer;
 }
 
+.icon-gamepad, .icon-film, .icon-glass {
+    margin-left: -1px;
+}
+
+.icon-location-arrow{
+    margin-left: -3px;
+    bottom: -2px;
+    position: relative;
+}
 /*
 @media only screen and (min-width: 320px) {
     canvas
