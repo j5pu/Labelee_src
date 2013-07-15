@@ -1,0 +1,76 @@
+<!doctype html>
+<head>
+    <!--Llamadas al jquery y al main.js---------------------------------------------------------------------------------->
+    <script src="{{ STATIC_URL }}vendor/jquery-1.9.1.min.js"></script>
+    <script src="{{ STATIC_URL }}c/main.js"></script>
+</head>
+<body>
+<!--Muestra los grados de giro e inclinación y si es soportado----------------------------------------------------------->
+        <div class="main">
+            <table>
+                <tr>
+                    <td>Soporte: </td>
+                    <td id="doEvent"></td>
+                </tr>
+                <tr>
+                    <td>Dirección: </td>
+                    <td id="doDirection"></td>
+                </tr>
+                 <tr>
+                    <td>Verticalidad: </td>
+                    <td id="doVertical"></td>
+                </tr>
+                <tr>
+                    <td>Horizontalidad: </td>
+                    <td id="doHorizontal"></td>
+                </tr>
+            </table>
+        </div>
+
+<!--Cargamos el estilo--------------------------------------------------------------------------------------------------->
+         <style media="screen">
+        .container {
+          width: 2048px;
+          height: 1500px;
+          border: 1px solid #CCC;
+          margin: 0 auto 60px;
+          position: relative;
+          -webkit-perspective: 600px;
+               perspective: 600px;
+        }
+
+          img{
+          width: 100%;
+          height: 100%;
+          position: absolute;
+        }
+
+     </style>
+            <div id="rotate" class="container">
+                <img src="http://192.168.1.56:8000/media/img/enclosures/Recinto1/floors/27.jpg" id="img" width=100% height=100%>
+            </div>
+
+<!--Muestra los grados de giro e inclinación y si es soportado>
+            <div class="main">
+              <h2>Device Motion</h2>
+              <table>
+                <tr>
+                  <td>Event Supported</td>
+                  <td id="dmEvent"></td>
+                </tr>
+                <tr>
+                  <td>accelerationIncludingGravity</td>
+                  <td id="moAccel"></td>
+                </tr>
+                <tr>
+                  <td>Calculated Left-Right Tilt</td>
+                  <td id="moCalcTiltLR"></td>
+                </tr>
+                <tr>
+                  <td>Calculated Front-Back Tilt</td>
+                  <td id="moCalcTiltFB"></td>
+                </tr>
+              </table>
+            </div----------------------------------------------------------->
+    </body>
+</html>

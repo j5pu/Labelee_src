@@ -1,6 +1,8 @@
 var ua = navigator.userAgent;
 var androidversion = parseFloat(ua.slice(ua.indexOf("Android")+8));
 
+var mySwiper;
+
 /*
 //Pantalla completa
 function hideAddressBar()
@@ -29,11 +31,13 @@ window.addEventListener("orientationchange", hideAddressBar );
 ///	Activación y configuración del menú
 $(function() {
 
-
+//    Logger.initSender();
 
     //SwipeMenu.init();
     ScrollMenu.init();
+    Panorama.init();
 
+    Map.events.bindAll();
 
     var $menu = $('nav#menu-right');
     $menu.mmenu({
@@ -105,7 +109,154 @@ $(function() {
             $('#menu-right').trigger( 'close' );
         }
     );
+
+
+
+    $('button#closeCoupon').on('click', function () {
+        $('div.device').fadeOut(100);
+    });
+
+    mySwiper = new Swiper('.swiper-container', {
+        pagination: '.pagination',
+        loop: true,
+        grabCursor: true,
+//        momentumRatio: 2,
+        paginationClickable: true
+    });
+    $('.arrow-left').on('click', function (e) {
+        e.preventDefault();
+        mySwiper.swipePrev();
+    });
+    $('.arrow-right').on('click', function (e) {
+        e.preventDefault();
+        mySwiper.swipeNext();
+    });
+
+    $('div#page').hide();
+    $('body').prepend('<div class="splash">    <div class="container">        <div class="sp-container"             >            <div class="frame-5"><span><img src="/media/logosplash.png"></span></div>            <div id="find" class="frame-6">find<span id="your"> your<span id="way"> way!</span></span></div>        </div>    </div></div>')
+    setTimeout(hideSplash, 3000);
+
+    $('div.swiper-slide img').on('click', function (e) {
+        e.preventDefault();
+        var cupPoint = parseInt($(this).prop('id')),
+            cupFloor = new PointResource().read(cupPoint).floor,
+            strL = cupFloor.length,
+            cupFloor = parseInt(cupFloor.substring(strL-3, strL-1));
+
+
+        preDrawRoute(qrPoint.point.id, qrFloor.id, cupPoint, cupFloor);
+        $('div.device').fadeOut();
+
+    });
+
 });
+
+
+function hideSplash() {
+    var d = new Date();
+    $('div#page').fadeIn(100);
+    $('div.splash').fadeOut(200);
+    loopFloors(floor_index);
+    LocalStorageHandler.init();
+    $('span#myCar').show();
+}
+
+var Coupon = {
+    opened: false,
+
+    init: function()
+    {
+        Coupon.calculateCouponArea();
+        Coupon.bindOpen();
+    },
+
+
+    bindOpen: function()
+    {
+        $('div#cupones area').on('click', function (ev) {
+            ev.stopPropagation();
+            if (!Coupon.opened)
+            {
+                Coupon.open();
+            }else{
+                Coupon.close();
+            }
+        });
+    },
+
+
+    bindShowFromMarker: function()
+    {
+        $('div.leaflet-popup-content-wrapper').on('click', function (e) {
+            if (e.clientX > $(this).offset().left + 105 &&
+                e.clientY > $(this).offset().top + 45)
+
+            {
+                var imgID=$(this).find('p>button').data('socialmenu'),
+                    myImg="img[id='"+imgID+"']",
+                    myPos=$(myImg).parent()[0].index(this);
+
+//VERSION CORTA
+
+               mySwiper.swipeTo(myPos-1);
+
+
+                e.stopPropagation();
+
+
+//VERSION CORTA
+                 Coupon.open();
+
+
+            }
+
+        });
+    },
+
+
+    open: function()
+    {
+        if(Panorama.opened) Panorama.close();
+
+        $('div.device').fadeIn(100);
+
+        $(document).on('click', function(ev){
+            ev.stopPropagation();
+            if(Coupon.opened &&
+                ($('div.device').has($(ev.target)).length === 0 &&
+                    !$(ev.target).hasClass('device')))
+                Coupon.close();
+        });
+
+        Coupon.opened = true;
+
+    },
+
+
+    calculateCouponArea: function()
+    {
+        var $img = $('img#cupon-img');
+
+        var ancho = $img.width(),
+            alto = $img.height(),
+            vert = 360 / 469 * ancho,
+            imgCoords = "0," + alto + "," + ancho + "," + alto + "," + vert + ",0,0," + alto,
+            $area = $('div#cupones area');
+
+        $area.attr({'coords': imgCoords});
+    },
+
+
+    close: function()
+    {
+        Coupon.opened = false;
+        $('div.device').fadeOut(100);
+    }
+};
+
+
+
+
 
 
 var ScrollMenu = {
@@ -229,4 +380,3 @@ var SwipeMenu = {
             .bind('dragend', self.swipeEnd)
     }
 };
-

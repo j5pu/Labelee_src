@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+
+{% block css%}
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/log/styles.css"/>
+{% endblock css%}
+
+
+
+{% block js%}
+
+    <script src="{{ STATIC_URL }}js/log/logger.js"></script>
+
+    <script>
+        $(function(){
+            Logger.initReceiver();
+        });
+    </script>
+
+{% endblock js%}
+
+
+
+{% block content %}
+
+    <div id="logs"></div>
+
+    <div id="paused">PAUSED</div>
+{% endblock content %}
