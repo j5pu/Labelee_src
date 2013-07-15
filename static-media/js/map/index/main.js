@@ -33,7 +33,7 @@ $(function() {
 
 //    Logger.initSender();
 
-    //SwipeMenu.init();
+    SwipeMenu.init();
     ScrollMenu.init();
     Panorama.init();
 
@@ -323,10 +323,18 @@ var SwipeMenu = {
 
     init: function()
     {
-        this.$swipeTab = $('#menuTab');
-        this.left = this.$swipeTab.position().left;
+        var self = this;
+        self.$swipeTab = $('#header');
+        self.left = self.$swipeTab.position().left;
 
-        this.swipeEvent();
+//        $('#header').trigger('click');
+
+        $('#mmenu-blocker').css({
+            'display': 'block',
+            'margin-left': -91.7 + '%'
+        });
+
+        self.swipeEvent();
     },
 
 
@@ -336,22 +344,27 @@ var SwipeMenu = {
     {
         var self = SwipeMenu;
 
-        var i = this;
-
         self.left_new = self.left + ev.gesture['deltaX'];
         self.$swipeTab.css({
             'left': parseInt(self.left_new) + 'px'
         });
-        $('.mmenu-page').css({
-            'left': parseInt(self.left_new) + 'px'
-        })
+
+
+        $('html.mmenu-left.mmenu-opening .mmenu-page').css({
+            'margin-left': -100 * ($(window).width() / parseInt(self.left_new)) + '%'
+        });
+        $('html.mmenu-left.mmenu-opening #mmenu-blocker').css({
+            'margin-left': -100 * ($(window).width() / parseInt(self.left_new)) + '%'
+        });
+
+        console.log(self.left_new);
     },
 
     swipeEnd: function()
     {
         var self = SwipeMenu;
 
-        var limit = $(document).width() * 0.8;
+        var limit = $(document).width() * 0.65;
         if(self.left_new > limit)
             self.left_new = limit;
         else if(self.left_new < 0 || self.left_new < limit *  0.5)
@@ -364,6 +377,8 @@ var SwipeMenu = {
         self.$swipeTab.css({
             'left': self.left_new + 'px'
         });
+
+        console.log('END: ' + self.left_new);
 
         self.left = self.left_new;
     },

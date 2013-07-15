@@ -266,12 +266,22 @@ var Events = {
         },
 
 
+        _autoGenerateMap: function()
+        {
+            $e.floor.auto_generate.on('click', function(){
+                WaitingDialog.open(gettext('Generating automatic map') + '...');
+                setTimeout(Floor.autoGenerateMap, 100);
+            });
+        },
+
+
         bind: function()
         {
             var self = this;
-            $('#menu *').off();
+            $('#menu *:not(.slider)').off();
             self._changeNumRows();
             self._manageLabel();
+            self._autoGenerateMap();
             self._manageLabelCategory();
             self._selectLabel();
             self._selectLabelCategory();

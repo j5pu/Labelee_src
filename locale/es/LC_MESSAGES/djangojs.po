@@ -8,123 +8,127 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-07-04 17:56+0200\n"
+"POT-Creation-Date: 2013-07-15 17:01+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: \n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: static-media/js/map/index/map.js:114
+#: .\static-media\js\map\index\map.js.c:116
 msgid "Do you want to remember your parking space?"
 msgstr "¿Desea recordar su plaza de parquing?"
 
-#: static-media/js/map/index/map.js:139
+#: .\static-media\js\map\index\map.js.c:135
 msgid "Do you still want to go to the previous destination?"
 msgstr "¿Todavía quieres llegar al destino anterior?"
 
-#: static-media/js/map/index/map.js:188
+#: .\static-media\js\map\index\map.js.c:174
 msgid "PREVIOUS DESTINATION"
 msgstr "DESTINO PREVIO"
 
-#: static-media/js/map/index/map.js:208
+#: .\static-media\js\map\index\map.js.c:192
 msgid "Do you still want to go to"
 msgstr "¿Todavía quieres llegar a"
 
-#: static-media/js/map/index/map.js:363
+#: .\static-media\js\map\index\map.js.c:373
 msgid "Scan a QR code to get here:"
 msgstr "Escanea un código QR para llegar hasta aquí:"
 
-#: static-media/js/map/index/map.js:409
+#: .\static-media\js\map\index\map.js.c:444
 msgid "You are right here:"
 msgstr "Estás justo aquí:"
 
-#: static-media/js/map/index/map.js:427
+#: .\static-media\js\map\index\map.js.c:458
 msgid "Please, scan a QR code to get here:"
 msgstr "Por favor, escanee un código QR para llegar hasta aquí:"
 
-#: static-media/js/map/index/map.js:431
+#: .\static-media\js\map\index\map.js.c:464
 msgid "floor"
 msgstr "planta"
 
-#: static-media/js/map/index/map.js:726
+#: .\static-media\js\map\index\map.js.c:749
 msgid "My car"
 msgstr "Mi coche"
 
-#: static-media/js/map/index/map.js:1024
+#: .\static-media\js\map\index\map.js.c:1041
 msgid "We are sorry, that route does not exist."
 msgstr "Lo sentimos, esa ruta no existe."
 
-#: static-media/js/map_editor/connections/main.js:55
+#: .\static-media\js\map_editor\connections\main.js.c:55
 msgid "No saved connections at the moment for this enclosure"
 msgstr "De momento no hay conexiones guardadas para este recinto"
 
-#: static-media/js/map_editor/connections/main.js:112
+#: .\static-media\js\map_editor\connections\main.js.c:112
 msgid "Delete connection?"
 msgstr "¿Eliminar esta conexión?"
 
-#: static-media/js/map_editor/edit_map/events.js:209
+#: .\static-media\js\map_editor\edit_map\events.js.c:209
 msgid "Updating floor"
 msgstr "Actualizando planta"
 
-#: static-media/js/map_editor/edit_map/floor.js:59
+#: .\static-media\js\map_editor\edit_map\events.js.c:272
+msgid "Generating automatic map"
+msgstr "Generando mapa inteligente"
+
+#: .\static-media\js\map_editor\edit_map\floor.js.c:60
 msgid "blocks"
 msgstr "bloques"
 
-#: static-media/js/map_editor/edit_map/floor.js:508
+#: .\static-media\js\map_editor\edit_map\floor.js.c:507
 msgid "Loading floor grid"
 msgstr "Cargando grid para la planta"
 
-#: static-media/js/map_editor/edit_map/floor.js:580
+#: .\static-media\js\map_editor\edit_map\floor.js.c:583
 msgid "Changing number of rows will erase all points on the floor. Continue?"
 msgstr ""
 "Al cambiar el número de filas se eliminarán todos los puntos. ¿Continuar?"
 
-#: static-media/js/map_editor/edit_map/floor.js:583
-#: static-media/js/map_editor/edit_map/floor.js:595
+#: .\static-media\js\map_editor\edit_map\floor.js.c:586
+#: .\static-media\js\map_editor\edit_map\floor.js.c:598
 msgid "Redrawing grid"
 msgstr "Redibujando grid"
 
-#: static-media/js/map_editor/edit_map/menu.js:82
+#: .\static-media\js\map_editor\edit_map\menu.js.c:82
 msgid "Delete category? (all its labels will be removed)"
 msgstr "¿Eliminar categoría? (se eliminarán todas sus etiquetas)"
 
-#: static-media/js/map_editor/edit_map/menu.js:220
+#: .\static-media\js\map_editor\edit_map\menu.js.c:219
 msgid "Delete label?"
 msgstr "¿Eliminar etiqueta?"
 
-#: static-media/js/map_editor/edit_map/menu.js:363
+#: .\static-media\js\map_editor\edit_map\menu.js.c:364
 msgid "Select category"
 msgstr "Selecc. categoría"
 
-#: static-media/js/map_editor/edit_map/menu.js:384
-#: static-media/js/map_editor/edit_map/menu.js:391
+#: .\static-media\js\map_editor\edit_map\menu.js.c:385
+#: .\static-media\js\map_editor\edit_map\menu.js.c:392
 msgid "Select label"
 msgstr "Selecc. etiqueta"
 
-#: static-media/js/map_editor/edit_map/painter.js:199
+#: .\static-media\js\map_editor\edit_map\painter.js.c:202
 msgid "Change panorama"
 msgstr "Cambiar panorama"
 
-#: static-media/js/map_editor/edit_map/painter.js:199
-#: static-media/js/map_editor/edit_map/painter.js:201
+#: .\static-media\js\map_editor\edit_map\painter.js.c:202
+#: .\static-media\js\map_editor\edit_map\painter.js.c:204
 msgid "Add panorama"
 msgstr "Añadir panorama"
 
-#: static-media/js/map_editor/index/main.js:81
+#: .\static-media\js\map_editor\index\main.js.c:66
 msgid ""
 "Are you sure you want to remove this enclosure? (this will erase all their "
 "floors)"
 msgstr "¿Seguro que desea eliminar este recinto? "
 
-#: static-media/js/map_editor/index/main.js:120
+#: .\static-media\js\map_editor\index\main.js.c:105
 msgid "You must specify the floor image too"
 msgstr "También debe subir la imágen del plano para la planta"
 
-#: static-media/js/map_editor/index/main.js:218
+#: .\static-media\js\map_editor\index\main.js.c:203
 msgid "Are you sure you want to remove this floor?"
 msgstr ""
 "¿Seguro que desea eliminar la planta? (también se perderá toda la "

@@ -8,6 +8,8 @@ $(function(){
 
         //cargamos la planta
         Floor.init();
+
+        Menu.init();
     }, 200);
 
 

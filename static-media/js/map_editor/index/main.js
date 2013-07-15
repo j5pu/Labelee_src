@@ -110,12 +110,10 @@ function FloorsCtrl($scope, $element)
 		// 1: Creamos el registro en B.D.
 		var floor_data = {
 			name : $scope.floor_name,
+			floor_number : parseInt($scope.floor_number),
 			enclosure : $scope.enclosure.resource_uri
-        };
-
-        if($scope.floor_number)
-            floor_data.floor_number = parseInt($scope.floor_number);
-
+		};
+		
 		var new_floor = $scope.floor_resource.create(floor_data);
 		
 		//

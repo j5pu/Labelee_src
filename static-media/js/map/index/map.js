@@ -289,6 +289,8 @@ function loopFloors() {
 
         //Coupon.init();
 
+        Coupon.init();
+
         // fin de loopFloors
         return;
     }

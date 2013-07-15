@@ -241,6 +241,65 @@ function FloorResource()
     };
 
 
+    this.del = function(floor_id, confirm_msg) {
+
+        if (!confirm(confirm_msg))
+            return;
+
+        // Primero eliminamos todos los puntos para el plano, de forma que no
+        // puedan quedar aristas sueltas
+//        var filter = '?floor__id=' + floor_id;
+//        var point_list = new PointResource().readAllFiltered(filter);
+//        new PointResource().deletePoints(point_list);
+
+        // Eliminamos la imágen para el plano
+        //
+        // POR CORREGIR
+//        this.delImg(floor_id);
+
+        // Eliminamos la planta
+        $.ajax({
+            url : this.api1_url + floor_id + '/',
+            type : 'delete',
+            headers : {
+                'Content-Type' : 'application/json'
+            },
+            dataType : 'json', // esto indica que la respuesta vendrá en formato json
+            async : false,
+            success : function(response) {
+                var i = response;
+            },
+            error : function(response) {
+                var j = response;
+            }
+        });
+    };
+
+
+    this.autoGenerateMap = function(floor_id, hough_parameters){
+
+        var get_url = composeGetUrl(this.api2_url + floor_id + "/generate-map", hough_parameters)
+        var lines;
+        $.ajax({
+            url : get_url,
+            type : 'get',
+            headers : {
+                'Content-Type' : 'application/json'
+            },
+            dataType : 'json',
+            async : false,
+            success : function(response) {
+                lines = response;
+            },
+            error : function(response) {
+                var j = response;
+            }
+        });
+
+        return lines
+    };
+
+
     this.renderGrid = function(floor_id){
         // Obtenemos el código html del grid renderizado de lado del servidor para
         // el plano de la planta
@@ -320,8 +379,6 @@ function LabelCategoryResource()
     Resource.call(this, 'label-category');
 
     this.readValidAsPois = function(enclosure_id){
-        // /api-2/label-category/valid/16
-
         return ajaxGetElements(this.api2_url, 'valid/' + enclosure_id);
     };
 }

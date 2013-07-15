@@ -2,7 +2,6 @@ from django.conf.urls.defaults import *
 
 
 # /api-2/..
-
 urlpatterns = patterns('map_editor.api_2',
 
 	# /api-2/map/16/img
@@ -10,6 +9,7 @@ urlpatterns = patterns('map_editor.api_2',
 
     #FLOOR
 	url(r'^floor/(?P<floor_id>.*)/render-grid$', 'resources.floor.render_grid'),
+    url(r'^floor/(?P<floor_id>.*)/generate-map$', 'resources.floor.generate_map'),
 
 
 	# LABEL
@@ -28,6 +28,7 @@ urlpatterns = patterns('map_editor.api_2',
 
     url(r'^url_to_qr/(?P<url>.+)', 'resources.qr_code.generate_qr_from_url'),
 
+	
 	# 	/api-2/grid/1/point/object/*/*..
 		#'(?P<related_resources>(?:\w+/)+)$', 'services.views.get_related'),
 	# http://stackoverflow.com/questions/2360179/django-urls-how-to-pass-a-list-of-items-via-clean-urls/2360415#2360415

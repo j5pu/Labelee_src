@@ -7,6 +7,9 @@ var Painter = {
     erase_mode: false,
     showing_label_info: false,
 
+    BLOCKERS_ID: 1,
+    WALL_ID: 6,
+
 
     //
     // Objeto a pintar en el mapa
@@ -142,8 +145,8 @@ var Painter = {
 
         // Ponemos el bloque de un color según la categoría de la etiqueta..
         block.css({
-            'background': Painter.label.category.color
-//            'opacity': '0.5'
+            'background': Painter.label.category.color,
+            'opacity': '0.5'
         });
 
         // Si la etiqueta tiene imágen se la añadimos escondida para que se muestre
@@ -401,7 +404,16 @@ var Painter = {
     {
         // Setea la etiqueta a pintar con la elegida en el selector
 
-        var label_id = $e.label.selector.val();
+        var label_id;
+
+        // si se le pasa una id de etiqueta entonces hay que sacar categoría y etiqueta
+        if(arguments[0]){
+            Painter.label_category = new LabelCategoryResource().read(arguments[0]);
+            label_id = arguments[1];
+        }
+        else
+            label_id = $e.label.selector.val();
+
         for(var i in Menu.labels)
         {
             var label = Menu.labels[i];

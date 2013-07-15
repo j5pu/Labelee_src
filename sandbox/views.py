@@ -1,10 +1,14 @@
 # Create your views here.
 # -*- coding: utf-8 -*-
+from os import read
+import re
+from django.core.files import File
 
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.http import HttpResponse
 import sys
+from map_editor.models import Floor
 from map_editor.models import Point
 
 
@@ -78,6 +82,12 @@ def i18n(request):
     # else:
     #     return HttpResponse("You prefer to read another language.")
 
+    floor = Floor.objects.get(id=53)
+
+    filename = re.sub(r'^/media', '', floor.img.name)
+
+# a.save()
+    f = floor.img.read()
     return render_to_response('i18n/test.html', context_instance=RequestContext(request))
 
 

@@ -5,6 +5,7 @@ var Floor = {
 
     loading: false,
     updating: false,
+    generating_map: false,
     redrawing_grid: false,
     rows_changing: false,
     show_only_qrs: false,
@@ -491,8 +492,6 @@ var Floor = {
 
         Floor.painted_connectors = [];
 
-        Menu.init();
-
         Events.bindAll();
 
         Floor.loading = false;
@@ -505,7 +504,7 @@ var Floor = {
 
     loadGrid: function()
     {
-        WaitingDialog.open(gettext('Loading floor grid') + '..');
+        WaitingDialog.open(gettext('Loading floor grid') + '...');
 
         Floor.loading = true;
 
@@ -526,12 +525,16 @@ var Floor = {
         Floor.painted_connectors = [];
         Painter.erase_mode = false;
 
-        setTimeout(function(){
-            if(Floor.hasPoints())
-                Floor.loadSaved();
-            else
-                Floor.loadEmpty();
-        }, 200);
+        if (Floor.generating_map){
+            Floor.loadEmpty();
+        } else {
+            setTimeout(function(){
+                if(Floor.hasPoints())
+                    Floor.loadSaved();
+                else
+                    Floor.loadEmpty();
+            }, 200);
+        }
 
     },
 
@@ -595,12 +598,159 @@ var Floor = {
             WaitingDialog.open(gettext('Redrawing grid') + '..');
             setTimeout(Floor.loadEmpty, 200);
         }
+                  
+        Floor.rows_changing = false;
     },
 
     hasPoints: function()
     {
         return Floor.points && Floor.points.length > 0;
+    },
+
+    /*
+    Translates (x,y) real coordinates from an image into block coordinates used in the grid
+     */
+    _translateToBlockXY: function(x,y)
+    {
+        // Transform coordinates to our coordinate system
+        var y = Floor.img.height - y;
+
+        // First transform to grid size (original image has been resized)
+        var x_1 = (x / Floor.img.width) * Floor.grid_width;
+        var y_1 = (y / Floor.img.height) * Floor.grid_height;
+
+        // Then get the block coordinate
+        var x_2 = Math.floor (x_1 / Floor.block_width);
+        var y_2 = Math.floor (y_1 / Floor.block_height);
+
+        return {'x_block' : x_2, 'y_block' : y_2};
+
+    },
+
+    /*
+    Get reasonable increments to traverse lines in the grid
+     */
+    _getLineIncrements : function (point1, point2)
+    {
+        var diff_x = point2.x - point1.x;
+        var diff_y = point2.y - point1.y;
+        var line_length = Math.sqrt (diff_x * diff_x + diff_y * diff_y);
+
+        /* The increment depends on a constant R > 0 to ensure that even when the line presence in a
+         block is short, the block will be considered. Larger values of R assures accuracy but decreases
+         performance
+         Differences in x and y are normalized with the line length
+          */
+        if (diff_x == 0 || diff_y == 0){
+            var R = 1 // horizontal or vertical line, just increment the block size
+        } else {
+            var R = 5 // allow more precision
+        }
+        var delta_x = (diff_x / line_length) * Floor.block_width / R;
+        var delta_y = (diff_y / line_length) * Floor.block_height / R;
+
+        return {'x': delta_x, 'y': delta_y};
+
+    },
+
+    /*
+    Checks whether a point is still inside a line
+     */
+    _isInsideLine: function (x, y, increments, line)
+    {
+        if (increments.x > 0)
+        {
+            if (x > line.point2.x)
+            {
+                return false;
+            }
+        }
+        else
+        {
+            if (x < line.point2.x)
+            {
+                return false;
+            }
+        }
+
+        if (increments.y > 0)
+        {
+            if (y > line.point2.y)
+            {
+                return false;
+            }
+        }
+        else
+        {
+            if (y < line.point2.y)
+            {
+                return false;
+            }
+        }
+
+        return true;
+    },
+
+    autoGenerateMap: function()
+    {
+        Floor.generating_map = true;
+
+        // Save previous selected category and POI
+        var previous_label = Painter.label;
+        var previous_category = Painter.label_category;
+
+        Painter.setLabel(Painter.BLOCKERS_ID, Painter.WALL_ID);
+
+        Floor.loadGrid();
+
+        hough_parameters = {
+            canny1: $e.floor.slider_canny.slider("values", 0),
+            canny2: $e.floor.slider_canny.slider("values", 1),
+            threshold: $e.floor.slider_threshold.slider("value"),
+            length: $e.floor.slider_line_length.slider("value"),
+            gap: $e.floor.slider_gap.slider("value")
+        }
+
+        var lines = new FloorResource ().autoGenerateMap(floor_id, hough_parameters);
+
+        for (i = 0; i < lines.length; ++i)
+        {
+            // Protection against one-point lines. They are not displayed
+            if (lines[i].point1.x == lines[i].point2.x && lines[i].point1.y == lines[i].point2.y)
+            {
+                continue;
+            }
+
+            var increments = Floor._getLineIncrements (lines[i].point1, lines[i].point2);
+
+            // Loop through the points in the line
+            var previous_block = {'x_block': -1, 'y_block': -1}
+            for (x = lines[i].point1.x, y = lines[i].point1.y;
+                 Floor._isInsideLine (x, y, increments, lines[i]);
+                 x += increments.x, y += increments.y)
+            {
+
+                var block_coordinate = Floor._translateToBlockXY (x,y);
+                if (block_coordinate.x_block != previous_block.x_block ||
+                    block_coordinate.y_block != previous_block.y_block)
+                {
+                    var block = Floor.findBlock (block_coordinate.y_block, block_coordinate.x_block);
+                    Painter.paintLabel(block);
+                }
+                previous_block = block_coordinate;
+
+            }
+        }
+
+        Floor.generating_map = false;
+
+        // Recover old category and label
+        Painter.label = previous_label;
+        Painter.label_category = previous_category;
+
+        WaitingDialog.close();
     }
+
 };
 
 
