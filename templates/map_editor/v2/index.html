@@ -62,7 +62,8 @@
                            ng-click="show_edit_form()"></i>
                     </div>
                     <h4 ng-show="enclosure.twitter_account">@[[enclosure.twitter_account]]</h4>
-                    <div class="poi_count">{% trans "Número de POIS:" %} [[enclosure.poi_count]]</div>
+                    <div class="poi_count">{% trans "Número de POIS/QRs:" %} [[enclosure.poi_count]]</div>
+                    <div class="floor_count">{% trans "Número de plantas:" %} [[enclosure.floors.length]]</div>
 
                     <div class="btn-group">
                         <a class="btn link-2" ng-click="calculateRoutes()">
