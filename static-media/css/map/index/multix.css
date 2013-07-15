@@ -460,7 +460,8 @@ border-radius: 0 6px 6px 0;
 }
 
 #header a img {
-    width: 50%;
+    width: 53%;
+    margin-top: 1px;
 }
 span#fake{
     bottom:0;
