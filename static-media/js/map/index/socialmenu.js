@@ -1,18 +1,52 @@
+/*
+** Loads Facebook Javascript SDK. Currently interaction with Facebook is performed via URL
+** If needed, we can go back to the complete API by uncommenting this block
+** Watch out! Facebook div must be included in index.html as well
+**
+
+
+$(document).ready(function() {
+
+    window.fbAsyncInit = function() {
+    // init the FB JS SDK
+    FB.init({
+      appId      : SocialMenu.FACEBOOK_APP_ID              // App ID from the app dashboard
+      //channelUrl : '//WWW.YOUR_DOMAIN.COM/channel.html', // Channel file for x-domain comms
+      status     : true,                                 // Check Facebook Login status
+      xfbml      : true                                  // Look for social plugins on the page
+    });
+
+    // Additional initialization code such as adding Event Listeners goes here
+  };
+
+  // Load the SDK asynchronously
+  (function(d, s, id){
+     var js, fjs = d.getElementsByTagName(s)[0];
+     if (d.getElementById(id)) {return;}
+     js = d.createElement(s); js.id = id;
+     js.src = "//connect.facebook.net/en_US/all.js";
+     fjs.parentNode.insertBefore(js, fjs);
+   }(document, 'script', 'facebook-jssdk'));
+
+});
+*/
+
 var SocialMenu = {
 
     opened: false,
     urlstring: location.origin + '/map/dest/',
+    FACEBOOK_APP_ID: 151420028386535,
 
     renderIcon: function (pointId) {
 
 
-        return '<p align="center"><button class="socialmenu" style=" left:0px; margin: 0%;" onclick="SocialMenu.fbs_click(' + pointId + ')" data-socialmenu="' + pointId + '">' +
+        return '<g:plus action="share"></g:plus>' + '<p align="center" id="socialsharing" ><button class="socialmenu" style=" left:0px; margin:0 -2px;" onclick="SocialMenu.fbs_click(' + pointId + ')" data-socialmenu="' + pointId + '">' +
             '<i class="icon-facebook-sign"></i>' +
             '</button>' +
-            '<button class="socialmenu" style=" left:0px; margin: 0%;"  onclick="SocialMenu.twt_click(' + pointId + ')" data-socialmenu="' + pointId + '">' +
+            '<button class="socialmenu" style=" left:0px; margin:0 -2px;"  onclick="SocialMenu.twt_click(' + pointId + ')" data-socialmenu="' + pointId + '">' +
             '<i class="icon-twitter-sign"></i>' +
             '</button>' +
-            '<button class="socialmenu" style=" left:0px; margin: 0%;" onclick="SocialMenu.google_click(' + pointId + ')" data-socialmenu="' + pointId + '">' +
+            '<button class="socialmenu" style=" left:0px; margin:0 -2px;" onclick="SocialMenu.google_click(' + pointId + ')" data-socialmenu="' + pointId + '">' +
             '<i class="icon-google-plus-sign"></i>' +
             '</button></p>'
 
@@ -86,12 +120,34 @@ var SocialMenu = {
     fbs_click: function (point) {
 
         var information = SocialMenu.getShareInformation(point);
-        window.open('http://www.facebook.com/sharer.php?u=' + encodeURIComponent(information[0]) + '&t=' + encodeURIComponent(information[1]), 'sharer', 'toolbar=0,status=0,width=626,height=436');
 
+        window.open('https://www.facebook.com/dialog/feed?' +
+            'app_id=' + SocialMenu.FACEBOOK_APP_ID +
+            '&link=' + information[0] +
+            '&picture=' + location.origin + '/media/labelee-square-logo.png' +
+            '&caption=' + information[1] +
+            '&name=Labelee' +
+            '&redirect_uri=' + document.URL,
+            'sharer', 'toolbar=0,status=0,width=900,height=436');
+
+        // Uncomment to use Javascript SDK instead of URL call to API
+/*        FB.ui({
+            method: 'feed',
+            link: information[0],
+            picture: location.origin + '/media/labelee-square-logo.png',
+            name: 'Labelee',
+            caption: information[1]
+            //description: '',
+        }, function(response){});*/
 
     },
     google_click: function (point) {
         var information = SocialMenu.getShareInformation(point);
+
+        // Not used at the moment !!!!
+        // Schema properties necessary to customize Google+ share
+        //$('#snippet_description').prop('content', information[1]);
+
         window.open('https://plus.google.com/share?url=' + encodeURIComponent(information[0]), 'sharer', 'toolbar=0,status=0,width=626,height=436');
     },
     twt_click: function (point) {
@@ -122,7 +178,7 @@ var SocialMenu = {
         }
         var enclosure = enclosure_id;
         url = SocialMenu.urlstring + enclosure + '_' + floor + '_' + pointId;
-        urlTitle = 'would you like to go to ' + description + '?';
+        urlTitle = 'Click here to go to ' + description;
         var result = new Array();
         result[0] = url;
         result[1] = urlTitle;
@@ -130,6 +186,42 @@ var SocialMenu = {
     }
 
 };
+
+
+/*
+$(document).ready(function() {
+
+	if (Modernizr.touch) {
+
+
+			*/
+/* ok we have a touch device so we will grab the touch events now *//*
+
+			$(".navi").click(function() {
+				*/
+/* for the first ul which is our list of other items display it *//*
+
+				$(".n1").show();
+                $(".n2").show();
+                $(".n3").show();
+                $(".n4").show();
+                //$(".n6").hide();
+			});
+
+			*/
+/* if the user touches the content of the page then hide all the nav items *//*
+
+			$("#content").click(function() {
+				$(".n1").hide();
+                $(".n2").hide();
+                $(".n3").hide();
+                $(".n4").hide();
+                //$(".n6").show();
+            })
+	}
+
+});
+*/
 
 
 

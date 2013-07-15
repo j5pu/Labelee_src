@@ -8,13 +8,7 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        # Deleting field 'Point.alwaysVisble'
-        db.delete_column(u'map_editor_point', 'alwaysVisble')
-
-        # Adding field 'Point.alwaysVisible'
-        db.add_column(u'map_editor_point', 'alwaysVisible',
-                      self.gf('django.db.models.fields.NullBooleanField')(null=True, blank=True),
-                      keep_default=False)
+        pass
 
 
     def backwards(self, orm):

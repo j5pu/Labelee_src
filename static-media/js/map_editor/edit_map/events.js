@@ -198,7 +198,7 @@ var Events = {
         {
             // Muestra en el plano el QR sobre el que hacemos click en la lista
 
-            var a = $e.qr.list.find('a');
+            var a = $e.qr.list.find('a.point');
             a.on('click', Menu.showQR)
         },
 

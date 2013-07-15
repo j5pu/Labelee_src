@@ -1,4 +1,5 @@
 {% load i18n %}
+{% load map_tags %}
 
 <!DOCTYPE html>
 <html>
@@ -10,7 +11,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes"/>
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
 
-    <link href="http://fonts.googleapis.com/css?family=Noto+Sans|Just+Me+Again+Down+Here" rel="stylesheet"
+    <link href="http://fonts.googleapis.com/css?family=Raleway|Noto+Sans|Just+Me+Again+Down+Here" rel="stylesheet"
           type="text/css">
 
     <link rel="stylesheet" href="{{ STATIC_URL }}vendor/leaflet/leaflet.css"/>
@@ -26,11 +27,18 @@
     <link rel="stylesheet" href="{{ STATIC_URL }}css/map/index/idangerous.swiper.css">
 
 
+
+
+{% comment %}
+    <script src="http://192.168.1.150:8500/aardwolf.js" type="text/javascript"></script>
+{% endcomment %}
+
     <script src="{% url 'django.views.i18n.javascript_catalog' %}"></script>
     <script src="{{ STATIC_URL }}vendor/leaflet/plugins/scale.fix.js"></script>
     <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>
     <script>window.jQuery || document.write('<script src="{{ STATIC_URL }}vendor/jquery-2.0.3.min.js"><\/script>')</script>
     <!--script src="{{ STATIC_URL }}vendor/jquery-1.10.2.min.js"></script-->
+    <!--script src="{{ STATIC_URL }}vendor/jquery-1.9.1.min.js"></script-->
 
     <!--script src="{{ STATIC_URL }}vendor/hammer.js_v1.0.3/dist/hammer.min.js"></script-->
     <script src="{{ STATIC_URL }}vendor/hammer.js_v1.0.3/dist/jquery.hammer.min.js"></script>
@@ -41,7 +49,7 @@
 
     <!--script type="text/javascript" src="http://code.jquery.com/jquery-1.9.1.min.js"></script-->
     <!--script src="http://cdn.leafletjs.com/leaflet-0.5.1/leaflet.js"></script-->
-    <!-- <script>L_PREFER_CANVAS = true;</script>-->
+    <!--script>L_PREFER_CANVAS = true;</script-->
     <script src="{{ STATIC_URL }}vendor/leaflet/leaflet.js"></script>
     <!--script src="{{ STATIC_URL }}vendor/leaflet/plugins/bouncemarker.js"></script-->
     <script src="{{ STATIC_URL }}vendor/leaflet/plugins/leaflet.awesome-markers.js"></script>
@@ -53,7 +61,7 @@
     <!--script src="{{ STATIC_URL }}vendor/leaflet/plugins/leaflet-search.js"></script-->
     <script src="{{ STATIC_URL }}vendor/leaflet/plugins/leaflet.label.js"></script>
     <script src="{{ STATIC_URL }}vendor/leaflet/plugins/jquery.mmenu.js"></script>
-    <script src="{{ STATIC_URL }}vendor/leaflet/plugins/idangerous.swiper-2.0.min.js"></script>
+   <script src="{{ STATIC_URL }}vendor/leaflet/plugins/idangerous.swiper-2.0.min.js"></script>
     <script type="text/javascript"
             src="{{ STATIC_URL }}vendor/leaflet/plugins/jquery.ba-outside-events.min.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}vendor/leaflet/plugins/ddpanorama.js"></script>
@@ -61,10 +69,15 @@
     <script src="{{ STATIC_URL }}js/helpers/base.js"></script>
     <script src="{{ STATIC_URL }}js/helpers/ajax_helpers.js"></script>
     <script src="{{ STATIC_URL }}js/helpers/resource.js"></script>
+    <script src="{{ STATIC_URL }}js/log/logger.js"></script>
 
+{#    {% include "_aardwolf.html" %}#}
 
     <script src="{{ STATIC_URL }}js/map/index/main.js"></script>
-    <script src="{{ STATIC_URL }}js/map/index/social.network.menu.js"></script>
+{% comment %}
+        <script src="http://192.168.1.150:8500/main.js" type="text/javascript"></script>
+{% endcomment %}
+
     <script src="{{ STATIC_URL }}js/map/index/modernizr.js"></script>
 
     <script>
@@ -87,15 +100,16 @@
 
 </head>
 
-
 <body>
+
+{% csrf_token %}
 
 
 <div id="page">
 
     <div id="header">
         <a href="#menu-right">
-            <img src="{{ STATIC_URL }}css/map/index/images/logo.png"/>
+            <img src="/media/logomenu.png"/>
         </a>
         <!--
         <span id="fake"></span>
@@ -112,6 +126,8 @@
         var qr_type = "{{ qr_type }}";
     </script>
     <script src="{{ STATIC_URL }}js/map/index/map.js"></script>
+{#    <script src="http://192.168.1.150:8500/map.js" type="text/javascript"></script>#}
+
 
     <nav id="menu-right">
         <!--
@@ -124,7 +140,7 @@
 
             {% for category in categories %}
                 <li>
-                <li class="Label">{{ category.name }}</li>
+                <li class="Label" style="background:{{colors|get_item:category.name}};">{{ category.name }}</li>
                 {% for destination in category.items %}
                     <li onclick="$('#menu-right').trigger( 'close' );preDrawRoute({{ poi_id }},floor_id,{{ destination.id }},{{ destination.floor_id }})">{{ destination.description }}</li>
                 {% endfor %}
@@ -143,13 +159,11 @@
     <!--span class="locator" id="myCar"><i class="icon-truck icon-white"></i></span-->
     <span class="locator icon-automobile" id="myCar"></span>
 
-{% comment %}
-    <div id="cupones">
+ {% comment %}   <div id="cupones">
         <a href="#">
             COUPONS
         </a>
-    </div>
-{% endcomment %}
+    </div>{% endcomment %}
     <div id="cupones">
         <img id="cupon-img" src="/media/cupones_lab.png"
              alt="Cupones" usemap="#cupon">
@@ -158,7 +172,6 @@
         </map>
 
     </div>
-
     <div class="device">
         <a class="arrow-left" href="#"></a>
         <a class="arrow-right" href="#"></a>
@@ -166,25 +179,18 @@
 
         <div class="swiper-container">
             <div class="swiper-wrapper">
-                <div class="swiper-slide">
-{#                    <p class="title">LA BOTELLITA</p>#}
-{#                    <p>Oferta 3 x 2, ¡solo hasta las 20.00h!</p>#}
-{#                    <button id="cup1">PULSA AQUÍ</button>#}
+                 {% for point,img in coupons.items %}
 
-                    <img id="cup1" src="/media/cup1.jpg">
-                </div>
-                <div class="swiper-slide">
-                    <img id="cup2" src="/media/cup2.jpg">
-                </div>
-                <div class="swiper-slide">
-                    <img id="cup3"src="/media/ingles.jpg">
-                </div>
+                   <div class="swiper-slide">
+                    <img id="{{ point }}" class="cupImg" src="{{ img }}">
+                   </div>
+                {% endfor %}
+
             </div>
 
         </div>
         <div class="pagination"></div>
     </div>
-
 
     <div style="background: rgb(17, 17, 17); background:rgba(17, 17, 17, 0.4); padding:0">
         <marquee align="center" direction="left" loop="40"

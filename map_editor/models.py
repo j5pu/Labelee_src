@@ -9,6 +9,9 @@ CATEGORIAS_FIJAS = {
     1: 'Aristas',
     2: 'Intermedias',
     3: 'Parquing',
+    4: 'Intermediate',
+    5: 'Blockers',
+    6: 'Connectors'
 }
 
 
@@ -141,6 +144,11 @@ def get_panorama_path(instance, filename):
     fileName, fileExtension = os.path.splitext(filename)
     return 'img/enclosures/%s/panoramas/%s%s' % (instance.floor.enclosure.id, instance.id, fileExtension)
 
+def get_coupon_path(instance, filename):
+    fileName, fileExtension = os.path.splitext(filename)
+    return 'img/enclosures/%s/coupons/%s%s' % (instance.floor.enclosure.id, instance.id, fileExtension)
+
+
 def get_panorama_thumbnail_path(instance, filename):
     fileName, fileExtension = os.path.splitext(filename)
     return 'img/enclosures/%s/panoramas/thumbnails/%s%s' % (instance.floor.enclosure.id, instance.id, fileExtension)
@@ -152,6 +160,7 @@ class Point(models.Model):
     col = models.PositiveIntegerField(null=True, blank=True)
     panorama = models.FileField(upload_to=get_panorama_path, null=True, blank=True)
     panorama_thumbnail = models.FileField(upload_to=get_panorama_thumbnail_path, null=True, blank=True)
+    coupon=models.FileField(upload_to=get_coupon_path,null=True, blank=True)
     label = models.ForeignKey(Label, related_name='points', on_delete=models.CASCADE)
     floor = models.ForeignKey(Floor, related_name='points', on_delete=models.CASCADE)
     alwaysVisible = models.NullBooleanField()

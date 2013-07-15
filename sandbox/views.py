@@ -27,6 +27,12 @@ def test(request):
 def directives(request):
     return render_to_response('angularjs/directives/directives.html', context_instance=RequestContext(request))
 
+def c(request):
+    return render_to_response('c/index.html', context_instance=RequestContext(request))
+
+def d(request):
+    return render_to_response('d/index.html', context_instance=RequestContext(request))
+
 
 def show_vinfo(request):
     import os

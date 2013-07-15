@@ -25,6 +25,9 @@ urlpatterns = patterns('map_editor.api_2',
 	url(r'^point/update-from-list', 'resources.point.update_from_list'),
 	url(r'^point/delete-from-list', 'resources.point.delete_from_list'),
 	url(r'^point/pois/(?P<floor_id>\d+)$', 'resources.point.readOnlyPois'),
+
+    url(r'^url_to_qr/(?P<url>.+)', 'resources.qr_code.generate_qr_from_url'),
+
 	
 	# 	/api-2/grid/1/point/object/*/*..
 		#'(?P<related_resources>(?:\w+/)+)$', 'services.views.get_related'),

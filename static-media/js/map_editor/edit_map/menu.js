@@ -326,6 +326,7 @@ var Menu = {
 
     setQrList: function()
     {
+
         // Rellena la lista de QRs creados para la planta
 
         var list = $e.qr.list;
@@ -337,11 +338,16 @@ var Menu = {
         for(var i in Menu.qr_list)
         {
             var qr = Menu.qr_list[i];
+            var url_to_code = location.origin + '/map/origin/' + qr.code;
             list.append(
                 '<li>' +
-                    '<a href="#" ' +
+                    '<a href="#" class="point"' +
                     'data-point-row="' + qr.point.row + '"' +
-                    'data-point-col="' + qr.point.col + '">' + qr.code + '</a>' +
+                    'data-point-col="' + qr.point.col + '">' + qr.code + '</a>' + ' - ' +
+                    '<a href="javascript:void(window.open(\''+ location.origin +'/api-2/url_to_qr/' + url_to_code +
+                    '\',\'mywindowtitle\',\'width=250,height=250\'))">Preview</a>' + ' - ' +
+                    '<a href="'+location.origin+'/api-2/url_to_qr/' + url_to_code + '" download="' + qr.code + '">' +
+                    ' Download ' + '</a>' +
                 '</li>'
             );
         }

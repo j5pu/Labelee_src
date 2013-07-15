@@ -30,7 +30,7 @@ html.mmenu-opened body
 .mmenu *
 {
     -webkit-text-size-adjust: none;
-    font-family: 'Noto Sans', Arial, Helvetica, Garuda, sans-serif;
+    font-family: 'Raleway', 'Noto Sans', Arial, Helvetica, Garuda, sans-serif;
     font-size: 14px;
 }
 .mmenu ul,
@@ -284,7 +284,6 @@ html.mmenu-right .mmenu a.mmenu-subopen
 {
     background: #444;
     font-size: 14px;
-    color: #ccc;
     text-transform: uppercase;
     line-height: 20px;
 }
@@ -377,7 +376,7 @@ body {
     }
 body, div, p
 {
-    font-family: 'Noto Sans', Arial, Helvetica, Verdana;
+    font-family: 'Raleway','Noto Sans', Arial, Helvetica, Verdana;
     font-size: 14px;
     line-height: 22px;
     color: #333;
@@ -461,7 +460,8 @@ border-radius: 0 6px 6px 0;
 }
 
 #header a img {
-    margin-top: 5px;
+    width: 53%;
+    margin-top: 2px;
 }
 span#fake{
     bottom:0;
@@ -674,12 +674,13 @@ label > span {
     left: 12px;
     font-size: 14px;
     font-weight: bold;
+    text-shadow: 1px 1px 1px #bbb;
 }
 
 .leaflet-control-layers-base span{
     margin-left:1px;
     font-size: 17px;
-    text-shadow: 1px 1px 1px #bbb;
+
 }
 span>span{
     color: green;
@@ -796,10 +797,11 @@ box-shadow: 0 0 15px rgba( 0, 0, 0, 0.2 );
 }
 .mmenu li
 {
-    border-top-color: #fff;
-    border-bottom-color: #ddd;
+    border-top-color:#F2EFE4;
+    border-bottom-color: #F2EFE4;
     position: relative;
     padding-left: 1em;
+    color: rgb(111, 107, 97);
 }
 .mmenu li > a,
 .mmenu li > span,
@@ -822,9 +824,10 @@ box-shadow: 0 0 15px rgba( 0, 0, 0, 0.2 );
 }
 .mmenu li.mmenu-label
 {
-    background: #cfcfcf;
-    color: #999;
-    border-color: #cfcfcf;
+    text-shadow: 1px 1px 1px #bbb;
+    color: white;
+    border-color: #F2EFE4;
+    border-bottom: 2px;
 }
 .mmenu a.mmenu-subopen:after,
 .mmenu a.mmenu-subclose:before
@@ -873,7 +876,7 @@ span.locator
     display: inline-block;
     text-align: center;
     line-height: 31px;
-    margin-left: 2px;
+    margin-left: 3px;
     margin-top: 11px;
     text-shadow: 1px 1px 1px #aaa;
 }
@@ -997,6 +1000,7 @@ body{
 }
 
 */
+/*
 
 .leaflet-popup-content-wrapper,.leaflet-popup-tip-container  {
     border: .5px solid #000;
@@ -1005,6 +1009,7 @@ body{
 .leaflet-popup-tip-container {
 border-top: white;
 }
+*/
 
 div#cupones{
     position: absolute;
@@ -1141,13 +1146,15 @@ button{
     background-color: transparent;
     color:#333;
 }
-
+button.panorama{
+    padding: 0px 3px;
+}
 .leaflet-top{
     z-index:6;
 }
 
 .leaflet-right .leaflet-control {
-    margin-right: 6px;
+    margin-right: 8px;
 }
 
 button#closeCoupon {
@@ -1155,7 +1162,7 @@ position: absolute;
 
 top: 0;
 right:-4px;
-margin: 6%;
+margin: 2%;
 font-size:1.2em;
 color:rgba(255, 255, 255, 0.8);
 }
@@ -1189,13 +1196,76 @@ color:rgba(255, 255, 255, 0.8);
     content: "\32";
 }
 
+
+.icon-smile:before {
+    content: "\f182|\f183";
+}
 *:focus{
     outline:none;
 }
 
+img[id*=pano]{
+    height:200%;
+    width: auto;
+}
+
+.leaflet-popup-content
+{
+    margin: 1px 12px;
+    font-size: 13px;
+    padding: 1px 8px;
+}
+
+.socialmenu {
+    font-size: 21px;
+}
+.leaflet-popup-tip{
+    width: 10px;
+    height: 12px;
+}
+
+.leaflet-popup-content-wrapper {
+    height: 50px;
+    width: auto;
+}
+
+.withCoupon:after {
+    content: 'COUPON!';
+    right: -70%;
+    bottom: 0px;
+    background: orange;
+    border: 3px solid crimson;
+    padding: 4px;
+    color: white;
+    font-weight: bolder;
+    border-radius: 8px;
+    position: relative;
+    text-align: center;
+    font-size: 10px !important;
+    cursor:pointer;
+}
+
+.icon-gamepad, .icon-glass {
+    margin-left: -1px;
+}
+.icon-film {
+    margin-left: -1px;
+}
+
+.icon-location-arrow{
+    margin-left: -1px;
+    bottom: -2px;
+    position: relative;
+}
+
+img.cupImg{
+    width: 200px;
+    height: 100px;
+}
+/*
 @media only screen and (min-width: 320px) {
     canvas
     {
         width: 74% !important;
     }
-}
+}*/
