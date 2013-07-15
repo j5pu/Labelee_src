@@ -175,7 +175,12 @@ var Coupon = {
     {
         $('div#cupones area').on('click', function (ev) {
             ev.stopPropagation();
-            Coupon.open();
+            if (!Coupon.opened)
+            {
+                Coupon.open();
+            }else{
+                Coupon.close();
+            }
         });
     },
 
