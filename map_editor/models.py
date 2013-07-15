@@ -9,6 +9,9 @@ CATEGORIAS_FIJAS = {
     1: 'Aristas',
     2: 'Intermedias',
     3: 'Parquing',
+    4: 'Intermediate',
+    5: 'Blockers',
+    6: 'Connectors'
 }
 
 

@@ -58,7 +58,7 @@ def threadCalculateRoute(enclosure_id):
             if hasattr(point, 'qr_code'):
                 qrlist.append(point.qr_code)
 
-            if point.label.category.name.upper() in CATEGORIAS_FIJAS[0].upper():
+            if point.label.category.name.upper() in CATEGORIAS_FIJAS[0].upper() or point.label.category.name.upper() in CATEGORIAS_FIJAS[5].upper():
                 walls.append(Dijkstra.getKey(point.row, point.col, point.floor.id))
 
             pmapconnections = Connection.objects.filter(init__id=point.id)
@@ -77,32 +77,40 @@ def threadCalculateRoute(enclosure_id):
         errors.append('Se ha producido un error al intentas calcular las rutas')
 
     try:
-        with transaction.commit_on_success():
-            for path in paths:
-                origin = path[0]
-                destination = path[1]
-                steps = path[2][1]
-                calculatedRoute = Route()
-                calculatedRoute.origin = origin.point
-                calculatedRoute.destiny = destination.point
-                calculatedRoute.save()
-                for index in range(1, len(steps)):
-                    routeStep = Step()
-                    stepElements = steps[index].split('_')
-                    routeStep.row = stepElements[0]
-                    routeStep.column = stepElements[1]
-                    routeStep.step_number = index
-                    routeStep.step_category = routeStep.NORMAL
-                    routeStep.floor = floors.filter(id=stepElements[2])[0]
-                    routeStep.route = calculatedRoute
-                    routeStep.save()
-    except Exception as ex:
-        errors.append('Se ha producido un error al insertar los datos en la BBDD')
-    mensaje='Se ha realizado la operación correctamente'
-    if len(errors) > 0:
-        mensaje = 'Se han producido los siguientes errores: '
-        for error in errors:
-            mensaje += error + '--'
+        email = EmailMessage('Calculo de rutas','Se ha terminado de calcular falta la BBDD', to=['alvaro.gutierrez@mnopi.com'])
+        email.send()
+    except:
+        pass
+
+    if len(errors) <= 0:
+
+        try:
+            with transaction.commit_on_success():
+                for path in paths:
+                    origin = path[0]
+                    destination = path[1]
+                    steps = path[2][1]
+                    calculatedRoute = Route()
+                    calculatedRoute.origin = origin.point
+                    calculatedRoute.destiny = destination.point
+                    calculatedRoute.save()
+                    for index in range(1, len(steps)):
+                        routeStep = Step()
+                        stepElements = steps[index].split('_')
+                        routeStep.row = stepElements[0]
+                        routeStep.column = stepElements[1]
+                        routeStep.step_number = index
+                        routeStep.step_category = routeStep.NORMAL
+                        routeStep.floor = floors.filter(id=stepElements[2])[0]
+                        routeStep.route = calculatedRoute
+                        routeStep.save()
+        except Exception as ex:
+            errors.append('Se ha producido un error al insertar los datos en la BBDD. Error:'+ ex.message)
+        mensaje='Se ha realizado la operación correctamente'
+        if len(errors) > 0:
+            mensaje = 'Se han producido los siguientes errores: '
+            for error in errors:
+                mensaje += error + '--'
 
     try:
         email = EmailMessage('Informe cálculo de rutas',mensaje, to=['alvaro.gutierrez@mnopi.com'])
