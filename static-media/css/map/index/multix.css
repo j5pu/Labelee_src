@@ -1248,13 +1248,18 @@ img[id*=pano]{
     margin-left: -1px;
 }
 .icon-film {
-    margin-left: -2px;
+    margin-left: -1px;
 }
 
 .icon-location-arrow{
     margin-left: -1px;
     bottom: -2px;
     position: relative;
+}
+
+img.cupImg{
+    width: 200px;
+    height: 100px;
 }
 /*
 @media only screen and (min-width: 320px) {

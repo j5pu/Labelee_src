@@ -15,13 +15,15 @@ def read_only_valid_categories(request, enclosure_id):
     label_categories = LabelCategory.objects.filter(
         labels__points__floor__enclosure__id = enclosure_id
     ).exclude(
-        name = 'Bloqueantes'
+        name_es = 'Bloqueantes'
     ).exclude(
-        name = 'Intermedias'
+        name_es = 'Aseos'
     ).exclude(
-        name = 'Parquing'
+        name_es = 'Intermedias'
     ).exclude(
-        name = 'Pasillo Parking'
+        name_es = 'Parquing'
+    ).exclude(
+        name_es = 'Pasillo Parking'
     ).annotate(total=Sum('id'))
 
 

@@ -412,7 +412,11 @@ function loadPOIs() {
 
             if (isCategoryVisibleOnButtons(floors[fl].pois[j].marker.category_es))
                 totalPois.addLayer(floors[fl].pois[j].marker);
+
+            if (isPoiVisibleByDefault(floors[fl].pois[j].marker.category_es))
+                floors[fl].layer.addLayer(floors[fl].pois[j].marker);
         }
+
 
         // Cada label es un conjunto de POIs (restaurantes, cines..)
         for (var la in floors[fl].labels) {
@@ -950,11 +954,12 @@ function isCategoryVisibleOnButtons(categ_name)
     return categ_name !== "Parquing" &&
         categ_name !== "Bloqueantes" &&
         categ_name !== "Aristas" &&
-        categ_name !== "Aseos" &&
-        categ_name !== "Parking" &&
-        categ_name !== "Blockers" &&
-        categ_name !== "Connectors" &&
-        categ_name !== "Toilets";
+        categ_name !== "Aseos";
+}
+
+function isPoiVisibleByDefault(categ_name)
+{
+    return categ_name == "Aristas" || categ_name == "Aseos";
 }
 
 
@@ -1154,7 +1159,7 @@ function bindContent(marker)
     // Se bindea el contenido del popup abierto para el marker
     Panorama.bindShow(marker);
     SocialMenu.bindShow(marker);
-    Coupon.bindShowFromMarker(marker);
+    Coupon.bindShowFromMarker();
 
     marker.contentBinded = true;
 }

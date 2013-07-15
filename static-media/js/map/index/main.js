@@ -1,6 +1,8 @@
 var ua = navigator.userAgent;
 var androidversion = parseFloat(ua.slice(ua.indexOf("Android")+8));
 
+var mySwiper;
+
 /*
 //Pantalla completa
 function hideAddressBar()
@@ -114,10 +116,11 @@ $(function() {
         $('div.device').fadeOut(100);
     });
 
-   var mySwiper = new Swiper('.swiper-container', {
+    mySwiper = new Swiper('.swiper-container', {
         pagination: '.pagination',
         loop: true,
         grabCursor: true,
+//        momentumRatio: 2,
         paginationClickable: true
     });
     $('.arrow-left').on('click', function (e) {
@@ -184,54 +187,20 @@ var Coupon = {
                 e.clientY > $(this).offset().top + 45)
 
             {
-                var itemsToRemove = Math.floor($('div.swiper-wrapper .swiper-slide').length/2);
-                $('div.swiper-wrapper').find('div.swiper-slide:nth-last-child(-n+'+itemsToRemove+')').remove();
                 var imgID=$(this).find('p>button').data('socialmenu'),
                     myImg="img[id='"+imgID+"']",
                     myPos=$(myImg).parent()[0].index(this);
 
-                var innerSwiper = new Swiper('.swiper-container', {
-                    pagination: '.pagination',
-                    loop: true,
-                    grabCursor: true,
-                    paginationClickable: true,
-                    initialSlide:myPos
-                });
-                $('.arrow-left').on('click', function (e) {
-                    e.preventDefault();
-                    innerSwiper.swipePrev();
-                });
-                $('.arrow-right').on('click', function (e) {
-                    e.preventDefault();
-                    innerSwiper.swipeNext();
-                });
+//VERSION CORTA
+
+               mySwiper.swipeTo(myPos-1);
+
 
                 e.stopPropagation();
-                //Coupon.open();
-                $('div.device').fadeIn(100);
-                $(document).on('click', function(ev){
-                    ev.stopPropagation();
-                    //console.log('click: '+ Coupon.opened);
-                    if(Coupon.opened &&
-                        ($('div.device').has($(ev.target)).length === 0 &&
-                            !$(ev.target).hasClass('device')))
-                        Coupon.close();
-                });
-
-                Coupon.opened = true;
-
-                $('div.swiper-slide img').on('click', function (e) {
-                    e.preventDefault();
-                    var cupPoint = parseInt($(this).prop('id')),
-                        cupFloor = new PointResource().read(cupPoint).floor,
-                        strL = cupFloor.length,
-                        cupFloor = parseInt(cupFloor.substring(strL-3, strL-1));
 
 
-                    preDrawRoute(qrPoint.point.id, qrFloor.id, cupPoint, cupFloor);
-                    $('div.device').fadeOut();
-
-                });
+//VERSION CORTA
+                 Coupon.open();
 
 
             }
@@ -244,16 +213,10 @@ var Coupon = {
     {
         if(Panorama.opened) Panorama.close();
 
-//        if(Coupon.opened){
-//            Coupon.close();
-//            return;
-//        }
-
         $('div.device').fadeIn(100);
 
         $(document).on('click', function(ev){
             ev.stopPropagation();
-            //console.log('click: '+ Coupon.opened);
             if(Coupon.opened &&
                 ($('div.device').has($(ev.target)).length === 0 &&
                     !$(ev.target).hasClass('device')))

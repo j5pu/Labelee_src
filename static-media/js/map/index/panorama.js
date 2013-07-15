@@ -31,6 +31,7 @@ var Panorama = {
     show: function()
     {
         console.log('yaaa');
+        Coupon.close();
         Panorama.opened = true;
 
         var newWidth=window.innerWidth*0.9,
