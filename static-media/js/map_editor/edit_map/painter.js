@@ -197,7 +197,11 @@ var Painter = {
             return;
 
         var block_description = Floor.loading ? Painter.point.description : Painter.label.name;
-//            img_btn_title = Painter.point.panorama ? gettext('Change panorama') : gettext('Add panorama')
+        var panorama_btn_title;
+        if(Floor.loading)
+            panorama_btn_title = Painter.point.panorama ? gettext('Change panorama') : gettext('Add panorama');
+        else
+            panorama_btn_title = gettext('Add panorama');
         var block_menu =
             '<div class="menu">' +
                 '<div class="descr">' +
@@ -206,12 +210,18 @@ var Painter = {
                         'value="' + block_description + '" ' +
                         'placeholder="Descripción para el punto..">' +
                 '</div>' +
-//                    '<div class="panorama">' +
-//                        '<input class="btn" ' +
-//                            'type="file" ' +
-//                            'name="img" ' +
-//                            'title="' + img_btn_title + '"/>' +
-//                    '</div>' +
+                    '<div class="panorama">' +
+                        '<form action=""' +
+                              'method="post"' +
+                              'enctype="multipart/form-data"' +
+                              'target="upload_target">' +
+                            '<input class="btn" ' +
+                                'type="file" ' +
+                                'name="panorama" ' +
+                                'title="' + panorama_btn_title + '"' +
+                                'placeholder="panorama"/>' +
+                        '</form>' +
+                    '</div>' +
                 '<div class="qr">' +
                     '<input type="checkbox"/> QR' +
                 '</div>' +

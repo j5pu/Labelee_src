@@ -161,8 +161,11 @@ var Floor = {
                     );
                 var has_descr_modified =
                     from_db && ($(this).data('saved-descr') != descr);
-                var is_modified = has_qr_modified || has_descr_modified;
 
+                var panorama_input = $(this).find('input[type=file]');
+                var has_panorama_attached = from_db && (panorama_input.length > 0 && panorama_input.val() != "")
+
+                var is_modified = has_qr_modified || has_descr_modified || has_panorama_attached;
 
                 if(is_new)
                 {
@@ -183,6 +186,9 @@ var Floor = {
                         description: descr,
                         qr: checked_qr
                     };
+
+                    if(has_panorama_attached)
+                        new PointResource().addImg($(this).find('form'), $(this).data('point-id'), function(){});
 
                     points_to_update.push(point_to_update);
                 }
@@ -301,6 +307,9 @@ var Floor = {
         Events.bindAll();
 
         Floor.loading = false;
+
+        // Dibujamos todos los botones para subir archivo
+        FileInput.draw();
 
         // Cerramos el mensaje de espera
         WaitingDialog.close();
@@ -495,7 +504,7 @@ var Floor = {
 
     loadGrid: function()
     {
-        WaitingDialog.open(gettext('Loading floor grid') + '..');
+        WaitingDialog.open(gettext('Loading floor grid') + '...');
 
         Floor.loading = true;
 
@@ -547,18 +556,19 @@ var Floor = {
 
     changeNumRows: function(ev)
     {
-        // Si pulsamos alguna tecla que no sea intro no hacemos nada
-        if(ev.keyCode && ev.keyCode != 13)
+        // Si pulsamos alguna tecla que no sea intro no hacemos nada,
+        // sólo comprobamos
+        if($e.floor.num_rows.val() == Floor.data.num_rows ||
+            $e.floor.num_rows.val() < 20)
         {
-            if($e.floor.num_rows.val() == Floor.data.num_rows ||
-                $e.floor.num_rows.val() < 20)
-                $e.floor.change_num_rows.attr('disabled', 'disabled');
-            else
-                $e.floor.change_num_rows.removeAttr('disabled');
-
+            $e.floor.change_num_rows.attr('disabled', 'disabled');
             return;
         }
+        else
+            $e.floor.change_num_rows.removeAttr('disabled');
 
+        if(ev.keyCode && ev.keyCode != 13)
+            return;
 
         // Si el número de filas no varia tampoco hacemos nada
         if($e.floor.num_rows.val() == Floor.data.num_rows)

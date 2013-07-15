@@ -101,8 +101,8 @@ class LabelCategory(models.Model):
 
     def qr_can_be_assigned(self):
         # Comprueba si la categoría no es ni bloqueante ni arista
-        return self.name_es.upper() != CATEGORIAS_FIJAS[0].upper() \
-            and self.name_es.upper() != CATEGORIAS_FIJAS[1].upper()
+        return not self.name_es or (self.name_es.upper() != CATEGORIAS_FIJAS[0].upper() and \
+            self.name_es.upper() != CATEGORIAS_FIJAS[1].upper())
 
 
 def label_filename(instance, filename):
@@ -154,6 +154,7 @@ class Point(models.Model):
     panorama_thumbnail = models.FileField(upload_to=get_panorama_thumbnail_path, null=True, blank=True)
     label = models.ForeignKey(Label, related_name='points', on_delete=models.CASCADE)
     floor = models.ForeignKey(Floor, related_name='points', on_delete=models.CASCADE)
+    alwaysVisible = models.NullBooleanField()
 
     def __unicode__(self):
         return self.floor.name + ' (' + str(self.row) + ', ' + str(self.col) + ')'

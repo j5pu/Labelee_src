@@ -8,15 +8,23 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        # Adding field 'Point.panorama'
-        db.add_column(u'map_editor_point', 'panorama',
-                      self.gf('django.db.models.fields.files.FileField')(max_length=100, null=True, blank=True),
+        # Deleting field 'Point.alwaysVisble'
+        db.delete_column(u'map_editor_point', 'alwaysVisble')
+
+        # Adding field 'Point.alwaysVisible'
+        db.add_column(u'map_editor_point', 'alwaysVisible',
+                      self.gf('django.db.models.fields.NullBooleanField')(null=True, blank=True),
                       keep_default=False)
 
 
     def backwards(self, orm):
-        # Deleting field 'Point.panorama'
-        db.delete_column(u'map_editor_point', 'panorama')
+        # Adding field 'Point.alwaysVisble'
+        db.add_column(u'map_editor_point', 'alwaysVisble',
+                      self.gf('django.db.models.fields.NullBooleanField')(null=True, blank=True),
+                      keep_default=False)
+
+        # Deleting field 'Point.alwaysVisible'
+        db.delete_column(u'map_editor_point', 'alwaysVisible')
 
 
     models = {
@@ -94,12 +102,14 @@ class Migration(SchemaMigration):
         },
         u'map_editor.point': {
             'Meta': {'object_name': 'Point'},
+            'alwaysVisible': ('django.db.models.fields.NullBooleanField', [], {'null': 'True', 'blank': 'True'}),
             'col': ('django.db.models.fields.PositiveIntegerField', [], {'null': 'True', 'blank': 'True'}),
             'description': ('django.db.models.fields.CharField', [], {'max_length': '2000', 'null': 'True', 'blank': 'True'}),
             'floor': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'points'", 'to': u"orm['map_editor.Floor']"}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'label': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'points'", 'to': u"orm['map_editor.Label']"}),
             'panorama': ('django.db.models.fields.files.FileField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
+            'panorama_thumbnail': ('django.db.models.fields.files.FileField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
             'row': ('django.db.models.fields.PositiveIntegerField', [], {'null': 'True', 'blank': 'True'})
         },
         u'map_editor.qr_code': {

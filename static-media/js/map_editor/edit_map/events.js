@@ -269,7 +269,7 @@ var Events = {
         _autoGenerateMap: function()
         {
             $e.floor.auto_generate.on('click', function(){
-                WaitingDialog.open('Calculando mapa inteligente');
+                WaitingDialog.open(gettext('Generating automatic map') + '...');
                 setTimeout(Floor.autoGenerateMap, 100);
             });
         },

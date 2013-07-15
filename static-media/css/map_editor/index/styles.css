@@ -146,8 +146,8 @@ iframe {
 
 .floor a.link-2
 {
-    display: inline-block;
-    padding: 0 0.4em;
+    display: inline;
+    padding: 0.3em 1em;
 }
 
 .floor-number

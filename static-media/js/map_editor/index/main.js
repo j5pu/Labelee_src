@@ -1,20 +1,5 @@
 $(function() {
-
-    setTimeout(function(){window.scrollTo(0, 0);}, 1000);
-
-    $('#choose-lang img').on('click', function(){
-        $(this).parent().find('select').val($(this).attr('id'));
-        $(this).parent().submit();
-    });
-
-    $('#choose-lang img').not(document.getElementById(lang_code))
-        .css({'opacity':0.4});
-
-
-    // Corrige el alto de la caja para el número de planta
-//    var floor_box_height = $('.floor').height();
-//    $('.floor .floor-number').height(floor_box_height);
-
+    I18n.selectLang(lang_code);
 });
 
 
@@ -22,10 +7,7 @@ function EnclosuresCtrl($scope, UrlService)
 {
 	$scope.enclosure_resource = new Resource('enclosure');
 
-    $scope.$watch('enclosures', function(){
-        FileInput.draw('.enclosures');
-        $("html, body").animate({ scrollTop: $(document).height() }, "slow");
-    });
+    $scope.$watch('enclosures', function(){FileInput.draw();});
 
 	$scope.enclosures = $scope.enclosure_resource.readAll();
 
@@ -39,6 +21,13 @@ function EnclosuresCtrl($scope, UrlService)
 		$scope.enclosures = $scope.enclosure_resource.readAll();
 		
 		$scope.enclosure_name = '';
+
+        setTimeout(function(){
+            $('html, body').animate({
+                scrollTop: $(document).height()
+            }, 2000);
+        }, 300);
+
 	};
 }
 
@@ -213,9 +202,14 @@ function FloorCtrl($scope, $element)
 
 		var confirm_msg = gettext('Are you sure you want to remove this floor?');
 
-		$scope.floor_resource.del($scope.floor.id, confirm_msg);
-
-        $scope.loadFloorList();
+		$scope.floor_resource.del(
+            $scope.floor.id,
+            confirm_msg,
+            function(){
+                $($element).fadeOut(200);
+                setTimeout($scope.loadFloorList, 200);
+            }
+        );
 	};
 }
 

@@ -68,27 +68,28 @@
             <div class="box box-1" style="width:280px">
                 <p>
                     {% trans "Rango de contraste " %}
-                    <img src="{{  STATIC_URL }}img/info.png" title={%  trans "El selector superior indica el contraste a partir
-                    del cual se buscan líneas. El selector inferior indica hasta qué punto se continúa una linea según
-                    su contraste.
-                    Un valor grande del selector superior resultará en menos líneas pero más precisas en mapas
-                    que presentan ruido como carteles y dibujos." %}>
+                    <img src="{{  STATIC_URL }}img/info.png" title="The upper selector refers to the contrast magnitude
+                    from which lines are identified. The lower one shows until which contrast magnitude a line is traced.
+                    A higher value of the upper selector in maps with noise such as signs and drawings results
+                    in less but more precise lines.">
                 </p>
                 <div id="slider_canny" class="slider"></div>
                 <p>
                     {% trans "Sensibilidad " %}
-                    <img src="{{  STATIC_URL }}img/info.png" title="A mayor sensibilidad, sólo las líneas más fuertes
-                    se conservan">
+                    <img src="{{  STATIC_URL }}img/info.png" title="Lower sensitivity identifies more lines; however,
+                    they could be false positives">
                 </p>
                 <div id="slider_threshold" class="slider"></div>
                 <p>
                     {% trans "Tamaño de línea mínimo " %}
-                    <img src="{{  STATIC_URL }}img/info.png" title="A mayor tamaño las líneas más cortas son descartadas">
+                    <img src="{{  STATIC_URL }}img/info.png" title="This selector acts as a threshold to avoid short lines and
+                    false positives derived from signs and drawings in the map">
                 </p>
                 <div id="slider_line_length" class="slider"></div>
                 <p>
                     {% trans "Distancia máxima entre líneas " %}
-                    <img src="{{  STATIC_URL }}img/info.png" title="A mayor distancia, líneas cortas pero cercanas se fusionan">
+                    <img src="{{  STATIC_URL }}img/info.png" title="When more distance between lines is allowed, different
+                    lines may get united">
                 </p>
                 <div id="slider_gap" class="slider"></div><br>
 
