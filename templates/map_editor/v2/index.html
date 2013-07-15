@@ -38,10 +38,12 @@
             <tr>
                 <th>
                     <span>Enclosure</span>
-                    <i class="icon-plus-sign" ng-click="show_create_form()"></i>
+                    <i class="icon-plus-sign" ng-click="show_create_enclosure_form()"></i>
                     <i class="icon-sort" ng-click="reverse = !reverse"></i>
                 </th>
-                <th>Floors</th>
+                <th>
+                    <span>Floors</span>
+                </th>
                 <th>Categories</th>
             </tr>
         </thead>
@@ -72,10 +74,19 @@
                     </div>
                 </td>
 
-                <td class="floors" ng-controller="FloorListCtrl">
+                <!-- PLANTAS -->
+                <td class="floors"
+                    ng-mouseover="hovered = true" ng-mouseleave="hovered = false"
+                    ng-controller="FloorListCtrl">
+
+                    <i class="icon-plus-sign" ng-click="show_create_floor_form()"></i>
+                    <i class="icon-sort"
+                       ng-click="reverse = !reverse"
+                       ng-show="enclosure.floors.length > 2"></i>
+
+                    <!-- CADA PLANTA -->
                     <div class="floor"
-                         ng-repeat="floor in enclosure.floors"
-                         ng-mouseover="hovered = true" ng-mouseleave="hovered = false"
+                         ng-repeat="floor in enclosure.floors | orderBy:'floor_number':reverse"
                          ng-controller="FloorCtrl">
                         <a      class="link-2"
                                 href="[[urls.map_editor.edit]]/[[floor.id]]">
@@ -84,7 +95,7 @@
                         <div class="icon-edit-wrapper">
                             <i class="icon-edit"
                                ng-show="hovered"
-                               ng-click="update()"></i>
+                               ng-click="show_edit_floor_form()"></i>
                         </div>
                     </div>
                 </td>
@@ -140,7 +151,7 @@
     </div>
 
 
-    <div id="floor_create">
+    <div id="floor_create" ng-controller="FloorFormsCtrl">
         <form class="create"
               action=""
               method="post"
@@ -166,14 +177,14 @@
                            title="{% trans "Elegir imagen" %}">
                 </div>
 
-                <button class="btn" ng-click="createFloor()">{% trans "Añadir planta" %}</button>
+                <button class="btn" ng-click="create()">{% trans "Añadir planta" %}</button>
             </div>
 
             {% include "_waiting_gif.html" %}
         </form>
     </div>
 
-    <div id="floor_edit">
+    <div id="floor_edit" ng-controller="FloorFormsCtrl">
         <form class="edit"
               action=""
               method="post" enctype="multipart/form-data"
@@ -185,7 +196,6 @@
                     <input type="text"
                            ng-init="floor_name=floor.name"
                            ng-model="floor_name"
-                           ng-change="validate()"
                            placeholder="{% trans "Nuevo nombre para la planta" %}.."
                            autofocus>
                 </label>
@@ -206,6 +216,9 @@
 
             <button class="btn" ng-click="cancelUpdate()">{% trans "Cancelar" %}</button>
             <button class="btn" ng-click="update()">{% trans "Editar" %}</button>
+            <button class="btn" ng-click="del()">{% trans "Eliminar planta" %}</button>
+
+            {% include "_waiting_gif.html" %}
         </form>
     </div>
 
