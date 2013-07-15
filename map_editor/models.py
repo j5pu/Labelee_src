@@ -3,6 +3,7 @@
 import os
 from django.db import models
 from django.contrib.auth.models import User
+from utils.helpers import filterAsPois
 
 CATEGORIAS_FIJAS = {
     0: 'Bloqueantes',
@@ -28,6 +29,11 @@ class Enclosure(models.Model):
             floor.delete()
 
         super(Enclosure, self).delete(*args, **kwargs)
+
+
+    def count_pois(self):
+        points = Point.objects.filter(floor__enclosure = self.id)
+        return filterAsPois(points).count()
 
 #         def get_path(instance, filename):
 # return 'photos/%s/%s' % (instance.stock_number, filename)

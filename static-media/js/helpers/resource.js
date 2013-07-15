@@ -538,6 +538,12 @@ function EnclosureResource()
             }
         });
     };
+
+    this.getForManagerIndex = function()
+    {
+        // Nos da toda la info necesaria para cargar el index de map-editor
+        return ajaxGetElements(this.api2_url, 'manager');
+    }
 }
 
 

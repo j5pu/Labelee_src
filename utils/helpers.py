@@ -5,6 +5,7 @@ from tastypie.models import ApiKey
 from django.http import HttpResponse
 import simplejson
 from django.core.serializers import serialize
+import settings
 
 
 def responseJSON(**kwargs):
@@ -89,11 +90,22 @@ def tx_serialized_json_list(json_list):
         d = {}
         d['id'] = el['pk']
         for key,val in el['fields'].items():
-            d[key] = val
+            if isinstance(val, str) and 'img/' in val:
+                d[key] = settings.MEDIA_URL + val
+            else:
+                d[key] = val
         tx_list.append(d)
 
     return tx_list
 
+
+def queryset_to_dict(queryset_object):
+    """
+    Recibe un objeto como resultado de una consulta usando el ORM de Django y
+    lo transforma en un diccionario
+    """
+    serialized = serialize('json', queryset_object)
+    return tx_serialized_json_list(serialized)
 
 
 def group_by_pk(queryset_response):
@@ -112,6 +124,21 @@ def filterAsPois(points):
         label__category__name_es = 'Parquing'
     ).exclude(
         qr_code = None
+    )
+
+
+def filterAsValidCategories(label_categories):
+    """
+    Quita las categorías que no queramos considerar como válidas (bloqueantes, etc..
+    """
+    return label_categories.exclude(
+        name_es = 'Bloqueantes'
+    ).exclude(
+        name_es = 'Intermedias'
+    ).exclude(
+        name_es = 'Parquing'
+    ).exclude(
+        name_es = 'Pasillo Parking'
     )
 
 

@@ -7,7 +7,7 @@ from django.db.models import Q
 
 import simplejson
 from map_editor.api.resources import PointResource
-from map_editor.models import Point, Label, Floor, QR_Code
+from map_editor.models import Point, Label, Floor, QR_Code, Enclosure
 from django.contrib.auth.models import User
 from utils.helpers import tx_serialized_json_list, filterAsPois
 
@@ -103,7 +103,7 @@ def delete_from_list(request):
 
 def readOnlyPois(request, floor_id):
     """
-       /api-2/point/pois/floor/17
+       /api-2/point/pois/17
     """
     pois = Point.objects.filter(
         floor = floor_id
@@ -135,7 +135,6 @@ def countPoisFromEnclosure(request, enclosure_id):
     """
         .../pois/enclosure/[enclosure_id]/count
     """
-    points = Point.objects.filter(floor__enclosure = enclosure_id)
-    poi_count = filterAsPois(points).count()
+    poi_count = Enclosure.objects.get(id=enclosure_id).count_pois()
     return HttpResponse(poi_count)
 

@@ -8,7 +8,11 @@ urlpatterns = patterns('map_editor.api_2',
 	# /api-2/map/16/img
 	url(r'^(?P<resource>.*)/(?P<id>\d*)/img$', 'services.views.img'),
 
-    #FLOOR
+    # ENCLOSURE
+	url(r'^enclosure/manager', 'resources.enclosure.manager'),
+
+
+    # FLOOR
 	url(r'^floor/(?P<floor_id>.*)/render-grid$', 'resources.floor.render_grid'),
 
 

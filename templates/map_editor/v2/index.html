@@ -57,10 +57,10 @@
                     <div class="icon-edit-wrapper">
                         <i class="icon-edit"
                            ng-show="hovered"
-                           ng-click="update()"></i>
+                           ng-click="show_edit_form()"></i>
                     </div>
                     <h4 ng-show="enclosure.twitter_account">@[[enclosure.twitter_account]]</h4>
-                    <div class="poi_count">{% trans "Número de POIS" %}[[poiCount]]</div>
+                    <div class="poi_count">{% trans "Número de POIS:" %} [[enclosure.poi_count]]</div>
 
                     <div class="btn-group">
                         <a class="btn link-2" ng-click="calculateRoutes()">
@@ -74,7 +74,7 @@
 
                 <td class="floors" ng-controller="FloorListCtrl">
                     <div class="floor"
-                         ng-repeat="floor in floors"
+                         ng-repeat="floor in enclosure.floors"
                          ng-mouseover="hovered = true" ng-mouseleave="hovered = false"
                          ng-controller="FloorCtrl">
                         <a      class="link-2"
@@ -91,7 +91,7 @@
 
                 <td class="categories" ng-controller="CategoryListCtrl">
                     <ul>
-                        <li ng-repeat="category in categories | orderBy:'name'">
+                        <li ng-repeat="category in enclosure.label_categories | orderBy:'name'">
                             [[category.name]]
                         </li>
                     </ul>
@@ -101,11 +101,13 @@
     </table>
 
 
+
+
     <!--
         FORMULARIOS
                     -->
-    <div id="enc_create">
-        <form class="create" ng-controller="EnclosureFormsCtrl">
+    <div id="enc_create" ng-controller="EnclosureFormsCtrl">
+        <form class="create">
             <input type="text"
                    ng-model="enclosure_name"
 {#                       ng-change="validate()"#}
@@ -115,27 +117,25 @@
         </form>
     </div>
 
-    <div id="enc_edit">
+    <div id="enc_edit" ng-controller="EnclosureFormsCtrl">
         <form class="edit">
             <label class="txt">Nuevo nombre:
                 <input type="text"
-                       ng-init="enclosure_name=enclosure.name"
                        ng-model="enclosure_name"
-                       ng-change="validate()"
                        placeholder="{% trans "Nuevo nombre para el recinto" %}.."
                        autofocus>
             </label>
             <label class="txt">
                 Cuenta de Twitter:
                 <input type="text"
-                       ng-init="twitter_account=enclosure.twitter_account"
                        ng-model="twitter_account"
-                       ng-change="validate()"
                        placeholder="{% trans "Cuenta de twitter" %}..">
             </label>
 
             <button class="btn" ng-click="cancelUpdate()">{% trans "Cancelar" %}</button>
             <button class="btn" ng-click="update()">{% trans "Editar" %}</button>
+
+            <button class="btn" ng-click="del()">{% trans "Eliminar recinto" %}</button>
         </form>
     </div>
 

@@ -7,37 +7,37 @@ $(function() {
 });
 
 
-function EnclosureListCtrl($scope, UrlService)
+function EnclosureListCtrl($scope, $rootScope)
 {
     $scope.$watch('enclosures', function(){FileInput.draw();});
 
-	$scope.enclosures = enclosureResource.readAll();
+	$scope.enclosures = enclosureResource.getForManagerIndex();
 
     // Orden en que aparecerán los recintos
     $scope.reverse = false;
 
     $scope.show_create_form = function() {
-        formDialog = new FormDialog('#enc_create');
-        formDialog.open();
+        $rootScope.$broadcast('show_create_form');
     };
 
-    $scope.$on('enclosure_created', function(ev, enclosure) {
-        $scope.enclosures.push(enclosure);
+    angular.forEach(
+        ['enclosure_created', 'enclosure_updated', 'enclosure_deleted'],
+        function(event){
+            $scope.$on(event, function() {
+                $scope.enclosures = enclosureResource.getForManagerIndex();
+                formDialog.close();
+        });
     });
 }
 
 
 function EnclosureCtrl($scope, $rootScope, $element)
 {
-	$scope.editing = false;
     $scope.hovered = false;
 
-    $scope.poiCount = pointResource.countPois($scope.enclosure.id);
-
-    $scope.update = function()
+    $scope.show_edit_form = function()
     {
-        // Abre el diálogo con el formulario para la edición del recinto
-        $rootScope.$broadcast('edit_enclosure', $scope.enclosure);
+        $rootScope.$broadcast('show_edit_form', $scope.enclosure);
     };
 
     $scope.calculateRoutes = function()
@@ -55,12 +55,6 @@ function FloorListCtrl($scope, $element)
     $scope.$watch('floors', function(){
         FileInput.draw();
     });
-
-    $scope.loadFloorList = function() {
-        $scope.floors = floorResource.readFromEnclosure($scope.enclosure.id);
-    };
-
-    $scope.loadFloorList();
 
 	$scope.createFloor = function() {
 
@@ -181,14 +175,7 @@ function FloorCtrl($scope, $element)
 
 function CategoryListCtrl($scope, UrlService)
 {
-    $scope.category_resource = new LabelCategoryResource();
 
-    $scope.loadCategoryList = function() {
-        var enclosure_id = $scope.$parent.$parent.enclosure.id;
-        $scope.categories = $scope.category_resource.readAllFiltered('?label__point__floor__enclosure__id=' + enclosure_id);
-    };
-
-    $scope.loadCategoryList();
 }
 
 
@@ -210,32 +197,23 @@ function EnclosureFormsCtrl($scope, $rootScope)
             }, 2000);
         }, 300);
 
-        formDialog.close();
-
 //        http://stackoverflow.com/questions/14502006/scope-emit-and-on-angularjs/14502755#14502755
         $rootScope.$broadcast('enclosure_created', enclosure);
     };
 
     $scope.update = function(enclosure) {
-
-        $scope.enclosure_name = enclosure.name;
-        $scope.twitter_account = enclosure.twitter_account;
-
         var data = {
             name : $scope.enclosure_name,
             twitter_account : $scope.twitter_account
         };
 
-        var updated_enclosure = enclosureResource.update(data, $scope.enclosure.id);
+        enclosureResource.update(data, $scope.enclosure.id);
 
-        $scope.editing = false;
-
-        $scope.$parent.enclosure.name = updated_enclosure.name;
-        $scope.$parent.enclosure.twitter_account = updated_enclosure.twitter_account;
+        $rootScope.$broadcast('enclosure_updated');
     };
 
     $scope.cancelUpdate = function() {
-        $scope.editing = false;
+        formDialog.close();
     };
 
     $scope.del = function() {
@@ -246,10 +224,25 @@ function EnclosureFormsCtrl($scope, $rootScope)
             $scope.enclosure.id,
             confirm_msg,
             function(){
-                $($element).fadeOut(200);
+                $rootScope.$broadcast('enclosure_deleted');
             }
         );
     };
+
+    $scope.$on('show_create_form', function() {
+        $scope.enclosure_name = '';
+        formDialog = new FormDialog('#enc_create');
+        formDialog.open();
+    });
+
+    $scope.$on('show_edit_form', function(ev, enclosure) {
+        // Abre el diálogo con el formulario para la edición del recinto
+        $scope.enclosure = enclosure;
+        $scope.enclosure_name = enclosure.name;
+        $scope.twitter_account = enclosure.twitter_account;
+        formDialog = new FormDialog('#enc_edit');
+        formDialog.open();
+    });
 }
 
 function FloorFormsCtrl($scope)
