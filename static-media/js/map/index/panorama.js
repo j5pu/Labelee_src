@@ -19,33 +19,23 @@ var Panorama = {
             '</button>'
     },
 
-    bindShow: function()
+    bindShow: function(marker)
     {
-
-     /*   $('.leaflet-popup-content button.panorama').on('click', function (e) {
+        Panorama.marker = marker;
+        $('.leaflet-popup-content button.panorama').on('click', function(e){
             e.preventDefault();
-            Panorama.opened = true;
-            var point_id = $(this).data('pan');
-            var point = new PointResource().read(point_id);
-
-//            addSamplePano(point.panorama,{ratio:9/16});
-            addSamplePano(point.panorama,{ratio:9/16, minSpeed:30});
-//            addSamplePano(point.panorama,{height: 200, width: 4});
-        });*/
+            Panorama.show();
+        });
     },
-     show: function(element)
-    {
-        Panorama.opened = true;
 
-        Panorama.element = element;
-        var point_id = element.id;
-        var point = new PointResource().read(point_id);
+    show: function()
+    {
+        console.log('yaaa');
+        Panorama.opened = true;
 
         var newWidth=window.innerWidth*0.9,
             newHeight=newWidth*9/16;
-
-//            addSamplePano(point.panorama,{ratio:9/16});
-        addSamplePano(point.panorama,{height: newHeight, ratio:9/16, minSpeed:30});
+        addSamplePano(Panorama.marker.panorama,{height: newHeight, ratio:9/16, minSpeed:30});
     },
 
     resize: function()
@@ -61,9 +51,9 @@ var Panorama = {
 
     close: function()
     {
-        jQuery('div#page').find('img[id*=pano]').hide();
-        jQuery('canvas').hide();
-        jQuery('button#close').hide();
+        jQuery('div#page').find('img[id*=pano]').remove();
+        jQuery('canvas').remove();
+        jQuery('button#close').remove();
         Panorama.opened = false;
 
         Logger.log('panorama cerradoxxxxxx');

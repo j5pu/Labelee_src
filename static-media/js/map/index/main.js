@@ -29,7 +29,7 @@ window.addEventListener("orientationchange", hideAddressBar );
 ///	Activación y configuración del menú
 $(function() {
 
-    Logger.initSender();
+//    Logger.initSender();
 
     //SwipeMenu.init();
     ScrollMenu.init();
@@ -110,11 +110,10 @@ $(function() {
 
 
 
-
-
     $('button#closeCoupon').on('click', function () {
-        $('div.device').fadeOut();
+        $('div.device').fadeOut(100);
     });
+
    var mySwiper = new Swiper('.swiper-container', {
         pagination: '.pagination',
         loop: true,
@@ -131,18 +130,21 @@ $(function() {
     });
 
     $('div#page').hide();
-    $('body').prepend('<div class="splash">    <div class="container">        <div class="sp-container"             >            <div class="frame-5"><span><img src="/media/logo-labelee-sin-slogan.png"></span></div>            <div id="find" class="frame-6">find<span id="your"> your<span id="way"> way!</span></span></div>        </div>    </div></div>')
+    $('body').prepend('<div class="splash">    <div class="container">        <div class="sp-container"             >            <div class="frame-5"><span><img src="/media/logosplash.png"></span></div>            <div id="find" class="frame-6">find<span id="your"> your<span id="way"> way!</span></span></div>        </div>    </div></div>')
     setTimeout(hideSplash, 3000);
 
-/*    $('div.swiper-slide img').on('click', function (e) {
+    $('div.swiper-slide img').on('click', function (e) {
         e.preventDefault();
-        var $id = $(this).prop('id');
-        if ($id === "cup1") preDrawRoute(qrPoint.point.id, qrFloor.id, 2850, 28);
-        else if ($id === "cup2") preDrawRoute(qrPoint.point.id, qrFloor.id, 2842, 28);
-        else preDrawRoute(qrPoint.point.id, qrFloor.id, 5655, 40);
+        var cupPoint = parseInt($(this).prop('id')),
+            cupFloor = new PointResource().read(cupPoint).floor,
+            strL = cupFloor.length,
+            cupFloor = parseInt(cupFloor.substring(strL-3, strL-1));
+
+
+        preDrawRoute(qrPoint.point.id, qrFloor.id, cupPoint, cupFloor);
         $('div.device').fadeOut();
 
-    });*/
+    });
 
 });
 
@@ -178,11 +180,62 @@ var Coupon = {
     bindShowFromMarker: function()
     {
         $('div.leaflet-popup-content-wrapper').on('click', function (e) {
-            console.log(e.clientX + e.clientY );
-            /*            if (e.clientX > $(this).offset().left + 90 &&
-             e.clientY < $(this).offset().top + 10) {
-             e.stopPropagation();
-             Coupon.open();            }*/
+            if (e.clientX > $(this).offset().left + 105 &&
+                e.clientY > $(this).offset().top + 45)
+
+            {
+                var itemsToRemove = Math.floor($('div.swiper-wrapper .swiper-slide').length/2);
+                $('div.swiper-wrapper').find('div.swiper-slide:nth-last-child(-n+'+itemsToRemove+')').remove();
+                var imgID=$(this).find('p>button').data('socialmenu'),
+                    myImg="img[id='"+imgID+"']",
+                    myPos=$(myImg).parent()[0].index(this);
+
+                var innerSwiper = new Swiper('.swiper-container', {
+                    pagination: '.pagination',
+                    loop: true,
+                    grabCursor: true,
+                    paginationClickable: true,
+                    initialSlide:myPos
+                });
+                $('.arrow-left').on('click', function (e) {
+                    e.preventDefault();
+                    innerSwiper.swipePrev();
+                });
+                $('.arrow-right').on('click', function (e) {
+                    e.preventDefault();
+                    innerSwiper.swipeNext();
+                });
+
+                e.stopPropagation();
+                //Coupon.open();
+                $('div.device').fadeIn(100);
+                $(document).on('click', function(ev){
+                    ev.stopPropagation();
+                    //console.log('click: '+ Coupon.opened);
+                    if(Coupon.opened &&
+                        ($('div.device').has($(ev.target)).length === 0 &&
+                            !$(ev.target).hasClass('device')))
+                        Coupon.close();
+                });
+
+                Coupon.opened = true;
+
+                $('div.swiper-slide img').on('click', function (e) {
+                    e.preventDefault();
+                    var cupPoint = parseInt($(this).prop('id')),
+                        cupFloor = new PointResource().read(cupPoint).floor,
+                        strL = cupFloor.length,
+                        cupFloor = parseInt(cupFloor.substring(strL-3, strL-1));
+
+
+                    preDrawRoute(qrPoint.point.id, qrFloor.id, cupPoint, cupFloor);
+                    $('div.device').fadeOut();
+
+                });
+
+
+            }
+
         });
     },
 
@@ -191,12 +244,12 @@ var Coupon = {
     {
         if(Panorama.opened) Panorama.close();
 
-        if(Coupon.opened){
-            Coupon.close();
-            return;
-        }
+//        if(Coupon.opened){
+//            Coupon.close();
+//            return;
+//        }
 
-        $('div.device').fadeIn(300);
+        $('div.device').fadeIn(100);
 
         $(document).on('click', function(ev){
             ev.stopPropagation();
@@ -229,7 +282,7 @@ var Coupon = {
     close: function()
     {
         Coupon.opened = false;
-        $('div.device').fadeOut(200);
+        $('div.device').fadeOut(100);
     }
 };
 

@@ -1,4 +1,5 @@
 {% load i18n %}
+{% load map_tags %}
 
 <!DOCTYPE html>
 <html>
@@ -35,9 +36,9 @@
     <script src="{% url 'django.views.i18n.javascript_catalog' %}"></script>
     <script src="{{ STATIC_URL }}vendor/leaflet/plugins/scale.fix.js"></script>
     <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>
-    <!--script>window.jQuery || document.write('<script src="{{ STATIC_URL }}vendor/jquery-2.0.3.min.js"><\/script>')</script-->
+    <script>window.jQuery || document.write('<script src="{{ STATIC_URL }}vendor/jquery-2.0.3.min.js"><\/script>')</script>
     <!--script src="{{ STATIC_URL }}vendor/jquery-1.10.2.min.js"></script-->
-    <script src="{{ STATIC_URL }}vendor/jquery-1.9.1.min.js"></script>
+    <!--script src="{{ STATIC_URL }}vendor/jquery-1.9.1.min.js"></script-->
 
     <!--script src="{{ STATIC_URL }}vendor/hammer.js_v1.0.3/dist/hammer.min.js"></script-->
     <script src="{{ STATIC_URL }}vendor/hammer.js_v1.0.3/dist/jquery.hammer.min.js"></script>
@@ -108,7 +109,7 @@
 
     <div id="header">
         <a href="#menu-right">
-            <img src="{{ STATIC_URL }}css/map/index/images/logo.png"/>
+            <img src="/media/logomenu.png"/>
         </a>
         <!--
         <span id="fake"></span>
@@ -139,7 +140,7 @@
 
             {% for category in categories %}
                 <li>
-                <li class="Label">{{ category.name }}</li>
+                <li class="Label" style="background:{{colors|get_item:category.name}};">{{ category.name }}</li>
                 {% for destination in category.items %}
                     <li onclick="$('#menu-right').trigger( 'close' );preDrawRoute({{ poi_id }},floor_id,{{ destination.id }},{{ destination.floor_id }})">{{ destination.description }}</li>
                 {% endfor %}
@@ -181,7 +182,7 @@
                  {% for point,img in coupons.items %}
 
                    <div class="swiper-slide">
-                    <img id="cup_{{ point }}" src="{{ img }}">
+                    <img id="{{ point }}" src="{{ img }}">
                    </div>
                 {% endfor %}
 
