@@ -57,7 +57,7 @@ function addSamplePano(options)
             $('button#close').css({
                 'position': 'absolute',
                 'z-index': 100000,
-                'top': '-15px',
+                'top': '-5px',
                 'right':'3%',
                 'margin': 6+'%',
                 'font-size':'1.2em',
