@@ -142,7 +142,7 @@
                 <li>
                 <li class="Label" style="background:{{colors|get_item:category.name}};">{{ category.name }}</li>
                 {% for destination in category.items %}
-                    <li onclick="$('#menu-right').trigger( 'close' );preDrawRoute({{ poi_id }},floor_id,{{ destination.id }},{{ destination.floor_id }})">{{ destination.description }}</li>
+                    <li onclick="$('#menu-right').trigger( 'close' );preDrawRoute({{ poi_id }},floor_id,{{ destination.id }},{{ destination.floor_id }});LocalStorageHandler.setPrevDestByPoi({{ destination.id }})">{{ destination.description }}</li>
                 {% endfor %}
 
                 </li>

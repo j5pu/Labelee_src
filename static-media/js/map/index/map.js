@@ -196,7 +196,33 @@ var LocalStorageHandler = {
         };
         localStorage.setItem('prevDest', JSON.stringify(prevDest));
     },
+    setPrevDestByPoi: function (pointid) {
+        var poi = null;
+        for (var floorIndex = 0, len = floors.length; floorIndex < len; ++floorIndex) {
+            for (var poiIndex = 0; poiIndex < floors[floorIndex].pois.length; ++poiIndex) {
+                if (floors[floorIndex].pois[poiIndex].id == pointid) {
+                    poi = floors[floorIndex].pois[poiIndex];
+                    break;
+                }
+            }
 
+            if (poi != null) {
+                break;
+            }
+        }
+        if (poi != null) {
+            var prevDest = {
+                'prevDate': new Date().getTime(),
+                'poid': poi.id,
+                'floorid': poi.floor,
+                'enclosureid':  qrPoint.enclosure.id,
+                'mesg': gettext('Do you still want to go to') + ' ' + poi.marker.description + '?',
+                'description': poi.marker.title,
+                'description_for_menu': poi.marker.description
+            };
+            localStorage.setItem('prevDest', JSON.stringify(prevDest));
+        }
+    },
 
     setSharedDest: function () {
         var sharedDest = {
@@ -290,7 +316,6 @@ function loopFloors() {
         $('span.locator').show();
 
 
-
 //       if(( ua.indexOf("Android") >= 0 ) && (androidversion >=3.0))
 
         //Coupon.init();
@@ -342,7 +367,7 @@ function loadPOIs() {
                 shapeIcon = floors[fl].pois[j].label.category.icon,
                 id = floors[fl].pois[j].id,
                 floorid = floors[fl].pois[j].floor;
-                description = floors[fl].pois[j].description,
+            description = floors[fl].pois[j].description,
                 panorama = floors[fl].pois[j].panorama,
                 coupon = floors[fl].pois[j].coupon,
                 sX = floors[fl].scaleX,
@@ -393,7 +418,7 @@ function loadPOIs() {
                     }
 
                     LocalStorageHandler.setPrevDest(this);
-                    if(Panorama.opened) Panorama.close();
+                    if (Panorama.opened) Panorama.close();
                     if (qrMarker)
                         drawRoute(qrPoint.point.id, qrFloor.sX, qrFloor.sY, this.poid, this.psX, this.psY);
 //                    map.invalidateSize();
@@ -426,7 +451,7 @@ function loadPOIs() {
 
         // Cada label es un conjunto de POIs (restaurantes, cines..)
         for (var la in floors[fl].labels) {
-            if (!isCategoryVisibleOnButtons(floors[fl].labels[la].fields.name_es)){
+            if (!isCategoryVisibleOnButtons(floors[fl].labels[la].fields.name_es)) {
                 floors[fl].layer.addLayer(floors[fl].labels[la].layer);
                 floors[fl].labels.splice(la, 1);
             }
@@ -455,14 +480,14 @@ function loadPOIs() {
                     qrPoint.label.name : qrPoint.point.description;
 
                 var originLegend = gettext("You are right here:") + '<br>' + point_description;
-                 if (qrPoint.point.panorama)
+                if (qrPoint.point.panorama)
                     originLegend = originLegend + Panorama.renderIcon(qrPoint.point.id);
-                originLegend+= SocialMenu.renderIcon(qrPoint.point.id);
+                originLegend += SocialMenu.renderIcon(qrPoint.point.id);
 
                 qrMarker = L.marker(qrLoc, { bounceOnAdd: false,
                     icon: OriginIcon})
                     .bindPopup(originLegend)
-                    .on('click', function(){
+                    .on('click', function () {
                         bindContent(this);
                     });
 
@@ -478,7 +503,7 @@ function loadPOIs() {
                     .bindPopup(msg + qrPoint.point.description +
                         " (" + gettext('floor') + ' ' + qrFloor.name + ", " +
                         qrPoint.enclosure.name + ')' + photoIcon + SocialMenu.renderIcon(qrPoint.point.id))
-                    .on('click', function(){
+                    .on('click', function () {
                         LocalStorageHandler.setPrevDest(this);
 
 //                        drawRoute(qrPoint.point.id, qrFloor.sX, qrFloor.sY, this.poid, this.psX, this.psY);
@@ -538,15 +563,14 @@ function initMap(qrPoint) {
             }
             bindContent(qrMarker);
 
-/*
-            } else {
-                map.setView(destLoc, 0);
-                destMarker.openPopup({autoPanPadding:(10,10)});
+            /*
+             } else {
+             map.setView(destLoc, 0);
+             destMarker.openPopup({autoPanPadding:(10,10)});
 
-            }
-*/
+             }
+             */
         }
-
 
 
 //        if (floors[i].pois[j].alwaysVisible) {
@@ -715,8 +739,7 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
         return;
 
     route = new RouteResource().getRoute(org, dst);
-    if (!route)
-    {
+    if (!route) {
         alert(gettext('We are sorry, that route does not exist.'));
         return;
     }
@@ -758,12 +781,11 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
     destLegend += SocialMenu.renderIcon(dst);
 
 
-
     destLoc = [(route.fields.destiny.fields.row) * sY + sY, route.fields.destiny.fields.col * sX + sX];
     destMarker = L.marker(destLoc, { bounceOnAdd: false,
         icon: DestinyIcon})
         .bindPopup(destLegend, {autoPanPadding: new L.Point(0, 10)})
-        .on('click', function(){
+        .on('click', function () {
             bindContent(this);
         });
 
@@ -961,26 +983,22 @@ var setArrow = function (flecha, idFloor) {
 };
 
 /*
-var setArrow = function (flecha, idFloor) {
+ var setArrow = function (flecha, idFloor) {
 
-    flecha.setPatterns([
-        {offset: arrowsOffset + '%', repeat: 0, symbol: new L.Symbol.Marker({rotate: true, markerOptions: {
-            icon: L.icon({
-                iconUrl: '/media/arrow1.png',
-                iconAnchor: [12, 12]
-            })
-        }})}]);
-    if (++arrowsOffset > 100)
-        arrowsOffset = 0;
-};
-*/
-
-
+ flecha.setPatterns([
+ {offset: arrowsOffset + '%', repeat: 0, symbol: new L.Symbol.Marker({rotate: true, markerOptions: {
+ icon: L.icon({
+ iconUrl: '/media/arrow1.png',
+ iconAnchor: [12, 12]
+ })
+ }})}]);
+ if (++arrowsOffset > 100)
+ arrowsOffset = 0;
+ };
+ */
 
 
-
-function isCategoryVisibleOnButtons(categ_name)
-{
+function isCategoryVisibleOnButtons(categ_name) {
     return categ_name !== "Parquing" &&
         categ_name !== "Bloqueantes" &&
         categ_name !== "Aristas" &&
@@ -988,14 +1006,12 @@ function isCategoryVisibleOnButtons(categ_name)
         categ_name !== "Aseos";
 }
 
-function isPoiVisibleByDefault(categ_name)
-{
+function isPoiVisibleByDefault(categ_name) {
     return categ_name == "Aristas" || categ_name == "Aseos" || categ_name == "Entrance";
 }
 
 
-Map.locateCar = function()
-{
+Map.locateCar = function () {
     var miCoche = JSON.parse(localStorage.getItem('miCoche'));
 
     if (!miCoche) {
@@ -1026,7 +1042,7 @@ Map.locateCar = function()
 
             carMarker.on('click', function () {
                 LocalStorageHandler.setPrevDest(this);
-                if(Panorama.opened) Panorama.close();
+                if (Panorama.opened) Panorama.close();
                 drawRoute(qrPoint.point.id, qrFloor.sX, qrFloor.sY, miCoche.point.id, floor_x.scaleX, floor_x.scaleY);
 
             });
@@ -1079,8 +1095,7 @@ Map.locateCar = function()
 };
 
 
-Map.locatePosition = function()
-{
+Map.locatePosition = function () {
     for (pos = 0; pos < $('input[type=checkbox].leaflet-control-layers-selector').length; pos++) {
         if ($('input[type=checkbox].leaflet-control-layers-selector:eq(' + pos + ')').is(':checked')) {
             checked[pos] = true;
@@ -1107,11 +1122,11 @@ Map.locatePosition = function()
                 map.addLayer(arrowHead[i]);
                 flechita = arrowHead[i];
                 arrowAnim(flechita, floor_x.name);
-                    map.setView(arrow[i].getBounds().pad(15).getCenter(), 0);
+                map.setView(arrow[i].getBounds().pad(15).getCenter(), 0);
 //                map.invalidateSize();
             } else {
 //                Logger.log('No ruta..');
-                    map.setView(qrLoc, 0);
+                map.setView(qrLoc, 0);
 //                map.invalidateSize();
             }
 
@@ -1156,8 +1171,7 @@ if (map.hasLayer(destMarker)) {
 }
 
 
-Map.resize = function()
-{
+Map.resize = function () {
     Coupon.calculateCouponArea();
     Panorama.resize();
 };
@@ -1165,18 +1179,15 @@ Map.resize = function()
 
 Map.events =
 {
-    locateCar: function()
-    {
+    locateCar: function () {
         $('span#myCar').on('click', Map.locateCar);
     },
 
-    locatePosition: function()
-    {
+    locatePosition: function () {
         $('span#location').on('click', Map.locatePosition);
     },
 
-    resizeWindow: function()
-    {
+    resizeWindow: function () {
         if (window.DeviceOrientationEvent) {
             window.addEventListener('orientationchange', Map.resize, false);
         }
@@ -1184,8 +1195,7 @@ Map.events =
         $(window).resize(Map.resize);
     },
 
-    bindAll: function()
-    {
+    bindAll: function () {
         Map.events.locateCar();
         Map.events.locatePosition();
         Map.events.resizeWindow();
@@ -1193,9 +1203,8 @@ Map.events =
 };
 
 
-function bindContent(marker)
-{
-    if(marker.contentBinded)
+function bindContent(marker) {
+    if (marker.contentBinded)
         return;
 
     // Se bindea el contenido del popup abierto para el marker
