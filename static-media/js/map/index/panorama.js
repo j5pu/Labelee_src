@@ -6,10 +6,12 @@ var Panorama = {
 
     init: function()
     {
+/*
         $(document).on('click tap touch', function(ev){
             if(ev.target.tagName !== 'CANVAS')
                 Panorama.close();
         });
+*/
     },
 
     renderIcon: function(pointId)
