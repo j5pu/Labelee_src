@@ -225,7 +225,7 @@ else:
             "NAME": "labelee_dev",
              "USER": "mnopi",
             "PASSWORD": "1aragon1",
-            "HOST": "192.168.1.201",
+            "HOST": "192.168.1.180",
             "PORT": "3306",
             }
     }

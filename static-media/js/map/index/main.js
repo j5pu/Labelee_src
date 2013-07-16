@@ -194,14 +194,18 @@ var Coupon = {
             {
                 var imgID=$(this).find('p>button').data('socialmenu'),
                     myImg="img[id='"+imgID+"']",
-                    myPos=$(myImg).parent()[0].index(this);
+                    myPos=$(myImg).parent()[0].index($(myImg).parent().parent());
 
 //VERSION CORTA
 
-               mySwiper.swipeTo(myPos-1);
+                window.setTimeout(function(){
+                    mySwiper.swipeTo(myPos-1);
+                },500);
 
 
-                e.stopPropagation();
+
+
+                 e.stopPropagation();
 
 
 //VERSION CORTA

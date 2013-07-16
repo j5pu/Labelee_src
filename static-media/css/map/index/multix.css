@@ -885,7 +885,6 @@ span.locator
 {
     background-color: cadetblue;
     left:45px;
-/**/    display:none;
 }
 
 #location
@@ -1211,7 +1210,7 @@ img[id*=pano]{
 
 .leaflet-popup-content
 {
-    margin: 1px 12px;
+    margin: 3px 12px 0px 12px;
     font-size: 13px;
     padding: 1px 8px;
 }
@@ -1225,14 +1224,14 @@ img[id*=pano]{
 }
 
 .leaflet-popup-content-wrapper {
-    height: 50px;
+    height: auto;
     width: auto;
 }
 
 .withCoupon:after {
     content: 'COUPON!';
     right: -70%;
-    bottom: 0px;
+    bottom: -12px;
     background: orange;
     border: 3px solid crimson;
     padding: 4px;
@@ -1245,12 +1244,14 @@ img[id*=pano]{
     cursor:pointer;
 }
 
+/*
 .icon-gamepad, .icon-glass {
     margin-left: -1px;
 }
 .icon-film {
     margin-left: -1px;
 }
+*/
 
 .icon-location-arrow{
     margin-left: -1px;

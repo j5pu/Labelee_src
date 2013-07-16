@@ -284,6 +284,12 @@ function loopFloors() {
 
         LocalStorageHandler.draw();
 
+//recolocar controles
+        $('span:has(i.icon-film)').css('left', '11px');
+        $('span:has(i.icon-glass)').css('left', '11px');
+        $('span.locator').show();
+
+
 
 //       if(( ua.indexOf("Android") >= 0 ) && (androidversion >=3.0))
 
@@ -448,7 +454,7 @@ function loadPOIs() {
                 var point_description = qrPoint.label.name_en == 'My car' ?
                     qrPoint.label.name : qrPoint.point.description;
 
-                var originLegend = gettext("You are right here:") + ' ' + point_description;
+                var originLegend = gettext("You are right here:") + '<br>' + point_description;
                  if (qrPoint.point.panorama)
                     originLegend = originLegend + Panorama.renderIcon(qrPoint.point.id);
                 originLegend+= SocialMenu.renderIcon(qrPoint.point.id);
@@ -527,13 +533,18 @@ function initMap(qrPoint) {
 //            if (!destMarker) {
             map.setView(qrLoc, 0);
             qrMarker.openPopup();
+            if (qrPoint.point.coupon) {
+                $('div.leaflet-popup-content-wrapper').addClass('withCoupon');
+            }
             bindContent(qrMarker);
 
- /*           } else {
-                //destMarker.openPopup({autoPanPadding:(10,10)});
-                map.setView(destMarker.loc, 0);
+/*
+            } else {
+                map.setView(destLoc, 0);
+                destMarker.openPopup({autoPanPadding:(10,10)});
 
-            }*/
+            }
+*/
         }
 
 
@@ -557,7 +568,7 @@ function initMap(qrPoint) {
         bindContent(destMarker);
     }
     loadedLabels = true;
-    map.invalidateSize();
+//    map.invalidateSize();
 
 }
 
@@ -639,7 +650,7 @@ function changeFloor(e) {
                 map.addLayer(arrowHead[i]);
                 flechita = arrowHead[i];
                 arrowAnim(flechita, floor_x.name);
-                map.setView(arrow[i].getBounds().getCenter(), 0);
+                map.setView(arrow[i].getBounds().pad(15).getCenter(), 0);
 
             } else {
                 map.setView(floor_x.bounds.getCenter(), 0);
@@ -689,7 +700,7 @@ function preDrawRoute(origin, qrFloor, destination, destinationFloor) {
         }
     }
     drawRoute(origin, osX, osY, destination, dsX, dsY);
-    map.invalidateSize();
+//    map.invalidateSize();
 
 }
 
@@ -873,7 +884,7 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
                 map.addLayer(arrowHead[f]);
                 flechita = arrowHead[f];
                 arrowAnim(flechita, floors[f].name);
-                map.setView(arrow[f].getBounds().getCenter(), 0);
+                map.setView(arrow[f].getBounds().pad(15).getCenter(), 0);
                 qrMarker.openPopup();
 
             } else {
@@ -907,11 +918,11 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
 
                 map.addLayer(floors[f].layer);
                 map.addLayer(floors[f].photo);
-                map.setView(arrow[f].getBounds().getCenter(), 0);
+                map.setView(arrow[f].getBounds().pad(15).getCenter(), 0);
                 map.addLayer(arrowHead[f]);
                 flechita = arrowHead[f];
                 arrowAnim(flechita, floors[f].name);
-                map.setView(arrow[f].getBounds().getCenter(), 0);
+                map.setView(arrow[f].getBounds().pad(15).getCenter(), 0);
 
             }
         }
@@ -940,15 +951,16 @@ function arrowAnim(arrow, idFloor) {
 var arrowsOffset = 0;
 
 //Función que define la animación (en este caso, flecha azul) que marca la ruta
-/*var setArrow = function (flecha, idFloor) {
+var setArrow = function (flecha, idFloor) {
 
     flecha.setPatterns([
         {offset: arrowsOffset + '%', repeat: 0, symbol: new L.Symbol.ArrowHead({pixelSize: 15, polygon: false, pathOptions: { stroke: true}})}
     ]);
     if (++arrowsOffset > 100)
         arrowsOffset = 0;
-};*/
+};
 
+/*
 var setArrow = function (flecha, idFloor) {
 
     flecha.setPatterns([
@@ -961,6 +973,7 @@ var setArrow = function (flecha, idFloor) {
     if (++arrowsOffset > 100)
         arrowsOffset = 0;
 };
+*/
 
 
 
@@ -1032,7 +1045,7 @@ Map.locateCar = function()
                 map.addLayer(arrowHead[i]);
                 flechita = arrowHead[i];
                 arrowAnim(flechita, floor_x.name);
-                map.setView(arrow[i].getBounds().getCenter(), 0);
+                map.setView(arrow[i].getBounds().pad(15).getCenter(), 0);
 
             } else {
                 map.setView(carLoc, 0);
@@ -1094,12 +1107,12 @@ Map.locatePosition = function()
                 map.addLayer(arrowHead[i]);
                 flechita = arrowHead[i];
                 arrowAnim(flechita, floor_x.name);
-//                    map.setView(arrow[i].getBounds().getCenter(), 0);
-                map.invalidateSize();
+                    map.setView(arrow[i].getBounds().pad(15).getCenter(), 0);
+//                map.invalidateSize();
             } else {
 //                Logger.log('No ruta..');
-//                    map.setView(qrLoc, 0);
-                map.invalidateSize();
+                    map.setView(qrLoc, 0);
+//                map.invalidateSize();
             }
 
         } else {
