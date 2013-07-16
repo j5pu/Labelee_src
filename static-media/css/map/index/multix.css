@@ -1158,7 +1158,7 @@ button.panorama{
 
 button#closeCoupon {
 position: absolute;
-
+padding: 2px 10px;
 top: 0;
 right:-4px;
 margin: 2%;

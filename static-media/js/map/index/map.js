@@ -700,7 +700,24 @@ function changeFloor(e) {
             jQuery('input[type=checkbox].leaflet-control-layers-selector:eq(' + lab + ')').prop("checked", true);
         }
     }
-    if (map.hasLayer(destMarker)) destMarker.openPopup();
+
+    if (map.hasLayer(qrMarker)) {
+        qrMarker.openPopup();
+        if (qrPoint.point.coupon) {
+            $('div.leaflet-popup-content-wrapper').addClass('withCoupon');
+        }
+        bindContent(qrMarker);
+    }
+
+    if (map.hasLayer(destMarker)) {
+        destMarker.openPopup();
+        if (route.fields.destiny.fields.coupon) {
+            $('div.leaflet-popup-content-wrapper').addClass('withCoupon');
+        }
+        bindContent(destMarker);
+    }
+
+
 }
 
 
