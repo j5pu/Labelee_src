@@ -6,10 +6,10 @@ var Panorama = {
 
     init: function()
     {
-//        $(document).on('click tap touch', function(ev){
-//            if(ev.target.tagName !== 'CANVAS')
-//                Panorama.close();
-//        });
+        $(document).on('click tap touch', function(ev){
+            if(ev.target.tagName !== 'CANVAS')
+                Panorama.close();
+        });
     },
 
     renderIcon: function(pointId)
@@ -57,6 +57,6 @@ var Panorama = {
         jQuery('button#close').remove();
         Panorama.opened = false;
 
-        Logger.log('panorama cerradoxxxxxx');
+//        Logger.log('panorama cerradoxxxxxx');
     }
 };
