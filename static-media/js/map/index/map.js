@@ -974,6 +974,10 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
         }
         bindContent(destMarker);
     }
+
+    if (map.hasLayer(carMarker)) {
+        map.removeLayer(carMarker);
+    }
 }
 //Función que gestiona la animación de la flecha
 function arrowAnim(arrow, idFloor) {
