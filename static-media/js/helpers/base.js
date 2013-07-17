@@ -160,8 +160,9 @@ var WaitingDialog = {
 };
 
 
-function FormDialog(node)
+function ModalDialog(node)
 {
+    // Elemento del DOM a insertar en el cuadro de diálogo
     this.node = node;
 
     $(node).dialog({

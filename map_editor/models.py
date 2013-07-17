@@ -15,8 +15,9 @@ CATEGORIAS_FIJAS = {
 
 class Enclosure(models.Model):
     name = models.CharField(max_length=60, unique=True, blank=False)
-    owner = models.ForeignKey(User, related_name='enclosures', blank=False)
     twitter_account = models.CharField(max_length=60, unique=True, blank=True, null=True)
+
+    owner = models.ForeignKey(User, related_name='enclosures', blank=False)
 
     def __unicode__(self):
         return self.name
@@ -48,16 +49,14 @@ def get_floor_path(instance, filename):
 
 #Se crea el modelo para los productos
 class Floor(models.Model):
+    floor_number = models.IntegerField(null=True, blank=True)
     name = models.CharField(max_length=200, null=False, blank=False)
     img = models.FileField(upload_to=get_floor_path, null=True, blank=True)
     num_rows = models.PositiveIntegerField(null=True, blank=True)
     num_cols = models.PositiveIntegerField(null=True, blank=True)
-    floor_number = models.IntegerField(null=True, blank=True)
-
 
     # por defecto, si eliminamos un lugar también se eliminan todos sus mapas
     enclosure = models.ForeignKey(Enclosure, related_name='floors', blank=True)
-    # 	place = models.ForeignKey(Enclosure, blank=True)
 
 
     def __unicode__(self):
@@ -87,6 +86,10 @@ class LabelCategory(models.Model):
     color = models.CharField(max_length=50, blank=False)
     img = models.FileField(upload_to="img/label_categories", blank=True, null=True)
     icon = models.CharField(max_length=50, blank=True, null=True)
+    cat_code = models.CharField(max_length=3, unique=True, blank=False, null=False)
+    is_generic = models.BooleanField(default=True)
+
+    enclosures = models.ManyToManyField(Enclosure)
 
     class Meta:
         verbose_name_plural = 'Label categories'
@@ -123,9 +126,6 @@ class Label(models.Model):
     name = models.CharField(max_length=200, blank=False, null=False)
     img = models.FileField(upload_to=label_filename, blank=True, null=True)
 
-    # ponemos '_objects_' en lugar de 'objects' para no confundirlo con la
-    # palabra reservada, ya que si no dará error
-    # 	category = models.ForeignKey(LabelCategory)
     category = models.ForeignKey(LabelCategory, related_name='labels', blank=True, on_delete=models.CASCADE)
 
     def __unicode__(self):
@@ -151,22 +151,15 @@ def get_coupon_path(instance, filename):
     fileName, fileExtension = os.path.splitext(filename)
     return 'img/enclosures/%s/coupons/%s%s' % (instance.floor.enclosure.id, instance.id, fileExtension)
 
-
-def get_panorama_thumbnail_path(instance, filename):
-    fileName, fileExtension = os.path.splitext(filename)
-    return 'img/enclosures/%s/panoramas/thumbnails/%s%s' % (instance.floor.enclosure.id, instance.id, fileExtension)
-
-
 class Point(models.Model):
     description = models.CharField(max_length=2000, null=True, blank=True)
     row = models.PositiveIntegerField(null=True, blank=True)
     col = models.PositiveIntegerField(null=True, blank=True)
     panorama = models.FileField(upload_to=get_panorama_path, null=True, blank=True)
-    panorama_thumbnail = models.FileField(upload_to=get_panorama_thumbnail_path, null=True, blank=True)
     coupon=models.FileField(upload_to=get_coupon_path,null=True, blank=True)
+
     label = models.ForeignKey(Label, related_name='points', on_delete=models.CASCADE)
     floor = models.ForeignKey(Floor, related_name='points', on_delete=models.CASCADE)
-    alwaysVisible = models.NullBooleanField()
 
     def __unicode__(self):
         return self.floor.name + ' (' + str(self.row) + ', ' + str(self.col) + ')'
@@ -179,6 +172,7 @@ class Point(models.Model):
 
 class QR_Code(models.Model):
     code = models.CharField(max_length=200, unique=True, blank=False)
+
     point = models.OneToOneField(Point, related_name='qr_code', null=True, blank=True, on_delete=models.CASCADE)
 
     class Meta:

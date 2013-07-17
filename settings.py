@@ -219,26 +219,26 @@ else:
     #         "PORT": "3306",
     #         }
     # }
-    # DATABASES = {
-    #     "default": {
-    #         "ENGINE": "django.db.backends.mysql",
-    #         "NAME": "labelee_dev",
-    #          "USER": "mnopi",
-    #         "PASSWORD": "1aragon1",
-    #         "HOST": "192.168.1.201",
-    #         "PORT": "3306",
-    #         }
-    # }
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.mysql",
-            "NAME": "labelee_dev",
+            "NAME": "admin_v2",
             "USER": "mnopi",
             "PASSWORD": "1aragon1",
             "HOST": "192.168.1.201",
             "PORT": "",
             }
-        }
+    }
+    # DATABASES = {
+    #     "default": {
+    #         "ENGINE": "django.db.backends.mysql",
+    #         "NAME": "labelee_dev",
+    #         "USER": "mnopi",
+    #         "PASSWORD": "1aragon1",
+    #         "HOST": "192.168.1.201",
+    #         "PORT": "",
+    #         }
+    #     }
 
 #     Estas aplicaciones solo se usaran en desarrollo..
     INSTALLED_APPS += ('south', 'sandbox',)

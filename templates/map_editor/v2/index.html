@@ -35,81 +35,92 @@
            class="table table-hover"
            ng-controller="EnclosureListCtrl">
         <thead>
-            <tr>
-                <th>
-                    <span>Enclosure</span>
-                    <i class="icon-plus-sign" ng-click="show_create_enclosure_form()"></i>
-                    <i class="icon-sort" ng-click="reverse = !reverse"></i>
-                </th>
-                <th>
-                    <span>Floors</span>
-                </th>
-                <th>Categories</th>
-            </tr>
+        <tr>
+            <th>
+                <span>{% trans "Recintos" %}</span>
+                <i class="icon-plus-sign" ng-click="show_create_enclosure_form()"></i>
+                <i class="icon-sort" ng-click="reverse = !reverse"></i>
+            </th>
+            <th>
+                <span>{% trans "Plantas" %}</span>
+            </th>
+            <th>
+                <span>{% trans "Categorías" %}</span>
+            </th>
+        </tr>
         </thead>
 
         <tbody>
-            <tr ng-repeat="enclosure in enclosures | orderBy:'name':reverse"
-                ng-controller="EnclosureCtrl">
+        <tr ng-repeat="enclosure in enclosures | orderBy:'name':reverse"
+            ng-controller="EnclosureCtrl">
 
-                <td class="enclosure"
-                    ng-mouseover="hovered = true" ng-mouseleave="hovered = false">
+            <td class="enclosure"
+                ng-mouseover="hovered = true" ng-mouseleave="hovered = false">
 
-                    <h2>[[enclosure.name]]</h2>
+                <h2>[[enclosure.name]]</h2>
+
+                <div class="icon-edit-wrapper">
+                    <i class="icon-edit"
+                       ng-show="hovered"
+                       ng-click="show_edit_form()"></i>
+                </div>
+                <h4 ng-show="enclosure.twitter_account">@[[enclosure.twitter_account]]</h4>
+
+                <div class="poi_count">{% trans "Número de POIS/QRs:" %} [[enclosure.poi_count]]</div>
+                <div class="floor_count">{% trans "Número de plantas:" %} [[enclosure.floors.length]]</div>
+
+                <div class="btn-group">
+                    <a class="btn link-2" ng-click="calculateRoutes()">
+                        <i class="icon-road icon-white"></i> {% trans "Calcular rutas" %}
+                    </a>
+                    <a class="btn link-2" id="aristas" href='edit/connections/[[enclosure.id]]'>
+                        <i class="icon-pencil icon-white"></i> {% trans "Conexiones entre plantas" %}
+                    </a>
+                </div>
+            </td>
+
+            <!-- PLANTAS -->
+            <td class="floors"
+                ng-mouseover="hovered = true" ng-mouseleave="hovered = false"
+                ng-controller="FloorListCtrl">
+
+                <i class="icon-plus-sign" ng-click="show_create_floor_form()"></i>
+                <i class="icon-sort"
+                   ng-click="reverse = !reverse"
+                   ng-show="enclosure.floors.length > 2"></i>
+
+                <!-- CADA PLANTA -->
+                <div class="floor"
+                     ng-repeat="floor in enclosure.floors | orderBy:'floor_number':reverse"
+                     ng-controller="FloorCtrl">
+                    <a class="link-2"
+                       href="[[urls.map_editor.edit]]/[[floor.id]]">
+                        <span>[[floor.name]]</span>
+                    </a>
+                    <span>[[floor.poi_count]]</span>
+
                     <div class="icon-edit-wrapper">
                         <i class="icon-edit"
-                           ng-show="hovered"
-                           ng-click="show_edit_form()"></i>
+{#                           ng-show="hovered"#}
+                           ng-click="show_edit_floor_form()"></i>
                     </div>
-                    <h4 ng-show="enclosure.twitter_account">@[[enclosure.twitter_account]]</h4>
-                    <div class="poi_count">{% trans "Número de POIS/QRs:" %} [[enclosure.poi_count]]</div>
-                    <div class="floor_count">{% trans "Número de plantas:" %} [[enclosure.floors.length]]</div>
+                </div>
+            </td>
 
-                    <div class="btn-group">
-                        <a class="btn link-2" ng-click="calculateRoutes()">
-                            <i class="icon-road icon-white"></i> {% trans "Calcular rutas" %}
-                        </a>
-                        <a class="btn link-2" id="aristas" href='edit/connections/[[enclosure.id]]'>
-                            <i class="icon-pencil icon-white"></i> {% trans "Conexiones entre plantas" %}
-                        </a>
-                    </div>
-                </td>
+            <td class="categories" ng-controller="CategoryListCtrl">
+                <i class="icon-plus-sign" ng-click="show_create_category_form()"></i>
+                <i class="icon-sort"
+                   ng-click="reverse = !reverse"
+                   ng-show="enclosure.label_categories.length > 5"></i>
 
-                <!-- PLANTAS -->
-                <td class="floors"
-                    ng-mouseover="hovered = true" ng-mouseleave="hovered = false"
-                    ng-controller="FloorListCtrl">
-
-                    <i class="icon-plus-sign" ng-click="show_create_floor_form()"></i>
-                    <i class="icon-sort"
-                       ng-click="reverse = !reverse"
-                       ng-show="enclosure.floors.length > 2"></i>
-
-                    <!-- CADA PLANTA -->
-                    <div class="floor"
-                         ng-repeat="floor in enclosure.floors | orderBy:'floor_number':reverse"
-                         ng-controller="FloorCtrl">
-                        <a      class="link-2"
-                                href="[[urls.map_editor.edit]]/[[floor.id]]">
-                            <span>[[floor.name]]</span>
-                        </a>
-                        <span>[[floor.poi_count]]</span>
-                        <div class="icon-edit-wrapper">
-                            <i class="icon-edit"
-                               ng-show="hovered"
-                               ng-click="show_edit_floor_form()"></i>
-                        </div>
-                    </div>
-                </td>
-
-                <td class="categories" ng-controller="CategoryListCtrl">
-                    <ul>
-                        <li ng-repeat="category in enclosure.label_categories | orderBy:'name'">
-                            [[category.name]] ([[category.poi_count]])
-                        </li>
-                    </ul>
-                </td>
-            </tr>
+                <ul>
+                    <li ng-repeat="category in enclosure.label_categories | orderBy:'name'"
+                        ng-click="showPois()">
+                        [[category.name]] ([[category.poi_count]])
+                    </li>
+                </ul>
+            </td>
+        </tr>
         </tbody>
     </table>
 
@@ -117,111 +128,117 @@
 
 
     <!--
-        FORMULARIOS
+        DIÁLOGOS
                     -->
-    <div id="enc_create" ng-controller="EnclosureFormsCtrl">
-        <form class="create">
-            <input type="text"
-                   ng-model="enclosure_name"
-{#                       ng-change="validate()"#}
-                   placeholder="{% trans "Nombre del recinto" %}..">
-
-            <button class="btn" ng-click="create()">{% trans "Añadir recinto" %}</button>
-        </form>
-    </div>
-
-    <div id="enc_edit" ng-controller="EnclosureFormsCtrl">
-        <form class="edit">
-            <label class="txt">Nuevo nombre:
+    <div id="dialogs">
+        <div id="enc_create" ng-controller="EnclosureFormsCtrl">
+            <form class="create">
                 <input type="text"
                        ng-model="enclosure_name"
-                       placeholder="{% trans "Nuevo nombre para el recinto" %}.."
-                       autofocus>
-            </label>
-            <label class="txt">
-                Cuenta de Twitter:
-                <input type="text"
-                       ng-model="twitter_account"
-                       placeholder="{% trans "Cuenta de twitter" %}..">
-            </label>
+                       placeholder="{% trans "Nombre del recinto" %}..">
 
-            <button class="btn" ng-click="cancelUpdate()">{% trans "Cancelar" %}</button>
-            <button class="btn" ng-click="update()">{% trans "Editar" %}</button>
+                <button class="btn" ng-click="create()">{% trans "Añadir recinto" %}</button>
+            </form>
+        </div>
 
-            <button class="btn" ng-click="del()">{% trans "Eliminar recinto" %}</button>
-        </form>
-    </div>
+        <div id="enc_edit" ng-controller="EnclosureFormsCtrl">
+            <form class="edit">
+                <label class="txt">Nuevo nombre:
+                    <input type="text"
+                           ng-model="enclosure_name"
+                           placeholder="{% trans "Nuevo nombre para el recinto" %}.."
+                           autofocus>
+                </label>
+                <label class="txt">
+                    Cuenta de Twitter:
+                    <input type="text"
+                           ng-model="twitter_account"
+                           placeholder="{% trans "Cuenta de twitter" %}..">
+                </label>
+
+                <button class="btn" ng-click="cancelUpdate()">{% trans "Cancelar" %}</button>
+                <button class="btn" ng-click="update()">{% trans "Editar" %}</button>
+
+                <button class="btn" ng-click="del()">{% trans "Eliminar recinto" %}</button>
+            </form>
+        </div>
 
 
-    <div id="floor_create" ng-controller="FloorFormsCtrl">
-        <form class="create"
-              action=""
-              method="post"
-              enctype="multipart/form-data"
-              target="upload_target">
+        <div id="floor_create" ng-controller="FloorFormsCtrl">
+            <form class="create"
+                  action=""
+                  method="post"
+                  enctype="multipart/form-data"
+                  target="upload_target">
 
-            <div class="form_content" ng-hide="sending_img">
-                <div class="box-3">
-                    <label class="txt">{% trans "Nombre de planta" %}:
+                <div class="form_content" ng-hide="sending_img">
+                    <div class="box-3">
+                        <label class="txt">{% trans "Nombre de planta" %}:
+                            <input type="text"
+                                   ng-model="floor_name"
+                                   placeholder="{% trans "Nombre de planta" %}..">
+                        </label>
+                        <label class="txt">{% trans "Número" %}:
+                            <input type="text"
+                                   ng-model="floor_number"
+                                   placeholder="{% trans "Número" %}..">
+                        </label>
+                        <input class="btn floor_img"
+                               type="file"
+                               name="img"
+                               title="{% trans "Elegir imagen" %}">
+                    </div>
+
+                    <button class="btn" ng-click="create()">{% trans "Añadir planta" %}</button>
+                </div>
+
+                {% include "_waiting_gif.html" %}
+            </form>
+        </div>
+
+        <div id="floor_edit" ng-controller="FloorFormsCtrl">
+            <form class="edit"
+                  action=""
+                  method="post" enctype="multipart/form-data"
+                  target="upload_target">
+
+                <div class="box-2 editing-floor">
+                    <label class="txt">{% trans "Nombre" %}:
                         <input type="text"
+                               ng-init="floor_name=floor.name"
                                ng-model="floor_name"
-                               placeholder="{% trans "Nombre de planta" %}..">
+                               placeholder="{% trans "Nuevo nombre para la planta" %}.."
+                               autofocus>
                     </label>
                     <label class="txt">{% trans "Número" %}:
                         <input type="text"
+                               ng-init="floor_number=floor.floor_number"
                                ng-model="floor_number"
+                               ng-change="validate()"
                                placeholder="{% trans "Número" %}..">
                     </label>
-                    <input class="btn floor_img"
+                    <input class="btn"
                            type="file"
                            name="img"
-                            {#                                   onchange="angular.element(this).scope().setFile(this)"#}
-                           title="{% trans "Elegir imagen" %}">
+                           title="{% trans "Cambiar imagen" %}">
                 </div>
 
-                <button class="btn" ng-click="create()">{% trans "Añadir planta" %}</button>
-            </div>
+                <button class="btn" ng-click="cancelUpdate()">{% trans "Cancelar" %}</button>
+                <button class="btn" ng-click="update()">{% trans "Editar" %}</button>
+                <button class="btn" ng-click="del()">{% trans "Eliminar planta" %}</button>
 
-            {% include "_waiting_gif.html" %}
-        </form>
-    </div>
+                {% include "_waiting_gif.html" %}
+            </form>
+        </div>
 
-    <div id="floor_edit" ng-controller="FloorFormsCtrl">
-        <form class="edit"
-              action=""
-              method="post" enctype="multipart/form-data"
-              target="upload_target">
 
-            <!--<div ng-include src="_form_alert_box"></div>-->
-            <div class="box-2 editing-floor">
-                <label class="txt">{% trans "Nombre" %}:
-                    <input type="text"
-                           ng-init="floor_name=floor.name"
-                           ng-model="floor_name"
-                           placeholder="{% trans "Nuevo nombre para la planta" %}.."
-                           autofocus>
-                </label>
-                <label class="txt">{% trans "Número" %}:
-                    {#                                        <span class="txt">{% trans "Número" %}:</span>#}
-                    <input type="text"
-                           ng-init="floor_number=floor.floor_number"
-                           ng-model="floor_number"
-                           ng-change="validate()"
-                           placeholder="{% trans "Número" %}..">
-                </label>
-                <input class="btn"
-                       type="file"
-                       name="img"
-                        {#                                   onchange="angular.element(this).scope().setFile(this)"#}
-                       title="{% trans "Cambiar imagen" %}">
-            </div>
-
-            <button class="btn" ng-click="cancelUpdate()">{% trans "Cancelar" %}</button>
-            <button class="btn" ng-click="update()">{% trans "Editar" %}</button>
-            <button class="btn" ng-click="del()">{% trans "Eliminar planta" %}</button>
-
-            {% include "_waiting_gif.html" %}
-        </form>
+        <div id="category_pois" ng-controller="PoiListCtrl">
+            <ul>
+                <li ng-repeat="poi in pois | orderBy:'name'">
+                    [[poi.name]]
+                </li>
+            </ul>
+        </div>
     </div>
 
 

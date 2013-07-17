@@ -8,7 +8,9 @@ from utils.helpers import *
 
 def manager(request):
     """
-    Devuelve toda la info de cada recinto a mostrar en el manager
+    /api-2/enclosure/manager
+
+    Devuelve toda la info de todos los recintos a mostrar en el manager para el usuario
     """
     enclosures = []
     enclosures_query = Enclosure.objects.filter(owner__id=request.user.id)
@@ -27,12 +29,15 @@ def manager(request):
 
 
         categories = LabelCategory.objects.filter(labels__points__floor__enclosure__id=enclosure.id)
-        categories_valid_grouped = filterAsValidCategories(categories).annotate(total=Sum('id'))
+        categories_valid_grouped = filterAsValidCategories(categories).distinct()
         enclosure_dict['label_categories'] = queryset_to_dict(categories_valid_grouped)
 
         for i in range(len(enclosure_dict['label_categories'])):
             enclosure_dict['label_categories'][i]['poi_count'] =\
-                Point.objects.filter(label__category__id=enclosure_dict['label_categories'][i]['id']).count()
+                Point.objects\
+                    .filter(floor__enclosure__id=enclosure_dict['id'])\
+                    .filter(label__category__id=enclosure_dict['label_categories'][i]['id'])\
+                    .count()
 
 
         enclosures.append(enclosure_dict)

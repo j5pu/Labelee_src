@@ -1,16 +1,12 @@
-var formDialog;
+var modalDialog;
 
 $(function() {
     I18n.selectLang(lang_code);
-
-
 });
 
 
 function EnclosureListCtrl($scope, $rootScope)
 {
-    $scope.$watch('enclosures', function(){FileInput.draw();});
-
 	$scope.enclosures = enclosureResource.getForManagerIndex();
 
     // Orden en que aparecerán los recintos
@@ -28,7 +24,7 @@ function EnclosureListCtrl($scope, $rootScope)
         function(event){
             $scope.$on(event, function() {
                 $scope.enclosures = enclosureResource.getForManagerIndex();
-                formDialog.close();
+                modalDialog.close();
         });
     });
 }
@@ -56,28 +52,29 @@ function FloorListCtrl($scope, $rootScope)
     $scope.hovered = false;
     $scope.reverse = false;
 
-    $scope.$watch('floors', function(){
-        FileInput.draw();
-    });
-
     $scope.show_create_floor_form = function() {
         $rootScope.$broadcast('show_create_floor_form', $scope.enclosure);
     };
-
-
 }
 
 function FloorCtrl($scope, $rootScope, $element)
 {
     $scope.show_edit_floor_form = function() {
         $rootScope.$broadcast('show_edit_floor_form', $scope.floor);
-    }
+    };
 }
 
 
-function CategoryListCtrl($scope, UrlService)
+function CategoryListCtrl($scope, $rootScope)
 {
+    $scope.show_create_category_form = function() {
+        $rootScope.$broadcast('show_create_category_form');
+    };
 
+    $scope.showPois = function()
+    {
+        $rootScope.$broadcast('show_poi_list', $scope.enclosure, $scope.category);
+    };
 }
 
 
@@ -115,7 +112,7 @@ function EnclosureFormsCtrl($scope, $rootScope)
     };
 
     $scope.cancelUpdate = function() {
-        formDialog.close();
+        modalDialog.close();
     };
 
     $scope.del = function() {
@@ -133,8 +130,8 @@ function EnclosureFormsCtrl($scope, $rootScope)
 
     $scope.$on('show_create_enclosure_form', function() {
         $scope.enclosure_name = '';
-        formDialog = new FormDialog('#enc_create');
-        formDialog.open();
+        modalDialog = new ModalDialog('#enc_create');
+        modalDialog.open();
     });
 
     $scope.$on('show_edit_form', function(ev, enclosure) {
@@ -142,8 +139,8 @@ function EnclosureFormsCtrl($scope, $rootScope)
         $scope.enclosure = enclosure;
         $scope.enclosure_name = enclosure.name;
         $scope.twitter_account = enclosure.twitter_account;
-        formDialog = new FormDialog('#enc_edit');
-        formDialog.open();
+        modalDialog = new ModalDialog('#enc_edit');
+        modalDialog.open();
     });
 }
 
@@ -228,7 +225,7 @@ function FloorFormsCtrl($scope, $rootScope, $element)
 
 
     $scope.cancelUpdate = function() {
-        formDialog.close();
+        modalDialog.close();
     };
 
 
@@ -250,8 +247,8 @@ function FloorFormsCtrl($scope, $rootScope, $element)
         $scope.floor_name = '';
         $scope.floor_number = '';
         $scope.floor_img = '';
-        formDialog = new FormDialog('#floor_create');
-        formDialog.open();
+        modalDialog = new ModalDialog('#floor_create');
+        modalDialog.open();
     });
 
 
@@ -260,8 +257,24 @@ function FloorFormsCtrl($scope, $rootScope, $element)
         $scope.floor_name = floor.name;
         $scope.floor_number = floor.floor_number;
         $scope.floor_img = floor.img;
-        formDialog = new FormDialog('#floor_edit');
-        formDialog.open();
+        modalDialog = new ModalDialog('#floor_edit');
+        modalDialog.open();
+    });
+}
+
+
+function PoiListCtrl($scope, $rootScope)
+{
+    $scope.$on('show_poi_list', function(enclosure, category){
+        // Muestra los POIs de la categoría donde hacemos click
+
+        $scope.pois = pointResource.readAllFiltered(
+            '?floor__enclosure__id=' + enclosure.id + '&' +
+            'label__category__id=' + category.id
+        );
+
+        modalDialog = new ModalDialog('#category_POIs');
+        modalDialog.open();
     });
 }
 
