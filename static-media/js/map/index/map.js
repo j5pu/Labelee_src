@@ -450,10 +450,14 @@ function loadPOIs() {
 
 
         // Cada label es un conjunto de POIs (restaurantes, cines..)
-        for (var la in floors[fl].labels) {
-            if (!isCategoryVisibleOnButtons(floors[fl].labels[la].fields.name_es)) {
-                floors[fl].layer.addLayer(floors[fl].labels[la].layer);
-                floors[fl].labels.splice(la, 1);
+        for (var i=0; i < floors[fl].labels.length;) {
+            if (!isCategoryVisibleOnButtons(floors[fl].labels[i].fields.name)) {
+                floors[fl].layer.addLayer(floors[fl].labels[i].layer);
+                floors[fl].labels.splice(i--, 1);
+            }
+            else
+            {
+                i++;
             }
         }
 
@@ -1020,11 +1024,11 @@ var setArrow = function (flecha, idFloor) {
 
 
 function isCategoryVisibleOnButtons(categ_name) {
-    return categ_name !== "Parquing" &&
-        categ_name !== "Bloqueantes" &&
-        categ_name !== "Aristas" &&
-        categ_name !== "Entrance" &&
-        categ_name !== "Aseos";
+    return (categ_name !== "Parquing" && categ_name !== "Parking") &&
+        (categ_name !== "Bloqueantes" && categ_name !==  "Blockers") &&
+        (categ_name !== "Aristas" && categ_name !== "Connectors") &&
+    (categ_name !== "Entrance") &&
+    (categ_name !== "Aseos" && categ_name !== "Toilet");
 }
 
 function isPoiVisibleByDefault(categ_name) {
