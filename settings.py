@@ -138,7 +138,7 @@ INSTALLED_APPS = (
     'route',
     'modeltranslation',
     'log',
-    # 'panorama',
+    'analytics',
 )
 
 # A sample logging configuration. The only tangible logging

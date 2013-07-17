@@ -19,7 +19,8 @@ function EnclosureListCtrl($scope, $rootScope)
     angular.forEach(
         [
             'enclosure_created', 'enclosure_updated', 'enclosure_deleted',
-            'floor_created', 'floor_updated', 'floor_deleted'
+            'floor_created', 'floor_updated', 'floor_deleted',
+            'category_created'
         ],
         function(event){
             $scope.$on(event, function() {
@@ -57,7 +58,7 @@ function FloorListCtrl($scope, $rootScope)
     };
 }
 
-function FloorCtrl($scope, $rootScope, $element)
+function FloorCtrl($scope, $rootScope, $element, UrlService)
 {
     $scope.show_edit_floor_form = function() {
         $rootScope.$broadcast('show_edit_floor_form', $scope.floor);
@@ -68,13 +69,13 @@ function FloorCtrl($scope, $rootScope, $element)
 function CategoryListCtrl($scope, $rootScope)
 {
     $scope.show_create_category_form = function() {
-        $rootScope.$broadcast('show_create_category_form');
+        $rootScope.$broadcast('show_create_category_form', $scope.enclosure);
     };
 
-    $scope.showPois = function()
-    {
-        $rootScope.$broadcast('show_poi_list', $scope.enclosure, $scope.category);
-    };
+//    $scope.showPois = function()
+//    {
+//        $rootScope.$broadcast('show_poi_list', $scope.enclosure, $scope.category);
+//    };
 }
 
 
@@ -263,20 +264,57 @@ function FloorFormsCtrl($scope, $rootScope, $element)
 }
 
 
-function PoiListCtrl($scope, $rootScope)
+function CategoryFormsCtrl($scope, $rootScope, $element)
 {
-    $scope.$on('show_poi_list', function(enclosure, category){
-        // Muestra los POIs de la categoría donde hacemos click
+    $scope.create = function()
+    {
+        var data = {
+            name: $scope.category_name,
+            color: $scope.category_color
+        };
+        new_label_category = labelCategoryResource.create(data);
 
-        $scope.pois = pointResource.readAllFiltered(
-            '?floor__enclosure__id=' + enclosure.id + '&' +
-            'label__category__id=' + category.id
-        );
+        data = {
+            enclosure: enclosureResource.api1_url + $scope.enclosure.id + '/',
+            label_category: labelCategoryResource.api1_url + new_label_category.id + '/'
+        };
+        enclosureHasLabelCategoryResource.create(data);
 
-        modalDialog = new ModalDialog('#category_POIs');
+        modalDialog.close();
+
+        $rootScope.$broadcast('category_created');
+    };
+
+
+    $scope.$on('show_create_category_form', function(ev, enclosure){
+        $scope.enclosure = enclosure;
+        $scope.category_name = '';
+        modalDialog = new ModalDialog('#category_create');
         modalDialog.open();
     });
 }
+
+
+
+
+
+
+
+
+//function PoiListCtrl($scope, $rootScope)
+//{
+//    $scope.$on('show_poi_list', function(enclosure, category){
+//        // Muestra los POIs de la categoría donde hacemos click
+//
+//        $scope.pois = pointResource.readAllFiltered(
+//            '?floor__enclosure__id=' + enclosure.id + '&' +
+//            'label__category__id=' + category.id
+//        );
+//
+//        modalDialog = new ModalDialog('#category_POIs');
+//        modalDialog.open();
+//    });
+//}
 
 
 

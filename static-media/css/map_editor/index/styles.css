@@ -1,4 +1,5 @@
 
+
 body {
     max-width: 80%;
 }
@@ -40,7 +41,7 @@ table th, table td
 
 td.enclosure
 {
-    width: 40%;
+    max-width: 40%;
 }
 
 td.floors
@@ -113,7 +114,7 @@ td.pois
     text-shadow: none;
 }
 
-#enc_create, #enc_edit, #floor_create, #floor_edit
+#dialogs
 {
     display: none;
 }

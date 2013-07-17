@@ -59,11 +59,10 @@
 
                 <h2>[[enclosure.name]]</h2>
 
-                <div class="icon-edit-wrapper">
-                    <i class="icon-edit"
-                       ng-show="hovered"
-                       ng-click="show_edit_form()"></i>
-                </div>
+                <button class="btn" ng-click="show_edit_form()">
+                    {% trans "Editar" %}
+                </button>
+
                 <h4 ng-show="enclosure.twitter_account">@[[enclosure.twitter_account]]</h4>
 
                 <div class="poi_count">{% trans "Número de POIS/QRs:" %} [[enclosure.poi_count]]</div>
@@ -90,23 +89,41 @@
                    ng-show="enclosure.floors.length > 2"></i>
 
                 <!-- CADA PLANTA -->
-                <div class="floor"
-                     ng-repeat="floor in enclosure.floors | orderBy:'floor_number':reverse"
-                     ng-controller="FloorCtrl">
-                    <a class="link-2"
-                       href="[[urls.map_editor.edit]]/[[floor.id]]">
-                        <span>[[floor.name]]</span>
-                    </a>
-                    <span>[[floor.poi_count]]</span>
-
-                    <div class="icon-edit-wrapper">
-                        <i class="icon-edit"
-{#                           ng-show="hovered"#}
-                           ng-click="show_edit_floor_form()"></i>
-                    </div>
-                </div>
+                <table ng-hide="enclosure.floors.length == 0">
+                    <thead>
+                    <tr>
+                        <th>{% trans "Número" %}</th>
+                        <th>{% trans "Nombre" %}</th>
+                        <th>{% trans "POIs" %}</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="floor in enclosure.floors | orderBy:'floor_number':reverse"
+                            ng-controller="FloorCtrl">
+                            <td>
+                                [[floor.floor_number]]
+                            </td>
+                            <td>
+                                <a class="link-2"
+                                   href="[[urls.map_editor.edit]]/[[floor.id]]">
+                                    <span>[[floor.name]]</span>
+                                </a>
+                            </td>
+                            <td>
+                                [[floor.poi_count]]
+                            </td>
+                            <td>
+                                <button class="btn" ng-click="show_edit_floor_form()">
+                                    {% trans "Editar" %}
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
             </td>
 
+            <!-- CATEGORÍAS -->
             <td class="categories" ng-controller="CategoryListCtrl">
                 <i class="icon-plus-sign" ng-click="show_create_category_form()"></i>
                 <i class="icon-sort"
@@ -117,6 +134,10 @@
                     <li ng-repeat="category in enclosure.label_categories | orderBy:'name'"
                         ng-click="showPois()">
                         [[category.name]] ([[category.poi_count]])
+
+                        <button class="btn" ng-hide="category.is_generic">
+                            {% trans "Editar" %}
+                        </button>
                     </li>
                 </ul>
             </td>
@@ -157,7 +178,7 @@
                 </label>
 
                 <button class="btn" ng-click="cancelUpdate()">{% trans "Cancelar" %}</button>
-                <button class="btn" ng-click="update()">{% trans "Editar" %}</button>
+                <button class="btn" ng-click="update()">{% trans "Guardar" %}</button>
 
                 <button class="btn" ng-click="del()">{% trans "Eliminar recinto" %}</button>
             </form>
@@ -224,20 +245,25 @@
                 </div>
 
                 <button class="btn" ng-click="cancelUpdate()">{% trans "Cancelar" %}</button>
-                <button class="btn" ng-click="update()">{% trans "Editar" %}</button>
+                <button class="btn" ng-click="update()">{% trans "Guardar" %}</button>
                 <button class="btn" ng-click="del()">{% trans "Eliminar planta" %}</button>
 
                 {% include "_waiting_gif.html" %}
             </form>
         </div>
 
+        <div id="category_create" ng-controller="CategoryFormsCtrl">
+            <form class="create">
+                <span>{% trans "Nueva categoría para el recinto" %} [[enclosure.name]]</span>
+                <input type="text"
+                       ng-model="category_name"
+                       placeholder="{% trans "Nombre para la categoría" %}..">
+                <input type="text"
+                       ng-model="category_color"
+                       placeholder="{% trans "Color para la categoría" %}..">
 
-        <div id="category_pois" ng-controller="PoiListCtrl">
-            <ul>
-                <li ng-repeat="poi in pois | orderBy:'name'">
-                    [[poi.name]]
-                </li>
-            </ul>
+                <button class="btn" ng-click="create()">{% trans "Añadir categoría" %}</button>
+            </form>
         </div>
     </div>
 

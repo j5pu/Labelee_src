@@ -592,10 +592,17 @@ function StepResource()
 }
 
 
+function EnclosureHasLabelCategoryResource()
+{
+    Resource.call(this, 'enclosure-has-labelcategory');
+}
+
+
 FloorResource.prototype = new Resource;
 var floorResource = new FloorResource();
 LabelResource.prototype = new Resource;
 LabelCategoryResource.prototype = new Resource;
+var labelCategoryResource = new LabelCategoryResource();
 PointResource.prototype = new Resource;
 var pointResource = new PointResource();
 EnclosureResource.prototype = new Resource;
@@ -603,3 +610,5 @@ var enclosureResource = new EnclosureResource();
 ConnectionResource.prototype = new Resource;
 RouteResource.prototype = new Resource;
 StepResource.prototype = new Resource;
+EnclosureHasLabelCategoryResource.prototype = new Resource;
+var enclosureHasLabelCategoryResource = new EnclosureHasLabelCategoryResource();

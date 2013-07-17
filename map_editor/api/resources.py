@@ -152,6 +152,9 @@ class LabelResource(ModelResource):
 class LabelCategoryResource(ModelResource):
     labels = fields.ToManyField('map_editor.api.resources.LabelResource', 'labels', null=True, blank=True)
 
+    enclosures = fields.ManyToManyField('map_editor.api.resources.EnclosureResource',
+                                        'enclosures', readonly=True, null=True)
+
     class Meta:
         resource_name = 'label-category'
         queryset = LabelCategory.objects.all()
@@ -164,11 +167,20 @@ class LabelCategoryResource(ModelResource):
             'color': ALL,
             'icon': ALL,
             'labels': ALL_WITH_RELATIONS,
+            'enclosures': ALL_WITH_RELATIONS,
         }
 
     def determine_format(self, request):
         return 'application/json'
 
+
+# class RecipeResource(ModelResource):
+#     ingredients = fields.ToManyField(RecipeIngredientResource,
+#                                      attribute=lambda bundle: bundle.obj.ingredients.through.objects.filter(
+#                                          recipe=bundle.obj) or bundle.obj.ingredients, full=True)
+#     class Meta:
+#         queryset = Recipe.objects.all()
+#         resource_name = 'recipe'
 
 class QRCodeResource(ModelResource):
     point = fields.ToOneField('map_editor.api.resources.PointResource', 'point', full=True)
@@ -267,6 +279,20 @@ class LogEntryResource(ModelResource):
             'message': ALL,
             'when': ALL
         }
+
+    def determine_format(self, request):
+        return 'application/json'
+
+
+class EnclosureHasLabelCategoryResource(ModelResource):
+    enclosure = fields.ToOneField(EnclosureResource, 'enclosure', full=False)
+    label_category = fields.ToOneField(LabelCategoryResource, 'label_category', full=False)
+
+    class Meta:
+        resource_name = 'enclosure-has-labelcategory'
+        queryset= EnclosureHasLabelCategory.objects.all()
+        always_return_data = True
+        authorization = DjangoAuthorization()
 
     def determine_format(self, request):
         return 'application/json'

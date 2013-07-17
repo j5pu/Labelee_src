@@ -3,6 +3,7 @@ from django.db.models import Sum
 from django.http import HttpResponse
 import simplejson
 from map_editor.models import Enclosure, LabelCategory, Point
+from django.db.models import Q
 from utils.helpers import *
 
 
@@ -28,7 +29,12 @@ def manager(request):
         enclosure_dict['poi_count'] = enclosure.count_pois()
 
 
-        categories = LabelCategory.objects.filter(labels__points__floor__enclosure__id=enclosure.id)
+        # categories = LabelCategory.objects.filter(labels__points__floor__enclosure__id=enclosure.id)
+        categories = LabelCategory.objects.filter(
+            Q(labels__points__floor__enclosure__id=enclosure.id) |
+            Q(enclosures__id=enclosure.id)
+        )
+
         categories_valid_grouped = filterAsValidCategories(categories).distinct()
         enclosure_dict['label_categories'] = queryset_to_dict(categories_valid_grouped)
 
