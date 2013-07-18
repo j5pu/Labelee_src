@@ -46,6 +46,15 @@ var OriginIcon = L.AwesomeMarkers.icon({
         color: 'red'
     });
 
+var txtIcon= new L.icon({
+    iconUrl: '/media/texticon.png',
+    iconRetinaUrl: '/media/texticon.png',
+    iconSize: [1, 1],
+    iconAnchor: [1,1],
+    //popupAnchor: [0,0],
+    labelAnchor: [2, 0]
+});
+
 
 var loadedLabels = false;
 
@@ -427,8 +436,28 @@ function loadPOIs() {
                     bindContent(qrMarker);
                 });
 
+/*
+            floors[fl].pois[j].marker.bindLabel(floors[fl].pois[j].description, {noHide: true}).addTo(map).showLabel();
+
+            if (floors[fl].pois[j].alwaysVisible) {
+            //Cambiar el parámetro loc por [centro del establecimiento/POI]
+            floors[fl].pois[j].txtMarker= new L.Marker(new L.latLng(loc), {icon: txtIcon}).bindLabel(floors[fl].pois[j].description, {noHide: true}).addTo(map).showLabel();
+            floors[fl].pois[j].txtMarker.setOpacity(1);
+            floors[fl].layer.addLayer(floors[fl].pois[j].txtMarker);
+            }
+*/
+
+
+//             if (floors[fl].pois[j].alwaysVisible) {
+//            floors[i].labels[l].layer.addLayer(floors[fl].pois[j].marker.bindLabel(floors[fl].pois[j].description, { noHide: true, className: 'textLabel' }))
+//            //.addTo(map)
+//        }
+
+
+
+
             /*
-             L.marker([-37.785, 175.263])
+             L.marker([50, 50])
              .bindLabel('A sweet static label!', { noHide: true })
              .addTo(map)
              .showLabel();
@@ -437,8 +466,8 @@ function loadPOIs() {
 
             for (var l in floors[fl].labels) {
                 if (floors[fl].pois[j].marker.category === floors[fl].labels[l].fields.name)
-                    floors[fl].labels[l].layer.addLayer(floors[fl].pois[j].marker);
-
+                {floors[fl].labels[l].layer.addLayer(floors[fl].pois[j].marker);
+                }
             }
 
             if (isCategoryVisibleOnButtons(floors[fl].pois[j].marker.category_es))
@@ -450,10 +479,14 @@ function loadPOIs() {
 
 
         // Cada label es un conjunto de POIs (restaurantes, cines..)
-        for (var la in floors[fl].labels) {
-            if (!isCategoryVisibleOnButtons(floors[fl].labels[la].fields.name_es)) {
-                floors[fl].layer.addLayer(floors[fl].labels[la].layer);
-                floors[fl].labels.splice(la, 1);
+        for (var i=0; i < floors[fl].labels.length;) {
+            if (!isCategoryVisibleOnButtons(floors[fl].labels[i].fields.name)) {
+                floors[fl].layer.addLayer(floors[fl].labels[i].layer);
+                floors[fl].labels.splice(i--, 1);
+            }
+            else
+            {
+                i++;
             }
         }
 
@@ -524,14 +557,16 @@ function loadPOIs() {
 //Configuración inicial del mapa
 var map = L.map('map', {
     crs: L.CRS.Simple,
-    zoom: 0,
+    zoom: 1,
     minZoom: 0,
     maxZoom: 3,
-    zoomControl: false,
+    zoomControl: false
+/*
     tapTolerance: 30,
     inertiaThreshold: 5,
     inertiaDeceleration: 2000,
     inertiaMaxSpeed: 1000
+*/
 });
 
 
@@ -548,7 +583,13 @@ function initMap(qrPoint) {
         if (floors[i].id === qrPoint.floor.id) {
             qrFloor = floors[i];
             map.addLayer(qrFloor.photo);
-            map.addLayer(qrFloor.layer);
+            map.addLayer(qrFloor.layer)
+
+
+                for (var txt in qrFloor.pois)
+                {
+                 if(qrFloor.pois[txt].textMarker)   qrFloor.pois[txt].textMarker.addTo(map).showLabel();
+                }
 
             for (var l in floors[i].labels) {
                 layersControl.addOverlay(floors[i].labels[l].layer, '<i class="icon-' + floors[i].labels[l].fields.icon + ' icon-white"></i>');
@@ -572,13 +613,15 @@ function initMap(qrPoint) {
              */
         }
 
-
-//        if (floors[i].pois[j].alwaysVisible) {
-//            floors[i].labels[l].layer.addLayer(floors[fl].pois[j].marker.bindLabel(floors[fl].pois[j].description, { noHide: true, className: 'textLabel' }))
-//            //.addTo(map)
-//        }
-
     }
+
+
+    L.marker(qrLoc, {icon: txtIcon})
+//    L.polyline(qrLoc, qrLoc)
+        .bindLabel('Demo text!', { noHide: true })
+        .addTo(qrFloor.layer)
+        //.addTo(map)
+        .showLabel();
 
     map.removeLayer(totalPois);
     map.addLayer(qrFloor.layer);
@@ -701,6 +744,16 @@ function changeFloor(e) {
         }
     }
 
+    for (var p in floor_x.pois)
+    {
+        if (floor_x.pois[p].alwaysVisible){
+        L.marker(floor_x.pois[p].marker.loc, {icon: txtIcon})
+            .bindLabel(floor_x.pois[p].description, { noHide: true })
+            .addTo(floor_x.layer)
+            //.addTo(map)
+            .showLabel();
+        }
+    }
     if (map.hasLayer(qrMarker)) {
         qrMarker.openPopup();
         if (qrPoint.point.coupon) {
@@ -1020,11 +1073,11 @@ var setArrow = function (flecha, idFloor) {
 
 
 function isCategoryVisibleOnButtons(categ_name) {
-    return categ_name !== "Parquing" &&
-        categ_name !== "Bloqueantes" &&
-        categ_name !== "Aristas" &&
-        categ_name !== "Entrance" &&
-        categ_name !== "Aseos";
+    return (categ_name !== "Parquing" && categ_name !== "Parking") &&
+        (categ_name !== "Bloqueantes" && categ_name !==  "Blockers") &&
+        (categ_name !== "Aristas" && categ_name !== "Connectors") &&
+    (categ_name !== "Entrance") &&
+    (categ_name !== "Aseos" && categ_name !== "Toilet");
 }
 
 function isPoiVisibleByDefault(categ_name) {
