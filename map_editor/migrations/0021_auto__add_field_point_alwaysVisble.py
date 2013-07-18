@@ -9,9 +9,10 @@ class Migration(SchemaMigration):
 
     def forwards(self, orm):
         # Adding field 'Point.alwaysVisble'
-        db.add_column(u'map_editor_point', 'alwaysVisble',
-                      self.gf('django.db.models.fields.NullBooleanField')(null=True, blank=True),
-                      keep_default=False)
+        # db.add_column(u'map_editor_point', 'alwaysVisble',
+        #               self.gf('django.db.models.fields.NullBooleanField')(null=True, blank=True),
+        #               keep_default=False)
+        pass
 
 
     def backwards(self, orm):
@@ -94,7 +95,6 @@ class Migration(SchemaMigration):
         },
         u'map_editor.point': {
             'Meta': {'object_name': 'Point'},
-            'alwaysVisble': ('django.db.models.fields.NullBooleanField', [], {'null': 'True', 'blank': 'True'}),
             'col': ('django.db.models.fields.PositiveIntegerField', [], {'null': 'True', 'blank': 'True'}),
             'description': ('django.db.models.fields.CharField', [], {'max_length': '2000', 'null': 'True', 'blank': 'True'}),
             'floor': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'points'", 'to': u"orm['map_editor.Floor']"}),

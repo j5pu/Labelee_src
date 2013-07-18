@@ -13,9 +13,9 @@ class Migration(SchemaMigration):
 
     def backwards(self, orm):
         # Adding field 'Point.alwaysVisble'
-        db.add_column(u'map_editor_point', 'alwaysVisble',
-                      self.gf('django.db.models.fields.NullBooleanField')(null=True, blank=True),
-                      keep_default=False)
+        # db.add_column(u'map_editor_point', 'alwaysVisble',
+        #               self.gf('django.db.models.fields.NullBooleanField')(null=True, blank=True),
+        #               keep_default=False)
 
         # Deleting field 'Point.alwaysVisible'
         db.delete_column(u'map_editor_point', 'alwaysVisible')

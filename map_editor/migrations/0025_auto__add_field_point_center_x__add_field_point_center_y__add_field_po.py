@@ -35,6 +35,8 @@ class Migration(SchemaMigration):
         db.delete_column(u'map_editor_point', 'isVertical')
 
 
+
+
     models = {
         u'auth.group': {
             'Meta': {'object_name': 'Group'},
