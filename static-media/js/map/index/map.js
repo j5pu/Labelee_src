@@ -50,9 +50,9 @@ var txtIcon= new L.icon({
     iconUrl: '/media/texticon.png',
     iconRetinaUrl: '/media/texticon.png',
     iconSize: [1, 1],
-    iconAnchor: [1,1],
+    iconAnchor: [0,0],
     //popupAnchor: [0,0],
-    labelAnchor: [2, 0]
+    labelAnchor: [-46, 6]
 });
 
 
@@ -383,8 +383,8 @@ function loadPOIs() {
                 sY = floors[fl].scaleY,
                 loc = [(floors[fl].pois[j].row) * sY + (sY),
                     floors[fl].pois[j].col * sX + (sX)],
-                center =  [(floors[fl].pois[j].center_y) * sY + (sY),
-                    floors[fl].pois[j].center_x * sX + (sX)],
+                center =  [(floors[fl].pois[j].center_x) * sY + (sY),
+                    floors[fl].pois[j].center_y * sX + (sX)],
                 labelid = floors[fl].pois[j].label.id,
                 category = floors[fl].pois[j].label.category.name,
                 category_es = floors[fl].pois[j].label.category.name_es;

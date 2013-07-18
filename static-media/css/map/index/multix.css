@@ -1279,11 +1279,14 @@ img.cupImg{
 */
     border:none;
     background: none;
-    color: rgb(90, 88, 81);
+    color: #8C8C87;
     display: block;
-    font: 1rem "Raleway", "Noto-Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+    font: 0.9em "Raleway", "Noto-Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+
     font-weight: bold;
+/*
     padding: 1px 6px;
+*/
     position: absolute;
     -webkit-user-select: none;
 }
