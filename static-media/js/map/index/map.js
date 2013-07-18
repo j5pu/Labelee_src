@@ -382,7 +382,9 @@ function loadPOIs() {
                 sX = floors[fl].scaleX,
                 sY = floors[fl].scaleY,
                 loc = [(floors[fl].pois[j].row) * sY + (sY),
-                    floors[fl].pois[j].col * sX + (sY)],
+                    floors[fl].pois[j].col * sX + (sX)],
+                center =  [(floors[fl].pois[j].center_y) * sY + (sY),
+                    floors[fl].pois[j].center_x * sX + (sX)],
                 labelid = floors[fl].pois[j].label.id,
                 category = floors[fl].pois[j].label.category.name,
                 category_es = floors[fl].pois[j].label.category.name_es;
@@ -404,6 +406,7 @@ function loadPOIs() {
             floors[fl].pois[j].marker.psX = sX;
             floors[fl].pois[j].marker.psY = sY;
             floors[fl].pois[j].marker.loc = loc;
+            floors[fl].pois[j].marker.center = center;
             floors[fl].pois[j].marker.category = category;
             floors[fl].pois[j].marker.category_es = category_es;
             floors[fl].pois[j].marker.label = labelid;
@@ -557,7 +560,7 @@ function loadPOIs() {
 //Configuración inicial del mapa
 var map = L.map('map', {
     crs: L.CRS.Simple,
-    zoom: 1,
+    zoom: 0,
     minZoom: 0,
     maxZoom: 3,
     zoomControl: false
@@ -615,6 +618,7 @@ function initMap(qrPoint) {
 
     }
 
+/*
 
     L.marker(qrLoc, {icon: txtIcon})
 //    L.polyline(qrLoc, qrLoc)
@@ -622,6 +626,7 @@ function initMap(qrPoint) {
         .addTo(qrFloor.layer)
         //.addTo(map)
         .showLabel();
+*/
 
     map.removeLayer(totalPois);
     map.addLayer(qrFloor.layer);
@@ -747,7 +752,7 @@ function changeFloor(e) {
     for (var p in floor_x.pois)
     {
         if (floor_x.pois[p].alwaysVisible){
-        L.marker(floor_x.pois[p].marker.loc, {icon: txtIcon})
+        L.marker(floor_x.pois[p].marker.center, {icon: txtIcon})
             .bindLabel(floor_x.pois[p].description, { noHide: true })
             .addTo(floor_x.layer)
             //.addTo(map)
@@ -1279,6 +1284,7 @@ Map.events =
 
 function bindContent(marker) {
     if (marker.contentBinded)
+    if (marker.contentBinded)
         return;
 
     // Se bindea el contenido del popup abierto para el marker
@@ -1289,3 +1295,67 @@ function bindContent(marker) {
     marker.contentBinded = true;
 }
 
+
+
+
+
+
+
+
+//PRUEBA FONT-ICONS
+/*
+var    drawnItems = new L.MarkerClusterGroup({
+       disableClusteringAtZoom: 0
+        }),
+        markers = [];
+
+
+addMarker(new L.LatLng(300,300), {icon: "\ue070", color: "#ff0000"});
+addMarker(new L.LatLng(400,400), {icon: "\ue025", color: "#00ff00"});
+addMarker(new L.LatLng(350,350), {icon: "\u2605", color: "#0000ff"});
+
+addMarker(new L.LatLng(150, 150), {icon: "\ue002", color: "#8B668B"}); // pint only display
+
+addMarker(new L.LatLng(250,250), {icon: "\uf030", color: "#990000", iconFont: 'awesome'}); //camera
+addMarker(new L.LatLng(200,200), {icon: "\uf06e", color: "#009900", iconFont: 'awesome'}); // eye open
+addMarker(new L.LatLng(100,300), {icon: "\uf005", color: "#000099", iconFont: 'awesome'}); // star
+
+addMarker(new L.LatLng(175,175), {icon: "\uf041", color: "#4F2F4F", iconFont: 'awesome'}); // pin only
+
+map.addLayer(drawnItems);
+
+map.on("viewreset", function() {
+    var zoom = map.getZoom(),
+        size = computeSizeFromZoom();
+    //console.log("resize, zoom " + zoom + " size " + size);
+    for (var i = 0; i < markers.length; i++) {
+        markers[i].setFontSize(size * 1.5);
+    }
+});
+
+function computeSizeFromZoom() {
+    var max = map.getMaxZoom(),
+        zoom = map.getZoom(),
+        diff = max - zoom,
+        table = [2, 1, 0.5];
+    return  (diff < table.length) ? table[diff] : 0.5;
+}
+
+function addMarker(latLng, opts) {
+    var icon = opts.icon || "\ue002",
+        color = opts.color || "blue",
+        font = opts.iconFont || "iconic",
+        sz = computeSizeFromZoom();
+
+    marker = new cilogi.L.Marker(latLng, {
+        fontIconSize: sz * 3,
+        fontIconName: icon,
+        fontIconColor: color,
+        fontIconFont: font,
+        opacity: 1
+    });
+    drawnItems.addLayer(marker);
+    markers.push(marker);
+}
+
+*/
