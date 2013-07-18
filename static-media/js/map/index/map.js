@@ -282,6 +282,7 @@ var LocalStorageHandler = {
 
 //Variables globales
 var mapH = $(document).height(),//Altura de la pantalla
+//var mapW = window.innerWidth,//Anchura de la pantalla
     baseLayers = {},
     layersControl = new L.control.layers(null, null, {collapsed: false}),
     floor_index = 0,
@@ -339,6 +340,7 @@ function loopFloors() {
     floorImg.src = img;
     floorImg.onload = function () {
         var mapW = (floorImg.width / floorImg.height) * mapH;
+//        var mapH = (floorImg.height / floorImg.width) * mapW;
         var bounds = new L.LatLngBounds(new L.LatLng(0, 0), new L.LatLng(mapH, mapW));
 
         floors[floor_index].scaleX = mapW / floors[floor_index].num_cols;
@@ -757,6 +759,9 @@ function changeFloor(e) {
             .addTo(floor_x.layer)
             //.addTo(map)
             .showLabel();
+            if (floor_x.pois[p].isVertical){
+               $('div.leaflet-label:contains('+floor_x.pois[p].description+')').addClass('isVertical');
+            }
         }
     }
     if (map.hasLayer(qrMarker)) {

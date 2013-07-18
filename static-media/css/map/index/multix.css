@@ -524,6 +524,7 @@ html{
 
 #map{
     height: 100%;
+    width: auto;
     border-left:3px solid #8C8C87;
     -webkit-box-shadow: inset 2px 2px 4px rgba(0,0,0,0.4);
     box-shadow: inset 2px 2px 4px rgba(0,0,0,0.4);
@@ -1298,6 +1299,12 @@ img.cupImg{
 //    top: 5px;
 //    left: -10px;
 }
+
+.isVertical{
+    -webkit-transform: rotate(-90deg) ;
+    transform: rotate(-90deg) ;
+}
+
 /*
 @media only screen and (min-width: 320px) {
     canvas
