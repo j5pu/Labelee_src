@@ -321,9 +321,14 @@ function LabelCategoryResource()
 
     this.readValidAsPois = function(enclosure_id){
         // /api-2/label-category/valid/16
-
         return ajaxGetElements(this.api2_url, 'valid/' + enclosure_id);
     };
+
+    this.getForManagerIndex = function(enclosure_id)
+    {
+        // Nos da toda la lista de categorías a mostrar en el manager sobre ese recinto
+        return ajaxGetElements(this.api2_url, 'manager/' + enclosure_id);
+    }
 }
 
 
@@ -539,10 +544,13 @@ function EnclosureResource()
         });
     };
 
-    this.getForManagerIndex = function()
+    this.getForManagerIndex = function(enclosure_id)
     {
         // Nos da toda la info necesaria para cargar el index de map-editor
-        return ajaxGetElements(this.api2_url, 'manager');
+        if(enclosure_id)
+            return ajaxGetElements(this.api2_url, 'manager/' + enclosure_id + '/');
+
+        return ajaxGetElements(this.api2_url, 'manager/');
     }
 }
 
@@ -592,9 +600,9 @@ function StepResource()
 }
 
 
-function EnclosureHasLabelCategoryResource()
+function UserResource()
 {
-    Resource.call(this, 'enclosure-has-labelcategory');
+    Resource.call(this, 'user');
 }
 
 
@@ -610,5 +618,5 @@ var enclosureResource = new EnclosureResource();
 ConnectionResource.prototype = new Resource;
 RouteResource.prototype = new Resource;
 StepResource.prototype = new Resource;
-EnclosureHasLabelCategoryResource.prototype = new Resource;
-var enclosureHasLabelCategoryResource = new EnclosureHasLabelCategoryResource();
+UserResource.prototype = new Resource;
+var userResource = new UserResource();

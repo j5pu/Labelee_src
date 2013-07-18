@@ -3,8 +3,8 @@
 
 from django.contrib.auth.models import User
 
-from tastypie.authorization import DjangoAuthorization, Authorization
-from tastypie.authentication import BasicAuthentication, ApiKeyAuthentication
+from tastypie.authorization import Authorization
+from tastypie.authentication import BasicAuthentication, ApiKeyAuthentication, SessionAuthentication
 from tastypie.paginator import Paginator
 # from tastypie.authorization import Authorization
 from tastypie.validation import FormValidation
@@ -24,11 +24,24 @@ from log.models import *
 from map_editor.forms import EnclosureForm
 
 
+class LoginRequiredAuthorization(Authorization):
+    """
+    Equivalent to Django's login_required decorator
+    Be careful with this; it will allow DELETE and everything else.
+
+    """
+    def is_authorized(self, request, object=None):
+        # GET is always allowed
+        if request.method == 'GET':
+            return True
+        return request.user.is_authenticated()
+
+
 class UserResource(ModelResource):
     class Meta:
         resource_name = 'user'
         queryset = User.objects.all()
-        authorization = DjangoAuthorization()
+        authorization = LoginRequiredAuthorization()
         # excludes = ['email', 'password', 'is_staff', 'is_superuser']
     # allowed_methods = ['get']
     # authentication = BasicAuthentication()
@@ -50,8 +63,8 @@ class EnclosureResource(ModelResource):
         # resource_name = 'places'
         queryset = Enclosure.objects.all()
         include_resource_uri = True
-        authorization = DjangoAuthorization()
-        # authentication = BasicAuthentication()
+        # authentication = LoginRequiredAuthorization()
+        authorization = LoginRequiredAuthorization()
         # 		validation = FormValidation(form_class=EnclosureForm)
         filtering = {
             'name': ALL,
@@ -74,7 +87,7 @@ class FloorResource(ModelResource):
 
     class Meta:
         queryset = Floor.objects.all()
-        authorization = DjangoAuthorization()
+        authorization = LoginRequiredAuthorization()
         # authentication = BasicAuthentication()
         include_resource_uri = True
         filtering = {
@@ -105,7 +118,7 @@ class PointResource(ModelResource):
 
     class Meta:
         queryset = Point.objects.all()
-        authorization = DjangoAuthorization()
+        authorization = LoginRequiredAuthorization()
         # authentication = BasicAuthentication()
         # usando apikey:
         # authentication = ApiKeyAuthentication()
@@ -134,7 +147,7 @@ class LabelResource(ModelResource):
 
     class Meta:
         queryset = Label.objects.all()
-        authorization = DjangoAuthorization()
+        authorization = LoginRequiredAuthorization()
         # authentication = BasicAuthentication()
         always_return_data = True
         filtering = {
@@ -151,14 +164,12 @@ class LabelResource(ModelResource):
 
 class LabelCategoryResource(ModelResource):
     labels = fields.ToManyField('map_editor.api.resources.LabelResource', 'labels', null=True, blank=True)
-
-    enclosures = fields.ManyToManyField('map_editor.api.resources.EnclosureResource',
-                                        'enclosures', readonly=True, null=True)
+    enclosure = fields.OneToOneField('map_editor.api.resources.EnclosureResource', 'enclosure', full=True)
 
     class Meta:
         resource_name = 'label-category'
         queryset = LabelCategory.objects.all()
-        authorization = DjangoAuthorization()
+        authorization = LoginRequiredAuthorization()
         # authentication = BasicAuthentication()
         always_return_data = True
         filtering = {
@@ -188,7 +199,7 @@ class QRCodeResource(ModelResource):
     class Meta:
         resource_name = 'qr-code'
         queryset = QR_Code.objects.all()
-        authorization = DjangoAuthorization()
+        authorization = LoginRequiredAuthorization()
         # authentication = BasicAuthentication()
         always_return_data = True
         filtering = {
@@ -207,7 +218,7 @@ class ConnectionResource(ModelResource):
     class Meta:
         resource_name = 'connection'
         queryset = Connection.objects.all()
-        authorization = DjangoAuthorization()
+        authorization = LoginRequiredAuthorization()
         # authentication = BasicAuthentication()
         always_return_data = True
         filtering = {
@@ -232,7 +243,7 @@ class RouteResource(ModelResource):
     class Meta:
         resource_name = 'route'
         queryset = Route.objects.all()
-        authorization = DjangoAuthorization()
+        authorization = LoginRequiredAuthorization()
         # authentication = BasicAuthentication()
         always_return_data = True
         filtering = {
@@ -252,7 +263,7 @@ class StepResource(ModelResource):
     class Meta:
         resource_name = 'step'
         queryset = Step.objects.all()
-        authorization = DjangoAuthorization()
+        authorization = LoginRequiredAuthorization()
         # authentication = BasicAuthentication()
         always_return_data = True
         filtering = {
@@ -270,7 +281,7 @@ class LogEntryResource(ModelResource):
     class Meta:
         resource_name = 'log-entry'
         queryset = LogEntry.objects.all()
-        authorization = DjangoAuthorization()
+        authorization = LoginRequiredAuthorization()
         # authentication = BasicAuthentication()
         always_return_data = True
         filtering = {
@@ -279,20 +290,6 @@ class LogEntryResource(ModelResource):
             'message': ALL,
             'when': ALL
         }
-
-    def determine_format(self, request):
-        return 'application/json'
-
-
-class EnclosureHasLabelCategoryResource(ModelResource):
-    enclosure = fields.ToOneField(EnclosureResource, 'enclosure', full=False)
-    label_category = fields.ToOneField(LabelCategoryResource, 'label_category', full=False)
-
-    class Meta:
-        resource_name = 'enclosure-has-labelcategory'
-        queryset= EnclosureHasLabelCategory.objects.all()
-        always_return_data = True
-        authorization = DjangoAuthorization()
 
     def determine_format(self, request):
         return 'application/json'

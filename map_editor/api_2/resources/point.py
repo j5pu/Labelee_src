@@ -9,7 +9,7 @@ import simplejson
 from map_editor.api.resources import PointResource
 from map_editor.models import Point, Label, Floor, QR_Code, Enclosure
 from django.contrib.auth.models import User
-from utils.helpers import tx_serialized_json_list, filterAsPois
+from utils.helpers import tx_serialized_json_list
 
 
 def create_from_list(request):

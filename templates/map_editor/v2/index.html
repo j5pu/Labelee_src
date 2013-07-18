@@ -12,6 +12,8 @@
     {% get_current_language as LANGUAGE_CODE %}
     <script>
         var lang_code = "{{ LANGUAGE_CODE }}";
+        var user_id = parseInt("{{ user.id }}");
+        var user_is_staff = "{{ user.is_staff }}" == "True";
     </script>
 
     <script src="{{ STATIC_URL }}vendor/bootstrap/bootstrap.file-input.js"></script>
@@ -132,14 +134,20 @@
 
                 <ul>
                     <li ng-repeat="category in enclosure.label_categories | orderBy:'name'"
-                        ng-click="showPois()">
+                        ng-controller="CategoryCtrl">
                         [[category.name]] ([[category.poi_count]])
 
-                        <button class="btn" ng-hide="category.is_generic">
+                        <button class="btn"
+                                ng-show="category.enclosure || user_is_staff"
+                                ng-click="show_edit_category_form()">
                             {% trans "Editar" %}
                         </button>
                     </li>
                 </ul>
+
+{#                <div class="forms">#}
+{#                    <div ng-include src="'category_forms'"></div>#}
+{#                </div>#}
             </td>
         </tr>
         </tbody>
@@ -177,7 +185,7 @@
                            placeholder="{% trans "Cuenta de twitter" %}..">
                 </label>
 
-                <button class="btn" ng-click="cancelUpdate()">{% trans "Cancelar" %}</button>
+                <button class="btn" ng-click="closeModalDialog()">{% trans "Cancelar" %}</button>
                 <button class="btn" ng-click="update()">{% trans "Guardar" %}</button>
 
                 <button class="btn" ng-click="del()">{% trans "Eliminar recinto" %}</button>
@@ -244,7 +252,7 @@
                            title="{% trans "Cambiar imagen" %}">
                 </div>
 
-                <button class="btn" ng-click="cancelUpdate()">{% trans "Cancelar" %}</button>
+                <button class="btn" ng-click="closeModalDialog()">{% trans "Cancelar" %}</button>
                 <button class="btn" ng-click="update()">{% trans "Guardar" %}</button>
                 <button class="btn" ng-click="del()">{% trans "Eliminar planta" %}</button>
 
@@ -252,6 +260,8 @@
             </form>
         </div>
 
+
+{#        <script type="text/ng-template" id="category_forms">#}
         <div id="category_create" ng-controller="CategoryFormsCtrl">
             <form class="create">
                 <span>{% trans "Nueva categoría para el recinto" %} [[enclosure.name]]</span>
@@ -259,12 +269,37 @@
                        ng-model="category_name"
                        placeholder="{% trans "Nombre para la categoría" %}..">
                 <input type="text"
+                       ng-model="category_code"
+                       placeholder="{% trans "Código de categoría (máx. 3 letras)" %}.."
+                       maxlength="3">
+                <input type="text"
                        ng-model="category_color"
                        placeholder="{% trans "Color para la categoría" %}..">
 
                 <button class="btn" ng-click="create()">{% trans "Añadir categoría" %}</button>
             </form>
         </div>
+
+
+        <div id="category_edit" ng-controller="CategoryFormsCtrl">
+            <form class="edit">
+                <input type="text"
+                       ng-model="category_name"
+                       placeholder="{% trans "Nuevo nombre para la categoría" %}..">
+                <input type="text"
+                       ng-model="category_code"
+                       placeholder="{% trans "Nuevo código de categoría (máx. 3 letras)" %}.."
+                       maxlength="3">
+                <input type="text"
+                       ng-model="category_color"
+                       placeholder="{% trans "Nuevo color para la categoría" %}..">
+
+                <button class="btn" ng-click="closeModalDialog()">{% trans "Cancelar" %}</button>
+                <button class="btn" ng-click="update()">{% trans "Guardar" %}</button>
+                <button class="btn" ng-click="del()">{% trans "Eliminar" %}</button>
+            </form>
+        </div>
+{#        </script>#}
     </div>
 
 

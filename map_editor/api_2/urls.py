@@ -9,7 +9,8 @@ urlpatterns = patterns('map_editor.api_2',
 	url(r'^(?P<resource>.*)/(?P<id>\d*)/img$', 'services.views.img'),
 
     # ENCLOSURE
-	url(r'^enclosure/manager', 'resources.enclosure.manager'),
+	url(r'^enclosure/manager/$', 'resources.enclosure.manager'),
+	url(r'^enclosure/manager/(?P<enclosure_id>\d+)/$', 'resources.enclosure.manager'),
 
 
     # FLOOR
@@ -22,6 +23,7 @@ urlpatterns = patterns('map_editor.api_2',
 
     # LABEL CATEGORY
 	url(r'^label-category/valid/(?P<enclosure_id>\d+)$', 'resources.label_category.read_only_valid_categories'),
+	url(r'^label-category/manager/(?P<enclosure_id>\d+)$', 'resources.label_category.manager'),
 
 
 	# POINT

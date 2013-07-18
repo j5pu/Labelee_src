@@ -14,6 +14,8 @@ var myApp = angular.module('myApp', ['ngSanitize'],
 	// $httpProvider.defaults.headers.post['X-CSRFToken'] = $('input[name=csrfmiddlewaretoken]').val();
 	$httpProvider.defaults.headers.post['X-CSRFToken'] = token;
 });
+//    .run(function ($rootScope, UrlService) {
+//});
 
 
 //
@@ -39,6 +41,18 @@ myApp.factory('UrlService', function($rootScope) {
     };
 });
 
+
+myApp.factory('UserService', function($rootScope) {
+
+    $rootScope.user_is_staff = user_is_staff;
+});
+
+myApp.factory('FormService', function($rootScope) {
+
+    $rootScope.closeModalDialog = function() {
+        modalDialog.close();
+    };
+});
 
 //
 //DIRECTIVAS

@@ -124,3 +124,9 @@ td.pois
     display: block
 }
 
+.ui-dialog form input
+{
+    display: block;
+    margin: 0.5em auto;
+}
+

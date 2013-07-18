@@ -3,7 +3,7 @@
 import os
 from django.db import models
 from django.contrib.auth.models import User
-from utils.helpers import filterAsPois
+from map_editor.api_2.utils.point import filterAsPois
 
 CATEGORIAS_FIJAS = {
     0: 'Bloqueantes',
@@ -18,8 +18,6 @@ class Enclosure(models.Model):
     twitter_account = models.CharField(max_length=60, unique=True, blank=True, null=True)
 
     owner = models.ForeignKey(User, related_name='enclosures', blank=False)
-    label_categories = models.ManyToManyField('map_editor.LabelCategory', through='EnclosureHasLabelCategory', null=True,blank=True)
-
 
     def __unicode__(self):
         return self.name
@@ -84,14 +82,13 @@ def category_filename(instance, filename):
     return 'img/label_categories/%s%s' % (instance.name, fileExtension)
 
 class LabelCategory(models.Model):
-    name = models.CharField(max_length=200, unique=True, blank=False, null=False)
+    name = models.CharField(max_length=200, blank=False, null=False)
     color = models.CharField(max_length=50, blank=False)
     img = models.FileField(upload_to="img/label_categories", blank=True, null=True)
     icon = models.CharField(max_length=50, blank=True, null=True)
     cat_code = models.CharField(max_length=3, null=True)
-    is_generic = models.BooleanField(default=True)
 
-    enclosures = models.ManyToManyField(Enclosure, through='EnclosureHasLabelCategory', null=True,blank=True)
+    enclosure = models.ForeignKey(Enclosure, related_name='enclosure', blank=True, null=True)
 
 
     class Meta:
@@ -99,6 +96,15 @@ class LabelCategory(models.Model):
 
     def __unicode__(self):
         return self.name
+
+    def save(self, *args, **kwargs):
+        """
+            Pasamos a mayúsculas el código de categoría
+        """
+        if self.cat_code:
+            self.cat_code = self.cat_code.upper()
+
+        return super(LabelCategory, self).save(*args, **kwargs)
 
     def delete(self, *args, **kwargs):
         if self.img:
@@ -186,7 +192,4 @@ class QR_Code(models.Model):
         return self.code
 
 
-class EnclosureHasLabelCategory(models.Model):
-    enclosure = models.ForeignKey(Enclosure)
-    label_category = models.ForeignKey(LabelCategory)
 

@@ -112,35 +112,5 @@ def group_by_pk(queryset_response):
     return queryset_response.values().annotate(total=Sum('id'))
 
 
-def filterAsPois(points):
-    """
-    Aplica filtros para sacar sólo aquellos puntos que sean considerados POIs
-    """
-    return points.exclude(
-        label__category = 1
-    ).exclude(
-        label__category__name_es = 'Intermedias'
-    ).exclude(
-        label__category__name_es = 'Parquing'
-    ).exclude(
-        qr_code = None
-    )
-
-
-def filterAsValidCategories(label_categories):
-    """
-    Quita las categorías que no queramos considerar como válidas (bloqueantes, etc..
-    """
-    return label_categories.exclude(
-        name_es = 'Bloqueantes'
-    ).exclude(
-        name_es = 'Intermedias'
-    ).exclude(
-        name_es = 'Parquing'
-    ).exclude(
-        name_es = 'Pasillo Parking'
-    )
-
-
 if __name__ == "__main__":
     pass

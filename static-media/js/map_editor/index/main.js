@@ -5,7 +5,7 @@ $(function() {
 });
 
 
-function EnclosureListCtrl($scope, $rootScope)
+function EnclosureListCtrl($scope, $rootScope, UserService, FormService)
 {
 	$scope.enclosures = enclosureResource.getForManagerIndex();
 
@@ -16,17 +16,9 @@ function EnclosureListCtrl($scope, $rootScope)
         $rootScope.$broadcast('show_create_enclosure_form');
     };
 
-    angular.forEach(
-        [
-            'enclosure_created', 'enclosure_updated', 'enclosure_deleted',
-            'floor_created', 'floor_updated', 'floor_deleted',
-            'category_created'
-        ],
-        function(event){
-            $scope.$on(event, function() {
-                $scope.enclosures = enclosureResource.getForManagerIndex();
-                modalDialog.close();
-        });
+    $scope.$on('sync_enclosureList', function() {
+        $scope.enclosures = enclosureResource.getForManagerIndex();
+        modalDialog.close();
     });
 }
 
@@ -45,6 +37,14 @@ function EnclosureCtrl($scope, $rootScope, $element)
         if(confirm(gettext('Previous routes will be removed for this enclosure. Do you want to continue?')))
             enclosureResource.calculateRoutes($scope.enclosure.id);
     };
+
+    $scope.$on('sync_enclosure', function(ev, enclosure) {
+        if($scope.enclosure.id == enclosure.id)
+        {
+            $scope.enclosure = enclosureResource.getForManagerIndex($scope.enclosure.id);
+            modalDialog.close();
+        }
+    });
 }
 
 function FloorListCtrl($scope, $rootScope)
@@ -61,7 +61,7 @@ function FloorListCtrl($scope, $rootScope)
 function FloorCtrl($scope, $rootScope, $element, UrlService)
 {
     $scope.show_edit_floor_form = function() {
-        $rootScope.$broadcast('show_edit_floor_form', $scope.floor);
+        $rootScope.$broadcast('show_edit_floor_form', $scope.floor, $scope.enclosure);
     };
 }
 
@@ -71,11 +71,13 @@ function CategoryListCtrl($scope, $rootScope)
     $scope.show_create_category_form = function() {
         $rootScope.$broadcast('show_create_category_form', $scope.enclosure);
     };
+}
 
-//    $scope.showPois = function()
-//    {
-//        $rootScope.$broadcast('show_poi_list', $scope.enclosure, $scope.category);
-//    };
+function CategoryCtrl($scope, $rootScope)
+{
+    $scope.show_edit_category_form = function() {
+        $rootScope.$broadcast('show_edit_category_form', $scope.category, $scope.enclosure);
+    };
 }
 
 
@@ -84,22 +86,23 @@ function EnclosureFormsCtrl($scope, $rootScope)
     $scope.create = function() {
         var data = {
             name: $scope.enclosure_name,
-            owner: '/api/v1/user/1/'
+            owner: userResource.api1_url + user_id + '/'
         };
 
-        var enclosure = enclosureResource.create(data);
+        enclosureResource.create(data);
 
         $scope.enclosure_name = '';
 
-        setTimeout(function(){
-            $('html, body').animate({
-                scrollTop: $(document).height()
-            }, 2000);
-        }, 300);
+//        setTimeout(function(){
+//            $('html, body').animate({
+//                scrollTop: $(document).height()
+//            }, 2000);
+//        }, 300);
 
 //        http://stackoverflow.com/questions/14502006/scope-emit-and-on-angularjs/14502755#14502755
-        $rootScope.$broadcast('enclosure_created', enclosure);
+        $rootScope.$broadcast('sync_enclosureList');
     };
+
 
     $scope.update = function(enclosure) {
         var data = {
@@ -109,31 +112,29 @@ function EnclosureFormsCtrl($scope, $rootScope)
 
         enclosureResource.update(data, $scope.enclosure.id);
 
-        $rootScope.$broadcast('enclosure_updated');
+        $rootScope.$broadcast('sync_enclosure', $scope.enclosure);
     };
 
-    $scope.cancelUpdate = function() {
-        modalDialog.close();
-    };
 
     $scope.del = function() {
-
         var confirm_msg = gettext('Are you sure you want to remove this enclosure? (this will erase all their floors)');
 
         enclosureResource.del(
             $scope.enclosure.id,
             confirm_msg,
             function(){
-                $rootScope.$broadcast('enclosure_deleted');
+                $rootScope.$broadcast('sync_enclosureList', $scope.enclosure);
             }
         );
     };
+
 
     $scope.$on('show_create_enclosure_form', function() {
         $scope.enclosure_name = '';
         modalDialog = new ModalDialog('#enc_create');
         modalDialog.open();
     });
+
 
     $scope.$on('show_edit_form', function(ev, enclosure) {
         // Abre el diálogo con el formulario para la edición del recinto
@@ -184,7 +185,7 @@ function FloorFormsCtrl($scope, $rootScope, $element)
                 $scope.waiting_response = false;
 
                 // Anunciamos que se ha creado la planta
-                $rootScope.$broadcast('floor_created');
+                $rootScope.$broadcast('sync_enclosure', $scope.enclosure);
             }
         );
     };
@@ -216,17 +217,12 @@ function FloorFormsCtrl($scope, $rootScope, $element)
                     img_form.find('input[name="img"]').val('');
                     img_form.find('.file-input-name').remove();
                     $scope.waiting_response = false;
-                    $rootScope.$broadcast('floor_updated');
+                    $rootScope.$broadcast('sync_enclosure', $scope.enclosure);
                 }
             );
         }
         else
-            $rootScope.$broadcast('floor_updated');
-    };
-
-
-    $scope.cancelUpdate = function() {
-        modalDialog.close();
+            $rootScope.$broadcast('sync_enclosure', $scope.enclosure);
     };
 
 
@@ -237,7 +233,7 @@ function FloorFormsCtrl($scope, $rootScope, $element)
             $scope.floor.id,
             confirm_msg,
             function(){
-                $rootScope.$broadcast('floor_deleted');
+                $rootScope.$broadcast('sync_enclosure', $scope.enclosure);
             }
         );
     };
@@ -253,7 +249,8 @@ function FloorFormsCtrl($scope, $rootScope, $element)
     });
 
 
-    $scope.$on('show_edit_floor_form', function(ev, floor) {
+    $scope.$on('show_edit_floor_form', function(ev, floor, enclosure) {
+        $scope.enclosure = enclosure;
         $scope.floor = floor;
         $scope.floor_name = floor.name;
         $scope.floor_number = floor.floor_number;
@@ -270,26 +267,58 @@ function CategoryFormsCtrl($scope, $rootScope, $element)
     {
         var data = {
             name: $scope.category_name,
+            cat_code: $scope.category_code,
+            color: $scope.category_color,
+            enclosure: enclosureResource.api1_url + $scope.enclosure.id + '/'
+        };
+        labelCategoryResource.create(data);
+
+        $rootScope.$broadcast('category_created', $scope.enclosure);
+    };
+
+
+    $scope.update = function()
+    {
+        var data = {
+            name: $scope.category_name,
+            cat_code: $scope.category_code,
             color: $scope.category_color
         };
-        new_label_category = labelCategoryResource.create(data);
+        labelCategoryResource.update(data, $scope.category.id);
 
-        data = {
-            enclosure: enclosureResource.api1_url + $scope.enclosure.id + '/',
-            label_category: labelCategoryResource.api1_url + new_label_category.id + '/'
-        };
-        enclosureHasLabelCategoryResource.create(data);
+        $rootScope.$broadcast('sync_enclosure', $scope.enclosure);
+    };
 
-        modalDialog.close();
 
-        $rootScope.$broadcast('category_created');
+    $scope.del = function()
+    {
+        labelCategoryResource.del(
+            $scope.category.id,
+            gettext('Are you sure you want to remove this category?'),
+            function(){
+                $rootScope.$broadcast('sync_enclosure', $scope.enclosure);
+            }
+        );
     };
 
 
     $scope.$on('show_create_category_form', function(ev, enclosure){
         $scope.enclosure = enclosure;
         $scope.category_name = '';
+        $scope.category_code = '';
+        $scope.category_color = '';
         modalDialog = new ModalDialog('#category_create');
+        modalDialog.open();
+    });
+
+
+    $scope.$on('show_edit_category_form', function(ev, category, enclosure){
+        $scope.enclosure = enclosure;
+        $scope.category = category;
+        $scope.category_name = category.name;
+        $scope.category_code = category.cat_code;
+        $scope.category_color = category.color;
+        modalDialog = new ModalDialog('#category_edit');
         modalDialog.open();
     });
 }
