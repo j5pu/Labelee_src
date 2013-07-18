@@ -1312,18 +1312,26 @@ function bindContent(marker) {
 var    drawnItems = new L.MarkerClusterGroup({
        disableClusteringAtZoom: 0
         }),
+*/
         markers = [];
 
 
+addMarker(new L.LatLng(300,300), {icon: "\ue002", color: "#ff0000"});
+addMarker(new L.LatLng(400,400), {icon: "\ue002", color: "#00ff00"});
+addMarker(new L.LatLng(350,350), {icon: "\ue002", color: "#0000ff"});
+/*
 addMarker(new L.LatLng(300,300), {icon: "\ue070", color: "#ff0000"});
 addMarker(new L.LatLng(400,400), {icon: "\ue025", color: "#00ff00"});
 addMarker(new L.LatLng(350,350), {icon: "\u2605", color: "#0000ff"});
+*/
 
 addMarker(new L.LatLng(150, 150), {icon: "\ue002", color: "#8B668B"}); // pint only display
 
+/*
 addMarker(new L.LatLng(250,250), {icon: "\uf030", color: "#990000", iconFont: 'awesome'}); //camera
 addMarker(new L.LatLng(200,200), {icon: "\uf06e", color: "#009900", iconFont: 'awesome'}); // eye open
 addMarker(new L.LatLng(100,300), {icon: "\uf005", color: "#000099", iconFont: 'awesome'}); // star
+*/
 
 addMarker(new L.LatLng(175,175), {icon: "\uf041", color: "#4F2F4F", iconFont: 'awesome'}); // pin only
 
@@ -1334,7 +1342,7 @@ map.on("viewreset", function() {
         size = computeSizeFromZoom();
     //console.log("resize, zoom " + zoom + " size " + size);
     for (var i = 0; i < markers.length; i++) {
-        markers[i].setFontSize(size * 1.5);
+        markers[i].setFontSize(size * 1.2);
     }
 });
 
@@ -1353,14 +1361,14 @@ function addMarker(latLng, opts) {
         sz = computeSizeFromZoom();
 
     marker = new cilogi.L.Marker(latLng, {
-        fontIconSize: sz * 3,
+        fontIconSize: sz * 2,
         fontIconName: icon,
         fontIconColor: color,
         fontIconFont: font,
         opacity: 1
     });
-    drawnItems.addLayer(marker);
-    markers.push(marker);
+//    drawnItems.addLayer(marker);
+    map.addLayer(marker);
+//    markers.push(marker);
 }
 
-*/
