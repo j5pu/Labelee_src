@@ -14,7 +14,6 @@ from route.pathfinding.Dijkstra import *
 
 
 def calculate_routes(request, enclosure_id):
-
     # t1 = threading.Thread(target=threadCalculateRoute, args=[enclosure_id])
     # t1.start()
     try:
@@ -22,26 +21,33 @@ def calculate_routes(request, enclosure_id):
         t1.start()
         #threadCalculateRoute(enclosure_id)
     except Exception as ex:
-       print type(ex)
-       print ex.args
+        print type(ex)
+        print ex.args
 
     return HttpResponse(_('Se están calculando las rutas'))
 
 
 def threadCalculateRoute(enclosure_id):
+    """
+
+    :param enclosure_id:
+    """
     errors = []
-    try:
-        email = EmailMessage('Cálculo de rutas','Se están calculando rutas', to=['alvaro.gutierrez@mnopi.com'])
-        email.send()
-    except:
-        pass
+
+    sendEmail('Cálculo de rutas', 'Se están calculando rutas')
+
     sql = "select * from route_route where origin_id in  " \
           "( SELECT id FROM map_editor_point where floor_id in " \
           "(select id from map_editor_floor where map_editor_floor.enclosure_id = %s))" % enclosure_id
     try:
+        ids = []
+
         currentroutes = Route.objects.raw(sql)
         for route in currentroutes:
-            route.delete()
+            ids.append(route.id)
+        Route.objects.filter(id__in=ids).delete()
+        # for route in currentroutes:
+        #     route.delete()
 
         floors = Floor.objects.filter(enclosure_id=enclosure_id)
         floorIds = []
@@ -58,7 +64,8 @@ def threadCalculateRoute(enclosure_id):
             if hasattr(point, 'qr_code'):
                 qrlist.append(point.qr_code)
 
-            if point.label.category.name.upper() in CATEGORIAS_FIJAS[0].upper() or point.label.category.name.upper() in CATEGORIAS_FIJAS[5].upper():
+            if point.label.category.name.upper() in CATEGORIAS_FIJAS[0].upper() or point.label.category.name.upper() in \
+                    CATEGORIAS_FIJAS[5].upper():
                 walls.append(Dijkstra.getKey(point.row, point.col, point.floor.id))
 
             pmapconnections = Connection.objects.filter(init__id=point.id)
@@ -76,12 +83,9 @@ def threadCalculateRoute(enclosure_id):
     except Exception as ex:
         errors.append('Se ha producido un error al intentas calcular las rutas')
 
-    try:
-        email = EmailMessage('Calculo de rutas','Se ha terminado de calcular falta la BBDD', to=['alvaro.gutierrez@mnopi.com'])
-        email.send()
-    except:
-        pass
+    sendEmail('Calculo de rutas', 'Se ha terminado de calcular falta la BBDD')
 
+    #stepsArray = []
     if len(errors) <= 0:
 
         try:
@@ -94,6 +98,7 @@ def threadCalculateRoute(enclosure_id):
                     calculatedRoute.origin = origin.point
                     calculatedRoute.destiny = destination.point
                     calculatedRoute.save()
+
                     for index in range(1, len(steps)):
                         routeStep = Step()
                         stepElements = steps[index].split('_')
@@ -104,19 +109,25 @@ def threadCalculateRoute(enclosure_id):
                         routeStep.floor = floors.filter(id=stepElements[2])[0]
                         routeStep.route = calculatedRoute
                         routeStep.save()
+                        #stepsArray.append(routeStep)
+
+              #  Step.objects.bulk_create(stepsArray)
+
         except Exception as ex:
-            errors.append('Se ha producido un error al insertar los datos en la BBDD. Error:'+ ex.message)
-        mensaje='Se ha realizado la operación correctamente'
+            errors.append('Se ha producido un error al insertar los datos en la BBDD. Error:' + ex.message)
+        mensaje = 'Se ha realizado la operación correctamente'
         if len(errors) > 0:
             mensaje = 'Se han producido los siguientes errores: '
             for error in errors:
                 mensaje += error + '--'
+        sendEmail('Informe cálculo de rutas', mensaje)
 
+
+def sendEmail(subject, message):
     try:
-        email = EmailMessage('Informe cálculo de rutas',mensaje, to=['alvaro.gutierrez@mnopi.com'])
+        email = EmailMessage(subject, message, to=['alvaro.gutierrez@mnopi.com'])
         email.send()
     except:
         pass
-
 
 

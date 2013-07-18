@@ -164,6 +164,10 @@ class Point(models.Model):
     label = models.ForeignKey(Label, related_name='points', on_delete=models.CASCADE)
     floor = models.ForeignKey(Floor, related_name='points', on_delete=models.CASCADE)
     alwaysVisible = models.NullBooleanField()
+    center_x = models.PositiveIntegerField(null=True)
+    center_y = models.PositiveIntegerField(null=True)
+    isVertical = models.NullBooleanField()
+
 
     def __unicode__(self):
         return self.floor.name + ' (' + str(self.row) + ', ' + str(self.col) + ')'
