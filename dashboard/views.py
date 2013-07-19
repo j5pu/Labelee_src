@@ -28,7 +28,7 @@ def saveRouteRequest(request):
     dispRoute =DisplayedRoutes()
     dispRoute.origin_id= point_list['originpoi']
     dispRoute.destination_id = point_list['destinationpoi']
-    dispRoute.date = datetime.datetime.now();
+    dispRoute.date = datetime.datetime.utcnow()
     dispRoute.save()
     return HttpResponse(json.dumps('ok'))
 

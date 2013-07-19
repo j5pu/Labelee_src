@@ -29,16 +29,17 @@ def show_map(request, qr_type, enclosure_id, floor_id, poi_id):
     points = Point.objects \
         .filter(~Q(label__category__name__in=CATEGORIAS_FIJAS.values()),
                 floor__enclosure__id=enclosure_id) \
-        .order_by('label__category__name', 'label__name')
-    #Alamcena el escaneo del qr para que pueda ser usado en el dashboard
+        .order_by('label__category__name', 'description', 'label__name')
+
     try:
         qrShot = Qr_shot()
-        qrShot.point_id = poi_id;
-        qrShot.date = datetime.datetime.now();
+        qrShot.point_id = poi_id
+        #qrShot.date = datetime.datetime.utcnow()
+        #  year, month, day, hour=None, minute=None, second=None
+        qrShot.date = datetime.datetime.utcnow()
         qrShot.save()
     except Exception as ex:
         Logger.error(ex.message)
-    ###
 
     for point in points:
         if point.label.category.name not in CATEGORIAS_FIJAS.values():
@@ -47,9 +48,6 @@ def show_map(request, qr_type, enclosure_id, floor_id, poi_id):
             else:
                 colors[point.label.category.name] = point.label.category.color
                 categories[point.label.category.name] = [point]
-
-
-
 
         if point.coupon.name is not None:
             try:

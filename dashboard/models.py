@@ -8,5 +8,5 @@ class Qr_shot(models.Model):
 class DisplayedRoutes(models.Model):
     origin = models.ForeignKey('map_editor.Point', related_name='origin')
     destination = models.ForeignKey('map_editor.Point', related_name='destination')
-    date = models.DateTimeField()
+    date = models.DateTimeField(auto_now_add=True)
 
