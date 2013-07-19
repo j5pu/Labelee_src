@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-
+import datetime
 
 from django.template import RequestContext
 from django.shortcuts import render_to_response
@@ -8,6 +8,8 @@ from django.http import HttpResponseRedirect
 # from touching_log import log
 
 import json
+from dashboard.models import Qr_shot
+from log.logger import Logger
 from map.twitterHelper import TwitterHelper
 from map_editor.models import *
 from django.db.models.query import Q
@@ -28,8 +30,16 @@ def show_map(request, qr_type, enclosure_id, floor_id, poi_id):
         .filter(~Q(label__category__name__in=CATEGORIAS_FIJAS.values()),
                 floor__enclosure__id=enclosure_id) \
         .order_by('label__category__name', 'label__name')
-
-
+    #Alamcena el escaneo del qr para que pueda ser usado en el dashboard
+    try:
+        qrShot = Qr_shot()
+        qrShot.point_id = poi_id;
+        qrShot.date = datetime.datetime.now();
+        qrShot.save()
+    except Exception as ex:
+        Logger.error(ex.message)
+    ###
+   
     for point in points:
         if point.label.category.name not in CATEGORIAS_FIJAS.values():
             if point.label.category.name in categories:
