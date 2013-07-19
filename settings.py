@@ -138,6 +138,7 @@ INSTALLED_APPS = (
     'route',
     'modeltranslation',
     'log',
+    'dashboard'
     # 'panorama',
 )
 
