@@ -155,10 +155,10 @@ $(function() {
 function hideSplash() {
     var d = new Date();
     $('div#page').fadeIn(100);
-    $('div.splash').fadeOut(200);
     loopFloors(floor_index);
     LocalStorageHandler.init();
     $('span#myCar').show();
+    $('div.splash').fadeOut(200);
 }
 
 var Coupon = {
