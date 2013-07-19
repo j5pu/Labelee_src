@@ -11,7 +11,14 @@ var DisplayedRoutes = {
             },
             data: JSON.stringify(data),
             dataType: 'json', // esto indica que la respuesta vendrá en formato json
-            async: true
+            async: true,
+            success:function(response){
+
+            },
+            error:function(response)
+            {
+                console.log(response)
+            }
 
         });
     }

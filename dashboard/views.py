@@ -6,7 +6,7 @@ from django.http import HttpResponse
 
 from django.shortcuts import render_to_response
 from django.template import RequestContext
-from django.utils import simplejson
+import simplejson
 from dashboard.models import DisplayedRoutes
 from map_editor.models import Point
 
@@ -30,5 +30,5 @@ def saveRouteRequest(request):
     dispRoute.destination_id = point_list['destinationpoi']
     dispRoute.date = datetime.datetime.utcnow()
     dispRoute.save()
-    return HttpResponse(json.dumps('ok'))
+    return HttpResponse(simplejson.dumps('ok'))
 
