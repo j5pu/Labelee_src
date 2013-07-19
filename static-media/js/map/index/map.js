@@ -1017,6 +1017,7 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
                 map.removeLayer(floors[f].layer);
                 map.removeLayer(floors[f].photo);
                 for (var l in floors[f].labels) {
+                    layersControl.removeLayer(floors[f].labels[l].layer);
                     map.removeLayer(floors[f].labels[l].layer);
                 }
 
@@ -1031,6 +1032,14 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
                     }
                 }
 
+                for (var l in floors[f].labels) {
+                    layersControl.addOverlay(floors[f].labels[l].layer, '<i class="icon-' + floors[f].labels[l].fields.icon + ' icon-white"></i>');
+                    if (checked[l] === true) {
+                        map.addLayer(floors[f].labels[l].layer);
+                    }
+                }
+
+
                 map.addLayer(floors[f].layer);
                 map.addLayer(floors[f].photo);
                 map.setView(arrow[f].getBounds().pad(15).getCenter(), 0);
@@ -1039,23 +1048,6 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
                 arrowAnim(flechita, floors[f].name);
                 map.setView(arrow[f].getBounds().pad(15).getCenter(), 0);
 
-            }
-        }
-
-/*
-        for (var l in floors[f].labels) {
-            layersControl.addOverlay(floors[f].labels[l].layer, '<i class="icon-' + floors[f].labels[l].fields.icon + ' icon-white"></i>');
-            if (checked[l] === true) {
-                map.addLayer(floors[f].labels[l].layer);
-            }
-        }
-*/
-
-
-        for (var lab in floors[f].labels) {
-            if (checked[lab] === true) {
-                jQuery('input[type=checkbox].leaflet-control-layers-selector:eq(' + lab + ')').css('background', floors[f].labels[lab].fields.color);
-                jQuery('input[type=checkbox].leaflet-control-layers-selector:eq(' + lab + ')').prop("checked", true);
             }
         }
 
