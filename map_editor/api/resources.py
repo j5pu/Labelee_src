@@ -63,7 +63,6 @@ class EnclosureResource(ModelResource):
         # resource_name = 'places'
         queryset = Enclosure.objects.all()
         include_resource_uri = True
-        # authentication = LoginRequiredAuthorization()
         authorization = LoginRequiredAuthorization()
         # 		validation = FormValidation(form_class=EnclosureForm)
         filtering = {

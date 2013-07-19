@@ -32,6 +32,11 @@
         {% trans "Administración de recintos" %}
     </h1>
 
+    {% if user.is_authenticated %}
+        {% trans "Bienvenido" %} {{ user.username }}
+        <a href="{% url 'django.contrib.auth.views.logout' %}">Logout</a>
+    {% endif %}
+
 
     <table id="enclosures"
            class="table table-hover"
