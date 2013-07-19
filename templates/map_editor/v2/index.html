@@ -32,9 +32,13 @@
         {% trans "Administración de recintos" %}
     </h1>
 
+
+    <!-- CAJITA DE LOGOUT -->
     {% if user.is_authenticated %}
-        {% trans "Bienvenido" %} {{ user.username }}
-        <a href="{% url 'django.contrib.auth.views.logout' %}">Logout</a>
+        <div id="logout" class="box box-1">
+            {% trans "Bienvenido" %}, {{ user.username }} |
+            <a href="{% url 'django.contrib.auth.views.logout' %}">Logout</a>
+        </div>
     {% endif %}
 
 

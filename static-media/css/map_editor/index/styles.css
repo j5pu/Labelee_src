@@ -130,3 +130,10 @@ td.pois
     margin: 0.5em auto;
 }
 
+#logout
+{
+    float: right;
+    position: relative;
+    bottom: 65px;
+}
+

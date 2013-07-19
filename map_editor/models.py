@@ -22,6 +22,7 @@ class Enclosure(models.Model):
     def __unicode__(self):
         return self.name
 
+
     def delete(self, *args, **kwargs):
         """
         Al eliminar cada recinto también eliminamos cada imagen de planta
@@ -30,6 +31,9 @@ class Enclosure(models.Model):
             floor.delete()
 
         super(Enclosure, self).delete(*args, **kwargs)
+
+
+
 
 
     def count_pois(self):
@@ -97,14 +101,6 @@ class LabelCategory(models.Model):
     def __unicode__(self):
         return self.name
 
-    def save(self, *args, **kwargs):
-        """
-            Pasamos a mayúsculas el código de categoría
-        """
-        if self.cat_code:
-            self.cat_code = self.cat_code.upper()
-
-        return super(LabelCategory, self).save(*args, **kwargs)
 
     def delete(self, *args, **kwargs):
         if self.img:

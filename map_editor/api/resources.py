@@ -3,8 +3,9 @@
 
 from django.contrib.auth.models import User
 
-from tastypie.authorization import Authorization
+from tastypie.authorization import Authorization, DjangoAuthorization
 from tastypie.authentication import BasicAuthentication, ApiKeyAuthentication, SessionAuthentication
+from tastypie.bundle import Bundle
 from tastypie.paginator import Paginator
 # from tastypie.authorization import Authorization
 from tastypie.validation import FormValidation
@@ -17,6 +18,7 @@ from tastypie.resources import ModelResource, ALL, ALL_WITH_RELATIONS
 #
 # http://obroll.com/django-tastypie-one-to-many-fields-related-models-reverse-backward/
 from tastypie import fields
+from map_editor.api.resource_authorization import ResourceAuthorization
 
 from map_editor.models import *
 from route.models import *
@@ -24,28 +26,16 @@ from log.models import *
 from map_editor.forms import EnclosureForm
 
 
-class LoginRequiredAuthorization(Authorization):
-    """
-    Equivalent to Django's login_required decorator
-    Be careful with this; it will allow DELETE and everything else.
-
-    """
-    def is_authorized(self, request, object=None):
-        # GET is always allowed
-        if request.method == 'GET':
-            return True
-        return request.user.is_authenticated()
-
-
 class UserResource(ModelResource):
     class Meta:
         resource_name = 'user'
         queryset = User.objects.all()
-        authorization = LoginRequiredAuthorization()
-        # excludes = ['email', 'password', 'is_staff', 'is_superuser']
-    # allowed_methods = ['get']
-    # authentication = BasicAuthentication()
-    # include_resource_uri = False
+        # authentication = SessionAuthentication()
+        # authorization = DjangoAuthorization()
+        authorization = ResourceAuthorization('user')
+        filtering = {
+            'id': ALL,
+            }
 
     def determine_format(self, request):
         """
@@ -53,6 +43,8 @@ class UserResource(ModelResource):
         URLs y dejarlo por defecto
         """
         return 'application/json'
+
+
 
 
 class EnclosureResource(ModelResource):
@@ -63,20 +55,15 @@ class EnclosureResource(ModelResource):
         # resource_name = 'places'
         queryset = Enclosure.objects.all()
         include_resource_uri = True
-        authorization = LoginRequiredAuthorization()
-        # 		validation = FormValidation(form_class=EnclosureForm)
-        filtering = {
-            'name': ALL,
-            'id': ALL,
-            'floors': ALL_WITH_RELATIONS
-        }
-        paginator_class = Paginator
-
-        # http://stackoverflow.com/questions/10138169/returning-data-on-post-in-django-tastypie
+        authorization = ResourceAuthorization('owner')
         always_return_data = True
+        filtering = {
+            'owner': ALL_WITH_RELATIONS,
+            }
 
     def determine_format(self, request):
         return 'application/json'
+
 
 
 class FloorResource(ModelResource):
@@ -86,8 +73,7 @@ class FloorResource(ModelResource):
 
     class Meta:
         queryset = Floor.objects.all()
-        authorization = LoginRequiredAuthorization()
-        # authentication = BasicAuthentication()
+        authorization = ResourceAuthorization('enclosure__owner')
         include_resource_uri = True
         filtering = {
             'enclosure': ALL_WITH_RELATIONS,
@@ -117,10 +103,7 @@ class PointResource(ModelResource):
 
     class Meta:
         queryset = Point.objects.all()
-        authorization = LoginRequiredAuthorization()
-        # authentication = BasicAuthentication()
-        # usando apikey:
-        # authentication = ApiKeyAuthentication()
+        authorization = ResourceAuthorization('floor__enclosure__owner')
         always_return_data = True
         filtering = {
             'floor': ALL_WITH_RELATIONS,
@@ -146,8 +129,7 @@ class LabelResource(ModelResource):
 
     class Meta:
         queryset = Label.objects.all()
-        authorization = LoginRequiredAuthorization()
-        # authentication = BasicAuthentication()
+        authorization = ResourceAuthorization('category__enclosure__owner')
         always_return_data = True
         filtering = {
             'id': ALL,
@@ -163,13 +145,12 @@ class LabelResource(ModelResource):
 
 class LabelCategoryResource(ModelResource):
     labels = fields.ToManyField('map_editor.api.resources.LabelResource', 'labels', null=True, blank=True)
-    enclosure = fields.OneToOneField('map_editor.api.resources.EnclosureResource', 'enclosure', full=True)
+    enclosure = fields.OneToOneField('map_editor.api.resources.EnclosureResource', 'enclosure', null=True, full=True)
 
     class Meta:
         resource_name = 'label-category'
         queryset = LabelCategory.objects.all()
-        authorization = LoginRequiredAuthorization()
-        # authentication = BasicAuthentication()
+        authorization = ResourceAuthorization('enclosure__owner')
         always_return_data = True
         filtering = {
             'id': ALL,
@@ -177,7 +158,7 @@ class LabelCategoryResource(ModelResource):
             'color': ALL,
             'icon': ALL,
             'labels': ALL_WITH_RELATIONS,
-            'enclosures': ALL_WITH_RELATIONS,
+            'enclosure': ALL_WITH_RELATIONS,
         }
 
     def determine_format(self, request):
@@ -198,7 +179,7 @@ class QRCodeResource(ModelResource):
     class Meta:
         resource_name = 'qr-code'
         queryset = QR_Code.objects.all()
-        authorization = LoginRequiredAuthorization()
+        authorization = DjangoAuthorization()
         # authentication = BasicAuthentication()
         always_return_data = True
         filtering = {
@@ -217,7 +198,7 @@ class ConnectionResource(ModelResource):
     class Meta:
         resource_name = 'connection'
         queryset = Connection.objects.all()
-        authorization = LoginRequiredAuthorization()
+        authorization = DjangoAuthorization()
         # authentication = BasicAuthentication()
         always_return_data = True
         filtering = {
@@ -242,7 +223,7 @@ class RouteResource(ModelResource):
     class Meta:
         resource_name = 'route'
         queryset = Route.objects.all()
-        authorization = LoginRequiredAuthorization()
+        authorization = DjangoAuthorization()
         # authentication = BasicAuthentication()
         always_return_data = True
         filtering = {
@@ -262,7 +243,7 @@ class StepResource(ModelResource):
     class Meta:
         resource_name = 'step'
         queryset = Step.objects.all()
-        authorization = LoginRequiredAuthorization()
+        authorization = DjangoAuthorization()
         # authentication = BasicAuthentication()
         always_return_data = True
         filtering = {
@@ -280,7 +261,7 @@ class LogEntryResource(ModelResource):
     class Meta:
         resource_name = 'log-entry'
         queryset = LogEntry.objects.all()
-        authorization = LoginRequiredAuthorization()
+        authorization = DjangoAuthorization()
         # authentication = BasicAuthentication()
         always_return_data = True
         filtering = {
