@@ -39,7 +39,7 @@ def show_map(request, qr_type, enclosure_id, floor_id, poi_id):
     except Exception as ex:
         Logger.error(ex.message)
     ###
-   
+
     for point in points:
         if point.label.category.name not in CATEGORIAS_FIJAS.values():
             if point.label.category.name in categories:

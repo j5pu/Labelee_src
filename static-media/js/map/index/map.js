@@ -46,11 +46,11 @@ var OriginIcon = L.AwesomeMarkers.icon({
         color: 'red'
     });
 
-var txtIcon= new L.icon({
+var txtIcon = new L.icon({
     iconUrl: '/media/texticon.png',
     iconRetinaUrl: '/media/texticon.png',
     iconSize: [1, 1],
-    iconAnchor: [0,0],
+    iconAnchor: [0, 0],
     //popupAnchor: [0,0],
     labelAnchor: [-46, 6]
 });
@@ -224,7 +224,7 @@ var LocalStorageHandler = {
                 'prevDate': new Date().getTime(),
                 'poid': poi.id,
                 'floorid': poi.floor,
-                'enclosureid':  qrPoint.enclosure.id,
+                'enclosureid': qrPoint.enclosure.id,
                 'mesg': gettext('Do you still want to go to') + ' ' + poi.marker.description + '?',
                 'description': poi.marker.title,
                 'description_for_menu': poi.marker.description
@@ -385,7 +385,7 @@ function loadPOIs() {
                 sY = floors[fl].scaleY,
                 loc = [(floors[fl].pois[j].row) * sY + (sY),
                     floors[fl].pois[j].col * sX + (sX)],
-                center =  [(floors[fl].pois[j].center_x) * sY + (sY),
+                center = [(floors[fl].pois[j].center_x) * sY + (sY),
                     floors[fl].pois[j].center_y * sX + (sX)],
                 labelid = floors[fl].pois[j].label.id,
                 category = floors[fl].pois[j].label.category.name,
@@ -441,24 +441,22 @@ function loadPOIs() {
                     bindContent(qrMarker);
                 });
 
-/*
-            floors[fl].pois[j].marker.bindLabel(floors[fl].pois[j].description, {noHide: true}).addTo(map).showLabel();
+            /*
+             floors[fl].pois[j].marker.bindLabel(floors[fl].pois[j].description, {noHide: true}).addTo(map).showLabel();
 
-            if (floors[fl].pois[j].alwaysVisible) {
-            //Cambiar el parámetro loc por [centro del establecimiento/POI]
-            floors[fl].pois[j].txtMarker= new L.Marker(new L.latLng(loc), {icon: txtIcon}).bindLabel(floors[fl].pois[j].description, {noHide: true}).addTo(map).showLabel();
-            floors[fl].pois[j].txtMarker.setOpacity(1);
-            floors[fl].layer.addLayer(floors[fl].pois[j].txtMarker);
-            }
-*/
+             if (floors[fl].pois[j].alwaysVisible) {
+             //Cambiar el parámetro loc por [centro del establecimiento/POI]
+             floors[fl].pois[j].txtMarker= new L.Marker(new L.latLng(loc), {icon: txtIcon}).bindLabel(floors[fl].pois[j].description, {noHide: true}).addTo(map).showLabel();
+             floors[fl].pois[j].txtMarker.setOpacity(1);
+             floors[fl].layer.addLayer(floors[fl].pois[j].txtMarker);
+             }
+             */
 
 
 //             if (floors[fl].pois[j].alwaysVisible) {
 //            floors[i].labels[l].layer.addLayer(floors[fl].pois[j].marker.bindLabel(floors[fl].pois[j].description, { noHide: true, className: 'textLabel' }))
 //            //.addTo(map)
 //        }
-
-
 
 
             /*
@@ -470,8 +468,8 @@ function loadPOIs() {
 
 
             for (var l in floors[fl].labels) {
-                if (floors[fl].pois[j].marker.category === floors[fl].labels[l].fields.name)
-                {floors[fl].labels[l].layer.addLayer(floors[fl].pois[j].marker);
+                if (floors[fl].pois[j].marker.category === floors[fl].labels[l].fields.name) {
+                    floors[fl].labels[l].layer.addLayer(floors[fl].pois[j].marker);
                 }
             }
 
@@ -484,13 +482,12 @@ function loadPOIs() {
 
 
         // Cada label es un conjunto de POIs (restaurantes, cines..)
-        for (var i=0; i < floors[fl].labels.length;) {
+        for (var i = 0; i < floors[fl].labels.length;) {
             if (!isCategoryVisibleOnButtons(floors[fl].labels[i].fields.name)) {
                 floors[fl].layer.addLayer(floors[fl].labels[i].layer);
                 floors[fl].labels.splice(i--, 1);
             }
-            else
-            {
+            else {
                 i++;
             }
         }
@@ -566,12 +563,12 @@ var map = L.map('map', {
     minZoom: 0,
     maxZoom: 3,
     zoomControl: false
-/*
-    tapTolerance: 30,
-    inertiaThreshold: 5,
-    inertiaDeceleration: 2000,
-    inertiaMaxSpeed: 1000
-*/
+    /*
+     tapTolerance: 30,
+     inertiaThreshold: 5,
+     inertiaDeceleration: 2000,
+     inertiaMaxSpeed: 1000
+     */
 });
 
 
@@ -591,10 +588,9 @@ function initMap(qrPoint) {
             map.addLayer(qrFloor.layer)
 
 
-                for (var txt in qrFloor.pois)
-                {
-                 if(qrFloor.pois[txt].textMarker)   qrFloor.pois[txt].textMarker.addTo(map).showLabel();
-                }
+            for (var txt in qrFloor.pois) {
+                if (qrFloor.pois[txt].textMarker)   qrFloor.pois[txt].textMarker.addTo(map).showLabel();
+            }
 
             for (var l in floors[i].labels) {
                 layersControl.addOverlay(floors[i].labels[l].layer, '<i class="icon-' + floors[i].labels[l].fields.icon + ' icon-white"></i>');
@@ -620,15 +616,15 @@ function initMap(qrPoint) {
 
     }
 
-/*
+    /*
 
-    L.marker(qrLoc, {icon: txtIcon})
-//    L.polyline(qrLoc, qrLoc)
-        .bindLabel('Demo text!', { noHide: true })
-        .addTo(qrFloor.layer)
-        //.addTo(map)
-        .showLabel();
-*/
+     L.marker(qrLoc, {icon: txtIcon})
+     //    L.polyline(qrLoc, qrLoc)
+     .bindLabel('Demo text!', { noHide: true })
+     .addTo(qrFloor.layer)
+     //.addTo(map)
+     .showLabel();
+     */
 
     map.removeLayer(totalPois);
     map.addLayer(qrFloor.layer);
@@ -751,16 +747,15 @@ function changeFloor(e) {
         }
     }
 
-    for (var p in floor_x.pois)
-    {
-        if (floor_x.pois[p].alwaysVisible){
-        L.marker(floor_x.pois[p].marker.center, {icon: txtIcon})
-            .bindLabel(floor_x.pois[p].description, { noHide: true })
-            .addTo(floor_x.layer)
-            //.addTo(map)
-            .showLabel();
-            if (floor_x.pois[p].isVertical){
-               $('div.leaflet-label:contains('+floor_x.pois[p].description+')').addClass('isVertical');
+    for (var p in floor_x.pois) {
+        if (floor_x.pois[p].alwaysVisible) {
+            L.marker(floor_x.pois[p].marker.center, {icon: txtIcon})
+                .bindLabel(floor_x.pois[p].description, { noHide: true })
+                .addTo(floor_x.layer)
+                //.addTo(map)
+                .showLabel();
+            if (floor_x.pois[p].isVertical) {
+                $('div.leaflet-label:contains(' + floor_x.pois[p].description + ')').addClass('isVertical');
             }
         }
     }
@@ -817,6 +812,15 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
 
     if (org == dst)
         return;
+
+    // Creo un nuevo displayed route para que el dashboard pueda utilizar esta información
+    try {
+        DisplayedRoutes.createDisplayedRoute(org, dst);
+    } catch (Exception) {
+
+    }
+
+    ///
 
     route = new RouteResource().getRoute(org, dst);
     if (!route) {
@@ -1084,10 +1088,10 @@ var setArrow = function (flecha, idFloor) {
 
 function isCategoryVisibleOnButtons(categ_name) {
     return (categ_name !== "Parquing" && categ_name !== "Parking") &&
-        (categ_name !== "Bloqueantes" && categ_name !==  "Blockers") &&
+        (categ_name !== "Bloqueantes" && categ_name !== "Blockers") &&
         (categ_name !== "Aristas" && categ_name !== "Connectors") &&
-    (categ_name !== "Entrance") &&
-    (categ_name !== "Aseos" && categ_name !== "Toilet");
+        (categ_name !== "Entrance") &&
+        (categ_name !== "Aseos" && categ_name !== "Toilet");
 }
 
 function isPoiVisibleByDefault(categ_name) {
@@ -1289,8 +1293,8 @@ Map.events =
 
 function bindContent(marker) {
     if (marker.contentBinded)
-    if (marker.contentBinded)
-        return;
+        if (marker.contentBinded)
+            return;
 
     // Se bindea el contenido del popup abierto para el marker
     Panorama.bindShow(marker);
@@ -1301,80 +1305,74 @@ function bindContent(marker) {
 }
 
 
-
-
-
-
-
-
 //PRUEBA FONT-ICONS
 /*
-var    drawnItems = new L.MarkerClusterGroup({
-       disableClusteringAtZoom: 0
-        }),
-*/
+ var    drawnItems = new L.MarkerClusterGroup({
+ disableClusteringAtZoom: 0
+ }),
+ */
 /*
-        markers = [];
+ markers = [];
 
 
-addMarker(new L.LatLng(300,300), {icon: "\ue002", color: "#ff0000"});
-addMarker(new L.LatLng(400,400), {icon: "\ue002", color: "#00ff00"});
-addMarker(new L.LatLng(350,350), {icon: "\ue002", color: "#0000ff"});
-*/
+ addMarker(new L.LatLng(300,300), {icon: "\ue002", color: "#ff0000"});
+ addMarker(new L.LatLng(400,400), {icon: "\ue002", color: "#00ff00"});
+ addMarker(new L.LatLng(350,350), {icon: "\ue002", color: "#0000ff"});
+ */
 /*
-addMarker(new L.LatLng(300,300), {icon: "\ue070", color: "#ff0000"});
-addMarker(new L.LatLng(400,400), {icon: "\ue025", color: "#00ff00"});
-addMarker(new L.LatLng(350,350), {icon: "\u2605", color: "#0000ff"});
-*//*
+ addMarker(new L.LatLng(300,300), {icon: "\ue070", color: "#ff0000"});
+ addMarker(new L.LatLng(400,400), {icon: "\ue025", color: "#00ff00"});
+ addMarker(new L.LatLng(350,350), {icon: "\u2605", color: "#0000ff"});
+ *//*
 
 
-addMarker(new L.LatLng(150, 150), {icon: "\ue002", color: "#8B668B"}); // pin only display
+ addMarker(new L.LatLng(150, 150), {icon: "\ue002", color: "#8B668B"}); // pin only display
 
-*/
+ */
 /*
-addMarker(new L.LatLng(250,250), {icon: "\uf030", color: "#990000", iconFont: 'awesome'}); //camera
-addMarker(new L.LatLng(200,200), {icon: "\uf06e", color: "#009900", iconFont: 'awesome'}); // eye open
-addMarker(new L.LatLng(100,300), {icon: "\uf005", color: "#000099", iconFont: 'awesome'}); // star
-*//*
+ addMarker(new L.LatLng(250,250), {icon: "\uf030", color: "#990000", iconFont: 'awesome'}); //camera
+ addMarker(new L.LatLng(200,200), {icon: "\uf06e", color: "#009900", iconFont: 'awesome'}); // eye open
+ addMarker(new L.LatLng(100,300), {icon: "\uf005", color: "#000099", iconFont: 'awesome'}); // star
+ *//*
 
 
-addMarker(new L.LatLng(175,175), {icon: "\uf041", color: "#4F2F4F", iconFont: 'awesome'}); // pin only
+ addMarker(new L.LatLng(175,175), {icon: "\uf041", color: "#4F2F4F", iconFont: 'awesome'}); // pin only
 
-//map.addLayer(drawnItems);
+ //map.addLayer(drawnItems);
 
-map.on("viewreset", function() {
-    var zoom = map.getZoom(),
-        size = computeSizeFromZoom();
-    //console.log("resize, zoom " + zoom + " size " + size);
-    for (var i = 0; i < markers.length; i++) {
-        markers[i].setFontSize(size * 1.2);
-    }
-});
+ map.on("viewreset", function() {
+ var zoom = map.getZoom(),
+ size = computeSizeFromZoom();
+ //console.log("resize, zoom " + zoom + " size " + size);
+ for (var i = 0; i < markers.length; i++) {
+ markers[i].setFontSize(size * 1.2);
+ }
+ });
 
-function computeSizeFromZoom() {
-    var max = map.getMaxZoom(),
-        zoom = map.getZoom(),
-        diff = max - zoom,
-        table = [2, 1, 0.5];
-    return  (diff < table.length) ? table[diff] : 0.5;
-}
+ function computeSizeFromZoom() {
+ var max = map.getMaxZoom(),
+ zoom = map.getZoom(),
+ diff = max - zoom,
+ table = [2, 1, 0.5];
+ return  (diff < table.length) ? table[diff] : 0.5;
+ }
 
-function addMarker(latLng, opts) {
-    var icon = opts.icon || "\ue002",
-        color = opts.color || "blue",
-        font = opts.iconFont || "iconic",
-        sz = computeSizeFromZoom();
+ function addMarker(latLng, opts) {
+ var icon = opts.icon || "\ue002",
+ color = opts.color || "blue",
+ font = opts.iconFont || "iconic",
+ sz = computeSizeFromZoom();
 
-    marker = new cilogi.L.Marker(latLng, {
-        fontIconSize: sz * 2,
-        fontIconName: icon,
-        fontIconColor: color,
-        fontIconFont: font,
-        opacity: 1
-    });
-//    drawnItems.addLayer(marker);
-    map.addLayer(marker);
-//    markers.push(marker);
-}
+ marker = new cilogi.L.Marker(latLng, {
+ fontIconSize: sz * 2,
+ fontIconName: icon,
+ fontIconColor: color,
+ fontIconFont: font,
+ opacity: 1
+ });
+ //    drawnItems.addLayer(marker);
+ map.addLayer(marker);
+ //    markers.push(marker);
+ }
 
-*/
+ */
