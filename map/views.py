@@ -34,8 +34,6 @@ def show_map(request, qr_type, enclosure_id, floor_id, poi_id):
     try:
         qrShot = Qr_shot()
         qrShot.point_id = poi_id
-        #qrShot.date = datetime.datetime.utcnow()
-        #  year, month, day, hour=None, minute=None, second=None
         qrShot.date = datetime.datetime.utcnow()
         qrShot.save()
     except Exception as ex:

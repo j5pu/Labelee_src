@@ -14,53 +14,6 @@ class Dijkstra():
         self.qr = qr
         self.mapConnections = mapConnections
 
-    def __shortestpath__(self, graph, start, end, visited=[], distances={}, predecessors={}):
-        # we've found our end node, now find the path to it, and return
-        if start == end:
-
-            path = []
-
-            while end != None:
-                path.append(end)
-
-                end = predecessors.get(end, None)
-
-            return distances[start], path[::-1]
-
-        # detect if it's the first time through, set current distance to zero
-
-        if not visited: distances[start] = 0
-
-        # process neighbors as per algorithm, keep track of predecessors
-
-        for neighbor in graph[start]:
-
-            if neighbor not in visited:
-
-                neighbordist = distances.get(neighbor, sys.maxint)
-
-                tentativedist = distances[start] + graph[start][neighbor]
-
-                if tentativedist < neighbordist:
-                    distances[neighbor] = tentativedist
-
-                    predecessors[neighbor] = start
-
-        # neighbors processed, now mark the current node as visited
-
-        visited.append(start)
-
-        # finds the closest unvisited node to the start
-
-        unvisiteds = dict((k, distances.get(k, sys.maxint)) for k in graph if k not in visited)
-
-        closestnode = min(unvisiteds, key=unvisiteds.get)
-
-        # now we can take the closest node and recurse, making it current
-
-        return self.__shortestpath__(graph, closestnode, end, visited, distances, predecessors)
-
-
     def __dijkstraUsingHeap__(self, adj, s, t):
         ''' Return predecessors and min distance if there exists a shortest path
             from s to t; Otherwise, return None '''
@@ -112,6 +65,8 @@ class Dijkstra():
 
         return [len(path), path]
 
+    #funcion que crea el mapa con las zonas que se pueden pisar o que no, W es muro, E pisable
+    # ejemplo 1_1_4: E, 1_1_5 : W, indica que el 1_1_4 es transitable y que el 1_1_5 es muro
     def __createMap__(self):
         map = {}
         for floor in self.floors:
@@ -131,15 +86,8 @@ class Dijkstra():
     def getKey(row, column, numfloor):
         return "{0}_{1}_{2}".format(row, column, numfloor)
 
+    #obtiene todas las conexiones de un punto
     def __getConnections__(self, row, column, map, numfloor):
-        """
-
-        :param map:
-        :param numMap:
-        :param row:
-        :param column:
-        :return:
-        """
 
         connection = {}
         keys = [
@@ -152,32 +100,38 @@ class Dijkstra():
             self.getKey(row, column + 1, numfloor), #East 90
             self.getKey(row - 1, column, numfloor), #North 0
         ]
+        #mira si el punto tiene conexion con los puntos contiguos (Norte, Sur, Este, Oeste)
         for key in keys:
             if self.__existConnection__(map, key):
                 connection[key] = 1
         key = self.getKey(row, column, numfloor)
+        #mira si el punto tiene una conexión con otra planta
         if key in self.mapConnections:
             for mapConnection in self.mapConnections[key]:
                 connection[mapConnection] = 1
 
         return connection
-
+    #crea el grafo del mapa
     def __createGraph__(self, map):
         graph = {}
+
         for floor in self.floors:
             for row in range(0, floor.num_rows):
                 for column in range(0, floor.num_cols):
                     key = self.getKey(row, column, floor.id)
                     if map[key] != 'W':
+                        #almaceno de cada punto del mapa transitables los puntos a los cuales está conectados
                         graph[key] = self.__getConnections__(row, column, map, floor.id)
 
         return graph
 
     def calculateDijkstra(self, errors=[]):
+        #creo el mapa con las zonas transitables y los muros
         map = self.__createMap__()
+        #creo el grafo es decir meto en un diccionario todas las conexiones que tiene un punto.
         graph = self.__createGraph__(map)
         result = []
-
+        #Ejecuta dijkstra para calcular todas las rutas posibles
         for origin in self.qr:
             for destination in self.qr:
                 if origin.point.id != destination.point.id:
@@ -196,6 +150,7 @@ class Dijkstra():
                         print type(ex)
                         print ex.args
                     else:
+                        #Añade la ruta al resultado
                         if path is not None:
                             result.append([origin, destination, path])
 
