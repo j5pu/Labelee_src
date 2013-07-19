@@ -839,6 +839,7 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
             floors[i].layer.removeLayer(arrow[i]);
             map.removeLayer(arrowHead[i]);
         }
+        map.removeLayer(floors[i].layer)
     }
 
     var check = null,
