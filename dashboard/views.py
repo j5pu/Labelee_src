@@ -21,11 +21,11 @@ def index(request):
 
 
 
-@login_required(login_url=settings.LOGIN_URL)
+
 def saveRouteRequest(request):
     json_data = request.body
     point_list = simplejson.loads(json_data)
-    dispRoute =DisplayedRoutes()
+    dispRoute = DisplayedRoutes()
     dispRoute.origin_id= point_list['originpoi']
     dispRoute.destination_id = point_list['destinationpoi']
     dispRoute.date = datetime.datetime.utcnow()
