@@ -65,7 +65,6 @@ class EnclosureResource(ModelResource):
         return 'application/json'
 
 
-
 class FloorResource(ModelResource):
     enclosure = fields.ToOneField(EnclosureResource, 'enclosure')
 

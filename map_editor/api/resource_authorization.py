@@ -1,8 +1,12 @@
 # -*- coding: utf-8 -*-
+import re
 
 from django.contrib.auth.models import User
 from tastypie.authorization import Authorization
 from tastypie.exceptions import Unauthorized
+from map_editor.api.resources import EnclosureResource
+from map_editor.api_2.services.factory import CLASSES
+from map_editor.models import Enclosure
 
 
 class ResourceAuthorization(Authorization):
@@ -12,11 +16,15 @@ class ResourceAuthorization(Authorization):
     http://django-tastypie.readthedocs.org/en/latest/authorization.html
     """
 
-    AUTHORIZED_RESOURCES_FOR_READ = [
+    RESOURCES_WITH_GET_ALLOWED = [
         'enclosure',
         'floor',
         'point'
     ]
+
+    # Para indicar si un registro para el recurso ha sido creado justo antes
+    # de realizar su lectura
+    resource_created = False
 
     def __init__(self, rel_to_user):
         """
@@ -30,9 +38,34 @@ class ResourceAuthorization(Authorization):
         """
         self.rel_to_user = rel_to_user
 
-    def _user_has_permission(self, bundle):
+    def __has_get_method_allowed__(self):
+        return self.resource_meta.resource_name in self.RESOURCES_WITH_GET_ALLOWED
+
+    def __get_id_from_uri__(self, uri):
         """
-        Determina si un usuario tiene permiso para manipular el recurso dado
+        Por ejemplo, de /api/v1/enclosure/27/, devolverá 27
+        """
+        return re.search(r".*\/(\d+)/", uri).group(1)
+
+    def __bundle_owner_match_to_user__(self, bundle):
+        """
+        Comprueba que el dueño del elemento es el mismo que el usuario que lo crea,
+        a menos que sea miembro del staff. Así evitamos que por ejemplo un dueño
+        pueda crear recintos para otros dueños.
+        """
+        if bundle.request.user.is_staff:
+            return True
+
+        owner_id = self.__get_id_from_uri__(bundle.data['owner'])
+        if bundle.request.user.is_authenticated() and bundle.request.user.id == owner_id:
+            return True
+
+        return False
+
+
+    def __user_has_permission_to_read__(self, bundle):
+        """
+        Determina si un usuario tiene permiso para leer el recurso dado
         """
         if type(bundle.obj) is User:
             return bundle.obj.id == bundle.request.user.id
@@ -52,8 +85,32 @@ class ResourceAuthorization(Authorization):
 
         return value == bundle.request.user
 
+    def __user_has_permission_to_create__(self, bundle):
+        """
+        Si el usuario no es dueño de un enclosure con id=37, entonces tampoco podrá
+        crear una planta para dicho enclosure, por ejemplo:
+            {"name":"floor_1","enclosure":"/api/v1/enclosure/37/"}
+        """
+        attrs = self.rel_to_user.split('__')
+        direct_rel = attrs[0]
+        # Me quedo con el enclosure para el que quiero crear la planta,
+        # es decir, de 'enclosure__owner' me quedo con 'enclosure'.
+        # Comprobamos que ese recinto pertenece al usuario
+        direct_rel_id = self.__get_id_from_uri__(bundle.data[direct_rel]) # 37
+        direct_rel_obj = CLASSES[direct_rel].get(id=direct_rel_id) # objeto Enclosure con id=37
+
+        # El siguiente attr es 'owner'
+        value = None
+        for i in range(len(attrs)):
+            value = getattr(direct_rel_obj, attrs[i+1])
+
+        return value == bundle.request.user
+
     def read_list(self, object_list, bundle):
-        if self.resource_meta.resource_name in self.AUTHORIZED_RESOURCES_FOR_READ:
+        """
+        Para leer una lista de elementos para el recurso
+        """
+        if self.__has_get_method_allowed__():
             return object_list
 
         if type(bundle.obj) is User:
@@ -63,32 +120,42 @@ class ResourceAuthorization(Authorization):
         return object_list.filter(**args)
 
     def read_detail(self, object_list, bundle):
-        # Is the requested object owned by the user?
-        if self.resource_meta.resource_name in self.AUTHORIZED_RESOURCES_FOR_READ\
-            or self.resource_created:
-            self.resource_created = False
+        """
+        Para leer un elemento del recurso.
+
+        Sea cual sea el recurso, se podrá leer cuando:
+            - Se pueda hacer GET sobre él (esté en RESOURCES_WITH_GET_ALLOWED)
+            - Se acabe de crear o editar un recurso (cuando llama luego a esta función)
+        """
+        if self.__has_get_method_allowed__() or self.__class__.resource_created:
+            self.__class__.resource_created = False
             return True
 
-        return self._user_has_permission(bundle)
+        return self.__user_has_permission_to_read__(bundle)
 
-    def create_list(self, object_list, bundle):
-        # Assuming their auto-assigned to ``user``.
-        return object_list
+    # def create_list(self, object_list, bundle):
+    #     # Assuming their auto-assigned to ``user``.
+    #     return object_list
 
     def create_detail(self, object_list, bundle):
         # return bundle.obj.user == bundle.request.user
-        self.resource_created = True
-        return bundle.request.user.is_authenticated()
+        self.__class__.resource_created = True
 
-    def update_list(self, object_list, bundle):
-        allowed = []
+        # Si el elemento contiene información sobre su dueño (owner)..
+        if 'owner' in bundle.data:
+            return self.__bundle_owner_match_to_user__(bundle)
 
-        # Since they may not all be saved, iterate over them.
-        for obj in object_list:
-            if obj.user == bundle.request.user:
-                allowed.append(obj)
-
-        return allowed
+        # Para comprobar que se está creando algo sobre un elemento del usuario
+        return self.__user_has_permission_to_create__(bundle)
+    # def update_list(self, object_list, bundle):
+    #     allowed = []
+    #
+    #     # Since they may not all be saved, iterate over them.
+    #     for obj in object_list:
+    #         if obj.user == bundle.request.user:
+    #             allowed.append(obj)
+    #
+    #     return allowed
 
     def update_detail(self, object_list, bundle):
         return bundle.obj.user == bundle.request.user

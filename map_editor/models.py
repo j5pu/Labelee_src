@@ -32,9 +32,8 @@ class Enclosure(models.Model):
 
         super(Enclosure, self).delete(*args, **kwargs)
 
-
-
-
+    def has_as_owner(self, owner):
+        return self.owner == owner
 
     def count_pois(self):
         points = Point.objects.filter(floor__enclosure = self.id)
