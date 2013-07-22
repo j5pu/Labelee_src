@@ -281,7 +281,8 @@ var LocalStorageHandler = {
 
 
 //Variables globales
-var mapH = $(document).height(),//Altura de la pantalla
+var mapW = Math.min($(window).innerWidth(), $(window).innerHeight()),
+//var mapH = $(document).height(),//Altura de la pantalla
 //var mapW = window.innerWidth,//Anchura de la pantalla
     baseLayers = {},
     layersControl = new L.control.layers(null, null, {collapsed: false}),
@@ -339,8 +340,8 @@ function loopFloors() {
     var floorImg = new Image();
     floorImg.src = img;
     floorImg.onload = function () {
-        var mapW = (floorImg.width / floorImg.height) * mapH;
-//        var mapH = (floorImg.height / floorImg.width) * mapW;
+//        var mapW = (floorImg.width / floorImg.height) * mapH;
+        var mapH = (floorImg.height / floorImg.width) * mapW;
         var bounds = new L.LatLngBounds(new L.LatLng(0, 0), new L.LatLng(mapH, mapW));
 
         floors[floor_index].scaleX = mapW / floors[floor_index].num_cols;
@@ -596,10 +597,18 @@ function initMap(qrPoint) {
                 layersControl.addOverlay(floors[i].labels[l].layer, '<i class="icon-' + floors[i].labels[l].fields.icon + ' icon-white"></i>');
             }
 
+
+            map.fitBounds(qrFloor.bounds);
+            qrMarker.openPopup();
+            bindContent(qrMarker);
+            map.setMaxBounds(map.getBounds());
+
+/*
             map.setMaxBounds(qrFloor.bounds);
 //            if (!destMarker) {
             map.setView(qrLoc, 0);
             qrMarker.openPopup();
+*/
             if (qrPoint.point.coupon) {
                 $('div.leaflet-popup-content-wrapper').addClass('withCoupon');
             }
