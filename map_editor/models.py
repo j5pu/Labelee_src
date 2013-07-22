@@ -12,10 +12,16 @@ CATEGORIAS_FIJAS = {
     3: 'Parquing',
 }
 
+def get_logo_path(instance, filename):
+    fileName, fileExtension = os.path.splitext(filename)
+    return 'img/enclosures/%s/logo__%s%s' % (instance.enclosure.id, instance.id, fileExtension)
 
 class Enclosure(models.Model):
     name = models.CharField(max_length=60, unique=True, blank=False)
     twitter_account = models.CharField(max_length=60, unique=True, blank=True, null=True)
+    logo = models.FileField(upload_to=get_logo_path, null=True, blank=True)
+    url_enclosure = models.URLField(null=True, blank=True)
+    url_dashboard = models.URLField(null=True, blank=True)
 
     owner = models.ForeignKey(User, related_name='enclosures', blank=False)
 
