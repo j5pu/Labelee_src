@@ -563,6 +563,7 @@ var map = L.map('map', {
     zoom: 0,
     minZoom: 0,
     maxZoom: 3,
+    trackResize: false,
     zoomControl: false
     /*
      tapTolerance: 30,
