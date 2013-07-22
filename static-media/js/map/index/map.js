@@ -599,9 +599,9 @@ function initMap(qrPoint) {
 
 
             map.fitBounds(qrFloor.bounds);
-            qrMarker.openPopup();
             bindContent(qrMarker);
             map.setMaxBounds(map.getBounds());
+            qrMarker.openPopup();
 
 /*
             map.setMaxBounds(qrFloor.bounds);
@@ -1291,18 +1291,13 @@ if (map.hasLayer(destMarker)) {
 
 
 Map.resize = function () {
-
-    if (map.getZoom()==0)
-    {
+/*
     var newDim = Math.min($(window).innerWidth(), $(window).innerHeight()),
         newBounds= new L.LatLngBounds(new L.LatLng(0, 0), new L.LatLng(newDim, newDim));
 
-    map.setView(newBounds.getCenter(),map.getZoom());
-        map.fitBounds(newBounds);
-//    map.setMaxBounds(newBounds);
-
-    }
-
+    map.fitBounds(newBounds);
+    map.setMaxBounds(map.getBounds().pad(0.2));
+*/
 
     Coupon.calculateCouponArea();
     Panorama.resize();
@@ -1420,31 +1415,3 @@ function bindContent(marker) {
  }
 
  */
-
-
-/*
-
-function onEachFeature(feature, layer) {
-    var popupContent = "<p>I started out as a GeoJSON " +
-        feature.geometry.type + ", but now I'm a Leaflet vector!</p>";
-
-    if (feature.properties && feature.properties.popupContent) {
-        popupContent += feature.properties.popupContent;
-    }
-
-    layer.bindPopup(popupContent);
-}
-
-L.geoJson(mimapa, {
-
-    filter: function (feature, layer) {
-        if (feature.properties) {
-            // If the property "underConstruction" exists and is true, return false (don't render features under construction)
-            return feature.properties.underConstruction !== undefined ? !feature.properties.underConstruction : true;
-        }
-        return false;
-    },
-
-    onEachFeature: onEachFeature
-}).addTo(map);
-*/
