@@ -4,7 +4,6 @@ import re
 from django.contrib.auth.models import User
 from tastypie.authorization import Authorization
 from tastypie.exceptions import Unauthorized
-from map_editor.api.resources import EnclosureResource
 from map_editor.api_2.services.factory import CLASSES
 from map_editor.models import Enclosure
 
@@ -45,7 +44,7 @@ class ResourceAuthorization(Authorization):
         """
         Por ejemplo, de /api/v1/enclosure/27/, devolverá 27
         """
-        return re.search(r".*\/(\d+)/", uri).group(1)
+        return re.search(r".*\/(\d+)/.*", uri).group(1)
 
     def __bundle_owner_match_to_user__(self, bundle):
         """
@@ -63,9 +62,12 @@ class ResourceAuthorization(Authorization):
         return False
 
 
-    def __user_has_permission_to_read__(self, bundle):
+    def __user_has_permission_to_access__(self, bundle):
         """
-        Determina si un usuario tiene permiso para leer el recurso dado
+        Determina si un usuario tiene permiso para acceder al recurso dado y realizar operaciones:
+            - GET
+            - PUT
+            - DELETE
         """
         if type(bundle.obj) is User:
             return bundle.obj.id == bundle.request.user.id
@@ -85,23 +87,37 @@ class ResourceAuthorization(Authorization):
 
         return value == bundle.request.user
 
+
     def __user_has_permission_to_create__(self, bundle):
         """
-        Si el usuario no es dueño de un enclosure con id=37, entonces tampoco podrá
-        crear una planta para dicho enclosure, por ejemplo:
+        Determina si el usuario que hace la petición tiene permiso para crear el recurso.
+
+        Por ejemplo, si el usuario no es dueño de un enclosure con id=37, entonces tampoco
+        podrá crear una planta para dicho enclosure, por ejemplo:
             {"name":"floor_1","enclosure":"/api/v1/enclosure/37/"}
+
+        Asímismo, si el usuario no es staff y crea un floor sin especificar su enclosure,
+        entonces no estará autorizado para crearlo.
         """
-        attrs = self.rel_to_user.split('__')
-        direct_rel = attrs[0]
+        if bundle.request.user.is_staff:
+            return True
+
+        attrs = self.rel_to_user.split('__') # 'enclosure__owner' => ['enclosure, 'owner']
+        direct_rel = attrs[0] # 'enclosure'
+
+        # Si no especificamos enclosure para el floor
+        if not direct_rel in bundle.data:
+            return False
+
         # Me quedo con el enclosure para el que quiero crear la planta,
         # es decir, de 'enclosure__owner' me quedo con 'enclosure'.
         # Comprobamos que ese recinto pertenece al usuario
         direct_rel_id = self.__get_id_from_uri__(bundle.data[direct_rel]) # 37
-        direct_rel_obj = CLASSES[direct_rel].get(id=direct_rel_id) # objeto Enclosure con id=37
+        direct_rel_obj = CLASSES[direct_rel].objects.get(id=direct_rel_id) # objeto Enclosure con id=37
 
-        # El siguiente attr es 'owner'
+        # Para este mismo caso de floor el siguiente attr es 'owner'
         value = None
-        for i in range(len(attrs)):
+        for i in range(len(attrs)-1):
             value = getattr(direct_rel_obj, attrs[i+1])
 
         return value == bundle.request.user
@@ -113,9 +129,16 @@ class ResourceAuthorization(Authorization):
         if self.__has_get_method_allowed__():
             return object_list
 
+        # Si lo que estamos pidiendo es la lista de usuarios:
         if type(bundle.obj) is User:
             return object_list.filter(id=bundle.request.user.id)
 
+        # Si el usuario no está logueado
+        if not bundle.request.user.is_authenticated():
+            return []
+
+        # Para el resto de casos, por ejemplo un user con id 2 que hace consulta sobre floor:
+        #       object_list.filter(enclosure__owner)
         args = {self.rel_to_user:bundle.request.user}
         return object_list.filter(**args)
 
@@ -125,13 +148,14 @@ class ResourceAuthorization(Authorization):
 
         Sea cual sea el recurso, se podrá leer cuando:
             - Se pueda hacer GET sobre él (esté en RESOURCES_WITH_GET_ALLOWED)
-            - Se acabe de crear o editar un recurso (cuando llama luego a esta función)
+            - Se acabe de crear o editar un recurso (cuando llama luego a esta función
+              para devolver los datos sobre el creado)
         """
         if self.__has_get_method_allowed__() or self.__class__.resource_created:
             self.__class__.resource_created = False
             return True
 
-        return self.__user_has_permission_to_read__(bundle)
+        return self.__user_has_permission_to_access__(bundle)
 
     # def create_list(self, object_list, bundle):
     #     # Assuming their auto-assigned to ``user``.
@@ -158,11 +182,11 @@ class ResourceAuthorization(Authorization):
     #     return allowed
 
     def update_detail(self, object_list, bundle):
-        return bundle.obj.user == bundle.request.user
+        return self.__user_has_permission_to_access__(bundle)
 
     def delete_list(self, object_list, bundle):
         # Sorry user, no deletes for you!
         raise Unauthorized("Sorry, no deletes.")
 
     def delete_detail(self, object_list, bundle):
-        raise Unauthorized("Sorry, no deletes.")
+        return self.__user_has_permission_to_access__(bundle)

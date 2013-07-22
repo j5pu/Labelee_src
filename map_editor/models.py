@@ -91,7 +91,7 @@ class LabelCategory(models.Model):
     icon = models.CharField(max_length=50, blank=True, null=True)
     cat_code = models.CharField(max_length=3, null=True)
 
-    enclosure = models.ForeignKey(Enclosure, related_name='enclosure', blank=True, null=True)
+    enclosure = models.ForeignKey(Enclosure, related_name='enclosure', blank=False, null=True)
 
 
     class Meta:
