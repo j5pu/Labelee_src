@@ -2,7 +2,7 @@
  Leaflet, a JavaScript library for mobile-friendly interactive maps. http://leafletjs.com
  (c) 2010-2013, Vladimir Agafonkin, CloudMade
  */
-window.L_DISABLE_3D=true;
+window.L_DISABLE_3D = true;
 var floorChecks = [];
 (function (t, e, i) {
     var n, o;
@@ -369,7 +369,8 @@ var floorChecks = [];
         return this.fire("movestart"), this._rawPanBy(n.point(t)), this.fire("move"), this.fire("moveend")
     }, setMaxBounds: function (t) {
         if (t = n.latLngBounds(t), this.options.maxBounds = t, !t)return this._boundsMinZoom = null, this;
-        var e = this.getBoundsZoom(t, !0);
+//ORIGINAL        var e = this.getBoundsZoom(t, !0);
+        var e = this.getBoundsZoom(t);
         return this._boundsMinZoom = e, this._loaded && (e > this._zoom ? this.setView(t.getCenter(), e) : this.panInsideBounds(t)), this
     }, panInsideBounds: function (t) {
         t = n.latLngBounds(t);
@@ -1910,7 +1911,7 @@ var floorChecks = [];
         a.innerHTML = " " + t.name, o.appendChild(i), o.appendChild(a);
         floorChecks.push(t.name);
         floorChecks[t.name] = i;
-        if(blinkingMode!=null && blinkingMode== t.name)
+        if (blinkingMode != null && blinkingMode == t.name)
             blinker(i);
         //toggleColor(i);
         var r = t.overlay ? this._overlaysList : this._baseLayersList;
@@ -2032,7 +2033,7 @@ var floorChecks = [];
 //Parpadeo a la planta del POI destino
 var blinkingMode = null;
 function blinker(element) {
-     if (blinkingMode!=null && element!=null && element.parentElement.innerText.trimLeft()==blinkingMode) {
+    if (blinkingMode != null && element != null && element.parentElement.innerText.trimLeft() == blinkingMode) {
         var color = element.style.background;
         if (color == "red") {
             element.style.background = "";
@@ -2042,8 +2043,7 @@ function blinker(element) {
         window.setTimeout(function () {
             blinker(element);
         }, 1000);
-    }else
-    {
-    if (element!=null) element.style.background="";
+    } else {
+        if (element != null) element.style.background = "";
     }
 }
