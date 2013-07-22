@@ -1292,13 +1292,25 @@ if (map.hasLayer(destMarker)) {
 
 
 Map.resize = function () {
-/*
-    var newDim = Math.min($(window).innerWidth(), $(window).innerHeight()),
-        newBounds= new L.LatLngBounds(new L.LatLng(0, 0), new L.LatLng(newDim, newDim));
 
-    map.fitBounds(newBounds);
-    map.setMaxBounds(map.getBounds().pad(0.2));
-*/
+//    var newDim = Math.min($(window).innerWidth(), $(window).innerHeight()),
+    var newW = $(window).innerWidth(),
+        newH = $(window).innerHeight(),
+        imgW = $('img.leaflet-image-layer').width(),
+        imgH = $('img.leaflet-image-layer').height();
+
+//        newBounds= new L.LatLngBounds(new L.LatLng(0, 0), new L.LatLng(newH, newW));
+
+    $('div.leaflet-map-pane').css({'left': (newW-imgW)/2+'px','top':(newH-imgH)/2+'px'});
+    Logger.log(map.bounds._northEast + ' : ' + map.bounds._southWest);
+    Logger.log($(window).innerWidth());
+    Logger.log($(window).innerHeight());
+//    map.fitBounds(newBounds);
+    map.setMaxBounds(newBounds);
+
+//    map.setView(newBounds().getCenter(), map.getZoom());
+//    map.options.maxBounds = newBounds;
+
 
     Coupon.calculateCouponArea();
     Panorama.resize();
@@ -1351,6 +1363,9 @@ function bindContent(marker) {
  disableClusteringAtZoom: 0
  }),
  */
+
+
+
 /*
  markers = [];
 
@@ -1358,17 +1373,15 @@ function bindContent(marker) {
  addMarker(new L.LatLng(300,300), {icon: "\ue002", color: "#ff0000"});
  addMarker(new L.LatLng(400,400), {icon: "\ue002", color: "#00ff00"});
  addMarker(new L.LatLng(350,350), {icon: "\ue002", color: "#0000ff"});
- */
-/*
  addMarker(new L.LatLng(300,300), {icon: "\ue070", color: "#ff0000"});
  addMarker(new L.LatLng(400,400), {icon: "\ue025", color: "#00ff00"});
  addMarker(new L.LatLng(350,350), {icon: "\u2605", color: "#0000ff"});
- *//*
+
 
 
  addMarker(new L.LatLng(150, 150), {icon: "\ue002", color: "#8B668B"}); // pin only display
 
- */
+*/
 /*
  addMarker(new L.LatLng(250,250), {icon: "\uf030", color: "#990000", iconFont: 'awesome'}); //camera
  addMarker(new L.LatLng(200,200), {icon: "\uf06e", color: "#009900", iconFont: 'awesome'}); // eye open
@@ -1376,9 +1389,14 @@ function bindContent(marker) {
  *//*
 
 
+
+
+
+
  addMarker(new L.LatLng(175,175), {icon: "\uf041", color: "#4F2F4F", iconFont: 'awesome'}); // pin only
 
- //map.addLayer(drawnItems);
+
+//map.addLayer(drawnItems);
 
  map.on("viewreset", function() {
  var zoom = map.getZoom(),
@@ -1415,4 +1433,27 @@ function bindContent(marker) {
  //    markers.push(marker);
  }
 
- */
+*/
+
+
+
+/*
+PRUEBA GEOJSON
+
+
+function onEachFeature(feature, layer) {
+    var popupContent = "<p>I started out as a GeoJSON " +
+        feature.geometry.type + ", but now I'm a Leaflet vector!</p>";
+
+    if (feature.properties && feature.properties.popupContent) {
+        popupContent += feature.properties.popupContent;
+    }
+
+    layer.bindPopup(popupContent);
+}
+
+L.geoJson(mimapa, {
+        style: function (feature) {
+            return feature.properties && feature.properties.style;
+        }}
+).addTo(map);*/
