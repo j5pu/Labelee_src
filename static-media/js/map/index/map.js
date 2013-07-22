@@ -1070,7 +1070,7 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
         bindContent(destMarker);
     }
 
-    if (map.hasLayer(carMarker)) {
+    if (carMarker && map.hasLayer(carMarker)) {
         map.removeLayer(carMarker);
     }
 }
@@ -1291,6 +1291,12 @@ if (map.hasLayer(destMarker)) {
 
 
 Map.resize = function () {
+    var newDim = Math.min($(window).innerWidth(), $(window).innerHeight()),
+        newBounds= new L.LatLngBounds(new L.LatLng(0, 0), new L.LatLng(newDim, newDim));
+
+    map.fitBounds(newBounds);
+    map.setMaxBounds(map.getBounds().pad(0.2));
+
     Coupon.calculateCouponArea();
     Panorama.resize();
 };
