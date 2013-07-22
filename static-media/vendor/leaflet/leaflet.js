@@ -369,8 +369,9 @@ var floorChecks = [];
         return this.fire("movestart"), this._rawPanBy(n.point(t)), this.fire("move"), this.fire("moveend")
     }, setMaxBounds: function (t) {
         if (t = n.latLngBounds(t), this.options.maxBounds = t, !t)return this._boundsMinZoom = null, this;
-//ORIGINAL        var e = this.getBoundsZoom(t, !0);
-        var e = this.getBoundsZoom(t);
+//ORIGINAL
+        var e = this.getBoundsZoom(t, !0);
+//HACK        var e = this.getBoundsZoom(t);
         return this._boundsMinZoom = e, this._loaded && (e > this._zoom ? this.setView(t.getCenter(), e) : this.panInsideBounds(t)), this
     }, panInsideBounds: function (t) {
         t = n.latLngBounds(t);
