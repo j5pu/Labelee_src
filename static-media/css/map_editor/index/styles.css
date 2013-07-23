@@ -112,6 +112,10 @@ td.pois
     max-height: 120px;
 }
 
+.enclosure .urls a{
+    color: blue;
+}
+
 .enclosure .btn.link-2 {
     display: inline-block;
     color: white;

@@ -76,6 +76,12 @@
 
                 <h4 ng-show="enclosure.twitter_account">@[[enclosure.twitter_account]]</h4>
                 <img class="logo" src="[[enclosure.logo]]">
+                <div class="urls">
+                    <a ng-show="enclosure.url_enclosure"
+                       href="[[enclosure.url_enclosure]]">{% trans  "Web del recinto" %}</a>
+                    <a ng-show="enclosure.url_dashboard"
+                       href="[[enclosure.url_dashboard]]">{% trans  "Ver dashboard" %}</a>
+                </div>
                 <div class="poi_count">{% trans "Número de POIS/QRs:" %} [[enclosure.poi_count]]</div>
                 <div class="floor_count">{% trans "Número de plantas:" %} [[enclosure.floors.length]]</div>
 

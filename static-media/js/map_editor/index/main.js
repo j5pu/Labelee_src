@@ -88,7 +88,7 @@ function EnclosureFormsCtrl($scope, $rootScope, $element)
         var data = {
             name: $scope.enclosure_name,
             owner: userResource.api1_url + user_id + '/',
-            twitter_account : $scope.twitter_account,
+            twitter_account : removeArroba($scope.twitter_account),
             url_enclosure : $scope.url_enclosure,
             url_dashboard : $scope.url_dashboard
         };
@@ -123,7 +123,7 @@ function EnclosureFormsCtrl($scope, $rootScope, $element)
         var img = $($element).find('input[name="logo"]');
         var data = {
             name : $scope.enclosure_name,
-            twitter_account : $scope.twitter_account,
+            twitter_account : removeArroba($scope.twitter_account),
             url_enclosure : $scope.url_enclosure,
             url_dashboard : $scope.url_dashboard
         };
@@ -370,6 +370,13 @@ function CategoryFormsCtrl($scope, $rootScope, $element)
 }
 
 
+function removeArroba(twitterAccount)
+{
+    if (twitterAccount && twitterAccount.charAt(0)== "@")
+        return twitterAccount.substr(1);
+
+    return twitterAccount;
+}
 
 
 
