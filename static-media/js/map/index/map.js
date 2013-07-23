@@ -560,10 +560,11 @@ function loadPOIs() {
 //Configuración inicial del mapa
 var map = L.map('map', {
     crs: L.CRS.Simple,
-    zoom: 0,
+    zoom: 1,
     minZoom: 0,
     maxZoom: 3,
-    trackResize: false,
+//Ojo, 'trackResize' desactiva la gestión 'orientationchange' automática
+//    trackResize: false,
     zoomControl: false
     /*
      tapTolerance: 30,
@@ -1292,6 +1293,8 @@ if (map.hasLayer(destMarker)) {
 
 
 Map.resize = function () {
+/*
+//PRUEBAS ZOOM-POSICION EN 'ORIENTATIONCHANGE'
 
 //    var newDim = Math.min($(window).innerWidth(), $(window).innerHeight()),
     var newW = $(window).innerWidth(),
@@ -1311,6 +1314,7 @@ Map.resize = function () {
 //    map.setView(newBounds().getCenter(), map.getZoom());
 //    map.options.maxBounds = newBounds;
 
+*/
 
     Coupon.calculateCouponArea();
     Panorama.resize();
@@ -1357,16 +1361,16 @@ function bindContent(marker) {
 }
 
 
-//PRUEBA FONT-ICONS
 /*
  var    drawnItems = new L.MarkerClusterGroup({
  disableClusteringAtZoom: 0
  }),
  */
 
-
+//PRUEBA FONT-ICONS
 
 /*
+
  markers = [];
 
 
@@ -1381,12 +1385,10 @@ function bindContent(marker) {
 
  addMarker(new L.LatLng(150, 150), {icon: "\ue002", color: "#8B668B"}); // pin only display
 
-*/
-/*
  addMarker(new L.LatLng(250,250), {icon: "\uf030", color: "#990000", iconFont: 'awesome'}); //camera
  addMarker(new L.LatLng(200,200), {icon: "\uf06e", color: "#009900", iconFont: 'awesome'}); // eye open
  addMarker(new L.LatLng(100,300), {icon: "\uf005", color: "#000099", iconFont: 'awesome'}); // star
- *//*
+
 
 
 
@@ -1433,12 +1435,11 @@ function bindContent(marker) {
  //    markers.push(marker);
  }
 
+
 */
 
 
-
-/*
-PRUEBA GEOJSON
+//PRUEBA GEOJSON
 
 
 function onEachFeature(feature, layer) {
@@ -1456,4 +1457,4 @@ L.geoJson(mimapa, {
         style: function (feature) {
             return feature.properties && feature.properties.style;
         }}
-).addTo(map);*/
+).addTo(map);
