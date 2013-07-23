@@ -328,6 +328,18 @@ function LabelCategoryResource()
     {
         // Nos da toda la lista de categorías a mostrar en el manager sobre ese recinto
         return ajaxGetElements(this.api2_url, 'manager/' + enclosure_id);
+    };
+
+    this.readForFloorEdit = function(enclosure_id)
+    {
+        // Lista de categorías a mostrar en la página de edición de planta
+        return ajaxGetElements(this.api2_url, 'all/' + enclosure_id);
+    };
+
+    this.readCustom = function(enclosure_id)
+    {
+        // Lista de categorías a mostrar en la página de edición de planta
+        return ajaxGetElements(this.api2_url, 'custom/' + enclosure_id);
     }
 }
 
@@ -609,6 +621,7 @@ function UserResource()
 FloorResource.prototype = new Resource;
 var floorResource = new FloorResource();
 LabelResource.prototype = new Resource;
+var labelResource = new LabelResource();
 LabelCategoryResource.prototype = new Resource;
 var labelCategoryResource = new LabelCategoryResource();
 PointResource.prototype = new Resource;

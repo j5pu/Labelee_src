@@ -116,84 +116,64 @@
                         {% trans "Categoría" %}:
                         <br>
                         <select></select>
-                        <a class="new" href=''>{% trans "Nueva" %}</a>
-                        <!--<a class="edit" href=''>Editar</a>-->
-                        <a class="delete" href=''>{% trans "Eliminar" %}</a>
                     </div><br>
 
                     <div id="label" class="box box-2">
                         POI:
                         <br>
                         <select></select>
-                        <a class="new" href=''>{% trans "Nuevo" %}</a>
-                        <!--<a class="edit" href=''>Editar</a>-->
-                        <a class="delete" href=''>{% trans "Eliminar" %}</a>
+                        <div id="manage">
+                            <a class="new" href=''>{% trans "Nueva" %}</a>
+                            <a class="edit" href=''>{% trans "Editar" %}</a>
+                            <a class="delete" href=''>{% trans "Eliminar" %}</a>
+                        </div>
                     </div>
                 </div>
 
                 <!--
-                    Cajas para crear objeto o categoría
+                    Formularios para crear/editar etiqueta
                 -->
-                <div id="category-form" class="box box-2">
-
-                    <span class="title">{% trans "Crear categoría" %}:</span>
-                    <br>
-
-                    <form action=""
-                          method="post"
-                          enctype="multipart/form-data"
-                          target="upload_target">
-                        <input type="text" name="name"
-                               placeholder="{% trans "Nombre para la categoría" %}.."/>
+                <div id="label-forms" class="box box-2">
+                    <div class="new">
+                        <span class="title">{% trans "Crear POI" %}:</span>
                         <br>
 
-                        <!-- Campo para la imágen -->
-                        <input class="btn"
-                               type="file"
-                               name="img"
-                               title="{% trans "Elegir icono" %}..">
+                        <form action=""
+                              method="post" enctype="multipart/form-data"
+                              target="upload_target">
+                            <input type="text" name="name"
+                                   placeholder="{% trans "Nombre para el POI" %}.."/><br>
+
+                            {% trans "Para la categoría" %}:
+                            <select></select><br>
+
+                            <button name="create">{% trans "Crear" %}</button>
+                            <button name="cancel">{% trans "Cancelar" %}</button>
+                        </form>
+                    </div>
+
+                    <div class="edit">
+                        <span class="title">{% trans "Editar POI" %}:</span>
                         <br>
 
-                        {% trans "Color de bloque" %}:
-                        <input type="text" name="color"
-                               placeholder="{% trans "Color" %}.."/>
-                        <br>
+                        <form action=""
+                              method="post" enctype="multipart/form-data"
+                              target="upload_target">
+                            <input type="text" name="name"
+                                   placeholder="{% trans "Nuevo nombre para el POI" %}.."/><br>
 
-                        <button name="create">{% trans "Crear" %}</button>
-                        <button name="cancel">{% trans "Cancelar" %}</button>
-                    </form>
-                </div>
+                            {% trans "Para la categoría" %}:
+                            <select></select><br>
 
-                <div id="label-form" class="box box-2">
-                    <span class="title">{% trans "Crear POI" %}:</span>
-                    <br>
-
-                    <form action=""
-                          method="post" enctype="multipart/form-data"
-                          target="upload_target">
-                        <input type="text" name="name"
-                               placeholder="{% trans "Nombre para el POI" %}.."/><br>
-
-                        {% trans "Para la categoría" %}:
-                        <select></select><br>
-
-                        {% trans "Imágen para el POI" %}:
-                        <input class="btn"
-                               type="file"
-                               name="img"
-                               title="{% trans "Elegir imagen" %}.."><br>
-
-                        <button name="create">{% trans "Crear" %}</button>
-                        <button name="cancel">{% trans "Cancelar" %}</button>
-                    </form>
+                            <button name="update">{% trans "Guardar" %}</button>
+                            <button name="cancel">{% trans "Cancelar" %}</button>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
-
     <div id="loadingScreen"></div>
-
-    {% include "_uploading_iframe.html" %}
 
 {% endblock content %}

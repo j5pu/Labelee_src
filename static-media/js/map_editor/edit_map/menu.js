@@ -6,93 +6,6 @@ var LabelCategory = {
         connector: 3
     },
 
-    show_form_new: function(ev)
-    {
-        ev.preventDefault();
-        $e.floor.poi_menu.hide(400);
-        $e.label.form.root_node.hide(400);
-        $e.category.form.root_node.show(400);
-    },
-
-
-    show_form_update: function(){
-        // implementar
-    },
-
-
-    create: function()
-    {
-        //
-        // 1: Creamos el registro en B.D.
-        var data = {
-            'name': $e.category.form.name.val(),
-            'color': $e.category.form.color.val()
-        };
-
-        Menu.category_created = new LabelCategoryResource().create(data);
-
-        // 2. Si se ha elegido una imágen la subimos
-        var img_form = $(this).closest('form');
-
-        if(!img_form.find('input[name=img]').val())
-        {
-            LabelCategory._post_create();
-            return;
-        }
-
-        Menu.waiting_response = true;
-
-        new LabelCategoryResource().addImg(
-            img_form,
-            Menu.category_created.id,
-            function(server_response){
-                LabelCategory._post_create();
-                Menu.waiting_response = false;
-            }
-        );
-    },
-
-
-    // Una vez la categoría está creada se hace esto también:
-    _post_create: function()
-    {
-        $e.category.form.name.val('');
-        $e.category.form.img.val('');
-        $e.category.form.color.val('');
-        $e.category.form.root_node.hide(400);
-        $e.floor.poi_menu.show(400);
-
-        // volvemos a rellenar el selector con el nuevo dato
-        Menu.setCategorySelector();
-
-        Menu.category_created = null;
-    },
-
-
-    update: function()
-    {
-
-    },
-
-
-    delete: function(ev)
-    {
-        ev.preventDefault();
-        var category_id = $e.category.selector.val();
-        var confirm_msg = gettext('Delete category? (all its labels will be removed)');
-
-        // Eliminación en cascada: categoría -> etiqueta -> punto
-        new LabelCategoryResource().del(category_id, confirm_msg);
-
-        Menu.setCategorySelector();
-
-        // Recargamos el grid para evitar que la próxima vez que guardemos
-        // intente guardar puntos de una etiqueta que no existe
-        Floor.reloading = true;
-        Floor.loadGrid();
-    },
-
-
     isBlocker: function(label_category)
     {
         // Nos indica si la categoría es bloqueante
@@ -125,6 +38,12 @@ var LabelCategory = {
             return false;
 
         return label_category.name_es.toUpperCase() === 'ARISTAS';
+    },
+
+
+    isGeneric: function(label_category)
+    {
+        return !label_category.enclosure;
     }
 };
 
@@ -140,61 +59,46 @@ var Label = {
     show_form_new: function(ev){
         ev.preventDefault();
         $e.floor.poi_menu.hide(400);
-        $e.label.form.root_node.show(400);
-        $e.category.form.root_node.hide(400);
-        var category = $e.category.selector.val();
-        if(category)
-            $e.label.form.category.val(category);
+        $e.label.form.root_node.show();
+        $e.label.form.new_node.show(400);
+        $e.label.form.edit_node.hide();
+
+        var category = $e.label_category_selector.val();
+        $e.label.form.category.val(category);
     },
 
 
-    show_form_update: function(){
-        // implementar
+    show_form_edit: function(ev){
+        ev.preventDefault();
+        $e.floor.poi_menu.hide(400);
+        $e.label.form.root_node.show();
+        $e.label.form.edit_node.show(400);
+        $e.label.form.new_node.hide();
+
+        var category = $e.label_category_selector.val();
+        $e.label.form.category.val(category);
+        $e.label.form.name.val(Painter.label.name);
     },
 
 
     create: function()
     {
-        //
-        // 1. Creamos el registro en la BD
         var category_id = $e.label.form.category.val();
         var data = {
-            'name': $e.label.form.name.val(),
-            'category': '/api/v1/label-category/' + category_id + '/'
+            'name': $e.label.form.name.first().val(),
+            'category': labelResource.api1_url + category_id + '/'
         };
 
-        var label_resource = new Resource('label');
-        Menu.label_created = label_resource.create(data);
+        Menu.label_created = labelResource.create(data);
 
-        //
-        // 2. Si se indicó una imágen la subimos..
-        var img_form = $(this).closest('form');
-
-        if(!img_form.find('input[name=img]').val())
-        {
-            Label._post_create();
-            return;
-        }
-
-        Menu.waiting_response = true;
-
-        label_resource.addImg(
-            img_form,
-            Menu.label_created.id,
-            function(server_response){
-                // Una vez que se sube la imágen al servidor..
-                Label._post_create();
-                Menu.waiting_response = false;
-            }
-        );
+        Label._hide_form();
     },
 
 
-    _post_create: function()
+    _hide_form: function()
     {
         // Limpiamos formulario
         $e.label.form.name.val('');
-        $e.label.form.img.val('');
 
         // Recargamos selector de etiqueta y dejamos elegida la nueva
         Menu.setLabelSelector();
@@ -202,14 +106,21 @@ var Label = {
         // Escondemos el formulario para crear la etiqueta
         $e.label.form.root_node.hide(400);
         $e.floor.poi_menu.show(400);
-
-        Menu.label_created = null;
     },
 
 
     update: function()
     {
+        // Hay dos input para el nombre de la etiqueta, uno para crear y otro para editar
+        var category_id = $e.label.form.category.val();
+        var data = {
+            'name': $e.label.form.name.last().val(),
+            'category': labelResource.api1_url + category_id + '/'
+        };
 
+        Menu.label_updated = labelResource.update(data, Painter.label.id);
+
+        Label._hide_form();
     },
 
 
@@ -217,13 +128,22 @@ var Label = {
     {
         ev.preventDefault();
         var label_id = $e.label.selector.val();
-        var confirm_msg = gettext('Delete label?');
+        var confirm_msg = gettext('Delete label') + ' ' + Painter.label.name + '? ' +
+            gettext('(All their points will be deleted too)');
         // Elimina en cascada: etiqueta -> punto
-        new LabelResource().del(label_id, confirm_msg);
-        Menu.setLabelSelector();
+        labelResource.del(
+            label_id,
+            confirm_msg,
+            function(server_response){
+                Menu.setLabelSelector();
 
-        Floor.reloading = true;
-        Floor.loadGrid();
+                Floor.reloading = true;
+                WaitingDialog.open(
+                    gettext('Redrawing grid') + '..',
+                    Floor.loadGrid
+                );
+            }
+        );
     },
 
 
@@ -269,7 +189,7 @@ var Menu = {
     waiting_response: false,
 
     init: function(){
-        Menu.labels = new LabelResource().readGrouped();
+        Menu.labels = labelResource.readGrouped();
         Menu._setSelectors();
         Menu.setQrList();
         Menu.setPointStats();
@@ -363,45 +283,52 @@ var Menu = {
 
     setCategorySelector: function()
     {
-        // Recogemos de la B.D. todos los LabelCategory y los metemos en el selector
+        // Recogemos de la B.D. todos los LabelCategory para el recinto del plano
+        // y los metemos en el selector
 
-        Menu.categories = new LabelCategoryResource().readAll();
         var prompt_opt = gettext('Select category');
-        setSelector($e.category.selector, Menu.categories, prompt_opt);
+        if(user_is_staff)
+            Menu.categories = labelCategoryResource.readAll();
+        else
+            Menu.categories = labelCategoryResource.readForFloorEdit(Floor.enclosure.id);
+
+        setSelector($e.label_category_selector, Menu.categories, prompt_opt);
         setSelector($e.label.form.category, Menu.categories, prompt_opt);
-
-        // Si se viene de crear una categoría se elije esa
-        if(Menu.category_created)
-        {
-            $e.category.selector.val(Menu.category_created.id);
-            $e.label.form.category.val(Menu.category_created.id);
-        }
-
-        Menu.setLabelSelector();
     },
 
 
     setLabelSelector: function()
     {
-        var category_id = $e.category.selector.val();
+        var category_id = $e.label_category_selector.val();
 
         if(!category_id)
         {
             setSelector($e.label.selector, null, gettext('Select label'));
+            $e.label.manage.root_node.hide();
             return;
         }
 
-        Painter.label_category = new LabelCategoryResource().read(category_id);
-        Menu.labels = new LabelResource().readAllFiltered('?category__id=' + category_id);
+        Painter.label_category = labelCategoryResource.read(category_id);
+        Menu.labels = labelResource.readAllFiltered('?category__id=' + category_id);
 
         setSelector($e.label.selector, Menu.labels, gettext('Select label'));
 
-        // Si se viene de crear una etiqueta se elije esa
         if(Menu.label_created)
+        {
             $e.label.selector.val(Menu.label_created.id);
+            Menu.label_created = null;
+        }
+        else if(Menu.label_updated)
+        {
+            $e.label.selector.val(Menu.label_updated.id);
+            Menu.label_updated = null;
+        }
+        else if(Painter.label)
+            $e.label.selector.val(Painter.label.id);
+
 
         // Si no, en caso de haber elegido la categoría 'Bloqueantes' se selecciona muro
-        else if(LabelCategory.isBlocker(Painter.label_category))
+        if(LabelCategory.isBlocker(Painter.label_category))
             for(var i in Menu.labels)
             {
                 var label = Menu.labels[i];
@@ -411,6 +338,16 @@ var Menu = {
                     break;
                 }
             }
+
+        // Se mostrará new/edit/delete sólo para etiquetas de categorías no genéricas,
+        // a menos que seamos staff
+        if(!LabelCategory.isGeneric(Painter.label_category))
+            $e.label.manage.root_node.show();
+        else
+            if(user_is_staff)
+                $e.label.manage.root_node.show();
+            else
+                $e.label.manage.root_node.hide();
 
         Painter.setLabel();
     },

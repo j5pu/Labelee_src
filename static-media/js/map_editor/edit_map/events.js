@@ -206,9 +206,10 @@ var Events = {
         _updateFloor: function()
         {
             $e.floor.update.on('click', function(){
-                WaitingDialog.open(gettext('Updating floor') + '..');
-
-                setTimeout(Floor.update, 300);
+                WaitingDialog.open(
+                    gettext('Updating floor') + '..',
+                    Floor.update
+                );
             });
             $e.floor.clear.on('click', Floor.clear);
         },
@@ -236,7 +237,7 @@ var Events = {
 
         _selectLabelCategory: function()
         {
-            $e.category.selector.on('change', Menu.setLabelSelector);
+            $e.label_category_selector.on('change', Menu.setLabelSelector);
         },
 
 
@@ -246,23 +247,14 @@ var Events = {
         },
 
 
-        _manageLabelCategory: function()
-        {
-            $e.category.new.on('click', LabelCategory.show_form_new);
-            $e.category.edit.on('click', LabelCategory.update);
-            $e.category.delete.on('click', LabelCategory.delete);
-            $e.category.form.create.on('click', LabelCategory.create);
-            $e.category.form.cancel.on('click', LabelCategory._post_create);
-        },
-
-
         _manageLabel: function()
         {
-            $e.label.new.on('click', Label.show_form_new);
-            $e.label.edit.on('click', Label.update);
-            $e.label.delete.on('click', Label.delete);
+            $e.label.manage.new.on('click', Label.show_form_new);
+            $e.label.manage.edit.on('click', Label.show_form_edit);
+            $e.label.manage.delete.on('click', Label.delete);
             $e.label.form.create.on('click', Label.create);
-            $e.label.form.cancel.on('click', Label._post_create);
+            $e.label.form.update.on('click', Label.update);
+            $e.label.form.cancel.on('click', Label._hide_form);
         },
 
 
@@ -272,7 +264,6 @@ var Events = {
             $('#menu *').off();
             self._changeNumRows();
             self._manageLabel();
-            self._manageLabelCategory();
             self._selectLabel();
             self._selectLabelCategory();
             self._toggleBlockBorders();

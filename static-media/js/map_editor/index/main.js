@@ -319,7 +319,7 @@ function CategoryFormsCtrl($scope, $rootScope, $element)
         };
         labelCategoryResource.create(data);
 
-        $rootScope.$broadcast('category_created', $scope.enclosure);
+        $rootScope.$broadcast('sync_enclosure', $scope.enclosure);
     };
 
 
@@ -376,6 +376,19 @@ function removeArroba(twitterAccount)
         return twitterAccount.substr(1);
 
     return twitterAccount;
+}
+
+
+function sanitizeUrl(url)
+{
+    // Quita
+    var regex = new RegExp("^(http[s]?:\\/\\/(www\\.)?|ftp:\\/\\/(www\\.)?|www\\.){1}([0-9A-Za-z-\\.@:%_\+~#=]+)+((\\.[a-zA-Z]{2,3})+)(/(.)*)?(\\?(.)*)?");
+
+    if(regex.test("http://google.com")){
+
+    }else{
+        alert("No match");
+    }
 }
 
 

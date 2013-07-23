@@ -9,13 +9,6 @@
 
 
 {% block js %}
-    {% get_current_language as LANGUAGE_CODE %}
-    <script>
-        var lang_code = "{{ LANGUAGE_CODE }}";
-        var user_id = parseInt("{{ user.id }}");
-        var user_is_staff = "{{ user.is_staff }}" == "True";
-    </script>
-
     <script src="{{ STATIC_URL }}vendor/bootstrap/bootstrap.file-input.js"></script>
     <script src="{{ STATIC_URL }}js/map_editor/index/main.js"></script>
 {% endblock js %}
@@ -78,9 +71,9 @@
                 <img class="logo" src="[[enclosure.logo]]">
                 <div class="urls">
                     <a ng-show="enclosure.url_enclosure"
-                       href="[[enclosure.url_enclosure]]">{% trans  "Web del recinto" %}</a>
+                       href="[[enclosure.url_enclosure | url]]">{% trans  "Web del recinto" %}</a>
                     <a ng-show="enclosure.url_dashboard"
-                       href="[[enclosure.url_dashboard]]">{% trans  "Ver dashboard" %}</a>
+                       href="[[enclosure.url_dashboard | url]]">{% trans  "Ver dashboard" %}</a>
                 </div>
                 <div class="poi_count">{% trans "Número de POIS/QRs:" %} [[enclosure.poi_count]]</div>
                 <div class="floor_count">{% trans "Número de plantas:" %} [[enclosure.floors.length]]</div>

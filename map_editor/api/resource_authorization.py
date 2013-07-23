@@ -18,7 +18,9 @@ class ResourceAuthorization(Authorization):
     RESOURCES_WITH_GET_ALLOWED = [
         'enclosure',
         'floor',
-        'point'
+        'point',
+        'label',
+        'label-category',
     ]
 
     # Para indicar si un registro para el recurso ha sido creado justo antes
@@ -62,13 +64,16 @@ class ResourceAuthorization(Authorization):
         return False
 
 
-    def __user_has_permission_to_access__(self, bundle):
+    def __user_can_access__(self, bundle):
         """
         Determina si un usuario tiene permiso para acceder al recurso dado y realizar operaciones:
             - GET
             - PUT
             - DELETE
         """
+        if(bundle.request.user.is_staff):
+            return True
+
         if type(bundle.obj) is User:
             return bundle.obj.id == bundle.request.user.id
 
@@ -78,17 +83,16 @@ class ResourceAuthorization(Authorization):
         #   lo que crearía esta comparación:
         #       bundle.obj.enclosure.owner == bundle.request.user
         attrs = self.rel_to_user.split('__')
-        value = None
+        value = bundle.obj
         for i in range(len(attrs)):
-            if i == 0:
-                value = getattr(bundle.obj, attrs[i])
-            else:
-                value = getattr(value, attrs[i])
+            if value is None:
+                break
+            value = getattr(value, attrs[i])
 
         return value == bundle.request.user
 
 
-    def __user_has_permission_to_create__(self, bundle):
+    def __user_can_create__(self, bundle):
         """
         Determina si el usuario que hace la petición tiene permiso para crear el recurso.
 
@@ -116,9 +120,9 @@ class ResourceAuthorization(Authorization):
         direct_rel_obj = CLASSES[direct_rel].objects.get(id=direct_rel_id) # objeto Enclosure con id=37
 
         # Para este mismo caso de floor el siguiente attr es 'owner'
-        value = None
+        value = direct_rel_obj
         for i in range(len(attrs)-1):
-            value = getattr(direct_rel_obj, attrs[i+1])
+            value = getattr(value, attrs[i+1])
 
         return value == bundle.request.user
 
@@ -139,8 +143,7 @@ class ResourceAuthorization(Authorization):
 
         # Para el resto de casos, por ejemplo un user con id 2 que hace consulta sobre floor:
         #       object_list.filter(enclosure__owner)
-        args = {self.rel_to_user:bundle.request.user}
-        return object_list.filter(**args)
+        return object_list.filter(**{self.rel_to_user:bundle.request.user})
 
     def read_detail(self, object_list, bundle):
         """
@@ -155,7 +158,7 @@ class ResourceAuthorization(Authorization):
             self.__class__.resource_created = False
             return True
 
-        return self.__user_has_permission_to_access__(bundle)
+        return self.__user_can_access__(bundle)
 
     # def create_list(self, object_list, bundle):
     #     # Assuming their auto-assigned to ``user``.
@@ -170,7 +173,8 @@ class ResourceAuthorization(Authorization):
             return self.__bundle_owner_match_to_user__(bundle)
 
         # Para comprobar que se está creando algo sobre un elemento del usuario
-        return self.__user_has_permission_to_create__(bundle)
+        return self.__user_can_create__(bundle)
+
     # def update_list(self, object_list, bundle):
     #     allowed = []
     #
@@ -182,11 +186,11 @@ class ResourceAuthorization(Authorization):
     #     return allowed
 
     def update_detail(self, object_list, bundle):
-        return self.__user_has_permission_to_access__(bundle)
+        return self.__user_can_access__(bundle)
 
     def delete_list(self, object_list, bundle):
         # Sorry user, no deletes for you!
         raise Unauthorized("Sorry, no deletes.")
 
     def delete_detail(self, object_list, bundle):
-        return self.__user_has_permission_to_access__(bundle)
+        return self.__user_can_access__(bundle)

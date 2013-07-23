@@ -30,7 +30,7 @@ def edit(request, pk):
     ctx = {
     'floor_id': pk
     }
-    return render_to_response('map_editor/v1/edit.html', ctx, context_instance=RequestContext(request))
+    return render_to_response('map_editor/v2/edit.html', ctx, context_instance=RequestContext(request))
 
 
 @login_required(login_url=settings.LOGIN_URL)

@@ -127,8 +127,12 @@ Object.size = function(obj) {
 
 
 var WaitingDialog = {
+
     init: function(){
-        $("#loadingScreen").dialog({
+        var self = this;
+        self.$e = $("#loadingScreen");
+//        $('body').append('<div id="loadingScreen"></div>');
+        self.$e.dialog({
             autoOpen: false,    // set this to false so we can manually open it
             dialogClass: "loadingScreenWindow",
             closeOnEscape: false,
@@ -149,13 +153,32 @@ var WaitingDialog = {
         }); // end of dialog
     },
 
-    open: function(msg){
-        $("#loadingScreen").html(msg);
-        $("#loadingScreen").dialog('open');
+    open: function(msg, callback){
+        var self = this;
+        self.$e.html(msg);
+
+// NO FUNCIONA
+//        $(document).on("dialogopen", ".ui-dialog", function(event, ui) {
+//            callback();
+//        });
+//        self.$e.on("dialogopen", function(){
+//            callback();
+//        });
+        self.$e.dialog('open');
+
+
+        var id = setInterval(function(){
+            if(self.$e.dialog("isOpen"))
+            {
+                clearInterval(id);
+                callback();
+            }
+        }, 200);
     },
 
     close: function(){
-        $("#loadingScreen").dialog('close');
+        var self = this;
+        self.$e.dialog('close');
     }
 };
 

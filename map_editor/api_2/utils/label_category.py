@@ -34,14 +34,18 @@ def filterAsMenuCategories(label_categories):
     )
 
 
+def getLabelCategories(enclosure_id):
+    return LabelCategory.objects.filter(
+        Q(enclosure__id=None) |
+        Q(enclosure__id=enclosure_id)
+    )
+
+
 def getLabelCategoriesForManager(enclosure_id):
     """
     Devuelve la info a mostrar en manager para la lista de categorías de un recinto dado
     """
-    categories = LabelCategory.objects.filter(
-        Q(enclosure__id=None) |
-        Q(enclosure__id=enclosure_id)
-    )
+    categories = getLabelCategories(enclosure_id)
 
     # categories_valid_grouped = filterAsMenuCategories(categories).distinct()
     categories_valid_grouped = filterAsMenuCategories(categories)
@@ -55,3 +59,4 @@ def getLabelCategoriesForManager(enclosure_id):
                 .count()
 
     return label_categories
+

@@ -11,6 +11,7 @@ CLASSES = {
     'enclosure': Enclosure,
     'floor': Floor,
     'label-category': LabelCategory,
+    'category': LabelCategory,
     'label': Label,
     'point': Point
 }

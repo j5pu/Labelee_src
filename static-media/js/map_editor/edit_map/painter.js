@@ -402,6 +402,14 @@ var Painter = {
         // Setea la etiqueta a pintar con la elegida en el selector
 
         var label_id = $e.label.selector.val();
+
+        if(!label_id)
+        {
+            $e.label.manage.edit.hide();
+            $e.label.manage.delete.hide();
+            return;
+        }
+
         for(var i in Menu.labels)
         {
             var label = Menu.labels[i];
@@ -412,12 +420,14 @@ var Painter = {
                 Painter.label.loaded_img.src = Painter.label.img;
                 Painter.label.category = null;
                 Painter.label.category = Painter.label_category;
+                $e.label.manage.edit.show();
+                $e.label.manage.delete.show();
                 break;
             }
         }
 
         $e.label.selector.blur();
-        $e.category.selector.blur();
+        $e.label_category_selector.blur();
     },
 
 

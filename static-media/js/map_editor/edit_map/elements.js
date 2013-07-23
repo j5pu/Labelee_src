@@ -6,35 +6,26 @@ $e = {
 
     init: function()
     {
-        this.category = {
-            selector: $('#category select'),
-            new: $('#category .new'),
-            edit: $('#category .edit'),
-            delete: $('#category .delete'),
-            form: {
-                root_node: $('#category-form'),
-                img_form: $('#category-form form'),
-                img: $('#category-form input[name=img]'),
-                name: $('#category-form input[name=name]'),
-                color: $('#category-form input[name=color]'),
-                create: $('#category-form button[name=create]'),
-                cancel: $('#category-form button[name=cancel]')
-            }
-        };
+        this.label_category_selector = $('#category select');
 
         this.label = {
             selector: $('#label select'),
-            new: $('#label .new'),
-            edit: $('#label .edit'),
-            delete: $('#label .delete'),
+            manage: {
+                root_node: $('#label #manage'),
+                new: $('#label #manage .new'),
+                edit: $('#label #manage .edit'),
+                delete: $('#label #manage .delete')
+            },
             form: {
-                root_node: $('#label-form'),
-                img_form: $('#label-form form'),
-                img: $('#label-form input[name=img]'),
-                name: $('#label-form input[name=name]'),
-                category: $('#label-form select'),
-                create: $('#label-form button[name=create]'),
-                cancel: $('#label-form button[name=cancel]')
+                root_node: $('#label-forms'),
+                new_node: $('#label-forms .new'),
+                edit_node: $('#label-forms .edit'),
+                name: $('#label-forms input[name=name]'),
+                category: $('#label-forms select'),
+                msg: $('#label-forms .msg'),
+                create: $('#label-forms button[name=create]'),
+                update: $('#label-forms button[name=update]'),
+                cancel: $('#label-forms button[name=cancel]')
             }
         };
 

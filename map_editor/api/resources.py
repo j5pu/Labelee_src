@@ -52,13 +52,13 @@ class EnclosureResource(ModelResource):
     owner = fields.ToOneField(UserResource, 'owner', null=False)
 
     class Meta:
-        # resource_name = 'places'
         queryset = Enclosure.objects.all()
         include_resource_uri = True
         authorization = ResourceAuthorization('owner')
         always_return_data = True
         filtering = {
             'owner': ALL_WITH_RELATIONS,
+            'id': ALL
             }
 
     def determine_format(self, request):

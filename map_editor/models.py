@@ -28,7 +28,6 @@ class Enclosure(models.Model):
     def __unicode__(self):
         return self.name
 
-
     def delete(self, *args, **kwargs):
         """
         Al eliminar cada recinto también eliminamos cada imagen de planta
@@ -66,7 +65,6 @@ class Floor(models.Model):
 
     # por defecto, si eliminamos un lugar también se eliminan todos sus mapas
     enclosure = models.ForeignKey(Enclosure, related_name='floors', blank=True)
-
 
     def __unicode__(self):
         return self.name
