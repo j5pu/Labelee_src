@@ -108,6 +108,10 @@ td.pois
     color: #5C5035;
 }
 
+.enclosure img.logo{
+    max-height: 120px;
+}
+
 .enclosure .btn.link-2 {
     display: inline-block;
     color: white;
