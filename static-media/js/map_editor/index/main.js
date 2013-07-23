@@ -81,38 +81,76 @@ function CategoryCtrl($scope, $rootScope)
 }
 
 
-function EnclosureFormsCtrl($scope, $rootScope)
+function EnclosureFormsCtrl($scope, $rootScope, $element)
 {
     $scope.create = function() {
+        var img = $($element).find('input[name="logo"]');
         var data = {
             name: $scope.enclosure_name,
-            owner: userResource.api1_url + user_id + '/'
+            owner: userResource.api1_url + user_id + '/',
+            twitter_account : $scope.twitter_account,
+            url_enclosure : $scope.url_enclosure,
+            url_dashboard : $scope.url_dashboard
         };
+        var enclosure_created =  enclosureResource.create(data);
+         // Si se ha puesto una nueva imágen la subimos, eliminando la anterior
+        if(img.val() !== '')
+        {
+            var img_form = $($element).find('form');
 
-        enclosureResource.create(data);
+            $scope.waiting_response = true;
 
-        $scope.enclosure_name = '';
-
-//        setTimeout(function(){
-//            $('html, body').animate({
-//                scrollTop: $(document).height()
-//            }, 2000);
-//        }, 300);
-
-//        http://stackoverflow.com/questions/14502006/scope-emit-and-on-angularjs/14502755#14502755
-        $rootScope.$broadcast('sync_enclosureList');
+            enclosureResource.addImg(
+                    img_form,
+                    enclosure_created.id,
+                    function(server_response){
+                        // Una vez se sube la imágen se limpia el formulario y se actualiza
+                        // la lista de plantas para el recinto
+                        img_form.find('input[name="logo"]').val('');
+                        img_form.find('.file-input-name').remove();
+                        $scope.waiting_response = false;
+                        $rootScope.$broadcast('sync_enclosureList', $scope.enclosure);
+                    }
+            );
+        }
+        else
+            $rootScope.$broadcast('sync_enclosureList', $scope.enclosure);
     };
 
 
+
     $scope.update = function(enclosure) {
+        var img = $($element).find('input[name="logo"]');
         var data = {
             name : $scope.enclosure_name,
-            twitter_account : $scope.twitter_account
+            twitter_account : $scope.twitter_account,
+            url_enclosure : $scope.url_enclosure,
+            url_dashboard : $scope.url_dashboard
         };
-
         enclosureResource.update(data, $scope.enclosure.id);
 
-        $rootScope.$broadcast('sync_enclosure', $scope.enclosure);
+        // Si se ha puesto una nueva imágen la subimos, eliminando la anterior
+        if(img.val() !== '')
+        {
+            var img_form = $($element).find('form');
+
+            $scope.waiting_response = true;
+
+            enclosureResource.addImg(
+                    img_form,
+                    $scope.enclosure.id,
+                    function(server_response){
+                        // Una vez se sube la imágen se limpia el formulario y se actualiza
+                        // la lista de plantas para el recinto
+                        img_form.find('input[name="logo"]').val('');
+                        img_form.find('.file-input-name').remove();
+                        $scope.waiting_response = false;
+                        $rootScope.$broadcast('sync_enclosure', $scope.enclosure);
+                    }
+            );
+        }
+        else
+            $rootScope.$broadcast('sync_enclosure', $scope.enclosure);
     };
 
 
@@ -131,6 +169,11 @@ function EnclosureFormsCtrl($scope, $rootScope)
 
     $scope.$on('show_create_enclosure_form', function() {
         $scope.enclosure_name = '';
+        $scope.twitter_account = '';
+        $scope.url_enclosure = '';
+        $scope.url_dashboard = '';
+        $scope.logo = '';
+
         modalDialog = new ModalDialog('#enc_create');
         modalDialog.open();
     });
@@ -141,6 +184,9 @@ function EnclosureFormsCtrl($scope, $rootScope)
         $scope.enclosure = enclosure;
         $scope.enclosure_name = enclosure.name;
         $scope.twitter_account = enclosure.twitter_account;
+        $scope.logo = enclosure.logo;
+        $scope.url_enclosure = enclosure.url_enclosure;
+        $scope.url_dashboard = enclosure.url_dashboard;
         modalDialog = new ModalDialog('#enc_edit');
         modalDialog.open();
     });

@@ -170,17 +170,53 @@
                     -->
     <div id="dialogs">
         <div id="enc_create" ng-controller="EnclosureFormsCtrl">
-            <form class="create">
-                <input type="text"
-                       ng-model="enclosure_name"
-                       placeholder="{% trans "Nombre del recinto" %}..">
+            <form class="create"
+                  action=""
+                  method="post"
+                  enctype="multipart/form-data"
+                  target="upload_target">
+                <label class="txt">Nuevo nombre:
+                    <input type="text"
+                           ng-model="enclosure_name"
+                           placeholder="{% trans "Nombre para el recinto" %}.."
+                           autofocus>
+                </label>
+                <label class="txt">
+                    Cuenta de Twitter:
+                    <input type="text"
+                           ng-model="twitter_account"
+                           placeholder="{% trans "Cuenta de twitter" %}..">
+                </label>
+                <label class="txt">
+                    Logo del recinto:
+                    <input class="btn"
+                               type="file"
+                               name="logo"
+                               title="{% trans "Subir imagen" %}">
+                </label>
+                <label class="txt">
+                    Url del recinto:
+                    <input type="text"
+                           ng-model="url_enclosure"
+                           placeholder="{% trans "Introduzca la url del recinto" %}..">
+                </label>
+                <label class="txt">
+                    Url del dashboard:
+                    <input type="text"
+                           ng-model="url_dashboard"
+                           placeholder="{% trans "Introduzca la url del dashboard" %}..">
+                </label>
 
                 <button class="btn" ng-click="create()">{% trans "Añadir recinto" %}</button>
             </form>
         </div>
 
         <div id="enc_edit" ng-controller="EnclosureFormsCtrl">
-            <form class="edit">
+            <form class="edit"
+                  action=""
+                  method="post"
+                  enctype="multipart/form-data"
+                  target="upload_target">
                 <label class="txt">Nuevo nombre:
                     <input type="text"
                            ng-model="enclosure_name"
@@ -192,6 +228,25 @@
                     <input type="text"
                            ng-model="twitter_account"
                            placeholder="{% trans "Cuenta de twitter" %}..">
+                </label>
+                <label class="txt">
+                    Logo del recinto:
+                    <input class="btn"
+                               type="file"
+                               name="logo"
+                               title="{% trans "Cambiar imagen" %}">
+                </label>
+                <label class="txt">
+                    Url del recinto:
+                    <input type="text"
+                           ng-model="url_enclosure"
+                           placeholder="{% trans "Introduzca la url del recinto" %}..">
+                </label>
+                <label class="txt">
+                    Url del dashboard:
+                    <input type="text"
+                           ng-model="url_dashboard"
+                           placeholder="{% trans "Introduzca la url del dashboard" %}..">
                 </label>
 
                 <button class="btn" ng-click="closeModalDialog()">{% trans "Cancelar" %}</button>
