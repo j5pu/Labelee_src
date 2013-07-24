@@ -63,7 +63,7 @@ msgstr "Connector2"
 
 #: templates/map_editor/v1/connections.html:41
 #: templates/map_editor/v2/connections.html:41
-msgid "Guardar connection"
+msgid "Guardar connexión"
 msgstr "Save connection"
 
 #: templates/map_editor/v1/connections.html:46
