@@ -272,3 +272,7 @@ MODELTRANSLATION_AUTO_POPULATE = True
 MODELTRANSLATION_FALLBACK_LANGUAGES = ('en', 'es')
 
 LOGIN_URL = '/accounts/login/'
+
+AUTHENTICATION_BACKENDS = (
+    'auth_backends.CustomUserModelBackend',
+)

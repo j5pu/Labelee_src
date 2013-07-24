@@ -2,10 +2,10 @@ from django.conf.urls.defaults import *
 from django.views.generic import TemplateView
 from django.contrib import admin
 import settings
+from django.contrib.auth.models import User
 
-# Uncomment the next two lines to enable the admin:
-from django.contrib import admin
 admin.autodiscover()
+admin.site.unregister(User)
 
 # Tastypie
 from tastypie.api import Api

@@ -2,8 +2,10 @@
 
 import os
 from django.db import models
-from django.contrib.auth.models import User
+# from django.utils.translation import ugettext_lazy as _
+from django.contrib.auth.models import User, UserManager
 from map_editor.api_2.utils.point import filterAsPois
+from file_paths import *
 
 FIXED_CATEGORIES = {
     0: 'Blockers',
@@ -12,14 +14,23 @@ FIXED_CATEGORIES = {
     3: 'Parking',
 }
 
-def get_logo_path(instance, filename):
-    fileName, fileExtension = os.path.splitext(filename)
-    return 'img/enclosures/%s/logo%s' % (instance.id, fileExtension)
+
+class CustomUser(User):
+    """User with app settings."""
+    logo = models.FileField(upload_to=get_user_logo_path, null=True, blank=True)
+
+    # Use UserManager to get the create_user method, etc.
+    objects = UserManager()
+
+    def save(self, *args, **kwargs):
+        self.set_password(self.password)
+        super(CustomUser, self).save(*args, **kwargs)
+
 
 class Enclosure(models.Model):
     name = models.CharField(max_length=60, unique=True, blank=False)
     twitter_account = models.CharField(max_length=60, blank=True, null=True)
-    logo = models.FileField(upload_to=get_logo_path, null=True, blank=True)
+    logo = models.FileField(upload_to=get_enclosure_logo_path, null=True, blank=True)
     url_enclosure = models.URLField(null=True, blank=True)
     url_dashboard = models.URLField(null=True, blank=True)
 
@@ -44,18 +55,7 @@ class Enclosure(models.Model):
         points = Point.objects.filter(floor__enclosure = self.id)
         return filterAsPois(points).count()
 
-#         def get_path(instance, filename):
-# return 'photos/%s/%s' % (instance.stock_number, filename)
-def get_floor_path(instance, filename):
-    """
-    img/enclosures/[encl_id]/floors/[floor_id].ext
-	xej: img/enclosures/25/floors/167.png
-	"""
-    fileName, fileExtension = os.path.splitext(filename)
-    return 'img/enclosures/%s/floors/%s%s' % (instance.enclosure.id, instance.id, fileExtension)
 
-
-#Se crea el modelo para los productos
 class Floor(models.Model):
     floor_number = models.IntegerField(null=True, blank=True)
     name = models.CharField(max_length=200, null=False, blank=False)
@@ -84,25 +84,19 @@ class Floor(models.Model):
             super(Floor, self).delete(*args, **kwargs)
 
 
-def category_filename(instance, filename):
-    fileName, fileExtension = os.path.splitext(filename)
-    return 'img/label_categories/%s%s' % (instance.name, fileExtension)
-
 class LabelCategory(models.Model):
     name = models.CharField(max_length=200, blank=False, null=False)
     color = models.CharField(max_length=50, blank=False)
-    img = models.FileField(upload_to="img/label_categories", blank=True, null=True)
+    img = models.FileField(upload_to=get_label_category_path, blank=True, null=True)
     icon = models.CharField(max_length=50, blank=True, null=True)
 
     enclosure = models.ForeignKey(Enclosure, related_name='enclosure', blank=False, null=True)
-
 
     class Meta:
         verbose_name_plural = 'Label categories'
 
     def __unicode__(self):
         return self.name
-
 
     def delete(self, *args, **kwargs):
         if self.img:
@@ -117,21 +111,13 @@ class LabelCategory(models.Model):
 
     def qr_can_be_assigned(self):
         # Comprueba si la categoría no es ni bloqueante ni arista
-        return not self.name_en or (self.name_en.upper() != FIXED_CATEGORIES[0].upper() and \
-            self.name_en.upper() != FIXED_CATEGORIES[1].upper())
-
-
-def label_filename(instance, filename):
-    """
-    img/labels/restaurante/rodilla.png
-    """
-    fileName, fileExtension = os.path.splitext(filename)
-    return 'img/labels/%s/%s%s' % (instance.category.name, instance.name, fileExtension)
+        return not self.name_es or (self.name_es.upper() != FIXED_CATEGORIES[0].upper() and \
+            self.name_es.upper() != FIXED_CATEGORIES[1].upper())
 
 
 class Label(models.Model):
     name = models.CharField(max_length=200, blank=False, null=False)
-    img = models.FileField(upload_to=label_filename, blank=True, null=True)
+    img = models.FileField(upload_to=get_label_path, blank=True, null=True)
 
     category = models.ForeignKey(LabelCategory, related_name='labels', blank=True, on_delete=models.CASCADE)
 
@@ -149,14 +135,6 @@ class Label(models.Model):
         else:
             super(Label, self).delete(*args, **kwargs)
 
-
-def get_panorama_path(instance, filename):
-    fileName, fileExtension = os.path.splitext(filename)
-    return 'img/enclosures/%s/panoramas/%s%s' % (instance.floor.enclosure.id, instance.id, fileExtension)
-
-def get_coupon_path(instance, filename):
-    fileName, fileExtension = os.path.splitext(filename)
-    return 'img/enclosures/%s/coupons/%s%s' % (instance.floor.enclosure.id, instance.id, fileExtension)
 
 class Point(models.Model):
     description = models.CharField(max_length=2000, null=True, blank=True)
@@ -188,6 +166,3 @@ class QR_Code(models.Model):
 
     def __unicode__(self):
         return self.code
-
-
-

@@ -58,7 +58,7 @@ class ResourceAuthorization(Authorization):
             return True
 
         owner_id = self.__get_id_from_uri__(bundle.data['owner'])
-        if bundle.request.user.is_authenticated() and bundle.request.user.id == owner_id:
+        if bundle.request.user.is_authenticated() and bundle.request.user.id == long(owner_id):
             return True
 
         return False
