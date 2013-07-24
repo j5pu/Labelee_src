@@ -3,8 +3,9 @@
 
 from django.contrib.auth.models import User
 
-from tastypie.authorization import DjangoAuthorization, Authorization
-from tastypie.authentication import BasicAuthentication, ApiKeyAuthentication
+from tastypie.authorization import Authorization, DjangoAuthorization
+from tastypie.authentication import BasicAuthentication, ApiKeyAuthentication, SessionAuthentication
+from tastypie.bundle import Bundle
 from tastypie.paginator import Paginator
 # from tastypie.authorization import Authorization
 from tastypie.validation import FormValidation
@@ -17,6 +18,7 @@ from tastypie.resources import ModelResource, ALL, ALL_WITH_RELATIONS
 #
 # http://obroll.com/django-tastypie-one-to-many-fields-related-models-reverse-backward/
 from tastypie import fields
+from map_editor.api.resource_authorization import ResourceAuthorization
 
 from map_editor.models import *
 from route.models import *
@@ -28,11 +30,12 @@ class UserResource(ModelResource):
     class Meta:
         resource_name = 'user'
         queryset = User.objects.all()
-        authorization = DjangoAuthorization()
-        # excludes = ['email', 'password', 'is_staff', 'is_superuser']
-    # allowed_methods = ['get']
-    # authentication = BasicAuthentication()
-    # include_resource_uri = False
+        # authentication = SessionAuthentication()
+        # authorization = DjangoAuthorization()
+        authorization = ResourceAuthorization('user')
+        filtering = {
+            'id': ALL,
+            }
 
     def determine_format(self, request):
         """
@@ -42,26 +45,21 @@ class UserResource(ModelResource):
         return 'application/json'
 
 
+
+
 class EnclosureResource(ModelResource):
     floors = fields.ToManyField('map_editor.api.resources.FloorResource', 'floors', null=True)
     owner = fields.ToOneField(UserResource, 'owner', null=False)
 
     class Meta:
-        # resource_name = 'places'
         queryset = Enclosure.objects.all()
         include_resource_uri = True
-        authorization = DjangoAuthorization()
-        # authentication = BasicAuthentication()
-        # 		validation = FormValidation(form_class=EnclosureForm)
-        filtering = {
-            'name': ALL,
-            'id': ALL,
-            'floors': ALL_WITH_RELATIONS
-        }
-        paginator_class = Paginator
-
-        # http://stackoverflow.com/questions/10138169/returning-data-on-post-in-django-tastypie
+        authorization = ResourceAuthorization('owner')
         always_return_data = True
+        filtering = {
+            'owner': ALL_WITH_RELATIONS,
+            'id': ALL
+            }
 
     def determine_format(self, request):
         return 'application/json'
@@ -74,8 +72,7 @@ class FloorResource(ModelResource):
 
     class Meta:
         queryset = Floor.objects.all()
-        authorization = DjangoAuthorization()
-        # authentication = BasicAuthentication()
+        authorization = ResourceAuthorization('enclosure__owner')
         include_resource_uri = True
         filtering = {
             'enclosure': ALL_WITH_RELATIONS,
@@ -105,10 +102,7 @@ class PointResource(ModelResource):
 
     class Meta:
         queryset = Point.objects.all()
-        authorization = DjangoAuthorization()
-        # authentication = BasicAuthentication()
-        # usando apikey:
-        # authentication = ApiKeyAuthentication()
+        authorization = ResourceAuthorization('floor__enclosure__owner')
         always_return_data = True
         filtering = {
             'floor': ALL_WITH_RELATIONS,
@@ -134,8 +128,7 @@ class LabelResource(ModelResource):
 
     class Meta:
         queryset = Label.objects.all()
-        authorization = DjangoAuthorization()
-        # authentication = BasicAuthentication()
+        authorization = ResourceAuthorization('category__enclosure__owner')
         always_return_data = True
         filtering = {
             'id': ALL,
@@ -151,12 +144,12 @@ class LabelResource(ModelResource):
 
 class LabelCategoryResource(ModelResource):
     labels = fields.ToManyField('map_editor.api.resources.LabelResource', 'labels', null=True, blank=True)
+    enclosure = fields.OneToOneField('map_editor.api.resources.EnclosureResource', 'enclosure', null=True, full=True)
 
     class Meta:
         resource_name = 'label-category'
         queryset = LabelCategory.objects.all()
-        authorization = DjangoAuthorization()
-        # authentication = BasicAuthentication()
+        authorization = ResourceAuthorization('enclosure__owner')
         always_return_data = True
         filtering = {
             'id': ALL,
@@ -164,11 +157,20 @@ class LabelCategoryResource(ModelResource):
             'color': ALL,
             'icon': ALL,
             'labels': ALL_WITH_RELATIONS,
+            'enclosure': ALL_WITH_RELATIONS,
         }
 
     def determine_format(self, request):
         return 'application/json'
 
+
+# class RecipeResource(ModelResource):
+#     ingredients = fields.ToManyField(RecipeIngredientResource,
+#                                      attribute=lambda bundle: bundle.obj.ingredients.through.objects.filter(
+#                                          recipe=bundle.obj) or bundle.obj.ingredients, full=True)
+#     class Meta:
+#         queryset = Recipe.objects.all()
+#         resource_name = 'recipe'
 
 class QRCodeResource(ModelResource):
     point = fields.ToOneField('map_editor.api.resources.PointResource', 'point', full=True)
@@ -212,10 +214,6 @@ class RouteResource(ModelResource):
     origin = fields.ToOneField('map_editor.api.resources.PointResource', 'origin', full=True)
     destiny = fields.ToOneField('map_editor.api.resources.PointResource', 'destiny', full=True)
     steps = fields.ToManyField('map_editor.api.resources.StepResource', 'steps', null=True, full=True)
-
-
-
-# Comentario
 
     class Meta:
         resource_name = 'route'

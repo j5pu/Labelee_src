@@ -42,10 +42,6 @@ iframe {
     display: none;
 }
 
-#label-form, #category-form {
-    display: none;
-}
-
 img#fake {
     width: 1px;
     height: 1px;
@@ -60,6 +56,11 @@ img#fake {
     background: #ffffff;
     padding: 0.4em;
     border: 6px solid;
+}
+
+#label-forms
+{
+    display: none;
 }
 
 .label_pos {

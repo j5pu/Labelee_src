@@ -8,17 +8,17 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        pass
+        # Adding model 'CustomUser'
+        db.create_table(u'map_editor_customuser', (
+            (u'user_ptr', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['auth.User'], unique=True, primary_key=True)),
+            ('logo', self.gf('django.db.models.fields.files.FileField')(max_length=100, null=True, blank=True)),
+        ))
+        db.send_create_signal(u'map_editor', ['CustomUser'])
 
 
     def backwards(self, orm):
-        # Adding field 'Point.alwaysVisble'
-        # db.add_column(u'map_editor_point', 'alwaysVisble',
-        #               self.gf('django.db.models.fields.NullBooleanField')(null=True, blank=True),
-        #               keep_default=False)
-
-        # Deleting field 'Point.alwaysVisible'
-        db.delete_column(u'map_editor_point', 'alwaysVisible')
+        # Deleting model 'CustomUser'
+        db.delete_table(u'map_editor_customuser')
 
 
     models = {
@@ -58,12 +58,20 @@ class Migration(SchemaMigration):
             'model': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '100'})
         },
+        u'map_editor.customuser': {
+            'Meta': {'object_name': 'CustomUser', '_ormbases': [u'auth.User']},
+            'logo': ('django.db.models.fields.files.FileField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
+            u'user_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': u"orm['auth.User']", 'unique': 'True', 'primary_key': 'True'})
+        },
         u'map_editor.enclosure': {
             'Meta': {'object_name': 'Enclosure'},
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'logo': ('django.db.models.fields.files.FileField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '60'}),
             'owner': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'enclosures'", 'to': u"orm['auth.User']"}),
-            'twitter_account': ('django.db.models.fields.CharField', [], {'max_length': '60', 'unique': 'True', 'null': 'True', 'blank': 'True'})
+            'twitter_account': ('django.db.models.fields.CharField', [], {'max_length': '60', 'null': 'True', 'blank': 'True'}),
+            'url_dashboard': ('django.db.models.fields.URLField', [], {'max_length': '200', 'null': 'True', 'blank': 'True'}),
+            'url_enclosure': ('django.db.models.fields.URLField', [], {'max_length': '200', 'null': 'True', 'blank': 'True'})
         },
         u'map_editor.floor': {
             'Meta': {'object_name': 'Floor'},
@@ -86,24 +94,25 @@ class Migration(SchemaMigration):
         },
         u'map_editor.labelcategory': {
             'Meta': {'object_name': 'LabelCategory'},
+            'cat_code': ('django.db.models.fields.CharField', [], {'max_length': '3', 'null': 'True'}),
             'color': ('django.db.models.fields.CharField', [], {'max_length': '50'}),
+            'enclosure': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'enclosure'", 'null': 'True', 'to': u"orm['map_editor.Enclosure']"}),
             'icon': ('django.db.models.fields.CharField', [], {'max_length': '50', 'null': 'True', 'blank': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'img': ('django.db.models.fields.files.FileField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '200'}),
-            'name_en': ('django.db.models.fields.CharField', [], {'max_length': '200', 'unique': 'True', 'null': 'True', 'blank': 'True'}),
-            'name_es': ('django.db.models.fields.CharField', [], {'max_length': '200', 'unique': 'True', 'null': 'True', 'blank': 'True'})
+            'name': ('django.db.models.fields.CharField', [], {'max_length': '200'}),
+            'name_en': ('django.db.models.fields.CharField', [], {'max_length': '200', 'null': 'True', 'blank': 'True'}),
+            'name_es': ('django.db.models.fields.CharField', [], {'max_length': '200', 'null': 'True', 'blank': 'True'})
         },
         u'map_editor.point': {
             'Meta': {'object_name': 'Point'},
-            'alwaysVisible': ('django.db.models.fields.NullBooleanField', [], {'null': 'True', 'blank': 'True'}),
             'col': ('django.db.models.fields.PositiveIntegerField', [], {'null': 'True', 'blank': 'True'}),
+            'coupon': ('django.db.models.fields.files.FileField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
             'description': ('django.db.models.fields.CharField', [], {'max_length': '2000', 'null': 'True', 'blank': 'True'}),
             'floor': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'points'", 'to': u"orm['map_editor.Floor']"}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'label': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'points'", 'to': u"orm['map_editor.Label']"}),
             'panorama': ('django.db.models.fields.files.FileField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
-            'panorama_thumbnail': ('django.db.models.fields.files.FileField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
             'row': ('django.db.models.fields.PositiveIntegerField', [], {'null': 'True', 'blank': 'True'})
         },
         u'map_editor.qr_code': {

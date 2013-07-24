@@ -127,8 +127,12 @@ Object.size = function(obj) {
 
 
 var WaitingDialog = {
+
     init: function(){
-        $("#loadingScreen").dialog({
+        var self = this;
+        self.$e = $("#loadingScreen");
+//        $('body').append('<div id="loadingScreen"></div>');
+        self.$e.dialog({
             autoOpen: false,    // set this to false so we can manually open it
             dialogClass: "loadingScreenWindow",
             closeOnEscape: false,
@@ -149,15 +153,71 @@ var WaitingDialog = {
         }); // end of dialog
     },
 
-    open: function(msg){
-        $("#loadingScreen").html(msg);
-        $("#loadingScreen").dialog('open');
+    open: function(msg, callback){
+        var self = this;
+        self.$e.html(msg);
+
+// NO FUNCIONA
+//        $(document).on("dialogopen", ".ui-dialog", function(event, ui) {
+//            callback();
+//        });
+//        self.$e.on("dialogopen", function(){
+//            callback();
+//        });
+        self.$e.dialog('open');
+
+
+        var id = setInterval(function(){
+            if(self.$e.dialog("isOpen"))
+            {
+                clearInterval(id);
+                callback();
+            }
+        }, 200);
     },
 
     close: function(){
-        $("#loadingScreen").dialog('close');
+        var self = this;
+        self.$e.dialog('close');
     }
 };
+
+
+function ModalDialog(node)
+{
+    // Elemento del DOM a insertar en el cuadro de diálogo
+    this.node = node;
+
+    $(node).dialog({
+        autoOpen: false,    // set this to false so we can manually open it
+        dialogClass: "formDialogWindow",
+        closeOnEscape: false,
+        draggable: false,
+        width: 460,
+        minHeight: 50,
+        modal: true,
+        buttons: {},
+        resizable: false,
+        open: function() {
+            // scrollbar fix for IE
+            $('body').css('overflow','hidden');
+        },
+        close: function() {
+            // reset overflow
+            $('body').css('overflow','auto');
+        }
+    }); // end of dialog
+
+    this.open = function()
+    {
+        $(this.node).dialog('open');
+    };
+
+    this.close = function()
+    {
+        $(this.node).dialog('close');
+    };
+}
 
 
 var ImgLoader = {

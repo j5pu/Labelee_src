@@ -140,6 +140,7 @@ INSTALLED_APPS = (
     'log',
     'dashboard'
     # 'panorama',
+    'analytics',
 )
 
 # A sample logging configuration. The only tangible logging
@@ -223,31 +224,21 @@ else:
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.mysql",
-            "NAME": "labelee_dev",
-             "USER": "mnopi",
+            "NAME": "admin_v2",
+            "USER": "mnopi",
             "PASSWORD": "1aragon1",
             "HOST": "192.168.1.201",
-            "PORT": "3306",
+            "PORT": "",
             }
     }
     # DATABASES = {
     #     "default": {
     #         "ENGINE": "django.db.backends.mysql",
-    #         "NAME": "labelee_dev",
-    #          "USER": "mnopi",
-    #         "PASSWORD": "1aragon1",
-    #         "HOST": "192.168.1.201",
-    #         "PORT": "3306",
-    #         }
-    # }
-    # DATABASES = {
-    #     "default": {
-    #         "ENGINE": "django.db.backends.mysql",
-    #         "NAME": "labelee_dev",
+    #         "NAME": "admin_v2",
     #         "USER": "root",
     #         "PASSWORD": "",
-    #         "HOST": "localhost",
-    #         "PORT": "3306",
+    #         "HOST": "",
+    #         "PORT": "",
     #         }
     #     }
 
@@ -283,3 +274,7 @@ MODELTRANSLATION_AUTO_POPULATE = True
 MODELTRANSLATION_FALLBACK_LANGUAGES = ('en', 'es')
 
 LOGIN_URL = '/accounts/login/'
+
+AUTHENTICATION_BACKENDS = (
+    'auth_backends.CustomUserModelBackend',
+)

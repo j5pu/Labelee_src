@@ -148,19 +148,19 @@ var Painter = {
 
         // Si la etiqueta tiene imágen se la añadimos escondida para que se muestre
         // sólo cuando se requiera
-        if(!LabelCategory.isBlocker() && Painter.label.img)
-        {
-            block.append('<img class="label_img" src="' + Painter.label.img + '"/>');
-
-            var img = block.find('img.label_img');
-            var transform_factor = Painter.label.loaded_img.width / Floor.block_width;
-            img.css({
-                'margin-top': (Floor.block_height - img.height()) / 2 + 'px',
-                'transform': 'scale(' + transform_factor + ')',
-                'z-index': '1',
-                'display': 'none'
-            });
-        }
+//        if(!LabelCategory.isBlocker() && Painter.label.img)
+//        {
+//            block.append('<img class="label_img" src="' + Painter.label.img + '"/>');
+//
+//            var img = block.find('img.label_img');
+//            var transform_factor = Painter.label.loaded_img.width / Floor.block_width;
+//            img.css({
+//                'margin-top': (Floor.block_height - img.height()) / 2 + 'px',
+//                'transform': 'scale(' + transform_factor + ')',
+//                'z-index': '1',
+//                'display': 'none'
+//            });
+//        }
 
 
         // Seguimos iterando mientras se esté cargando el plano
@@ -354,7 +354,7 @@ var Painter = {
 //        Painter.current_hovered_block.find('img').show();
 //        Painter.current_hovered_block.find('div').show();
 
-        Painter.current_hovered_block.find('.label_img').show();
+//        Painter.current_hovered_block.find('.label_img').show();
 //        Painter.current_hovered_block.find('.qr_info').show();
 //        Painter.current_hovered_block.find('.label_pos').show();
 //        Painter.current_hovered_block.find('.connector_descr').show();
@@ -378,7 +378,7 @@ var Painter = {
             Painter.current_hovered_block = null;
             return;
         }
-        Painter.current_hovered_block.find('.label_img').hide();
+//        Painter.current_hovered_block.find('.label_img').hide();
 //        Painter.current_hovered_block.find('.qr_info').hide();
 //        Painter.current_hovered_block.find('.label_pos').hide();
 //        Painter.current_hovered_block.find('.connector_descr').hide();
@@ -402,6 +402,14 @@ var Painter = {
         // Setea la etiqueta a pintar con la elegida en el selector
 
         var label_id = $e.label.selector.val();
+
+        if(!label_id)
+        {
+            $e.label.manage.edit.hide();
+            $e.label.manage.delete.hide();
+            return;
+        }
+
         for(var i in Menu.labels)
         {
             var label = Menu.labels[i];
@@ -412,12 +420,14 @@ var Painter = {
                 Painter.label.loaded_img.src = Painter.label.img;
                 Painter.label.category = null;
                 Painter.label.category = Painter.label_category;
+                $e.label.manage.edit.show();
+                $e.label.manage.delete.show();
                 break;
             }
         }
 
         $e.label.selector.blur();
-        $e.category.selector.blur();
+        $e.label_category_selector.blur();
     },
 
 

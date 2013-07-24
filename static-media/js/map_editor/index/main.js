@@ -1,217 +1,404 @@
+var modalDialog;
+
 $(function() {
     I18n.selectLang(lang_code);
 });
 
 
-function EnclosuresCtrl($scope, UrlService)
+function EnclosureListCtrl($scope, $rootScope, UserService, FormService)
 {
-	$scope.enclosure_resource = new Resource('enclosure');
+	$scope.enclosures = enclosureResource.getForManagerIndex();
 
-    $scope.$watch('enclosures', function(){FileInput.draw();});
+    // Orden en que aparecerán los recintos
+    $scope.reverse = false;
 
-	$scope.enclosures = $scope.enclosure_resource.readAll();
+    $scope.show_create_enclosure_form = function() {
+        $rootScope.$broadcast('show_create_enclosure_form');
+    };
 
-	$scope.createEnclosure = function() {
-		var data = {
-			name: $scope.enclosure_name,
-            owner: '/api/v1/user/1/'
-		};
-
-		$scope.enclosure_resource.create(data);
-		$scope.enclosures = $scope.enclosure_resource.readAll();
-		
-		$scope.enclosure_name = '';
-
-        setTimeout(function(){
-            $('html, body').animate({
-                scrollTop: $(document).height()
-            }, 2000);
-        }, 300);
-
-	};
+    $scope.$on('sync_enclosureList', function() {
+        $scope.enclosures = enclosureResource.getForManagerIndex();
+        modalDialog.close();
+    });
 }
 
 
-function EnclosureCtrl($scope, $element)
+function EnclosureCtrl($scope, $rootScope, $element)
 {
-	$scope.editing = false;
+    $scope.hovered = false;
 
-	$scope.update = function() {
-		if (!$scope.editing) {
-			$scope.editing = true;
-		} else {
-			// Si ya se estaba editando cuando hemos invocado update() entonces
-			// guardamos el nuevo nombre en la BD
-
-			var data = {
-				name : $scope.enclosure_name,
-                twitter_account : $scope.twitter_account
-			};
-
-			var updated_enclosure = $scope.enclosure_resource.update(data, $scope.enclosure.id);
-
-			$scope.editing = false;
-
-			$scope.$parent.enclosure.name = updated_enclosure.name;
-			$scope.$parent.enclosure.twitter_account = updated_enclosure.twitter_account;
-		}
-	};
-
-    $scope.cancelUpdate = function() {
-        $scope.editing = false;
+    $scope.show_edit_form = function()
+    {
+        $rootScope.$broadcast('show_edit_form', $scope.enclosure);
     };
-
-	$scope.del = function() {
-
-		var confirm_msg = gettext('Are you sure you want to remove this enclosure? (this will erase all their floors)');
-
-		$scope.enclosure_resource.del(
-            $scope.enclosure.id,
-            confirm_msg,
-            function(){
-                $($element).fadeOut(200);
-            }
-        );
-	};
-
 
     $scope.calculateRoutes = function()
     {
-        new EnclosureResource().calculateRoutes($scope.enclosure.id);
+        if(confirm(gettext('Previous routes will be removed for this enclosure. Do you want to continue?')))
+            enclosureResource.calculateRoutes($scope.enclosure.id);
+    };
+
+    $scope.$on('sync_enclosure', function(ev, enclosure) {
+        if($scope.enclosure.id == enclosure.id)
+        {
+            $scope.enclosure = enclosureResource.getForManagerIndex($scope.enclosure.id);
+            modalDialog.close();
+        }
+    });
+}
+
+function FloorListCtrl($scope, $rootScope)
+{
+	$scope.waiting_response = false;
+    $scope.hovered = false;
+    $scope.reverse = false;
+
+    $scope.show_create_floor_form = function() {
+        $rootScope.$broadcast('show_create_floor_form', $scope.enclosure);
     };
 }
 
-function FloorsCtrl($scope, $element)
+function FloorCtrl($scope, $rootScope, $element, UrlService)
 {
-	$scope.sending_img = false;
+    $scope.show_edit_floor_form = function() {
+        $rootScope.$broadcast('show_edit_floor_form', $scope.floor, $scope.enclosure);
+    };
+}
 
-    $scope.floor_resource = new FloorResource();
 
-    $scope.$watch('floors', function(){
-        FileInput.draw();
-    });
+function CategoryListCtrl($scope, $rootScope)
+{
+    $scope.show_create_category_form = function() {
+        $rootScope.$broadcast('show_create_category_form', $scope.enclosure);
+    };
+}
 
-    $scope.loadFloorList = function() {
-        $scope.floors = $scope.floor_resource.readFromEnclosure($scope.enclosure.id);
+function CategoryCtrl($scope, $rootScope)
+{
+    $scope.show_edit_category_form = function() {
+        $rootScope.$broadcast('show_edit_category_form', $scope.category, $scope.enclosure);
+    };
+}
+
+
+function EnclosureFormsCtrl($scope, $rootScope, $element)
+{
+    $scope.create = function() {
+        var data = {
+            name: $scope.enclosure_name,
+            owner: userResource.api1_url + user_id + '/',
+            twitter_account : removeArroba($scope.twitter_account),
+            url_enclosure : $scope.url_enclosure,
+            url_dashboard : $scope.url_dashboard
+        };
+        var enclosure_created =  enclosureResource.create(data);
+
+        //
+        // Si se ha puesto una nueva imágen la subimos, eliminando la anterior
+        var img = $($element).find('input[name="logo"]');
+        if(img.val() !== '')
+        {
+            var img_form = $($element).find('form');
+
+            $scope.waiting_response = true;
+
+            enclosureResource.addImg(
+                    img_form,
+                    enclosure_created.id,
+                    function(server_response){
+                        // Una vez se sube la imágen se limpia el formulario y se actualiza
+                        // la lista de plantas para el recinto
+                        img_form.find('input[name="logo"]').val('');
+                        img_form.find('.file-input-name').remove();
+                        $scope.waiting_response = false;
+                        $rootScope.$broadcast('sync_enclosureList', $scope.enclosure);
+                    }
+            );
+        }
+        else
+            $rootScope.$broadcast('sync_enclosureList', $scope.enclosure);
     };
 
-    $scope.loadFloorList();
 
-	$scope.createFloor = function() {
 
+    $scope.update = function(enclosure) {
+        var img = $($element).find('input[name="logo"]');
+        var data = {
+            name : $scope.enclosure_name,
+            twitter_account : removeArroba($scope.twitter_account),
+            url_enclosure : $scope.url_enclosure,
+            url_dashboard : $scope.url_dashboard
+        };
+        enclosureResource.update(data, $scope.enclosure.id);
+
+        // Si se ha puesto una nueva imágen la subimos, eliminando la anterior
+        if(img.val() !== '')
+        {
+            var img_form = $($element).find('form');
+
+            $scope.waiting_response = true;
+
+            enclosureResource.addImg(
+                    img_form,
+                    $scope.enclosure.id,
+                    function(server_response){
+                        // Una vez se sube la imágen se limpia el formulario y se actualiza
+                        // la lista de plantas para el recinto
+                        img_form.find('input[name="logo"]').val('');
+                        img_form.find('.file-input-name').remove();
+                        $scope.waiting_response = false;
+                        $rootScope.$broadcast('sync_enclosure', $scope.enclosure);
+                    }
+            );
+        }
+        else
+            $rootScope.$broadcast('sync_enclosure', $scope.enclosure);
+    };
+
+
+    $scope.del = function() {
+        var confirm_msg = gettext('Are you sure you want to remove this enclosure? (this will erase all their floors)');
+
+        enclosureResource.del(
+            $scope.enclosure.id,
+            confirm_msg,
+            function(){
+                $rootScope.$broadcast('sync_enclosureList', $scope.enclosure);
+            }
+        );
+    };
+
+
+    $scope.$on('show_create_enclosure_form', function() {
+        $scope.enclosure_name = '';
+        $scope.twitter_account = '';
+        $scope.url_enclosure = '';
+        $scope.url_dashboard = '';
+        $scope.logo = '';
+
+        modalDialog = new ModalDialog('#enc_create');
+        modalDialog.open();
+    });
+
+
+    $scope.$on('show_edit_form', function(ev, enclosure) {
+        // Abre el diálogo con el formulario para la edición del recinto
+        $scope.enclosure = enclosure;
+        $scope.enclosure_name = enclosure.name;
+        $scope.twitter_account = enclosure.twitter_account;
+        $scope.logo = enclosure.logo;
+        $scope.url_enclosure = enclosure.url_enclosure;
+        $scope.url_dashboard = enclosure.url_dashboard;
+        modalDialog = new ModalDialog('#enc_edit');
+        modalDialog.open();
+    });
+}
+
+function FloorFormsCtrl($scope, $rootScope, $element)
+{
+    $scope.create = function() {
         var img = $($element).find('input[name="img"]');
         if(!img.val())
         {
             alert(gettext('You must specify the floor image too'));
             return;
         }
-		
-		//
-		// 1: Creamos el registro en B.D.
-		var floor_data = {
-			name : $scope.floor_name,
-			floor_number : parseInt($scope.floor_number),
-			enclosure : $scope.enclosure.resource_uri
-		};
-		
-		var new_floor = $scope.floor_resource.create(floor_data);
-		
-		//
-		// 2: Una vez creado subimos la imágen para el nuevo mapa creado	
-		var img_form = $($element).find('form').first();
-		
-		$scope.sending_img = true;
-		
-		$scope.floor_resource.addImg(
-			img_form, 
-			new_floor.id,
-			function(server_response){
-				// Una vez se sube la imágen se limpia el formulario y se actualiza
-				// la lista de mapas para el lugar
-				$scope.floor_name = '';
-				$scope.floor_number = '';
-				img_form.find('input[name="img"]').val('');
+
+        //
+        // 1: Creamos el registro en B.D.
+        var floor_data = {
+            name : $scope.floor_name,
+            floor_number : parseInt($scope.floor_number),
+            enclosure : enclosureResource.api1_url + $scope.enclosure.id + '/'
+        };
+
+        var new_floor = floorResource.create(floor_data);
+
+        //
+        // 2: Una vez creado subimos la imágen para el nuevo mapa creado
+        var img_form = $($element).find('form').first();
+
+        $scope.waiting_response = true;
+
+        floorResource.addImg(
+            img_form,
+            new_floor.id,
+            function(server_response){
+                // Una vez se sube la imágen se limpia el formulario y se actualiza
+                // la lista de mapas para el lugar
+                $scope.floor_name = '';
+                $scope.floor_number = '';
+                img_form.find('input[name="img"]').val('');
                 img_form.find('.file-input-name').remove();
-				$scope.floors =
-					$scope.floor_resource.readAllFiltered('?enclosure__id=' + $scope.enclosure.id + '&order_by=floor_number');
-				
-				$scope.sending_img = false;
-				
-				$scope.$apply();
-			}
-		);
+                $scope.waiting_response = false;
 
-
-	};
-}
-
-function FloorCtrl($scope, $element)
-{
-	$scope.editing = false;
-
-
-	$scope.update = function() {
-		var img = $($element).find('input[name="img"]');
-
-		if (!$scope.editing)
-			$scope.editing = true;
-        else
-        {
-			// Si ya se estaba editando cuando hemos invocado update() entonces
-			// guardamos el nuevo nombre en la BD
-
-			var floor_data = {
-				name : $scope.floor_name,
-				floor_number : $scope.floor_number
-			};
-
-			$scope.floor_resource.update(floor_data, $scope.floor.id);
-			
-			// Si se ha puesto una nueva imágen la subimos, eliminando la anterior
-			if(img.val() !== '')
-			{					
-				var img_form = $($element).find('form');
-				
-				$scope.sending_img = true;
-				
-				$scope.floor_resource.addImg(
-					img_form, 
-					$scope.floor.id,
-					function(server_response){
-						// Una vez se sube la imágen se limpia el formulario y se actualiza
-						// la lista de plantas para el recinto
-						$scope.sending_img = false;						
-					}
-				);
-			}
-
-			$scope.editing = false;
-            $scope.loadFloorList();
-		}
-
-        FileInput.draw();
-	};
-
-    $scope.cancelUpdate = function() {
-        $scope.editing = false;
-
-        $scope.loadFloorList();
+                // Anunciamos que se ha creado la planta
+                $rootScope.$broadcast('sync_enclosure', $scope.enclosure);
+            }
+        );
     };
 
-	$scope.del = function() {
 
-		var confirm_msg = gettext('Are you sure you want to remove this floor?');
+    $scope.update = function() {
+        var img = $($element).find('input[name="img"]');
 
-		$scope.floor_resource.del(
+        var floor_data = {
+            name : $scope.floor_name,
+            floor_number : $scope.floor_number
+        };
+
+        floorResource.update(floor_data, $scope.floor.id);
+
+        // Si se ha puesto una nueva imágen la subimos, eliminando la anterior
+        if(img.val() !== '')
+        {
+            var img_form = $($element).find('form');
+
+            $scope.waiting_response = true;
+
+            floorResource.addImg(
+                img_form,
+                $scope.floor.id,
+                function(server_response){
+                    // Una vez se sube la imágen se limpia el formulario y se actualiza
+                    // la lista de plantas para el recinto
+                    img_form.find('input[name="img"]').val('');
+                    img_form.find('.file-input-name').remove();
+                    $scope.waiting_response = false;
+                    $rootScope.$broadcast('sync_enclosure', $scope.enclosure);
+                }
+            );
+        }
+        else
+            $rootScope.$broadcast('sync_enclosure', $scope.enclosure);
+    };
+
+
+    $scope.del = function() {
+        var confirm_msg = gettext('Are you sure you want to remove this floor?');
+
+        floorResource.del(
             $scope.floor.id,
             confirm_msg,
             function(){
-                $($element).fadeOut(200);
-                setTimeout($scope.loadFloorList, 200);
+                $rootScope.$broadcast('sync_enclosure', $scope.enclosure);
             }
         );
-	};
+    };
+
+
+    $scope.$on('show_create_floor_form', function(ev, enclosure) {
+        $scope.enclosure = enclosure;
+        $scope.floor_name = '';
+        $scope.floor_number = '';
+        $scope.floor_img = '';
+        modalDialog = new ModalDialog('#floor_create');
+        modalDialog.open();
+    });
+
+
+    $scope.$on('show_edit_floor_form', function(ev, floor, enclosure) {
+        $scope.enclosure = enclosure;
+        $scope.floor = floor;
+        $scope.floor_name = floor.name;
+        $scope.floor_number = floor.floor_number;
+        $scope.floor_img = floor.img;
+        modalDialog = new ModalDialog('#floor_edit');
+        modalDialog.open();
+    });
 }
+
+
+function CategoryFormsCtrl($scope, $rootScope, $element)
+{
+    $scope.create = function()
+    {
+        var data = {
+            name: $scope.category_name,
+            cat_code: $scope.category_code,
+            color: $scope.category_color,
+            enclosure: enclosureResource.api1_url + $scope.enclosure.id + '/'
+        };
+        labelCategoryResource.create(data);
+
+        $rootScope.$broadcast('sync_enclosure', $scope.enclosure);
+    };
+
+
+    $scope.update = function()
+    {
+        var data = {
+            name: $scope.category_name,
+            cat_code: $scope.category_code,
+            color: $scope.category_color
+        };
+        labelCategoryResource.update(data, $scope.category.id);
+
+        $rootScope.$broadcast('sync_enclosure', $scope.enclosure);
+    };
+
+
+    $scope.del = function()
+    {
+        labelCategoryResource.del(
+            $scope.category.id,
+            gettext('Are you sure you want to remove this category?'),
+            function(){
+                $rootScope.$broadcast('sync_enclosure', $scope.enclosure);
+            }
+        );
+    };
+
+
+    $scope.$on('show_create_category_form', function(ev, enclosure){
+        $scope.enclosure = enclosure;
+        $scope.category_name = '';
+        $scope.category_code = '';
+        $scope.category_color = '';
+        modalDialog = new ModalDialog('#category_create');
+        modalDialog.open();
+    });
+
+
+    $scope.$on('show_edit_category_form', function(ev, category, enclosure){
+        $scope.enclosure = enclosure;
+        $scope.category = category;
+        $scope.category_name = category.name;
+        $scope.category_code = category.cat_code;
+        $scope.category_color = category.color;
+        modalDialog = new ModalDialog('#category_edit');
+        modalDialog.open();
+    });
+}
+
+
+function removeArroba(twitterAccount)
+{
+    if (twitterAccount && twitterAccount.charAt(0)== "@")
+        return twitterAccount.substr(1);
+
+    return twitterAccount;
+}
+
+
+
+
+
+
+//function PoiListCtrl($scope, $rootScope)
+//{
+//    $scope.$on('show_poi_list', function(enclosure, category){
+//        // Muestra los POIs de la categoría donde hacemos click
+//
+//        $scope.pois = pointResource.readAllFiltered(
+//            '?floor__enclosure__id=' + enclosure.id + '&' +
+//            'label__category__id=' + category.id
+//        );
+//
+//        modalDialog = new ModalDialog('#category_POIs');
+//        modalDialog.open();
+//    });
+//}
 
 
 

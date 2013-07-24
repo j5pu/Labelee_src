@@ -80,7 +80,7 @@ function Resource(resource_name) {
 
 	this.readAllFiltered = function(filter) {
 
-		// xej: /api/v1/map/?place__id=1
+		// xej: /api/v1/floor/?enclosure__id=1
 
 		var elements;
 		$.ajax({
@@ -321,9 +321,26 @@ function LabelCategoryResource()
 
     this.readValidAsPois = function(enclosure_id){
         // /api-2/label-category/valid/16
-
         return ajaxGetElements(this.api2_url, 'valid/' + enclosure_id);
     };
+
+    this.getForManagerIndex = function(enclosure_id)
+    {
+        // Nos da toda la lista de categorías a mostrar en el manager sobre ese recinto
+        return ajaxGetElements(this.api2_url, 'manager/' + enclosure_id);
+    };
+
+    this.readForFloorEdit = function(enclosure_id)
+    {
+        // Lista de categorías a mostrar en la página de edición de planta
+        return ajaxGetElements(this.api2_url, 'all/' + enclosure_id);
+    };
+
+    this.readCustom = function(enclosure_id)
+    {
+        // Lista de categorías a mostrar en la página de edición de planta
+        return ajaxGetElements(this.api2_url, 'custom/' + enclosure_id);
+    }
 }
 
 
@@ -467,6 +484,29 @@ function PointResource()
         return element;
     };
 
+
+    this.countPois = function(enclosure_id)
+    {
+        // Lee todas las etiquetas que sean consideradas POIs, es decir, que
+        // no sean bloqueantes ni intermedias
+
+        // api-2/point/pois/enclosure/16/count
+        var element;
+        $.ajax({
+            url : this.api2_url + 'pois/enclosure/' + enclosure_id + '/count',
+            type : 'get',
+            async : false,
+            success : function(response) {
+                element = response;
+            },
+            error : function(response) {
+                var j = response;
+            }
+        });
+
+        return element;
+    };
+
     this.readConnectionsFromEnclosure = function(enclosure_id)
     {
         return this.readAllFiltered(
@@ -515,6 +555,15 @@ function EnclosureResource()
             }
         });
     };
+
+    this.getForManagerIndex = function(enclosure_id)
+    {
+        // Nos da toda la info necesaria para cargar el index de map-editor
+        if(enclosure_id)
+            return ajaxGetElements(this.api2_url, 'manager/' + enclosure_id + '/');
+
+        return ajaxGetElements(this.api2_url, 'manager/');
+    }
 }
 
 
@@ -563,11 +612,24 @@ function StepResource()
 }
 
 
+function UserResource()
+{
+    Resource.call(this, 'user');
+}
+
+
 FloorResource.prototype = new Resource;
+var floorResource = new FloorResource();
 LabelResource.prototype = new Resource;
+var labelResource = new LabelResource();
 LabelCategoryResource.prototype = new Resource;
+var labelCategoryResource = new LabelCategoryResource();
 PointResource.prototype = new Resource;
+var pointResource = new PointResource();
 EnclosureResource.prototype = new Resource;
+var enclosureResource = new EnclosureResource();
 ConnectionResource.prototype = new Resource;
 RouteResource.prototype = new Resource;
 StepResource.prototype = new Resource;
+UserResource.prototype = new Resource;
+var userResource = new UserResource();

@@ -14,6 +14,8 @@ var myApp = angular.module('myApp', ['ngSanitize'],
 	// $httpProvider.defaults.headers.post['X-CSRFToken'] = $('input[name=csrfmiddlewaretoken]').val();
 	$httpProvider.defaults.headers.post['X-CSRFToken'] = token;
 });
+//    .run(function ($rootScope, UrlService) {
+//});
 
 
 //
@@ -39,6 +41,32 @@ myApp.factory('UrlService', function($rootScope) {
     };
 });
 
+
+myApp.factory('UserService', function($rootScope) {
+
+    $rootScope.user_is_staff = user_is_staff;
+});
+
+myApp.factory('FormService', function($rootScope) {
+
+    $rootScope.closeModalDialog = function() {
+        modalDialog.close();
+    };
+});
+
+myApp.filter('url', function() {
+    return function(input) {
+        var regex_http = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/;
+        var regex_www = /(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/;
+
+        if(regex_http.test(input))
+            return input;
+        else if(regex_www.test(input))
+            return 'http://' + input;
+        else
+            return 'http://www.' + input;
+    };
+});
 
 //
 //DIRECTIVAS

@@ -66,9 +66,8 @@ def threadCalculateRoute(enclosure_id):
             if hasattr(point, 'qr_code'):
                 #meto en una lista todos los qrs
                 qrlist.append(point.qr_code)
-            #meto en una lista todos los muros
-            if point.label.category.name.upper() in CATEGORIAS_FIJAS[0].upper() or point.label.category.name.upper() in \
-                    CATEGORIAS_FIJAS[5].upper():
+
+            if point.label.category.name_en.upper() in FIXED_CATEGORIES[0].upper():
                 walls.append(Dijkstra.getKey(point.row, point.col, point.floor.id))
             #me creo un grafo (diccionario) para las conexiones; ej 1_1_1 : 1_2_1,1_3_1
             #significa que desde el qr 1_1_1 p
@@ -130,7 +129,7 @@ def threadCalculateRoute(enclosure_id):
 
 def sendEmail(subject, message):
     try:
-        email = EmailMessage(subject, message, to=['alvaro.gutierrez@mnopi.com'])
+        email = EmailMessage('Informe cálculo de rutas',mensaje, to=['jose.c.rubio@mnopi.com'])
         email.send()
     except:
         pass
