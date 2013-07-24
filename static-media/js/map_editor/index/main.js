@@ -84,7 +84,6 @@ function CategoryCtrl($scope, $rootScope)
 function EnclosureFormsCtrl($scope, $rootScope, $element)
 {
     $scope.create = function() {
-        var img = $($element).find('input[name="logo"]');
         var data = {
             name: $scope.enclosure_name,
             owner: userResource.api1_url + user_id + '/',
@@ -93,7 +92,10 @@ function EnclosureFormsCtrl($scope, $rootScope, $element)
             url_dashboard : $scope.url_dashboard
         };
         var enclosure_created =  enclosureResource.create(data);
-         // Si se ha puesto una nueva imágen la subimos, eliminando la anterior
+
+        //
+        // Si se ha puesto una nueva imágen la subimos, eliminando la anterior
+        var img = $($element).find('input[name="logo"]');
         if(img.val() !== '')
         {
             var img_form = $($element).find('form');
@@ -376,19 +378,6 @@ function removeArroba(twitterAccount)
         return twitterAccount.substr(1);
 
     return twitterAccount;
-}
-
-
-function sanitizeUrl(url)
-{
-    // Quita
-    var regex = new RegExp("^(http[s]?:\\/\\/(www\\.)?|ftp:\\/\\/(www\\.)?|www\\.){1}([0-9A-Za-z-\\.@:%_\+~#=]+)+((\\.[a-zA-Z]{2,3})+)(/(.)*)?(\\?(.)*)?");
-
-    if(regex.test("http://google.com")){
-
-    }else{
-        alert("No match");
-    }
 }
 
 

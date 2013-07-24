@@ -191,7 +191,7 @@ var Floor = {
                     };
 
                     if(has_panorama_attached)
-                        new PointResource().addImg($(this).find('form'), $(this).data('point-id'), function(){});
+                        pointResource.addImg($(this).find('form'), $(this).data('point-id'), function(){});
 
                     points_to_update.push(point_to_update);
                 }
@@ -205,7 +205,7 @@ var Floor = {
             num_rows: Floor.num_rows,
             num_cols: Floor.num_cols
         };
-        new FloorResource().update(data, Floor.data.id);
+        floorResource.update(data, Floor.data.id);
 
         // Enviamos al servidor primero los puntos a eliminar y luego los nuevos
         var pr = new PointResource();
@@ -219,8 +219,6 @@ var Floor = {
         // Recargamos el grid
         Floor.reloading = true;
         Floor.loadGrid();
-
-//        loadingMsg.hide();
     },
 
 
