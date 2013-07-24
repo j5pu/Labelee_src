@@ -174,7 +174,7 @@ msgstr "Block color"
 
 #: templates/map_editor/v1/edit.html:159
 msgid "Color"
-msgstr ""
+msgstr "Color"
 
 #: templates/map_editor/v1/edit.html:162 templates/map_editor/v1/edit.html:186
 #: templates/map_editor/v2/edit.html:150
@@ -292,7 +292,7 @@ msgstr "Name"
 #: templates/map_editor/v1/index.html:183
 #: templates/map_editor/v2/index.html:302
 msgid "Nuevo nombre para la planta"
-msgstr "New name for the floor"
+msgstr "New floor name"
 
 #: templates/map_editor/v1/index.html:198
 #: templates/map_editor/v2/index.html:236
@@ -310,7 +310,7 @@ msgstr "New POI name"
 
 #: templates/map_editor/v2/index.html:32
 msgid "Bienvenido"
-msgstr ""
+msgstr "Welcome"
 
 #: templates/map_editor/v2/index.html:44
 msgid "Recintos"
@@ -326,83 +326,73 @@ msgstr "Enclosure website"
 
 #: templates/map_editor/v2/index.html:76
 msgid "Ver dashboard"
-msgstr ""
+msgstr "Go to dashboard"
 
 #: templates/map_editor/v2/index.html:78
 msgid "Número de POIS/QRs:"
-msgstr ""
+msgstr "POIS/QRs count"
 
 #: templates/map_editor/v2/index.html:79
-#, fuzzy
 msgid "Número de plantas:"
-msgstr "Floor name"
+msgstr "Floors count"
 
 #: templates/map_editor/v2/index.html:107
 msgid "POIs"
-msgstr ""
+msgstr "POIs"
 
 #: templates/map_editor/v2/index.html:180
-#, fuzzy
 msgid "Nombre para el recinto"
-msgstr "New name for the enclosure"
+msgstr "Enclosure name"
 
 #: templates/map_editor/v2/index.html:194
-#, fuzzy
 msgid "Subir imagen"
-msgstr "Change image"
+msgstr "Upload image"
 
 #: templates/map_editor/v2/index.html:200
 #: templates/map_editor/v2/index.html:242
 msgid "Introduzca la url del recinto"
-msgstr ""
+msgstr "Insert the enclosure URL"
 
 #: templates/map_editor/v2/index.html:206
 #: templates/map_editor/v2/index.html:248
 msgid "Introduzca la url del dashboard"
-msgstr ""
+msgstr "Insert the dashboard URL"
 
 #: templates/map_editor/v2/index.html:254
-#, fuzzy
 msgid "Eliminar recinto"
-msgstr "Delete"
+msgstr "Delete enclosure"
 
 #: templates/map_editor/v2/index.html:320
-#, fuzzy
 msgid "Eliminar planta"
-msgstr "Delete"
+msgstr "Delete floor"
 
 #: templates/map_editor/v2/index.html:330
-#, fuzzy
 msgid "Nueva categoría para el recinto"
-msgstr "New name for the enclosure"
+msgstr "New category for the enclosure"
 
 #: templates/map_editor/v2/index.html:336
 msgid "Código de categoría (máx. 3 letras)"
-msgstr ""
+msgstr "Category code (max. 3 characters)"
 
 #: templates/map_editor/v2/index.html:340
-#, fuzzy
 msgid "Color para la categoría"
-msgstr "Category name"
+msgstr "Color for the category"
 
 #: templates/map_editor/v2/index.html:342
-#, fuzzy
 msgid "Añadir categoría"
-msgstr "Create category"
+msgstr "Add category"
 
 #: templates/map_editor/v2/index.html:351
-#, fuzzy
 msgid "Nuevo nombre para la categoría"
-msgstr "Category name"
+msgstr "New category name"
 
 #: templates/map_editor/v2/index.html:354
 msgid "Nuevo código de categoría (máx. 3 letras)"
-msgstr ""
+msgstr "New category code (max. 3 characters)"
 
 #: templates/map_editor/v2/index.html:358
-#, fuzzy
 msgid "Nuevo color para la categoría"
-msgstr "Category name"
+msgstr "New color for the category"
 
 #~ msgid "Compartir con"
 #~ msgstr "Share on"
