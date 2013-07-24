@@ -350,12 +350,12 @@ msgstr "Upload image"
 
 #: templates/map_editor/v2/index.html:200
 #: templates/map_editor/v2/index.html:242
-msgid "Introduzca la url del recinto"
+msgid "Introduzca la URL del recinto"
 msgstr "Insert the enclosure URL"
 
 #: templates/map_editor/v2/index.html:206
 #: templates/map_editor/v2/index.html:248
-msgid "Introduzca la url del dashboard"
+msgid "Introduzca la URL del dashboard"
 msgstr "Insert the dashboard URL"
 
 #: templates/map_editor/v2/index.html:254

@@ -5,11 +5,11 @@ from django.db import models
 from django.contrib.auth.models import User
 from map_editor.api_2.utils.point import filterAsPois
 
-CATEGORIAS_FIJAS = {
-    0: 'Bloqueantes',
-    1: 'Aristas',
-    2: 'Intermedias',
-    3: 'Parquing',
+FIXED_CATEGORIES = {
+    0: 'Blockers',
+    1: 'Connectors',
+    2: 'Intermediate',
+    3: 'Parking',
 }
 
 def get_logo_path(instance, filename):
@@ -93,7 +93,6 @@ class LabelCategory(models.Model):
     color = models.CharField(max_length=50, blank=False)
     img = models.FileField(upload_to="img/label_categories", blank=True, null=True)
     icon = models.CharField(max_length=50, blank=True, null=True)
-    cat_code = models.CharField(max_length=3, null=True)
 
     enclosure = models.ForeignKey(Enclosure, related_name='enclosure', blank=False, null=True)
 
@@ -118,8 +117,8 @@ class LabelCategory(models.Model):
 
     def qr_can_be_assigned(self):
         # Comprueba si la categoría no es ni bloqueante ni arista
-        return not self.name_es or (self.name_es.upper() != CATEGORIAS_FIJAS[0].upper() and \
-            self.name_es.upper() != CATEGORIAS_FIJAS[1].upper())
+        return not self.name_en or (self.name_en.upper() != FIXED_CATEGORIES[0].upper() and \
+            self.name_en.upper() != FIXED_CATEGORIES[1].upper())
 
 
 def label_filename(instance, filename):

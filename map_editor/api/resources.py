@@ -215,10 +215,6 @@ class RouteResource(ModelResource):
     destiny = fields.ToOneField('map_editor.api.resources.PointResource', 'destiny', full=True)
     steps = fields.ToManyField('map_editor.api.resources.StepResource', 'steps', null=True, full=True)
 
-
-
-# Comentario
-
     class Meta:
         resource_name = 'route'
         queryset = Route.objects.all()

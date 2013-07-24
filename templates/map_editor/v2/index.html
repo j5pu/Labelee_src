@@ -328,17 +328,16 @@
         <div id="category_create" ng-controller="CategoryFormsCtrl">
             <form class="create">
                 <span>{% trans "Nueva categoría para el recinto" %} [[enclosure.name]]</span>
-                <input type="text"
-                       ng-model="category_name"
-                       placeholder="{% trans "Nombre para la categoría" %}..">
-                <input type="text"
-                       ng-model="category_code"
-                       placeholder="{% trans "Código de categoría (máx. 3 letras)" %}.."
-                       maxlength="3">
-                <input type="text"
-                       ng-model="category_color"
-                       placeholder="{% trans "Color para la categoría" %}..">
-
+                <label class="txt">{% trans "Nombre" %}:
+                    <input type="text"
+                           ng-model="category_name"
+                           placeholder="{% trans "Nombre para la categoría" %}..">
+                </label>
+                <label class="txt">{% trans "Color" %}:
+                    <input type="text"
+                           ng-model="category_color"
+                           placeholder="{% trans "Color para la categoría" %}..">
+                </label>
                 <button class="btn" ng-click="create()">{% trans "Añadir categoría" %}</button>
             </form>
         </div>
@@ -346,17 +345,16 @@
 
         <div id="category_edit" ng-controller="CategoryFormsCtrl">
             <form class="edit">
-                <input type="text"
-                       ng-model="category_name"
-                       placeholder="{% trans "Nuevo nombre para la categoría" %}..">
-                <input type="text"
-                       ng-model="category_code"
-                       placeholder="{% trans "Nuevo código de categoría (máx. 3 letras)" %}.."
-                       maxlength="3">
-                <input type="text"
-                       ng-model="category_color"
-                       placeholder="{% trans "Nuevo color para la categoría" %}..">
-
+                <label class="txt">{% trans "Nombre" %}:
+                    <input type="text"
+                           ng-model="category_name"
+                           placeholder="{% trans "Nuevo nombre para la categoría" %}..">
+                </label>
+                <label class="txt">{% trans "Color" %}:
+                    <input type="text"
+                           ng-model="category_color"
+                           placeholder="{% trans "Nuevo color para la categoría" %}..">
+                </label>
                 <button class="btn" ng-click="closeModalDialog()">{% trans "Cancelar" %}</button>
                 <button class="btn" ng-click="update()">{% trans "Guardar" %}</button>
                 <button class="btn" ng-click="del()">{% trans "Eliminar" %}</button>

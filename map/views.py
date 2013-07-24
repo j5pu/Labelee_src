@@ -24,12 +24,12 @@ def show_map(request, qr_type, enclosure_id, floor_id, poi_id):
     categories = {}
     coupons = {}
     points = Point.objects \
-        .filter(~Q(label__category__name__in=CATEGORIAS_FIJAS.values()),
+        .filter(~Q(label__category__name_en__in=FIXED_CATEGORIES.values()),
                 floor__enclosure__id=enclosure_id) \
         .order_by('label__category__name', 'label__name')
 
     for point in points:
-        if point.label.category.name not in CATEGORIAS_FIJAS.values():
+        if point.label.category.name_en not in FIXED_CATEGORIES.values():
             if point.label.category.name in categories:
                 categories[point.label.category.name].append(point)
             else:

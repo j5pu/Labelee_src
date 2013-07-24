@@ -58,7 +58,7 @@ def threadCalculateRoute(enclosure_id):
             if hasattr(point, 'qr_code'):
                 qrlist.append(point.qr_code)
 
-            if point.label.category.name.upper() in CATEGORIAS_FIJAS[0].upper():
+            if point.label.category.name_en.upper() in FIXED_CATEGORIES[0].upper():
                 walls.append(Dijkstra.getKey(point.row, point.col, point.floor.id))
 
             pmapconnections = Connection.objects.filter(init__id=point.id)
@@ -105,7 +105,7 @@ def threadCalculateRoute(enclosure_id):
             mensaje += error + '--'
 
     try:
-        email = EmailMessage('Informe cálculo de rutas',mensaje, to=['alvaro.gutierrez@mnopi.com'])
+        email = EmailMessage('Informe cálculo de rutas',mensaje, to=['jose.c.rubio@mnopi.com'])
         email.send()
     except:
         pass
