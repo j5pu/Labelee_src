@@ -111,8 +111,8 @@ class LabelCategory(models.Model):
 
     def qr_can_be_assigned(self):
         # Comprueba si la categoría no es ni bloqueante ni arista
-        return not self.name_es or (self.name_es.upper() != FIXED_CATEGORIES[0].upper() and \
-            self.name_es.upper() != FIXED_CATEGORIES[1].upper())
+        return not self.name_en or (self.name_en.upper() != FIXED_CATEGORIES[0].upper() and \
+            self.name_en.upper() != FIXED_CATEGORIES[1].upper())
 
 
 class Label(models.Model):
