@@ -26,6 +26,11 @@
     </h1>
 
 
+    {% if user.logo %}
+        <img src="{{ MEDIA_URL }}{{ user.logo }}">
+    {% endif %}
+
+
     <!-- CAJITA DE LOGOUT -->
     {% if user.is_authenticated %}
         <div id="logout" class="box box-1">
@@ -68,7 +73,7 @@
                 </button>
 
                 <h4 ng-show="enclosure.twitter_account">@[[enclosure.twitter_account]]</h4>
-                <img class="logo" src="[[enclosure.logo]]">
+                <img class="logo" ng-src="[[enclosure.logo]]">
                 <div class="urls">
                     <a ng-show="enclosure.url_enclosure"
                        href="[[enclosure.url_enclosure | url]]">{% trans  "Web del recinto" %}</a>
