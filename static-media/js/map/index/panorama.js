@@ -55,7 +55,7 @@ var Panorama = {
     close: function()
     {
         jQuery('div#page').find('img[id*=pano]').remove();
-        jQuery('canvas').remove();
+        jQuery('#canvasPan').remove();
         jQuery('button#close').remove();
         Panorama.opened = false;
 
