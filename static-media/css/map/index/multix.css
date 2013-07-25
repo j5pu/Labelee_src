@@ -1379,6 +1379,7 @@ toiletFIcon = L.divIcon({className: 'my-div-icon toiletF-icon'}),
 toiletMIcon = L.divIcon({className: 'my-div-icon toiletM-icon'})
 */
 
+/*
 
 .stamp {
     border-top: 3px dashed darkorange;
@@ -1401,6 +1402,7 @@ div#cupones {
     bottom: 0;
     z-index: 6;
 }
+*/
 
 /*
 PRUEBA CUPONES B
