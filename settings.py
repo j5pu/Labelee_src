@@ -224,7 +224,7 @@ else:
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.mysql",
-            "NAME": "admin_v2",
+            "NAME": "labelee_dev",
             "USER": "mnopi",
             "PASSWORD": "1aragon1",
             "HOST": "192.168.1.201",
