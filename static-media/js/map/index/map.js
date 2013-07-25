@@ -355,9 +355,12 @@ function loopFloors() {
 
    if (!Modernizr.svg) {
         img = floors[floor_index].imgB;
+       Logger.log('png');
     }
 
+   else {
     img = floors[floor_index].img;
+   }
     var floorImg = new Image();
     floorImg.src = img;
     floorImg.onload = function () {
