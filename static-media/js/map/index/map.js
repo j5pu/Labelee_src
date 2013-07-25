@@ -296,8 +296,8 @@ var mapW = Math.min($(window).innerWidth(), $(window).innerHeight()),
     arrow = [],
     arrowHead = [],
     arrowOffset = 0,
-    qrMarker = new L.Marker(),
-    destMarker = new L.Marker(),
+    qrMarker = new cilogi.L.Marker(),
+    destMarker = new cilogi.L.Marker(),
     subpath = [],
     subarrow = [],
     floors = new FloorResource().readFromEnclosure(qrPoint.enclosure.id);
@@ -340,17 +340,29 @@ function loopFloors() {
     var floorImg = new Image();
     floorImg.src = img;
     floorImg.onload = function () {
-//        var mapW = (floorImg.width / floorImg.height) * mapH;
-        var mapH = (floorImg.height / floorImg.width) * mapW;
+//        var mapH = (floorImg.height / floorImg.width) * mapW;
+        var mapH=mapW;
         var bounds = new L.LatLngBounds(new L.LatLng(0, 0), new L.LatLng(mapH, mapW));
 
         floors[floor_index].scaleX = mapW / floors[floor_index].num_cols;
         floors[floor_index].scaleY = mapH / floors[floor_index].num_rows;
         floors[floor_index].bounds = bounds;
         floors[floor_index].photo = new L.imageOverlay(img, bounds);
-
+/*
+        floors[floor_index].photo = new L.geoJson(mimapa, {
+                style: function (feature) {
+                    return feature.properties && feature.properties.style;
+                }}
+        );
+*/
         baseLayers[name] = new L.imageOverlay(img, bounds);
-
+/*
+        baseLayers[name] = new L.geoJson(mimapa, {
+                style: function (feature) {
+                    return feature.properties && feature.properties.style;
+                }}
+        );
+*/
         floor_index++;
         loopFloors();
     };
@@ -384,8 +396,10 @@ function loadPOIs() {
                 coupon = floors[fl].pois[j].coupon,
                 sX = floors[fl].scaleX,
                 sY = floors[fl].scaleY,
+ //               loc = [(floors[fl].pois[j].row) * sY + (sY),
+ //                   floors[fl].pois[j].col * sX + (sX)],
                 loc = [(floors[fl].pois[j].row) * sY + (sY),
-                    floors[fl].pois[j].col * sX + (sX)],
+                    floors[fl].pois[j].col * sX +(sX)],
                 center = [(floors[fl].pois[j].center_x) * sY + (sY),
                     floors[fl].pois[j].center_y * sX + (sX)],
                 labelid = floors[fl].pois[j].label.id,
@@ -399,10 +413,17 @@ function loadPOIs() {
             popupTitle += SocialMenu.renderIcon(id);
 
 
-            floors[fl].pois[j].marker = new L.Marker(new L.latLng(loc), {
-                icon: loadIcon(colorIcon, shapeIcon),
-                title: popupTitle
+            floors[fl].pois[j].marker = new cilogi.L.Marker(new L.latLng(loc), {
+ //               icon: loadIcon(colorIcon, shapeIcon),
+                title: popupTitle,
+                fontIconSize: 1,
+                fontIconName:  "\uf041",
+                fontIconColor: colorIcon,
+                fontIconFont: "awesome",
+                opacity: 1
             });
+
+
             floors[fl].pois[j].marker.options.icon.options.color = colorIcon;
             floors[fl].pois[j].marker.poid = id;
             floors[fl].pois[j].marker.floorid = floorid;
@@ -426,7 +447,7 @@ function loadPOIs() {
 
             floors[fl].pois[j].marker
                 .bindPopup(popupTitle)
-                .on('click', function () {
+                .on('click tap touchstart touch', function () {
                     if (qr_type == 'dest') {
                         this.changeTitle();
                         return;
@@ -435,7 +456,11 @@ function loadPOIs() {
                     LocalStorageHandler.setPrevDest(this);
                     if (Panorama.opened) Panorama.close();
                     if (qrMarker)
-                        drawRoute(qrPoint.point.id, qrFloor.sX, qrFloor.sY, this.poid, this.psX, this.psY);
+                    {
+                     //Logger.log('ruta');
+                     preDrawRoute(qrPoint.point.id, qrFloor.id, this.poid, this.floorid);
+                     //drawRoute(qrPoint.point.id, qrFloor.sX, qrFloor.sY, this.poid, this.psX, this.psY);
+                    }
 //                    map.invalidateSize();
 
                     qrMarker.contentBinded = false;
@@ -520,12 +545,25 @@ function loadPOIs() {
                     originLegend = originLegend + Panorama.renderIcon(qrPoint.point.id);
                 originLegend += SocialMenu.renderIcon(qrPoint.point.id);
 
+                qrMarker = new cilogi.L.Marker(new L.latLng(qrLoc), {
+                    //title: popupTitle,
+                    fontIconSize: 1,
+                    fontIconName: "\uf041",
+                    fontIconColor: "rgb(6, 84, 150)",
+                    fontIconFont: "awesome",
+                    opacity: 1
+                }).bindPopup(originLegend)
+                    .on('click', function () {
+                        bindContent(this);
+                    });
+/*
                 qrMarker = L.marker(qrLoc, { bounceOnAdd: false,
                     icon: OriginIcon})
                     .bindPopup(originLegend)
                     .on('click', function () {
                         bindContent(this);
                     });
+*/
 
                 qrMarker.panorama = qrPoint.point.panorama;
                 qrMarker.coupon = qrPoint.point.coupon;
@@ -533,11 +571,21 @@ function loadPOIs() {
             else {
                 var msg = gettext("Please, scan a QR code to get here:") + ' ';
                 var photoIcon = qrPoint.point.panorama ? Panorama.renderIcon(qrPoint.point.id) : "";
+/*
                 qrMarker = L.marker(qrLoc, {
                     bounceOnAdd: false,
                     icon: DestinyIcon})
-                    .bindPopup(msg + qrPoint.point.description +
-                        " (" + gettext('floor') + ' ' + qrFloor.name + ", " +
+*/
+
+                qrMarker = new cilogi.L.Marker(new L.latLng(qrLoc), {
+                    //title: popupTitle,
+                    fontIconSize: 1,
+                    fontIconName: "\uf041",
+                    fontIconColor: "red",
+                    fontIconFont: "awesome",
+                    opacity: 1
+                }).bindPopup(msg + qrPoint.point.description +
+                    " (" + gettext('floor') + ' ' + qrFloor.name + ", " +
                         qrPoint.enclosure.name + ')' + photoIcon + SocialMenu.renderIcon(qrPoint.point.id))
                     .on('click', function () {
                         LocalStorageHandler.setPrevDest(this);
@@ -560,7 +608,7 @@ function loadPOIs() {
 //Configuración inicial del mapa
 var map = L.map('map', {
     crs: L.CRS.Simple,
-    zoom: 1,
+    zoom: 0,
     minZoom: 0,
     maxZoom: 3,
 //Ojo, 'trackResize' desactiva la gestión 'orientationchange' automática
@@ -886,12 +934,23 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
 
 
     destLoc = [(route.fields.destiny.fields.row) * sY + sY, route.fields.destiny.fields.col * sX + sX];
+    destMarker = new cilogi.L.Marker(new L.latLng(destLoc),  {
+        fontIconSize: 1,
+        fontIconName: "\uf041",
+        fontIconColor: "red",
+        fontIconFont: "awesome",
+        opacity: 1
+    }).bindPopup(destLegend, {}).on('click', function () {
+            bindContent(this);
+        });
+/*
     destMarker = L.marker(destLoc, { bounceOnAdd: false,
         icon: DestinyIcon})
         .bindPopup(destLegend, {autoPanPadding: new L.Point(0, 10)})
         .on('click', function () {
             bindContent(this);
         });
+*/
 
     destMarker.panorama = '/media/' + route.fields.destiny.fields.panorama;
 
@@ -1157,9 +1216,18 @@ Map.locateCar = function () {
             floor_x = floors[i];
             carLoc = [((miCoche.point.row) * floor_x.scaleY) + floor_x.scaleY,
                 (miCoche.point.col * floor_x.scaleX) + floor_x.scaleX];
+            carMarker = new cilogi.L.Marker(new L.latLng(carLoc),  {
+                fontIconSize: 1,
+                fontIconName: "\uf041",
+                fontIconColor: "cadetblue",
+                fontIconFont: "awesome",
+                opacity: 1
+            }).bindPopup(gettext("My car"));
+/*
             carMarker = new L.marker(carLoc, { bounceOnAdd: false,
                 icon: CarIcon})
                 .bindPopup(gettext("My car"));
+*/
 
             carMarker.on('click', function () {
                 LocalStorageHandler.setPrevDest(this);
@@ -1369,62 +1437,60 @@ function bindContent(marker) {
 
 //PRUEBA FONT-ICONS
 
-/*
 
+/*
  markers = [];
 
-
- addMarker(new L.LatLng(300,300), {icon: "\ue002", color: "#ff0000"});
- addMarker(new L.LatLng(400,400), {icon: "\ue002", color: "#00ff00"});
- addMarker(new L.LatLng(350,350), {icon: "\ue002", color: "#0000ff"});
- addMarker(new L.LatLng(300,300), {icon: "\ue070", color: "#ff0000"});
- addMarker(new L.LatLng(400,400), {icon: "\ue025", color: "#00ff00"});
- addMarker(new L.LatLng(350,350), {icon: "\u2605", color: "#0000ff"});
-
-
-
- addMarker(new L.LatLng(150, 150), {icon: "\ue002", color: "#8B668B"}); // pin only display
-
- addMarker(new L.LatLng(250,250), {icon: "\uf030", color: "#990000", iconFont: 'awesome'}); //camera
- addMarker(new L.LatLng(200,200), {icon: "\uf06e", color: "#009900", iconFont: 'awesome'}); // eye open
- addMarker(new L.LatLng(100,300), {icon: "\uf005", color: "#000099", iconFont: 'awesome'}); // star
+// addMarker(new L.LatLng(300,300), {icon: "\ue002", color: "#ff0000"});
+// addMarker(new L.LatLng(400,400), {icon: "\ue002", color: "#00ff00"});
+// addMarker(new L.LatLng(350,350), {icon: "\ue002", color: "#0000ff"});
+// addMarker(new L.LatLng(300,300), {icon: "\ue070", color: "#ff0000"});
+// addMarker(new L.LatLng(400,400), {icon: "\ue025", color: "#00ff00"});
+// addMarker(new L.LatLng(350,350), {icon: "\u2605", color: "#0000ff"});
 
 
 
+ //addMarker(new L.LatLng(150, 150), {icon: "\ue002", color: "#8B668B", iconFont: 'iconic'}); // pin only display
 
+// addMarker(new L.LatLng(250,250), {icon: "\uf030", color: "#990000", iconFont: 'awesome'}); //camera
+// addMarker(new L.LatLng(200,200), {icon: "\uf06e", color: "#009900", iconFont: 'awesome'}); // eye open
+// addMarker(new L.LatLng(100,300), {icon: "\uf005", color: "#000099", iconFont: 'awesome'}); // star
 
-
-
- addMarker(new L.LatLng(175,175), {icon: "\uf041", color: "#4F2F4F", iconFont: 'awesome'}); // pin only
+ addMarker(new L.LatLng(175,175), {icon: "\uf041", color: "#4F2F4F"}); // pin only
 
 
 //map.addLayer(drawnItems);
 
- map.on("viewreset", function() {
- var zoom = map.getZoom(),
- size = computeSizeFromZoom();
- //console.log("resize, zoom " + zoom + " size " + size);
- for (var i = 0; i < markers.length; i++) {
- markers[i].setFontSize(size * 1.2);
- }
- });
+// map.on("viewreset", function() {
+// var zoom = map.getZoom(),
+// size = computeSizeFromZoom();
+// //console.log("resize, zoom " + zoom + " size " + size);
+// for (var i = 0; i < markers.length; i++) {
+// markers[i].setFontSize(size * 1.2);
+// }
+// });
+//
+// function computeSizeFromZoom() {
+// var max = map.getMaxZoom(),
+// zoom = map.getZoom(),
+// diff = max - zoom,
+// table = [2, 1, 0.5];
+// return  (diff < table.length) ? table[diff] : 0.5;
+// }
 
- function computeSizeFromZoom() {
- var max = map.getMaxZoom(),
- zoom = map.getZoom(),
- diff = max - zoom,
- table = [2, 1, 0.5];
- return  (diff < table.length) ? table[diff] : 0.5;
- }
+
+
+addMarker(new L.LatLng(175,175), {icon: "\uf041", color: "#4F2F4F"}); // pin only
 
  function addMarker(latLng, opts) {
  var icon = opts.icon || "\ue002",
  color = opts.color || "blue",
- font = opts.iconFont || "iconic",
- sz = computeSizeFromZoom();
+ font = opts.iconFont || "awesome",
+ sz = 1;
+// sz = computeSizeFromZoom();
 
  marker = new cilogi.L.Marker(latLng, {
- fontIconSize: sz * 2,
+ fontIconSize: sz *1.3,
  fontIconName: icon,
  fontIconColor: color,
  fontIconFont: font,
@@ -1435,13 +1501,15 @@ function bindContent(marker) {
  //    markers.push(marker);
  }
 
-
 */
+
+
 
 
 //PRUEBA GEOJSON
 
 
+/*
 function onEachFeature(feature, layer) {
     var popupContent = "<p>I started out as a GeoJSON " +
         feature.geometry.type + ", but now I'm a Leaflet vector!</p>";
@@ -1453,8 +1521,42 @@ function onEachFeature(feature, layer) {
     layer.bindPopup(popupContent);
 }
 
+*/
+
+
+
+/*
 L.geoJson(mimapa, {
         style: function (feature) {
             return feature.properties && feature.properties.style;
         }}
 ).addTo(map);
+*/
+
+
+/*
+
+var micuad={"geometry": {"type": "Polygon", "coordinates": [
+    [
+        [157.5, 293],
+        [157.5, 334.5],
+        [213, 334.5],
+        [213, 293],
+        [157.5, 293]
+    ]
+]}, "type": "Feature"}
+
+L.geoJson(micuad, {
+        style: function (feature) {
+            return feature.properties && feature.properties.style;
+        }}
+).addTo(map);
+
+for (var i in micuad.geometry.coordinates) {
+    for (var j in micuad.geometry.coordinates[i]) {
+        for (var k in micuad.geometry.coordinates[i][j]) {
+        micuad.geometry.coordinates[i][j][k] = micuad.geometry.coordinates[i][j][k] * floors[0].scaleY + (floors[0].scaleY);
+    }
+    }
+}
+*/
