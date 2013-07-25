@@ -240,7 +240,9 @@ function FloorFormsCtrl($scope, $rootScope, $element)
 
 
     $scope.update = function() {
+        var img_form = $($element).find('form');
         var img = $($element).find('input[name="img"]');
+        var imgB = $($element).find('input[name="img_b"]');
 
         var floor_data = {
             name : $scope.floor_name,
@@ -250,10 +252,8 @@ function FloorFormsCtrl($scope, $rootScope, $element)
         floorResource.update(floor_data, $scope.floor.id);
 
         // Si se ha puesto una nueva imágen la subimos, eliminando la anterior
-        if(img.val() !== '')
+        if(img.val() !== '' || imgB.val() !== '')
         {
-            var img_form = $($element).find('form');
-
             $scope.waiting_response = true;
 
             floorResource.addImg(
@@ -263,6 +263,7 @@ function FloorFormsCtrl($scope, $rootScope, $element)
                     // Una vez se sube la imágen se limpia el formulario y se actualiza
                     // la lista de plantas para el recinto
                     img_form.find('input[name="img"]').val('');
+                    img_form.find('input[name="imgB"]').val('');
                     img_form.find('.file-input-name').remove();
                     $scope.waiting_response = false;
                     $rootScope.$broadcast('sync_enclosure', $scope.enclosure);

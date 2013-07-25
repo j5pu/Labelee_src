@@ -28,41 +28,31 @@ class ImgService:
         self.id = id
         self.resource_class = CLASSES[resource]
 
-    def upload_img(self):
+    def upload_img(self, uploaded_file):
         """
         Sube la imágen para el recurso. Si ya hay una imágen ésta se elimina
         """
-        posted_img = self.request.FILES.itervalues().next()
-        file_content = ContentFile(posted_img.read())
+        file_content = ContentFile(uploaded_file.read())
 
         # Xej floor: resource_obj = Floor.objects.get(id=self.id)
         resource_obj = self.resource_class.objects.get(id=self.id)
 
         # Se elimina la imágen que el recurso tenía antes
         # nombre para el atributo donde queremos subir la imagen (panorama, img,..)
-        img_name = posted_img.field_name
+        img_name = uploaded_file.field_name
         self.model_img_attr = getattr(resource_obj, img_name)
         if self.model_img_attr.name:
             self.delete_img()
 
         # Guardamos la nueva imágen
-        filename = posted_img.name.replace(" ", "_")
+        filename = uploaded_file.name.replace(" ", "_")
         fileName, fileExtension = os.path.splitext(filename)
         fileName = str(resource_obj.id) + fileExtension
-        try:
-            self.model_img_attr.save(fileName, file_content)
-        except:
-            return responseJSON(errors='yes')
+        self.model_img_attr.save(fileName, file_content)
+        resource_obj.save()
 
-        saved_obj = resource_obj.save()
 
-        # respuesta en el iframe
-        data = {
-        'form': self.resource
-        # 'obj': saved_obj
-        }
 
-        return responseJSON(data=data)
 
 
     def delete_img(self):

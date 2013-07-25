@@ -22,6 +22,11 @@ class CustomUser(User):
     # Use UserManager to get the create_user method, etc.
     objects = UserManager()
 
+    def save(self, *args, **kwargs):
+        if type(self) is CustomUser and not self.pk:
+            self.set_password(self.password)
+        super(CustomUser, self).save(*args, **kwargs)
+
     class Meta:
         verbose_name = 'CustomUser'
         verbose_name_plural = 'CustomUsers'
@@ -29,12 +34,12 @@ class CustomUser(User):
 
 class Enclosure(models.Model):
     name = models.CharField(max_length=60, unique=True, blank=False)
+    owner = models.ForeignKey(User, related_name='enclosures', blank=False)
     twitter_account = models.CharField(max_length=60, blank=True, null=True)
     logo = models.FileField(upload_to=get_enclosure_logo_path, null=True, blank=True)
     url_enclosure = models.URLField(null=True, blank=True)
     url_dashboard = models.URLField(null=True, blank=True)
 
-    owner = models.ForeignKey(User, related_name='enclosures', blank=False)
 
     def __unicode__(self):
         return self.name
@@ -57,14 +62,15 @@ class Enclosure(models.Model):
 
 
 class Floor(models.Model):
-    floor_number = models.IntegerField(null=True, blank=True)
     name = models.CharField(max_length=200, null=False, blank=False)
     img = models.FileField(upload_to=get_floor_path, null=True, blank=True)
+    enclosure = models.ForeignKey(Enclosure, related_name='floors', blank=True)
     num_rows = models.PositiveIntegerField(null=True, blank=True)
     num_cols = models.PositiveIntegerField(null=True, blank=True)
+    floor_number = models.IntegerField(null=True, blank=True)
+    imgB = models.FileField(upload_to=get_floor_path_b, null=True, blank=True)
 
     # por defecto, si eliminamos un lugar también se eliminan todos sus mapas
-    enclosure = models.ForeignKey(Enclosure, related_name='floors', blank=True)
 
     def __unicode__(self):
         return self.name
@@ -86,10 +92,9 @@ class Floor(models.Model):
 
 class LabelCategory(models.Model):
     name = models.CharField(max_length=200, blank=False, null=False)
-    color = models.CharField(max_length=50, blank=False)
     img = models.FileField(upload_to=get_label_category_path, blank=True, null=True)
+    color = models.CharField(max_length=50, blank=False)
     icon = models.CharField(max_length=50, blank=True, null=True)
-
     enclosure = models.ForeignKey(Enclosure, related_name='enclosure', blank=False, null=True)
 
     class Meta:
@@ -118,7 +123,6 @@ class LabelCategory(models.Model):
 class Label(models.Model):
     name = models.CharField(max_length=200, blank=False, null=False)
     img = models.FileField(upload_to=get_label_path, blank=True, null=True)
-
     category = models.ForeignKey(LabelCategory, related_name='labels', blank=True, on_delete=models.CASCADE)
 
     def __unicode__(self):
@@ -140,16 +144,15 @@ class Point(models.Model):
     description = models.CharField(max_length=2000, null=True, blank=True)
     row = models.PositiveIntegerField(null=True, blank=True)
     col = models.PositiveIntegerField(null=True, blank=True)
-    panorama = models.FileField(upload_to=get_panorama_path, null=True, blank=True)
-    coupon=models.FileField(upload_to=get_coupon_path,null=True, blank=True)
-
     label = models.ForeignKey(Label, related_name='points', on_delete=models.CASCADE)
     floor = models.ForeignKey(Floor, related_name='points', on_delete=models.CASCADE)
+    panorama_thumbnail = models.FileField(upload_to=get_panorama_path, null=True, blank=True)
     alwaysVisible = models.NullBooleanField()
     center_x = models.PositiveIntegerField(null=True)
     center_y = models.PositiveIntegerField(null=True)
     isVertical = models.NullBooleanField()
-
+    panorama = models.FileField(upload_to=get_panorama_path, null=True, blank=True)
+    coupon = models.FileField(upload_to=get_coupon_path,null=True, blank=True)
 
     def __unicode__(self):
         return self.floor.name + ' (' + str(self.row) + ', ' + str(self.col) + ')'
@@ -162,7 +165,6 @@ class Point(models.Model):
 
 class QR_Code(models.Model):
     code = models.CharField(max_length=200, unique=True, blank=False)
-
     point = models.OneToOneField(Point, related_name='qr_code', null=True, blank=True, on_delete=models.CASCADE)
 
     class Meta:

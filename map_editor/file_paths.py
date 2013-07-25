@@ -19,6 +19,14 @@ def get_floor_path(instance, filename):
     fileName, fileExtension = os.path.splitext(filename)
     return 'img/enclosures/%s/floors/%s%s' % (instance.enclosure.id, instance.id, fileExtension)
 
+def get_floor_path_b(instance, filename):
+    """
+    img/enclosures/[encl_id]/floors/[floor_id].ext
+	xej: img/enclosures/25/floors/167.png
+	"""
+    fileName, fileExtension = os.path.splitext(filename)
+    return 'img/enclosures/%s/floors/%s_b%s' % (instance.enclosure.id, instance.id, fileExtension)
+
 
 def get_label_category_path(instance, filename):
     fileName, fileExtension = os.path.splitext(filename)
