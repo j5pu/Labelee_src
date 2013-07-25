@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 from tastypie.authorization import Authorization
 from tastypie.exceptions import Unauthorized
 from map_editor.api_2.services.factory import CLASSES
-from map_editor.models import Enclosure
+from map_editor.models import Enclosure, CustomUser
 
 
 class ResourceAuthorization(Authorization):
@@ -74,7 +74,7 @@ class ResourceAuthorization(Authorization):
         if(bundle.request.user.is_staff):
             return True
 
-        if type(bundle.obj) is User:
+        if type(bundle.obj) is CustomUser:
             return bundle.obj.id == bundle.request.user.id
 
         # Vamos iterando en cada uno de los elementos que nos llevan hasta owner.
@@ -134,7 +134,7 @@ class ResourceAuthorization(Authorization):
             return object_list
 
         # Si lo que estamos pidiendo es la lista de usuarios:
-        if type(bundle.obj) is User:
+        if type(bundle.obj) is CustomUser:
             return object_list.filter(id=bundle.request.user.id)
 
         # Si el usuario no está logueado

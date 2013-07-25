@@ -138,7 +138,7 @@ INSTALLED_APPS = (
     'route',
     'modeltranslation',
     'log',
-    'dashboard'
+    'dashboard',
     # 'panorama',
     'analytics',
 )
@@ -218,7 +218,7 @@ else:
     #         "USER": "mnopi",
     #         "PASSWORD": "1aragon1",
     #         "HOST": "192.168.1.201",
-    #         "PORT": "3306",
+    #         "PORT": "",
     #         }
     # }
     DATABASES = {
@@ -230,17 +230,7 @@ else:
             "HOST": "192.168.1.201",
             "PORT": "",
             }
-    }
-    # DATABASES = {
-    #     "default": {
-    #         "ENGINE": "django.db.backends.mysql",
-    #         "NAME": "admin_v2",
-    #         "USER": "root",
-    #         "PASSWORD": "",
-    #         "HOST": "",
-    #         "PORT": "",
-    #         }
-    #     }
+        }
 
 #     Estas aplicaciones solo se usaran en desarrollo..
     INSTALLED_APPS += ('south', 'sandbox',)

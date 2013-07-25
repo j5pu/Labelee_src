@@ -5,13 +5,13 @@ import settings
 from django.contrib.auth.models import User
 
 admin.autodiscover()
-admin.site.unregister(User)
+# admin.site.unregister(User)
 
 # Tastypie
 from tastypie.api import Api
 from map_editor.api.resources import *
 v1_api = Api()
-v1_api.register(UserResource())
+v1_api.register(CustomUserResource())
 v1_api.register(EnclosureResource())
 v1_api.register(FloorResource())
 v1_api.register(LabelCategoryResource())

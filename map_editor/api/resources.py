@@ -23,15 +23,12 @@ from map_editor.api.resource_authorization import ResourceAuthorization
 from map_editor.models import *
 from route.models import *
 from log.models import *
-from map_editor.forms import EnclosureForm
 
 
-class UserResource(ModelResource):
+class CustomUserResource(ModelResource):
     class Meta:
         resource_name = 'user'
-        queryset = User.objects.all()
-        # authentication = SessionAuthentication()
-        # authorization = DjangoAuthorization()
+        queryset = CustomUser.objects.all()
         authorization = ResourceAuthorization('user')
         filtering = {
             'id': ALL,
@@ -45,11 +42,9 @@ class UserResource(ModelResource):
         return 'application/json'
 
 
-
-
 class EnclosureResource(ModelResource):
     floors = fields.ToManyField('map_editor.api.resources.FloorResource', 'floors', null=True)
-    owner = fields.ToOneField(UserResource, 'owner', null=False)
+    owner = fields.ToOneField(CustomUserResource, 'owner', null=False)
 
     class Meta:
         queryset = Enclosure.objects.all()
@@ -92,13 +87,6 @@ class PointResource(ModelResource):
     floor = fields.ToOneField(FloorResource, 'floor')
     label = fields.ToOneField('map_editor.api.resources.LabelResource', 'label')
     qr_code = fields.ToOneField('map_editor.api.resources.QRCodeResource', 'qr_code', null=True)
-    # connection_init = fields.ToOneField('map_editor.api.resources.ConnectionResource', 'connection_init', null=True)
-    # connection_end = fields.ToOneField('map_editor.api.resources.ConnectionResource', 'connection_end', null=True)
-    # qr_code = fields.ToOneField('map_editor.api.resources.QRCodeResource', 'qr_code', null=True)
-    # route = fields.ToOneField('map_editor.api.resources.RouteResource', 'route', null=True)
-    # connections = fields.ToManyField('map_editor.api.resources.ConnectionResource', 'connections', null=True)
-    # connections2 = fields.ToManyField('map_editor.api.resources.ConnectionResource', 'connections2', null=True)
-
 
     class Meta:
         queryset = Point.objects.all()
@@ -164,14 +152,6 @@ class LabelCategoryResource(ModelResource):
         return 'application/json'
 
 
-# class RecipeResource(ModelResource):
-#     ingredients = fields.ToManyField(RecipeIngredientResource,
-#                                      attribute=lambda bundle: bundle.obj.ingredients.through.objects.filter(
-#                                          recipe=bundle.obj) or bundle.obj.ingredients, full=True)
-#     class Meta:
-#         queryset = Recipe.objects.all()
-#         resource_name = 'recipe'
-
 class QRCodeResource(ModelResource):
     point = fields.ToOneField('map_editor.api.resources.PointResource', 'point', full=True)
 
@@ -179,7 +159,6 @@ class QRCodeResource(ModelResource):
         resource_name = 'qr-code'
         queryset = QR_Code.objects.all()
         authorization = DjangoAuthorization()
-        # authentication = BasicAuthentication()
         always_return_data = True
         filtering = {
             'id': ALL,
@@ -198,7 +177,6 @@ class ConnectionResource(ModelResource):
         resource_name = 'connection'
         queryset = Connection.objects.all()
         authorization = DjangoAuthorization()
-        # authentication = BasicAuthentication()
         always_return_data = True
         filtering = {
             'id': ALL,
@@ -219,7 +197,6 @@ class RouteResource(ModelResource):
         resource_name = 'route'
         queryset = Route.objects.all()
         authorization = DjangoAuthorization()
-        # authentication = BasicAuthentication()
         always_return_data = True
         filtering = {
             'id': ALL,
@@ -239,7 +216,6 @@ class StepResource(ModelResource):
         resource_name = 'step'
         queryset = Step.objects.all()
         authorization = DjangoAuthorization()
-        # authentication = BasicAuthentication()
         always_return_data = True
         filtering = {
             'id': ALL,
@@ -257,7 +233,6 @@ class LogEntryResource(ModelResource):
         resource_name = 'log-entry'
         queryset = LogEntry.objects.all()
         authorization = DjangoAuthorization()
-        # authentication = BasicAuthentication()
         always_return_data = True
         filtering = {
             'id': ALL,

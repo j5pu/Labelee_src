@@ -22,9 +22,9 @@ class CustomUser(User):
     # Use UserManager to get the create_user method, etc.
     objects = UserManager()
 
-    def save(self, *args, **kwargs):
-        self.set_password(self.password)
-        super(CustomUser, self).save(*args, **kwargs)
+    class Meta:
+        verbose_name = 'CustomUser'
+        verbose_name_plural = 'CustomUsers'
 
 
 class Enclosure(models.Model):

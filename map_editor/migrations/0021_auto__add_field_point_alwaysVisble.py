@@ -8,34 +8,17 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        # Adding field 'Floor.floor_number'
-        db.add_column(u'map_editor_floor', 'floor_number',
-                      self.gf('django.db.models.fields.IntegerField')(null=True, blank=True),
-                      keep_default=False)
-
-
-        # Changing field 'Point.description'
-        db.alter_column(u'map_editor_point', 'description', self.gf('django.db.models.fields.CharField')(max_length=2000, null=True))
-
-        # Changing field 'QR_Code.point'
-        db.alter_column(u'map_editor_qr_code', 'point_id', self.gf('django.db.models.fields.related.OneToOneField')(unique=True, to=orm['map_editor.Point']))
-        # Adding unique constraint on 'QR_Code', fields ['point']
-        db.create_unique(u'map_editor_qr_code', ['point_id'])
+        # Adding field 'Point.alwaysVisble'
+        # db.add_column(u'map_editor_point', 'alwaysVisble',
+        #               self.gf('django.db.models.fields.NullBooleanField')(null=True, blank=True),
+        #               keep_default=False)
+        pass
 
 
     def backwards(self, orm):
-        # Removing unique constraint on 'QR_Code', fields ['point']
-        db.delete_unique(u'map_editor_qr_code', ['point_id'])
+        # Deleting field 'Point.alwaysVisble'
+        db.delete_column(u'map_editor_point', 'alwaysVisble')
 
-        # Deleting field 'Floor.floor_number'
-        db.delete_column(u'map_editor_floor', 'floor_number')
-
-
-        # Changing field 'Point.description'
-        db.alter_column(u'map_editor_point', 'description', self.gf('django.db.models.fields.CharField')(max_length=200, null=True))
-
-        # Changing field 'QR_Code.point'
-        db.alter_column(u'map_editor_qr_code', 'point_id', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['map_editor.Point']))
 
     models = {
         u'auth.group': {
@@ -78,7 +61,8 @@ class Migration(SchemaMigration):
             'Meta': {'object_name': 'Enclosure'},
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '60'}),
-            'owner': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'enclosures'", 'to': u"orm['auth.User']"})
+            'owner': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'enclosures'", 'to': u"orm['auth.User']"}),
+            'twitter_account': ('django.db.models.fields.CharField', [], {'max_length': '60', 'unique': 'True', 'null': 'True', 'blank': 'True'})
         },
         u'map_editor.floor': {
             'Meta': {'object_name': 'Floor'},
@@ -95,14 +79,19 @@ class Migration(SchemaMigration):
             'category': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'labels'", 'blank': 'True', 'to': u"orm['map_editor.LabelCategory']"}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'img': ('django.db.models.fields.files.FileField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '200'})
+            'name': ('django.db.models.fields.CharField', [], {'max_length': '200'}),
+            'name_en': ('django.db.models.fields.CharField', [], {'max_length': '200', 'null': 'True', 'blank': 'True'}),
+            'name_es': ('django.db.models.fields.CharField', [], {'max_length': '200', 'null': 'True', 'blank': 'True'})
         },
         u'map_editor.labelcategory': {
             'Meta': {'object_name': 'LabelCategory'},
             'color': ('django.db.models.fields.CharField', [], {'max_length': '50'}),
+            'icon': ('django.db.models.fields.CharField', [], {'max_length': '50', 'null': 'True', 'blank': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'img': ('django.db.models.fields.files.FileField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '200'})
+            'name': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '200'}),
+            'name_en': ('django.db.models.fields.CharField', [], {'max_length': '200', 'unique': 'True', 'null': 'True', 'blank': 'True'}),
+            'name_es': ('django.db.models.fields.CharField', [], {'max_length': '200', 'unique': 'True', 'null': 'True', 'blank': 'True'})
         },
         u'map_editor.point': {
             'Meta': {'object_name': 'Point'},
@@ -111,13 +100,15 @@ class Migration(SchemaMigration):
             'floor': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'points'", 'to': u"orm['map_editor.Floor']"}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'label': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'points'", 'to': u"orm['map_editor.Label']"}),
+            'panorama': ('django.db.models.fields.files.FileField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
+            'panorama_thumbnail': ('django.db.models.fields.files.FileField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
             'row': ('django.db.models.fields.PositiveIntegerField', [], {'null': 'True', 'blank': 'True'})
         },
         u'map_editor.qr_code': {
             'Meta': {'object_name': 'QR_Code'},
             'code': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '200'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'point': ('django.db.models.fields.related.OneToOneField', [], {'related_name': "'qr_code'", 'unique': 'True', 'to': u"orm['map_editor.Point']"})
+            'point': ('django.db.models.fields.related.OneToOneField', [], {'blank': 'True', 'related_name': "'qr_code'", 'unique': 'True', 'null': 'True', 'to': u"orm['map_editor.Point']"})
         }
     }
 
