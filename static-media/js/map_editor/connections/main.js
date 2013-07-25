@@ -94,14 +94,17 @@ var Connections = {
         var a1 = a[Connections.$e.aristas.select1[0].selectedIndex];
         var a2 = Connections.$e.aristas.select2[0].options[Connections.$e.aristas.select2[0].selectedIndex];
 
-        var data = {
-            init: a1.value,
-            end: a2.value
-        };
+        if (a1.value!=a2.value){
+            var data = {
+                init: a1.value,
+                end: a2.value
+            };
 
-        new ConnectionResource().create(data);
+            new ConnectionResource().create(data);
 
-        Connections.cargarConnections();
+            Connections.cargarConnections();
+        }
+
     },
 
 

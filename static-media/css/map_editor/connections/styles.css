@@ -32,7 +32,7 @@
     border-radius: 1em 1em 1em 1em;
     display: inline-block;
     height: auto;
-    /*width: 350px;*/
+    width: 350px;
     padding: 1em;
     list-style:none;
 
@@ -104,7 +104,7 @@ h4
 
 .connection-list ul
 {
-    width: auto;
+    width: 370px;
     max-height: 311px;
     overflow-x: hidden;
     overflow-y: auto;

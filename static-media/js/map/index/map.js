@@ -3,6 +3,12 @@ var Map = {};
 var showOrigin = false;
 
 //Configuración de iconos
+
+var myIcon = L.divIcon({className: 'my-div-icon'});
+// you can set .my-div-icon styles in CSS
+var myCarIcon = L.divIcon({className: 'my-div-icon my-car-icon'});
+
+
 var OriginIcon = L.AwesomeMarkers.icon({
         icon: 'location-arrow',
         color: 'darkblue'
@@ -336,6 +342,11 @@ function loopFloors() {
     }
 
     name = floors[floor_index].name;
+
+/*    if (!Modernizr.svg) {
+        img = floors[floor_index].imgB;
+    }
+*/
     img = floors[floor_index].img;
     var floorImg = new Image();
     floorImg.src = img;
@@ -1560,3 +1571,5 @@ for (var i in micuad.geometry.coordinates) {
     }
 }
 */
+
+L.marker([300, 300.57], {icon: myCarIcon}).addTo(map);

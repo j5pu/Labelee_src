@@ -1178,6 +1178,7 @@ color:rgba(255, 255, 255, 0.8);
     url('../font/carFont.svg#carFont') format('svg');
     font-weight: normal;
     font-style: normal;
+
 }
 
 .icon-automobile, .icon-car {
@@ -1335,4 +1336,135 @@ div.cilogiMarker > span{
 
 .leaflet-popup  {
     margin-bottom: 1.9em !important;
+}
+
+.my-div-icon {
+    margin-left: -6px;
+    margin-top: -6px;
+    width: 1.5em;
+    height: 1.5em;
+    left: 300px;
+    top: 475px;
+    z-index: 475;
+    background: transparent;
+    color: cadetblue;
+    text-shadow: 6px -5px 9px #336;
+//    font-family: 'carFont';
+    font-family: 'FontAwesome';
+    font-size: 3em;
+    text-align: center;
+    line-height: 1.2em;
+}
+
+.my-car-icon:before {
+//    content: "\31";
+    content:"\f041";
+}
+
+
+
+
+/*
+PRUEBA CUPONES
+*/
+.stamp {
+    width: 280px;
+    height: 160px;
+    display: inline-block;
+    padding: 10px;
+    background: white;
+    position: relative;
+
+    /*The stamp cutout will be created using crisp radial gradients*/
+    background: radial-gradient(
+        transparent 0px,
+        transparent 4px,
+        blue 4px,
+        blue
+    );
+    /*reducing the gradient size*/
+    background-size: 20px 20px;
+    /*Offset to move the holes to the edge*/
+    background-position: -10px -1px;
+    -webkit-transform: rotate(-45deg);
+    top:20rem;
+}
+.stamp:after {
+    content: '';
+    position: absolute;
+    /*We can shrink the pseudo element here to hide the shadow edges*/
+    left: 5px; top: 5px; right: 5px; bottom: 5px;
+    /*Shadow - doesn't look good because of the stamp cutout. We can still move this into another pseudo element behind the .stamp main element*/
+    box-shadow: 0 0 20px 1px rgba(0, 0, 0, 0.5);
+    /*pushing it back*/
+    z-index: -1;
+}
+/*Some text*/
+.stamp:before {
+    content: 'mi kuponako... ¡toma chollo!';
+    position: absolute;
+    bottom: 0; left: 0;
+    font: bold 18px arial;
+    color: #bada55;
+    opacity: 0.75;
+    line-height: 100%;
+    padding: 15px;
+}
+.miKupon{
+
+    background:beige;
+
+    height:106%;
+    width:100%;
+    margin-top: -2%;
+}
+
+#stamp1{
+
+}
+
+#stamp2{
+    background: white;
+    position: relative;
+
+    /*The stamp cutout will be created using crisp radial gradients*/
+    background: radial-gradient(
+        transparent 0px,
+        transparent 4px,
+        red 4px,
+        red
+    );
+    /*reducing the gradient size*/
+    background-size: 20px 20px;
+    /*Offset to move the holes to the edge*/
+    background-position: -10px -1px;
+    -webkit-transform: rotate(-50deg);
+    top:10rem;
+}
+
+#stamp3{
+    background: white;
+    position: relative;
+
+    /*The stamp cutout will be created using crisp radial gradients*/
+    background: radial-gradient(
+        transparent 0px,
+        transparent 4px,
+        darkorange 4px,
+        darkorange
+    );
+    /*reducing the gradient size*/
+    background-size: 20px 20px;
+    /*Offset to move the holes to the edge*/
+    background-position: -10px -1px;
+    -webkit-transform: rotate(-55deg);
+    top:0rem;
+
+}
+
+div#cupones {
+    position: absolute;
+    left: 50%;
+    bottom: -11rem;
+    z-index: 6;
 }
