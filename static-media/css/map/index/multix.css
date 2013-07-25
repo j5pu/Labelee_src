@@ -1349,24 +1349,62 @@ div.cilogiMarker > span{
     background: transparent;
     color: cadetblue;
     text-shadow: 6px -5px 9px #336;
-//    font-family: 'carFont';
     font-family: 'FontAwesome';
     font-size: 3em;
     text-align: center;
     line-height: 1.2em;
 }
 
-.my-car-icon:before {
-//    content: "\31";
+.poi-icon:before{
     content:"\f041";
 }
 
 
-
+.car-icon{
+    font-family: 'carFont';
+}
+.car-icon:before {
+    content: "\31";
+}
 
 /*
-PRUEBA CUPONES
+poiIcon = L.divIcon({className: 'my-div-icon poi-icon'}),
+destIcon = L.divIcon({className: 'my-div-icon dest-icon'}),
+locateIcon = L.divIcon({className: 'my-div-icon locate-icon'}),
+entryIcon = L.divIcon({className: 'my-div-icon entry-icon'}),
+elevatorIcon = L.divIcon({className: 'my-div-icon elevator-icon'}),
+stairwayIcon = L.divIcon({className: 'my-div-icon stairway-icon'}),
+toiletIcon = L.divIcon({className: 'my-div-icon toilet-icon'}),
+toiletFIcon = L.divIcon({className: 'my-div-icon toiletF-icon'}),
+toiletMIcon = L.divIcon({className: 'my-div-icon toiletM-icon'})
 */
+
+
+.stamp {
+    border-top: 3px dashed darkorange;
+    width: 100%;
+    height: 100px;
+    z-index: -1;
+    -webkit-transform: rotate(30deg);
+    margin-bottom: -2em;
+}
+.stamp div {
+    width: 100%;
+    height: 100%;
+    background: darkorange;
+}
+
+div#cupones {
+    position: absolute;
+    left: 50%;
+    width:10%;
+    bottom: 0;
+    z-index: 6;
+}
+
+/*
+PRUEBA CUPONES B
+
 .stamp {
     width: 280px;
     height: 160px;
@@ -1375,16 +1413,13 @@ PRUEBA CUPONES
     background: white;
     position: relative;
 
-    /*The stamp cutout will be created using crisp radial gradients*/
     background: radial-gradient(
         transparent 0px,
         transparent 4px,
         blue 4px,
         blue
     );
-    /*reducing the gradient size*/
     background-size: 20px 20px;
-    /*Offset to move the holes to the edge*/
     background-position: -10px -1px;
     -webkit-transform: rotate(-45deg);
     top:20rem;
@@ -1392,14 +1427,10 @@ PRUEBA CUPONES
 .stamp:after {
     content: '';
     position: absolute;
-    /*We can shrink the pseudo element here to hide the shadow edges*/
     left: 5px; top: 5px; right: 5px; bottom: 5px;
-    /*Shadow - doesn't look good because of the stamp cutout. We can still move this into another pseudo element behind the .stamp main element*/
     box-shadow: 0 0 20px 1px rgba(0, 0, 0, 0.5);
-    /*pushing it back*/
     z-index: -1;
 }
-/*Some text*/
 .stamp:before {
     content: 'mi kuponako... ¡toma chollo!';
     position: absolute;
@@ -1427,16 +1458,13 @@ PRUEBA CUPONES
     background: white;
     position: relative;
 
-    /*The stamp cutout will be created using crisp radial gradients*/
     background: radial-gradient(
         transparent 0px,
         transparent 4px,
         red 4px,
         red
     );
-    /*reducing the gradient size*/
     background-size: 20px 20px;
-    /*Offset to move the holes to the edge*/
     background-position: -10px -1px;
     -webkit-transform: rotate(-50deg);
     top:10rem;
@@ -1446,16 +1474,13 @@ PRUEBA CUPONES
     background: white;
     position: relative;
 
-    /*The stamp cutout will be created using crisp radial gradients*/
     background: radial-gradient(
         transparent 0px,
         transparent 4px,
         darkorange 4px,
         darkorange
     );
-    /*reducing the gradient size*/
     background-size: 20px 20px;
-    /*Offset to move the holes to the edge*/
     background-position: -10px -1px;
     -webkit-transform: rotate(-55deg);
     top:0rem;
@@ -1468,3 +1493,4 @@ div#cupones {
     bottom: -11rem;
     z-index: 6;
 }
+*/

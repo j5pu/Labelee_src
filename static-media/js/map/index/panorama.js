@@ -32,13 +32,14 @@ var Panorama = {
 
     show: function()
     {
-        console.log('yaaa');
+//        console.log('yaaa');
         Coupon.close();
         Panorama.opened = true;
 
         var newWidth=window.innerWidth*0.9,
             newHeight=newWidth*9/16;
-        addSamplePano(Panorama.marker.panorama,{height: newHeight, ratio:9/16, minSpeed:30});
+        addSamplePano(Panorama.marker.panorama,{height: newHeight, ratio:9/16});
+            //, minSpeed:30});
     },
 
     resize: function()
@@ -54,11 +55,11 @@ var Panorama = {
 
     close: function()
     {
-        jQuery('div#page').find('img[id*=pano]').remove();
         jQuery('#canvasPan').remove();
         jQuery('button#close').remove();
+        jQuery('div#page').find('img[id*=pano]').remove();
         Panorama.opened = false;
 
-//        Logger.log('panorama cerradoxxxxxx');
+        Logger.log('panorama cerradoxxxxxx');
     }
 };

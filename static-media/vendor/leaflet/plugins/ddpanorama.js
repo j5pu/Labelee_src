@@ -82,6 +82,8 @@
 					var img = $(this);//document.createElement("img");
 					
 					var canvas = document.createElement("canvas");
+                        canvas.setAttribute('id', 'canvasPan');
+
 					var o = {
 						img : img,
 						canvas : canvas,

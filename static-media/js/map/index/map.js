@@ -6,7 +6,17 @@ var showOrigin = false;
 
 var myIcon = L.divIcon({className: 'my-div-icon'});
 // you can set .my-div-icon styles in CSS
-var myCarIcon = L.divIcon({className: 'my-div-icon my-car-icon'});
+var carIcon = L.divIcon({className: 'my-div-icon car-icon'}),
+    poiIcon = L.divIcon({className: 'my-div-icon poi-icon'}),
+    destIcon = L.divIcon({className: 'my-div-icon dest-icon'}),
+    locateIcon = L.divIcon({className: 'my-div-icon locate-icon'}),
+    entryIcon = L.divIcon({className: 'my-div-icon entry-icon'}),
+    elevatorIcon = L.divIcon({className: 'my-div-icon elevator-icon'}),
+    stairwayIcon = L.divIcon({className: 'my-div-icon stairway-icon'}),
+    toiletIcon = L.divIcon({className: 'my-div-icon toilet-icon'}),
+    toiletFIcon = L.divIcon({className: 'my-div-icon toiletF-icon'}),
+    toiletMIcon = L.divIcon({className: 'my-div-icon toiletM-icon'})
+    ;
 
 
 var OriginIcon = L.AwesomeMarkers.icon({
@@ -343,10 +353,10 @@ function loopFloors() {
 
     name = floors[floor_index].name;
 
-/*    if (!Modernizr.svg) {
+   if (!Modernizr.svg) {
         img = floors[floor_index].imgB;
     }
-*/
+
     img = floors[floor_index].img;
     var floorImg = new Image();
     floorImg.src = img;
@@ -1572,4 +1582,4 @@ for (var i in micuad.geometry.coordinates) {
 }
 */
 
-L.marker([300, 300.57], {icon: myCarIcon}).addTo(map);
+//L.marker([300, 300.57], {icon: myCarIcon}).addTo(map);
