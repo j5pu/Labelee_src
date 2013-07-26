@@ -71,6 +71,7 @@ a {
     text-decoration: none;
     background: rgb(122, 113, 81);
     color: #FEFAF1;
+    cursor: pointer;
 }
 a:hover
 {

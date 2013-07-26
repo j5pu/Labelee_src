@@ -12,7 +12,8 @@ function EnclosureListCtrl($scope, $rootScope, UserService, FormService)
     // Orden en que aparecerán los recintos
     $scope.reverse = false;
 
-    $scope.show_create_enclosure_form = function() {
+    $scope.show_create_enclosure_form = function($event) {
+        $($event.target).blur();
         $rootScope.$broadcast('show_create_enclosure_form');
     };
 
@@ -27,8 +28,9 @@ function EnclosureCtrl($scope, $rootScope, $element)
 {
     $scope.hovered = false;
 
-    $scope.show_edit_form = function()
+    $scope.show_edit_form = function($event)
     {
+        $($event.target).blur();
         $rootScope.$broadcast('show_edit_form', $scope.enclosure);
     };
 
@@ -53,14 +55,16 @@ function FloorListCtrl($scope, $rootScope)
     $scope.hovered = false;
     $scope.desc = true;
 
-    $scope.show_create_floor_form = function() {
+    $scope.show_create_floor_form = function($event) {
+        $($event.target).blur();
         $rootScope.$broadcast('show_create_floor_form', $scope.enclosure);
     };
 }
 
 function FloorCtrl($scope, $rootScope, $element, UrlService)
 {
-    $scope.show_edit_floor_form = function() {
+    $scope.show_edit_floor_form = function($event) {
+        $($event.target).blur();
         $rootScope.$broadcast('show_edit_floor_form', $scope.floor, $scope.enclosure);
     };
 }
