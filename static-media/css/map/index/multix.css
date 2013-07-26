@@ -123,8 +123,6 @@ html.mmenu-right.mmenu-opening #mmenu-blocker
     right: 100%;
 }
 
-
-
 /*
 	Menu
 		- styling
@@ -218,7 +216,6 @@ html.mmenu-right .mmenu a.mmenu-subopen
     margin-top: -10px;
 }
 
-
 /*
 	Submenu
 		- vertical
@@ -237,7 +234,6 @@ html.mmenu-right .mmenu a.mmenu-subopen
 {
     border-bottom-width: 0;
 }
-
 
 /*
 	Submenu
@@ -276,7 +272,6 @@ html.mmenu-right .mmenu a.mmenu-subopen
     overflow: hidden;
 }
 
-
 /*
 	Labels
 */
@@ -287,8 +282,6 @@ html.mmenu-right .mmenu a.mmenu-subopen
     text-transform: uppercase;
     line-height: 20px;
 }
-
-
 /*
 	Arrows
 */
@@ -371,9 +364,6 @@ html, body
     padding: 0;
     margin: 0;
 }
-body {
-/*background-color: #eee;*/
-    }
 body, div, p
 {
     font-family: 'Raleway','Noto Sans', Arial, Helvetica, Verdana;
@@ -434,13 +424,6 @@ pre
 }
 
 #header a {
-/*background: center center no-repeat #f6f6f6;*/
-    /*
-        background-size: auto;
-
-        background: url(http://bradjasper.com/subtle-patterns-bookmarklet/patterns/squairy_light.png) repeat repeat;
-    */
-    /*background-image: url(logo.png);*/
 display: block;
 width: 55px;
 height: 30px;
@@ -475,9 +458,6 @@ span#fake{
     z-index: 99;
     opacity: 1;
 }
-#header a.friends
-{
-    background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABkAAAAZCAYAAADE6YVjAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAVNJREFUeNq01jFLAzEYxvH2UBCxiIiDUhzcdXCyIk5ufgUXLR37JdxcXBxcuwmOOtml0EKpo04iWIpIQREVEVFLjf9AhoC9e3O5uxd+lMLdPU1yedO8UiqXdQWO122ghi4+8IwGqiiId+uRCHbxqsLrFHNRz5ACSnhTch1EPScQpnIH0w7TWcGiz5rouS45rtkMVnxCJrAQ4yUq+oT8YhAjZOAT8oWHGCE9nxC9H64cA15w4xOiW0HbfErVNhvUa8c3cecQcoZv3xA9z+fCNbe4SNq7jvEUMaUnuE/au7SjkHbSR1G637ULh73Kn+gn7cIBttELGckQh9Jo8iMOrSksYx2b2MKk8FuvUUcHl/9GbiWuooYu3pVf/eARLZQxbp8na2YR0659e+HLmM/geN+z98lSRv8hZu2QQkYh+kzKjZkvHdPahymH6DNp5Cucev0JMAAkKj0NEoYBJwAAAABJRU5ErkJggg==);}
 #header a.right
 {
     left: auto;
@@ -493,12 +473,6 @@ span#fake{
 body {
     padding: 0;
     margin: 0;
-/*background: #f6f6f6;*/
-
-/*
-    background-size: auto;
-    background: url(http://bradjasper.com/subtle-patterns-bookmarklet/patterns/squairy_light.png) repeat repeat;
-*/
 }
 
 body:before {
@@ -870,10 +844,6 @@ span.locator
     color: white;
     font-size: 1.2em;
     vertical-align: middle !important;
-/*
-    -webkit-box-shadow: 2px 2px 8px rgba(0,0,0,0.5) !important;
-    box-shadow: 2px 2px 8px rgba(0,0,0,0.5) !important;
-*/
     border: none;
     display: inline-block;
     text-align: center;
@@ -907,110 +877,6 @@ span.locator
     color: dimgrey;
 }
 
-/*
-#map{
-    background-image: -webkit-gradient(linear, left top, right bottom, color-stop(0, #FFFFFF), color-stop(1, rgba(113, 190, 226, 0.64))) !important;
-}
-
-
-.leaflet-overlay-pane{
-	-webkit-transform: perspective(167) rotateX(20deg) rotateZ(0deg) !important;
-	-webkit-transform-origin: 300px 300px !important;
-    transform: perspective(167) rotateX(20deg) rotateZ(0deg) !important;
-    transform-origin: 300px 300px !important;
-    }
-*/
-
-/*
-#coupon
-{
-    margin-top: 85%;
-    position: relative;
-    width: 65%;
-    z-index: 9999;
-    -webkit-transform: rotate(-25deg);
-    transform: rotate(-25deg);
-    left: 0;
-    margin-left: 20%;
-    height: 40%;
-}
-
-#coupon .sheet
-{
-    -webkit-box-shadow: grey 2px 2px 10px;
-    box-shadow: grey 2px 2px 10px;
-    border: 2px solid #999;
-    height: 100%;
-    position: relative;
-    background: #ddd;
-    padding: 5%;
-}
-
-#coupon .sheet.s1
-{
-    top: 0;
-    left: 10%;
-}
-
-#coupon .sheet.s2
-{
-    top: -95%;
-    left: 20%;
-}
-
-body{
-    overflow: hidden;
-}
-*/
-
-/*
-@media only screen and (min-width: 321px) and (max-width: 490px) {
-    #coupon
-    {
-        margin-top: 30%;
-        position: relative;
-        width: 80%;
-        z-index: 9999;
-        -webkit-transform: rotate(-15deg);
-        transform: rotate(-15deg);
-        left: 0;
-        margin-left: 5%;
-        height: 30%;
-    }
-    #coupon .sheet
-    {
-        box-shadow: grey 2px 2px 10px;
-        border: 2px solid #999;
-        height: 100%;
-        position: relative;
-        background: #ddd;
-        padding: 5%;
-    }
-
-    #coupon .sheet.s1
-    {
-        top: -5%;
-        left: 10%;
-    }
-
-    #coupon .sheet.s2
-    {
-        top: -95%;
-        left: 15%;
-    }
-}
-
-*/
-/*
-
-.leaflet-popup-content-wrapper,.leaflet-popup-tip-container  {
-    border: .5px solid #000;
-}
-
-.leaflet-popup-tip-container {
-border-top: white;
-}
-*/
 
 div#cupones{
     position: absolute;
@@ -1026,38 +892,7 @@ div#cupones{
     bottom: 0;
 }
 
-/*
-div#cupones {
-    position: absolute;
-    right: 0;
-    bottom: 25px;
-    z-index: 6;
-    width: 55px;
-    font-size: 0.7em;
-    text-align: center;
-    line-height: 36px;
-    height: 37px;
-    background-color: white;
-    border-radius: 6px 0 0 6px;
 
-}
-*/
-
-/*
-#cupones a {
-    display: block;
-    z-index: 99;
-    opacity: 1;
-    box-shadow: 2px 2px 2px rgba(0,0,0,0.2);
-    -webkit-box-shadow: 2px 2px 2px rgba(0,0,0,0.2);
-    border: 3px solid #8C8C87;
-    border-right: none;
-    border-radius: 6px 0 0 6px;
-    color: #70706D;
-    text-shadow: 1px 1px 1px rgba(0,0,0,0.2);
-    padding:0 2px;
-}
-*/
 .device {
     width: 86%;
     height: 40%;
@@ -1252,14 +1087,7 @@ img[id*=pano]{
     cursor:pointer;
 }
 
-/*
-.icon-gamepad, .icon-glass {
-    margin-left: -1px;
-}
-.icon-film {
-    margin-left: -1px;
-}
-*/
+
 
 .icon-location-arrow{
     margin-left: -1px;
@@ -1274,16 +1102,6 @@ img.cupImg{
 
 
 .leaflet-label {
-/*
-    background: rgb(235, 235, 235);
-    background: rgba(235, 235, 235, 0.81);
-    background-clip: padding-box;
-    border-color: #777;
-    border-color: rgba(0,0,0,0.25);
-    border-radius: 4px;
-    border-style: solid;
-    border-width: 4px;
-*/
     border:none;
     background: none;
     color: #8C8C87;
@@ -1291,10 +1109,7 @@ img.cupImg{
     font: 0.9em "Raleway", "Noto-Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
 
     font-weight: bold;
-/*
-    padding: 1px 6px;
-*/
-    position: absolute;
+   position: absolute;
     -webkit-user-select: none;
 }
 
@@ -1311,13 +1126,6 @@ img.cupImg{
     transform: rotate(-90deg) ;
 }
 
-/*
-@media only screen and (min-width: 320px) {
-    canvas
-    {
-        width: 74% !important;
-    }
-}*/
 
 .shadowIcon {
       font-size: 300%;
@@ -1342,24 +1150,10 @@ div.cilogiMarker > span{
 .leaflet-popup  {
     margin-bottom: 1.9em !important;
 }
-/*
-.my-div-icon {
-    margin-left: -6px;
-    margin-top: -6px;
-    width: 1.5em;
-    height: 1.5em;
-    left: 300px;
-    top: 475px;
-    z-index: 475;
-    background: transparent;
-    color: cadetblue;
-    text-shadow: 6px -5px 9px #336;
-    font-family: 'FontAwesome';
-    font-size: 3em;
-    text-align: center;
-    line-height: 1.2em;
-}*/
 
+leaflet-marker-icon{
+    border-radius: 50% 50% 75% 75% !important;
+}
 .my-div-icon {
     width: 1.5em !important;
     height: 1.5em !important;
@@ -1369,9 +1163,13 @@ div.cilogiMarker > span{
     font-size: 1.3em;
     text-align: center;
     line-height: 1.5em;
-    border-radius: 50% 50% 75% 75%;
-    opacity: 1;
-    margin-top:-1.9em !important;
+/*
+    border-radius: 50% 50% 75% 75% !important;
+*/
+    -webkit-border-radius: 13px 13px 20px 20px;
+    -moz-border-radius: 50% 50% 75% 75%;
+    opacity: 0.8;
+    margin-top:-1.7em !important;
     margin-left:-0.75em !important;
 }
 
@@ -1430,179 +1228,3 @@ div.cilogiMarker > span{
 .dest-icon:after {
     border-top-color: red;
 }
-/*
-poiIcon = L.divIcon({className: 'my-div-icon poi-icon'}),
-destIcon = L.divIcon({className: 'my-div-icon dest-icon'}),
-locateIcon = L.divIcon({className: 'my-div-icon locate-icon'}),
-entryIcon = L.divIcon({className: 'my-div-icon entry-icon'}),
-elevatorIcon = L.divIcon({className: 'my-div-icon elevator-icon'}),
-stairwayIcon = L.divIcon({className: 'my-div-icon stairway-icon'}),
-toiletIcon = L.divIcon({className: 'my-div-icon toilet-icon'}),
-toiletFIcon = L.divIcon({className: 'my-div-icon toiletF-icon'}),
-toiletMIcon = L.divIcon({className: 'my-div-icon toiletM-icon'})
-*/
-
-/*
-
-.stamp {
-    border-top: 3px dashed darkorange;
-    width: 100%;
-    height: 100px;
-    z-index: -1;
-    -webkit-transform: rotate(30deg);
-    margin-bottom: -2em;
-}
-.stamp div {
-    width: 100%;
-    height: 100%;
-    background: darkorange;
-}
-
-div#cupones {
-    position: absolute;
-    left: 50%;
-    width:10%;
-    bottom: 0;
-    z-index: 6;
-}
-*/
-
-/*
-PRUEBA CUPONES B
-
-.stamp {
-    width: 280px;
-    height: 160px;
-    display: inline-block;
-    padding: 10px;
-    background: white;
-    position: relative;
-
-    background: radial-gradient(
-        transparent 0px,
-        transparent 4px,
-        blue 4px,
-        blue
-    );
-    background-size: 20px 20px;
-    background-position: -10px -1px;
-    -webkit-transform: rotate(-45deg);
-    top:20rem;
-}
-.stamp:after {
-    content: '';
-    position: absolute;
-    left: 5px; top: 5px; right: 5px; bottom: 5px;
-    box-shadow: 0 0 20px 1px rgba(0, 0, 0, 0.5);
-    z-index: -1;
-}
-.stamp:before {
-    content: 'mi kuponako... ¡toma chollo!';
-    position: absolute;
-    bottom: 0; left: 0;
-    font: bold 18px arial;
-    color: #bada55;
-    opacity: 0.75;
-    line-height: 100%;
-    padding: 15px;
-}
-.miKupon{
-
-    background:beige;
-
-    height:106%;
-    width:100%;
-    margin-top: -2%;
-}
-
-#stamp1{
-
-}
-
-#stamp2{
-    background: white;
-    position: relative;
-
-    background: radial-gradient(
-        transparent 0px,
-        transparent 4px,
-        red 4px,
-        red
-    );
-    background-size: 20px 20px;
-    background-position: -10px -1px;
-    -webkit-transform: rotate(-50deg);
-    top:10rem;
-}
-
-#stamp3{
-    background: white;
-    position: relative;
-
-    background: radial-gradient(
-        transparent 0px,
-        transparent 4px,
-        darkorange 4px,
-        darkorange
-    );
-    background-size: 20px 20px;
-    background-position: -10px -1px;
-    -webkit-transform: rotate(-55deg);
-    top:0rem;
-
-}
-
-div#cupones {
-    position: absolute;
-    left: 50%;
-    bottom: -11rem;
-    z-index: 6;
-}
-*/
-
-
-
-
-/*
-
-.triangle-isosceles {
-    width: 0;
-    height: 0;
-    position: absolute;
-    padding: 1em;
-    margin: 0;
-    color: black;
-    -webkit-border-radius: 0.3em;
-    -moz-border-radius: 0.3em;
-    border-radius: 0.3em;
-
-    -moz-box-shadow: 0 0 0 1px #000000;
-    -webkit-box-shadow: 0 0 0 1px #000000;
-    -o-box-shadow: 0 0 0 1px #000000;
-    -ms-box-shadow: 0 0 0 1px #000000;
-}
-
-.triangle-isosceles-after {
-    position: absolute;
-    bottom: -0.5em; */
-/* value = - border-top-width - border-bottom-width *//*
-
-
-left: 0.5em; */
-/* controls horizontal position *//*
-
-
-border-width: 0.5em 0.5em 0; */
-/* vary these values to change the angle of the vertex *//*
-
-
-border-style: solid;
-
-display: block;
-width: 0em;
-
-border-right-color: transparent;
-border-left-color: transparent;
-    }
-
-*/

@@ -420,8 +420,6 @@ function loadPOIs() {
                 coupon = floors[fl].pois[j].coupon,
                 sX = floors[fl].scaleX,
                 sY = floors[fl].scaleY,
- //               loc = [(floors[fl].pois[j].row) * sY + (sY),
- //                   floors[fl].pois[j].col * sX + (sX)],
                 loc = [(floors[fl].pois[j].row) * sY + (sY),
                     floors[fl].pois[j].col * sX +(sX)],
                 center = [(floors[fl].pois[j].center_x) * sY + (sY),
@@ -481,11 +479,8 @@ function loadPOIs() {
                     if (Panorama.opened) Panorama.close();
                     if (qrMarker)
                     {
-                     //Logger.log('ruta');
                      preDrawRoute(qrPoint.point.id, qrFloor.id, this.poid, this.floorid);
-                     //drawRoute(qrPoint.point.id, qrFloor.sX, qrFloor.sY, this.poid, this.psX, this.psY);
                     }
-//                    map.invalidateSize();
 
                     qrMarker.contentBinded = false;
                     bindContent(qrMarker);
@@ -569,19 +564,6 @@ function loadPOIs() {
                     originLegend = originLegend + Panorama.renderIcon(qrPoint.point.id);
                 originLegend += SocialMenu.renderIcon(qrPoint.point.id);
 
-/*
-                qrMarker = new L.Marker(new L.latLng(qrLoc), {
-                    //title: popupTitle,
-                    fontIconSize: 1,
-                    fontIconName: "\uf041",
-                    fontIconColor: "rgb(6, 84, 150)",
-                    fontIconFont: "awesome",
-                    opacity: 1
-                }).bindPopup(originLegend)
-                    .on('click', function () {
-                        bindContent(this);
-                    });
-*/
                 qrMarker = L.marker(qrLoc, {icon: originIcon})
                     .bindPopup(originLegend)
                     .on('click', function () {
@@ -594,27 +576,11 @@ function loadPOIs() {
             else {
                 var msg = gettext("Please, scan a QR code to get here:") + ' ';
                 var photoIcon = qrPoint.point.panorama ? Panorama.renderIcon(qrPoint.point.id) : "";
-/*
-                qrMarker = L.marker(qrLoc, {
-                    bounceOnAdd: false,
-                    icon: DestinyIcon})
-*/
 
-                qrMarker = new cilogi.L.Marker(new L.latLng(qrLoc), {
-                    //title: popupTitle,
-                    fontIconSize: 1,
-                    fontIconName: "\uf041",
-                    fontIconColor: "red",
-                    fontIconFont: "awesome",
-                    opacity: 1
-                }).bindPopup(msg + qrPoint.point.description +
-                    " (" + gettext('floor') + ' ' + qrFloor.name + ", " +
-                        qrPoint.enclosure.name + ')' + photoIcon + SocialMenu.renderIcon(qrPoint.point.id))
+                qrMarker = L.marker(qrLoc, {
+                    icon: destIcon}).bindPopup(msg + '<br>'+ qrPoint.point.description + photoIcon + SocialMenu.renderIcon(qrPoint.point.id))
                     .on('click', function () {
                         LocalStorageHandler.setPrevDest(this);
-
-//                        drawRoute(qrPoint.point.id, qrFloor.sX, qrFloor.sY, this.poid, this.psX, this.psY);
-
                         bindContent(this);
                     });
             }
@@ -676,37 +642,14 @@ function initMap(qrPoint) {
             map.setMaxBounds(map.getBounds());
             qrMarker.openPopup();
 
-/*
-            map.setMaxBounds(qrFloor.bounds);
-//            if (!destMarker) {
-            map.setView(qrLoc, 0);
-            qrMarker.openPopup();
-*/
             if (qrPoint.point.coupon) {
                 $('div.leaflet-popup-content-wrapper').addClass('withCoupon');
             }
             bindContent(qrMarker);
 
-            /*
-             } else {
-             map.setView(destLoc, 0);
-             destMarker.openPopup({autoPanPadding:(10,10)});
-
-             }
-             */
         }
 
     }
-
-    /*
-
-     L.marker(qrLoc, {icon: txtIcon})
-     //    L.polyline(qrLoc, qrLoc)
-     .bindLabel('Demo text!', { noHide: true })
-     .addTo(qrFloor.layer)
-     //.addTo(map)
-     .showLabel();
-     */
 
     map.removeLayer(totalPois);
     map.addLayer(qrFloor.layer);
@@ -720,8 +663,6 @@ function initMap(qrPoint) {
         bindContent(destMarker);
     }
     loadedLabels = true;
-//    map.invalidateSize();
-
 }
 
 
@@ -848,7 +789,6 @@ function changeFloor(e) {
         }
         bindContent(qrMarker);
     }
-
     if (map.hasLayer(destMarker)) {
         destMarker.openPopup();
         if (route.fields.destiny.fields.coupon) {
@@ -856,8 +796,6 @@ function changeFloor(e) {
         }
         bindContent(destMarker);
     }
-
-
 }
 
 
@@ -881,16 +819,12 @@ function preDrawRoute(origin, qrFloor, destination, destinationFloor) {
         }
     }
     drawRoute(origin, osX, osY, destination, dsX, dsY);
-//    map.invalidateSize();
 
 }
 
 
 //Creación de las rutas (con subrutas correspondientes), desde el origen hasta el POI destino
 function drawRoute(org, osX, osY, dst, sX, sY) {
-
-//    Logger.log('calculando ruta..');
-//    Logger.log('--------------');
 
     if (org == dst)
         return;
@@ -909,16 +843,6 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
         alert(gettext('We are sorry, that route does not exist.'));
         return;
     }
-
-
-//    Logger.log('DESTINO:');
-//    Logger.log('org: ' + org);
-//    Logger.log('osX: ' + osX);
-//    Logger.log('osY: ' + osY);
-//    Logger.log('dst: ' + dst);
-//    Logger.log('sX: ' + sX);
-//    Logger.log('sY: ' + sY);
-//    Logger.log('-------');
 
     for (pos = 0; pos < $('input[type=checkbox].leaflet-control-layers-selector').length; pos++) {
         if ($('input[type=checkbox].leaflet-control-layers-selector:eq(' + pos + ')').is(':checked')) {
@@ -955,19 +879,7 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
     }
     destLegend += SocialMenu.renderIcon(dst);
 
-
     destLoc = [(route.fields.destiny.fields.row) * sY + sY, route.fields.destiny.fields.col * sX + sX];
-/*
-    destMarker = new cilogi.L.Marker(new L.latLng(destLoc),  {
-        fontIconSize: 1,
-        fontIconName: "\uf041",
-        fontIconColor: "red",
-        fontIconFont: "awesome",
-        opacity: 1
-    }).bindPopup(destLegend, {}).on('click', function () {
-            bindContent(this);
-        });
-*/
 
     destMarker = L.marker(destLoc, { bounceOnAdd: false,
         icon: destIcon})
@@ -976,11 +888,7 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
             bindContent(this);
         });
 
-
     destMarker.panorama = '/media/' + route.fields.destiny.fields.panorama;
-
-//autoPanPadding: new L.Point(0, 10),
-//offset: new L.Point(0, -24)
     for (var i in floors) {
         if (route.fields.destiny.fields.floor == floors[i].id) {
             floors[i].layer.addLayer(destMarker);
@@ -1066,7 +974,6 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
             if (floorToHide === floors[f].id) {
                 map.removeLayer(floors[f].layer);
 
-
                 for (var l in floors[f].labels) {
                     layersControl.removeLayer(floors[f].labels[l].layer);
                     map.removeLayer(floors[f].labels[l].layer);
@@ -1134,7 +1041,6 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
                     }
                 }
 
-
                 map.addLayer(floors[f].layer);
                 map.addLayer(floors[f].photo);
                 map.setView(arrow[f].getBounds().pad(15).getCenter(), 0);
@@ -1187,22 +1093,6 @@ var setArrow = function (flecha, idFloor) {
         arrowsOffset = 0;
 };
 
-/*
- var setArrow = function (flecha, idFloor) {
-
- flecha.setPatterns([
- {offset: arrowsOffset + '%', repeat: 0, symbol: new L.Symbol.Marker({rotate: true, markerOptions: {
- icon: L.icon({
- iconUrl: '/media/arrow1.png',
- iconAnchor: [12, 12]
- })
- }})}]);
- if (++arrowsOffset > 100)
- arrowsOffset = 0;
- };
- */
-
-
 function isCategoryVisibleOnButtons(categ_name) {
     return (categ_name !== "Parquing" && categ_name !== "Parking") &&
         (categ_name !== "Bloqueantes" && categ_name !== "Blockers") &&
@@ -1241,25 +1131,9 @@ Map.locateCar = function () {
             floor_x = floors[i];
             carLoc = [((miCoche.point.row) * floor_x.scaleY) + floor_x.scaleY,
                 (miCoche.point.col * floor_x.scaleX) + floor_x.scaleX];
-/*
-            carMarker = new cilogi.L.Marker(new L.latLng(carLoc),  {
-                fontIconSize: 1,
-                fontIconName: "\uf041",
-                fontIconColor: "cadetblue",
-                fontIconFont: "awesome",
-                opacity: 1
-            }).bindPopup(gettext("My car"));
-*/
             carMarker = new L.marker(carLoc, {
                 icon: carIcon})
                 .bindPopup(gettext("My car"));
-
-/*
-            carMarker = new L.marker(carLoc, { bounceOnAdd: false,
-                icon: CarIcon})
-                .bindPopup(gettext("My car"));
-*/
-
             carMarker.on('click', function () {
                 LocalStorageHandler.setPrevDest(this);
                 if (Panorama.opened) Panorama.close();
@@ -1343,11 +1217,8 @@ Map.locatePosition = function () {
                 flechita = arrowHead[i];
                 arrowAnim(flechita, floor_x.name);
                 map.setView(arrow[i].getBounds().pad(15).getCenter(), 0);
-//                map.invalidateSize();
             } else {
-//                Logger.log('No ruta..');
                 map.setView(qrLoc, 0);
-//                map.invalidateSize();
             }
 
         } else {
@@ -1372,7 +1243,6 @@ Map.locatePosition = function () {
             jQuery('input[type=checkbox].leaflet-control-layers-selector:eq(' + lab + ')').prop("checked", true);
         }
     }
-//        map.addLayer(qrFloor.photo);
     map.addLayer(qrFloor.layer);
     qrMarker._bringToFront();
     qrMarker.openPopup();
@@ -1392,29 +1262,6 @@ if (map.hasLayer(destMarker)) {
 
 
 Map.resize = function () {
-/*
-//PRUEBAS ZOOM-POSICION EN 'ORIENTATIONCHANGE'
-
-//    var newDim = Math.min($(window).innerWidth(), $(window).innerHeight()),
-    var newW = $(window).innerWidth(),
-        newH = $(window).innerHeight(),
-        imgW = $('img.leaflet-image-layer').width(),
-        imgH = $('img.leaflet-image-layer').height();
-
-//        newBounds= new L.LatLngBounds(new L.LatLng(0, 0), new L.LatLng(newH, newW));
-
-    $('div.leaflet-map-pane').css({'left': (newW-imgW)/2+'px','top':(newH-imgH)/2+'px'});
-    Logger.log(map.bounds._northEast + ' : ' + map.bounds._southWest);
-    Logger.log($(window).innerWidth());
-    Logger.log($(window).innerHeight());
-//    map.fitBounds(newBounds);
-    map.setMaxBounds(newBounds);
-
-//    map.setView(newBounds().getCenter(), map.getZoom());
-//    map.options.maxBounds = newBounds;
-
-*/
-
     Coupon.calculateCouponArea();
     Panorama.resize();
 };
