@@ -1585,4 +1585,4 @@ for (var i in micuad.geometry.coordinates) {
 }
 */
 
-//L.marker([300, 300.57], {icon: myCarIcon}).addTo(map);
+L.marker([300, 300.57], {icon: carIcon}).addTo(map);

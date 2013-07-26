@@ -1337,7 +1337,7 @@ div.cilogiMarker > span{
 .leaflet-popup  {
     margin-bottom: 1.9em !important;
 }
-
+/*
 .my-div-icon {
     margin-left: -6px;
     margin-top: -6px;
@@ -1353,7 +1353,36 @@ div.cilogiMarker > span{
     font-size: 3em;
     text-align: center;
     line-height: 1.2em;
+}*/
+
+.my-div-icon {
+    width: 1.5em !important;
+    height: 1.5em !important;
+    z-index: 475;
+    background: cadetblue;
+    color:white;
+    font-family: 'FontAwesome';
+    font-size: 3em;
+    text-align: center;
+    line-height: 1.5em;
+    border-radius: 50% 50% 75% 75%;
+    opacity: 0.7;
 }
+
+
+.my-div-icon:after {
+    content: "";
+    position: absolute;
+    top: 87%;
+    left: 0.25em;
+    border-top: 0.5em solid cadetblue;
+/*
+    border-top-color: inherit;
+*/
+    border-left: 0.5em solid transparent;
+    border-right: 0.5em solid transparent;
+}
+
 
 .poi-icon:before{
     content:"\f041";
@@ -1495,4 +1524,51 @@ div#cupones {
     bottom: -11rem;
     z-index: 6;
 }
+*/
+
+
+
+
+/*
+
+.triangle-isosceles {
+    width: 0;
+    height: 0;
+    position: absolute;
+    padding: 1em;
+    margin: 0;
+    color: black;
+    -webkit-border-radius: 0.3em;
+    -moz-border-radius: 0.3em;
+    border-radius: 0.3em;
+
+    -moz-box-shadow: 0 0 0 1px #000000;
+    -webkit-box-shadow: 0 0 0 1px #000000;
+    -o-box-shadow: 0 0 0 1px #000000;
+    -ms-box-shadow: 0 0 0 1px #000000;
+}
+
+.triangle-isosceles-after {
+    position: absolute;
+    bottom: -0.5em; */
+/* value = - border-top-width - border-bottom-width *//*
+
+
+left: 0.5em; */
+/* controls horizontal position *//*
+
+
+border-width: 0.5em 0.5em 0; */
+/* vary these values to change the angle of the vertex *//*
+
+
+border-style: solid;
+
+display: block;
+width: 0em;
+
+border-right-color: transparent;
+border-left-color: transparent;
+    }
+
 */

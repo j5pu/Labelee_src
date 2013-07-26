@@ -79,7 +79,7 @@
     <script src="{{ STATIC_URL }}js/helpers/resource.js"></script>
       <script src="{{ STATIC_URL }}js/helpers/dashboard.js"></script>
 
-    <!--script src="{{ STATIC_URL }}js/log/logger.js"></script-->
+    <script src="{{ STATIC_URL }}js/log/logger.js"></script>
 
 {#    {% include "_aardwolf.html" %}#}
 
@@ -175,6 +175,8 @@
             COUPONS
         </a>
     </div>{% endcomment %}
+
+
     <div id="cupones">
         <img id="cupon-img" src="/media/cupones_lab.png"
              alt="Cupones" usemap="#cupon">
@@ -182,13 +184,12 @@
             <area shape="poly" coords="" href="#" alt="{% trans "Cupones" %}" title="Cupon">
         </map>
 
-{% comment %}
         <!-- Lets create a CSS3 stamp -->
-        <div class="stamp" id="stamp1">
+ {% comment %}       <div class="stamp" id="stamp1">
             <!-- the image -->
             <div class="miKupon"></div>
         </div>
-
+ {% endcomment %}       {% comment %}
         <div class="stamp" id="stamp2">
             <!-- the image -->
             <div class="miKupon"></div>
