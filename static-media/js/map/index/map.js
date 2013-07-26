@@ -97,12 +97,21 @@ var flechita = null;
 
 
 function loadIcon(color, shape) {
+    var icon = L.AwesomeMarkers.icon({
+        icon: shape,
+        color: color
+    });
+    return icon;
+}
+/*
+function loadIcon(color, shape) {
     var icon = new L.AwesomeMarkers.icon({
         icon: shape,
         color: color
     });
     return icon;
 }
+*/
 
 //Carga de datos globales
 var qrPoint = {
@@ -435,6 +444,7 @@ function loadPOIs() {
             popupTitle += SocialMenu.renderIcon(id);
 
 
+/*
             floors[fl].pois[j].marker = new L.Marker(loc, {
                 icon: loadIcon(colorIcon, shapeIcon)
 //                title: popupTitle,
@@ -445,6 +455,24 @@ function loadPOIs() {
 //                opacity: 1
             });
 
+
+ poiIcon = L.divIcon({className: 'my-div-icon poi-icon'}),
+ qrMarker = L.marker(qrLoc, {
+ icon: destIcon})
+
+*/
+
+
+
+                floors[fl].pois[j].marker = new L.Marker(loc, {
+                icon: loadIcon(colorIcon, shapeIcon)
+//                title: popupTitle,
+//                fontIconSize: 1,
+//                fontIconName:  "\uf041",
+//                fontIconColor: colorIcon,
+//                fontIconFont: "awesome",
+//                opacity: 1
+            });
 
             floors[fl].pois[j].marker.options.icon.options.color = colorIcon;
             floors[fl].pois[j].marker.poid = id;

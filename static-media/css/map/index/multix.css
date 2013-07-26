@@ -1210,8 +1210,9 @@ leaflet-marker-icon{
     font-family: 'FontAwesome';
     background: rgb(6, 84, 150);
 }
-.locate-icon:before {
+.locate-icon::before {
     content: "\f124";
+    -webkit-transform:rotate(45deg) ;
 }
 .locate-icon:after {
     border-top-color: rgb(6, 84, 150);
