@@ -58,7 +58,7 @@ a {
     margin: 0.5em 0.4em;
 }
 
-a.link-1 {
+.link-1 {
     background: rgb(173, 157, 101);
     padding: 0.3em 1em;
     margin: 0;
@@ -66,14 +66,23 @@ a.link-1 {
     display: block;
 }
 
-a.link-1:hover
+.link-1:hover
 {
     text-decoration: none;
     background: rgb(122, 113, 81);
     color: #FEFAF1;
 }
+a:hover
+{
+    text-decoration: none;
+}
 
-a.link-2
+li
+{
+    list-style: none;
+}
+
+.link-2
 {
     background: rgb(196, 190, 170);
     padding: 0.3em 1em;
@@ -83,7 +92,7 @@ a.link-2
     display: block;
     border: 2px solid rgb(175, 170, 155);
 }
-a.link-2:hover
+.link-2:hover
 {
     background: #D9D4C7;
     text-decoration: none;

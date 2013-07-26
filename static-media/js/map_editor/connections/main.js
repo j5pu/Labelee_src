@@ -93,8 +93,18 @@ var Connections = {
         var a = Connections.$e.aristas.select1[0].options;
         var a1 = a[Connections.$e.aristas.select1[0].selectedIndex];
         var a2 = Connections.$e.aristas.select2[0].options[Connections.$e.aristas.select2[0].selectedIndex];
+        var repetido = false;
 
-        if (a1.value!=a2.value){
+        //recorrer la lista de connections si hay alguna igual repetido = true
+//        var connections = new ConnectionResource().readFromEnclosure(Connections.enclosure_id);
+//        for(var i in connections)
+//        {
+//            var connection = connections[i];
+//            var init = connection.init;
+//            var end = connection.end;
+//            if (init==a1.value && end==a2.value) repetido = true;
+//        }
+        if (a1.value!=a2.value && !repetido){
             var data = {
                 init: a1.value,
                 end: a2.value

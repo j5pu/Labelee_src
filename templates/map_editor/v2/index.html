@@ -18,25 +18,65 @@
 
     {% csrf_token %}
 
-    {% include "_lang_selector.html" %}
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="navbar-inner">
+            <div class="container">
+                <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </a>
+                {% include "_lang_selector.html" %}
+                <a class="brand" href="#">{% trans "Administración de recintos" %}</a>
+
+                <div class="nav-collapse">
+                <ul class="nav">
+                    <li><a href="#"><i class="icon-white icon-home"></i> Enclosure Manager</a></li>
+                    <li><a href="#"><i class="icon-white icon-picture"></i> Enclosure Site</a>
+                    </li>
+                    <li class="active"><a href="#"><i class="icon-white icon-play-circle"></i>
+                        Labelee App</a></li>
+                    <li><a href="#"><i class="icon-white icon-book"></i> Anything</a></li>
+                </ul>
+                <ul class="nav pull-right">
+                    <li><p class="navbar-text"><i class="icon-white icon-download"></i> Download:</p></li>
+                    <li>
+                        <div class="btn-group">
+                            <a class="btn btn-small btn-primary" href="#">PDF</a>
+                            <a class="btn btn-small btn-primary" href="#">E-MAIL</a>
+                        </div>
+                    </li>
+                    <li>
+                        <!-- CAJITA DE LOGOUT -->
+                        {% if user.is_authenticated %}
+                            <div id="logout" class="box box-1">
+                                {% trans "Bienvenido" %}, {{ user.username }} |
+                                <a href="{% url 'django.contrib.auth.views.logout' %}">Logout</a>
+                            </div>
+                        {% endif %}
+                    </li>
+                </ul>
+            </div>
+            <!--/.nav-collapse -->
 
 
-    <h1>
-        {% trans "Administración de recintos" %}
-    </h1>
+        </div>
+    </div>
+</div>
+
+
+
+    <div>
+        <h1>{% trans "Administración de recintos" %}</h1>
+        <span class="link-1 add_new" ng-click="show_create_enclosure_form()">
+            <i class="icon-plus-sign"></i>
+            {% trans "Agregar nuevo recinto" %}
+        </span>
+    </div>
 
 
     {% if user.logo %}
         <img src="{{ MEDIA_URL }}{{ user.logo }}">
-    {% endif %}
-
-
-    <!-- CAJITA DE LOGOUT -->
-    {% if user.is_authenticated %}
-        <div id="logout" class="box box-1">
-            {% trans "Bienvenido" %}, {{ user.username }} |
-            <a href="{% url 'django.contrib.auth.views.logout' %}">Logout</a>
-        </div>
     {% endif %}
 
 
@@ -47,8 +87,6 @@
         <tr>
             <th>
                 <span>{% trans "Recintos" %}</span>
-                <i class="icon-plus-sign" ng-click="show_create_enclosure_form()"></i>
-                <i class="icon-sort" ng-click="reverse = !reverse"></i>
             </th>
             <th>
                 <span>{% trans "Plantas" %}</span>
@@ -60,17 +98,14 @@
         </thead>
 
         <tbody>
-        <tr ng-repeat="enclosure in enclosures | orderBy:'name':reverse"
+        <tr
+                ng-repeat="enclosure in enclosures | orderBy:'name':reverse"
             ng-controller="EnclosureCtrl">
 
             <td class="enclosure"
                 ng-mouseover="hovered = true" ng-mouseleave="hovered = false">
 
                 <h2>[[enclosure.name]]</h2>
-
-                <button class="btn" ng-click="show_edit_form()">
-                    {% trans "Editar" %}
-                </button>
 
                 <h4 ng-show="enclosure.twitter_account">@[[enclosure.twitter_account]]</h4>
                 <img class="logo" ng-src="[[enclosure.logo]]">
@@ -83,14 +118,15 @@
                 <div class="poi_count">{% trans "Número de POIS/QRs:" %} [[enclosure.poi_count]]</div>
                 <div class="floor_count">{% trans "Número de plantas:" %} [[enclosure.floors.length]]</div>
 
-                <div class="btn-group">
-                    <a class="btn link-2" ng-click="calculateRoutes()">
-                        <i class="icon-road icon-white"></i> {% trans "Calcular rutas" %}
-                    </a>
-                    <a class="btn link-2" id="aristas" href='edit/connections/[[enclosure.id]]'>
-                        <i class="icon-pencil icon-white"></i> {% trans "Conexiones entre plantas" %}
-                    </a>
-                </div>
+                <button class="btn link-2" ng-click="show_edit_form()">
+                    {% trans "Editar" %}
+                </button>
+                <a class="btn link-2" ng-click="calculateRoutes()">
+                    <i class="icon-road icon-white"></i> {% trans "Calcular rutas" %}
+                </a>
+                <a class="btn link-2" id="aristas" href='edit/connections/[[enclosure.id]]'>
+                    <i class="icon-pencil icon-white"></i> {% trans "Conexiones entre plantas" %}
+                </a>
             </td>
 
             <!-- PLANTAS -->
@@ -98,65 +134,80 @@
                 ng-mouseover="hovered = true" ng-mouseleave="hovered = false"
                 ng-controller="FloorListCtrl">
 
-                <i class="icon-plus-sign" ng-click="show_create_floor_form()"></i>
-                <i class="icon-sort"
-                   ng-click="reverse = !reverse"
-                   ng-show="enclosure.floors.length > 2"></i>
-
                 <!-- CADA PLANTA -->
                 <table ng-hide="enclosure.floors.length == 0">
                     <thead>
                     <tr>
-                        <th>{% trans "Número" %}</th>
-                        <th>{% trans "Nombre" %}</th>
-                        <th>{% trans "POIs" %}</th>
-                        <th></th>
+                        <th>{% trans "Plantas" %}</th>
+                        <th>{% trans "Puntos de interés" %}</th>
                     </tr>
                     </thead>
                     <tbody>
                         <tr ng-repeat="floor in enclosure.floors | orderBy:'floor_number':reverse"
-                            ng-controller="FloorCtrl">
+                            ng-controller="FloorCtrl" class="floor">
                             <td>
-                                [[floor.floor_number]]
-                            </td>
-                            <td>
-                                <a class="link-2"
-                                   href="[[urls.map_editor.edit]]/[[floor.id]]">
-                                    <span>[[floor.name]]</span>
-                                </a>
+                                [[floor.name]]
+                                <button class="btn link-2" ng-click="show_edit_floor_form()">
+                                    {% trans "Editar" %}
+                                </button>
                             </td>
                             <td>
                                 [[floor.poi_count]]
-                            </td>
-                            <td>
-                                <button class="btn" ng-click="show_edit_floor_form()">
-                                    {% trans "Editar" %}
-                                </button>
+                                <a href="[[urls.map_editor.edit]]/[[floor.id]]">
+                                   <button class="btn link-2">{% trans "Editar" %}</button>
+                                </a>
                             </td>
                         </tr>
                     </tbody>
                 </table>
+
+                <span class="link-1" ng-click="show_create_floor_form()">
+                    <i class="icon-plus-sign"></i>
+                    {% trans "Agregar nueva planta" %}
+                </span>
             </td>
 
             <!-- CATEGORÍAS -->
             <td class="categories" ng-controller="CategoryListCtrl">
-                <i class="icon-plus-sign" ng-click="show_create_category_form()"></i>
-                <i class="icon-sort"
-                   ng-click="reverse = !reverse"
-                   ng-show="enclosure.label_categories.length > 5"></i>
+                <div>
+                    <span>{% trans "Genéricas" %}</span>
+                    <!-- GENÉRICAS -->
+                    <ul>
+                        <li ng-repeat="category in enclosure.label_categories | orderBy:'name'"
+                            ng-show="!category.enclosure" ng-controller="CategoryCtrl">
+                            <span>
+                                [[category.name]] ([[category.poi_count]])
+                                <button class="btn link-2"
+                                        ng-show="user_is_staff"
+                                        ng-click="show_edit_category_form()">
+                                    {% trans "Editar" %}
+                                </button>
+                            </span>
+                        </li>
+                    </ul>
+                </div>
+                <div>
+                    <span>{% trans "Personalizadas" %}</span>
+                    <ul>
+                        <li class="category" ng-repeat="category in enclosure.label_categories | orderBy:'name'"
+                            ng-show="category.enclosure" ng-controller="CategoryCtrl">
+                            <span>
+                                [[category.name]] ([[category.poi_count]])
+                                <button class="btn link-2"
+                                        ng-click="show_edit_category_form()">
+                                    {% trans "Editar" %}
+                                </button>
+                            </span>
+                        </li>
+                    </ul>
+                </div>
 
-                <ul>
-                    <li ng-repeat="category in enclosure.label_categories | orderBy:'name'"
-                        ng-controller="CategoryCtrl">
-                        [[category.name]] ([[category.poi_count]])
+                <br>
 
-                        <button class="btn"
-                                ng-show="category.enclosure || user_is_staff"
-                                ng-click="show_edit_category_form()">
-                            {% trans "Editar" %}
-                        </button>
-                    </li>
-                </ul>
+                <span class="link-1" ng-click="show_create_category_form()">
+                    <i class="icon-plus-sign" ></i>
+                    {% trans "Añadir nueva categoría" %}
+                </span>
 
 {#                <div class="forms">#}
 {#                    <div ng-include src="'category_forms'"></div>#}

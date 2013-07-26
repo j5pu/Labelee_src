@@ -51,7 +51,7 @@ function FloorListCtrl($scope, $rootScope)
 {
 	$scope.waiting_response = false;
     $scope.hovered = false;
-    $scope.reverse = false;
+    $scope.desc = true;
 
     $scope.show_create_floor_form = function() {
         $rootScope.$broadcast('show_create_floor_form', $scope.enclosure);
