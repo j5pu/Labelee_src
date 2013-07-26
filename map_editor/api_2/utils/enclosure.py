@@ -21,6 +21,6 @@ def getEnclosureForManager(enclosure_id):
         enclosure_dict['floors'].append(floor_dict)
 
     enclosure_dict['poi_count'] = enclosure.count_pois()
-    enclosure_dict['label_categories'] = getLabelCategoriesForManager(enclosure.id)
+    # enclosure_dict['label_categories'] = getLabelCategoriesForManager(enclosure.id)
 
     return enclosure_dict

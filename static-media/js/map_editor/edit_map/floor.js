@@ -380,23 +380,25 @@ var Floor = {
         var label = Floor.saved_labels[Label.keys[Label.i]];
 
         // Si la etiqueta contiene imágen
-        if(label.img)
-        {
-            var img = new Image();
-            img.src = label.img;
-            img.onload = function(){
-                Floor.saved_labels[Label.keys[Label.i]].loaded_img = null;
-                Floor.saved_labels[Label.keys[Label.i]].loaded_img = img;
-                Label.i++;
-                Floor._loopLabels();
-            };
-        }
-        else
-        {
+
+        // NO ES NECESARIO IMAGEN PARA CADA ETIQUETA
+//        if(label.img)
+//        {
+//            var img = new Image();
+//            img.src = label.img;
+//            img.onload = function(){
+//                Floor.saved_labels[Label.keys[Label.i]].loaded_img = null;
+//                Floor.saved_labels[Label.keys[Label.i]].loaded_img = img;
+//                Label.i++;
+//                Floor._loopLabels();
+//            };
+//        }
+//        else
+//        {
             Floor.saved_labels[Label.keys[Label.i]].loaded_img = null;
             Label.i++;
             Floor._loopLabels();
-        }
+//        }
     },
 
 
@@ -404,7 +406,7 @@ var Floor = {
     {
         // Obtenemos todas las etiquetas que contiene la planta a cargar, y así evitar
         // llamar a BD cada vez que queramos pedir la etiqueta de cada punto
-        Floor.saved_labels = new LabelResource().readFromFloor(Floor.data.id);
+        Floor.saved_labels = labelResource.readFromFloor(Floor.data.id);
 
         // Carga todas las imágenes para
         Label.i = 0;

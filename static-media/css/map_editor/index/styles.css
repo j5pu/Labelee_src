@@ -51,6 +51,32 @@ td.floors table td
     width: 100%;
 }
 
+#search_box
+{
+    float: left;
+    margin-top: 2em;
+}
+
+#search_box input
+{
+    margin: -0.3em 0 0 0.1em;
+}
+
+.floor td {
+    padding: 0.4em !important;
+}
+
+.floor td *
+{
+    display: inline-block !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.floor button, .floor a {
+    margin: 0 0.9em !important;
+    float: right;
+}
 
 
 td.pois
@@ -106,15 +132,20 @@ td *
 .enclosure h2
 {
     display: inline-block;
+    margin: 0;
 }
 
 .enclosure h4
 {
     color: #5C5035;
+    margin: 0;
 }
 
 .enclosure img.logo{
     max-height: 120px;
+    display: inline-block;
+    vertical-align: top;
+    max-width: 255px;
 }
 
 .enclosure .urls a{
@@ -130,6 +161,21 @@ td *
 .enclosure td
 {
     width: 33.3%;
+}
+
+.enclosure img, .enclosure > div
+{
+    display: inline-block;
+}
+
+.enclosure
+{
+    vertical-align: middle !important;
+}
+
+.enclosure .info
+{
+    display: inline-block;
 }
 
 #dialogs
@@ -157,8 +203,8 @@ td *
 
 .add_new
 {
-    margin: 1em 0 2em 0;
-    display: inline-block;
+    margin: 1.75em 0 0em 1.9em;
+    float: left;
 }
 
 th span, td span

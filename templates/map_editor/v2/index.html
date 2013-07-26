@@ -64,25 +64,25 @@
     </div>
 </div>
 
-
-
-    <div>
-        <h1>{% trans "Administración de recintos" %}</h1>
-        <span class="link-1 add_new" ng-click="show_create_enclosure_form()">
-            <i class="icon-plus-sign"></i>
-            {% trans "Agregar nuevo recinto" %}
-        </span>
-    </div>
-
+    <h1>{% trans "Administración de recintos" %}</h1>
 
     {% if user.logo %}
         <img src="{{ MEDIA_URL }}{{ user.logo }}">
     {% endif %}
 
 
-    <table id="enclosures"
-           class="table table-hover"
-           ng-controller="EnclosureListCtrl">
+    <div ng-controller="EnclosureListCtrl">
+        <label id="search_box">{% trans "Buscar recinto" %}:
+            <input type="text" ng-model="search.name"
+                   placeholder="{% trans "Nombre del recinto" %}..">
+        </label>
+
+        <span class="link-1 add_new" ng-click="show_create_enclosure_form($event)">
+            <i class="icon-plus-sign"></i>
+            {% trans "Agregar nuevo recinto" %}
+        </span>
+
+        <table id="enclosures" class="table table-hover">
         <thead>
         <tr>
             <th>
@@ -91,42 +91,42 @@
             <th>
                 <span>{% trans "Plantas" %}</span>
             </th>
-            <th>
-                <span>{% trans "Categorías" %}</span>
-            </th>
         </tr>
         </thead>
 
         <tbody>
-        <tr
-                ng-repeat="enclosure in enclosures | orderBy:'name':reverse"
+        <tr ng-repeat="enclosure in enclosures | orderBy:'name':reverse | filter:search"
             ng-controller="EnclosureCtrl">
 
             <td class="enclosure"
                 ng-mouseover="hovered = true" ng-mouseleave="hovered = false">
 
-                <h2>[[enclosure.name]]</h2>
+                <img ng-show="enclosure.logo" class="logo" ng-src="[[enclosure.logo]]">
+                <div class="info">
+                    <h2>[[enclosure.name]]</h2>
 
-                <h4 ng-show="enclosure.twitter_account">@[[enclosure.twitter_account]]</h4>
-                <img class="logo" ng-src="[[enclosure.logo]]">
-                <div class="urls">
-                    <a ng-show="enclosure.url_enclosure"
-                       href="[[enclosure.url_enclosure | url]]">{% trans  "Web del recinto" %}</a>
-                    <a ng-show="enclosure.url_dashboard"
-                       href="[[enclosure.url_dashboard | url]]">{% trans  "Ver dashboard" %}</a>
+                    <h4 ng-show="enclosure.twitter_account">@[[enclosure.twitter_account]]</h4>
+                    <div class="urls">
+                        <a ng-show="enclosure.url_enclosure"
+                           href="[[enclosure.url_enclosure | url]]">{% trans  "Web del recinto" %}</a>
+                        <a ng-show="enclosure.url_dashboard"
+                           href="[[enclosure.url_dashboard | url]]">{% trans  "Ver dashboard" %}</a>
+                    </div>
+
+                    <div class="buttons">
+                        <button class="btn link-2" ng-click="show_edit_form($event)">
+                            {% trans "Editar" %}
+                        </button>
+                        <a class="btn link-2" ng-click="calculateRoutes()">
+                            <i class="icon-road icon-white"></i> {% trans "Calcular rutas" %}
+                        </a>
+                        <a class="btn link-2" id="aristas" href='edit/connections/[[enclosure.id]]'>
+                            <i class="icon-pencil icon-white"></i> {% trans "Conexiones entre plantas" %}
+                        </a>
+                    </div>
                 </div>
-                <div class="poi_count">{% trans "Número de POIS/QRs:" %} [[enclosure.poi_count]]</div>
-                <div class="floor_count">{% trans "Número de plantas:" %} [[enclosure.floors.length]]</div>
 
-                <button class="btn link-2" ng-click="show_edit_form()">
-                    {% trans "Editar" %}
-                </button>
-                <a class="btn link-2" ng-click="calculateRoutes()">
-                    <i class="icon-road icon-white"></i> {% trans "Calcular rutas" %}
-                </a>
-                <a class="btn link-2" id="aristas" href='edit/connections/[[enclosure.id]]'>
-                    <i class="icon-pencil icon-white"></i> {% trans "Conexiones entre plantas" %}
-                </a>
+
             </td>
 
             <!-- PLANTAS -->
@@ -138,8 +138,8 @@
                 <table ng-hide="enclosure.floors.length == 0">
                     <thead>
                     <tr>
-                        <th>{% trans "Plantas" %}</th>
-                        <th>{% trans "Puntos de interés" %}</th>
+                        <th>{% trans "Plantas" %} ([[enclosure.floors.length]])</th>
+                        <th>{% trans "Puntos de interés" %} ([[enclosure.poi_count]])</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -147,77 +147,32 @@
                             ng-controller="FloorCtrl" class="floor">
                             <td>
                                 [[floor.name]]
-                                <button class="btn link-2" ng-click="show_edit_floor_form()">
-                                    {% trans "Editar" %}
+                                <button class="btn link-2" ng-click="show_edit_floor_form($event)">
+                                    {% trans "Editar planta" %}
                                 </button>
                             </td>
                             <td>
                                 [[floor.poi_count]]
                                 <a href="[[urls.map_editor.edit]]/[[floor.id]]">
-                                   <button class="btn link-2">{% trans "Editar" %}</button>
+                                   <button class="btn link-2">{% trans "Editar POIs" %}</button>
                                 </a>
                             </td>
                         </tr>
                     </tbody>
                 </table>
 
-                <span class="link-1" ng-click="show_create_floor_form()">
+                <span class="link-1" ng-click="show_create_floor_form($event)">
                     <i class="icon-plus-sign"></i>
                     {% trans "Agregar nueva planta" %}
                 </span>
             </td>
 
-            <!-- CATEGORÍAS -->
-            <td class="categories" ng-controller="CategoryListCtrl">
-                <div>
-                    <span>{% trans "Genéricas" %}</span>
-                    <!-- GENÉRICAS -->
-                    <ul>
-                        <li ng-repeat="category in enclosure.label_categories | orderBy:'name'"
-                            ng-show="!category.enclosure" ng-controller="CategoryCtrl">
-                            <span>
-                                [[category.name]] ([[category.poi_count]])
-                                <button class="btn link-2"
-                                        ng-show="user_is_staff"
-                                        ng-click="show_edit_category_form()">
-                                    {% trans "Editar" %}
-                                </button>
-                            </span>
-                        </li>
-                    </ul>
-                </div>
-                <div>
-                    <span>{% trans "Personalizadas" %}</span>
-                    <ul>
-                        <li class="category" ng-repeat="category in enclosure.label_categories | orderBy:'name'"
-                            ng-show="category.enclosure" ng-controller="CategoryCtrl">
-                            <span>
-                                [[category.name]] ([[category.poi_count]])
-                                <button class="btn link-2"
-                                        ng-click="show_edit_category_form()">
-                                    {% trans "Editar" %}
-                                </button>
-                            </span>
-                        </li>
-                    </ul>
-                </div>
 
-                <br>
-
-                <span class="link-1" ng-click="show_create_category_form()">
-                    <i class="icon-plus-sign" ></i>
-                    {% trans "Añadir nueva categoría" %}
-                </span>
-
-{#                <div class="forms">#}
-{#                    <div ng-include src="'category_forms'"></div>#}
-{#                </div>#}
-            </td>
         </tr>
         </tbody>
     </table>
 
-
+    </div>
 
 
     <!--
