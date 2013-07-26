@@ -415,8 +415,8 @@
                          -ms-user-select: none;
                          user-select: none;                         
                          */
-                         $(canvas).css("-webkit-touch-callout", "none");
-                         $(canvas).css("-webkit-user-select", "none");
+                        // $(canvas).css("-webkit-touch-callout", "none");
+                         //$(canvas).css("-webkit-user-select", "none");
                          $(canvas).css("-khtml-user-selec", "none");
                          $(canvas).css("-moz-user-select", "none");
                          $(canvas).css("-ms-user-select", "none");
@@ -425,7 +425,7 @@
 						$(canvas).bind("mouseupoutside", mouseup);
                          //$(canvas).bind("onselectstart", function (){return false;});
                          
-						$(canvas).bind("mousemove", function(event) {
+						$(canvas).hammer("drag", function(event) {
 							var pageX = event.pageX;
 							var o = $(this).data('ddpanorama');
 							if (o.mousedown == false)
@@ -437,7 +437,7 @@
 							event.preventDefault();
 							return false;
 						});
-						$(canvas).bind("touchstart", function(event) {
+						$(canvas).hammer("dragstart", function(event) {
 							var o = $(this).data('ddpanorama');
 							o.onmousedown(event.originalEvent.touches[0].pageX);
 						});

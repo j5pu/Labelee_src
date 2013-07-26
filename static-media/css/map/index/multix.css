@@ -1147,6 +1147,11 @@ button{
     background-color: transparent;
     color:#333;
 }
+
+button#close{
+    width: 4em;
+    height: 4em;
+}
 button.panorama{
     padding: 0px 3px;
 }
@@ -1359,14 +1364,15 @@ div.cilogiMarker > span{
     width: 1.5em !important;
     height: 1.5em !important;
     z-index: 475;
-    background: cadetblue;
     color:white;
     font-family: 'FontAwesome';
-    font-size: 3em;
+    font-size: 1.3em;
     text-align: center;
     line-height: 1.5em;
     border-radius: 50% 50% 75% 75%;
-    opacity: 0.7;
+    opacity: 1;
+    margin-top:-1.9em !important;
+    margin-left:-0.75em !important;
 }
 
 
@@ -1375,10 +1381,11 @@ div.cilogiMarker > span{
     position: absolute;
     top: 87%;
     left: 0.25em;
-    border-top: 0.5em solid cadetblue;
-/*
-    border-top-color: inherit;
-*/
+    border-top: 0.5em solid;
+
+    /*
+        border-top-color: inherit;
+    */
     border-left: 0.5em solid transparent;
     border-right: 0.5em solid transparent;
 }
@@ -1391,11 +1398,38 @@ div.cilogiMarker > span{
 
 .car-icon{
     font-family: 'carFont';
+    background: cadetblue;
 }
 .car-icon:before {
     content: "\31";
 }
+.car-icon:after {
+    border-top-color: cadetblue;
+}
 
+
+.locate-icon {
+    font-family: 'FontAwesome';
+    background: rgb(6, 84, 150);
+}
+.locate-icon:before {
+    content: "\f124";
+}
+.locate-icon:after {
+    border-top-color: rgb(6, 84, 150);
+}
+
+
+.dest-icon {
+    font-family: 'FontAwesome';
+    background: red;
+}
+.dest-icon:before {
+    content: "\f05b";
+}
+.dest-icon:after {
+    border-top-color: red;
+}
 /*
 poiIcon = L.divIcon({className: 'my-div-icon poi-icon'}),
 destIcon = L.divIcon({className: 'my-div-icon dest-icon'}),

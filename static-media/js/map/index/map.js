@@ -9,7 +9,7 @@ var myIcon = L.divIcon({className: 'my-div-icon'});
 var carIcon = L.divIcon({className: 'my-div-icon car-icon'}),
     poiIcon = L.divIcon({className: 'my-div-icon poi-icon'}),
     destIcon = L.divIcon({className: 'my-div-icon dest-icon'}),
-    locateIcon = L.divIcon({className: 'my-div-icon locate-icon'}),
+    originIcon = L.divIcon({className: 'my-div-icon locate-icon'}),
     entryIcon = L.divIcon({className: 'my-div-icon entry-icon'}),
     elevatorIcon = L.divIcon({className: 'my-div-icon elevator-icon'}),
     stairwayIcon = L.divIcon({className: 'my-div-icon stairway-icon'}),
@@ -312,8 +312,8 @@ var mapW = Math.min($(window).innerWidth(), $(window).innerHeight()),
     arrow = [],
     arrowHead = [],
     arrowOffset = 0,
-    qrMarker = new cilogi.L.Marker(),
-    destMarker = new cilogi.L.Marker(),
+    qrMarker = new L.Marker(),
+    destMarker = new L.Marker(),
     subpath = [],
     subarrow = [],
     floors = new FloorResource().readFromEnclosure(qrPoint.enclosure.id);
@@ -437,14 +437,14 @@ function loadPOIs() {
             popupTitle += SocialMenu.renderIcon(id);
 
 
-            floors[fl].pois[j].marker = new cilogi.L.Marker(new L.latLng(loc), {
- //               icon: loadIcon(colorIcon, shapeIcon),
-                title: popupTitle,
-                fontIconSize: 1,
-                fontIconName:  "\uf041",
-                fontIconColor: colorIcon,
-                fontIconFont: "awesome",
-                opacity: 1
+            floors[fl].pois[j].marker = new L.Marker(loc, {
+                icon: loadIcon(colorIcon, shapeIcon)
+//                title: popupTitle,
+//                fontIconSize: 1,
+//                fontIconName:  "\uf041",
+//                fontIconColor: colorIcon,
+//                fontIconFont: "awesome",
+//                opacity: 1
             });
 
 
@@ -569,7 +569,8 @@ function loadPOIs() {
                     originLegend = originLegend + Panorama.renderIcon(qrPoint.point.id);
                 originLegend += SocialMenu.renderIcon(qrPoint.point.id);
 
-                qrMarker = new cilogi.L.Marker(new L.latLng(qrLoc), {
+/*
+                qrMarker = new L.Marker(new L.latLng(qrLoc), {
                     //title: popupTitle,
                     fontIconSize: 1,
                     fontIconName: "\uf041",
@@ -580,14 +581,12 @@ function loadPOIs() {
                     .on('click', function () {
                         bindContent(this);
                     });
-/*
-                qrMarker = L.marker(qrLoc, { bounceOnAdd: false,
-                    icon: OriginIcon})
+*/
+                qrMarker = L.marker(qrLoc, {icon: originIcon})
                     .bindPopup(originLegend)
                     .on('click', function () {
                         bindContent(this);
                     });
-*/
 
                 qrMarker.panorama = qrPoint.point.panorama;
                 qrMarker.coupon = qrPoint.point.coupon;
@@ -958,6 +957,7 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
 
 
     destLoc = [(route.fields.destiny.fields.row) * sY + sY, route.fields.destiny.fields.col * sX + sX];
+/*
     destMarker = new cilogi.L.Marker(new L.latLng(destLoc),  {
         fontIconSize: 1,
         fontIconName: "\uf041",
@@ -967,14 +967,15 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
     }).bindPopup(destLegend, {}).on('click', function () {
             bindContent(this);
         });
-/*
+*/
+
     destMarker = L.marker(destLoc, { bounceOnAdd: false,
-        icon: DestinyIcon})
+        icon: destIcon})
         .bindPopup(destLegend, {autoPanPadding: new L.Point(0, 10)})
         .on('click', function () {
             bindContent(this);
         });
-*/
+
 
     destMarker.panorama = '/media/' + route.fields.destiny.fields.panorama;
 
@@ -1240,6 +1241,7 @@ Map.locateCar = function () {
             floor_x = floors[i];
             carLoc = [((miCoche.point.row) * floor_x.scaleY) + floor_x.scaleY,
                 (miCoche.point.col * floor_x.scaleX) + floor_x.scaleX];
+/*
             carMarker = new cilogi.L.Marker(new L.latLng(carLoc),  {
                 fontIconSize: 1,
                 fontIconName: "\uf041",
@@ -1247,6 +1249,11 @@ Map.locateCar = function () {
                 fontIconFont: "awesome",
                 opacity: 1
             }).bindPopup(gettext("My car"));
+*/
+            carMarker = new L.marker(carLoc, {
+                icon: carIcon})
+                .bindPopup(gettext("My car"));
+
 /*
             carMarker = new L.marker(carLoc, { bounceOnAdd: false,
                 icon: CarIcon})
@@ -1585,4 +1592,4 @@ for (var i in micuad.geometry.coordinates) {
 }
 */
 
-L.marker([300, 300.57], {icon: carIcon}).addTo(map);
+//L.marker([300, 300.57], {icon: carIcon}).addTo(map);
