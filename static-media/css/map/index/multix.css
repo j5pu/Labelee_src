@@ -863,6 +863,7 @@ span.locator
 {
     background-color: rgb(6, 84, 150);
     left: 10px;
+    line-height: 29px;
 }
 
 #location:hover, #myCar:hover
@@ -1035,6 +1036,7 @@ color:rgba(255, 255, 255, 0.8);
 }
 .icon-navigation:before {
     content: "\f23a";
+    font-size: 0.85em;
 }
 
 

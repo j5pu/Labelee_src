@@ -19,25 +19,7 @@ var carIcon = L.divIcon({className: 'my-div-icon car-icon'}),
     ;
 
 
-var OriginIcon = L.AwesomeMarkers.icon({
-        icon: 'location-arrow',
-        color: 'darkblue'
-        //spin: true
-
-    }),
-    DestinyIcon = L.AwesomeMarkers.icon({
-        icon: 'screenshot',
-        color: 'red'
-        //spin: true
-
-    }),
-    CarIcon = L.AwesomeMarkers.icon({
-        icon: 'automobile',
-        color: 'cadetblue'
-        //spin: true
-
-    }),
-    green = L.AwesomeMarkers.icon({
+var    green = L.AwesomeMarkers.icon({
         icon: 'retweet',
         color: 'green'
 
