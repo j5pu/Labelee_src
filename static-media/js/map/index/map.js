@@ -7,7 +7,6 @@ var showOrigin = false;
 var myIcon = L.divIcon({className: 'my-div-icon'});
 // you can set .my-div-icon styles in CSS
 var carIcon = L.divIcon({className: 'my-div-icon car-icon'}),
-    poiIcon = L.divIcon({className: 'my-div-icon poi-icon'}),
     destIcon = L.divIcon({className: 'my-div-icon dest-icon'}),
     originIcon = L.divIcon({className: 'my-div-icon locate-icon'}),
     entryIcon = L.divIcon({className: 'my-div-icon entry-icon'}),
@@ -15,6 +14,7 @@ var carIcon = L.divIcon({className: 'my-div-icon car-icon'}),
     stairwayIcon = L.divIcon({className: 'my-div-icon stairway-icon'}),
     toiletIcon = L.divIcon({className: 'my-div-icon toilet-icon'}),
     toiletFIcon = L.divIcon({className: 'my-div-icon toiletF-icon'}),
+    poiIcon = L.divIcon({className: 'my-div-icon poi-icon'}),
     toiletMIcon = L.divIcon({className: 'my-div-icon toiletM-icon'})
     ;
 
@@ -79,9 +79,10 @@ var flechita = null;
 
 
 function loadIcon(color, shape) {
-    var icon = L.AwesomeMarkers.icon({
-        icon: shape,
-        color: color
+    var icon = L.divIcon({
+        className: "my-div-icon icon-white icon-"+ shape
+        //html: "<span style='background:"+ color+"; width:100%; height:100%;'></span>"
+        //color: color
     });
     return icon;
 }
@@ -445,6 +446,7 @@ function loadPOIs() {
 */
 
 
+/*
 
                 floors[fl].pois[j].marker = new L.Marker(loc, {
                 icon: loadIcon(colorIcon, shapeIcon)
@@ -455,8 +457,19 @@ function loadPOIs() {
 //                fontIconFont: "awesome",
 //                opacity: 1
             });
+*/
 
-            floors[fl].pois[j].marker.options.icon.options.color = colorIcon;
+            floors[fl].pois[j].marker =new L.marker(loc, {
+                icon: loadIcon(colorIcon,shapeIcon)});
+
+            $('div.icon-'+ shapeIcon).css('background', colorIcon);
+
+
+
+
+            //floors[fl].pois[j].marker.options.icon.options.className="my-div-icon icon-white icon-" +shapeIcon;
+
+            //floors[fl].pois[j].marker.options.icon.options.color = colorIcon;
             floors[fl].pois[j].marker.poid = id;
             floors[fl].pois[j].marker.floorid = floorid;
             floors[fl].pois[j].marker.psX = sX;
@@ -693,6 +706,7 @@ map.on('baselayerchange', function (e) {
 // Sacar panorámica para el punto
 
 function addCategory(e) {
+    // Cada vez que añade una layer se dispara esto
     for (var i in floors) {
         for (var l in floors[i].labels) {
             if (map.hasLayer(floors[i].labels[l].layer) &&
@@ -700,7 +714,21 @@ function addCategory(e) {
                 $('input[type=checkbox].leaflet-control-layers-selector:eq(' + l + ')').css('background', floors[i].labels[l].fields.color);
             }
         }
+    }
 
+    setIconColor();
+}
+
+function setIconColor()
+{
+    for(var i in floors)
+    {
+        for(var kk in floors[i].pois)
+        {
+            var shapeIcon = floors[i].pois[kk].label.category.icon;
+            var colorIcon = floors[i].pois[kk].label.category.color;
+            $('div.icon-'+ shapeIcon).css({'background': colorIcon, 'border-top-color':colorIcon});
+        }
     }
 
 }

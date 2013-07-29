@@ -1160,6 +1160,7 @@ leaflet-marker-icon{
     height: 1.5em !important;
     z-index: 475;
     color:white;
+    //background-color: lightblue;
     font-family: 'FontAwesome';
     font-size: 1.3em;
     text-align: center;
@@ -1182,10 +1183,7 @@ leaflet-marker-icon{
     top: 87%;
     left: 0.25em;
     border-top: 0.5em solid;
-
-    /*
-        border-top-color: inherit;
-    */
+    border-top-color: inherit;
     border-left: 0.5em solid transparent;
     border-right: 0.5em solid transparent;
 }
@@ -1235,3 +1233,4 @@ leaflet-marker-icon{
 .dest-icon:after {
     border-top-color: red;
 }
+

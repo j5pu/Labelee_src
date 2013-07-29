@@ -416,8 +416,8 @@ var Painter = {
             if(label.id == label_id)
             {
                 Painter.label = label;
-                Painter.label.loaded_img = new Image();
-                Painter.label.loaded_img.src = Painter.label.img;
+//                Painter.label.loaded_img = new Image();
+//                Painter.label.loaded_img.src = Painter.label.img;
                 Painter.label.category = null;
                 Painter.label.category = Painter.label_category;
                 $e.label.manage.edit.show();
