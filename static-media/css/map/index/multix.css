@@ -655,7 +655,7 @@ label > span {
 .leaflet-control-layers-base span{
     margin-left:1px;
     font-size: 17px;
-    font-family: 'Noto Sans', SANS-SERIF;
+    font-family: 'Raleway','Noto Sans', SANS-SERIF;
 
 }
 span>span{
@@ -1018,10 +1018,9 @@ color:rgba(255, 255, 255, 0.8);
     url('../font/carFont.svg#carFont') format('svg');
     font-weight: normal;
     font-style: normal;
-
 }
 
-.icon-automobile, .icon-car {
+.icon-automobile, .icon-navigation {
     font-family: 'carFont';
     speak: none;
     font-style: normal;
@@ -1032,10 +1031,10 @@ color:rgba(255, 255, 255, 0.8);
     -webkit-font-smoothing: antialiased;
 }
 .icon-automobile:before {
-    content: "\31";
+    content: "\f239";
 }
-.icon-car:before {
-    content: "\32";
+.icon-navigation:before {
+    content: "\f23a";
 }
 
 
@@ -1169,8 +1168,9 @@ leaflet-marker-icon{
     -webkit-border-radius: 13px 13px 20px 20px;
     -moz-border-radius: 50% 50% 75% 75%;
     opacity: 0.8;
-    margin-top:-1.7em !important;
+    margin-top:-1.65em !important;
     margin-left:-0.75em !important;
+    box-shadow: 3px -2px 8px 1px #bbb;
 }
 
 
@@ -1197,9 +1197,11 @@ leaflet-marker-icon{
 .car-icon{
     font-family: 'carFont';
     background: cadetblue;
+    line-height: 1.3em;
 }
 .car-icon:before {
-    content: "\31";
+    content: "\f239";
+    font-size: 0.8em;
 }
 .car-icon:after {
     border-top-color: cadetblue;
@@ -1207,12 +1209,14 @@ leaflet-marker-icon{
 
 
 .locate-icon {
-    font-family: 'FontAwesome';
+    font-family: 'carFont';
     background: rgb(6, 84, 150);
+    line-height: 1.3em;
+
 }
 .locate-icon::before {
-    content: "\f124";
-    -webkit-transform:rotate(45deg) ;
+    content: "\f23a";
+    font-size: 0.8em;
 }
 .locate-icon:after {
     border-top-color: rgb(6, 84, 150);
