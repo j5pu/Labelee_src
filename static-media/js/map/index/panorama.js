@@ -60,6 +60,5 @@ var Panorama = {
         jQuery('div#page').find('img[id*=pano]').remove();
         Panorama.opened = false;
 
-        Logger.log('panorama cerradoxxxxxx');
     }
 };

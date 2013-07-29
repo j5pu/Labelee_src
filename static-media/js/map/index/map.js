@@ -589,6 +589,11 @@ map.on('baselayerchange', function (e) {
     changeFloor(e);
 });
 
+$('span#go-button').on('click', function(e){
+    e.stopPropagation();
+console.log('GO!');
+});
+
 // Sacar panorámica para el punto
 
 function addCategory(e) {

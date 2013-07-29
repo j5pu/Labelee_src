@@ -1056,11 +1056,13 @@ img[id*=pano]{
 {
     margin: 3px 12px 0px 12px;
     font-size: 13px;
-    padding: 1px 8px;
+    padding: 5px 8px;
 }
 
 .socialmenu {
-    font-size: 21px;
+    font-size: 1.6rem;
+    margin-bottom: 0.4rem;
+
 }
 .leaflet-popup-tip{
     width: 10px;
@@ -1149,7 +1151,7 @@ div.cilogiMarker > span{
 }
 
 .leaflet-popup  {
-    margin-bottom: 1.9em !important;
+    margin-bottom: 1.6em !important;
 }
 
 leaflet-marker-icon{
@@ -1166,11 +1168,11 @@ leaflet-marker-icon{
     text-align: center;
     line-height: 1.4em;
    -webkit-border-radius: 13px 13px 20px 20px;
-    -moz-border-radius: 50% 50% 75% 75%;
+    -moz-border-radius: 50% 50% 80% 80%;
     opacity: 0.8;
     margin-top:-1.65em !important;
     margin-left:-0.75em !important;
-    box-shadow: 3px -2px 8px 1px #bbb;
+    box-shadow: 3px -2px 8px 1px #888;
 }
 
 .my-div-icon:before{
@@ -1181,7 +1183,7 @@ leaflet-marker-icon{
     content: "";
     position: absolute;
     top: 87%;
-    left: 0.25em;
+    left: 0.29em;
     border-top: 0.5em solid;
     border-top-color: inherit;
     border-left: 0.5em solid transparent;
@@ -1202,7 +1204,7 @@ leaflet-marker-icon{
 }
 .car-icon:before {
     content: "\f239";
-    font-size: 0.8em;
+    font-size: 0.9em;
 }
 .car-icon:after {
     border-top-color: cadetblue;
@@ -1236,3 +1238,20 @@ leaflet-marker-icon{
     border-top-color: red;
 }
 
+span#go-button{
+    position:relative;
+    background: orange;
+    border: 3px solid crimson;
+    padding: 3px;
+    color: white;
+    font-weight: bolder;
+    border-radius: 8px;
+    position: relative;
+    text-align: center;
+    font-size: 0.9rem !important;
+    cursor:pointer;
+
+}
+.socialmenu{
+
+}
