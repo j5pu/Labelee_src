@@ -1164,11 +1164,8 @@ leaflet-marker-icon{
     font-family: 'FontAwesome';
     font-size: 1.3em;
     text-align: center;
-    line-height: 1.5em;
-/*
-    border-radius: 50% 50% 75% 75% !important;
-*/
-    -webkit-border-radius: 13px 13px 20px 20px;
+    line-height: 1.4em;
+   -webkit-border-radius: 13px 13px 20px 20px;
     -moz-border-radius: 50% 50% 75% 75%;
     opacity: 0.8;
     margin-top:-1.65em !important;
@@ -1176,6 +1173,9 @@ leaflet-marker-icon{
     box-shadow: 3px -2px 8px 1px #bbb;
 }
 
+.my-div-icon:before{
+    font-size: 0.9em;
+}
 
 .my-div-icon:after {
     content: "";
@@ -1186,6 +1186,7 @@ leaflet-marker-icon{
     border-top-color: inherit;
     border-left: 0.5em solid transparent;
     border-right: 0.5em solid transparent;
+
 }
 
 
@@ -1226,6 +1227,7 @@ leaflet-marker-icon{
 .dest-icon {
     font-family: 'FontAwesome';
     background: red;
+    opacity:1;
 }
 .dest-icon:before {
     content: "\f05b";

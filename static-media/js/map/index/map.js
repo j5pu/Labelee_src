@@ -8,42 +8,7 @@ var myIcon = L.divIcon({className: 'my-div-icon'});
 // you can set .my-div-icon styles in CSS
 var carIcon = L.divIcon({className: 'my-div-icon car-icon'}),
     destIcon = L.divIcon({className: 'my-div-icon dest-icon'}),
-    originIcon = L.divIcon({className: 'my-div-icon locate-icon'}),
-    entryIcon = L.divIcon({className: 'my-div-icon entry-icon'}),
-    elevatorIcon = L.divIcon({className: 'my-div-icon elevator-icon'}),
-    stairwayIcon = L.divIcon({className: 'my-div-icon stairway-icon'}),
-    toiletIcon = L.divIcon({className: 'my-div-icon toilet-icon'}),
-    toiletFIcon = L.divIcon({className: 'my-div-icon toiletF-icon'}),
-    poiIcon = L.divIcon({className: 'my-div-icon poi-icon'}),
-    toiletMIcon = L.divIcon({className: 'my-div-icon toiletM-icon'})
-    ;
-
-
-var    green = L.AwesomeMarkers.icon({
-        icon: 'retweet',
-        color: 'green'
-
-    }),
-    orange = L.AwesomeMarkers.icon({
-        icon: 'gift',
-        color: 'orange'
-
-    }),
-    purple = L.AwesomeMarkers.icon({
-        icon: 'food',
-        color: 'purple'
-
-    }),
-    blue = L.AwesomeMarkers.icon({
-        icon: 'star',
-        color: 'blue'
-
-    }),
-    red = L.AwesomeMarkers.icon({
-        icon: 'coffee',
-        color: 'red'
-    });
-
+    originIcon = L.divIcon({className: 'my-div-icon locate-icon'});
 var txtIcon = new L.icon({
     iconUrl: '/media/texticon.png',
     iconRetinaUrl: '/media/texticon.png',
@@ -78,23 +43,13 @@ var flechita = null;
  }*/
 
 
-function loadIcon(color, shape) {
+function loadIcon(shape) {
     var icon = L.divIcon({
         className: "my-div-icon icon-white icon-"+ shape
-        //html: "<span style='background:"+ color+"; width:100%; height:100%;'></span>"
-        //color: color
     });
     return icon;
 }
-/*
-function loadIcon(color, shape) {
-    var icon = new L.AwesomeMarkers.icon({
-        icon: shape,
-        color: color
-    });
-    return icon;
-}
-*/
+
 
 //Carga de datos globales
 var qrPoint = {
@@ -175,7 +130,6 @@ var LocalStorageHandler = {
                     '</li>' +
                     '</li>'
             );
-//            $('span#myCar').show();
         }
 
         var prevDest = JSON.parse(localStorage.getItem('prevDest'));
@@ -309,7 +263,6 @@ var mapW = Math.min($(window).innerWidth(), $(window).innerHeight()),
     subpath = [],
     subarrow = [],
     floors = new FloorResource().readFromEnclosure(qrPoint.enclosure.id);
-//    labels = new LabelCategoryResource().readAllFiltered('?label__point__floor__enclosure__id=16');
 
 
 //POIs de cada floor, separados para pintarlos por capas
@@ -426,50 +379,9 @@ function loadPOIs() {
             }
             popupTitle += SocialMenu.renderIcon(id);
 
-
-/*
-            floors[fl].pois[j].marker = new L.Marker(loc, {
-                icon: loadIcon(colorIcon, shapeIcon)
-//                title: popupTitle,
-//                fontIconSize: 1,
-//                fontIconName:  "\uf041",
-//                fontIconColor: colorIcon,
-//                fontIconFont: "awesome",
-//                opacity: 1
-            });
-
-
- poiIcon = L.divIcon({className: 'my-div-icon poi-icon'}),
- qrMarker = L.marker(qrLoc, {
- icon: destIcon})
-
-*/
-
-
-/*
-
-                floors[fl].pois[j].marker = new L.Marker(loc, {
-                icon: loadIcon(colorIcon, shapeIcon)
-//                title: popupTitle,
-//                fontIconSize: 1,
-//                fontIconName:  "\uf041",
-//                fontIconColor: colorIcon,
-//                fontIconFont: "awesome",
-//                opacity: 1
-            });
-*/
-
             floors[fl].pois[j].marker =new L.marker(loc, {
-                icon: loadIcon(colorIcon,shapeIcon)});
+                icon: loadIcon(shapeIcon)});
 
-            $('div.icon-'+ shapeIcon).css('background', colorIcon);
-
-
-
-
-            //floors[fl].pois[j].marker.options.icon.options.className="my-div-icon icon-white icon-" +shapeIcon;
-
-            //floors[fl].pois[j].marker.options.icon.options.color = colorIcon;
             floors[fl].pois[j].marker.poid = id;
             floors[fl].pois[j].marker.floorid = floorid;
             floors[fl].pois[j].marker.psX = sX;
@@ -508,32 +420,6 @@ function loadPOIs() {
                     qrMarker.contentBinded = false;
                     bindContent(qrMarker);
                 });
-
-            /*
-             floors[fl].pois[j].marker.bindLabel(floors[fl].pois[j].description, {noHide: true}).addTo(map).showLabel();
-
-             if (floors[fl].pois[j].alwaysVisible) {
-             //Cambiar el parámetro loc por [centro del establecimiento/POI]
-             floors[fl].pois[j].txtMarker= new L.Marker(new L.latLng(loc), {icon: txtIcon}).bindLabel(floors[fl].pois[j].description, {noHide: true}).addTo(map).showLabel();
-             floors[fl].pois[j].txtMarker.setOpacity(1);
-             floors[fl].layer.addLayer(floors[fl].pois[j].txtMarker);
-             }
-             */
-
-
-//             if (floors[fl].pois[j].alwaysVisible) {
-//            floors[i].labels[l].layer.addLayer(floors[fl].pois[j].marker.bindLabel(floors[fl].pois[j].description, { noHide: true, className: 'textLabel' }))
-//            //.addTo(map)
-//        }
-
-
-            /*
-             L.marker([50, 50])
-             .bindLabel('A sweet static label!', { noHide: true })
-             .addTo(map)
-             .showLabel();
-             */
-
 
             for (var l in floors[fl].labels) {
                 if (floors[fl].pois[j].marker.category === floors[fl].labels[l].fields.name) {
