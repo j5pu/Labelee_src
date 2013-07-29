@@ -38,6 +38,17 @@ table th, table td
 
 }
 
+.table thead:first-child tr:first-child th
+{
+    border-left: 0;
+}
+
+.table thead tr th:last-child
+{
+    border-right: 0;
+}
+
+
 #enclosures thead
 {
     margin-top: 20%;
@@ -175,7 +186,8 @@ td *
 
 .enclosure .urls a:hover
 {
-    color: #c16b30;
+    color: #FEFAF1;
+    background-color: #8C8C87;
 }
 .btn.link-2 {
     display: block;
@@ -223,9 +235,18 @@ td *
 {
     float: right;
     display: inline-block;
-    margin: 0;
 }
 
+#logout a
+{
+    color: rgb(196, 190, 170);
+}
+
+#logout a:hover
+{
+    color: #FEFAF1;
+    background-color: rgb(196, 190, 170);
+}
 .add_new
 {
     margin: 1.75em 0 0em 1.9em;
@@ -275,4 +296,8 @@ margin-top: 1em;
 h4
 {
     color: #8C8C87;
+}
+
+td {
+width: 50%;
 }

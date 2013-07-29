@@ -50,8 +50,8 @@
                         <!-- CAJITA DE LOGOUT -->
                         {% if user.is_authenticated %}
                             <div id="logout" class="box box-1">
-                                {% trans "Bienvenido" %}, {{ user.username }} |
-                                <a href="{% url 'django.contrib.auth.views.logout' %}">Logout</a>
+                                {% trans "Bienvenido" %}, {{ user.username }}
+                                <a href="{% url 'django.contrib.auth.views.logout' %}"> <i class="icon-signout"></i> Logout</a>
                             </div>
                         {% endif %}
                     </li>
