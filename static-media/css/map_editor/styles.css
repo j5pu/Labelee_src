@@ -5,6 +5,8 @@ body
     text-align: center;
     /*background: black*/
     background-color: rgba(186, 186, 186, 0.23);
+    font-family: 'raleway';
+
 }
 
 h4 {
@@ -34,15 +36,16 @@ a {
     vertical-align: top;
 }
 
-.box-1
-{
-    display: inline-block;
-    background: #D9D4C7;
-    padding: 0.6em;
-    border-radius: 0.4em;
-    margin: 0.3em 0.4em;
-    vertical-align: top;
+.box-1 {
+background: #FEFAF1;
+padding: 0.2em;
+border-radius: 0.4em;
+margin: 0.25em;
+color: #8C8C87;
+vertical-align: top;
+font-size: 1.5em;
 }
+
 
 .box-2
 {
@@ -119,6 +122,11 @@ a.link-3
 }
 
 .btn{
+    font-family: 'raleway';
+}
+
+.table thead th
+{
     font-family: 'raleway';
 }
 

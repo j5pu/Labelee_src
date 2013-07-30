@@ -25,31 +25,38 @@
     <a class="link-1" href="{% url 'map_editor.views.index' %}">{% trans "Volver al menú" %}</a>
 
 
-    <form class="box box-1" name="formul">
-        <div class="connector">
-            <input placeholder="{% trans "Arista1" %}.." id="textbox1" type="text">
-            <br>
-            <select id="select1" name="miSelect1" multiple=""></select>
-        </div>
+     <div class="container-fluid">
+            <div class="span6">
+                <div id="caja1" class="box box-0 connection-list">
+                    <h4>{% trans "Lista de conexiones" %}</h4>
 
-        <div class="connector">
-            <input placeholder="{% trans "Arista2" %}.." id="textbox2" type="text">
-            <br>
-            <select id="select2" name="miSelect2" multiple=""></select>
-        </div>
+                    <div id="caja2" class="box box-1">
+                        <ul>
+                            <div id="lista_connections"></div>
+                        </ul>
+                    </div>
+                </div>
+            </div>
 
-        <input class='btn' type="button" value="{% trans "Guardar connection" %}">
-{#               onclick="javascript:agregaArista(document.formul.miSelect1,document.formul.miSelect2)">#}
-    </form>
+            <div id="col2" class="span6">
+                <h4>{% trans "New connection" %}</h4>
+                <form class="box box-1" name="formul">
+                    <div class="connector">
+                        <input placeholder="{% trans "Arista1" %}.." id="textbox1" type="text">
+                        <br>
+                        <select id="select1" name="miSelect1" multiple=""></select>
+                    </div>
 
-    <div class="box box-0 connection-list">
-        <h4>{% trans "Lista de conexiones" %}</h4>
+                    <div class="connector">
+                        <input placeholder="{% trans "Arista2" %}.." id="textbox2" type="text">
+                        <br>
+                        <select id="select2" name="miSelect2" multiple=""></select>
+                    </div>
 
-        <div class="box box-1">
-            <ul>
-                <div id="lista_connections"></div>
-            </ul>
-        </div>
+                    <input class='btn' type="button" value="{% trans "Save connection" %}">
+            {#               onclick="javascript:agregaArista(document.formul.miSelect1,document.formul.miSelect2)">#}
+                </form>
+            </div>
     </div>
 
 {% endblock %}

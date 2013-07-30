@@ -8,17 +8,6 @@
     /*border: 3px solid grey;*/
     box-shadow: 1px -2px 5px;
 }
-
-#caja1 {
-
-    border-radius: 1em 1em 1em 1em;
-    display: inline-block;
-    height: 400px;
-    width: auto;
-    padding: 1em;
-
-}
-
 #select1 {
     height: 150px;
 }
@@ -32,9 +21,10 @@
     border-radius: 1em 1em 1em 1em;
     display: inline-block;
     height: auto;
-    width: 350px;
-    padding: 1em;
+    width: 450px;
+    padding: 0.8em;
     list-style:none;
+    margin-top: -1em;
 
 }
 
@@ -87,8 +77,9 @@ form .btn
 
 h4
 {
-    color: white;
+    color: rgb(196, 190, 170);
     margin-top: 0em;
+    padding-right: 37px;
 }
 
 .box-1
@@ -104,8 +95,8 @@ h4
 
 .connection-list ul
 {
-    width: 370px;
-    max-height: 311px;
+    width: 497px;
+    max-height: 516px;
     overflow-x: hidden;
     overflow-y: auto;
     margin-left: -10px;
@@ -118,17 +109,19 @@ h4
     padding: 0.7em;
     border-radius: 0.5em;
     color: whitesmoke;
+    text-align: center;
 }
 
 .connection-list .btn
 {
     margin-right: 0.5em;
+    float: left;
 }
 
 span.connector
 {
     background: rgb(173, 157, 101);
-    padding: 0.6em 0.8em;
+    padding: 0.1em 0.1em;
     border-radius: 1.2em;
     color: whitesmoke;
 }
@@ -137,8 +130,29 @@ i.icon-arrow-right
 {
     margin: 0 0.4em;
 }
+div.box.box-0.connection-list {
 
+    border-radius: 1em 1em 1em 1em;
+    display: inline-block;
+    height: 400px;
+    width: auto;
+    padding: 1em;
+}
 
+.container-fluid
+{
+    width: 100%;
+}
+
+#col2
+{
+    margin-top: 2.8em;
+}
+
+form.box.box-1.ng-pristine.ng-valid
+{
+    margin-top: -0.9em;
+}
 
 
 

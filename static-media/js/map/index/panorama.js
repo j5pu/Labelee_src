@@ -6,12 +6,13 @@ var Panorama = {
 
     init: function()
     {
-/*
-        $(document).on('click tap touch', function(ev){
-            if(ev.target.tagName !== 'CANVAS')
+
+        $(document).on('click', function(ev){
+//        console.log(ev);
+            if(ev.target.id !== 'canvasPan')
                 Panorama.close();
         });
-*/
+
     },
 
     renderIcon: function(pointId)
@@ -38,8 +39,7 @@ var Panorama = {
 
         var newWidth=window.innerWidth*0.9,
             newHeight=newWidth*9/16;
-        addSamplePano(Panorama.marker.panorama,{height: newHeight, ratio:9/16});
-            //, minSpeed:30});
+        addSamplePano(Panorama.marker.panorama,{height: newHeight, ratio:9/16, minSpeed:30});
     },
 
     resize: function()
@@ -60,6 +60,5 @@ var Panorama = {
         jQuery('div#page').find('img[id*=pano]').remove();
         Panorama.opened = false;
 
-        Logger.log('panorama cerradoxxxxxx');
     }
 };

@@ -31,27 +31,27 @@
 
                 <div class="nav-collapse">
                 <ul class="nav">
-                    <li><a href="#"><i class="icon-white icon-home"></i> Enclosure Manager</a></li>
-                    <li><a href="#"><i class="icon-white icon-picture"></i> Enclosure Site</a>
+                    <li><a href="#"><i class="icon-white icon-dashboard"></i>{% trans "Enclosure Dashboard" %}</a></li>
+                    <li><a href="#"><i class="icon-white icon-link"></i>{% trans "Enclosure Site" %}</a>
                     </li>
-                    <li class="active"><a href="#"><i class="icon-white icon-play-circle"></i>
-                        Labelee App</a></li>
-                    <li><a href="#"><i class="icon-white icon-book"></i> Anything</a></li>
+                    <li><a href="#"><i class="icon-white icon-play-circle"></i>
+                        {% trans "Labelee App" %}</a></li>
+                    <li><a href="#"><i class="icon-white icon-book"></i> {% trans "Anything" %}</a></li>
                 </ul>
                 <ul class="nav pull-right">
-                    <li><p class="navbar-text"><i class="icon-white icon-download"></i> Download:</p></li>
-                    <li>
-                        <div class="btn-group">
-                            <a class="btn btn-small btn-primary" href="#">PDF</a>
-                            <a class="btn btn-small btn-primary" href="#">E-MAIL</a>
-                        </div>
-                    </li>
-                    <li>
+{#                    <li><p class="navbar-text"><i class="icon-white icon-download"></i> Download:</p></li>#}
+{#                    <li>#}
+{#                        <div class="btn-group">#}
+{#                            <a class="btn btn-small btn-primary" href="#">PDF</a>#}
+{#                            <a class="btn btn-small btn-primary" href="#">E-MAIL</a>#}
+{#                        </div>#}
+{#                    </li>#}
+{#                    <li>#}
                         <!-- CAJITA DE LOGOUT -->
                         {% if user.is_authenticated %}
                             <div id="logout" class="box box-1">
-                                {% trans "Bienvenido" %}, {{ user.username }} |
-                                <a href="{% url 'django.contrib.auth.views.logout' %}">Logout</a>
+                                {% trans "Bienvenido" %}, {{ user.username }}
+                                <a href="{% url 'django.contrib.auth.views.logout' %}"> <i class="icon-signout"></i> Logout</a>
                             </div>
                         {% endif %}
                     </li>
@@ -64,7 +64,7 @@
     </div>
 </div>
 
-    <h1>{% trans "Administración de recintos" %}</h1>
+{#    <h1>{% trans "Administración de recintos" %}</h1>#}
 
     {% if user.logo %}
         <img src="{{ MEDIA_URL }}{{ user.logo }}">
@@ -78,19 +78,18 @@
                    placeholder="{% trans "Nombre del recinto" %}..">
         </label>
 
-        <span class="link-1 add_new" ng-click="show_create_enclosure_form($event)">
-            <i class="icon-plus-sign"></i>
-            {% trans "Agregar nuevo recinto" %}
-        </span>
-
-        <table id="enclosures" class="table table-hover table-bordered">
+            <span id="addEnclosureBtn" class="btn link-2" ng-click="show_create_enclosure_form($event)">
+                <i class="icon-plus-sign"></i>
+                {% trans "Agregar nuevo recinto" %}
+            </span>
+        <table id="enclosures" class="table table-hover">
         <thead>
         <tr>
             <th>
-                <span>{% trans "Recintos" %}</span>
+                <h3><span>{% trans "Recintos" %}</span></h3>
             </th>
             <th>
-                <span>{% trans "Plantas" %}</span>
+                <h3><span>{% trans "Plantas" %}</span></h3>
             </th>
         </tr>
         </thead>
@@ -109,20 +108,20 @@
                     <h4 ng-show="enclosure.twitter_account">@[[enclosure.twitter_account]]</h4>
                     <div class="urls">
                         <a ng-show="enclosure.url_enclosure"
-                           href="[[enclosure.url_enclosure | url]]">{% trans  "Web del recinto" %}</a>
+                           href="[[enclosure.url_enclosure | url]]"><i class="icon-link"></i>{% trans  "Web del recinto" %}</a>
                         <a ng-show="enclosure.url_dashboard"
-                           href="[[enclosure.url_dashboard | url]]">{% trans  "Ver dashboard" %}</a>
+                           href="[[enclosure.url_dashboard | url]]"><i class="icon-dashboard"></i>{% trans  "Ver dashboard" %}</a>
                     </div>
 
                     <div class="buttons">
                         <button class="btn link-2" ng-click="show_edit_form($event)">
-                            {% trans "Editar" %}
+                            <i class="icon-pencil icon-white"></i>{% trans "Editar" %}
                         </button>
                         <a class="btn link-2" ng-click="calculateRoutes()">
                             <i class="icon-road icon-white"></i> {% trans "Calcular rutas" %}
                         </a>
                         <a class="btn link-2" id="aristas" href='edit/connections/[[enclosure.id]]'>
-                            <i class="icon-pencil icon-white"></i> {% trans "Conexiones entre plantas" %}
+                            <i class="icon-random icon-white"></i> {% trans "Conexiones entre plantas" %}
                         </a>
                     </div>
                 </div>
@@ -140,8 +139,8 @@
                        ng-hide="enclosure.floors.length == 0">
                     <thead>
                     <tr>
-                        <th>{% trans "Plantas" %} ([[enclosure.floors.length]])</th>
-                        <th>{% trans "Puntos de interés" %} ([[enclosure.poi_count]])</th>
+                        <th><h4>{% trans "Plantas" %} ([[enclosure.floors.length]])</h4></th>
+                        <th><h4>{% trans "Puntos de interés" %} ([[enclosure.poi_count]])</h4></th>
                     </tr>
                     </thead>
                     <tbody>
@@ -163,7 +162,7 @@
                     </tbody>
                 </table>
 
-                <span class="link-1" ng-click="show_create_floor_form($event)">
+                <span class="btn link-2" ng-click="show_create_floor_form($event)">
                     <i class="icon-plus-sign"></i>
                     {% trans "Agregar nueva planta" %}
                 </span>

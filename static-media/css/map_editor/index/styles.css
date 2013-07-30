@@ -23,11 +23,35 @@ margin: 0.25em 2em 0 -1em;
 table
 {
     min-width: 100%;
+    /*margin-top: 2em;*/
+
 }
 
 table th, table td
 {
-    border: 1px solid grey;
+    border: 0.15em solid #AD9D65;
+}
+#enclosures th
+{
+    text-align: center;
+    font-size: 16px;
+
+}
+
+.table thead:first-child tr:first-child th
+{
+    border-left: 0;
+}
+
+.table thead tr th:last-child
+{
+    border-right: 0;
+}
+
+
+#enclosures thead
+{
+    margin-top: 20%;
 }
 
 table td{
@@ -54,11 +78,15 @@ td.floors table td *
 {
     float: left;
     margin-top: 2em;
+    color: #8C8C87;
+
 }
 
 #search_box input
 {
     margin: -0.3em 0 0 0.1em;
+    color: #8C8C87;
+
 }
 
 .floor td {
@@ -116,6 +144,10 @@ td.pois
     display: inline-block;
 }
 
+.ng-binding
+{
+    color: #8C8C87;
+}
 
 
 td *
@@ -148,9 +180,14 @@ td *
 }
 
 .enclosure .urls a{
-    color: blue;
+    color: #8C8C87;
 }
 
+.enclosure .urls a:hover
+{
+    color: #FEFAF1;
+    background-color: #8C8C87;
+}
 .btn.link-2 {
     display: block;
     color: white;
@@ -197,9 +234,18 @@ td *
 {
     float: right;
     display: inline-block;
-    margin: 0;
 }
 
+#logout a
+{
+    color: rgb(196, 190, 170);
+}
+
+#logout a:hover
+{
+    color: #FEFAF1;
+    background-color: rgb(196, 190, 170);
+}
 .add_new
 {
     margin: 1.75em 0 0em 1.9em;
@@ -219,6 +265,13 @@ th span, td span
 .btn.link-2
 {
     display: inline-block;
+}
+
+#addEnclosureBtn
+{
+    float: left;
+    margin: 1.7em 0 0 1em;
+    padding: 0.2em;
 }
 
 .floors table
@@ -246,3 +299,11 @@ display: inline-block !important;
     margin-bottom: 1em;
 }
 
+h4
+{
+    color: #8C8C87;
+}
+
+td {
+width: 50%;
+}

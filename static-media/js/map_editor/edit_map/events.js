@@ -29,37 +29,37 @@ var Events = {
             $e.floor.blocks.on('mouseover', function(){
 //                $(this).css({'box-shadow': '1px 1px 10px'});
 
-                if(Floor.current_hovered_block || $e.floor.toggle_border.is(':checked'))
-                    return;
-
-                Floor.block_height_prev = $(this).height();
-                Floor.block_width_prev = $(this).width();
-
-                Floor.border_size_prev = $e.floor.toggle_border.is(':checked') ? 1 : 0;
-                Floor.border_size_new = 2;
-
-                var new_height = Floor.block_height_prev - (Floor.border_size_new*2) + Floor.border_size_prev*2,
-                    new_width = Floor.block_width_prev - (Floor.border_size_new*2) + Floor.border_size_prev*2;
-
-                $(this).css({
-                    'border': Floor.border_size_new + 'px solid black',
-                    'height': new_height + 'px',
-                    'width': new_width + 'px'
-                });
+//                if(Floor.current_hovered_block || $e.floor.toggle_border.is(':checked'))
+//                    return;
+//
+//                Floor.block_height_prev = $(this).height();
+//                Floor.block_width_prev = $(this).width();
+//
+//                Floor.border_size_prev = $e.floor.toggle_border.is(':checked') ? 1 : 0;
+//                Floor.border_size_new = 2;
+//
+//                var new_height = Floor.block_height_prev - (Floor.border_size_new*2) + Floor.border_size_prev*2,
+//                    new_width = Floor.block_width_prev - (Floor.border_size_new*2) + Floor.border_size_prev*2;
+//
+//                $(this).css({
+//                    'border': Floor.border_size_new + 'px solid black',
+//                    'height': new_height + 'px',
+//                    'width': new_width + 'px'
+//                });
 
                 Floor.current_hovered_block = $(this);
             });
             $e.floor.blocks.on('mouseleave', function(){
 //                $(this).css({'box-shadow': ''});
 
-                if($e.floor.toggle_border.is(':checked'))
-                    return;
-
-                $(this).css({
-                    'border': Floor.border_size_prev + 'px solid black',
-                    'height': Floor.block_height_prev + 'px',
-                    'width': Floor.block_width_prev + 'px'
-                });
+//                if($e.floor.toggle_border.is(':checked'))
+//                    return;
+//
+//                $(this).css({
+//                    'border': Floor.border_size_prev + 'px solid black',
+//                    'height': Floor.block_height_prev + 'px',
+//                    'width': Floor.block_width_prev + 'px'
+//                });
 
                 Floor.current_hovered_block = null;
             });
