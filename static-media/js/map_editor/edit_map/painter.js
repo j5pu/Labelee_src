@@ -133,16 +133,16 @@ var Painter = {
         Painter._paintMenu(block);
 
         // Dejamos el bloque como pintado
-        block.attr('data-label', Painter.label.resource_uri);
+        block.attr('data-label', Painter.label.id);
 
         // Si lo que se está pintando es una arista, añadimos al bloque la descripción para el punto:
         //      xej: Parquing_Escalera_4
-        if(LabelCategory.isConnector(Painter.label.category))
+        if(LabelCategory.isConnector(Painter.label_category))
             Painter.paintConnector(block);
 
         // Ponemos el bloque de un color según la categoría de la etiqueta..
         block.css({
-            'background': Painter.label.category.color
+            'background': Painter.label_category.color
 //            'opacity': '0.5'
         });
 
@@ -190,7 +190,7 @@ var Painter = {
         // Pinta un menú con el checkbox para el QR aún sin setear conforme a lo que haya en BD
 
         // Si se trata de un bloqueante entonces no le pintamos el menú
-        if(LabelCategory.isBlocker(Painter.label.category))
+        if(LabelCategory.isBlocker(Painter.label_category))
             return;
 
         var block_description = Floor.loading ? Painter.point.description : Painter.label.name;
@@ -393,41 +393,6 @@ var Painter = {
 
     hideLabelMenu: function(){
 
-    },
-
-
-
-    setLabel: function()
-    {
-        // Setea la etiqueta a pintar con la elegida en el selector
-
-        var label_id = $e.label.selector.val();
-
-        if(!label_id)
-        {
-            $e.label.manage.edit.hide();
-            $e.label.manage.delete.hide();
-            return;
-        }
-
-        for(var i in Menu.labels)
-        {
-            var label = Menu.labels[i];
-            if(label.id == label_id)
-            {
-                Painter.label = label;
-                Painter.label.loaded_img = new Image();
-                Painter.label.loaded_img.src = Painter.label.img;
-                Painter.label.category = null;
-                Painter.label.category = Painter.label_category;
-                $e.label.manage.edit.show();
-                $e.label.manage.delete.show();
-                break;
-            }
-        }
-
-        $e.label.selector.blur();
-        $e.label_category_selector.blur();
     },
 
 

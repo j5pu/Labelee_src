@@ -71,7 +71,7 @@ class ResourceAuthorization(Authorization):
             - PUT
             - DELETE
         """
-        if(bundle.request.user.is_staff):
+        if bundle.request.user.is_staff:
             return True
 
         if type(bundle.obj) is CustomUser:
@@ -122,6 +122,8 @@ class ResourceAuthorization(Authorization):
         # Para este mismo caso de floor el siguiente attr es 'owner'
         value = direct_rel_obj
         for i in range(len(attrs)-1):
+            if value is None:
+                break
             value = getattr(value, attrs[i+1])
 
         return value == bundle.request.user

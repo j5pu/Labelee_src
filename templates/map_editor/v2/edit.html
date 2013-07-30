@@ -31,149 +31,224 @@
 
     {% csrf_token %}
 
-    <!-- GRID PARA EL PLANO DE LA PLANTA -->
-    <!--<img src = "/mediFa/floors/28.jpg" id = "fake"> -->
-    <div id="grid"></div>
+    <div ng-controller="FloorCtrl">
 
-    <div class="box box-0 alert">
-        <ul>
-            <li>{% trans "Antes de cambiar la descripción o el QR de un punto guardar el plano" %}</li>
-            <li>{% trans "No aumentar el tamaño de la página" %}</li>
-        </ul>
-    </div>
+        <!-- GRID PARA EL PLANO DE LA PLANTA -->
+        <!--<img src = "/mediFa/floors/28.jpg" id = "fake"> -->
+        <div id="grid"></div>
 
-    <!--MENU-->
-    <div id="menu">
-        <div class="box box-0">
-            <!-- NUMERO DE FILAS Y GUARDAR FLOOR -->
-            <div class="box box-1">
-                <div class="box box-2" id="num_rows">
+        <div class="box box-0 alert">
+            <ul>
+                <li>{% trans "Antes de cambiar la descripción o el QR de un punto guardar el plano" %}</li>
+                <li>{% trans "No aumentar el tamaño de la página" %}</li>
+            </ul>
+        </div>
+
+        <!--MENU-->
+        <div id="menu">
+            <div class="box box-0" id="menu1">
+                <!-- NUMERO DE FILAS Y GUARDAR FLOOR -->
+                <div class="box box-1">
+                    <div class="box box-2" id="num_rows">
                     <span class="txt">
                         {% trans "Filas" %}:
                         <input type="text" value="20">
                         =
                     </span>
-                    <span class="txt" id="num_blocks"></span>
-                    <button class="btn" id="change_num_rows">{% trans "Refrescar filas" %}</button>
+                        <span class="txt" id="num_blocks"></span>
+                        <button class="btn" id="change_num_rows">{% trans "Refrescar filas" %}</button>
+                    </div>
+
+                    <a class="link-1" href="{% url 'map_editor.views.index' %}">{% trans "Volver al menú" %}</a>
+                    <button class="btn" id="update_floor">{% trans "Guardar" %}</button>
+                    <!--<button class="btn" id="clear_floor">{% trans "Limpiar" %}</button>-->
+
                 </div>
+                <br>
 
-                <a class="link-1" href="{% url 'map_editor.views.index' %}">{% trans "Volver al menú" %}</a>
-                <button class="btn" id="update_floor">{% trans "Guardar" %}</button>
-                <!--<button class="btn" id="clear_floor">{% trans "Limpiar" %}</button>-->
+                <!-- STATS CHECKBOXES Y QR LIST -->
+                <div class="box box-1">
+                    <div id="puntos" class="box box-2">
+                        <h4>{% trans "Puntos" %}:</h4>
+                        <ul>
+                            <li>
+                                <span class="txt">{% trans "Guardados" %}:</span>
+                                <span id="num_saved_points" class="num"></span>
+                            </li>
+                            <li>
+                                <span class="txt">{% trans "Por guardar" %}:</span>
+                                <span id="num_points_to_save" class="num"></span>
+                            </li>
+                            <li>
+                                <span class="txt">{% trans "Por elminar" %}:</span>
+                                <span id="num_points_to_delete" class="num"></span>
+                            </li>
+                        </ul>
+                        <!--Total: <span id="num_total_points"></span> <br>-->
+                    </div>
 
-            </div><br>
-
-            <!-- STATS CHECKBOXES Y QR LIST -->
-            <div class="box box-1">
-                <div id="puntos" class="box box-2">
-                    <h4>{% trans "Puntos" %}:</h4>
-                    <ul>
-                        <li>
-                            <span class="txt">{% trans "Guardados" %}:</span>
-                            <span id="num_saved_points" class="num"></span>
-                        </li>
-                        <li>
-                            <span class="txt">{% trans "Por guardar" %}:</span>
-                            <span id="num_points_to_save" class="num"></span>
-                        </li>
-                        <li>
-                            <span class="txt">{% trans "Por elminar" %}:</span>
-                            <span id="num_points_to_delete" class="num"></span>
-                        </li>
-                    </ul>
-                    <!--Total: <span id="num_total_points"></span> <br>-->
-                </div>
-
-                <div class="box box-2">
-                    <label class="checkbox">
-                        <input type="checkbox" id="toggle_border">{% trans "Ver rejilla" %}
-                    </label>
-                    <label class="checkbox">
-                        <input type="checkbox" name="toggle_erase_mode">{% trans "Modo borrar" %}<br>
-                    </label>
-                </div><br>
-
-                <!-- LISTA DE QRs -->
-                <div id="qr_list" class="box box-2">
-                    <h4>{% trans "Lista de QRs" %}:</h4>
-                    <label class="checkbox">
-                        <input type="checkbox" id="toggle_qrs">{% trans "Resaltar todos" %}
-                    </label>
-                    <ul></ul>
-                </div>
-            </div>
-        </div>
-
-        <div class="box box-0">
-            <!-- WRAPPER MENU POI-->
-            <div class="box box-1">
-                <!-- MENU -->
-                <div id="poi_menu" class="box box-2">
-                    <span class="title">{% trans "Elegir POI" %}:</span>
+                    <div class="box box-2">
+                        <label class="checkbox">
+                            <input type="checkbox" id="toggle_border">{% trans "Ver rejilla" %}
+                        </label>
+                        <label class="checkbox">
+                            <input type="checkbox" name="toggle_erase_mode">{% trans "Modo borrar" %}<br>
+                        </label>
+                    </div>
                     <br>
 
-                    <div id="category" class="box box-2">
-                        {% trans "Categoría" %}:
-                        <br>
-                        <select></select>
-                    </div><br>
+                    <!-- LISTA DE QRs -->
+                    <div id="qr_list" class="box box-2">
+                        <h4>{% trans "Lista de QRs" %}:</h4>
+                        <label class="checkbox">
+                            <input type="checkbox" id="toggle_qrs">{% trans "Resaltar todos" %}
+                        </label>
+                        <ul></ul>
+                    </div>
+                </div>
+            </div>
 
-                    <div id="label" class="box box-2">
-                        POI:
+            <!-- MENU POI -->
+            <div class="box box-0">
+                <div class="box box-1" ng-controller="PoisCtrl">
+                    <!-- MENU -->
+                    <div id="poi_menu" class="box box-2">
+                        <span class="title">{% trans "Elegir POI" %}:</span>
                         <br>
-                        <select></select>
-                        <div id="manage">
-                            <a class="new" href=''>{% trans "Nueva" %}</a>
-                            <a class="edit" href=''>{% trans "Editar" %}</a>
-                            <a class="delete" href=''>{% trans "Eliminar" %}</a>
+
+                        <div id="category" class="box box-2">
+                            <label>{% trans "Categoría" %}:
+                                <select ng-model="selected_category"
+                                        ng-options="category as category.name for category in label_categories">
+                                    <option value="">{% trans "Select category" %}</option>
+                                </select>
+                            </label>
+                            <div class="manage">
+                                <a class="new" href=''
+                                   ng-click="show_create_category_form()">
+                                    {% trans "Nueva" %}
+                                </a>
+                                <a class="edit" href=''
+                                   ng-show="can_edit_category"
+                                   ng-click="show_update_category_form()">
+                                    {% trans "Editar" %}
+                                </a>
+                            </div>
+                        </div>
+                        <br>
+                        <div id="label" class="box box-2">
+                            <label>POI:
+                                <select ng-model="selected_label"
+                                        ng-options="label as label.name for label in selected_category.labels">
+                                    <option value="">{% trans "Select POI" %}</option>
+                                </select>
+                            </label>
+
+                            <div class="manage">
+                                <a class="new" href=''
+                                   ng-click="show_create_label_form()">
+                                    {% trans "Nueva" %}
+                                </a>
+                                <a class="edit" href=''
+                                   ng-show="can_edit_label"
+                                   ng-click="show_update_label_form()">
+                                    {% trans "Editar" %}
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!--
+                        Formularios para crear/editar etiqueta y su categoría
+                    -->
+                    <div id="dialogs">
+                        <div id="category_create">
+                            <form>
+                                <label class="txt">{% trans "Nombre" %}:
+                                    <input type="text"
+                                           ng-model="category_name"
+                                           placeholder="{% trans "Nombre para la categoría" %}..">
+                                </label>
+                                <label class="txt">{% trans "Color" %}:
+                                    <input type="text"
+                                           ng-model="category_color"
+                                           placeholder="{% trans "Color para la categoría" %}..">
+                                    <span id="input_color_create" ng-style="{background:category_color}"></span>
+                                </label>
+                                <div class="cat_colors"></div>
+                                <button class="btn" ng-click="closeModalDialog()">{% trans "Cancelar" %}</button>
+                                <button class="btn" ng-click="createCategory()">{% trans "Añadir categoría" %}</button>
+                            </form>
+                        </div>
+                        <div id="category_update">
+                            <form>
+                                <label class="txt">{% trans "Nombre" %}:
+                                    <input type="text"
+                                           ng-model="new_category_name"
+                                           placeholder="{% trans "Nuevo nombre para la categoría" %}..">
+                                </label>
+                                <label class="txt">{% trans "Color" %}:
+                                    <input type="text"
+                                           ng-model="new_category_color"
+                                           placeholder="{% trans "Nuevo color para la categoría" %}..">
+                                    <span id="input_color_update" ng-style="{background:new_category_color}"></span>
+                                </label>
+                                <div class="cat_colors"></div>
+                                <button class="btn" ng-click="closeModalDialog()">{% trans "Cancelar" %}</button>
+                                <button class="btn" ng-click="updateCategory()">{% trans "Guardar" %}</button>
+                                <button class="btn btn-danger" ng-click="delCategory()">{% trans "Eliminar categoría" %}</button>
+                            </form>
+                        </div>
+
+                        <div id="label_create">
+                            <span class="title">{% trans "Crear POI" %}:</span>
+                            <br>
+                            <form>
+                                <label class="txt">{% trans "Nombre" %}:
+                                    <input type="text" ng-model="label_name"
+                                           placeholder="{% trans "Nombre para el POI" %}.."/>
+                                </label>
+
+                                <label class="txt">{% trans "Para la categoría" %}:
+                                    <select ng-model="selected_category"
+                                            ng-options="category as category.name for category in label_categories">
+                                        <option value="">{% trans "Select category" %}</option>
+                                    </select>
+                                </label>
+
+                                <button class="btn" ng-click="closeModalDialog()">{% trans "Cancelar" %}</button>
+                                <button class="btn" ng-click="createLabel()">{% trans "Crear" %}</button>
+                            </form>
+                        </div>
+                        <div id="label_update">
+                            <span class="title">{% trans "Editar POI" %}:</span>
+                            <br>
+
+                            <form>
+                                <label class="txt">{% trans "Nuevo nombre" %}:
+                                    <input type="text" ng-model="new_label_name"
+                                           placeholder="{% trans "Nuevo nombre para el POI" %}.."/>
+                                </label>
+
+                                <label class="txt">{% trans "Para la categoría" %}:
+                                    <select ng-model="selected_category"
+                                            ng-options="category as category.name for category in label_categories">
+                                        <option value="">{% trans "Select category" %}</option>
+                                    </select>
+                                </label>
+
+                                <button class="btn" ng-click="closeModalDialog()">{% trans "Cancelar" %}</button>
+                                <button class="btn" ng-click="updateLabel()">{% trans "Guardar" %}</button>
+                                <button class="btn btn-danger" ng-click="delLabel()">{% trans "Eliminar etiqueta" %}</button>
+                            </form>
                         </div>
                     </div>
                 </div>
-
-                <!--
-                    Formularios para crear/editar etiqueta
-                -->
-                <div id="label-forms" class="box box-2">
-                    <div class="new">
-                        <span class="title">{% trans "Crear POI" %}:</span>
-                        <br>
-
-                        <form action=""
-                              method="post" enctype="multipart/form-data"
-                              target="upload_target">
-                            <input type="text" name="name"
-                                   placeholder="{% trans "Nombre para el POI" %}.."/><br>
-
-                            {% trans "Para la categoría" %}:
-                            <select></select><br>
-
-                            <button name="create">{% trans "Crear" %}</button>
-                            <button name="cancel">{% trans "Cancelar" %}</button>
-                        </form>
-                    </div>
-
-                    <div class="edit">
-                        <span class="title">{% trans "Editar POI" %}:</span>
-                        <br>
-
-                        <form action=""
-                              method="post" enctype="multipart/form-data"
-                              target="upload_target">
-                            <input type="text" name="name"
-                                   placeholder="{% trans "Nuevo nombre para el POI" %}.."/><br>
-
-                            {% trans "Para la categoría" %}:
-                            <select></select><br>
-
-                            <button name="update">{% trans "Guardar" %}</button>
-                            <button name="cancel">{% trans "Cancelar" %}</button>
-                        </form>
-                    </div>
-                </div>
             </div>
         </div>
-    </div>
 
-    <div id="loadingScreen"></div>
+        <div id="loadingScreen"></div>
+
+    </div>
 
 {% endblock content %}

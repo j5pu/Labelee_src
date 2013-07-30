@@ -186,3 +186,40 @@ a.link-1
     margin-right: 1em;
 }
 
+.cat_colors p
+{
+    display: inline-block;
+    margin: 0 0.9em;
+}
+
+.cat_colors p span
+{
+    width: 10px;
+    height: 10px;
+    display: inline-block;
+    margin-right: 0.4em;
+}
+
+.cat_colors
+{
+    border: 1px solid grey;
+    padding: 1em;
+    border-radius: .5em;
+    margin-bottom: 0.8em;
+}
+
+.cat_colors h4
+{
+    color: grey;
+    text-align: left;
+    margin-top: 0;
+}
+
+#input_color_create, #input_color_update
+{
+    width: 10px;
+    height: 10px;
+    display: inline-block;
+
+}
+

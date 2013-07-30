@@ -618,6 +618,12 @@ function UserResource()
 }
 
 
+function QrCodeResource()
+{
+    Resource.call(this, 'qr-code');
+}
+
+
 FloorResource.prototype = new Resource;
 var floorResource = new FloorResource();
 LabelResource.prototype = new Resource;
@@ -633,3 +639,4 @@ RouteResource.prototype = new Resource;
 StepResource.prototype = new Resource;
 UserResource.prototype = new Resource;
 var userResource = new UserResource();
+var qrCodeResource = new QrCodeResource();

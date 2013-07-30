@@ -41,9 +41,8 @@ td.floors table td *
     display: block;
 }
 
-td.floors table td
-{
-    border: 2px solid rgb(175, 170, 155);
+.floors table th, .floors table td{
+    border: 1px solid #C4BEAC;
 }
 
 #enclosures
@@ -222,10 +221,17 @@ th span, td span
     display: inline-block;
 }
 
+.floors table
+{
+    margin-bottom: 0.5em;
+    background-color: #F2EFE5 !important;
+}
+
 .categories div {
     display: inline-block;
     vertical-align: top;
 }
+
 
 .categories ul
 {
@@ -237,6 +243,6 @@ display: inline-block !important;
 }
 
 .floors > span {
-margin-top: 1em;
+    margin-bottom: 1em;
 }
 

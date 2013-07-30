@@ -73,7 +73,8 @@
 
     <div ng-controller="EnclosureListCtrl">
         <label id="search_box">{% trans "Buscar recinto" %}:
-            <input type="text" ng-model="search.name"
+            <input class="input-medium search-query"
+                   type="text" ng-model="search.name"
                    placeholder="{% trans "Nombre del recinto" %}..">
         </label>
 
@@ -82,7 +83,7 @@
             {% trans "Agregar nuevo recinto" %}
         </span>
 
-        <table id="enclosures" class="table table-hover">
+        <table id="enclosures" class="table table-hover table-bordered">
         <thead>
         <tr>
             <th>
@@ -135,7 +136,8 @@
                 ng-controller="FloorListCtrl">
 
                 <!-- CADA PLANTA -->
-                <table ng-hide="enclosure.floors.length == 0">
+                <table class="table table-bordered"
+                       ng-hide="enclosure.floors.length == 0">
                     <thead>
                     <tr>
                         <th>{% trans "Plantas" %} ([[enclosure.floors.length]])</th>
@@ -143,7 +145,7 @@
                     </tr>
                     </thead>
                     <tbody>
-                        <tr ng-repeat="floor in enclosure.floors | orderBy:'floor_number':reverse"
+                        <tr ng-repeat="floor in enclosure.floors | orderBy:'floor_number':desc"
                             ng-controller="FloorCtrl" class="floor">
                             <td>
                                 [[floor.name]]
@@ -339,45 +341,6 @@
                 {% include "_waiting_gif.html" %}
             </form>
         </div>
-
-
-{#        <script type="text/ng-template" id="category_forms">#}
-        <div id="category_create" ng-controller="CategoryFormsCtrl">
-            <form class="create">
-                <span>{% trans "Nueva categoría para el recinto" %} [[enclosure.name]]</span>
-                <label class="txt">{% trans "Nombre" %}:
-                    <input type="text"
-                           ng-model="category_name"
-                           placeholder="{% trans "Nombre para la categoría" %}..">
-                </label>
-                <label class="txt">{% trans "Color" %}:
-                    <input type="text"
-                           ng-model="category_color"
-                           placeholder="{% trans "Color para la categoría" %}..">
-                </label>
-                <button class="btn" ng-click="create()">{% trans "Añadir categoría" %}</button>
-            </form>
-        </div>
-
-
-        <div id="category_edit" ng-controller="CategoryFormsCtrl">
-            <form class="edit">
-                <label class="txt">{% trans "Nombre" %}:
-                    <input type="text"
-                           ng-model="category_name"
-                           placeholder="{% trans "Nuevo nombre para la categoría" %}..">
-                </label>
-                <label class="txt">{% trans "Color" %}:
-                    <input type="text"
-                           ng-model="category_color"
-                           placeholder="{% trans "Nuevo color para la categoría" %}..">
-                </label>
-                <button class="btn" ng-click="closeModalDialog()">{% trans "Cancelar" %}</button>
-                <button class="btn" ng-click="update()">{% trans "Guardar" %}</button>
-                <button class="btn" ng-click="del()">{% trans "Eliminar" %}</button>
-            </form>
-        </div>
-{#        </script>#}
     </div>
 
 

@@ -131,7 +131,7 @@ class LabelResource(ModelResource):
 
 
 class LabelCategoryResource(ModelResource):
-    labels = fields.ToManyField('map_editor.api.resources.LabelResource', 'labels', null=True, blank=True)
+    labels = fields.ToManyField('map_editor.api.resources.LabelResource', 'labels', null=True, blank=True, full=True)
     enclosure = fields.OneToOneField('map_editor.api.resources.EnclosureResource', 'enclosure', null=True, full=True)
 
     class Meta:

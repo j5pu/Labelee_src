@@ -18,10 +18,10 @@ var LabelCategory = {
             cat_id = label_category.id;
             cat_name = label_category.name;
         }
-        else if(Painter.label.category)
+        else if(Painter.label_category)
         {
-            cat_id = Painter.label.category.id;
-            cat_name = Painter.label.category.name;
+            cat_id = Painter.label_category.id;
+            cat_name = Painter.label_category.name;
         }
 
         // Nos aseguramos por el id o el nombre que es una bloqueante
@@ -189,14 +189,11 @@ var Menu = {
     waiting_response: false,
 
     init: function(){
-        Menu.labels = labelResource.readGrouped();
-        Menu._setSelectors();
         Menu.setQrList();
         Menu.setPointStats();
 
         if($e.floor.num_rows.val() == Floor.data.num_rows)
             $e.floor.change_num_rows.attr('disabled', 'disabled');
-//        Events.menu.bind();
     },
 
 
@@ -253,7 +250,7 @@ var Menu = {
         if(list)
             list.empty();
 
-        Menu.qr_list = new Resource('qr-code').readAllFiltered('?point__floor__id=' + Floor.data.id);
+//        Menu.qr_list = new Resource('qr-code').readAllFiltered('?point__floor__id=' + Floor.data.id);
         for(var i in Menu.qr_list)
         {
             var qr = Menu.qr_list[i];
@@ -286,46 +283,20 @@ var Menu = {
         // Recogemos de la B.D. todos los LabelCategory para el recinto del plano
         // y los metemos en el selector
 
-        var prompt_opt = gettext('Select category');
-        if(user_is_staff)
-            Menu.categories = labelCategoryResource.readAll();
-        else
-            Menu.categories = labelCategoryResource.readForFloorEdit(Floor.enclosure.id);
+//        var prompt_opt = gettext('Select category');
+//        if(user_is_staff)
+//            Menu.categories = labelCategoryResource.readAll();
+//        else
+//            Menu.categories = labelCategoryResource.readForFloorEdit(Floor.enclosure.id);
 
-        setSelector($e.label_category_selector, Menu.categories, prompt_opt);
-        setSelector($e.label.form.category, Menu.categories, prompt_opt);
+//        setSelector($e.label_category_selector, Menu.categories, prompt_opt);
+//        setSelector($e.label.form.category, Menu.categories, prompt_opt);
     },
 
 
     setLabelSelector: function()
     {
-        var category_id = $e.label_category_selector.val();
-
-        if(!category_id)
-        {
-            setSelector($e.label.selector, null, gettext('Select label'));
-            $e.label.manage.root_node.hide();
-            return;
-        }
-
-        Painter.label_category = labelCategoryResource.read(category_id);
-        Menu.labels = labelResource.readAllFiltered('?category__id=' + category_id);
-
-        setSelector($e.label.selector, Menu.labels, gettext('Select label'));
-
-        if(Menu.label_created)
-        {
-            $e.label.selector.val(Menu.label_created.id);
-            Menu.label_created = null;
-        }
-        else if(Menu.label_updated)
-        {
-            $e.label.selector.val(Menu.label_updated.id);
-            Menu.label_updated = null;
-        }
-        else if(Painter.label)
-            $e.label.selector.val(Painter.label.id);
-
+        Painter.label_category = $scope.selected_category;
 
         // Si no, en caso de haber elegido la categoría 'Bloqueantes' se selecciona muro
         if(LabelCategory.isBlocker(Painter.label_category))
@@ -405,5 +376,19 @@ var Menu = {
         Floor.reloading = true;
 
         Floor.loadGrid();
+    },
+
+
+    getWallLabel: function()
+    {
+        for(var i in Menu.labels)
+        {
+            var label = Menu.labels[i];
+            if(Label.isWall(label))
+            {
+                return label;
+                break;
+            }
+        }
     }
 };

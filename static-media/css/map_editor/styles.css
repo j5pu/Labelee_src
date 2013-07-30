@@ -21,6 +21,11 @@ a {
     padding: 1em;
 }
 
+#dialogs
+{
+    display: none;
+}
+
 .box-0
 {
     margin: 0.4em;

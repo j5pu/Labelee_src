@@ -217,6 +217,11 @@ function ModalDialog(node)
     {
         $(this.node).dialog('close');
     };
+
+    this.isOpened = function()
+    {
+        $(this.node).dialog('isOpen');
+    };
 }
 
 

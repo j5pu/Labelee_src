@@ -198,8 +198,7 @@ var Events = {
         {
             // Muestra en el plano el QR sobre el que hacemos click en la lista
 
-            var a = $e.qr.list.find('a.point');
-            a.on('click', Menu.showQR)
+            $e.qr.list.find('a.point').on('click', Menu.showQR);
         },
 
 
@@ -235,37 +234,37 @@ var Events = {
         },
 
 
-        _selectLabelCategory: function()
-        {
-            $e.label_category_selector.on('change', Menu.setLabelSelector);
-        },
+//        _selectLabelCategory: function()
+//        {
+//            $e.label_category_selector.on('change', Menu.setLabelSelector);
+//        },
+//
+//
+//        _selectLabel: function()
+//        {
+//            $e.label.selector.on('change', Painter.setLabel);
+//        },
 
 
-        _selectLabel: function()
-        {
-            $e.label.selector.on('change', Painter.setLabel);
-        },
-
-
-        _manageLabel: function()
-        {
-            $e.label.manage.new.on('click', Label.show_form_new);
-            $e.label.manage.edit.on('click', Label.show_form_edit);
-            $e.label.manage.delete.on('click', Label.delete);
-            $e.label.form.create.on('click', Label.create);
-            $e.label.form.update.on('click', Label.update);
-            $e.label.form.cancel.on('click', Label._hide_form);
-        },
+//        _manageLabel: function()
+//        {
+//            $e.label.manage.new.on('click', Label.show_form_new);
+//            $e.label.manage.edit.on('click', Label.show_form_edit);
+//            $e.label.manage.delete.on('click', Label.delete);
+//            $e.label.form.create.on('click', Label.create);
+//            $e.label.form.update.on('click', Label.update);
+//            $e.label.form.cancel.on('click', Label._hide_form);
+//        },
 
 
         bind: function()
         {
             var self = this;
-            $('#menu *').off();
+            $('#menu1 *').off();
             self._changeNumRows();
-            self._manageLabel();
-            self._selectLabel();
-            self._selectLabelCategory();
+//            self._manageLabel();
+//            self._selectLabel();
+//            self._selectLabelCategory();
             self._toggleBlockBorders();
             self._toggleQRs();
             self._updateFloor();

@@ -48,8 +48,13 @@ def readAll(request, enclosure_id):
 
         /api-2/label-category/<enclosure_id>/all
     """
+    categories_dict = []
     categories = getLabelCategories(enclosure_id)
-    categories_dict = queryset_to_dict(categories)
+    for category in categories:
+        category_dict = queryset_to_dict([category])[0]
+        category_dict['labels'] = queryset_to_dict(category.labels.all())
+        categories_dict.append(category_dict)
+
     return HttpResponse(simplejson.dumps(categories_dict), mimetype='application/json')
 
 

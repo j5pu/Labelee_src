@@ -314,69 +314,6 @@ function FloorFormsCtrl($scope, $rootScope, $element)
 }
 
 
-function CategoryFormsCtrl($scope, $rootScope, $element)
-{
-    $scope.create = function()
-    {
-        var data = {
-            name: $scope.category_name,
-            cat_code: $scope.category_code,
-            color: $scope.category_color,
-            enclosure: enclosureResource.api1_url + $scope.enclosure.id + '/'
-        };
-        labelCategoryResource.create(data);
-
-        $rootScope.$broadcast('sync_enclosure', $scope.enclosure);
-    };
-
-
-    $scope.update = function()
-    {
-        var data = {
-            name: $scope.category_name,
-            cat_code: $scope.category_code,
-            color: $scope.category_color
-        };
-        labelCategoryResource.update(data, $scope.category.id);
-
-        $rootScope.$broadcast('sync_enclosure', $scope.enclosure);
-    };
-
-
-    $scope.del = function()
-    {
-        labelCategoryResource.del(
-            $scope.category.id,
-            gettext('Are you sure you want to remove this category?'),
-            function(){
-                $rootScope.$broadcast('sync_enclosure', $scope.enclosure);
-            }
-        );
-    };
-
-
-    $scope.$on('show_create_category_form', function(ev, enclosure){
-        $scope.enclosure = enclosure;
-        $scope.category_name = '';
-        $scope.category_code = '';
-        $scope.category_color = '';
-        modalDialog = new ModalDialog('#category_create');
-        modalDialog.open();
-    });
-
-
-    $scope.$on('show_edit_category_form', function(ev, category, enclosure){
-        $scope.enclosure = enclosure;
-        $scope.category = category;
-        $scope.category_name = category.name;
-        $scope.category_code = category.cat_code;
-        $scope.category_color = category.color;
-        modalDialog = new ModalDialog('#category_edit');
-        modalDialog.open();
-    });
-}
-
-
 function removeArroba(twitterAccount)
 {
     if (twitterAccount && twitterAccount.charAt(0)== "@")

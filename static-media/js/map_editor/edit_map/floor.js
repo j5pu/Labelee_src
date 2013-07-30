@@ -123,11 +123,6 @@ var Floor = {
         if(Floor.redrawing_grid)
             return;
 
-//        loadingMsg.show('Actualizando planta..');
-
-        // Tomamos todas las etiquetas pintadas sobre el plano hasta el momento
-        Floor._getPaintedLabels();
-
         var new_points = [];
         var points_to_update = [];
 
@@ -177,7 +172,7 @@ var Floor = {
                         row: row,
                         col: col,
                         floor: Floor.data.id,
-                        label: Floor.painted_labels[block_label].id
+                        label: block_label
                     };
 
                     new_points.push(new_point);
@@ -273,6 +268,7 @@ var Floor = {
         var block = $e.floor.grid.find('.row[data-row="' + point.row + '"]')
             .find('.block[data-col="' + point.col + '"]');
         Painter.label = Floor.saved_labels[point.label];
+        Painter.label_category = Floor.saved_labels[point.label].category;
         Painter.point_id = point.id;
 
 
@@ -395,7 +391,7 @@ var Floor = {
 //        }
 //        else
 //        {
-            Floor.saved_labels[Label.keys[Label.i]].loaded_img = null;
+//            Floor.saved_labels[Label.keys[Label.i]].loaded_img = null;
             Label.i++;
             Floor._loopLabels();
 //        }
@@ -444,7 +440,7 @@ var Floor = {
         // Pintamos los QRs de las etiquetas que lo contengan
 
         Painter.i = 0;
-        Menu.qr_list = new Resource('qr-code').readAllFiltered('?point__floor__id=' + Floor.data.id);
+        Menu.qr_list = qrCodeResource.readAllFiltered('?point__floor__id=' + Floor.data.id);
 
         Floor._loopQRs();
     },
