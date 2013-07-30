@@ -109,7 +109,7 @@ function PoisCtrl($scope, $rootScope)
             return;
         }
 
-        if(!$scope.category_name || $scope.category_name.length < 4)
+        if(!$scope.new_category_name || $scope.new_category_name.length < 4)
         {
             alert(gettext('You must specify a name with at least 4 characters'));
             return;
