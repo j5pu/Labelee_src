@@ -1054,9 +1054,18 @@ img[id*=pano]{
 
 .leaflet-popup-content
 {
+
+    margin: 3px 12px 0px 12px;
+    font-size: 13px;
+    padding: 1px 8px;
+/*
+para el botón GO!
     margin: 3px 12px;
     font-size: 13px;
     padding: 5px 8px;
+*/
+
+
 }
 
 .socialmenu {
@@ -1065,17 +1074,15 @@ img[id*=pano]{
 
 }
 .leaflet-popup-tip{
-    width: 10px;
-    height: 12px;
+    width: 8px;
+    height: 10px;
 }
 
 .leaflet-popup-content-wrapper {
-    height: 85px;
-    width: 192px;
-/*
+/*    height: 85px;
+    width: 192px;*/
     height: auto;
     width: auto;
-*/
 }
 
 .withCoupon:after {
@@ -1155,7 +1162,7 @@ div.cilogiMarker > span{
 }
 
 .leaflet-popup  {
-    margin-bottom: 1.6em !important;
+    margin-bottom: 1.2em !important;
 }
 
 leaflet-marker-icon{

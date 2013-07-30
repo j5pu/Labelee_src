@@ -534,7 +534,7 @@ function initMap(qrPoint) {
         if (floors[i].id === qrPoint.floor.id) {
             qrFloor = floors[i];
             map.addLayer(qrFloor.photo);
-            map.addLayer(qrFloor.layer)
+            map.addLayer(qrFloor.layer);
 
 
             for (var txt in qrFloor.pois) {
@@ -548,8 +548,8 @@ function initMap(qrPoint) {
 
             map.fitBounds(qrFloor.bounds);
             bindContent(qrMarker);
-            map.setMaxBounds(map.getBounds());
             qrMarker.openPopup();
+            map.setMaxBounds(map.getBounds());
 
             if (qrPoint.point.coupon) {
                 $('div.leaflet-popup-content-wrapper').addClass('withCoupon');
@@ -561,8 +561,8 @@ function initMap(qrPoint) {
     }
 
     map.removeLayer(totalPois);
-    map.addLayer(qrFloor.layer);
-    qrMarker._bringToFront();
+    //map.addLayer(qrFloor.layer);
+    //qrMarker._bringToFront();
 
 
     Coupon.init();
@@ -572,6 +572,7 @@ function initMap(qrPoint) {
         bindContent(destMarker);
     }
     loadedLabels = true;
+    map.invalidateSize();
 }
 
 
