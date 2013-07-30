@@ -22,8 +22,9 @@
     display: inline-block;
     height: auto;
     width: 450px;
-    padding: 1em;
+    padding: 0.8em;
     list-style:none;
+    margin-top: -1em;
 
 }
 
@@ -108,11 +109,13 @@ h4
     padding: 0.7em;
     border-radius: 0.5em;
     color: whitesmoke;
+    text-align: center;
 }
 
 .connection-list .btn
 {
     margin-right: 0.5em;
+    float: left;
 }
 
 span.connector
