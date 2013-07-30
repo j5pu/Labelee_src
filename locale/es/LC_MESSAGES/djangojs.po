@@ -89,17 +89,17 @@ msgstr "Redibujando grid"
 
 #: static-media/js/map_editor/edit_map/main.js:31
 msgid "Used colors"
-msgstr ""
+msgstr "Colores usados"
 
 #: static-media/js/map_editor/edit_map/main.js:71
 #: static-media/js/map_editor/edit_map/main.js:108
 msgid "Invalid color"
-msgstr ""
+msgstr "Color no válido"
 
 #: static-media/js/map_editor/edit_map/main.js:77
 #: static-media/js/map_editor/edit_map/main.js:114
 msgid "You must specify a name with at least 4 characters"
-msgstr ""
+msgstr "Debe especificar un nombre con 4 caracteres como mínimo"
 
 #: static-media/js/map_editor/edit_map/main.js:135
 msgid "Are you sure you want to remove this category?"
@@ -108,19 +108,17 @@ msgstr ""
 "etiquetas y POIs en los mapas)"
 
 #: static-media/js/map_editor/edit_map/main.js:196
-#, fuzzy
 msgid "Are you sure you want to remove this label?"
-msgstr ""
-"¿Seguro que desea eliminar la planta? (también se perderá toda la "
-"información relativa a ella)"
+msgstr "¿Seguro que desea eliminar esta etiqueta?"
+
 
 #: static-media/js/map_editor/edit_map/menu.js:131
 msgid "Delete label"
-msgstr "¿Eliminar etiqueta?"
+msgstr "Eliminar etiqueta"
 
 #: static-media/js/map_editor/edit_map/menu.js:132
 msgid "(All their points will be deleted too)"
-msgstr ""
+msgstr "(Todos los puntos también serán borrados)"
 
 #: static-media/js/map_editor/edit_map/painter.js:199
 msgid "Change panorama"
@@ -134,13 +132,14 @@ msgstr "Añadir panorama"
 #: static-media/js/map_editor/index/main.js:39
 msgid ""
 "Previous routes will be removed for this enclosure. Do you want to continue?"
-msgstr ""
+msgstr "Todas las rutas previas serán borradas del recinto. ¿Desea continuar?"
 
 #: static-media/js/map_editor/index/main.js:164
 msgid ""
 "Are you sure you want to remove this enclosure? (this will erase all their "
 "floors)"
-msgstr "¿Seguro que desea eliminar este recinto? "
+msgstr "¿Seguro que desea eliminar este recinto? (esto eliminará todas sus "
+"plantas)"
 
 #: static-media/js/map_editor/index/main.js:207
 msgid "You must specify the floor image too"

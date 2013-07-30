@@ -58,7 +58,7 @@ msgstr "Connection list"
 
 #: templates/map_editor/v1/connections.html:42
 msgid "New connection"
-msgstr ""
+msgstr "Nueva conexión"
 
 #: templates/map_editor/v1/connections.html:45
 #: templates/map_editor/v2/connections.html:43
@@ -73,7 +73,7 @@ msgstr "Connector2"
 #: templates/map_editor/v1/connections.html:56
 #: templates/map_editor/v2/connections.html:54
 msgid "Save connection"
-msgstr ""
+msgstr "Guardar conexión"
 
 #: templates/map_editor/v1/edit.html:40 templates/map_editor/v2/edit.html:42
 msgid "Antes de cambiar la descripción o el QR de un punto guardar el plano"
@@ -306,12 +306,11 @@ msgstr "Change image"
 
 #: templates/map_editor/v2/edit.html:123 templates/map_editor/v2/edit.html:215
 #: templates/map_editor/v2/edit.html:236
-msgid "Select category"
-msgstr ""
+msgid "Elegir categoría"
+msgstr "Choose category"
 
 #: templates/map_editor/v2/edit.html:143
-#, fuzzy
-msgid "Select POI"
+msgid "Elegir POI"
 msgstr "Choose POI"
 
 #: templates/map_editor/v2/edit.html:175
@@ -331,58 +330,52 @@ msgid "Nuevo color para la categoría"
 msgstr "New color for the category"
 
 #: templates/map_editor/v2/edit.html:199
-#, fuzzy
 msgid "Eliminar categoría"
-msgstr "Create category"
+msgstr "Delete category"
 
 #: templates/map_editor/v2/edit.html:224
 msgid "Editar POI"
 msgstr "Edit POI"
 
 #: templates/map_editor/v2/edit.html:228
-#, fuzzy
 msgid "Nuevo nombre"
-msgstr "New POI name"
+msgstr "New name"
 
 #: templates/map_editor/v2/edit.html:230
 msgid "Nuevo nombre para el POI"
 msgstr "New POI name"
 
 #: templates/map_editor/v2/edit.html:242
-#, fuzzy
 msgid "Eliminar etiqueta"
-msgstr "Delete enclosure"
+msgstr "Delete label"
 
 #: templates/map_editor/v2/index.html:34
-#, fuzzy
-msgid "Enclosure Dashboard"
-msgstr "Go to dashboard"
+msgid "Dashboard del recinto"
+msgstr "Enclosure Dashboard"
 
 #: templates/map_editor/v2/index.html:35
-msgid "Enclosure Site"
-msgstr ""
+msgid "Web del recinto"
+msgstr "Enclosure site"
 
 #: templates/map_editor/v2/index.html:38
 msgid "Labelee App"
-msgstr ""
+msgstr "Labelee App"
 
 #: templates/map_editor/v2/index.html:39
-msgid "Anything"
-msgstr ""
+msgid "Algo"
+msgstr "Anything"
 
 #: templates/map_editor/v2/index.html:53
 msgid "Bienvenido"
 msgstr "Welcome"
 
 #: templates/map_editor/v2/index.html:75
-#, fuzzy
 msgid "Buscar recinto"
-msgstr "Add enclosure"
+msgstr "Search for enclosure"
 
 #: templates/map_editor/v2/index.html:83
-#, fuzzy
 msgid "Agregar nuevo recinto"
-msgstr "Enclosure name"
+msgstr "Add a new enclosure"
 
 #: templates/map_editor/v2/index.html:89
 msgid "Recintos"
@@ -397,30 +390,25 @@ msgid "Ver dashboard"
 msgstr "Go to dashboard"
 
 #: templates/map_editor/v2/index.html:143
-#, fuzzy
 msgid "Puntos de interés"
-msgstr "Twitter account"
+msgstr "POIs"
 
 #: templates/map_editor/v2/index.html:152
-#, fuzzy
 msgid "Editar planta"
-msgstr "Delete floor"
+msgstr "Edit floor"
 
 #: templates/map_editor/v2/index.html:158
-#, fuzzy
 msgid "Editar POIs"
-msgstr "Edit POI"
+msgstr "Edit POIs"
 
 #: templates/map_editor/v2/index.html:167
-#, fuzzy
 msgid "Agregar nueva planta"
-msgstr "New floor"
+msgstr "Add new floor"
 
 #: templates/map_editor/v2/index.html:189
 #: templates/map_editor/v2/index.html:231
-#, fuzzy
 msgid "Nuevo nombre:"
-msgstr "New POI name"
+msgstr "New name:"
 
 #: templates/map_editor/v2/index.html:192
 msgid "Nombre para el recinto"
@@ -428,15 +416,13 @@ msgstr "Enclosure name"
 
 #: templates/map_editor/v2/index.html:196
 #: templates/map_editor/v2/index.html:238
-#, fuzzy
 msgid "Cuenta de Twitter:"
-msgstr "Twitter account"
+msgstr "Twitter account:"
 
 #: templates/map_editor/v2/index.html:202
 #: templates/map_editor/v2/index.html:244
-#, fuzzy
 msgid "Logo del recinto:"
-msgstr "Enclosure website"
+msgstr "Enclosure logo:"
 
 #: templates/map_editor/v2/index.html:206
 msgid "Subir imagen"
@@ -444,9 +430,8 @@ msgstr "Upload image"
 
 #: templates/map_editor/v2/index.html:209
 #: templates/map_editor/v2/index.html:251
-#, fuzzy
 msgid "URL del recinto:"
-msgstr "Enclosure website"
+msgstr "Enclosure URL:"
 
 #: templates/map_editor/v2/index.html:212
 #: templates/map_editor/v2/index.html:254
@@ -455,9 +440,8 @@ msgstr "Insert the enclosure URL"
 
 #: templates/map_editor/v2/index.html:215
 #: templates/map_editor/v2/index.html:257
-#, fuzzy
 msgid "URL del dashboard:"
-msgstr "Go to dashboard"
+msgstr "Dashboard URL"
 
 #: templates/map_editor/v2/index.html:218
 #: templates/map_editor/v2/index.html:260
@@ -470,11 +454,11 @@ msgstr "Delete enclosure"
 
 #: templates/map_editor/v2/index.html:324
 msgid "Imagen .svg"
-msgstr ""
+msgstr "Image .svg"
 
 #: templates/map_editor/v2/index.html:329
 msgid "Imagen .png"
-msgstr ""
+msgstr "Image .png"
 
 #: templates/map_editor/v2/index.html:338
 msgid "Eliminar planta"

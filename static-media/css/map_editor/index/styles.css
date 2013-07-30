@@ -234,6 +234,8 @@ td *
 {
     float: right;
     display: inline-block;
+    margin-top: 0.27em;
+    margin: 0.15em;
 }
 
 #logout a
