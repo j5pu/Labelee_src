@@ -146,7 +146,7 @@ class Point(models.Model):
     col = models.PositiveIntegerField(null=True, blank=True)
     label = models.ForeignKey(Label, related_name='points', on_delete=models.CASCADE)
     floor = models.ForeignKey(Floor, related_name='points', on_delete=models.CASCADE)
-    panorama_thumbnail = models.FileField(upload_to=get_panorama_path, null=True, blank=True)
+    # panorama_thumbnail = models.FileField(upload_to=get_panorama_path, null=True, blank=True)
     alwaysVisible = models.NullBooleanField()
     center_x = models.PositiveIntegerField(null=True)
     center_y = models.PositiveIntegerField(null=True)
