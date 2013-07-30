@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-07-24 10:36+0200\n"
+"POT-Creation-Date: 2013-07-30 13:20+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: route/calculateRoutes.py:28
+#: route/calculateRoutes.py:27
 msgid "Se están calculando las rutas"
 msgstr "Routes are being processed"
 
@@ -25,129 +25,131 @@ msgstr "Routes are being processed"
 msgid "Esto es un titulo"
 msgstr "This is a title"
 
-#: templates/map/index.html:138
+#: templates/map/index.html:150
 msgid "Selecciona tu destino"
 msgstr "Select destination"
 
-#: templates/map/index.html:149
+#: templates/map/index.html:161
 msgid "Lo sentimos, no se ha encontrado ningún resultado."
 msgstr "No results found, sorry."
 
-#: templates/map/index.html:171
+#: templates/map/index.html:185
 msgid "Cupones"
 msgstr "Coupons"
 
 #: templates/map_editor/v1/connections.html:23
 #: templates/map_editor/v1/index.html:69
 #: templates/map_editor/v2/connections.html:23
-#: templates/map_editor/v2/index.html:86
+#: templates/map_editor/v2/index.html:124
 msgid "Conexiones entre plantas"
 msgstr "Map connections"
 
 #: templates/map_editor/v1/connections.html:25
 #: templates/map_editor/v1/edit.html:60
 #: templates/map_editor/v2/connections.html:25
-#: templates/map_editor/v2/edit.html:60
+#: templates/map_editor/v2/edit.html:62
 msgid "Volver al menú"
 msgstr "Back to menu"
 
-#: templates/map_editor/v1/connections.html:30
+#: templates/map_editor/v1/connections.html:31
 #: templates/map_editor/v2/connections.html:30
-msgid "Arista1"
-msgstr "Connector1"
-
-#: templates/map_editor/v1/connections.html:36
-#: templates/map_editor/v2/connections.html:36
-msgid "Arista2"
-msgstr "Connector2"
-
-#: templates/map_editor/v1/connections.html:41
-#: templates/map_editor/v2/connections.html:41
-msgid "Guardar conexión"
-msgstr "Save connection"
-
-#: templates/map_editor/v1/connections.html:46
-#: templates/map_editor/v2/connections.html:46
 msgid "Lista de conexiones"
 msgstr "Connection list"
 
-#: templates/map_editor/v1/edit.html:40 templates/map_editor/v2/edit.html:40
+#: templates/map_editor/v1/connections.html:42
+msgid "New connection"
+msgstr ""
+
+#: templates/map_editor/v1/connections.html:45
+#: templates/map_editor/v2/connections.html:43
+msgid "Arista1"
+msgstr "Connector1"
+
+#: templates/map_editor/v1/connections.html:51
+#: templates/map_editor/v2/connections.html:49
+msgid "Arista2"
+msgstr "Connector2"
+
+#: templates/map_editor/v1/connections.html:56
+#: templates/map_editor/v2/connections.html:54
+msgid "Save connection"
+msgstr ""
+
+#: templates/map_editor/v1/edit.html:40 templates/map_editor/v2/edit.html:42
 msgid "Antes de cambiar la descripción o el QR de un punto guardar el plano"
 msgstr ""
 "You need to save the floor before assign QR or changing description for a "
 "point"
 
-#: templates/map_editor/v1/edit.html:41 templates/map_editor/v2/edit.html:41
+#: templates/map_editor/v1/edit.html:41 templates/map_editor/v2/edit.html:43
 msgid "No aumentar el tamaño de la página"
 msgstr "Don't zooming on this page"
 
-#: templates/map_editor/v1/edit.html:52 templates/map_editor/v2/edit.html:52
+#: templates/map_editor/v1/edit.html:52 templates/map_editor/v2/edit.html:54
 msgid "Filas"
 msgstr "Rows"
 
-#: templates/map_editor/v1/edit.html:57 templates/map_editor/v2/edit.html:57
+#: templates/map_editor/v1/edit.html:57 templates/map_editor/v2/edit.html:59
 msgid "Refrescar filas"
 msgstr "Update rows"
 
-#: templates/map_editor/v1/edit.html:61 templates/map_editor/v2/edit.html:61
-#: templates/map_editor/v2/edit.html:168
-#: templates/map_editor/v2/index.html:252
-#: templates/map_editor/v2/index.html:319
-#: templates/map_editor/v2/index.html:361
+#: templates/map_editor/v1/edit.html:61 templates/map_editor/v2/edit.html:63
+#: templates/map_editor/v2/edit.html:198 templates/map_editor/v2/edit.html:241
+#: templates/map_editor/v2/index.html:264
+#: templates/map_editor/v2/index.html:337
 msgid "Guardar"
 msgstr "Save"
 
-#: templates/map_editor/v1/edit.html:62 templates/map_editor/v2/edit.html:62
+#: templates/map_editor/v1/edit.html:62 templates/map_editor/v2/edit.html:64
 msgid "Limpiar"
 msgstr "Clear"
 
-#: templates/map_editor/v1/edit.html:69 templates/map_editor/v2/edit.html:69
+#: templates/map_editor/v1/edit.html:69 templates/map_editor/v2/edit.html:72
 msgid "Puntos"
 msgstr "Points"
 
-#: templates/map_editor/v1/edit.html:72 templates/map_editor/v2/edit.html:72
+#: templates/map_editor/v1/edit.html:72 templates/map_editor/v2/edit.html:75
 msgid "Guardados"
 msgstr "Saved"
 
-#: templates/map_editor/v1/edit.html:76 templates/map_editor/v2/edit.html:76
+#: templates/map_editor/v1/edit.html:76 templates/map_editor/v2/edit.html:79
 msgid "Por guardar"
 msgstr "To save"
 
-#: templates/map_editor/v1/edit.html:80 templates/map_editor/v2/edit.html:80
+#: templates/map_editor/v1/edit.html:80 templates/map_editor/v2/edit.html:83
 msgid "Por elminar"
 msgstr "To delete"
 
-#: templates/map_editor/v1/edit.html:89 templates/map_editor/v2/edit.html:89
+#: templates/map_editor/v1/edit.html:89 templates/map_editor/v2/edit.html:92
 msgid "Ver rejilla"
 msgstr "View block borders"
 
-#: templates/map_editor/v1/edit.html:92 templates/map_editor/v2/edit.html:92
+#: templates/map_editor/v1/edit.html:92 templates/map_editor/v2/edit.html:95
 msgid "Modo borrar"
 msgstr "Erase mode"
 
-#: templates/map_editor/v1/edit.html:98 templates/map_editor/v2/edit.html:98
+#: templates/map_editor/v1/edit.html:98 templates/map_editor/v2/edit.html:102
 msgid "Lista de QRs"
 msgstr "QR list"
 
-#: templates/map_editor/v1/edit.html:100 templates/map_editor/v2/edit.html:100
+#: templates/map_editor/v1/edit.html:100 templates/map_editor/v2/edit.html:104
 msgid "Resaltar todos"
 msgstr "Highlight all"
 
-#: templates/map_editor/v1/edit.html:112 templates/map_editor/v2/edit.html:112
+#: templates/map_editor/v1/edit.html:112 templates/map_editor/v2/edit.html:116
 msgid "Elegir POI"
 msgstr "Choose POI"
 
-#: templates/map_editor/v1/edit.html:116 templates/map_editor/v2/edit.html:116
+#: templates/map_editor/v1/edit.html:116 templates/map_editor/v2/edit.html:120
 msgid "Categoría"
 msgstr "Category"
 
-#: templates/map_editor/v1/edit.html:119 templates/map_editor/v2/edit.html:126
+#: templates/map_editor/v1/edit.html:119 templates/map_editor/v2/edit.html:129
+#: templates/map_editor/v2/edit.html:150
 msgid "Nueva"
 msgstr "New"
 
 #: templates/map_editor/v1/edit.html:121 templates/map_editor/v1/edit.html:130
-#: templates/map_editor/v2/edit.html:128
-#: templates/map_editor/v2/index.html:362
 msgid "Eliminar"
 msgstr "Delete"
 
@@ -159,8 +161,7 @@ msgstr "New"
 msgid "Crear categoría"
 msgstr "Create category"
 
-#: templates/map_editor/v1/edit.html:147
-#: templates/map_editor/v2/index.html:333
+#: templates/map_editor/v1/edit.html:147 templates/map_editor/v2/edit.html:170
 msgid "Nombre para la categoría"
 msgstr "Category name"
 
@@ -172,35 +173,36 @@ msgstr "Choose icon"
 msgid "Color de bloque"
 msgstr "Block color"
 
-#: templates/map_editor/v1/edit.html:159
+#: templates/map_editor/v1/edit.html:159 templates/map_editor/v2/edit.html:172
+#: templates/map_editor/v2/edit.html:190
 msgid "Color"
 msgstr "Color"
 
 #: templates/map_editor/v1/edit.html:162 templates/map_editor/v1/edit.html:186
-#: templates/map_editor/v2/edit.html:150
+#: templates/map_editor/v2/edit.html:220
 msgid "Crear"
 msgstr "Create"
 
 #: templates/map_editor/v1/edit.html:163 templates/map_editor/v1/edit.html:187
 #: templates/map_editor/v1/index.html:97
 #: templates/map_editor/v1/index.html:201
-#: templates/map_editor/v2/edit.html:151 templates/map_editor/v2/edit.html:169
-#: templates/map_editor/v2/index.html:251
-#: templates/map_editor/v2/index.html:318
-#: templates/map_editor/v2/index.html:360
+#: templates/map_editor/v2/edit.html:179 templates/map_editor/v2/edit.html:197
+#: templates/map_editor/v2/edit.html:219 templates/map_editor/v2/edit.html:240
+#: templates/map_editor/v2/index.html:263
+#: templates/map_editor/v2/index.html:336
 msgid "Cancelar"
 msgstr "Cancel"
 
-#: templates/map_editor/v1/edit.html:168 templates/map_editor/v2/edit.html:138
+#: templates/map_editor/v1/edit.html:168 templates/map_editor/v2/edit.html:204
 msgid "Crear POI"
 msgstr "Create POI"
 
-#: templates/map_editor/v1/edit.html:175 templates/map_editor/v2/edit.html:145
+#: templates/map_editor/v1/edit.html:175 templates/map_editor/v2/edit.html:209
 msgid "Nombre para el POI"
 msgstr "POI name"
 
-#: templates/map_editor/v1/edit.html:177 templates/map_editor/v2/edit.html:147
-#: templates/map_editor/v2/edit.html:165
+#: templates/map_editor/v1/edit.html:177 templates/map_editor/v2/edit.html:212
+#: templates/map_editor/v2/edit.html:233
 msgid "Para la categoría"
 msgstr "For category"
 
@@ -210,43 +212,43 @@ msgstr "POI image"
 
 #: templates/map_editor/v1/edit.html:184
 #: templates/map_editor/v1/index.html:134
-#: templates/map_editor/v2/index.html:281
+#: templates/map_editor/v2/index.html:293
 msgid "Elegir imagen"
 msgstr "Choose image"
 
-#: templates/map_editor/v1/index.html:30 templates/map_editor/v2/index.html:25
+#: templates/map_editor/v1/index.html:30 templates/map_editor/v2/index.html:30
 msgid "Administración de recintos"
 msgstr "Enclosure manager"
 
-#: templates/map_editor/v1/index.html:41
+#: templates/map_editor/v1/index.html:41 templates/map_editor/v2/index.html:78
 msgid "Nombre del recinto"
 msgstr "Enclosure name"
 
 #: templates/map_editor/v1/index.html:43
-#: templates/map_editor/v2/index.html:209
+#: templates/map_editor/v2/index.html:221
 msgid "Añadir recinto"
 msgstr "Add enclosure"
 
-#: templates/map_editor/v1/index.html:66 templates/map_editor/v2/index.html:83
+#: templates/map_editor/v1/index.html:66
+#: templates/map_editor/v2/index.html:121
 msgid "Calcular rutas"
 msgstr "Calculate routes"
 
 #: templates/map_editor/v1/index.html:84
-#: templates/map_editor/v2/index.html:222
+#: templates/map_editor/v2/index.html:234
 msgid "Nuevo nombre para el recinto"
 msgstr "New name for the enclosure"
 
 #: templates/map_editor/v1/index.html:93
-#: templates/map_editor/v2/index.html:187
-#: templates/map_editor/v2/index.html:229
+#: templates/map_editor/v2/index.html:199
+#: templates/map_editor/v2/index.html:241
 msgid "Cuenta de twitter"
 msgstr "Twitter account"
 
 #: templates/map_editor/v1/index.html:98
 #: templates/map_editor/v1/index.html:202
-#: templates/map_editor/v2/edit.html:127 templates/map_editor/v2/index.html:67
-#: templates/map_editor/v2/index.html:128
-#: templates/map_editor/v2/index.html:151
+#: templates/map_editor/v2/edit.html:134 templates/map_editor/v2/edit.html:155
+#: templates/map_editor/v2/index.html:118
 msgid "Editar"
 msgstr "Edit"
 
@@ -256,8 +258,8 @@ msgstr "New floor"
 
 #: templates/map_editor/v1/index.html:120
 #: templates/map_editor/v1/index.html:123
-#: templates/map_editor/v2/index.html:268
-#: templates/map_editor/v2/index.html:271
+#: templates/map_editor/v2/index.html:280
+#: templates/map_editor/v2/index.html:283
 msgid "Nombre de planta"
 msgstr "Floor name"
 
@@ -265,134 +267,242 @@ msgstr "Floor name"
 #: templates/map_editor/v1/index.html:128
 #: templates/map_editor/v1/index.html:186
 #: templates/map_editor/v1/index.html:192
-#: templates/map_editor/v2/index.html:105
-#: templates/map_editor/v2/index.html:273
-#: templates/map_editor/v2/index.html:276
-#: templates/map_editor/v2/index.html:305
-#: templates/map_editor/v2/index.html:310
+#: templates/map_editor/v2/index.html:285
+#: templates/map_editor/v2/index.html:288
+#: templates/map_editor/v2/index.html:317
+#: templates/map_editor/v2/index.html:322
 msgid "Número"
 msgstr "Number"
 
 #: templates/map_editor/v1/index.html:137
-#: templates/map_editor/v2/index.html:284
+#: templates/map_editor/v2/index.html:296
 msgid "Añadir planta"
 msgstr "Add floor"
 
 #: templates/map_editor/v1/index.html:145
-#: templates/map_editor/v2/index.html:49
+#: templates/map_editor/v2/index.html:92
+#: templates/map_editor/v2/index.html:142
 msgid "Plantas"
 msgstr "Floors"
 
 #: templates/map_editor/v1/index.html:178
-#: templates/map_editor/v2/index.html:106
-#: templates/map_editor/v2/index.html:298
+#: templates/map_editor/v2/edit.html:167 templates/map_editor/v2/edit.html:185
+#: templates/map_editor/v2/edit.html:207
+#: templates/map_editor/v2/index.html:310
 msgid "Nombre"
 msgstr "Name"
 
 #: templates/map_editor/v1/index.html:183
-#: templates/map_editor/v2/index.html:302
+#: templates/map_editor/v2/index.html:314
 msgid "Nuevo nombre para la planta"
 msgstr "New floor name"
 
 #: templates/map_editor/v1/index.html:198
-#: templates/map_editor/v2/index.html:236
-#: templates/map_editor/v2/index.html:315
+#: templates/map_editor/v2/index.html:248
+#: templates/map_editor/v2/index.html:328
+#: templates/map_editor/v2/index.html:333
 msgid "Cambiar imagen"
 msgstr "Change image"
 
-#: templates/map_editor/v2/edit.html:156
-msgid "Editar POI"
-msgstr "Edit POI"
+#: templates/map_editor/v2/edit.html:123 templates/map_editor/v2/edit.html:215
+#: templates/map_editor/v2/edit.html:236
+msgid "Select category"
+msgstr ""
 
-#: templates/map_editor/v2/edit.html:163
-msgid "Nuevo nombre para el POI"
-msgstr "New POI name"
+#: templates/map_editor/v2/edit.html:143
+#, fuzzy
+msgid "Select POI"
+msgstr "Choose POI"
 
-#: templates/map_editor/v2/index.html:32
-msgid "Bienvenido"
-msgstr "Welcome"
-
-#: templates/map_editor/v2/index.html:44
-msgid "Recintos"
-msgstr "Enclosures"
-
-#: templates/map_editor/v2/index.html:52
-msgid "Categorías"
-msgstr "Categories"
-
-#: templates/map_editor/v2/index.html:74
-msgid "Web del recinto"
-msgstr "Enclosure website"
-
-#: templates/map_editor/v2/index.html:76
-msgid "Ver dashboard"
-msgstr "Go to dashboard"
-
-#: templates/map_editor/v2/index.html:78
-msgid "Número de POIS/QRs:"
-msgstr "POIS/QRs count"
-
-#: templates/map_editor/v2/index.html:79
-msgid "Número de plantas:"
-msgstr "Floors count"
-
-#: templates/map_editor/v2/index.html:107
-msgid "POIs"
-msgstr "POIs"
-
-#: templates/map_editor/v2/index.html:180
-msgid "Nombre para el recinto"
-msgstr "Enclosure name"
-
-#: templates/map_editor/v2/index.html:194
-msgid "Subir imagen"
-msgstr "Upload image"
-
-#: templates/map_editor/v2/index.html:200
-#: templates/map_editor/v2/index.html:242
-msgid "Introduzca la URL del recinto"
-msgstr "Insert the enclosure URL"
-
-#: templates/map_editor/v2/index.html:206
-#: templates/map_editor/v2/index.html:248
-msgid "Introduzca la URL del dashboard"
-msgstr "Insert the dashboard URL"
-
-#: templates/map_editor/v2/index.html:254
-msgid "Eliminar recinto"
-msgstr "Delete enclosure"
-
-#: templates/map_editor/v2/index.html:320
-msgid "Eliminar planta"
-msgstr "Delete floor"
-
-#: templates/map_editor/v2/index.html:330
-msgid "Nueva categoría para el recinto"
-msgstr "New category for the enclosure"
-
-#: templates/map_editor/v2/index.html:336
-msgid "Código de categoría (máx. 3 letras)"
-msgstr "Category code (max. 3 characters)"
-
-#: templates/map_editor/v2/index.html:340
+#: templates/map_editor/v2/edit.html:175
 msgid "Color para la categoría"
 msgstr "Color for the category"
 
-#: templates/map_editor/v2/index.html:342
+#: templates/map_editor/v2/edit.html:180
 msgid "Añadir categoría"
 msgstr "Add category"
 
-#: templates/map_editor/v2/index.html:351
+#: templates/map_editor/v2/edit.html:188
 msgid "Nuevo nombre para la categoría"
 msgstr "New category name"
 
-#: templates/map_editor/v2/index.html:354
-msgid "Nuevo código de categoría (máx. 3 letras)"
-msgstr "New category code (max. 3 characters)"
-
-#: templates/map_editor/v2/index.html:358
+#: templates/map_editor/v2/edit.html:193
 msgid "Nuevo color para la categoría"
 msgstr "New color for the category"
+
+#: templates/map_editor/v2/edit.html:199
+#, fuzzy
+msgid "Eliminar categoría"
+msgstr "Create category"
+
+#: templates/map_editor/v2/edit.html:224
+msgid "Editar POI"
+msgstr "Edit POI"
+
+#: templates/map_editor/v2/edit.html:228
+#, fuzzy
+msgid "Nuevo nombre"
+msgstr "New POI name"
+
+#: templates/map_editor/v2/edit.html:230
+msgid "Nuevo nombre para el POI"
+msgstr "New POI name"
+
+#: templates/map_editor/v2/edit.html:242
+#, fuzzy
+msgid "Eliminar etiqueta"
+msgstr "Delete enclosure"
+
+#: templates/map_editor/v2/index.html:34
+#, fuzzy
+msgid "Enclosure Dashboard"
+msgstr "Go to dashboard"
+
+#: templates/map_editor/v2/index.html:35
+msgid "Enclosure Site"
+msgstr ""
+
+#: templates/map_editor/v2/index.html:38
+msgid "Labelee App"
+msgstr ""
+
+#: templates/map_editor/v2/index.html:39
+msgid "Anything"
+msgstr ""
+
+#: templates/map_editor/v2/index.html:53
+msgid "Bienvenido"
+msgstr "Welcome"
+
+#: templates/map_editor/v2/index.html:75
+#, fuzzy
+msgid "Buscar recinto"
+msgstr "Add enclosure"
+
+#: templates/map_editor/v2/index.html:83
+#, fuzzy
+msgid "Agregar nuevo recinto"
+msgstr "Enclosure name"
+
+#: templates/map_editor/v2/index.html:89
+msgid "Recintos"
+msgstr "Enclosures"
+
+#: templates/map_editor/v2/index.html:111
+msgid "Web del recinto"
+msgstr "Enclosure website"
+
+#: templates/map_editor/v2/index.html:113
+msgid "Ver dashboard"
+msgstr "Go to dashboard"
+
+#: templates/map_editor/v2/index.html:143
+#, fuzzy
+msgid "Puntos de interés"
+msgstr "Twitter account"
+
+#: templates/map_editor/v2/index.html:152
+#, fuzzy
+msgid "Editar planta"
+msgstr "Delete floor"
+
+#: templates/map_editor/v2/index.html:158
+#, fuzzy
+msgid "Editar POIs"
+msgstr "Edit POI"
+
+#: templates/map_editor/v2/index.html:167
+#, fuzzy
+msgid "Agregar nueva planta"
+msgstr "New floor"
+
+#: templates/map_editor/v2/index.html:189
+#: templates/map_editor/v2/index.html:231
+#, fuzzy
+msgid "Nuevo nombre:"
+msgstr "New POI name"
+
+#: templates/map_editor/v2/index.html:192
+msgid "Nombre para el recinto"
+msgstr "Enclosure name"
+
+#: templates/map_editor/v2/index.html:196
+#: templates/map_editor/v2/index.html:238
+#, fuzzy
+msgid "Cuenta de Twitter:"
+msgstr "Twitter account"
+
+#: templates/map_editor/v2/index.html:202
+#: templates/map_editor/v2/index.html:244
+#, fuzzy
+msgid "Logo del recinto:"
+msgstr "Enclosure website"
+
+#: templates/map_editor/v2/index.html:206
+msgid "Subir imagen"
+msgstr "Upload image"
+
+#: templates/map_editor/v2/index.html:209
+#: templates/map_editor/v2/index.html:251
+#, fuzzy
+msgid "URL del recinto:"
+msgstr "Enclosure website"
+
+#: templates/map_editor/v2/index.html:212
+#: templates/map_editor/v2/index.html:254
+msgid "Introduzca la URL del recinto"
+msgstr "Insert the enclosure URL"
+
+#: templates/map_editor/v2/index.html:215
+#: templates/map_editor/v2/index.html:257
+#, fuzzy
+msgid "URL del dashboard:"
+msgstr "Go to dashboard"
+
+#: templates/map_editor/v2/index.html:218
+#: templates/map_editor/v2/index.html:260
+msgid "Introduzca la URL del dashboard"
+msgstr "Insert the dashboard URL"
+
+#: templates/map_editor/v2/index.html:266
+msgid "Eliminar recinto"
+msgstr "Delete enclosure"
+
+#: templates/map_editor/v2/index.html:324
+msgid "Imagen .svg"
+msgstr ""
+
+#: templates/map_editor/v2/index.html:329
+msgid "Imagen .png"
+msgstr ""
+
+#: templates/map_editor/v2/index.html:338
+msgid "Eliminar planta"
+msgstr "Delete floor"
+
+#~ msgid "Guardar conexión"
+#~ msgstr "Save connection"
+
+#~ msgid "Categorías"
+#~ msgstr "Categories"
+
+#~ msgid "Número de POIS/QRs:"
+#~ msgstr "POIS/QRs count"
+
+#~ msgid "Número de plantas:"
+#~ msgstr "Floors count"
+
+#~ msgid "POIs"
+#~ msgstr "POIs"
+
+#~ msgid "Nueva categoría para el recinto"
+#~ msgstr "New category for the enclosure"
+
+#~ msgid "Código de categoría (máx. 3 letras)"
+#~ msgstr "Category code (max. 3 characters)"
+
+#~ msgid "Nuevo código de categoría (máx. 3 letras)"
+#~ msgstr "New category code (max. 3 characters)"
 
 #~ msgid "Compartir con"
 #~ msgstr "Share on"
