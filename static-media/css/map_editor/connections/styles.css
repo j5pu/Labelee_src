@@ -8,17 +8,6 @@
     /*border: 3px solid grey;*/
     box-shadow: 1px -2px 5px;
 }
-
-#caja1 {
-
-    border-radius: 1em 1em 1em 1em;
-    display: inline-block;
-    height: 400px;
-    width: auto;
-    padding: 1em;
-
-}
-
 #select1 {
     height: 150px;
 }
@@ -32,7 +21,7 @@
     border-radius: 1em 1em 1em 1em;
     display: inline-block;
     height: auto;
-    width: 350px;
+    width: 450px;
     padding: 1em;
     list-style:none;
 
@@ -87,8 +76,9 @@ form .btn
 
 h4
 {
-    color: white;
+    color: rgb(196, 190, 170);
     margin-top: 0em;
+    padding-right: 37px;
 }
 
 .box-1
@@ -104,7 +94,7 @@ h4
 
 .connection-list ul
 {
-    width: 370px;
+    width: 497px;
     max-height: 311px;
     overflow-x: hidden;
     overflow-y: auto;
@@ -128,7 +118,7 @@ h4
 span.connector
 {
     background: rgb(173, 157, 101);
-    padding: 0.6em 0.8em;
+    padding: 0.1em 0.1em;
     border-radius: 1.2em;
     color: whitesmoke;
 }
@@ -136,6 +126,15 @@ span.connector
 i.icon-arrow-right
 {
     margin: 0 0.4em;
+}
+div.box.box-0.connection-list {
+
+    border-radius: 1em 1em 1em 1em;
+    display: inline-block;
+    height: 400px;
+    width: auto;
+    padding: 1em;
+    padding-left: 38px;
 }
 
 
