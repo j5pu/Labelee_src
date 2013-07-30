@@ -589,9 +589,9 @@ map.on('baselayerchange', function (e) {
     changeFloor(e);
 });
 
-$('#route-button').on('click', function(){
+/*$('#route-button').on('click', function(){
 alert('GO!');
-});
+});*/
 
 // Sacar panorámica para el punto
 

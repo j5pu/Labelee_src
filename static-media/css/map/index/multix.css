@@ -1070,8 +1070,12 @@ img[id*=pano]{
 }
 
 .leaflet-popup-content-wrapper {
+    height: 85px;
+    width: 192px;
+/*
     height: auto;
     width: auto;
+*/
 }
 
 .withCoupon:after {
