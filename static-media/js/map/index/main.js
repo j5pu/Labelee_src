@@ -190,7 +190,7 @@ var Coupon = {
         $('div.leaflet-popup-content-wrapper').on('click', function (e) {
             console.log(e.clientX +':'+ $(this).offset().left+':'+e.clientY +':'+ $(this).offset().top)
             if (e.clientX > $(this).offset().left + 135 &&
-                e.clientY > $(this).offset().top + 70)
+                e.clientY > $(this).offset().top + 67)
 
             {
                 var imgID=$(this).find('p>button').data('socialmenu'),
