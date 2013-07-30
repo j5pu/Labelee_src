@@ -96,7 +96,7 @@ h4
 .connection-list ul
 {
     width: 497px;
-    max-height: 311px;
+    max-height: 516px;
     overflow-x: hidden;
     overflow-y: auto;
     margin-left: -10px;
@@ -137,10 +137,22 @@ div.box.box-0.connection-list {
     height: 400px;
     width: auto;
     padding: 1em;
-    padding-left: 38px;
 }
 
+.container-fluid
+{
+    width: 100%;
+}
 
+#col2
+{
+    margin-top: 2.8em;
+}
+
+form.box.box-1.ng-pristine.ng-valid
+{
+    margin-top: -0.9em;
+}
 
 
 
