@@ -188,8 +188,9 @@ var Coupon = {
     bindShowFromMarker: function()
     {
         $('div.leaflet-popup-content-wrapper').on('click', function (e) {
-            if (e.clientX > $(this).offset().left + 105 &&
-                e.clientY > $(this).offset().top + 45)
+            console.log(e.clientX +':'+ $(this).offset().left+':'+e.clientY +':'+ $(this).offset().top)
+            if (e.clientX > $(this).offset().left + 135 &&
+                e.clientY > $(this).offset().top + 70)
 
             {
                 var imgID=$(this).find('p>button').data('socialmenu'),
