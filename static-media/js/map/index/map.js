@@ -546,10 +546,11 @@ function initMap(qrPoint) {
             }
 
 
-            map.fitBounds(qrFloor.bounds);
+            map.setView(qrFloor.bounds.getCenter(), 0);
+//            map.fitBounds(qrFloor.bounds);
             bindContent(qrMarker);
-            qrMarker.openPopup();
             map.setMaxBounds(map.getBounds());
+            qrMarker.openPopup();
 
             if (qrPoint.point.coupon) {
                 $('div.leaflet-popup-content-wrapper').addClass('withCoupon');
