@@ -40,17 +40,18 @@ var SocialMenu = {
     renderIcon: function (pointId) {
 
 
-        return '<g:plus action="share"></g:plus>' + '<p align="center" id="socialsharing" ><button class="socialmenu" style=" left:0px;" onclick="SocialMenu.fbs_click(' + pointId + ')" data-socialmenu="' + pointId + '">' +
+        return '<g:plus action="share"></g:plus>' + '<p align="center" id="socialsharing" ><button class="socialmenu" style=" left:0px; margin:0 -2px;" onclick="SocialMenu.fbs_click(' + pointId + ')" data-socialmenu="' + pointId + '">' +
             '<i class="icon-facebook-sign"></i>' +
             '</button>' +
-            '<button class="socialmenu" style=" left:0px;"  onclick="SocialMenu.twt_click(' + pointId + ')" data-socialmenu="' + pointId + '">' +
+            '<button class="socialmenu" style=" left:0px; margin:0 -2px;"  onclick="SocialMenu.twt_click(' + pointId + ')" data-socialmenu="' + pointId + '">' +
             '<i class="icon-twitter-sign"></i>' +
             '</button>' +
-            '<button class="socialmenu" style=" left:0px;" onclick="SocialMenu.google_click(' + pointId + ')" data-socialmenu="' + pointId + '">' +
+            '<button class="socialmenu" style=" left:0px; margin:0 -2px;" onclick="SocialMenu.google_click(' + pointId + ')" data-socialmenu="' + pointId + '">' +
             '<i class="icon-google-plus-sign"></i>' +
-            '</button></p>'+
-            '<span id="go-button">GO!</span>'
-
+            '</button></p>'
+            /*+
+            '<span id="route-button">GO!</span>'
+*/
     },
 
     bindShow: function () {

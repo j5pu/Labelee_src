@@ -2,7 +2,7 @@
 <!-- saved from url=(0025)http://nvd3.org/livecode/ -->
 <html lang="en">
 <script type="text/javascript" async=""
-        src="./NVD3.js    Live Code examples powered by CodeMirror_files/ga.js"></script>
+        src="{{ STATIC_URL }}VENDOR/NVD3.js    Live Code examples powered by CodeMirror_files/ga.js"></script>
 <script id="tinyhippos-injected">if (window.top.ripple) {
     window.top.ripple("bootstrap").inject(window, document);
 }</script>
@@ -25,11 +25,11 @@
     <link href="http://nvd3.org/src/nv.d3.css" rel="stylesheet">
     <link href="http://nvd3.org/css/syntax.css" rel="stylesheet">
 
-    <script src="./NVD3.js    Live Code examples powered by CodeMirror_files/d3.v2.js"></script>
-    <script src="./NVD3.js    Live Code examples powered by CodeMirror_files/fisheye.js"></script>
-    <script src="./NVD3.js    Live Code examples powered by CodeMirror_files/nv.d3.js"></script>
+    <script src="{{ STATIC_URL }}VENDOR/NVD3.js    Live Code examples powered by CodeMirror_files/d3.v2.js"></script>
+    <script src="{{ STATIC_URL }}VENDOR/NVD3.js    Live Code examples powered by CodeMirror_files/fisheye.js"></script>
+    <script src="{{ STATIC_URL }}VENDOR/NVD3.js    Live Code examples powered by CodeMirror_files/nv.d3.js"></script>
 
-    <script src="./NVD3.js    Live Code examples powered by CodeMirror_files/stream_layers.js"></script>
+    <script src="{{ STATIC_URL }}VENDOR/NVD3.js    Live Code examples powered by CodeMirror_files/stream_layers.js"></script>
 
     <!--[if lt IE 9]>
       <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
@@ -259,32 +259,93 @@
         </h1>
     </div>
 
+    <script>
+        var data=[
+            {
+                key: "Cumulative Return",
+                values: [
+                    {
+                        "label" : "A" ,
+                        "value" : -29.765957771107
+                    } ,
+                    {
+                        "label" : "B" ,
+                        "value" : 0
+                    } ,
+                    {
+                        "label" : "C" ,
+                        "value" : 32.807804682612
+                    } ,
+                    {
+                        "label" : "D" ,
+                        "value" : 196.45946739256
+                    } ,
+                    {
+                        "label" : "E" ,
+                        "value" : 0.19434030906893
+                    } ,
+                    {
+                        "label" : "F" ,
+                        "value" : -98.079782601442
+                    } ,
+                    {
+                        "label" : "G" ,
+                        "value" : -13.925743130903
+                    } ,
+                    {
+                        "label" : "H" ,
+                        "value" : -5.1387322875705
+                    }
+                ]
+            }
+        ];
+
+        nv.addGraph(function() {
+            var chart = nv.models.discreteBarChart()
+                    .x(function(d) { return d.label })
+                    .y(function(d) { return d.value })
+                    .staggerLabels(true)
+                    .tooltips(false)
+                    .showValues(true)
+
+            d3.select('#chart svg')
+                    .datum(data)
+                    .transition().duration(500)
+                    .call(chart);
+
+            nv.utils.windowResize(chart.update);
+
+            return chart;
+        });
+
+
+    </script>
     <ul class="thumbnails">
 
-        <li class="span6">
+        <li class="span3">
             <h2 id="discrete_bar_chart">Discrete Bar Chart</h2>
             <div id="chart">
-                <svg style="width:500px"></svg>
+                <svg style="width:auto"></svg>
             </div>
             <script src="discreteBar.js" type="text/javascript"> </script>
 
         </li>
 
-        <li class="span6">
+        <li class="span3">
             <a href="#" class="thumbnail" data-chart="scatter"
                data-charttitle="Scatter / Bubble Chart">
                 <img src="./NVD3.js    Live Code examples powered by CodeMirror_files/scatter.png">
             </a>
         </li>
 
-        <li class="span6">
+        <li class="span3">
             <a href="#" class="thumbnail" data-chart="stackedArea"
                data-charttitle="Stacked Area Chart">
                 <img src="./NVD3.js    Live Code examples powered by CodeMirror_files/stackedarea.png">
             </a>
         </li>
 
-        <li class="span6">
+        <li class="span3">
             <a href="http://nvd3.org/livecode/#codemirrorNav" class="thumbnail" data-chart="discreteBar"
                data-charttitle="Discrete Bar Chart">
                 <img src="./NVD3.js    Live Code examples powered by CodeMirror_files/discretebar.png">

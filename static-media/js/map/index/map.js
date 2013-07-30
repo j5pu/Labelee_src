@@ -589,9 +589,8 @@ map.on('baselayerchange', function (e) {
     changeFloor(e);
 });
 
-$('span#go-button').on('click', function(e){
-    e.stopPropagation();
-console.log('GO!');
+$('#route-button').on('click', function(){
+alert('GO!');
 });
 
 // Sacar panorámica para el punto
@@ -930,7 +929,7 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
                 map.addLayer(arrowHead[f]);
                 flechita = arrowHead[f];
                 arrowAnim(flechita, floors[f].name);
-                map.setView(arrow[f].getBounds().pad(15).getCenter(), 0);
+//                map.setView(arrow[f].getBounds().pad(15).getCenter(), 0);
                 qrMarker.openPopup();
 
             } else {
@@ -972,11 +971,11 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
 
                 map.addLayer(floors[f].layer);
                 map.addLayer(floors[f].photo);
-                map.setView(arrow[f].getBounds().pad(15).getCenter(), 0);
+//                map.setView(arrow[f].getBounds().pad(15).getCenter(), 0);
                 map.addLayer(arrowHead[f]);
                 flechita = arrowHead[f];
                 arrowAnim(flechita, floors[f].name);
-                map.setView(arrow[f].getBounds().pad(15).getCenter(), 0);
+//                map.setView(arrow[f].getBounds().pad(15).getCenter(), 0);
 
             }
         }

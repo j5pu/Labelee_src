@@ -35,7 +35,13 @@ urlpatterns = patterns('map_editor.api_2',
 	url(r'^point/pois/(?P<floor_id>\d+)$', 'resources.point.readOnlyPois'),
 	url(r'^point/pois/enclosure/(?P<enclosure_id>\d+)/count$', 'resources.point.countPoisFromEnclosure'),
 
+
+    #QR-CODE
     url(r'^url_to_qr/(?P<url>.+)', 'resources.qr_code.generate_qr_from_url'),
+
+
+    #QR-SHOT
+    url(r'^qr-shot/count/(?P<enclosure_id>\d+)$', 'resources.qr_shot.get_count'),
 
 	# 	/api-2/grid/1/point/object/*/*..
 		#'(?P<related_resources>(?:\w+/)+)$', 'services.views.get_related'),
