@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 
-import sys
 import heapq
 
 
@@ -16,7 +15,7 @@ class Dijkstra():
         self.qr = qr
         self.mapConnections = mapConnections
 
-    def __dijkstraUsingHeap__(self, adj, s, t):
+    def __dijkstraUsingHeap__(self, adj, s):
         ''' Return predecessors and min distance if there exists a shortest path
             from s to t; Otherwise, return None '''
         Q = []     # priority queue of items; note item is mutable.
@@ -38,8 +37,6 @@ class Dijkstra():
             if u not in visited_set:
                 p[u] = parent
                 visited_set.add(u)
-                if u == t:
-                    return p, d[u]
                 for v in adj.get(u, []):
                     if d.get(v):
                         if d[v] > cost + d[u]:
@@ -53,19 +50,24 @@ class Dijkstra():
                         heapq.heappush(Q, item)
                         Qd[v] = item
 
-        return None
+        return p
 
-    def __shortestpathUsingHeap__(self, graph, start, end, visited=[], distances={}, predecessors={}):
+    def __shortestpathsUsingHeap__(self, graph, start, visited=[], distances={}, predecessors={}):
 
-        predecessors, min_cost = self.__dijkstraUsingHeap__(graph, start, end)
-        c = end
-        path = [c]
+        predecessors = self.__dijkstraUsingHeap__(graph, start)
+        paths = {}
+        for destination_qr in self.qr:
+            destination = self.getKey(destination_qr.point.row, destination_qr.point.col,
+                                      destination_qr.point.floor.id)
+            if destination != start:
+                path = [destination]
+                v = destination
+                while predecessors.get(v):
+                    path.insert(0, predecessors[v])
+                    v = predecessors[v]
+                paths[destination_qr] = path
 
-        while predecessors.get(c):
-            path.insert(0, predecessors[c])
-            c = predecessors[c]
-
-        return [len(path), path]
+        return paths
 
     #funcion que crea el mapa con las zonas que se pueden pisar o que no, W es muro, E pisable
     # ejemplo 1_1_4: E, 1_1_5 : W, indica que el 1_1_4 es transitable y que el 1_1_5 es muro
@@ -135,26 +137,21 @@ class Dijkstra():
         result = []
         #Ejecuta dijkstra para calcular todas las rutas posibles
         for origin in self.qr:
-            for destination in self.qr:
-                if origin.point.id != destination.point.id:
-                    try:
-                        keyorigin = self.getKey(origin.point.row, origin.point.col, origin.point.floor.id)
-                        keydestination = self.getKey(destination.point.row, destination.point.col,
-                                                     destination.point.floor.id)
-                        path = self.__shortestpathUsingHeap__(graph, keyorigin, keydestination
+            try:
+                keyorigin = self.getKey(origin.point.row, origin.point.col, origin.point.floor.id)
+                paths = self.__shortestpathsUsingHeap__(graph, keyorigin
                             , visited=[], distances={}
                             , predecessors={})
-                    except Exception as ex:
-                        errors.append(
-                            '--Imposible encontrar camino entre camino entre {0} y {1} ex: {2}--'.format(keyorigin,
-                                                                                                         keydestination,
-                                                                                                         ex.args))
-                        print type(ex)
-                        print ex.args
-                    else:
-                        #Añade la ruta al resultado
-                        if path is not None:
-                            result.append([origin, destination, path])
+            except Exception as ex:
+                errors.append(
+                            '--Imposible encontrar camino entre caminos para {0}, ex: {1}--'.format(keyorigin,
+                                                                                                    ex.args))
+                print type(ex)
+                print ex.args
+            else:
+                #Añade las rutas al resultado
+                for destination in paths.keys():
+                    result.append([origin, destination, paths[destination]])
 
         return result
 
