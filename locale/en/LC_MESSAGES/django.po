@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-07-31 10:48+0200\n"
+"POT-Creation-Date: 2013-07-31 11:34+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -137,6 +137,7 @@ msgid "Resaltar todos"
 msgstr "Highlight all"
 
 #: templates/map_editor/v1/edit.html:112 templates/map_editor/v2/edit.html:116
+#: templates/map_editor/v2/edit.html:143
 msgid "Elegir POI"
 msgstr "Choose POI"
 
@@ -309,10 +310,6 @@ msgstr "Change image"
 msgid "Elegir categoría"
 msgstr "Select category"
 
-#: templates/map_editor/v2/edit.html:143
-msgid "Elegir POI"
-msgstr "Select POI"
-
 #: templates/map_editor/v2/edit.html:175
 msgid "Color para la categoría"
 msgstr "Color for the category"
@@ -350,13 +347,14 @@ msgid "Eliminar etiqueta"
 msgstr "Delete label"
 
 #: templates/map_editor/v2/index.html:34
-
 msgid "Dashboard"
 msgstr "Dashboard"
 
 #: templates/map_editor/v2/index.html:35
+#: templates/map_editor/v2/index.html:111
+#, fuzzy
 msgid "Web del recinto"
-msgstr "Enclosure Site"
+msgstr "Enclosure name"
 
 #: templates/map_editor/v2/index.html:38
 msgid "Labelee App"
@@ -381,10 +379,6 @@ msgstr "Add a new enclosure"
 #: templates/map_editor/v2/index.html:89
 msgid "Recintos"
 msgstr "Enclosures"
-
-#: templates/map_editor/v2/index.html:111
-msgid "Web del recinto"
-msgstr "Enclosure site"
 
 #: templates/map_editor/v2/index.html:113
 msgid "Ver dashboard"
@@ -470,9 +464,6 @@ msgstr "Delete floor"
 
 #~ msgid "Algo"
 #~ msgstr "Anything"
-
-#~ msgid "Guardar conexión"
-#~ msgstr "Save connection"
 
 #~ msgid "Categorías"
 #~ msgstr "Categories"
