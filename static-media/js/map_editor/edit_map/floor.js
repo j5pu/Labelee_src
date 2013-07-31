@@ -598,7 +598,13 @@ var Floor = {
 
     hasPoints: function()
     {
-        return Floor.points && Floor.points.length > 0;
+        return Floor.points && Floor.points.length > 0 ;
+    },
+
+//    Si se ha pintado algun punto
+    isPainted: function()
+    {
+        return Floor.point_count.to_save > 0 ;
     }
 };
 
