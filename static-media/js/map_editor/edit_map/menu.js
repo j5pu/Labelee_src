@@ -368,7 +368,7 @@ var Menu = {
         checkbox.attr('checked', checkbox_is_checked);
 
         if(checkbox_is_checked &&
-            !confirm('Se perderán los puntos que no se han guardado. ¿Desea continuar?'))
+            !confirm (gettext('POIs that are not saved will be erased. Do you want to continue?')))
             return;
 
         Floor.show_only_qrs = checkbox_is_checked;

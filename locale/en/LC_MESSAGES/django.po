@@ -57,8 +57,8 @@ msgid "Lista de conexiones"
 msgstr "Connection list"
 
 #: templates/map_editor/v1/connections.html:42
-msgid "New connection"
-msgstr "Nueva conexión"
+msgid "Nueva conexión"
+msgstr "New connection"
 
 #: templates/map_editor/v1/connections.html:45
 #: templates/map_editor/v2/connections.html:43
@@ -72,8 +72,8 @@ msgstr "Connector2"
 
 #: templates/map_editor/v1/connections.html:56
 #: templates/map_editor/v2/connections.html:54
-msgid "Save connection"
-msgstr "Guardar conexión"
+msgid "Guardar conexión"
+msgstr "Save connection"
 
 #: templates/map_editor/v1/edit.html:40 templates/map_editor/v2/edit.html:42
 msgid "Antes de cambiar la descripción o el QR de un punto guardar el plano"
@@ -306,14 +306,12 @@ msgstr "Change image"
 
 #: templates/map_editor/v2/edit.html:123 templates/map_editor/v2/edit.html:215
 #: templates/map_editor/v2/edit.html:236
-#, fuzzy
-msgid "Select category"
-msgstr "Choose category"
+msgid "Elegir categoría"
+msgstr "Select category"
 
 #: templates/map_editor/v2/edit.html:143
-#, fuzzy
 msgid "Elegir POI"
-msgstr "Choose POI"
+msgstr "Select POI"
 
 #: templates/map_editor/v2/edit.html:175
 msgid "Color para la categoría"
@@ -352,21 +350,21 @@ msgid "Eliminar etiqueta"
 msgstr "Delete label"
 
 #: templates/map_editor/v2/index.html:34
-#, fuzzy
-msgid "Enclosure Dashboard"
-msgstr "Go to dashboard"
+
+msgid "Dashboard"
+msgstr "Dashboard"
 
 #: templates/map_editor/v2/index.html:35
-msgid "Enclosure Site"
-msgstr ""
+msgid "Web del recinto"
+msgstr "Enclosure Site"
 
 #: templates/map_editor/v2/index.html:38
 msgid "Labelee App"
 msgstr "Labelee App"
 
 #: templates/map_editor/v2/index.html:39
-msgid "Anything"
-msgstr ""
+msgid "Ayuda"
+msgstr "Help"
 
 #: templates/map_editor/v2/index.html:53
 msgid "Bienvenido"

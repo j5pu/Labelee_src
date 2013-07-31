@@ -102,24 +102,24 @@ msgid "You must specify a name with at least 4 characters"
 msgstr "Debe especificar un nombre con 4 caracteres como mínimo"
 
 #: static-media/js/map_editor/edit_map/main.js:134
-#, fuzzy
 msgid ""
 "Are you sure you want to remove this category?  It will erase ALL points "
 "with that category and not saved points yet"
 msgstr ""
-"¿Seguro que desea eliminar este recinto? (esto eliminará todas sus plantas)"
+"¿Seguro que desea eliminar esta categoría? (esto eliminará todos los puntos"
+" de la categoría que no se hayan guardado todavía)"
 
 #: static-media/js/map_editor/edit_map/main.js:197
-#, fuzzy
 msgid ""
 "Are you sure you want to remove this label? It will erase ALL points with "
 "that label and not saved points yet."
 msgstr ""
-"¿Seguro que desea eliminar este recinto? (esto eliminará todas sus plantas)"
+"¿Seguro que desea eliminar esta etiqueta? (esto eliminará todos los puntos "
+"de la etiqueta que no hayan sido guardados)"
 
 #: static-media/js/map_editor/edit_map/main.js:283
 msgid "zooming disabled!"
-msgstr ""
+msgstr "Zoom deshabilitado"
 
 #: static-media/js/map_editor/edit_map/menu.js:131
 msgid "Delete label"
@@ -130,9 +130,8 @@ msgid "(All their points will be deleted too)"
 msgstr "(Todos los puntos también serán borrados)"
 
 #: static-media/js/map_editor/edit_map/menu.js:377
-#, fuzzy
 msgid "Drawing only QRs for grid"
-msgstr "Cargando grid para la planta"
+msgstr "Dibujando solo QRs para el grid"
 
 #: static-media/js/map_editor/edit_map/menu.js:377
 msgid "Drawing back labels"
