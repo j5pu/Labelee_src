@@ -126,7 +126,9 @@ d3.select('#chart0')
 .transition().duration(500)
 .call(chart);
 
-nv.utils.windowResize(chart.update);
+    //chart.margin({top:0, right:0, bottom:0, left:-20});
+    //chart.width(352);
+    nv.utils.windowResize(chart.update);
 
 return chart;
 });

@@ -573,7 +573,7 @@ function initMap(qrPoint) {
         bindContent(destMarker);
     }
     loadedLabels = true;
-    map.invalidateSize();
+//    map.invalidateSize();
 }
 
 
