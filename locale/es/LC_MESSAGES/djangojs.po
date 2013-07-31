@@ -130,9 +130,8 @@ msgid "(All their points will be deleted too)"
 msgstr "(Todos los puntos también serán borrados)"
 
 #: static-media/js/map_editor/edit_map/menu.js:371
-#, fuzzy
 msgid "POIs that are not saved will be erased. Do you want to continue?"
-msgstr "Todas las rutas previas serán borradas del recinto. ¿Desea continuar?"
+msgstr "Se perderán los puntos que no hayan sido guardados. ¿Desea continuar?"
 
 #: static-media/js/map_editor/edit_map/menu.js:377
 msgid "Drawing only QRs for grid"
