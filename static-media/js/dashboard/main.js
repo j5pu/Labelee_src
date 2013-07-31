@@ -10,10 +10,10 @@ var data=[
             {
                 key: "Cumulative Return",
                 values: [
-                {
-                "label" : "Connections" ,
-                "value" : 129.765957771107
-                } ,
+                    {
+                    "label" : "Connections" ,
+                    "value" : 129.765957771107
+                    } ,
                     {
                         "label" : "Toilets" ,
                         "value" : 200
@@ -138,12 +138,13 @@ nv.addGraph(function() {
     var chart = nv.models.discreteBarChart()
     .x(function(d) { return d.label })
 .y(function(d) { return d.value })
+.color(d3.scale.category20c().range())
 .staggerLabels(true)
-.tooltips(false)
+.tooltips(true)
 .showValues(true);
 
 d3.select('#chart1')
-.datum(data)
+.datum(data3)
 .transition().duration(500)
 .call(chart);
 
@@ -156,12 +157,34 @@ return chart;
 //SCANS BY CATEGORIES
 nv.addGraph(function() {
     var chart = nv.models.pieChart()
-    .x(function(d) { return d.label })
-.y(function(d) { return d.value })
-.showLabels(true);
+        .x(function (d) {
+            return d.label
+        })
+        .y(function (d) {
+            return d.value
+        })
+        //.labelThreshold(-.03)
+        .showLabels(true)
+        .donut(true);
+/*
 
+       var chart = nv.models.pieChart()
+           .x(function(d) { return d.key })
+           //.y(function(d) { return d.value })
+           .values(function(d) { return d })
+           //.labelThreshold(.08)
+           //.showLabels(false)
+           .color(d3.scale.category10().range())
+           .donut(true);
+
+       chart.pie
+           .startAngle(function(d) { return d.startAngle/2 -Math.PI/2 })
+           .endAngle(function(d) { return d.endAngle/2 -Math.PI/2 });
+*/
+
+    chart.pie.donutLabelsOutside(true).donut(true);
 d3.select("#chart2")
-.datum(data3)
+.datum(data)
 .transition().duration(1200)
 .call(chart);
 
@@ -173,7 +196,9 @@ nv.addGraph(function() {
     var chart = nv.models.pieChart()
     .x(function(d) { return d.label })
 .y(function(d) { return d.value })
+.color(d3.scale.category10().range())
 .showLabels(true);
+
 
 d3.select("#chart3")
 .datum(data3)
@@ -189,6 +214,7 @@ nv.addGraph(function() {
     var chart = nv.models.discreteBarChart()
     .x(function(d) { return d.label })
 .y(function(d) { return d.value })
+.color(d3.scale.category20c().range())
 .staggerLabels(true)
 .tooltips(false)
 .showValues(true);
@@ -207,6 +233,7 @@ nv.addGraph(function() {
     var chart = nv.models.discreteBarChart()
     .x(function(d) { return d.label })
 .y(function(d) { return d.value })
+.color(d3.scale.category20b().range())
 .staggerLabels(true)
 .tooltips(false)
 .showValues(true);

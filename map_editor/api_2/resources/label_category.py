@@ -15,7 +15,9 @@ def read_only_valid_categories(request, enclosure_id):
     """
 
     label_categories = LabelCategory.objects.filter(
-        labels__points__floor__enclosure__id = enclosure_id
+        Q(labels__points__floor__enclosure__id = enclosure_id)
+        &
+        Q(enclosure__id = enclosure_id)
     ).exclude(
         name_es = 'Bloqueantes'
     ).exclude(

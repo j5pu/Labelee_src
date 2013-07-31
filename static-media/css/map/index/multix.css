@@ -31,7 +31,7 @@ html.mmenu-opened body
 {
     -webkit-text-size-adjust: none;
     font-family: 'Raleway', 'Noto Sans', Arial, Helvetica, Garuda, sans-serif;
-    font-size: 14px;
+    font-size: 1rem;
 }
 .mmenu ul,
 .mmenu li,
@@ -278,7 +278,7 @@ html.mmenu-right .mmenu a.mmenu-subopen
 .mmenu li.mmenu-label
 {
     background: #444;
-    font-size: 14px;
+    font-size: 0.9rem;
     text-transform: uppercase;
     line-height: 20px;
 }
@@ -404,7 +404,7 @@ pre
     overflow: auto;
     -webkit-overflow-scrolling: touch;
 }
-#page nav
+#page, nav
 {
     display: none;
 }
@@ -473,6 +473,7 @@ span#fake{
 body {
     padding: 0;
     margin: 0;
+    background: #ddd;
 }
 
 body:before {
@@ -778,6 +779,7 @@ box-shadow: 0 0 15px rgba( 0, 0, 0, 0.2 );
     position: relative;
     padding-left: 1em;
     color: rgb(111, 107, 97);
+    background:white;
 }
 .mmenu li > a,
 .mmenu li > span,
@@ -1212,6 +1214,7 @@ leaflet-marker-icon{
     font-family: 'carFont';
     background: cadetblue;
     line-height: 1.3em;
+    opacity:1;
 }
 .car-icon:before {
     content: "\f239";

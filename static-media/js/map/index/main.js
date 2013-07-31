@@ -132,7 +132,7 @@ $(function() {
         mySwiper.swipeNext();
     });
 
-    $('div#page').hide();
+//    $('div#page').hide();
     $('body').prepend('<div class="splash">    <div class="container">        <div class="sp-container"             >            <div class="frame-5"><span><img src="/media/logosplash.png"></span></div>            <div id="find" class="frame-6">find<span id="your"> your<span id="way"> way!</span></span></div>        </div>    </div></div>')
     setTimeout(hideSplash, 3000);
 

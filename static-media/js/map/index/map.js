@@ -300,7 +300,7 @@ function loopFloors() {
 
    if (!Modernizr.svg) {
         img = floors[floor_index].imgB;
-       Logger.log('png');
+//       Logger.log('png');
     }
 
    else {
@@ -496,8 +496,10 @@ function loadPOIs() {
 
             qrMarker.addTo(floors[i].layer);
 
+
             break;
         }
+
     }
 
 
@@ -564,7 +566,6 @@ function initMap(qrPoint) {
     map.removeLayer(totalPois);
     //map.addLayer(qrFloor.layer);
     //qrMarker._bringToFront();
-
 
     Coupon.init();
 
@@ -832,7 +833,7 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
     for (var i in route.fields.subroutes) {
         if (route.fields.subroutes[i].floor.pk === route.fields.origin.fields.floor) {
             subpath[i] = [];
-            subpath[i].push([(route.fields.origin.fields.row) * osY + osY, route.fields.origin.fields.col * osX + osX]);
+            //subpath[i].push([(route.fields.origin.fields.row) * osY + osY, route.fields.origin.fields.col * osX + osX]);
             for (var j in route.fields.subroutes[i].steps) {
                 subpath[i].push([(route.fields.subroutes[i].steps[j].fields.row) * osY + osY, (route.fields.subroutes[i].steps[j].fields.column) * osX + osX]);
             }
@@ -843,7 +844,7 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
                     break;
                 }
             }
-            arrow[f] = L.polyline(subarrow[f], {color: 'orange', opacity: 0.8});
+            arrow[f] = L.polyline(subarrow[f], {color: 'orange', opacity: 0.8, weight:2 });
             arrowHead[f] = L.polylineDecorator(arrow[f]);
             map.addLayer(arrowHead[f]);
         }
@@ -860,7 +861,7 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
                     break;
                 }
             }
-            arrow[f] = L.polyline(subarrow[f], {color: 'orange', opacity: 0.8});
+            arrow[f] = L.polyline(subarrow[f], {color: 'orange', opacity: 0.8, weight:2});
             arrowHead[f] = L.polylineDecorator(arrow[f]);
             map.addLayer(arrowHead[f]);
         }
@@ -1017,7 +1018,9 @@ var arrowsOffset = 0;
 var setArrow = function (flecha, idFloor) {
 
     flecha.setPatterns([
-        {offset: arrowsOffset + '%', repeat: 0, symbol: new L.Symbol.ArrowHead({pixelSize: 15, polygon: false, pathOptions: { stroke: true}})}
+        {offset: arrowsOffset + '%', repeat: 0, symbol: new L.Symbol.ArrowHead({pixelSize: 8, polygon: false, pathOptions: { stroke: true, weight:2}})}
+            //Dash({pixelSize: 1, pathOptions: { stroke: true, weight:10}})}
+
     ]);
     if (++arrowsOffset > 100)
         arrowsOffset = 0;
