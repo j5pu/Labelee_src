@@ -2,7 +2,7 @@ from django.db import models
 
 
 class Qr_shot(models.Model):
-    point = models.ForeignKey('map_editor.Point', related_name='point')
+    point = models.ForeignKey('map_editor.Point', related_name='qr_shots')
     date = models.DateTimeField()
 
 class DisplayedRoutes(models.Model):
