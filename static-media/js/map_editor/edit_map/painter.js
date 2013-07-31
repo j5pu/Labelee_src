@@ -110,11 +110,11 @@ var Painter = {
             block.attr('data-saved-descr', Painter.point.description);
 
             // Posición en el grid
-            block.append(
-                '<div class="label_pos">' +
-                    Painter.point.row + ', ' +  Painter.point.col +
-                '</div>'
-            );
+//            block.append(
+//                '<div class="label_pos">' +
+//                    Painter.point.row + ', ' +  Painter.point.col +
+//                '</div>'
+//            );
 
             Floor.point_count.saved++;
         }

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-07-30 13:20+0200\n"
+"POT-Creation-Date: 2013-07-31 10:50+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -46,11 +46,11 @@ msgstr "Estás justo aquí:"
 msgid "Please, scan a QR code to get here:"
 msgstr "Por favor, escanee un código QR para llegar hasta aquí:"
 
-#: static-media/js/map/index/map.js:772
+#: static-media/js/map/index/map.js:773
 msgid "We are sorry, that route does not exist."
 msgstr "Lo sentimos, esa ruta no existe."
 
-#: static-media/js/map/index/map.js:1065
+#: static-media/js/map/index/map.js:1066
 msgid "My car"
 msgstr "Mi coche"
 
@@ -81,36 +81,45 @@ msgstr ""
 
 #: static-media/js/map_editor/edit_map/floor.js:580
 #: static-media/js/map_editor/edit_map/floor.js:593
-#: static-media/js/map_editor/edit_map/main.js:140
-#: static-media/js/map_editor/edit_map/main.js:201
+#: static-media/js/map_editor/edit_map/main.js:139
+#: static-media/js/map_editor/edit_map/main.js:202
 #: static-media/js/map_editor/edit_map/menu.js:142
 msgid "Redrawing grid"
 msgstr "Redibujando grid"
 
-#: static-media/js/map_editor/edit_map/main.js:31
+#: static-media/js/map_editor/edit_map/main.js:30
 msgid "Used colors"
 msgstr "Colores usados"
 
-#: static-media/js/map_editor/edit_map/main.js:71
-#: static-media/js/map_editor/edit_map/main.js:108
+#: static-media/js/map_editor/edit_map/main.js:70
+#: static-media/js/map_editor/edit_map/main.js:107
 msgid "Invalid color"
 msgstr "Color no válido"
 
-#: static-media/js/map_editor/edit_map/main.js:77
-#: static-media/js/map_editor/edit_map/main.js:114
+#: static-media/js/map_editor/edit_map/main.js:76
+#: static-media/js/map_editor/edit_map/main.js:113
 msgid "You must specify a name with at least 4 characters"
 msgstr "Debe especificar un nombre con 4 caracteres como mínimo"
 
-#: static-media/js/map_editor/edit_map/main.js:135
-msgid "Are you sure you want to remove this category?"
+#: static-media/js/map_editor/edit_map/main.js:134
+#, fuzzy
+msgid ""
+"Are you sure you want to remove this category?  It will erase ALL points "
+"with that category and not saved points yet"
 msgstr ""
-"¿Seguro que desea eliminar la categoría? (también se eliminarán todas sus "
-"etiquetas y POIs en los mapas)"
+"¿Seguro que desea eliminar este recinto? (esto eliminará todas sus plantas)"
 
-#: static-media/js/map_editor/edit_map/main.js:196
-msgid "Are you sure you want to remove this label?"
-msgstr "¿Seguro que desea eliminar esta etiqueta?"
+#: static-media/js/map_editor/edit_map/main.js:197
+#, fuzzy
+msgid ""
+"Are you sure you want to remove this label? It will erase ALL points with "
+"that label and not saved points yet."
+msgstr ""
+"¿Seguro que desea eliminar este recinto? (esto eliminará todas sus plantas)"
 
+#: static-media/js/map_editor/edit_map/main.js:283
+msgid "zooming disabled!"
+msgstr ""
 
 #: static-media/js/map_editor/edit_map/menu.js:131
 msgid "Delete label"
@@ -119,6 +128,15 @@ msgstr "Eliminar etiqueta"
 #: static-media/js/map_editor/edit_map/menu.js:132
 msgid "(All their points will be deleted too)"
 msgstr "(Todos los puntos también serán borrados)"
+
+#: static-media/js/map_editor/edit_map/menu.js:377
+#, fuzzy
+msgid "Drawing only QRs for grid"
+msgstr "Cargando grid para la planta"
+
+#: static-media/js/map_editor/edit_map/menu.js:377
+msgid "Drawing back labels"
+msgstr ""
 
 #: static-media/js/map_editor/edit_map/painter.js:199
 msgid "Change panorama"
@@ -138,8 +156,8 @@ msgstr "Todas las rutas previas serán borradas del recinto. ¿Desea continuar?"
 msgid ""
 "Are you sure you want to remove this enclosure? (this will erase all their "
 "floors)"
-msgstr "¿Seguro que desea eliminar este recinto? (esto eliminará todas sus "
-"plantas)"
+msgstr ""
+"¿Seguro que desea eliminar este recinto? (esto eliminará todas sus plantas)"
 
 #: static-media/js/map_editor/index/main.js:207
 msgid "You must specify the floor image too"
@@ -150,6 +168,14 @@ msgid "Are you sure you want to remove this floor?"
 msgstr ""
 "¿Seguro que desea eliminar la planta? (también se perderá toda la "
 "información relativa a ella)"
+
+#~ msgid "Are you sure you want to remove this category?"
+#~ msgstr ""
+#~ "¿Seguro que desea eliminar la categoría? (también se eliminarán todas sus "
+#~ "etiquetas y POIs en los mapas)"
+
+#~ msgid "Are you sure you want to remove this label?"
+#~ msgstr "¿Seguro que desea eliminar esta etiqueta?"
 
 #~ msgid "floor"
 #~ msgstr "planta"

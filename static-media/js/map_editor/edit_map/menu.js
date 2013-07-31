@@ -373,9 +373,15 @@ var Menu = {
 
         Floor.show_only_qrs = checkbox_is_checked;
 
+        var msg = checkbox_is_checked ?
+            gettext('Drawing only QRs for grid') : gettext('Drawing back labels')
+
         Floor.reloading = true;
 
-        Floor.loadGrid();
+        WaitingDialog.open(
+            msg + '..',
+            Floor.loadGrid
+        );
     },
 
 

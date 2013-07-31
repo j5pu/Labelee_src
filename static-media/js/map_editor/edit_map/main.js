@@ -1,11 +1,12 @@
 $(function(){
 
-
-
+//    document.body.style.zoom=1.0;
+//    preventZooming();
 });
 
 function FloorCtrl($scope, $rootScope)
 {
+
     WaitingDialog.init();
 
     // mapeamos lo que nos interesa del DOM
@@ -22,8 +23,6 @@ function PoisCtrl($scope, $rootScope)
             $scope.label_categories = labelCategoryResource.readAll();
         else
             $scope.label_categories = labelCategoryResource.readForFloorEdit(Floor.enclosure.id);
-
-        Menu.label_categories = $scope.label_categories;
     };
 
     $scope.showUsedColors = function(){
@@ -132,17 +131,17 @@ function PoisCtrl($scope, $rootScope)
     {
         labelCategoryResource.del(
             $scope.selected_category.id,
-            gettext('Are you sure you want to remove this category?'),
+            gettext('Are you sure you want to remove this category?  It will erase ALL points with that category and not saved points yet'),
             function(){
                 $scope.sync_categories();
 
                 WaitingDialog.open(
                     gettext('Redrawing grid') + '..',
-                    function(){
-                        Floor.loadGrid();
-                        Painter.label = null;
-                    }
+                    Floor.loadGrid
                 );
+
+                $scope.selected_category = null;
+                Painter.label = null;
 
                 modalDialog.close();
             }
@@ -174,6 +173,8 @@ function PoisCtrl($scope, $rootScope)
         var label_created = labelResource.create(data);
 
         $scope.sync_labels(label_created);
+
+        var i = 17;
     };
 
 
@@ -193,7 +194,7 @@ function PoisCtrl($scope, $rootScope)
     {
         labelResource.del(
             $scope.selected_label.id,
-            gettext('Are you sure you want to remove this label?'),
+            gettext('Are you sure you want to remove this label? It will erase ALL points with that label and not saved points yet.'),
             function(){
                 $scope.sync_labels();
                 Floor.reloading = true;
@@ -235,6 +236,8 @@ function PoisCtrl($scope, $rootScope)
     //
     // WATCHERS
     $scope.$watch('selected_category', function(){
+        Menu.label_categories = $scope.label_categories;
+
         $scope.can_edit_category = $scope.selected_category &&
             (user_is_staff || $scope.selected_category.enclosure);
 
@@ -251,12 +254,11 @@ function PoisCtrl($scope, $rootScope)
             $scope.selected_label = Menu.getWallLabel();
             Painter.label = $scope.selected_label;
         }
-
-
     });
     $scope.$watch('selected_label', function(){
         $scope.can_edit_label = $scope.selected_label && $scope.can_edit_category;
         Painter.label = $scope.selected_label;
+        Painter.label_category = $scope.selected_category;
     });
 }
 
@@ -267,4 +269,62 @@ function getFromList(list, element_id)
     return $.grep(list, function(n, i){
         return n.id == element_id
     })[0];
+}
+
+
+function preventZooming()
+{
+    // Previene de hacer zoom sobre la página
+    $(document).on('keydown', function(e) {
+        $(document).on('keypress', function(e){
+            if(e.keyCode == 43 || e.keyCode == 45)
+            {
+                e.preventDefault();
+                alert(gettext('zooming disabled!'));
+            }
+        });
+    });
+}
+
+
+function disableCtrlKeyCombination(e)
+{
+    //list all CTRL + key combinations you want to disable
+    var forbiddenKeys = new Array('+');
+    var key;
+    var isCtrl;
+
+    if(window.event)
+    {
+        key = window.event.keyCode;     //IE
+        if(window.event.ctrlKey)
+            isCtrl = true;
+        else
+            isCtrl = false;
+    }
+    else
+    {
+        key = e.which;     //firefox
+        if(e.ctrlKey)
+            isCtrl = true;
+        else
+            isCtrl = false;
+    }
+
+    //if ctrl is pressed check if other key is in forbidenKeys array
+    if(isCtrl)
+    {
+        for(i=0; i<forbiddenkeys.length; i++)
+        {
+            //case-insensitive comparation
+            if(forbiddenKeys[i].toLowerCase() == String.fromCharCode(key).toLowerCase())
+            {
+                alert('Key combination CTRL + '
+                    +String.fromCharCode(key)
+                    +' has been disabled.');
+                return false;
+            }
+        }
+    }
+    return true;
 }

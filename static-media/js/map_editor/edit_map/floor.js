@@ -373,7 +373,7 @@ var Floor = {
             return;
         }
 
-        var label = Floor.saved_labels[Label.keys[Label.i]];
+//        var label = Floor.saved_labels[Label.keys[Label.i]];
 
         // Si la etiqueta contiene imágen
 
