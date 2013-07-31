@@ -216,7 +216,7 @@ var Menu = {
 
     setPointStats: function()
     {
-        if(!Floor.hasPoints())
+        if(!Floor.hasPoints()&& !Floor.isPainted())
         {
             Floor.point_count.to_save = 0;
             Floor.point_count.saved = 0;

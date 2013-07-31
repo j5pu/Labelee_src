@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-07-31 11:34+0200\n"
+"POT-Creation-Date: 2013-07-31 11:38+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -117,7 +117,7 @@ msgid "Por guardar"
 msgstr "To save"
 
 #: templates/map_editor/v1/edit.html:80 templates/map_editor/v2/edit.html:83
-msgid "Por elminar"
+msgid "Por eliminar"
 msgstr "To delete"
 
 #: templates/map_editor/v1/edit.html:89 templates/map_editor/v2/edit.html:92
@@ -354,7 +354,7 @@ msgstr "Dashboard"
 #: templates/map_editor/v2/index.html:111
 #, fuzzy
 msgid "Web del recinto"
-msgstr "Enclosure name"
+msgstr "Enclosure website"
 
 #: templates/map_editor/v2/index.html:38
 msgid "Labelee App"

@@ -11,9 +11,9 @@ from django.db.models import Count
 
 
 
-def qr_shots_by_category(request, enclosure_id):
+def scans_by_category(request, enclosure_id):
     """
-    qr-shot/count/(?P<enclosure_id>\d+)/category/
+    services/graph/(?P<enclosure_id>\d+)/shots/category/
 
     Muestra el número de escaneos de QRs para todos los recintos del dueño o para uno dado
     """
@@ -25,20 +25,11 @@ def qr_shots_by_category(request, enclosure_id):
             'key': gettext('Total de escaneos'),
             'values': []
         }
-                # {
-                #     "label" : "Connections" ,
-                #     "value" : 129.765957771107
-                # } ,
-                # {
-                #     "label" : "Toilets" ,
-                #     "value" : 200
-                # } ,
-                # {
-                #     "label" : "Restaurants" ,
-                #     "value" : 32.807804682612
-                # } ,
+        # {
+        #     "label" : "Connections" ,
+        #     "value" : 129.765957771107
+        # },...
     ]
-
 
     for category in c:
         cat = {
@@ -51,5 +42,5 @@ def qr_shots_by_category(request, enclosure_id):
     return HttpResponse(simplejson.dumps(response), mimetype='application/json')
 
 
-def count_by_poi(request, enclosure_id=None):
+def top_scans_by_poi(request, enclosure_id):
     pass

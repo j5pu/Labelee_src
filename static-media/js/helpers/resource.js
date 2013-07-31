@@ -624,6 +624,17 @@ function QrCodeResource()
 }
 
 
+function DashboardResource()
+{
+    Resource.call(this, 'qr-shot');
+
+    this.getShotsByCategoryGraph = function(enclosure_id)
+    {
+        return ajaxGetElements(this.api2_url, 'manager/');
+    }
+}
+
+
 FloorResource.prototype = new Resource;
 var floorResource = new FloorResource();
 LabelResource.prototype = new Resource;
@@ -640,3 +651,4 @@ StepResource.prototype = new Resource;
 UserResource.prototype = new Resource;
 var userResource = new UserResource();
 var qrCodeResource = new QrCodeResource();
+var qrShotResource = new QrShotResource();

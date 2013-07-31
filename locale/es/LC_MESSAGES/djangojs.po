@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-07-31 11:35+0200\n"
+"POT-Creation-Date: 2013-07-31 11:40+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -107,7 +107,7 @@ msgid ""
 "with that category and not saved points yet"
 msgstr ""
 "¿Seguro que desea eliminar esta categoría? (esto eliminará todos los puntos "
-"de la categoría que no se hayan guardado todavía)"
+"de la categoría y los que no se hayan guardado todavía)"
 
 #: static-media/js/map_editor/edit_map/main.js:197
 msgid ""
@@ -115,7 +115,7 @@ msgid ""
 "that label and not saved points yet."
 msgstr ""
 "¿Seguro que desea eliminar esta etiqueta? (esto eliminará todos los puntos "
-"de la etiqueta que no hayan sido guardados)"
+"que no hayan sido guardados)"
 
 #: static-media/js/map_editor/edit_map/main.js:283
 msgid "zooming disabled!"
@@ -139,7 +139,7 @@ msgstr "Dibujando solo QRs para el grid"
 
 #: static-media/js/map_editor/edit_map/menu.js:377
 msgid "Drawing back labels"
-msgstr ""
+msgstr "Redibujando etiquetas"
 
 #: static-media/js/map_editor/edit_map/painter.js:199
 msgid "Change panorama"
