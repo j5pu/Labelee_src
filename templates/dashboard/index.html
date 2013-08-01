@@ -1,34 +1,8 @@
-<!DOCTYPE html>
-<!-- saved from url=(0025)http://nvd3.org/livecode/ -->
-<html lang="en">
-<script type="text/javascript" async=""
-        src="{{ STATIC_URL }}vendor/NVD3.js    Live Code examples powered by CodeMirror_files/ga.js"></script>
-<script id="tinyhippos-injected">if (window.top.ripple) {
-    window.top.ripple("bootstrap").inject(window, document);
-}</script>
-<head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <meta charset="utf-8">
-    <title>Labelee Dashboard</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="">
-    <meta name="author" content="Labelee">
+{% extends "base.html" %}
 
+{% block css %}
     <link href="http://nvd3.org/css/bootstrap.css" rel="stylesheet">
     <link href="http://nvd3.org/src/nv.d3.css" rel="stylesheet">
-
-    <script src="{{ STATIC_URL }}vendor/NVD3.js    Live Code examples powered by CodeMirror_files/d3.v2.js"></script>
-    <!--script src="{{ STATIC_URL }}vendor/NVD3.js    Live Code examples powered by CodeMirror_files/fisheye.js"></script-->
-    <script src="{{ STATIC_URL }}vendor/NVD3.js    Live Code examples powered by CodeMirror_files/nv.d3.js"></script>
-    <script src="{{ STATIC_URL }}vendor/NVD3.js    Live Code examples powered by CodeMirror_files/jquery.min.js"></script>
-    <script src="{{ STATIC_URL }}vendor/NVD3.js    Live Code examples powered by CodeMirror_files/bootstrap.js"></script>
-    <script src="{{ STATIC_URL }}js/dashboard/main.js"></script>
-
-
-    <!--[if lt IE 9]>
-      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-
     <style>
         body{
 
@@ -48,10 +22,32 @@
             width: auto;
         }
     </style>
+ {% endblock %}
+{% block js %}
+    <script>//AÑADIR TITULO REAL</script>
+    <script src="{{ STATIC_URL }}vendor/NVD3.js    Live Code examples powered by CodeMirror_files/d3.v2.js"></script>
+    <!--script src="{{ STATIC_URL }}vendor/NVD3.js    Live Code examples powered by CodeMirror_files/fisheye.js"></script-->
+    <script src="{{ STATIC_URL }}vendor/NVD3.js    Live Code examples powered by CodeMirror_files/nv.d3.js"></script>
+    <script src="{{ STATIC_URL }}vendor/NVD3.js    Live Code examples powered by CodeMirror_files/jquery.min.js"></script>
+    <script src="{{ STATIC_URL }}vendor/NVD3.js    Live Code examples powered by CodeMirror_files/bootstrap.js"></script>
+    <script src="{{ STATIC_URL }}js/helpers/resource.js"></script>
+    <script src="{{ STATIC_URL }}js/dashboard/main.js"></script>
 
-</head>
 
-<body>
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+{% endblock %}
+
+{% block content %}
+
+
+
+
+
+
+
 
 <div class="navbar navbar-inverse navbar-fixed-top">
     <div class="navbar-inner">
@@ -65,7 +61,6 @@
 
             <div class="nav-collapse">
                 <ul class="nav">
-                    <li><a href="#"><i class="icon-white icon-home"></i> Enclosure Manager</a></li>
                     <li><a href="#"><i class="icon-white icon-picture"></i> Enclosure Website</a>
                     </li>
                     <li><a href="#"><i class="icon-white icon-play-circle"></i>
@@ -128,14 +123,14 @@
             </div>
         </li>
         <li class="span6">
-            <h2 id="top_scans">Top Scans</h2>
+            <h2 id="top_scans">Top 8 Scans</h2>
             <div>
                 <svg  id="chart4"></svg>
             </div>
         </li>
 
         <li class="span6">
-            <h2 id="top_routes">Top Routes</h2>
+            <h2 id="top_routes">Top 8 Routes</h2>
             <div>
                 <svg  id="chart5"></svg>
             </div>
@@ -150,6 +145,4 @@
 </div>
 
 
-
-</body>
-</html>
+{% endblock %}

@@ -661,20 +661,20 @@ function DashboardResource()
 }
 
 
-FloorResource.prototype = new Resource;
+FloorResource.prototype = new Resource();
 var floorResource = new FloorResource();
-LabelResource.prototype = new Resource;
+LabelResource.prototype = new Resource();
 var labelResource = new LabelResource();
-LabelCategoryResource.prototype = new Resource;
+LabelCategoryResource.prototype = new Resource();
 var labelCategoryResource = new LabelCategoryResource();
-PointResource.prototype = new Resource;
+PointResource.prototype = new Resource();
 var pointResource = new PointResource();
-EnclosureResource.prototype = new Resource;
+EnclosureResource.prototype = new Resource();
 var enclosureResource = new EnclosureResource();
-ConnectionResource.prototype = new Resource;
-RouteResource.prototype = new Resource;
-StepResource.prototype = new Resource;
-UserResource.prototype = new Resource;
+ConnectionResource.prototype = new Resource();
+RouteResource.prototype = new Resource();
+StepResource.prototype = new Resource();
+UserResource.prototype = new Resource();
 var userResource = new UserResource();
 var qrCodeResource = new QrCodeResource();
 var dashBoardResource = new DashboardResource();

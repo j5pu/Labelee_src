@@ -120,12 +120,12 @@ return chart;
 
 
 
-var totalScans,
-    totalRoutes,
-    scansByCat,
-    routesByCat,
-    topScans,
-    topRoutes;
+var scansByCat = dashBoardResource.getScansByCategory(16),
+    totalScans=scansByCat,
+    totalRoutes = dashBoardResource.getDisplayedRoutesByCategory(16),
+    routesByCat= totalRoutes,
+    topScans= dashBoardResource.getScansForTopPois(16),
+    topRoutes=dashBoardResource.getDisplayedRoutesForTopPois(16);
 
 //TOTAL SCANS
 nv.addGraph(function() {
@@ -153,7 +153,7 @@ nv.addGraph(function() {
     var chart = nv.models.discreteBarChart()
     .x(function(d) { return d.label })
 .y(function(d) { return d.value })
-.color(d3.scale.category20c().range())
+//.color(d3.scale.category20c().range())
 .staggerLabels(true)
 .tooltips(true)
 .showValues(true);
@@ -179,7 +179,7 @@ nv.addGraph(function() {
             return d.value
         })
         //.labelThreshold(-.03)
-        .showLabels(true)
+        //.showLabels(true)
         .donut(true);
 /*
 
@@ -189,7 +189,6 @@ nv.addGraph(function() {
            .values(function(d) { return d })
            //.labelThreshold(.08)
            //.showLabels(false)
-           .color(d3.scale.category10().range())
            .donut(true);
 
        chart.pie
@@ -197,7 +196,7 @@ nv.addGraph(function() {
            .endAngle(function(d) { return d.endAngle/2 -Math.PI/2 });
 */
 
-    chart.pie.donutLabelsOutside(true).donut(true);
+    chart.pie.donutLabelsOutside(true);
 d3.select("#chart2")
 .datum(scansByCat)
 .transition().duration(1200)
@@ -211,7 +210,7 @@ nv.addGraph(function() {
     var chart = nv.models.pieChart()
     .x(function(d) { return d.label })
 .y(function(d) { return d.value })
-.color(d3.scale.category10().range())
+//.color(d3.scale.category20().range())
 .showLabels(true);
 
 
@@ -229,7 +228,7 @@ nv.addGraph(function() {
     var chart = nv.models.discreteBarChart()
     .x(function(d) { return d.label })
 .y(function(d) { return d.value })
-.color(d3.scale.category20c().range())
+//.color(d3.scale.category20c().range())
 .staggerLabels(true)
 .tooltips(false)
 .showValues(true);
@@ -248,7 +247,7 @@ nv.addGraph(function() {
     var chart = nv.models.discreteBarChart()
     .x(function(d) { return d.label })
 .y(function(d) { return d.value })
-.color(d3.scale.category20b().range())
+//.color(d3.scale.category10().range())
 .staggerLabels(true)
 .tooltips(false)
 .showValues(true);

@@ -283,6 +283,8 @@ function loopFloors() {
 //recolocar controles
         $('span:has(i.icon-film)').css('left', '11px');
         $('span:has(i.icon-glass)').css('left', '11px');
+        Coupon.init();
+
 
 
 
@@ -528,7 +530,7 @@ function initMap(qrPoint) {
     layersControl.addTo(map);
 
 
-    for (var i = (floors.length) - 1; i >= 0; i--) {
+    for (var i = 0; i<(floors.length); i++) {
         layersControl.addBaseLayer(floors[i].photo, floors[i].name);
 
         if (floors[i].id === qrPoint.floor.id) {
@@ -566,7 +568,7 @@ function initMap(qrPoint) {
     //map.addLayer(qrFloor.layer);
     //qrMarker._bringToFront();
 
-    Coupon.init();
+//    Coupon.init();
 
     if (map.hasLayer(destMarker)) {
         destMarker.openPopup();
