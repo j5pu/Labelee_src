@@ -31,7 +31,7 @@ html.mmenu-opened body
 {
     -webkit-text-size-adjust: none;
     font-family: 'Raleway', 'Noto Sans', Arial, Helvetica, Garuda, sans-serif;
-    font-size: 14px;
+    font-size: 1rem;
 }
 .mmenu ul,
 .mmenu li,
@@ -278,7 +278,7 @@ html.mmenu-right .mmenu a.mmenu-subopen
 .mmenu li.mmenu-label
 {
     background: #444;
-    font-size: 14px;
+    font-size: 0.9rem;
     text-transform: uppercase;
     line-height: 20px;
 }
@@ -404,7 +404,7 @@ pre
     overflow: auto;
     -webkit-overflow-scrolling: touch;
 }
-#page nav
+#page, nav
 {
     display: none;
 }
@@ -443,8 +443,8 @@ border-radius: 0 6px 6px 0;
 }
 
 #header a img {
-    width: 53%;
-    margin-top: 2px;
+    width: 48%;
+    margin-top: 3px;
 }
 span#fake{
     bottom:0;
@@ -473,6 +473,7 @@ span#fake{
 body {
     padding: 0;
     margin: 0;
+    background: #ddd;
 }
 
 body:before {
@@ -503,8 +504,16 @@ html{
     -webkit-box-shadow: inset 2px 2px 4px rgba(0,0,0,0.4);
     box-shadow: inset 2px 2px 4px rgba(0,0,0,0.4);
 
+    background-color: #ededed;
+/*
+    background-image: linear-gradient(white 1px, transparent 1px),
+    linear-gradient(90deg, white 1px, transparent 1px),
+    linear-gradient(rgba(255,255,255,.3) 1px, transparent 1px),
+   linear-gradient(90deg, rgba(255,255,255,.3) 1px, transparent 1px);
+    background-size:100px 100px, 100px 100px, 20px 20px, 20px 20px;
+    background-position:-2px -2px, -2px -2px, -1px -1px, -1px -1px;
+*/
 }
-
 .leaflet-control-search .search-button {
 //       background-position: 0 -30px;
     opacity: .4;
@@ -778,6 +787,7 @@ box-shadow: 0 0 15px rgba( 0, 0, 0, 0.2 );
     position: relative;
     padding-left: 1em;
     color: rgb(111, 107, 97);
+    background:white;
 }
 .mmenu li > a,
 .mmenu li > span,
@@ -1212,6 +1222,7 @@ leaflet-marker-icon{
     font-family: 'carFont';
     background: cadetblue;
     line-height: 1.3em;
+    opacity:1;
 }
 .car-icon:before {
     content: "\f239";
@@ -1263,6 +1274,15 @@ span#go-button{
     cursor:pointer;
 
 }
-.socialmenu{
+div.socialmenu{
 
 }
+
+div#marquee{
+    background: rgb(17, 17, 17); background:rgba(17, 17, 17, 0.4); padding:0;
+}
+/*
+
+#cupones, #header, span.locator {
+    display:none !important;
+}*/

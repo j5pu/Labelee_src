@@ -45,7 +45,7 @@
 	-webkit-animation: blurFadeIn 1s;
 	-moz-animation: blurFadeIn 1s;
 	animation: blurFadeIn 1s;
-    width: 100%;
+    width: 80%;
 
 }
 
@@ -91,7 +91,7 @@
 	}
 	100%{
 		opacity: 1;
-		width: 100%;
+		width: 80%;
 	}
 }
 

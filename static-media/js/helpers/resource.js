@@ -12,7 +12,6 @@ function Resource(resource_name) {
 	this.api1_url = '/api/v1/' + this.resource_name + '/';
 	this.api2_url = '/api-2/' + this.resource_name + '/';
 
-
 	this.create = function(data) {
 		var new_element;
 
@@ -222,7 +221,7 @@ function FloorResource()
 
         var elements;
         $.ajax({
-            url : this.api1_url + '?enclosure__id=' + enclosure_id + '&order_by=floor_number',
+            url : this.api1_url + '?enclosure__id=' + enclosure_id + '&order_by=-floor_number',
             type : 'get',
             headers : {
                 'Content-Type' : 'application/json'
@@ -626,29 +625,56 @@ function QrCodeResource()
 
 function DashboardResource()
 {
-    Resource.call(this, 'qr-shot');
+    this.dashboard_url = '/dashboard/';
 
-    this.getShotsByCategoryGraph = function(enclosure_id)
+    this._getScansUrl = function(enclosure_id)
     {
-        return ajaxGetElements(this.api2_url, 'manager/');
-    }
+        return this.dashboard_url + 'scans/' + enclosure_id;
+    };
+
+    this._getDisplayedRoutesUrl = function(enclosure_id)
+    {
+        return this.dashboard_url + 'routes/' + enclosure_id;
+    };
+
+    this.getScansByCategory = function(enclosure_id)
+    {
+        // /dashboard/scans/(?P<enclosure_id>\d+)/by-category/
+        return ajaxGetElements(this._getScansUrl(enclosure_id), '/by-category/');
+    };
+
+    this.getScansForTopPois = function(enclosure_id)
+    {
+        return ajaxGetElements(this._getScansUrl(enclosure_id), '/top-pois/');
+    };
+
+    this.getDisplayedRoutesByCategory = function(enclosure_id)
+    {
+        // /dashboard/scans/(?P<enclosure_id>\d+)/by-category/
+        return ajaxGetElements(this._getDisplayedRoutesUrl(enclosure_id), '/by-category/');
+    };
+
+    this.getDisplayedRoutesForTopPois = function(enclosure_id)
+    {
+        return ajaxGetElements(this._getDisplayedRoutesUrl(enclosure_id), '/top-pois/');
+    };
 }
 
 
-FloorResource.prototype = new Resource;
+FloorResource.prototype = new Resource();
 var floorResource = new FloorResource();
-LabelResource.prototype = new Resource;
+LabelResource.prototype = new Resource();
 var labelResource = new LabelResource();
-LabelCategoryResource.prototype = new Resource;
+LabelCategoryResource.prototype = new Resource();
 var labelCategoryResource = new LabelCategoryResource();
-PointResource.prototype = new Resource;
+PointResource.prototype = new Resource();
 var pointResource = new PointResource();
-EnclosureResource.prototype = new Resource;
+EnclosureResource.prototype = new Resource();
 var enclosureResource = new EnclosureResource();
-ConnectionResource.prototype = new Resource;
-RouteResource.prototype = new Resource;
-StepResource.prototype = new Resource;
-UserResource.prototype = new Resource;
+ConnectionResource.prototype = new Resource();
+RouteResource.prototype = new Resource();
+StepResource.prototype = new Resource();
+UserResource.prototype = new Resource();
 var userResource = new UserResource();
 var qrCodeResource = new QrCodeResource();
-var qrShotResource = new QrShotResource();
+var dashBoardResource = new DashboardResource();

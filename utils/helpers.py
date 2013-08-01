@@ -112,5 +112,17 @@ def group_by_pk(queryset_response):
     return queryset_response.values().annotate(total=Sum('id'))
 
 
+import string
+import random
+def random_string_generator(size=6, chars=string.ascii_uppercase + string.digits):
+    """
+    id_generator()
+    'G5G74W'
+    id_generator(3, "6793YUIO")
+    'Y3U'
+    """
+    return ''.join(random.choice(chars) for x in range(size))
+
+
 if __name__ == "__main__":
     pass

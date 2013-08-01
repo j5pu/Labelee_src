@@ -214,6 +214,8 @@ var Floor = {
         // Recargamos el grid
         Floor.reloading = true;
         Floor.loadGrid();
+
+        Painter.label_category = Painter.label_category_pre_update_floor;
     },
 
 

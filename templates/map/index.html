@@ -11,13 +11,17 @@
     <meta name="apple-mobile-web-app-capable" content="yes"/>
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
 
-    <link href="http://fonts.googleapis.com/css?family=Raleway|Just+Me+Again+Down+Here" rel="stylesheet"
+{% comment %}    <link href="http://fonts.googleapis.com/css?family=Raleway|Just+Me+Again+Down+Here" rel="stylesheet"
+          type="text/css">{% endcomment %}
+    <link href="http://fonts.googleapis.com/css?family=Raleway" rel="stylesheet"
+          type="text/css">
+    <link href="http://fonts.googleapis.com/css?family=Just+Me+Again+Down+Here&text=find%20your%20way!" rel="stylesheet"
           type="text/css">
 
     <link rel="stylesheet" href="{{ STATIC_URL }}vendor/leaflet/leaflet.css"/>
     <link rel="stylesheet" href="{{ STATIC_URL }}css/map/index/font-awesome.min.css">
-    <link rel="stylesheet" href="{{ STATIC_URL }}css/map/index/iconic_stroke.css">
-    <link rel="stylesheet" href="{{ STATIC_URL }}css/map/index/leaflet.awesome-markers.css">
+    <!--link rel="stylesheet" href="{{ STATIC_URL }}css/map/index/iconic_stroke.css"-->
+    <!--link rel="stylesheet" href="{{ STATIC_URL }}css/map/index/leaflet.awesome-markers.css"-->
     <!--link rel="stylesheet" href="{{ STATIC_URL }}css/map/index/leaflet.rrose.css"-->
     <!--link rel="stylesheet" href="{{ STATIC_URL }}css/map/index/leaflet-search.css"-->
     <link rel="stylesheet" href="{{ STATIC_URL }}css/map/index/leaflet.label.css">
@@ -25,8 +29,8 @@
     <link rel="stylesheet" href="{{ STATIC_URL }}css/map/index/social.network.menu.css">
     <link rel="stylesheet" href="{{ STATIC_URL }}css/map/index/animation.css">
     <link rel="stylesheet" href="{{ STATIC_URL }}css/map/index/idangerous.swiper.css">
-    <link rel="stylesheet" href="{{ STATIC_URL }}css/map/index/MarkerCluster.css">
-    <link rel="stylesheet" href="{{ STATIC_URL }}css/map/index/MarkerCluster.Default.css">
+    <!--link rel="stylesheet" href="{{ STATIC_URL }}css/map/index/MarkerCluster.css"-->
+    <!--link rel="stylesheet" href="{{ STATIC_URL }}css/map/index/MarkerCluster.Default.css"-->
     <!--link rel="stylesheet" href="{{ STATIC_URL }}css/map/index/cilogi-marker.css"-->
     <link rel="stylesheet" href="{{ STATIC_URL }}css/map/index/multix.css">
 
@@ -56,20 +60,21 @@
     <!--script src="http://cdn.leafletjs.com/leaflet-0.5.1/leaflet.js"></script-->
     <!--script>L_PREFER_CANVAS = true;</script-->
     <script src="{{ STATIC_URL }}vendor/leaflet/leaflet.js"></script>
-    <script src="{{ STATIC_URL }}vendor/leaflet/plugins/leaflet.markercluster.js"></script>
+    <!--script src="{{ STATIC_URL }}vendor/leaflet/plugins/leaflet.markercluster.js"></script-->
     <!--script src="{{ STATIC_URL }}vendor/leaflet/plugins/cilogi-marker.min.js"></script-->
 
     <!--script src="{{ STATIC_URL }}vendor/leaflet/plugins/bouncemarker.js"></script-->
-    <script src="{{ STATIC_URL }}vendor/leaflet/plugins/leaflet.awesome-markers.js"></script>
+    <!--script src="{{ STATIC_URL }}vendor/leaflet/plugins/leaflet.awesome-markers.js"></script-->
     <script src="{{ STATIC_URL }}vendor/leaflet/plugins/L.GeometryUtil.js"></script>
     <script src="{{ STATIC_URL }}vendor/leaflet/plugins/L.RotatedMarker.js"></script>
     <script src="{{ STATIC_URL }}vendor/leaflet/plugins/L.Symbol.js"></script>
     <script src="{{ STATIC_URL }}vendor/leaflet/plugins/L.PolylineDecorator.js"></script>
     <!--script src="{{ STATIC_URL }}vendor/leaflet/plugins/rrose-src.js"></script-->
     <!--script src="{{ STATIC_URL }}vendor/leaflet/plugins/leaflet-search.js"></script-->
-    <script src="{{ STATIC_URL }}vendor/leaflet/plugins/leaflet.label.js"></script>
     <script src="{{ STATIC_URL }}vendor/leaflet/plugins/jquery.mmenu.js"></script>
-   <script src="{{ STATIC_URL }}vendor/leaflet/plugins/idangerous.swiper-2.0.min.js"></script>
+
+    <script src="{{ STATIC_URL }}vendor/leaflet/plugins/leaflet.label.js"></script>
+    <script src="{{ STATIC_URL }}vendor/leaflet/plugins/idangerous.swiper-2.0.min.js"></script>
     <script type="text/javascript"
             src="{{ STATIC_URL }}vendor/leaflet/plugins/jquery.ba-outside-events.min.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}vendor/leaflet/plugins/ddpanorama.js"></script>
@@ -77,7 +82,7 @@
     <script src="{{ STATIC_URL }}js/helpers/base.js"></script>
     <script src="{{ STATIC_URL }}js/helpers/ajax_helpers.js"></script>
     <script src="{{ STATIC_URL }}js/helpers/resource.js"></script>
-      <script src="{{ STATIC_URL }}js/helpers/dashboard.js"></script>
+    <script src="{{ STATIC_URL }}js/helpers/dashboard.js"></script>
 
     <script src="{{ STATIC_URL }}js/log/logger.js"></script>
 
@@ -226,8 +231,8 @@
         <div class="pagination"></div>
     </div>
 
-    <div style="background: rgb(17, 17, 17); background:rgba(17, 17, 17, 0.4); padding:0">
-        <marquee align="center" direction="left" loop="40"
+    <div id="marquee">
+            <marquee align="center" direction="left" loop="40"
                  style="width:100%; z-index: 10000; font-size:14px;line-height:16px; position: absolute;bottom: 0;background:rgba(17, 17, 17, 0.4);color: #ddd">
             {% for text in marquee %}
                 <span>{{ text }}</span>
