@@ -121,6 +121,17 @@ function PoisCtrl($scope, $rootScope)
 
         var cat_updated = labelCategoryResource.update(data, $scope.selected_category.id);
 
+        if ($scope.new_category_color!=$scope.selected_category.color)
+        {
+            //Cambiamos el color de las etiquetas pintadas anteriormente de la misma categoría
+            // necesitamos categoría nueva y anterior
+            for (var i in $scope.selected_category.labels)
+            {
+                var label=$scope.selected_category.labels[i];
+                $('.block[data-label='+label.id+']').css("background-color",$scope.new_category_color);
+            }
+        }
+
         $scope.sync_categories();
         $scope.selected_category = getFromList($scope.label_categories, cat_updated.id);
         modalDialog.close();
@@ -245,6 +256,8 @@ function PoisCtrl($scope, $rootScope)
             return;
 
         Painter.label_category = $scope.selected_category;
+        // Cuando guardamos los puntos el Painter.label_category cambia, así que lo dejamos como estaba antes
+        Painter.label_category_pre_update_floor = $scope.selected_category;
         Menu.labels = $scope.selected_category.labels;
         Painter.label = null;
 

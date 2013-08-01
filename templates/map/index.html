@@ -11,7 +11,11 @@
     <meta name="apple-mobile-web-app-capable" content="yes"/>
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
 
-    <link href="http://fonts.googleapis.com/css?family=Raleway|Just+Me+Again+Down+Here" rel="stylesheet"
+{% comment %}    <link href="http://fonts.googleapis.com/css?family=Raleway|Just+Me+Again+Down+Here" rel="stylesheet"
+          type="text/css">{% endcomment %}
+    <link href="http://fonts.googleapis.com/css?family=Raleway" rel="stylesheet"
+          type="text/css">
+    <link href="http://fonts.googleapis.com/css?family=Just+Me+Again+Down+Here&text=find%20your%20way!" rel="stylesheet"
           type="text/css">
 
     <link rel="stylesheet" href="{{ STATIC_URL }}vendor/leaflet/leaflet.css"/>
@@ -227,8 +231,8 @@
         <div class="pagination"></div>
     </div>
 
-    <div style="background: rgb(17, 17, 17); background:rgba(17, 17, 17, 0.4); padding:0">
-        <marquee align="center" direction="left" loop="40"
+    <div id="marquee">
+            <marquee align="center" direction="left" loop="40"
                  style="width:100%; z-index: 10000; font-size:14px;line-height:16px; position: absolute;bottom: 0;background:rgba(17, 17, 17, 0.4);color: #ddd">
             {% for text in marquee %}
                 <span>{{ text }}</span>

@@ -277,15 +277,15 @@ var name = null, img;
 function loopFloors() {
     if (floor_index == floors.length) {
         loadPOIs();
-
-        initMap(qrPoint);
-
         LocalStorageHandler.draw();
-
+        initMap(qrPoint);
+        $('div#cupones, div#header, span.locator, div#marquee').show();
 //recolocar controles
         $('span:has(i.icon-film)').css('left', '11px');
         $('span:has(i.icon-glass)').css('left', '11px');
-        $('span.locator').show();
+        Coupon.init();
+
+
 
 
 //       if(( ua.indexOf("Android") >= 0 ) && (androidversion >=3.0))
@@ -530,7 +530,7 @@ function initMap(qrPoint) {
     layersControl.addTo(map);
 
 
-    for (var i = (floors.length) - 1; i >= 0; i--) {
+    for (var i = 0; i<(floors.length); i++) {
         layersControl.addBaseLayer(floors[i].photo, floors[i].name);
 
         if (floors[i].id === qrPoint.floor.id) {
@@ -549,6 +549,7 @@ function initMap(qrPoint) {
 
 
             map.setView(qrFloor.bounds.getCenter(), 0);
+
 //            map.fitBounds(qrFloor.bounds);
             bindContent(qrMarker);
             map.setMaxBounds(map.getBounds());
@@ -567,7 +568,7 @@ function initMap(qrPoint) {
     //map.addLayer(qrFloor.layer);
     //qrMarker._bringToFront();
 
-    Coupon.init();
+//    Coupon.init();
 
     if (map.hasLayer(destMarker)) {
         destMarker.openPopup();
@@ -760,12 +761,6 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
     if (org == dst)
         return;
 
-    // Creo un nuevo displayed route para que el dashboard pueda utilizar esta información
-    try {
-        DisplayedRoutes.createDisplayedRoute(org, dst);
-    } catch (Exception) {
-
-    }
 
     ///
 
@@ -996,6 +991,14 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
     if (carMarker && map.hasLayer(carMarker)) {
         map.removeLayer(carMarker);
     }
+
+    // Creo un nuevo displayed route para que el dashboard pueda utilizar esta información
+    try {
+        DisplayedRoutes.createDisplayedRoute(org, dst);
+    } catch (Exception) {
+
+    }
+
 }
 
 

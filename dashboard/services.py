@@ -38,7 +38,7 @@ def scans_by_category(request, enclosure_id):
 def top_scans_by_poi(request, enclosure_id):
     labels = getLabelsForDashboard(enclosure_id)
     l = labels.annotate(num_shots=Count('points__qr_shots'))\
-        .order_by('-num_shots')[:8]
+        .order_by('-num_shots')[:10]
 
     response = getChartSkeleton(gettext('POIs más escaneados'))
 
@@ -74,7 +74,7 @@ def routes_by_category(request, enclosure_id):
 def top_routes_by_poi(request, enclosure_id):
     labels = getLabelsForDashboard(enclosure_id)
     l = labels.annotate(displayed_destination_count=Count('points__displayed_destination')) \
-            .order_by('-displayed_destination_count')[:8]
+            .order_by('-displayed_destination_count')[:10]
 
     response = getChartSkeleton(gettext('Rutas más solicitadas'))
 
