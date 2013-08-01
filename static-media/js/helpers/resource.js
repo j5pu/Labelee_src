@@ -221,7 +221,7 @@ function FloorResource()
 
         var elements;
         $.ajax({
-            url : this.api1_url + '?enclosure__id=' + enclosure_id + '&order_by=floor_number',
+            url : this.api1_url + '?enclosure__id=' + enclosure_id + '&order_by=-floor_number',
             type : 'get',
             headers : {
                 'Content-Type' : 'application/json'

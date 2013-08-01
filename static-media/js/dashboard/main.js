@@ -6,6 +6,7 @@
  * To change this template use File | Settings | File Templates.
  */
 
+/*
 var data=[
             {
                 key: "Cumulative Return",
@@ -86,6 +87,9 @@ data3=[
 ]
 }
 ];
+*/
+
+
 
 //FUNCION BASE COMUN
 
@@ -112,6 +116,17 @@ return chart;
 });
 }
 
+
+
+
+
+var totalScans,
+    totalRoutes,
+    scansByCat,
+    routesByCat,
+    topScans,
+    topRoutes;
+
 //TOTAL SCANS
 nv.addGraph(function() {
     var chart = nv.models.discreteBarChart()
@@ -122,7 +137,7 @@ nv.addGraph(function() {
 .showValues(true);
 
 d3.select('#chart0')
-.datum(data)
+.datum(totalScans)
 .transition().duration(500)
 .call(chart);
 
@@ -144,7 +159,7 @@ nv.addGraph(function() {
 .showValues(true);
 
 d3.select('#chart1')
-.datum(data3)
+.datum(totalRoutes)
 .transition().duration(500)
 .call(chart);
 
@@ -184,7 +199,7 @@ nv.addGraph(function() {
 
     chart.pie.donutLabelsOutside(true).donut(true);
 d3.select("#chart2")
-.datum(data)
+.datum(scansByCat)
 .transition().duration(1200)
 .call(chart);
 
@@ -201,7 +216,7 @@ nv.addGraph(function() {
 
 
 d3.select("#chart3")
-.datum(data3)
+.datum(routesByCat)
 .transition().duration(1200)
 .call(chart);
 
@@ -220,7 +235,7 @@ nv.addGraph(function() {
 .showValues(true);
 
 d3.select('#chart4')
-.datum(data)
+.datum(topScans)
 .transition().duration(500)
 .call(chart);
 
@@ -239,7 +254,7 @@ nv.addGraph(function() {
 .showValues(true);
 
 d3.select('#chart5')
-.datum(data)
+.datum(topRoutes)
 .transition().duration(500)
 .call(chart);
 

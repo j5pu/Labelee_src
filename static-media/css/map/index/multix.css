@@ -1266,6 +1266,15 @@ span#go-button{
     cursor:pointer;
 
 }
-.socialmenu{
+div.socialmenu{
 
 }
+
+div#marquee{
+    background: rgb(17, 17, 17); background:rgba(17, 17, 17, 0.4); padding:0;
+}
+/*
+
+#cupones, #header, span.locator {
+    display:none !important;
+}*/
