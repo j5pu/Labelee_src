@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import heapq
+import math
 
 
 class Dijkstra():
@@ -9,11 +10,12 @@ class Dijkstra():
     qr = []
     mapConnections = {} #Aristas del mapa
 
-    def __init__(self, floors, walls, qr, mapConnections):
+    def __init__(self, floors, walls, qr, mapConnections, allowDiagonalPaths=True):
         self.floors = floors
         self.walls = walls
         self.qr = qr
         self.mapConnections = mapConnections
+        self.allowDiagonalPaths = allowDiagonalPaths
 
     def __dijkstraUsingHeap__(self, adj, s):
         ''' Return predecessors and min distance if there exists a shortest path
@@ -23,10 +25,10 @@ class Dijkstra():
         Qd = {}    # vertex -> [d[v], parent_v, v]
         p = {}     # predecessor
         visited_set = set([s])
-        cost = 1
+        costs = adj
 
         for v in adj.get(s, []):
-            d[v] = cost
+            d[v] = costs[s][v]
             item = [d[v], s, v]
             heapq.heappush(Q, item)
             Qd[v] = item
@@ -39,13 +41,13 @@ class Dijkstra():
                 visited_set.add(u)
                 for v in adj.get(u, []):
                     if d.get(v):
-                        if d[v] > cost + d[u]:
-                            d[v] = cost + d[u]
+                        if d[v] > costs[u][v] + d[u]:
+                            d[v] = costs[u][v] + d[u]
                             Qd[v][0] = d[v]    # decrease key
                             Qd[v][1] = u       # update predecessor
                             heapq._siftdown(Q, 0, Q.index(Qd[v]))
                     else:
-                        d[v] = cost + d[u]
+                        d[v] = costs[u][v] + d[u]
                         item = [d[v], u, v]
                         heapq.heappush(Q, item)
                         Qd[v] = item
@@ -94,20 +96,30 @@ class Dijkstra():
     def __getConnections__(self, row, column, map, numfloor):
 
         connection = {}
-        keys = [
-           # self.getKey(row - 1, column + 1, numfloor), #Northeast  45
-           # self.getKey(row + 1, column + 1, numfloor), #Southeast 135
-           # self.getKey(row + 1, column - 1, numfloor), #Southwest 225
-           # self.getKey(row - 1, column - 1, numfloor), #Northwest 315
+        direct_neighbours_keys = [
             self.getKey(row, column - 1, numfloor), #West 270
             self.getKey(row + 1, column, numfloor), #South 180
             self.getKey(row, column + 1, numfloor), #East 90
             self.getKey(row - 1, column, numfloor), #North 0
         ]
-        #mira si el punto tiene conexion con los puntos contiguos (Norte, Sur, Este, Oeste)
-        for key in keys:
+
+        # Calculate costs to neighbours
+        for key in direct_neighbours_keys:
             if self.__existConnection__(map, key):
                 connection[key] = 1
+
+        if self.allowDiagonalPaths:
+            diagonal_neighbours_keys = [
+                self.getKey(row - 1, column + 1, numfloor), #Northeast  45
+                self.getKey(row + 1, column + 1, numfloor), #Southeast 135
+                self.getKey(row + 1, column - 1, numfloor), #Southwest 225
+                self.getKey(row - 1, column - 1, numfloor), #Northwest 315
+            ]
+
+            for key in diagonal_neighbours_keys:
+                if self.__existConnection__(map, key):
+                    connection[key] = math.sqrt(2)
+
         key = self.getKey(row, column, numfloor)
         #mira si el punto tiene una conexión con otra planta
         if key in self.mapConnections:
