@@ -123,7 +123,9 @@ class LabelCategory(models.Model):
 class Label(models.Model):
     name = models.CharField(max_length=200, blank=False, null=False)
     img = models.FileField(upload_to=get_label_path, blank=True, null=True)
+    # si elimino su categoría o dueño ésta también se elimina
     category = models.ForeignKey(LabelCategory, related_name='labels', blank=True, on_delete=models.CASCADE)
+    owner = models.ForeignKey(CustomUser, related_name='labels', blank=True, null=True, on_delete=models.CASCADE)
 
     def __unicode__(self):
         return self.name

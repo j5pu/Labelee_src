@@ -12,6 +12,9 @@ from tastypie.validation import FormValidation
 # from tastypie.authentication import Authentication
 
 from tastypie.resources import ModelResource, ALL, ALL_WITH_RELATIONS
+from utils.constants import USER_GROUPS
+from utils.helpers import random_string_generator
+from django.contrib.auth.models import Group
 
 #
 # Para poder sacar en la api la lista de mapas para el lugar y el lugar al que pertenece el mapa
@@ -126,8 +129,59 @@ class LabelResource(ModelResource):
         }
         max_limit = 5000
 
+    def obj_create(self, bundle, **kwargs):
+        """
+        Si la etiqueta creada no es genérica (tiene enclosure asociado para su categoría)
+        entonces se crea un usuario dueño de ella
+        """
+        label_created = super(LabelResource, self).obj_create(bundle, user=bundle.request.user)
+
+        if label_created.obj.category.enclosure:
+            label_name = label_created.obj.name
+            enclosure_name = label_created.obj.category.enclosure.name
+            username = label_name + '_' + enclosure_name
+            # todo: cambiar a generación aleatoria
+            password = '1234'
+            # password = random_string_generator(6)
+
+            user = CustomUser.objects.create_user(username, '', password)
+            g = Group.objects.get(id=USER_GROUPS['shop_owners'])
+            g.user_set.add(user)
+
+            label_created.obj.owner = user
+            label_created.obj.save()
+
+        return label_created
+
+    def obj_update(self, bundle, **kwargs):
+        """
+        Si editamos el nombre para la etiqueta también se modifica el nombre
+        de usuario para su dueño
+        """
+        label_updated = super(LabelResource, self).obj_update(bundle, **kwargs)
+
+        if label_updated.obj.category.enclosure:
+            label_name = label_updated.obj.name
+            enclosure_name = label_updated.obj.category.enclosure.name
+            owner = label_updated.obj.owner
+            owner.username = label_name + '_' + enclosure_name
+            owner.save()
+
+        return label_updated
+
+
+    def obj_delete(self, bundle, **kwargs):
+        """
+        Si editamos el nombre para la etiqueta también se modifica el nombre
+        de usuario para su dueño
+        """
+        label_id = kwargs['pk']
+        user = CustomUser.objects.filter(labels__id=label_id)
+        user.delete()
+
     def determine_format(self, request):
         return 'application/json'
+
 
 
 class LabelCategoryResource(ModelResource):
