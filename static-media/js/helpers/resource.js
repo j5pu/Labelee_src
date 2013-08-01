@@ -12,7 +12,6 @@ function Resource(resource_name) {
 	this.api1_url = '/api/v1/' + this.resource_name + '/';
 	this.api2_url = '/api-2/' + this.resource_name + '/';
 
-
 	this.create = function(data) {
 		var new_element;
 
@@ -626,12 +625,39 @@ function QrCodeResource()
 
 function DashboardResource()
 {
-    Resource.call(this, 'qr-shot');
+    this.dashboard_url = '/dashboard/';
 
-    this.getShotsByCategoryGraph = function(enclosure_id)
+    this._getScansUrl = function(enclosure_id)
     {
-        return ajaxGetElements(this.api2_url, 'manager/');
-    }
+        return this.dashboard_url + 'scans/' + enclosure_id;
+    };
+
+    this._getDisplayedRoutesUrl = function(enclosure_id)
+    {
+        return this.dashboard_url + 'routes/' + enclosure_id;
+    };
+
+    this.getScansByCategory = function(enclosure_id)
+    {
+        // /dashboard/scans/(?P<enclosure_id>\d+)/by-category/
+        return ajaxGetElements(this._getScansUrl(enclosure_id), '/by-category/');
+    };
+
+    this.getScansForTopPois = function(enclosure_id)
+    {
+        return ajaxGetElements(this._getScansUrl(enclosure_id), '/top-pois/');
+    };
+
+    this.getDisplayedRoutesByCategory = function(enclosure_id)
+    {
+        // /dashboard/scans/(?P<enclosure_id>\d+)/by-category/
+        return ajaxGetElements(this._getDisplayedRoutesUrl(enclosure_id), '/by-category/');
+    };
+
+    this.getDisplayedRoutesForTopPois = function(enclosure_id)
+    {
+        return ajaxGetElements(this._getDisplayedRoutesUrl(enclosure_id), '/top-pois/');
+    };
 }
 
 
@@ -651,4 +677,4 @@ StepResource.prototype = new Resource;
 UserResource.prototype = new Resource;
 var userResource = new UserResource();
 var qrCodeResource = new QrCodeResource();
-var qrShotResource = new QrShotResource();
+var dashBoardResource = new DashboardResource();
