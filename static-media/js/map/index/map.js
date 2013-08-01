@@ -1,3 +1,28 @@
+(function() {
+    var lastTime = 0;
+    var vendors = ['webkit', 'moz'];
+    for(var x = 0; x < vendors.length && !window.requestAnimationFrame; ++x) {
+        window.requestAnimationFrame = window[vendors[x]+'RequestAnimationFrame'];
+        window.cancelAnimationFrame =
+            window[vendors[x]+'CancelAnimationFrame'] || window[vendors[x]+'CancelRequestAnimationFrame'];
+    }
+
+    if (!window.requestAnimationFrame)
+        window.requestAnimationFrame = function(callback, element) {
+            var currTime = new Date().getTime();
+            var timeToCall = Math.max(0, 16 - (currTime - lastTime));
+            var id = window.setTimeout(function() { callback(currTime + timeToCall); },
+                timeToCall);
+            lastTime = currTime + timeToCall;
+            return id;
+        };
+
+    if (!window.cancelAnimationFrame)
+        window.cancelAnimationFrame = function(id) {
+            clearTimeout(id);
+        };
+}());
+
 var Map = {};
 
 var showOrigin = false;
@@ -238,6 +263,7 @@ var LocalStorageHandler = {
 
             this.setSideMenu();
         }
+
     }
 };
 
@@ -549,8 +575,6 @@ function initMap(qrPoint) {
 
 
             map.setView(qrFloor.bounds.getCenter(), 0);
-
-//            map.fitBounds(qrFloor.bounds);
             bindContent(qrMarker);
             map.setMaxBounds(map.getBounds());
             qrMarker.openPopup();
@@ -561,14 +585,11 @@ function initMap(qrPoint) {
             bindContent(qrMarker);
 
         }
-
     }
 
     map.removeLayer(totalPois);
     //map.addLayer(qrFloor.layer);
     //qrMarker._bringToFront();
-
-//    Coupon.init();
 
     if (map.hasLayer(destMarker)) {
         destMarker.openPopup();
@@ -867,6 +888,7 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
             floors[i].layer.addLayer(arrow[i]);
             if (floors[i].id === route.fields.destiny.fields.floor) {
                 var check = floorChecks[floors[i].name];
+                //$('div.leaflet-control-layers-base').find('span:contains("'+check+'")').addClass('blink');
                 blinkingMode = floors[i].name;
                 blinker(check);
                 map.addLayer(arrowHead[i]);
@@ -1002,7 +1024,6 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
 }
 
 
-
 //Función que gestiona la animación de la flecha
 function arrowAnim(arrow, idFloor) {
     if (anim != null) {
@@ -1011,7 +1032,7 @@ function arrowAnim(arrow, idFloor) {
     }
     anim = window.setInterval(function () {
         setArrow(arrow, idFloor)
-    }, 100);
+    }, 50);
 
 }
 
@@ -1028,6 +1049,29 @@ var setArrow = function (flecha, idFloor) {
     if (++arrowsOffset > 100)
         arrowsOffset = 0;
 };
+/*
+var fps = 15;
+//var fps = 0.001;
+//var now;
+//var then = Date.now();
+//var interval = 10000000/fps;
+//var delta;
+function arrowAnim(arrow, idFloor) {
+    (function anim(){
+        setArrow(arrow, idFloor);
+        setTimeout(function(){
+        requestAnimationFrame(anim);
+        }, 2000 / fps)
+//        now = Date.now();
+//        delta = now - then;
+//
+//        if (delta > interval) {
+//            then = now - (delta % interval);
+//        }
+    })();
+}*/
+
+
 
 function isCategoryVisibleOnButtons(categ_name) {
     return (categ_name !== "Parquing" && categ_name !== "Parking") &&

@@ -662,10 +662,16 @@ label > span {
 }
 
 .leaflet-control-layers-base span{
-    margin-left:1px;
+    margin-left: 1px;
     font-size: 17px;
     font-family: 'Raleway','Noto Sans', SANS-SERIF;
-
+    width: inherit;
+    height: inherit;
+    left: 2px;
+    text-align: center;
+    top: 3px;
+    line-height: 31px;
+    border-radius: 4px;
 }
 span>span{
     color: green;
@@ -1018,7 +1024,87 @@ margin: 2%;
 font-size:1.2em;
 color:rgba(255, 255, 255, 0.8);
 }
+@font-face {
+    font-family: 'fontawesome';
+    src:url('../font/fontawesome.eot');
+    src:url('../font/fontawesome.eot?#iefix') format('embedded-opentype'),
+    url('../font/fontawesome.woff') format('woff'),
+    url('../font/fontawesome.ttf') format('truetype'),
+    url('../font/fontawesome.svg#fontawesome') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
 
+/* Use the following CSS code if you want to use data attributes for inserting your icons */
+[data-icon]:before {
+    font-family: 'fontawesome';
+    content: attr(data-icon);
+    speak: none;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* Use the following CSS code if you want to have a class per icon */
+/*
+Instead of a list of all class selectors,
+you can use the generic selector below, but it's slower:
+[class*="icon-"] {
+*/
+.icon-food, .icon-female, .icon-male, .icon-gamepad, .icon-sort, .icon-signin, .icon-glass, .icon-film, .icon-screenshot, .icon-tumblr-sign, .icon-google-plus-sign, .icon-facebook-sign, .icon-gift {
+    font-family: 'fontawesome';
+    speak: none;
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+    -webkit-font-smoothing: antialiased;
+}
+.icon-food:before {
+    content: "\f0f5";
+}
+.icon-female:before {
+    content: "\f182";
+}
+.icon-male:before {
+    content: "\f183";
+}
+.icon-gamepad:before {
+    content: "\f11b";
+}
+.icon-sort:before {
+    content: "\f0dc";
+}
+.icon-signin:before {
+    content: "\f090";
+}
+.icon-glass:before {
+    content: "\f000";
+}
+.icon-film:before {
+    content: "\f008";
+}
+.icon-screenshot:before {
+    content: "\f05b";
+}
+.icon-tumblr-sign:before {
+    content: "\f174";
+}
+.icon-google-plus-sign:before {
+    content: "\f0d4";
+}
+.icon-facebook-sign:before {
+    content: "\f082";
+}
+.icon-gift:before {
+    content: "\f06b";
+}
+.icon-smile:before {
+    content: "\f182|\f183";
+}
 
 @font-face {
     font-family: 'carFont';
@@ -1286,3 +1372,17 @@ div#marquee{
 #cupones, #header, span.locator {
     display:none !important;
 }*/
+
+@keyframes blink {
+    0% { background-color: red; }
+    100% { background-color: transparent; }
+}
+@-webkit-keyframes blink {
+    0% {background-color: red; }
+    100% {background-color: transparent; }
+}
+.blink {
+    -webkit-animation: blink 1.5s linear infinite;
+    -moz-animation: blink 1.5s linear infinite;
+    animation: blink 1.5s linear infinite;
+}
