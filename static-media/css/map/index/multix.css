@@ -504,14 +504,43 @@ html{
     -webkit-box-shadow: inset 2px 2px 4px rgba(0,0,0,0.4);
     box-shadow: inset 2px 2px 4px rgba(0,0,0,0.4);
 
+/*    background: rgba(234, 236, 230, 1);*/
+
     background-color: #ededed;
+/*    background-image: -webkit-linear-gradient(60deg, transparent, rgba(189, 189, 189, 0.1), transparent 65px, white);
+    background-image: -moz-linear-gradient(60deg, transparent, #666, transparent 65px, white);
+    background-image: linear-gradient(60deg, transparent, rgba(189, 189, 189, 0.1), transparent 65px, white);
+    background-size: 1.5em 1.5em;*/
+
 /*
-    background-image: linear-gradient(white 1px, transparent 1px),
-    linear-gradient(90deg, white 1px, transparent 1px),
-    linear-gradient(rgba(255,255,255,.3) 1px, transparent 1px),
-   linear-gradient(90deg, rgba(255,255,255,.3) 1px, transparent 1px);
-    background-size:100px 100px, 100px 100px, 20px 20px, 20px 20px;
-    background-position:-2px -2px, -2px -2px, -1px -1px, -1px -1px;
+    background-image:
+        linear-gradient(180deg,
+        rgba(242, 242, 242, 1) 2px,
+        transparent 2px, transparent 11px,
+        rgba(242, 242, 242, 1) 11px, rgba(242, 242, 242, 1) 12px,
+        transparent 12px, transparent 21px,
+        rgba(242, 242, 242, 1) 21px, rgba(242, 242, 242, 1) 22px,
+        transparent 22px, transparent 31px,
+        rgba(242, 242, 242, 1) 31px, rgba(242, 242, 242, 1) 32px,
+        transparent 32px, transparent 41px,
+        rgba(242, 242, 242, 1) 41px, rgba(242, 242, 242, 1) 42px,
+        transparent 42px, transparent 51px
+        ),
+
+        linear-gradient(90deg,
+        rgba(242, 242, 242, 1) 2px,
+        transparent 2px, transparent 11px,
+        rgba(242, 242, 242, 1) 11px, rgba(242, 242, 242, 1) 12px,
+        transparent 12px, transparent 21px,
+        rgba(242, 242, 242, 1) 21px, rgba(242, 242, 242, 1) 22px,
+        transparent 22px, transparent 31px,
+        rgba(242, 242, 242, 1) 31px, rgba(242, 242, 242, 1) 32px,
+        transparent 32px, transparent 41px,
+        rgba(242, 242, 242, 1) 41px, rgba(242, 242, 242, 1) 42px,
+        transparent 42px, transparent 51px
+        );
+
+    background-size: 20px 20px;
 */
 }
 .leaflet-control-search .search-button {
@@ -662,10 +691,16 @@ label > span {
 }
 
 .leaflet-control-layers-base span{
-    margin-left:1px;
+    margin-left: 1px;
     font-size: 17px;
     font-family: 'Raleway','Noto Sans', SANS-SERIF;
-
+    width: inherit;
+    height: inherit;
+    left: 2px;
+    text-align: center;
+    top: 3px;
+    line-height: 31px;
+    border-radius: 4px;
 }
 span>span{
     color: green;
@@ -1018,7 +1053,92 @@ margin: 2%;
 font-size:1.2em;
 color:rgba(255, 255, 255, 0.8);
 }
+/*
+@font-face {
+    font-family: 'fontawesome';
+    src:url('../font/fontawesome.eot');
+    src:url('../font/fontawesome.eot?#iefix') format('embedded-opentype'),
+    url('../font/fontawesome.woff') format('woff'),
+    url('../font/fontawesome.ttf') format('truetype'),
+    url('../font/fontawesome.svg#fontawesome') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+*/
 
+/* Use the following CSS code if you want to use data attributes for inserting your icons */
+[data-icon]:before {
+    font-family: 'carFont';
+    content: attr(data-icon);
+    speak: none;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* Use the following CSS code if you want to have a class per icon */
+/*
+Instead of a list of all class selectors,
+you can use the generic selector below, but it's slower:
+[class*="icon-"] {
+*/
+.icon-food, .icon-female, .icon-male, .icon-gamepad, .icon-sort, .icon-signin, .icon-glass, .icon-film, .icon-screenshot, .icon-twitter-sign, .icon-google-plus-sign, .icon-facebook-sign, .icon-gift, .icon-camera, .icon-star {
+    font-family: 'carFont';
+    speak: none;
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+    -webkit-font-smoothing: antialiased;
+}
+.icon-food:before {
+    content: "\f0f5";
+}
+.icon-female:before {
+    content: "\f182";
+}
+.icon-male:before {
+    content: "\f183";
+}
+.icon-gamepad:before {
+    content: "\f11b";
+}
+.icon-sort:before {
+    content: "\f0dc";
+}
+.icon-signin:before {
+    content: "\f090";
+}
+.icon-glass:before {
+    content: "\f000";
+}
+.icon-film:before {
+    content: "\f008";
+}
+.icon-screenshot:before {
+    content: "\f05b";
+}
+.icon-twitter-sign:before {
+    content: "\f081";
+}
+.icon-google-plus-sign:before {
+    content: "\f0d4";
+}
+.icon-facebook-sign:before {
+    content: "\f082";
+}
+.icon-gift:before {
+    content: "\f06b";
+}
+.icon-smile:before {
+    content: "\f182|\f183";
+}
+.icon-camera:before {
+    content: "\f030";
+}
 
 @font-face {
     font-family: 'carFont';
@@ -1052,6 +1172,11 @@ color:rgba(255, 255, 255, 0.8);
 
 .icon-smile:before {
     content: "\f182|\f183";
+    font-size: 0.85em;
+}
+
+.icon-star:before {
+    content: "\e000";
 }
 *:focus{
     outline:none;
@@ -1135,6 +1260,7 @@ img.cupImg{
     font-weight: bold;
    position: absolute;
     -webkit-user-select: none;
+    right: 50%;
 }
 
 .leaflet-label:before {
@@ -1184,7 +1310,7 @@ leaflet-marker-icon{
     z-index: 475;
     color:white;
     //background-color: lightblue;
-    font-family: 'FontAwesome';
+    font-family: 'carFont';
     font-size: 1.3em;
     text-align: center;
     line-height: 1.4em;
@@ -1249,7 +1375,7 @@ leaflet-marker-icon{
 
 
 .dest-icon {
-    font-family: 'FontAwesome';
+    font-family: 'carFont';
     background: red;
     opacity:1;
 }
@@ -1260,6 +1386,11 @@ leaflet-marker-icon{
     border-top-color: red;
 }
 
+
+.icon-smile:before {
+    content: "\f182|\f183";
+    font-size: 0.75em;
+}
 span#go-button{
     position:relative;
     background: orange;
@@ -1286,3 +1417,25 @@ div#marquee{
 #cupones, #header, span.locator {
     display:none !important;
 }*/
+
+@keyframes blink {
+    0% { background-color: red; }
+    100% { background-color: transparent; }
+}
+@-webkit-keyframes blink {
+    0% {background-color: red; }
+    100% {background-color: transparent; }
+}
+.blink {
+    -webkit-animation: blink 1.5s linear infinite;
+    -moz-animation: blink 1.5s linear infinite;
+    animation: blink 1.5s linear infinite;
+}
+
+#navigator {
+    font-size: 25px;
+    position:absolute;
+    top:50%;
+    left:50%;
+    z-index:4;
+}

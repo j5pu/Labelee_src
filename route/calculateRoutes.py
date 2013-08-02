@@ -227,16 +227,16 @@ def threadCalculateRoute(enclosure_id):
         except Exception as ex:
             errors.append('Se ha producido un error al insertar los datos en la BBDD. Error:' + str(ex))
 
-        final_time = time.clock()
-        if len(errors) == 0:
-            report = "Calculate routes finished correctly. Load to memory time = " + str(pre_dijkstra_time - initial_time) + "s -- " +\
-                "Dijkstra algorithm time = " + str(post_dijkstra_time - pre_dijkstra_time) + "s -- " +\
-                "Save to database time = " + str(final_time - post_dijkstra_time) + "s -- " +\
-                "Total time = " + str(final_time - initial_time) + "s."
-            Logger.info(report)
-        else:
-            report = "Calculate routes finished with errors. "
-            for error in errors:
-                report += error + '--'
-            Logger.error(report)
+    final_time = time.clock()
+    if len(errors) == 0:
+        report = "Calculate routes finished correctly. Load to memory time = " + str(pre_dijkstra_time - initial_time) + "s -- " +\
+            "Dijkstra algorithm time = " + str(post_dijkstra_time - pre_dijkstra_time) + "s -- " +\
+            "Save to database time = " + str(final_time - post_dijkstra_time) + "s -- " +\
+            "Total time = " + str(final_time - initial_time) + "s."
+        Logger.info(report)
+    else:
+        report = "Calculate routes finished with errors. "
+        for error in errors:
+            report += error + '--'
+        Logger.error(report[:200])
 

@@ -99,7 +99,7 @@ class LabelCategory(models.Model):
     img = models.FileField(upload_to=get_label_category_path, blank=True, null=True)
     color = models.CharField(max_length=50, blank=False)
     icon = models.CharField(max_length=50, blank=True, null=True)
-    enclosure = models.ForeignKey(Enclosure, related_name='enclosure', blank=False, null=True)
+    enclosure = models.ForeignKey(Enclosure, related_name='enclosure', blank=True, null=True)
 
     class Meta:
         verbose_name_plural = 'Label categories'
@@ -154,8 +154,8 @@ class Point(models.Model):
     floor = models.ForeignKey(Floor, related_name='points', on_delete=models.CASCADE)
     # panorama_thumbnail = models.FileField(upload_to=get_panorama_path, null=True, blank=True)
     alwaysVisible = models.NullBooleanField()
-    center_x = models.PositiveIntegerField(null=True)
-    center_y = models.PositiveIntegerField(null=True)
+    center_x = models.PositiveIntegerField(null=True, blank=True)
+    center_y = models.PositiveIntegerField(null=True, blank=True)
     isVertical = models.NullBooleanField()
     panorama = models.FileField(upload_to=get_panorama_path, null=True, blank=True)
     coupon = models.FileField(upload_to=get_coupon_path,null=True, blank=True)

@@ -113,9 +113,11 @@ def readOnlyPois(request, floor_id):
         label__category__name_es = 'Intermedias'
     ).exclude(
         label__category__name_es = 'Parquing'
-    ).exclude(
-        qr_code = None
     )
+    # por hacer: las aristas deben llevar QR
+    # ).exclude(
+    #     qr_code = None
+    # )
 
     json_pois = serialize('json', pois)
     tx_pois = tx_serialized_json_list(json_pois)
