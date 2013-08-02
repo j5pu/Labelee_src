@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-07-31 11:38+0200\n"
+"POT-Creation-Date: 2013-08-02 13:02+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,7 +17,33 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: route/calculateRoutes.py:27
+#: coupon_manager/services.py:25
+#, fuzzy
+msgid "Mis cupones"
+msgstr "Coupons"
+
+#: coupon_manager/services.py:26
+msgid "Mi cupón"
+msgstr ""
+
+#: dashboard/services.py:25 map_editor/api_2/resources/qr_shot.py:25
+#, fuzzy
+msgid "Total de escaneos"
+msgstr "Connection list"
+
+#: dashboard/services.py:43
+msgid "POIs más escaneados"
+msgstr ""
+
+#: dashboard/services.py:61
+msgid "Total de rutas"
+msgstr ""
+
+#: dashboard/services.py:79
+msgid "Rutas más solicitadas"
+msgstr ""
+
+#: route/calculateRoutes.py:119
 msgid "Se están calculando las rutas"
 msgstr "Routes are being processed"
 
@@ -25,15 +51,93 @@ msgstr "Routes are being processed"
 msgid "Esto es un titulo"
 msgstr "This is a title"
 
-#: templates/map/index.html:150
+#: templates/coupon_manager/index.html:27
+msgid "Cupón"
+msgstr ""
+
+#: templates/coupon_manager/index.html:35
+#: templates/coupon_manager/index.html:50
+#: templates/map_editor/v1/index.html:98
+#: templates/map_editor/v1/index.html:202
+#: templates/map_editor/v2/edit.html:134 templates/map_editor/v2/edit.html:155
+#: templates/map_editor/v2/index.html:118
+msgid "Editar"
+msgstr "Edit"
+
+#: templates/coupon_manager/index.html:54
+#: templates/coupon_manager/index.html:86
+#, fuzzy
+msgid "Añadir cupón"
+msgstr "Add floor"
+
+#: templates/coupon_manager/index.html:59
+msgid ""
+"\n"
+"                    Este POI, <b>[[manager.coupon.label.name]]</b>, no "
+"aparece como dibujado\n"
+"                    en ninguna planta del recinto <b>[[manager.coupon."
+"enclosure.name]]</b>.\n"
+"                    Consulte con el administrador.\n"
+"                "
+msgstr ""
+
+#: templates/coupon_manager/index.html:77
+#, fuzzy
+msgid "Imagen para el cupón:"
+msgstr "POI image"
+
+#: templates/coupon_manager/index.html:82
+#: templates/map_editor/v2/index.html:206
+msgid "Subir imagen"
+msgstr "Upload image"
+
+#: templates/coupon_manager/index.html:85
+#: templates/coupon_manager/index.html:104
+#: templates/map_editor/v1/edit.html:163 templates/map_editor/v1/edit.html:187
+#: templates/map_editor/v1/index.html:97
+#: templates/map_editor/v1/index.html:201
+#: templates/map_editor/v2/edit.html:179 templates/map_editor/v2/edit.html:197
+#: templates/map_editor/v2/edit.html:219 templates/map_editor/v2/edit.html:240
+#: templates/map_editor/v2/index.html:263
+#: templates/map_editor/v2/index.html:336
+msgid "Cancelar"
+msgstr "Cancel"
+
+#: templates/coupon_manager/index.html:97
+#, fuzzy
+msgid "Nueva imagen para el cupón:"
+msgstr "New name for the enclosure"
+
+#: templates/coupon_manager/index.html:101
+#: templates/map_editor/v1/index.html:198
+#: templates/map_editor/v2/index.html:248
+#: templates/map_editor/v2/index.html:328
+#: templates/map_editor/v2/index.html:333
+msgid "Cambiar imagen"
+msgstr "Change image"
+
+#: templates/coupon_manager/index.html:105
+#: templates/map_editor/v1/edit.html:61 templates/map_editor/v2/edit.html:63
+#: templates/map_editor/v2/edit.html:198 templates/map_editor/v2/edit.html:241
+#: templates/map_editor/v2/index.html:264
+#: templates/map_editor/v2/index.html:337
+msgid "Guardar"
+msgstr "Save"
+
+#: templates/coupon_manager/index.html:106
+#, fuzzy
+msgid "Eliminar cupón"
+msgstr "Delete floor"
+
+#: templates/map/index.html:156
 msgid "Selecciona tu destino"
 msgstr "Select destination"
 
-#: templates/map/index.html:161
+#: templates/map/index.html:167
 msgid "Lo sentimos, no se ha encontrado ningún resultado."
 msgstr "No results found, sorry."
 
-#: templates/map/index.html:185
+#: templates/map/index.html:191
 msgid "Cupones"
 msgstr "Coupons"
 
@@ -93,13 +197,6 @@ msgstr "Rows"
 msgid "Refrescar filas"
 msgstr "Update rows"
 
-#: templates/map_editor/v1/edit.html:61 templates/map_editor/v2/edit.html:63
-#: templates/map_editor/v2/edit.html:198 templates/map_editor/v2/edit.html:241
-#: templates/map_editor/v2/index.html:264
-#: templates/map_editor/v2/index.html:337
-msgid "Guardar"
-msgstr "Save"
-
 #: templates/map_editor/v1/edit.html:62 templates/map_editor/v2/edit.html:64
 msgid "Limpiar"
 msgstr "Clear"
@@ -116,8 +213,9 @@ msgstr "Saved"
 msgid "Por guardar"
 msgstr "To save"
 
-#: templates/map_editor/v1/edit.html:80 templates/map_editor/v2/edit.html:83
-msgid "Por eliminar"
+#: templates/map_editor/v1/edit.html:80
+#, fuzzy
+msgid "Por elminar"
 msgstr "To delete"
 
 #: templates/map_editor/v1/edit.html:89 templates/map_editor/v2/edit.html:92
@@ -184,16 +282,6 @@ msgstr "Color"
 msgid "Crear"
 msgstr "Create"
 
-#: templates/map_editor/v1/edit.html:163 templates/map_editor/v1/edit.html:187
-#: templates/map_editor/v1/index.html:97
-#: templates/map_editor/v1/index.html:201
-#: templates/map_editor/v2/edit.html:179 templates/map_editor/v2/edit.html:197
-#: templates/map_editor/v2/edit.html:219 templates/map_editor/v2/edit.html:240
-#: templates/map_editor/v2/index.html:263
-#: templates/map_editor/v2/index.html:336
-msgid "Cancelar"
-msgstr "Cancel"
-
 #: templates/map_editor/v1/edit.html:168 templates/map_editor/v2/edit.html:204
 msgid "Crear POI"
 msgstr "Create POI"
@@ -246,13 +334,6 @@ msgstr "New name for the enclosure"
 msgid "Cuenta de twitter"
 msgstr "Twitter account"
 
-#: templates/map_editor/v1/index.html:98
-#: templates/map_editor/v1/index.html:202
-#: templates/map_editor/v2/edit.html:134 templates/map_editor/v2/edit.html:155
-#: templates/map_editor/v2/index.html:118
-msgid "Editar"
-msgstr "Edit"
-
 #: templates/map_editor/v1/index.html:112
 msgid "Nueva planta"
 msgstr "New floor"
@@ -298,12 +379,9 @@ msgstr "Name"
 msgid "Nuevo nombre para la planta"
 msgstr "New floor name"
 
-#: templates/map_editor/v1/index.html:198
-#: templates/map_editor/v2/index.html:248
-#: templates/map_editor/v2/index.html:328
-#: templates/map_editor/v2/index.html:333
-msgid "Cambiar imagen"
-msgstr "Change image"
+#: templates/map_editor/v2/edit.html:83
+msgid "Por eliminar"
+msgstr "To delete"
 
 #: templates/map_editor/v2/edit.html:123 templates/map_editor/v2/edit.html:215
 #: templates/map_editor/v2/edit.html:236
@@ -418,10 +496,6 @@ msgstr "Twitter account:"
 #: templates/map_editor/v2/index.html:244
 msgid "Logo del recinto:"
 msgstr "Enclosure logo:"
-
-#: templates/map_editor/v2/index.html:206
-msgid "Subir imagen"
-msgstr "Upload image"
 
 #: templates/map_editor/v2/index.html:209
 #: templates/map_editor/v2/index.html:251

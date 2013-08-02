@@ -35,6 +35,7 @@ urlpatterns = patterns('',
     url(r'^map/', include('map.urls')),
     url(r'^map-editor/', include('map_editor.urls')),
     url(r'^dashboard/', include('dashboard.urls')),
+    url(r'^coupon/', include('coupon_manager.urls')),
 
     # ADMIN:
     # Uncomment the admin/doc line below to enable admin documentation:

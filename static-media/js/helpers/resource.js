@@ -661,6 +661,24 @@ function DashboardResource()
 }
 
 
+function CouponResource()
+{
+    this.coupons_url = '/coupon/';
+
+    this.getManager = function()
+    {
+        // /coupon/manager/
+        return ajaxGetElements(this.coupons_url, 'manager/');
+    };
+
+    this.getCoupon = function(label_id)
+    {
+        // /coupon/manager/label/<label_id>
+        return ajaxGetElements(this.coupons_url, 'label/' + label_id);
+    };
+}
+
+
 FloorResource.prototype = new Resource();
 var floorResource = new FloorResource();
 LabelResource.prototype = new Resource();
@@ -678,3 +696,4 @@ UserResource.prototype = new Resource();
 var userResource = new UserResource();
 var qrCodeResource = new QrCodeResource();
 var dashBoardResource = new DashboardResource();
+var couponResource = new CouponResource();

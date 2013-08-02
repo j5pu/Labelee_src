@@ -3,7 +3,7 @@
 import os
 from django.db import models
 # from django.utils.translation import ugettext_lazy as _
-from django.contrib.auth.models import User, UserManager
+from django.contrib.auth.models import User, UserManager, Group
 from map_editor.api_2.utils.point import filterAsPois
 from file_paths import *
 
@@ -26,6 +26,10 @@ class CustomUser(User):
         if type(self) is CustomUser and not self.pk:
             self.set_password(self.password)
         super(CustomUser, self).save(*args, **kwargs)
+
+    def is_in_group(self, group_id):
+        users_in_group = Group.objects.get(id=group_id).user_set.all()
+        return self.user_ptr in users_in_group
 
     class Meta:
         verbose_name = 'CustomUser'

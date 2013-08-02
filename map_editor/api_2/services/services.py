@@ -52,9 +52,6 @@ class ImgService:
         resource_obj.save()
 
 
-
-
-
     def delete_img(self):
         """
         Elimina la imágen para el recurso

@@ -1,0 +1,121 @@
+{% extends "base.html" %}
+
+{% load i18n %}
+
+
+{% block css %}
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/map_editor/styles.css"/>
+{% endblock %}
+
+{% block js %}
+    <script src="{{ STATIC_URL }}vendor/bootstrap/bootstrap.file-input.js"></script>
+    <script src="{{ STATIC_URL }}js/coupon_manager/main.js"></script>
+{% endblock %}
+
+
+{% block content %}
+    {% csrf_token %}
+
+    {% include "_manager_navbar.html" with section="Coupon Manager"%}
+
+    <div ng-controller="MainCtrl">
+
+        <h1>[[manager.title]]</h1>
+
+        <table ng-show="!manager.for_shop_owner">
+            <thead>
+                <tr>
+                    <th>POI</th>
+                    <th>{% trans "Cupón" %}</th>
+                </tr>
+            </thead>
+            <tr ng-repeat="coupon in manager.coupons" ng-controller="CouponCtrl">
+                <td>[[coupon.label.name]]</td>
+                <td>
+                    <img ng-show="coupon.img" ng-src="[[coupon.point.coupon]]">
+                    <button class="btn link-2" ng-click="show_edit_form()">
+                        <i class="icon-pencil icon-white"></i>{% trans "Editar" %}
+                    </button>
+                </td>
+            </tr>
+        </table>
+
+        <div ng-show="manager.for_shop_owner">
+
+            <h2>[[manager.coupons[0].label.name]] - [[manager.coupons[0].enclosure.name]]</h2>
+
+            <div ng-show="manager.coupons[0].point">
+                <div ng-repeat="coupon in manager.coupons" ng-controller="CouponCtrl">
+                    <div ng-show="coupon.point.coupon">
+                        <h2>[[coupon.label.name]]</h2>
+                        <img ng-show="coupon.point.coupon" ng-src="[[coupon.point.coupon]]">
+                        <button class="btn link-2" ng-click="show_update_form($event)">
+                            <i class="icon-pencil icon-white"></i>{% trans "Editar" %}
+                        </button>
+                    </div>
+                    <div ng-show="!coupon.point.coupon">
+                        <button class="btn" ng-click="show_create_form($event)">{% trans "Añadir cupón" %}</button>
+                    </div>
+
+                    <div id="dialogs">
+                        <div id="coupon_create">
+                            <form class="create"
+                                  id="create"
+                                  action=""
+                                  method="post"
+                                  enctype="multipart/form-data"
+                                  target="upload_target">
+
+                                <label class="txt">
+                                    {% trans "Imagen para el cupón:" %}
+                                    <input class="btn"
+                                           type="file"
+                                           ng-model="coupon_img"
+                                           name="coupon"
+                                           title="{% trans "Subir imagen" %}">
+                                </label>
+
+                                <button class="btn" ng-click="closeModalDialog()">{% trans "Cancelar" %}</button>
+                                <button class="btn" ng-click="create()">{% trans "Añadir cupón" %}</button>
+                            </form>
+                        </div>
+
+                        <div id="coupon_update">
+                            <form class="edit"
+                                  action=""
+                                  method="post"
+                                  enctype="multipart/form-data"
+                                  target="upload_target">
+                                <label class="txt">
+                                    {% trans "Nueva imagen para el cupón:" %}
+                                    <input class="btn"
+                                           type="file"
+                                           ng-model="new_coupon_img"
+                                           name="coupon"
+                                           title="{% trans "Cambiar imagen" %}">
+                                </label>
+
+                                <button class="btn" ng-click="closeModalDialog()">{% trans "Cancelar" %}</button>
+                                <button class="btn" ng-click="update()">{% trans "Guardar" %}</button>
+                                <button class="btn" ng-click="del()">{% trans "Eliminar cupón" %}</button>
+                            </form>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="alert" ng-show="!manager.coupons[0].point">
+                {% blocktrans %}
+                    Este POI, <b>[[manager.coupon.label.name]]</b>, no aparece como dibujado
+                    en ninguna planta del recinto <b>[[manager.coupon.enclosure.name]]</b>.
+                    Consulte con el administrador.
+                {% endblocktrans %}
+            </div>
+
+        </div>
+
+    </div>
+
+    {% include "_uploading_iframe.html" %}
+{% endblock %}
