@@ -30,9 +30,9 @@ $(function () {
     //    };
 
         // Motion listener
-   //    if (window.DeviceMotionEvent) {
-   //         window.addEventListener('devicemotion', deviceMotionListener, false);
-   //    };
+       if (window.DeviceMotionEvent) {
+            window.addEventListener('devicemotion', deviceMotionListener, false);
+       };
 
 //    };
 

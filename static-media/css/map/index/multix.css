@@ -1392,3 +1392,11 @@ div#marquee{
     -moz-animation: blink 1.5s linear infinite;
     animation: blink 1.5s linear infinite;
 }
+
+#navigator {
+    font-size: 25px;
+    position:absolute;
+    top:50%;
+    left:50%;
+    z-index:4;
+}
