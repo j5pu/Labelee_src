@@ -504,13 +504,13 @@ html{
     -webkit-box-shadow: inset 2px 2px 4px rgba(0,0,0,0.4);
     box-shadow: inset 2px 2px 4px rgba(0,0,0,0.4);
 
-    background: rgba(234, 236, 230, 1);
+/*    background: rgba(234, 236, 230, 1);*/
 
-/*    background-color: #ededed;*/
-    background-image: -webkit-linear-gradient(60deg, transparent, rgba(189, 189, 189, 0.1), transparent 65px, white);
+    background-color: #ededed;
+/*    background-image: -webkit-linear-gradient(60deg, transparent, rgba(189, 189, 189, 0.1), transparent 65px, white);
     background-image: -moz-linear-gradient(60deg, transparent, #666, transparent 65px, white);
     background-image: linear-gradient(60deg, transparent, rgba(189, 189, 189, 0.1), transparent 65px, white);
-    background-size: 1.5em 1.5em;
+    background-size: 1.5em 1.5em;*/
 
 /*
     background-image:
@@ -1084,7 +1084,7 @@ Instead of a list of all class selectors,
 you can use the generic selector below, but it's slower:
 [class*="icon-"] {
 */
-.icon-food, .icon-female, .icon-male, .icon-gamepad, .icon-sort, .icon-signin, .icon-glass, .icon-film, .icon-screenshot, .icon-twitter-sign, .icon-google-plus-sign, .icon-facebook-sign, .icon-gift, .icon-camera {
+.icon-food, .icon-female, .icon-male, .icon-gamepad, .icon-sort, .icon-signin, .icon-glass, .icon-film, .icon-screenshot, .icon-twitter-sign, .icon-google-plus-sign, .icon-facebook-sign, .icon-gift, .icon-camera, .icon-star {
     font-family: 'carFont';
     speak: none;
     font-style: normal;
@@ -1173,6 +1173,10 @@ you can use the generic selector below, but it's slower:
 .icon-smile:before {
     content: "\f182|\f183";
     font-size: 0.85em;
+}
+
+.icon-star:before {
+    content: "\e000";
 }
 *:focus{
     outline:none;

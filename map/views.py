@@ -31,13 +31,14 @@ def show_map(request, qr_type, enclosure_id, floor_id, poi_id):
                 floor__enclosure__id=enclosure_id) \
         .order_by('label__category__name', 'description', 'label__name')
 
-    try:
-        qrShot = Qr_shot()
-        qrShot.point_id = poi_id
-        qrShot.date = datetime.datetime.utcnow()
-        qrShot.save()
-    except Exception as ex:
-        Logger.error(ex.message)
+    # try:
+    #     pass
+    #     # qrShot = Qr_shot()
+    #     # qrShot.point_id = poi_id
+    #     # qrShot.date = datetime.datetime.utcnow()
+    #     # qrShot.save()
+    # except Exception as ex:
+    #     Logger.error(ex.message)
 
     for point in points:
         if point.label.category.name_en not in FIXED_CATEGORIES.values():

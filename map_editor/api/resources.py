@@ -56,7 +56,8 @@ class EnclosureResource(ModelResource):
         always_return_data = True
         filtering = {
             'owner': ALL_WITH_RELATIONS,
-            'id': ALL
+            'id': ALL,
+            'name': ALL
             }
 
     def determine_format(self, request):
@@ -75,6 +76,7 @@ class FloorResource(ModelResource):
         filtering = {
             'enclosure': ALL_WITH_RELATIONS,
             'id': ALL,
+            'name': ALL,
         }
         ordering = {
             'floor_number': ALL

@@ -11,13 +11,13 @@
     <meta name="apple-mobile-web-app-capable" content="yes"/>
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
 
-{% comment %}    <link href="http://fonts.googleapis.com/css?family=Raleway|Just+Me+Again+Down+Here" rel="stylesheet"
-          type="text/css">{% endcomment %}
-    <link href="http://fonts.googleapis.com/css?family=Raleway" rel="stylesheet"
+    <link href="http://fonts.googleapis.com/css?family=Raleway|Just+Me+Again+Down+Here" rel="stylesheet"
+          type="text/css">
+ {% comment %}   <link href="http://fonts.googleapis.com/css?family=Raleway" rel="stylesheet"
           type="text/css">
     <link href="http://fonts.googleapis.com/css?family=Just+Me+Again+Down+Here&text=find%20your%20way!" rel="stylesheet"
           type="text/css">
-
+{% endcomment %}
     <link rel="stylesheet" href="{{ STATIC_URL }}vendor/leaflet/leaflet.css"/>
     <!--link rel="stylesheet" href="{{ STATIC_URL }}css/map/index/font-awesome.min.css"-->
     <!--link rel="stylesheet" href="{{ STATIC_URL }}css/map/index/iconic_stroke.css"-->
@@ -84,7 +84,7 @@
     <script src="{{ STATIC_URL }}js/helpers/base.js"></script>
     <script src="{{ STATIC_URL }}js/helpers/ajax_helpers.js"></script>
     <script src="{{ STATIC_URL }}js/helpers/resource.js"></script>
-    <script src="{{ STATIC_URL }}js/helpers/dashboard.js"></script>
+    <!--script src="{{ STATIC_URL }}js/helpers/dashboard.js"></script-->
 
     <script src="{{ STATIC_URL }}js/log/logger.js"></script>
 
@@ -161,7 +161,13 @@
                 <li>
                 <li class="Label" style="background:{{colors|get_item:category.name}};">{{ category.name }}</li>
                 {% for destination in category.items %}
-                    <li onclick="$('#menu-right').trigger( 'close' );preDrawRoute({{ poi_id }},floor_id,{{ destination.id }},{{ destination.floor_id }});LocalStorageHandler.setPrevDestByPoi({{ destination.id }})">{{ destination.description }}</li>
+                    <li onclick="$('#menu-right').trigger( 'close' );preDrawRoute({{ poi_id }},floor_id,{{ destination.id }},{{ destination.floor_id }});LocalStorageHandler.setPrevDestByPoi({{ destination.id }})">
+                        {% if destination.label.category.enclosure %}
+                            {{ destination.label.name }}
+                        {% else %}
+                            {{ destination.description }}
+                        {% endif %}
+                    </li>
                 {% endfor %}
 
                 </li>

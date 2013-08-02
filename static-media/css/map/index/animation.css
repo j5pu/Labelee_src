@@ -9,11 +9,13 @@
     height:100%;
     z-index:10000;
     position: absolute;
+/*
 
     background:
         radial-gradient(#ededed 5%, #fff 40%);
     background-color: #fff;
-    background-size: 1em 1em;
+    background-size: .5em .5em;
+*/
 }
 
 .splash .container {
