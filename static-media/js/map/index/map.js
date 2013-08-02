@@ -304,7 +304,7 @@ function loopFloors() {
     }
 
    else {
-    img = floors[floor_index].img;
+    img = floors[floor_index].img || floors[floor_index].imgB;
    }
     var floorImg = new Image();
     floorImg.src = img;
