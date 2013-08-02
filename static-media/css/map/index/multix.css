@@ -1024,6 +1024,7 @@ margin: 2%;
 font-size:1.2em;
 color:rgba(255, 255, 255, 0.8);
 }
+/*
 @font-face {
     font-family: 'fontawesome';
     src:url('../font/fontawesome.eot');
@@ -1034,10 +1035,11 @@ color:rgba(255, 255, 255, 0.8);
     font-weight: normal;
     font-style: normal;
 }
+*/
 
 /* Use the following CSS code if you want to use data attributes for inserting your icons */
 [data-icon]:before {
-    font-family: 'fontawesome';
+    font-family: 'carFont';
     content: attr(data-icon);
     speak: none;
     font-weight: normal;
@@ -1053,8 +1055,8 @@ Instead of a list of all class selectors,
 you can use the generic selector below, but it's slower:
 [class*="icon-"] {
 */
-.icon-food, .icon-female, .icon-male, .icon-gamepad, .icon-sort, .icon-signin, .icon-glass, .icon-film, .icon-screenshot, .icon-tumblr-sign, .icon-google-plus-sign, .icon-facebook-sign, .icon-gift {
-    font-family: 'fontawesome';
+.icon-food, .icon-female, .icon-male, .icon-gamepad, .icon-sort, .icon-signin, .icon-glass, .icon-film, .icon-screenshot, .icon-twitter-sign, .icon-google-plus-sign, .icon-facebook-sign, .icon-gift, .icon-camera {
+    font-family: 'carFont';
     speak: none;
     font-style: normal;
     font-weight: normal;
@@ -1090,8 +1092,8 @@ you can use the generic selector below, but it's slower:
 .icon-screenshot:before {
     content: "\f05b";
 }
-.icon-tumblr-sign:before {
-    content: "\f174";
+.icon-twitter-sign:before {
+    content: "\f081";
 }
 .icon-google-plus-sign:before {
     content: "\f0d4";
@@ -1104,6 +1106,9 @@ you can use the generic selector below, but it's slower:
 }
 .icon-smile:before {
     content: "\f182|\f183";
+}
+.icon-camera:before {
+    content: "\f030";
 }
 
 @font-face {
@@ -1221,6 +1226,7 @@ img.cupImg{
     font-weight: bold;
    position: absolute;
     -webkit-user-select: none;
+    right: 50%;
 }
 
 .leaflet-label:before {
@@ -1270,7 +1276,7 @@ leaflet-marker-icon{
     z-index: 475;
     color:white;
     //background-color: lightblue;
-    font-family: 'FontAwesome';
+    font-family: 'carFont';
     font-size: 1.3em;
     text-align: center;
     line-height: 1.4em;
@@ -1335,7 +1341,7 @@ leaflet-marker-icon{
 
 
 .dest-icon {
-    font-family: 'FontAwesome';
+    font-family: 'carFont';
     background: red;
     opacity:1;
 }
