@@ -324,15 +324,18 @@ function loopFloors() {
 
     name = floors[floor_index].name;
 
-/*   if (!Modernizr.svg) {
+/*
+   if (!Modernizr.svg) {
         img = floors[floor_index].imgB;
 //       Logger.log('png');
     }
 
-   else {*/
- //   img = floors[floor_index].img;
- /*  }*/
-    img = floors[floor_index].img||floors[floor_index].imgB;
+   else {
+    img = floors[floor_index].img;
+   }
+*/
+    img = floors[floor_index].imgB;
+    //floors[floor_index].img||
     var floorImg = new Image();
     floorImg.src = img;
     floorImg.onload = function () {
@@ -1041,7 +1044,6 @@ var arrowsOffset = 0;
 
 //Función que define la animación (en este caso, flecha azul) que marca la ruta
 var setArrow = function (flecha, idFloor) {
-
     flecha.setPatterns([
         {offset: arrowsOffset + '%', repeat: 0, symbol: new L.Symbol.ArrowHead({pixelSize: 8, polygon: false, pathOptions: { stroke: true, weight:2}})}
             //Dash({pixelSize: 1, pathOptions: { stroke: true, weight:10}})}
