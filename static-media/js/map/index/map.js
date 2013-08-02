@@ -324,14 +324,15 @@ function loopFloors() {
 
     name = floors[floor_index].name;
 
-   if (!Modernizr.svg) {
+/*   if (!Modernizr.svg) {
         img = floors[floor_index].imgB;
 //       Logger.log('png');
     }
 
-   else {
-    img = floors[floor_index].img || floors[floor_index].imgB;
-   }
+   else {*/
+ //   img = floors[floor_index].img;
+ /*  }*/
+    img = floors[floor_index].img||floors[floor_index].imgB;
     var floorImg = new Image();
     floorImg.src = img;
     floorImg.onload = function () {
@@ -397,7 +398,7 @@ function loadPOIs() {
                     floors[fl].pois[j].center_y * sX + (sX)],
                 labelid = floors[fl].pois[j].label.id,
                 category = floors[fl].pois[j].label.category.name,
-                category_es = floors[fl].pois[j].label.category.name_es;
+                category_en = floors[fl].pois[j].label.category.name_en;
 
             var popupTitle = description;
             if (panorama) {
@@ -415,7 +416,7 @@ function loadPOIs() {
             floors[fl].pois[j].marker.loc = loc;
             floors[fl].pois[j].marker.center = center;
             floors[fl].pois[j].marker.category = category;
-            floors[fl].pois[j].marker.category_es = category_es;
+            floors[fl].pois[j].marker.category_en = category_en;
             floors[fl].pois[j].marker.label = labelid;
             floors[fl].pois[j].marker.panorama = panorama;
             floors[fl].pois[j].marker.coupon = coupon;
@@ -453,10 +454,10 @@ function loadPOIs() {
                 }
             }
 
-            if (isCategoryVisibleOnButtons(floors[fl].pois[j].marker.category_es))
+            if (isCategoryVisibleOnButtons(floors[fl].pois[j].marker.category_en))
                 totalPois.addLayer(floors[fl].pois[j].marker);
 
-            if (isPoiVisibleByDefault(floors[fl].pois[j].marker.category_es))
+            if (isPoiVisibleByDefault(floors[fl].pois[j].marker.category_en))
                 floors[fl].layer.addLayer(floors[fl].pois[j].marker);
         }
 
@@ -1032,7 +1033,7 @@ function arrowAnim(arrow, idFloor) {
     }
     anim = window.setInterval(function () {
         setArrow(arrow, idFloor)
-    }, 50);
+    }, 100);
 
 }
 
@@ -1082,7 +1083,7 @@ function isCategoryVisibleOnButtons(categ_name) {
 }
 
 function isPoiVisibleByDefault(categ_name) {
-    return categ_name == "Aristas" || categ_name == "Aseos" || categ_name == "Entrance";
+    return categ_name == "Connectors" || categ_name == "Toilet" || categ_name == "Entrance";
 }
 
 
