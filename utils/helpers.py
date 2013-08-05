@@ -124,5 +124,14 @@ def random_string_generator(size=6, chars=string.ascii_uppercase + string.digits
     return ''.join(random.choice(chars) for x in range(size))
 
 
+def delete_file(fileField):
+    """
+    Elimina la imágen del campo para el modelo. Por ejemplo sobre Point.coupon:
+
+    """
+    storage, path = fileField.storage, fileField.path
+    storage.delete(path)
+
+
 if __name__ == "__main__":
     pass

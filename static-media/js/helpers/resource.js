@@ -178,7 +178,7 @@ function Resource(resource_name) {
 		// xej para la planta con id 16:
 		//		POST -> /api-2/floor/16/img
 
-		var action_url = this.api2_url + element_id + '/img';
+		var action_url = this.api2_url + element_id + '/img/';
 		form.attr('action', action_url);
 
 		// mandamos el formulario, no sin antes agregarle el csrfmiddlewaretoken
@@ -191,12 +191,12 @@ function Resource(resource_name) {
 	};
 
 
-    this.delImg = function(element_id){
+    this.delImg = function(element_id, img_field){
 
         //		DELETE -> /api-2/floor/16/img
 
         $.ajax({
-            url : this.api2_url + element_id + '/img',
+            url : this.api2_url + element_id + '/img/?field=' + img_field,
             type : 'delete',
             headers : {
                 'Content-Type' : 'application/json'
@@ -672,6 +672,12 @@ function CouponResource()
     };
 
     this.getCoupon = function(label_id)
+    {
+        // /coupon/manager/label/<label_id>
+        return ajaxGetElements(this.coupons_url, 'label/' + label_id);
+    };
+
+    this.delCoupon = function(label_id)
     {
         // /coupon/manager/label/<label_id>
         return ajaxGetElements(this.coupons_url, 'label/' + label_id);

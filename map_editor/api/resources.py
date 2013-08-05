@@ -13,7 +13,7 @@ from tastypie.validation import FormValidation
 
 from tastypie.resources import ModelResource, ALL, ALL_WITH_RELATIONS
 from utils.constants import USER_GROUPS
-from utils.helpers import random_string_generator
+from utils.helpers import random_string_generator, delete_file
 from django.contrib.auth.models import Group
 
 #
@@ -104,7 +104,8 @@ class PointResource(ModelResource):
             'row': ALL,
             'col': ALL,
             'description': ALL,
-            'panorama': ALL
+            'panorama': ALL,
+            'coupon': ALL
         }
         ordering = {
             'description': ALL
@@ -146,11 +147,12 @@ class LabelResource(ModelResource):
             password = '1234'
             # password = random_string_generator(6)
 
-            user = CustomUser.objects.create_user(username, '', password)
-            g = Group.objects.get(id=USER_GROUPS['shop_owners'])
-            g.user_set.add(user)
+            custom_user = CustomUser().create(username, password)
 
-            label_created.obj.owner = user
+            g = Group.objects.get(id=USER_GROUPS['shop_owners'])
+            g.user_set.add(custom_user.user_ptr)
+
+            label_created.obj.owner = custom_user
             label_created.obj.save()
 
         return label_created
@@ -172,16 +174,20 @@ class LabelResource(ModelResource):
         return label_updated
 
 
-    def obj_delete(self, bundle, **kwargs):
-        """
-        Si editamos el nombre para la etiqueta también se modifica el nombre
-        de usuario para su dueño
-        """
-        label_id = kwargs['pk']
-        user = CustomUser.objects.filter(labels__id=label_id)
-        user.delete()
+    # def obj_delete(self, bundle, **kwargs):
+    #     """
+    #     Si eliminamos la etiqueta también se eliminan:
+    #         - dueño de la etiqueta
+    #         - cupones para la etiqueta (de momento es un cupón por etiqueta)
+    #     """
+    #     label_id = kwargs['pk']
+    #     user = CustomUser.objects.filter(labels__id=label_id)
+    #     user.delete()
+    #     points = Point.objects.filter(label_id=label_id)
+    #     for point in points:
+    #         delete_file(point.coupon)
 
-    def determine_format(self, request):
+def determine_format(self, request):
         return 'application/json'
 
 

@@ -5,6 +5,7 @@
 
 {% block css %}
     <link rel="stylesheet" href="{{ STATIC_URL }}css/map_editor/styles.css"/>
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/coupon_manager/styles.css"/>
 {% endblock %}
 
 {% block js %}
@@ -32,7 +33,9 @@
             <tr ng-repeat="coupon in manager.coupons" ng-controller="CouponCtrl">
                 <td>[[coupon.label.name]]</td>
                 <td>
-                    <img ng-show="coupon.img" ng-src="[[coupon.point.coupon]]">
+                    <div class="img_wrapper">
+                        <img ng-show="coupon.img" ng-src="[[coupon.point.coupon]]">
+                    </div>
                     <button class="btn link-2" ng-click="show_edit_form()">
                         <i class="icon-pencil icon-white"></i>{% trans "Editar" %}
                     </button>
@@ -42,21 +45,28 @@
 
         <div ng-show="manager.for_shop_owner">
 
-            <h2>[[manager.coupons[0].label.name]] - [[manager.coupons[0].enclosure.name]]</h2>
-
-            <div ng-show="manager.coupons[0].point">
-                <div ng-repeat="coupon in manager.coupons" ng-controller="CouponCtrl">
-                    <div ng-show="coupon.point.coupon">
-                        <h2>[[coupon.label.name]]</h2>
-                        <img ng-show="coupon.point.coupon" ng-src="[[coupon.point.coupon]]">
-                        <button class="btn link-2" ng-click="show_update_form($event)">
-                            <i class="icon-pencil icon-white"></i>{% trans "Editar" %}
-                        </button>
+                <div class="coupon" ng-repeat="coupon in manager.coupons" ng-controller="CouponCtrl">
+                    <div ng-show="coupon.point">
+                        <div ng-show="coupon.point.coupon">
+                            <h2>[[coupon.label.name]] - [[coupon.enclosure.name]]</h2>
+                            <div class="img_wrapper">
+                                <img ng-show="coupon.point.coupon" ng-src="[[coupon.point.coupon]]">
+                            </div>
+                            <button class="btn link-2" ng-click="show_update_form($event)">
+                                <i class="icon-pencil icon-white"></i>{% trans "Editar" %}
+                            </button>
+                        </div>
+                        <div ng-show="!coupon.point.coupon">
+                            <button class="btn" ng-click="show_create_form($event)">{% trans "Añadir cupón" %}</button>
+                        </div>
                     </div>
-                    <div ng-show="!coupon.point.coupon">
-                        <button class="btn" ng-click="show_create_form($event)">{% trans "Añadir cupón" %}</button>
+                    <div class="alert" ng-show="!manager.coupons[0].point">
+                        {% blocktrans %}
+                            Este POI, <b>[[manager.coupon.label.name]]</b>, no aparece como dibujado
+                            en ninguna planta del recinto <b>[[manager.coupon.enclosure.name]]</b>.
+                            Consulte con el administrador.
+                        {% endblocktrans %}
                     </div>
-
                     <div id="dialogs">
                         <div id="coupon_create">
                             <form class="create"
@@ -101,18 +111,8 @@
                             </form>
                         </div>
                     </div>
-
                 </div>
             </div>
-
-            <div class="alert" ng-show="!manager.coupons[0].point">
-                {% blocktrans %}
-                    Este POI, <b>[[manager.coupon.label.name]]</b>, no aparece como dibujado
-                    en ninguna planta del recinto <b>[[manager.coupon.enclosure.name]]</b>.
-                    Consulte con el administrador.
-                {% endblocktrans %}
-            </div>
-
         </div>
 
     </div>

@@ -2,3 +2,25 @@
 {
     display: none;
 }
+
+.coupon img
+{
+    max-width: 1024px;
+    max-height: 230px;
+}
+
+.coupon
+{
+    border: 1px solid #AFAA9B;
+    border-radius: 0.4em;
+}
+
+.coupon button
+{
+    margin: 1em auto;
+}
+
+h1
+{
+    margin: 2em auto 1em;
+}

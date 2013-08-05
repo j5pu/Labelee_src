@@ -2,24 +2,34 @@
 
 function MainCtrl($scope, $rootScope, $element, UserService, FormService)
 {
-    $scope.manager = couponResource.getManager();
 
     $scope.sync_main = function() {
         $scope.manager = couponResource.getManager();
-
-        modalDialog.close();
     };
+
+    $scope.sync_main();
 }
 
+function replaceImg(wrapper, img_src)
+{
+    //    <div class="img_wrapper">
+    //        <img ng-show="coupon.point.coupon" ng-src="[[coupon.point.coupon]]">
+    //    </div>
+    wrapper.find('img').remove();
+    img = new Image();
+    img.src = img_src;
+    wrapper.append(img);
+}
 
 function CouponCtrl($scope, $element)
 {
     $scope.sync_coupon = function() {
         $scope.coupon = couponResource.getCoupon($scope.coupon.label.id);
 
-        $($element).find('img').attr('src', '');
-        $($element).find('img').attr('src', $scope.coupon.point.coupon);
-        modalDialog.close();
+        replaceImg(
+            $($element).find('.img_wrapper'),
+            $scope.coupon.point.coupon
+        );
     };
 
 
@@ -43,6 +53,8 @@ function CouponCtrl($scope, $element)
                     img_form.find('.file-input-name').remove();
                     $scope.waiting_response = false;
                     $scope.sync_main();
+                    modalDialog.close();
+                    $scope.$apply();
                 }
             );
         }
@@ -71,6 +83,7 @@ function CouponCtrl($scope, $element)
                     img_form.find('.file-input-name').remove();
                     $scope.waiting_response = false;
                     $scope.sync_coupon();
+                    modalDialog.close();
                 }
             );
         }
@@ -80,15 +93,13 @@ function CouponCtrl($scope, $element)
 
 
     $scope.del = function() {
-        var confirm_msg = gettext('Are you sure you want to remove this enclosure? (this will erase all their floors)');
-
-        enclosureResource.del(
-            $scope.enclosure.id,
-            confirm_msg,
-            function(){
-                $rootScope.$broadcast('sync_enclosureList', $scope.enclosure);
-            }
-        );
+        var confirm_msg = gettext('Are you sure you want to remove this coupon?');
+        if(confirm(confirm_msg))
+        {
+            pointResource.delImg($scope.coupon.point.id, 'coupon');
+            $scope.sync_coupon();
+        }
+        modalDialog.close();
     };
 
 

@@ -6,6 +6,7 @@ from django.db import models
 from django.contrib.auth.models import User, UserManager, Group
 from map_editor.api_2.utils.point import filterAsPois
 from file_paths import *
+from utils.helpers import delete_file
 
 FIXED_CATEGORIES = {
     0: 'Blockers',
@@ -30,6 +31,13 @@ class CustomUser(User):
     def is_in_group(self, group_id):
         users_in_group = Group.objects.get(id=group_id).user_set.all()
         return self.user_ptr in users_in_group
+
+    def create(self, username, password):
+        c = CustomUser(username=username)
+        c.save()
+        c.set_password(password)
+        c.save()
+        return c
 
     class Meta:
         verbose_name = 'CustomUser'
@@ -135,15 +143,19 @@ class Label(models.Model):
         return self.name
 
     def delete(self, *args, **kwargs):
-        if self.img:
-            # You have to prepare what you need before delete the model
-            storage, path = self.img.storage, self.img.path
-            # Delete the model before the file
-            super(Label, self).delete(*args, **kwargs)
-            # Delete the file after the model
-            storage.delete(path)
-        else:
-            super(Label, self).delete(*args, **kwargs)
+        """
+        Antes eliminamos:
+            - imágen de su cupón (si existe)
+            - su usuario, dueño de la etiqueta (tienda)
+        """
+        points = Point.objects.filter(label__id=self.pk)
+        for point in points:
+            delete_file(point.coupon)
+
+        user = CustomUser.objects.filter(labels__id=self.pk)
+        user.delete()
+
+        super(Label, self).delete(*args, **kwargs)
 
 
 class Point(models.Model):
