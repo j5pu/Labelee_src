@@ -599,10 +599,13 @@ html{
     top: -5.25%;
     margin-top: -13px;
     position: absolute;
-    left: -187px;
+    left: -167px;
     float: left;
     height: 36px;
+/*
     width: 185px;
+*/
+    width: 165px;
     display: block;
 }
 
@@ -1084,7 +1087,7 @@ Instead of a list of all class selectors,
 you can use the generic selector below, but it's slower:
 [class*="icon-"] {
 */
-.icon-food, .icon-female, .icon-male, .icon-gamepad, .icon-sort, .icon-signin, .icon-glass, .icon-film, .icon-screenshot, .icon-twitter-sign, .icon-google-plus-sign, .icon-facebook-sign, .icon-gift, .icon-camera, .icon-star {
+.icon-food, .icon-female, .icon-male, .icon-gamepad, .icon-sort, .icon-signin, .icon-glass, .icon-film, .icon-screenshot, .icon-twitter-sign, .icon-google-plus-sign, .icon-facebook-sign, .icon-gift, .icon-camera, .icon-star,.icon-basket, .icon-hanger, .icon-gift, .icon-tie, .icon-stiletto, .icon-racquet, .icon-microwave {
     font-family: 'carFont';
     speak: none;
     font-style: normal;
@@ -1138,6 +1141,27 @@ you can use the generic selector below, but it's slower:
 }
 .icon-camera:before {
     content: "\f030";
+}
+.icon-basket:before {
+    content: "\e001";
+}
+.icon-hanger:before {
+    content: "\f2ab";
+}
+.icon-gift:before {
+    content: "\f260";
+}
+.icon-tie:before {
+    content: "\2040";
+}
+.icon-stiletto:before {
+    content: "\f429";
+}
+.icon-racquet:before {
+    content: "\f2f2";
+}
+.icon-microwave:before {
+    content: "\e005";
 }
 
 @font-face {
@@ -1257,10 +1281,13 @@ img.cupImg{
     display: block;
     font: 0.9em "Raleway", "Noto-Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
 
-    font-weight: bold;
+    font-weight: normal;
    position: absolute;
     -webkit-user-select: none;
+    margin-top:1.2rem;
+/*
     right: 50%;
+*/
 }
 
 .leaflet-label:before {

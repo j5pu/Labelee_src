@@ -1030,20 +1030,21 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
 
 //Función que gestiona la animación de la flecha
 function arrowAnim(arrow, idFloor) {
-    if (anim != null) {
+ /*   if (anim != null) {
         window.clearInterval(anim);
 
     }
     anim = window.setInterval(function () {
         setArrow(arrow, idFloor)
     }, 100);
-
+*/
 }
 
 var arrowsOffset = 0;
 
 //Función que define la animación (en este caso, flecha azul) que marca la ruta
 var setArrow = function (flecha, idFloor) {
+/*
     flecha.setPatterns([
         {offset: arrowsOffset + '%', repeat: 0, symbol: new L.Symbol.ArrowHead({pixelSize: 8, polygon: false, pathOptions: { stroke: true, weight:2}})}
             //Dash({pixelSize: 1, pathOptions: { stroke: true, weight:10}})}
@@ -1051,6 +1052,7 @@ var setArrow = function (flecha, idFloor) {
     ]);
     if (++arrowsOffset > 100)
         arrowsOffset = 0;
+*/
 };
 /*
 var fps = 15;
