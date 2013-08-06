@@ -24,7 +24,7 @@ var Connections = {
     cargarAristas: function()
     {
         // Carga todas las etiquetas de categoría 'aristas' de todos los sitios
-        Connections.listaAristas = new PointResource().readConnectionsFromEnclosure(Connections.enclosure_id);
+        Connections.listaAristas = pointResource.readConnectionsFromEnclosure(Connections.enclosure_id);
 
 //        col: 1
 //        description: A0-P0
