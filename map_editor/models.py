@@ -92,14 +92,11 @@ class Floor(models.Model):
 		Sobreescribimos el método delete() para también eliminar su imagen del disco duro
 		"""
         if self.img:
-            # You have to prepare what you need before delete the model
-            storage, path = self.img.storage, self.img.path
-            # Delete the model before the file
-            super(Floor, self).delete(*args, **kwargs)
-            # Delete the file after the model
-            storage.delete(path)
-        else:
-            super(Floor, self).delete(*args, **kwargs)
+            delete_file(self.img)
+        if self.imgB:
+            delete_file(self.imgB)
+
+        super(Floor, self).delete(*args, **kwargs)
 
 
 class LabelCategory(models.Model):
@@ -150,7 +147,8 @@ class Label(models.Model):
         """
         points = Point.objects.filter(label__id=self.pk)
         for point in points:
-            delete_file(point.coupon)
+            if point.coupon:
+                delete_file(point.coupon)
 
         user = CustomUser.objects.filter(labels__id=self.pk)
         user.delete()

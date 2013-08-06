@@ -1,3 +1,4 @@
+{% load i18n %}
 <div class="navbar navbar-inverse navbar-fixed-top">
     <div class="navbar-inner">
         <div class="container">
@@ -17,21 +18,17 @@
                     <li><a href="#"><i class="icon-white icon-book"></i> Coupons Manager</a></li>
                 </ul>
                 <ul class="nav pull-right">
-                    {% comment %}
-                    <li><p class="navbar-text"><i class="icon-white icon-download"></i> Download:</p></li>
                     <li>
-                        <div class="btn-group">
-                            <a class="btn btn-small btn-primary"
-                               href="#">PDF</a>
-                            <a class="btn btn-small btn-primary" href="#">E-MAIL</a>
-                        </div>
+                        <!-- CAJITA DE LOGOUT -->
+                        {% if user.is_authenticated %}
+                            <div id="logout" class="box box-1">
+                                {% trans "Bienvenido" %}, {{ user.username }}
+                                <a href="{% url 'django.contrib.auth.views.logout' %}"> <i class="icon-signout"></i> Logout</a>
+                            </div>
+                        {% endif %}
                     </li>
-{% endcomment %}
                 </ul>
             </div>
-            <!--/.nav-collapse -->
-
-
         </div>
     </div>
 </div>

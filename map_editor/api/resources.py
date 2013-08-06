@@ -35,6 +35,7 @@ class CustomUserResource(ModelResource):
         authorization = ResourceAuthorization('user')
         filtering = {
             'id': ALL,
+            'username': ALL,
             }
 
     def determine_format(self, request):
@@ -173,28 +174,14 @@ class LabelResource(ModelResource):
 
         return label_updated
 
-
-    # def obj_delete(self, bundle, **kwargs):
-    #     """
-    #     Si eliminamos la etiqueta también se eliminan:
-    #         - dueño de la etiqueta
-    #         - cupones para la etiqueta (de momento es un cupón por etiqueta)
-    #     """
-    #     label_id = kwargs['pk']
-    #     user = CustomUser.objects.filter(labels__id=label_id)
-    #     user.delete()
-    #     points = Point.objects.filter(label_id=label_id)
-    #     for point in points:
-    #         delete_file(point.coupon)
-
-def determine_format(self, request):
-        return 'application/json'
+    def determine_format(self, request):
+            return 'application/json'
 
 
 
 class LabelCategoryResource(ModelResource):
     labels = fields.ToManyField('map_editor.api.resources.LabelResource', 'labels', null=True, blank=True, full=True)
-    enclosure = fields.OneToOneField('map_editor.api.resources.EnclosureResource', 'enclosure', null=True, full=True)
+    enclosure = fields.OneToOneField('map_editor.api.resources.EnclosureResource', 'enclosure', null=True, blank=True, full=True)
 
     class Meta:
         resource_name = 'label-category'

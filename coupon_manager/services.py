@@ -5,7 +5,7 @@ from django.utils.translation import gettext
 import simplejson
 from dashboard.models import Qr_shot
 from dashboard.utils import getChartSkeleton
-from map_editor.api_2.utils.label import getLabelsForDashboard
+from map_editor.api_2.utils.label import getLabelsForDashboard, filterAsPois
 from map_editor.api_2.utils.label_category import getLabelCategories, filterAsValidCategories
 from map_editor.models import LabelCategory, Point, Label
 from django.db.models import Count
@@ -31,7 +31,8 @@ def manager(request, enclosure_id=None):
         labels = Label.objects.filter(owner=request.user)
     elif request.user.is_in_group(USER_GROUPS['enclosure_owners']):
         manager['for_enclosure_owner'] = True
-        labels = Label.objects.get(enclosure__owner=request.user)
+        l = Label.objects.filter(category__enclosure__owner=request.user)
+        labels = filterAsPois(l)
     elif request.user.is_staff:
         manager['for_staff'] = True
         labels = Label.objects.all()
