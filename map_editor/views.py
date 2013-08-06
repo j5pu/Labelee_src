@@ -37,6 +37,9 @@ def edit(request, pk):
     ctx = {
     'floor_id': pk
     }
+    if request.user.is_in_group(USER_GROUPS['shop_owners']):
+        return HttpResponseRedirect('/coupon/')
+
     return render_to_response('map_editor/v2/edit.html', ctx, context_instance=RequestContext(request))
 
 
@@ -45,6 +48,8 @@ def connections(request, enclosure_id):
     ctx = {
     'enclosure_id': enclosure_id
     }
+    if request.user.is_in_group(USER_GROUPS['shop_owners']):
+        return HttpResponseRedirect('/coupon/')
     return render_to_response('map_editor/v1/connections.html', ctx, context_instance=RequestContext(request))
 
 

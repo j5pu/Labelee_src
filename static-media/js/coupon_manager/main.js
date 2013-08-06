@@ -12,7 +12,7 @@ function MainCtrl($scope, $rootScope, $element, UserService, FormService)
     $scope.search = function (row) {
         return !$scope.query ||
             row.label.name.toUpperCase().indexOf($scope.query.toUpperCase() || '') !== -1 ||
-            row.enclosure.name.indexOf($scope.query || '') !== -1;
+            row.enclosure.name.toUpperCase().indexOf($scope.query.toUpperCase() || '') !== -1;
     };
 
     $scope.search2 = function (row) {
@@ -22,11 +22,6 @@ function MainCtrl($scope, $rootScope, $element, UserService, FormService)
         var false2 = undefined2 || !$scope.show_only_unempty;
         var both_false = false1 && false2;
 
-//        if(typeof $scope.show_only_empty == 'undefined')
-//            $scope.show_only_empty = true;
-//        if(typeof $scope.show_only_unempty == 'undefined')
-//            $scope.show_only_unempty = true;
-
         var only_empty = $scope.show_only_empty && !row.point.coupon;
         var only_unempty = $scope.show_only_unempty && row.point.coupon;
 
@@ -34,6 +29,14 @@ function MainCtrl($scope, $rootScope, $element, UserService, FormService)
     };
 
 
+    $scope.$watch('show_only_empty', function(){
+        if($scope.show_only_empty && $scope.show_only_unempty)
+            $scope.show_only_unempty = false;
+    });
+    $scope.$watch('show_only_unempty', function(){
+        if($scope.show_only_empty && $scope.show_only_unempty)
+            $scope.show_only_empty = false;
+    });
 }
 
 function replaceImg(wrapper, img_src)

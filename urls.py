@@ -46,6 +46,7 @@ urlpatterns = patterns('',
     # LOGIN / LOGOUT
     (r'^accounts/login/$', 'django.contrib.auth.views.login'),
     (r'^accounts/logout/$', 'django.contrib.auth.views.logout', {'next_page': '/map-editor/'}),
+    (r'^accounts/password/change/$', 'django.contrib.auth.views.password_change', {'post_change_redirect' : '/map-editor/'}),
 
     # Calculo de rutas
     url(r'^calculate-routes/(?P<enclosure_id>\d+)', 'route.calculateRoutes.calculate_routes'),

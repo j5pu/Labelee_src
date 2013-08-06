@@ -17,26 +17,36 @@
 {% block content %}
     {% csrf_token %}
 
-    {% include "_manager_navbar.html" with section="Coupon Manager"%}
+{#    {% include "_manager_navbar.html" with section="Coupon Manager"%}#}
+    {% if user.is_authenticated %}
+        <div id="menu" class="box box-1">
+            {% trans "Bienvenido" %}, {{ user.username }}
+            <a href="{% url 'django.contrib.auth.views.logout' %}"> <i class="icon-signout"></i> Logout</a>
+            <a href="{% url 'django.contrib.auth.views.password_change' %}"> <i class="icon-signout"></i> Cambiar contraseña</a>
+        </div>
+    {% endif %}
 
     <div ng-controller="MainCtrl">
 
-        <h1>[[manager.title]]</h1>
+{#        <h1>[[manager.title]]</h1>#}
 
-        <label id="search_box">{% trans "Buscar cupón" %}:
-            <input class="input-large search-query"
-                   type="text" ng-model="query"
-                   placeholder="{% trans "Introduzca nombre del POI o su recinto" %}..">
-        </label>
+        <div id="filter_box" ng-show="manager.coupons.length > 1">
+            <label id="search_box">{% trans "Buscar cupón" %}:
+                <input class="input-large search-query"
+                       type="text" ng-model="query"
+                       placeholder="{% trans "Introduzca nombre del POI o su recinto" %}..">
+            </label>
 
-        <div id="search_box2">
-            <label>{% trans "Mostrar sólo tiendas sin cupones" %}:
-                <input type="checkbox" ng-model="show_only_empty">
-            </label>
-            <label>{% trans "Mostrar sólo tiendas con cupones" %}:
-                <input type="checkbox" ng-model="show_only_unempty">
-            </label>
+            <div id="search_box2">
+                <label>{% trans "Mostrar sólo tiendas sin cupones" %}:
+                    <input type="checkbox" ng-model="show_only_empty">
+                </label>
+                <label>{% trans "Mostrar sólo tiendas con cupones" %}:
+                    <input type="checkbox" ng-model="show_only_unempty">
+                </label>
+            </div>
         </div>
+
 
         <table class="coupons table table-bordered" ng-show="manager.coupons.length > 1">
             <thead>
