@@ -1,10 +1,13 @@
 # -*- coding: utf-8 -*-
 from django.contrib.auth.decorators import login_required
+from django.http.response import HttpResponseRedirect
 
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 
 import settings
+from utils.constants import USER_GROUPS
+
 
 @login_required(login_url=settings.LOGIN_URL)
 def index(request):
@@ -16,6 +19,10 @@ def index(request):
             '3': 'Intermedias',
         }
     }
+
+    # Si es un dueño de una tienda se le redirigirá a su admin de cupones
+    if request.user.is_in_group(USER_GROUPS['shop_owners']):
+        return HttpResponseRedirect('/coupon/')
 
     # translation.activate(request.session['django_language'])
 

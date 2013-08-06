@@ -21,10 +21,6 @@ def manager(request, enclosure_id=None):
     """
     manager = {}
 
-    # título
-    manager['title'] = gettext('Mis cupones') if request.user.is_staff \
-        else gettext('Mi cupón')
-
     labels = None
     if request.user.is_in_group(USER_GROUPS['shop_owners']):
         manager['for_shop_owner'] = True
@@ -36,6 +32,9 @@ def manager(request, enclosure_id=None):
     elif request.user.is_staff:
         manager['for_staff'] = True
         labels = Label.objects.all()
+
+    manager['title'] = gettext('Mis cupones') if len(labels) > 1 \
+        else gettext('Mi cupón')
 
     manager['coupons'] = []
     for label in labels:

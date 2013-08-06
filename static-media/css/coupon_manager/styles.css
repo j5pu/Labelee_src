@@ -24,3 +24,25 @@ h1
 {
     margin: 2em auto 1em;
 }
+
+.coupons
+{
+    margin: 0 auto;
+    width: auto;
+}
+
+table.coupons td
+{
+    padding: 0.8em;
+}
+
+table.coupons tbody td
+{
+    vertical-align: middle;
+    text-align: center;
+}
+
+#search_box input
+{
+    width: 19em;
+}

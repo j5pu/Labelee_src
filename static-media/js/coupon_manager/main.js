@@ -8,6 +8,32 @@ function MainCtrl($scope, $rootScope, $element, UserService, FormService)
     };
 
     $scope.sync_main();
+
+    $scope.search = function (row) {
+        return !$scope.query ||
+            row.label.name.toUpperCase().indexOf($scope.query.toUpperCase() || '') !== -1 ||
+            row.enclosure.name.indexOf($scope.query || '') !== -1;
+    };
+
+    $scope.search2 = function (row) {
+        var undefined1 = typeof $scope.show_only_empty == 'undefined';
+        var undefined2 = typeof $scope.show_only_unempty == 'undefined';
+        var false1 = undefined1 || !$scope.show_only_empty;
+        var false2 = undefined2 || !$scope.show_only_unempty;
+        var both_false = false1 && false2;
+
+//        if(typeof $scope.show_only_empty == 'undefined')
+//            $scope.show_only_empty = true;
+//        if(typeof $scope.show_only_unempty == 'undefined')
+//            $scope.show_only_unempty = true;
+
+        var only_empty = $scope.show_only_empty && !row.point.coupon;
+        var only_unempty = $scope.show_only_unempty && row.point.coupon;
+
+        return both_false || (only_empty || only_unempty);
+    };
+
+
 }
 
 function replaceImg(wrapper, img_src)
@@ -21,7 +47,7 @@ function replaceImg(wrapper, img_src)
     wrapper.append(img);
 }
 
-function CouponCtrl($scope, $element)
+function CouponCtrl($scope, $rootScope, $element)
 {
     $scope.sync_coupon = function() {
         $scope.coupon = couponResource.getCoupon($scope.coupon.label.id);
@@ -31,6 +57,39 @@ function CouponCtrl($scope, $element)
             $scope.coupon.point.coupon
         );
     };
+
+    $scope.show_update_form = function($event) {
+        $($event.target).blur();
+        $rootScope.$broadcast('show_update_form', $scope.coupon);
+    };
+
+    $scope.show_create_form = function($event) {
+        $($event.target).blur();
+        $rootScope.$broadcast('show_create_form', $scope.coupon);
+    };
+
+    $scope.$on('sync_coupon', function(ev, coupon){
+        if($scope.coupon.id == coupon.id)
+            $scope.sync_coupon();
+    });
+}
+
+
+function FormsCtrl($scope, $rootScope)
+{
+    $scope.$on('show_update_form', function(ev, coupon){
+        $scope.coupon = coupon;
+        $scope.coupon_img = coupon.img;
+        modalDialog = new ModalDialog('#coupon_update');
+        modalDialog.open();
+    });
+
+    $scope.$on('show_create_form', function(ev, coupon){
+        $scope.coupon = coupon;
+        $scope.coupon_img = '';
+        modalDialog = new ModalDialog('#coupon_create');
+        modalDialog.open();
+    });
 
 
     $scope.create = function() {
@@ -82,7 +141,7 @@ function CouponCtrl($scope, $element)
                     img_form.find('input[name="coupon_img"]').val('');
                     img_form.find('.file-input-name').remove();
                     $scope.waiting_response = false;
-                    $scope.sync_coupon();
+                    $rootScope.$broadcast('sync_coupon', $scope.coupon);
                     modalDialog.close();
                 }
             );
@@ -97,25 +156,8 @@ function CouponCtrl($scope, $element)
         if(confirm(confirm_msg))
         {
             pointResource.delImg($scope.coupon.point.id, 'coupon');
-            $scope.sync_coupon();
+            $rootScope.$broadcast('sync_coupon', $scope.coupon);
         }
         modalDialog.close();
-    };
-
-
-    $scope.show_update_form = function($event) {
-        $($event.target).blur();
-
-        $scope.coupon_img = $scope.coupon.img;
-        modalDialog = new ModalDialog('#coupon_update');
-        modalDialog.open();
-    };
-
-    $scope.show_create_form = function($event) {
-        $($event.target).blur();
-
-        $scope.coupon_img = '';
-        modalDialog = new ModalDialog('#coupon_create');
-        modalDialog.open();
     };
 }
