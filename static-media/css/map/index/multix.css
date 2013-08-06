@@ -1087,7 +1087,7 @@ Instead of a list of all class selectors,
 you can use the generic selector below, but it's slower:
 [class*="icon-"] {
 */
-.icon-food, .icon-female, .icon-male, .icon-gamepad, .icon-sort, .icon-signin, .icon-glass, .icon-film, .icon-screenshot, .icon-twitter-sign, .icon-google-plus-sign, .icon-facebook-sign, .icon-gift, .icon-camera, .icon-star,.icon-basket, .icon-hanger, .icon-gift, .icon-tie, .icon-stiletto, .icon-racquet, .icon-microwave {
+.icon-food, .icon-female, .icon-male, .icon-gamepad, .icon-sort, .icon-signin, .icon-glass, .icon-film, .icon-screenshot, .icon-twitter-sign, .icon-google-plus-sign, .icon-facebook-sign, .icon-gift, .icon-camera, .icon-star,.icon-basket, .icon-hanger, .icon-gift, .icon-tie, .icon-stiletto, .icon-racquet, .icon-microwave,.icon-barbell {
     font-family: 'carFont';
     speak: none;
     font-style: normal;
@@ -1143,7 +1143,7 @@ you can use the generic selector below, but it's slower:
     content: "\f030";
 }
 .icon-basket:before {
-    content: "\e001";
+    content: "\e003";
 }
 .icon-hanger:before {
     content: "\f2ab";
@@ -1202,6 +1202,10 @@ you can use the generic selector below, but it's slower:
 .icon-star:before {
     content: "\e000";
 }
+
+.icon-barbell:before {
+    content: "\e002";
+}
 *:focus{
     outline:none;
 }
@@ -1242,6 +1246,7 @@ para el botón GO!
     width: 192px;*/
     height: auto;
     width: auto;
+    box-shadow: 0 3px 5px rgba(0,0,0,0.2);
 }
 
 .withCoupon:after {
@@ -1284,7 +1289,7 @@ img.cupImg{
     font-weight: normal;
    position: absolute;
     -webkit-user-select: none;
-    margin-top:1.2rem;
+    margin-top:0.6rem;
 /*
     right: 50%;
 */
@@ -1346,7 +1351,7 @@ leaflet-marker-icon{
     opacity: 0.8;
     margin-top:-1.65em !important;
     margin-left:-0.75em !important;
-    box-shadow: 3px -2px 8px 1px #888;
+    box-shadow: 3px -2px 5px rgba(0,0,0,0.2);
 }
 
 .my-div-icon:before{

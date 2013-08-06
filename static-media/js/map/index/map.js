@@ -409,7 +409,7 @@ function loadPOIs() {
             }
             popupTitle += SocialMenu.renderIcon(id);
 
-            floors[fl].pois[j].marker =new L.marker(loc, {
+            floors[fl].pois[j].marker =new L.marker(center, {
                 icon: loadIcon(shapeIcon)});
 
             floors[fl].pois[j].marker.poid = id;
