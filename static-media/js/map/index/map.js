@@ -23,14 +23,31 @@
         };
 }());
 
+var blinkingMode = null;
+function blinker(element) {
+    if (blinkingMode != null && element != null && element.parentElement.innerText.trimLeft() == blinkingMode) {
+        var color = element.style.background;
+        if (color == "red") {
+            element.style.background = "";
+        } else {
+            element.style.background = "red";
+        }
+        window.setTimeout(function () {
+            blinker(element);
+        }, 1000);
+    } else {
+        if (element != null) element.style.background = "";
+    }
+}
+
+
 var Map = {};
 
 var showOrigin = false;
 
 //Configuración de iconos
 
-var myIcon = L.divIcon({className: 'my-div-icon'});
-// you can set .my-div-icon styles in CSS
+//var txtIcon = L.divIcon({className: 'txt-icon'});
 var carIcon = L.divIcon({className: 'my-div-icon car-icon'}),
     destIcon = L.divIcon({className: 'my-div-icon dest-icon'}),
     originIcon = L.divIcon({className: 'my-div-icon locate-icon'});
@@ -40,7 +57,7 @@ var txtIcon = new L.icon({
     iconSize: [1, 1],
     iconAnchor: [0, 0],
     //popupAnchor: [0,0],
-    labelAnchor: [-46, 6]
+    labelAnchor: [-12, 17]
 });
 
 
@@ -623,21 +640,6 @@ alert('GO!');
 });*/
 
 // Sacar panorámica para el punto
-
-function addCategory(e) {
-    // Cada vez que añade una layer se dispara esto
-    for (var i in floors) {
-        for (var l in floors[i].labels) {
-            if (map.hasLayer(floors[i].labels[l].layer) &&
-                $('input[type=checkbox].leaflet-control-layers-selector:eq(' + l + ')').is(':checked')) {
-                $('input[type=checkbox].leaflet-control-layers-selector:eq(' + l + ')').css('background', floors[i].labels[l].fields.color);
-            }
-        }
-    }
-
-    setIconColor();
-}
-
 function setIconColor()
 {
     for(var i in floors)
@@ -651,6 +653,33 @@ function setIconColor()
     }
 
 }
+
+function addCategory(e) {
+    // Cada vez que añade una layer se dispara esto
+    for (var i in floors) {
+        for (var l in floors[i].labels) {
+            var myCat = $('input[type=checkbox].leaflet-control-layers-selector:eq(' + l + ')');
+            if (map.hasLayer(floors[i].labels[l].layer) &&
+                myCat.is(':checked'))
+            {
+                myCat.css('background', floors[i].labels[l].fields.color);
+                //myCat.parent().siblings().find('input').css('background', '#333');
+
+/*
+                for (var n in floors[i].labels){
+                    if (n!=l)
+                        map.removeLayer(floors[i].labels[n].layer);
+                }
+*/
+
+            }
+        }
+    }
+
+    setIconColor();
+}
+
+
 
 function removeCategory(e) {
     if (e.layer._layers) {
@@ -734,6 +763,8 @@ function changeFloor(e) {
                 .addTo(floor_x.layer)
                 //.addTo(map)
                 .showLabel();
+            var $width=$('div.leaflet-label:contains(' + floor_x.pois[p].description + ')').width();
+            $('div.leaflet-label:contains(' + floor_x.pois[p].description + ')').css('margin-left',-$width/2);
             if (floor_x.pois[p].isVertical) {
                 $('div.leaflet-label:contains(' + floor_x.pois[p].description + ')').addClass('isVertical');
             }
@@ -1425,3 +1456,37 @@ for (var i in micuad.geometry.coordinates) {
 */
 
 //L.marker([300, 300.57], {icon: carIcon}).addTo(map);
+
+
+
+
+//PRUEBA PARA LOS LABELMARKERS
+/*
+
+var geojsonFeature = {
+    "type": "Feature",
+    "properties": {
+        "name": "Coors Field",
+        "amenity": "Baseball Stadium",
+        "popupContent": "This is where the Rockies play!"
+    },
+    "geometry": {
+        "type": "Point",
+        "coordinates": [-104.99404, 39.75621]
+    }
+};
+var geojsonMarkerOptions = {
+    radius: 8,
+    fillColor: "#ff7800",
+    color: "#000",
+    weight: 1,
+    opacity: 1,
+    fillOpacity: 0.8
+};
+
+L.geoJson(someGeojsonFeature, {
+    pointToLayer: function (feature, latlng) {
+        return L.circleMarker(latlng, geojsonMarkerOptions);
+    }
+}).addTo(map);
+*/

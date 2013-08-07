@@ -509,7 +509,7 @@ function PointResource()
     this.readConnectionsFromEnclosure = function(enclosure_id)
     {
         return this.readAllFiltered(
-            '?label__category__name__icontains=arista' +
+            '?label__category__name_en__iexact=Connectors' +
                 '&floor__enclosure__id=' + enclosure_id +
                 '&order_by=description'
         );

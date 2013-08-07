@@ -2032,19 +2032,4 @@ var floorChecks = [];
     }})
 })(this, document);
 //Parpadeo a la planta del POI destino
-var blinkingMode = null;
-function blinker(element) {
-    if (blinkingMode != null && element != null && element.parentElement.innerText.trimLeft() == blinkingMode) {
-        var color = element.style.background;
-        if (color == "red") {
-            element.style.background = "";
-        } else {
-            element.style.background = "red";
-        }
-        window.setTimeout(function () {
-            blinker(element);
-        }, 1000);
-    } else {
-        if (element != null) element.style.background = "";
-    }
-}
+

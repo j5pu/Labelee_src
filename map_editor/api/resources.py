@@ -191,6 +191,7 @@ class LabelCategoryResource(ModelResource):
         filtering = {
             'id': ALL,
             'name': ALL,
+            'name_en': ALL,
             'color': ALL,
             'icon': ALL,
             'labels': ALL_WITH_RELATIONS,
