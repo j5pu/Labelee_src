@@ -47,8 +47,7 @@ var showOrigin = false;
 
 //Configuración de iconos
 
-var myIcon = L.divIcon({className: 'my-div-icon'});
-// you can set .my-div-icon styles in CSS
+//var txtIcon = L.divIcon({className: 'txt-icon'});
 var carIcon = L.divIcon({className: 'my-div-icon car-icon'}),
     destIcon = L.divIcon({className: 'my-div-icon dest-icon'}),
     originIcon = L.divIcon({className: 'my-div-icon locate-icon'});
@@ -58,7 +57,7 @@ var txtIcon = new L.icon({
     iconSize: [1, 1],
     iconAnchor: [0, 0],
     //popupAnchor: [0,0],
-    labelAnchor: [-46, 6]
+    labelAnchor: [-12, 17]
 });
 
 
@@ -497,12 +496,10 @@ function loadPOIs() {
     }
 
 
-/*
     for (var i in totalPois._layers) {
         totalPois._layers[i].title = totalPois._layers[i].options.title;	//value searched
         totalPois._layers[i].color = totalPois._layers[i].options.icon.options.color;
     }
-*/
 
     for (var i in floors) {
         if (qrPoint.floor.id == floors[i].id) {
@@ -766,6 +763,8 @@ function changeFloor(e) {
                 .addTo(floor_x.layer)
                 //.addTo(map)
                 .showLabel();
+            var $width=$('div.leaflet-label:contains(' + floor_x.pois[p].description + ')').width();
+            $('div.leaflet-label:contains(' + floor_x.pois[p].description + ')').css('margin-left',-$width/2);
             if (floor_x.pois[p].isVertical) {
                 $('div.leaflet-label:contains(' + floor_x.pois[p].description + ')').addClass('isVertical');
             }

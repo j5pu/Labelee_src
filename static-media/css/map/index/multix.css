@@ -1275,8 +1275,11 @@ img.cupImg{
     font-weight: normal;
    position: absolute;
     -webkit-user-select: none;
+    padding: 0;
+/*
     margin-top:0.6rem;
     margin-left:15px;
+*/
 /*
     right: 50%;
 */
@@ -1460,4 +1463,12 @@ div#marquee{
     top:50%;
     left:50%;
     z-index:4;
+}
+
+.txt-icon{
+    width: 1px;
+    height: 1px;
+    z-index: 475;
+    color:white;
+    background-color: transparent;
 }
