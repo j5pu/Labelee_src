@@ -22,3 +22,16 @@ def filterAsPois(labels):
     ).exclude(
         points__qr_code = None
     )
+
+
+def filterForCouponManager(labels):
+    """
+    Aplica filtros para sacar sólo aquellas etiquetas a considerar en el coupon manager
+    """
+    return labels.exclude(
+        category = 1
+    ).exclude(
+        category__name_en = FIXED_CATEGORIES[2]
+    ).exclude(
+        category__name_en = FIXED_CATEGORIES[3]
+    )

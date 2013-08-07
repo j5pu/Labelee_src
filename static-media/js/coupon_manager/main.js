@@ -22,8 +22,8 @@ function MainCtrl($scope, $rootScope, $element, UserService, FormService)
         var false2 = undefined2 || !$scope.show_only_unempty;
         var both_false = false1 && false2;
 
-        var only_empty = $scope.show_only_empty && !row.point.coupon;
-        var only_unempty = $scope.show_only_unempty && row.point.coupon;
+        var only_empty = $scope.show_only_empty && (!row.point || !row.point.coupon);
+        var only_unempty = $scope.show_only_unempty && (row.point && row.point.coupon);
 
         return both_false || (only_empty || only_unempty);
     };

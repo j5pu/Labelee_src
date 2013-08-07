@@ -38,12 +38,18 @@
             </label>
 
             <div id="search_box2">
-                <label>{% trans "Mostrar sólo tiendas sin cupones" %}:
-                    <input type="checkbox" ng-model="show_only_empty">
-                </label>
-                <label>{% trans "Mostrar sólo tiendas con cupones" %}:
-                    <input type="checkbox" ng-model="show_only_unempty">
-                </label>
+                <span>Filtrar por:</span>
+                <div>
+                    <label>{% trans "Tiendas sin cupón" %}:
+                        <input type="checkbox" ng-model="show_only_empty">
+                    </label>
+                    <label>{% trans "Tiendas con cupón" %}:
+                        <input type="checkbox" ng-model="show_only_unempty">
+                    </label>
+{#                    <label>{% trans "Tiendas sin POI dibujado aún" %}:#}
+{#                        <input type="checkbox" ng-model="show_only_undrawed">#}
+{#                    </label>#}
+                </div>
             </div>
         </div>
 
