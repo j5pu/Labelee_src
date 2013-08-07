@@ -650,22 +650,60 @@ function escapeHtml(unsafe) {
         .replace(/'/g, "&#039;");
 }
 
+function drawHeadings(n){
+    var descr = escapeHtml(floors[n].pois[p].description);
+    L.marker(floors[n].pois[p].marker.center, {icon: txtIcon})
+        .bindLabel(descr, { noHide: true })
+        .addTo(floors[n].layer)
+        .showLabel();
+    var $myLabel = $('div.leaflet-label:contains(' + descr + ')');
+    var $width = $myLabel.width();
+    $myLabel.css('margin-left', -$width / 2);
+
+    if (floors[n].pois[p].isVertical) {
+        $myLabel.addClass('isVertical');
+    }
+}
+
 function loadHeadings(n) {
     for (var p in floors[n].pois) {
-        if (floors[n].pois[p].alwaysVisible) {
+
+        if (map.getZoom() < 2)
+        {
+            if (floors[n].pois[p].alwaysVisible)
+            {
+                //drawHeadings(n);
+                var descr = escapeHtml(floors[n].pois[p].description);
+                L.marker(floors[n].pois[p].marker.center, {icon: txtIcon})
+                    .bindLabel(descr, { noHide: true })
+                    .addTo(floors[n].layer)
+                    .showLabel();
+                var $myLabel = $('div.leaflet-label:contains(' + descr + ')');
+                var $width = $myLabel.width();
+                $myLabel.css('margin-left', -$width / 2);
+
+                if (floors[n].pois[p].isVertical) {
+                    $myLabel.addClass('isVertical');
+                }
+
+            }
+        }
+        else
+        {
+            //drawHeadings(n);
             var descr = escapeHtml(floors[n].pois[p].description);
             L.marker(floors[n].pois[p].marker.center, {icon: txtIcon})
                 .bindLabel(descr, { noHide: true })
                 .addTo(floors[n].layer)
-                //.addTo(map)
                 .showLabel();
             var $myLabel = $('div.leaflet-label:contains(' + descr + ')');
-            var $width=$myLabel.width();
-            $myLabel.css('margin-left',-$width/2);
+            var $width = $myLabel.width();
+            $myLabel.css('margin-left', -$width / 2);
 
             if (floors[n].pois[p].isVertical) {
                 $myLabel.addClass('isVertical');
             }
+
         }
     }
 
@@ -789,10 +827,10 @@ function changeFloor(e) {
                 map.addLayer(arrowHead[i]);
                 flechita = arrowHead[i];
                 arrowAnim(flechita, floor_x.name);
-                map.setView(arrow[i].getBounds().pad(15).getCenter(), 0);
+                map.setView(arrow[i].getBounds().pad(15).getCenter(), map.getZoom());
 
             } else {
-                map.setView(floor_x.bounds.getCenter(), 0);
+                map.setView(floor_x.bounds.getCenter(), map.getZoom());
             }
 
         } else {
