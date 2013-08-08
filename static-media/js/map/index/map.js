@@ -355,6 +355,8 @@ function loopFloors() {
     //floors[floor_index].img||
     var floorImg = new Image();
     floorImg.src = img;
+    var solotxt="/media/img/enclosures/26/floors/solotextos.gif";
+
     floorImg.onload = function () {
 //        var mapH = (floorImg.height / floorImg.width) * mapW;
         var mapH=mapW;
@@ -363,7 +365,28 @@ function loopFloors() {
         floors[floor_index].scaleX = mapW / floors[floor_index].num_cols;
         floors[floor_index].scaleY = mapH / floors[floor_index].num_rows;
         floors[floor_index].bounds = bounds;
-        floors[floor_index].photo = new L.imageOverlay(img, bounds);
+//        floors[floor_index].photo= new L.imageOverlay(img, bounds);
+
+        floors[floor_index].photo = new L.LayerGroup();
+        floors[floor_index].img= new L.imageOverlay(img, bounds);
+        floors[floor_index].solotxt= new L.imageOverlay(solotxt, bounds);
+
+        floors[floor_index].photo.addLayer(floors[floor_index].img);
+        floors[floor_index].photo.addLayer(floors[floor_index].solotxt);
+
+/*
+        var centerHeading = [(floors[floor_index].num_rows/4)*3 *floors[floor_index].scaleY + (floors[floor_index].scaleY),
+            floors[floor_index].num_cols/3.5 * floors[floor_index].scaleX + (floors[floor_index].scaleX)];
+
+        floors[floor_index].heading= new L.marker(centerHeading, {icon: txtIcon})
+            .bindLabel('ALCALA MAGNA', { noHide: true })
+            .addTo(floors[floor_index].photo)
+            //.addTo(map)
+            .showLabel();
+*/
+
+
+
 /*
         floors[floor_index].photo = new L.geoJson(mimapa, {
                 style: function (feature) {
@@ -478,7 +501,7 @@ function loadPOIs() {
                 totalPois.addLayer(floors[fl].pois[j].marker);
 
             if (isPoiVisibleByDefault(floors[fl].pois[j].marker.category_en))
-                floors[fl].layer.addLayer(floors[fl].pois[j].marker);
+               floors[fl].layer.addLayer(floors[fl].pois[j].marker);
         }
 
 
@@ -599,11 +622,15 @@ function initMap(qrPoint) {
             bindContent(qrMarker);
             map.setMaxBounds(map.getBounds());
             qrMarker.openPopup();
+            qrMarker._bringToFront();
+
 
             if (qrPoint.point.coupon) {
                 $('div.leaflet-popup-content-wrapper').addClass('withCoupon');
             }
             bindContent(qrMarker);
+
+            //loadHeadings(i);
 
         }
     }
@@ -619,6 +646,82 @@ function initMap(qrPoint) {
     loadedLabels = true;
 //    map.invalidateSize();
 }
+
+function escapeHtml(unsafe) {
+    return unsafe
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+}
+
+function drawHeadings(n){
+    var descr = escapeHtml(floors[n].pois[p].description);
+    L.marker(floors[n].pois[p].marker.center, {icon: txtIcon})
+        .bindLabel(descr, { noHide: true })
+        .addTo(floors[n].layer)
+        .showLabel();
+    var $myLabel = $('div.leaflet-label:contains(' + descr + ')');
+    var $width = $myLabel.width();
+    $myLabel.css('margin-left', -$width / 2);
+
+    if (floors[n].pois[p].isVertical) {
+        $myLabel.addClass('isVertical');
+    }
+}
+
+function loadHeadings(n) {
+    for (var p in floors[n].pois) {
+
+        if (map.getZoom() < 2)
+        {
+            if (floors[n].pois[p].alwaysVisible)
+            {
+                var descr = escapeHtml(floors[n].pois[p].description);
+                L.marker(floors[n].pois[p].marker.center, {icon: txtIcon})
+                    .bindLabel(descr, { noHide: true })
+                    .addTo(floors[n].layer)
+                    .showLabel();
+                var $myLabel = $('div.leaflet-label:contains(' + descr + ')');
+                var $width = $myLabel.width();
+                $myLabel.css('margin-left', -$width / 2);
+
+                if (floors[n].pois[p].isVertical) {
+                    $myLabel.addClass('isVertical');
+                }
+
+            }
+        }
+        else
+        {
+            var descr = escapeHtml(floors[n].pois[p].description);
+            L.marker(floors[n].pois[p].marker.center, {icon: txtIcon})
+                .bindLabel(descr, { noHide: true })
+                .addTo(floors[n].layer)
+                .showLabel();
+            var $myLabel = $('div.leaflet-label:contains(' + descr + ')');
+            var $width = $myLabel.width();
+            $myLabel.css('margin-left', -$width / 2);
+
+            if (floors[n].pois[p].isVertical) {
+                $myLabel.addClass('isVertical');
+            }
+
+        }
+    }
+
+    var centerHeading = [(floors[n].num_rows/5)*4 *floors[n].scaleY + (floors[n].scaleY),
+        floors[n].num_cols/5 * floors[n].scaleX + (floors[n].scaleX)];
+
+    L.marker(centerHeading, {icon: txtIcon})
+        .bindLabel('ALCALA MAGNA - Planta '+floors[n].name, { noHide: true })
+        .addTo(floors[n].layer)
+        .showLabel();
+
+}
+
+var selected_cat = null;
 
 
 //EVENTOS - Añadir layer
@@ -655,23 +758,36 @@ function setIconColor()
 }
 
 function addCategory(e) {
+
+    var selected_category = e.layer.category;
+
+    if(!selected_category)
+        return;
+
+    console.log(selected_category);
+
+
+
     // Cada vez que añade una layer se dispara esto
     for (var i in floors) {
+        var cats = $('input[type=checkbox].leaflet-control-layers-selector');
+        cats.css('background', '#333');
+        cats.prop('checked', false);
+
         for (var l in floors[i].labels) {
             var myCat = $('input[type=checkbox].leaflet-control-layers-selector:eq(' + l + ')');
-            if (map.hasLayer(floors[i].labels[l].layer) &&
-                myCat.is(':checked'))
+            var current_category = floors[i].labels[l].fields.name;
+            if (current_category == selected_category)
             {
                 myCat.css('background', floors[i].labels[l].fields.color);
-                //myCat.parent().siblings().find('input').css('background', '#333');
-
-/*
-                for (var n in floors[i].labels){
-                    if (n!=l)
-                        map.removeLayer(floors[i].labels[n].layer);
-                }
-*/
-
+                myCat.prop('checked', true);
+                checked = l;
+                console.log('1 - ' + checked);
+                break;
+            }
+            else
+            {
+                map.removeLayer(floors[i].labels[l].layer)
             }
         }
     }
@@ -696,7 +812,7 @@ function removeCategory(e) {
 
 }
 
-var checked = [];
+var checked;
 
 function changeFloor(e) {
 
@@ -704,26 +820,35 @@ function changeFloor(e) {
 
     for (pos = 0; pos < $('input[type=checkbox].leaflet-control-layers-selector').length; pos++) {
         if ($('input[type=checkbox].leaflet-control-layers-selector:eq(' + pos + ')').is(':checked')) {
-            checked[pos] = true;
-        } else {
-            checked[pos] = false;
+            checked = pos;
         }
     }
 
-    var floor_x = {};
-    for (var i in floors) {
-        if ((e.layer && (e.layer._url === floors[i].photo._url)) || (e._url === floors[i].photo._url)) {
-            floor_x = floors[i];
+    console.log('2 - ' + checked);
 
-            for (var l in floors[i].labels) {
-                layersControl.addOverlay(floor_x.labels[l].layer, '<i class="icon-' + floors[i].labels[l].fields.icon + ' icon-white"></i>');
-                if (checked[l] === true) {
-                    map.addLayer(floor_x.labels[l].layer);
-                }
-            }
+    var floor_x = {};
+    var key;
+    for (var i in floors) {
+        for (var k in floors[i].photo._layers){
+            key=k;
+            break;
+        }
+//        if ((e.layer && (e.layer._url === floors[i].photo._url)) || (e._url === floors[i].photo._url)) {
+        if ((e.layer._layers[key] && (e.layer._layers[key]._url === floors[i].photo._layers[key]._url)) || (e._url === floors[i].photo._layers[key]._url)) {
+            floor_x = floors[i];
 
             map.addLayer(floor_x.photo);
             map.addLayer(floor_x.layer);
+            
+            for (var l in floors[i].labels) {
+                layersControl.addOverlay(floor_x.labels[l].layer, '<i class="icon-' + floors[i].labels[l].fields.icon + ' icon-white"></i>');
+                if (checked == l) {
+                    if (floor_x.labels[l].layer)
+                        map.addLayer(floor_x.labels[l].layer);
+                }
+            }
+
+
 
             if (arrowHead[i] && subarrow[i]) {
                 map.addLayer(arrowHead[i]);
@@ -737,6 +862,7 @@ function changeFloor(e) {
 
         } else {
             map.removeLayer(floors[i].layer);
+            map.removeLayer(floors[i].photo);
 
             for (var l in floors[i].labels) {
                 layersControl.removeLayer(floors[i].labels[l].layer);
@@ -747,15 +873,19 @@ function changeFloor(e) {
                 map.removeLayer(arrowHead[i]);
         }
 
+        //loadHeadings(i);
+
     }
 
     for (var lab in floor_x.labels) {
-        if (checked[lab] === true) {
+        if (checked == lab) {
             jQuery('input[type=checkbox].leaflet-control-layers-selector:eq(' + lab + ')').css('background', floor_x.labels[lab].fields.color);
             jQuery('input[type=checkbox].leaflet-control-layers-selector:eq(' + lab + ')').prop("checked", true);
         }
     }
 
+
+/*
     for (var p in floor_x.pois) {
         if (floor_x.pois[p].alwaysVisible) {
             L.marker(floor_x.pois[p].marker.center, {icon: txtIcon})
@@ -770,6 +900,16 @@ function changeFloor(e) {
             }
         }
     }
+
+    var centerHeading = [(floor_x.num_rows/4)*3 *floor_x.scaleY + (floor_x.scaleY),
+        floor_x.num_cols/3.5 * floor_x.scaleX + (floor_x.scaleX)];
+    L.marker(centerHeading, {icon: txtIcon})
+        .bindLabel('ALCALA MAGNA', { noHide: true })
+        .addTo(floor_x.layer)
+        //.addTo(map)
+        .showLabel();
+*/
+
     if (map.hasLayer(qrMarker)) {
         qrMarker.openPopup();
         if (qrPoint.point.coupon) {
@@ -1061,14 +1201,13 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
 
 //Función que gestiona la animación de la flecha
 function arrowAnim(arrow, idFloor) {
- /*   if (anim != null) {
+/*    if (anim != null) {
         window.clearInterval(anim);
 
     }
     anim = window.setInterval(function () {
         setArrow(arrow, idFloor)
-    }, 100);
-*/
+    }, 100);*/
 }
 
 var arrowsOffset = 0;
@@ -1077,8 +1216,9 @@ var arrowsOffset = 0;
 var setArrow = function (flecha, idFloor) {
 /*
     flecha.setPatterns([
-        {offset: arrowsOffset + '%', repeat: 0, symbol: new L.Symbol.ArrowHead({pixelSize: 8, polygon: false, pathOptions: { stroke: true, weight:2}})}
-            //Dash({pixelSize: 1, pathOptions: { stroke: true, weight:10}})}
+        {offset: arrowsOffset + '%', repeat: 0, symbol: new L.Symbol.Dash({pixelSize: 0, pathOptions: { stroke: true, weight:10}})}
+            //ArrowHead({pixelSize: 8, polygon: false, pathOptions: { stroke: true, weight:2}})}
+
 
     ]);
     if (++arrowsOffset > 100)
