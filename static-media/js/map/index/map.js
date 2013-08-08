@@ -721,6 +721,8 @@ function loadHeadings(n) {
 
 }
 
+var selected_cat = null;
+
 
 //EVENTOS - Añadir layer
 map.on('layeradd', function (e) {
@@ -756,25 +758,36 @@ function setIconColor()
 }
 
 function addCategory(e) {
+
+    var selected_category = e.layer.category;
+
+    if(!selected_category)
+        return;
+
+    console.log(selected_category);
+
+
+
     // Cada vez que añade una layer se dispara esto
     for (var i in floors) {
+        var cats = $('input[type=checkbox].leaflet-control-layers-selector');
+        cats.css('background', '#333');
+        cats.prop('checked', false);
+
         for (var l in floors[i].labels) {
-            var myCat = $('input[type=checkbox].leaflet-control-layers-selector:eq(' + l + ')'),
-                otherCat=myCat.parent().siblings().find('input');
-            if (map.hasLayer(floors[i].labels[l].layer) &&
-                myCat.is(':checked'))
+            var myCat = $('input[type=checkbox].leaflet-control-layers-selector:eq(' + l + ')');
+            var current_category = floors[i].labels[l].fields.name;
+            if (current_category == selected_category)
             {
                 myCat.css('background', floors[i].labels[l].fields.color);
-                otherCat.css('background', '#333');
-                otherCat.prop('checked', false);
-
-/*
-                for (var n in floors[i].labels){
-                    if (n!=l)
-                        map.removeLayer(floors[i].labels[n].layer);
-                }
-*/
-
+                myCat.prop('checked', true);
+                checked = l;
+                console.log('1 - ' + checked);
+                break;
+            }
+            else
+            {
+                map.removeLayer(floors[i].labels[l].layer)
             }
         }
     }
@@ -799,7 +812,7 @@ function removeCategory(e) {
 
 }
 
-var checked = [];
+var checked;
 
 function changeFloor(e) {
 
@@ -807,11 +820,11 @@ function changeFloor(e) {
 
     for (pos = 0; pos < $('input[type=checkbox].leaflet-control-layers-selector').length; pos++) {
         if ($('input[type=checkbox].leaflet-control-layers-selector:eq(' + pos + ')').is(':checked')) {
-            checked[pos] = true;
-        } else {
-            checked[pos] = false;
+            checked = pos;
         }
     }
+
+    console.log('2 - ' + checked);
 
     var floor_x = {};
     var key;
@@ -824,15 +837,17 @@ function changeFloor(e) {
         if ((e.layer._layers[key] && (e.layer._layers[key]._url === floors[i].photo._layers[key]._url)) || (e._url === floors[i].photo._layers[key]._url)) {
             floor_x = floors[i];
 
+            map.addLayer(floor_x.photo);
+            map.addLayer(floor_x.layer);
+            
             for (var l in floors[i].labels) {
                 layersControl.addOverlay(floor_x.labels[l].layer, '<i class="icon-' + floors[i].labels[l].fields.icon + ' icon-white"></i>');
-                if (checked[l] === true) {
-                    map.addLayer(floor_x.labels[l].layer);
+                if (checked == l) {
+                    if (floor_x.labels[l].layer)
+                        map.addLayer(floor_x.labels[l].layer);
                 }
             }
 
-            map.addLayer(floor_x.photo);
-            map.addLayer(floor_x.layer);
 
 
             if (arrowHead[i] && subarrow[i]) {
@@ -863,7 +878,7 @@ function changeFloor(e) {
     }
 
     for (var lab in floor_x.labels) {
-        if (checked[lab] === true) {
+        if (checked == lab) {
             jQuery('input[type=checkbox].leaflet-control-layers-selector:eq(' + lab + ')').css('background', floor_x.labels[lab].fields.color);
             jQuery('input[type=checkbox].leaflet-control-layers-selector:eq(' + lab + ')').prop("checked", true);
         }
