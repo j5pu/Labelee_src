@@ -355,6 +355,8 @@ function loopFloors() {
     //floors[floor_index].img||
     var floorImg = new Image();
     floorImg.src = img;
+    var solotxt="/media/img/enclosures/26/floors/solotextos.gif";
+
     floorImg.onload = function () {
 //        var mapH = (floorImg.height / floorImg.width) * mapW;
         var mapH=mapW;
@@ -363,10 +365,14 @@ function loopFloors() {
         floors[floor_index].scaleX = mapW / floors[floor_index].num_cols;
         floors[floor_index].scaleY = mapH / floors[floor_index].num_rows;
         floors[floor_index].bounds = bounds;
-        //floors[floor_index].photo = new L.LayerGroup();
-//        floors[floor_index].img= new L.imageOverlay(img, bounds);
-        floors[floor_index].photo= new L.imageOverlay(img, bounds);
-//        floors[floor_index].photo.addLayer(floors[floor_index].img);
+//        floors[floor_index].photo= new L.imageOverlay(img, bounds);
+
+        floors[floor_index].photo = new L.LayerGroup();
+        floors[floor_index].img= new L.imageOverlay(img, bounds);
+        floors[floor_index].solotxt= new L.imageOverlay(solotxt, bounds);
+
+        floors[floor_index].photo.addLayer(floors[floor_index].img);
+        floors[floor_index].photo.addLayer(floors[floor_index].solotxt);
 
 /*
         var centerHeading = [(floors[floor_index].num_rows/4)*3 *floors[floor_index].scaleY + (floors[floor_index].scaleY),
@@ -624,7 +630,7 @@ function initMap(qrPoint) {
             }
             bindContent(qrMarker);
 
-            loadHeadings(i);
+            //loadHeadings(i);
 
         }
     }
@@ -672,7 +678,6 @@ function loadHeadings(n) {
         {
             if (floors[n].pois[p].alwaysVisible)
             {
-                //drawHeadings(n);
                 var descr = escapeHtml(floors[n].pois[p].description);
                 L.marker(floors[n].pois[p].marker.center, {icon: txtIcon})
                     .bindLabel(descr, { noHide: true })
@@ -690,7 +695,6 @@ function loadHeadings(n) {
         }
         else
         {
-            //drawHeadings(n);
             var descr = escapeHtml(floors[n].pois[p].description);
             L.marker(floors[n].pois[p].marker.center, {icon: txtIcon})
                 .bindLabel(descr, { noHide: true })
@@ -755,12 +759,14 @@ function addCategory(e) {
     // Cada vez que añade una layer se dispara esto
     for (var i in floors) {
         for (var l in floors[i].labels) {
-            var myCat = $('input[type=checkbox].leaflet-control-layers-selector:eq(' + l + ')');
+            var myCat = $('input[type=checkbox].leaflet-control-layers-selector:eq(' + l + ')'),
+                otherCat=myCat.parent().siblings().find('input');
             if (map.hasLayer(floors[i].labels[l].layer) &&
                 myCat.is(':checked'))
             {
                 myCat.css('background', floors[i].labels[l].fields.color);
-                //myCat.parent().siblings().find('input').css('background', '#333');
+                otherCat.css('background', '#333');
+                otherCat.prop('checked', false);
 
 /*
                 for (var n in floors[i].labels){
@@ -808,8 +814,14 @@ function changeFloor(e) {
     }
 
     var floor_x = {};
+    var key;
     for (var i in floors) {
-        if ((e.layer && (e.layer._url === floors[i].photo._url)) || (e._url === floors[i].photo._url)) {
+        for (var k in floors[i].photo._layers){
+            key=k;
+            break;
+        }
+//        if ((e.layer && (e.layer._url === floors[i].photo._url)) || (e._url === floors[i].photo._url)) {
+        if ((e.layer._layers[key] && (e.layer._layers[key]._url === floors[i].photo._layers[key]._url)) || (e._url === floors[i].photo._layers[key]._url)) {
             floor_x = floors[i];
 
             for (var l in floors[i].labels) {
@@ -827,14 +839,15 @@ function changeFloor(e) {
                 map.addLayer(arrowHead[i]);
                 flechita = arrowHead[i];
                 arrowAnim(flechita, floor_x.name);
-                map.setView(arrow[i].getBounds().pad(15).getCenter(), map.getZoom());
+                map.setView(arrow[i].getBounds().pad(15).getCenter(), 0);
 
             } else {
-                map.setView(floor_x.bounds.getCenter(), map.getZoom());
+                map.setView(floor_x.bounds.getCenter(), 0);
             }
 
         } else {
             map.removeLayer(floors[i].layer);
+            map.removeLayer(floors[i].photo);
 
             for (var l in floors[i].labels) {
                 layersControl.removeLayer(floors[i].labels[l].layer);
@@ -845,7 +858,7 @@ function changeFloor(e) {
                 map.removeLayer(arrowHead[i]);
         }
 
-        loadHeadings(i);
+        //loadHeadings(i);
 
     }
 
