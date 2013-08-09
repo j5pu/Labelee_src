@@ -418,9 +418,10 @@ function loadPOIs() {
         floors[fl].layer = new L.LayerGroup();
 
         for (j = 0; j < floors[fl].pois.length; j++) {
+            console.log(floors[fl].pois[j].id);
             if (floors[fl].pois[j].id === poi_id) {
                 // Si es el último no hacemos nada. Si no, lo sacamos
-                if (j == floors[fl].pois.length)
+                if (j == floors[fl].pois.length-1)
                     break;
                 else
                     floors[fl].pois.splice(j, 1);
@@ -721,8 +722,9 @@ function loadHeadings(n) {
 
 }
 
-var selected_cat = null;
-
+$('input[type=checkbox].leaflet-control-layers-selector').on('click change', function(e){
+    addCategory(e);
+});
 
 //EVENTOS - Añadir layer
 map.on('layeradd', function (e) {
@@ -738,9 +740,6 @@ map.on('baselayerchange', function (e) {
     changeFloor(e);
 });
 
-/*$('#route-button').on('click', function(){
-alert('GO!');
-});*/
 
 // Sacar panorámica para el punto
 function setIconColor()
@@ -777,6 +776,18 @@ function addCategory(e) {
         for (var l in floors[i].labels) {
             var myCat = $('input[type=checkbox].leaflet-control-layers-selector:eq(' + l + ')');
             var current_category = floors[i].labels[l].fields.name;
+
+/*
+            if (myCat.is(':checked'))
+            {
+                myCat.css('background', floors[i].labels[l].fields.color);
+                myCat.prop('checked', true);
+                checked = l;
+                console.log('1 - ' + checked);
+                break;
+            }
+
+*/
             if (current_category == selected_category)
             {
                 myCat.css('background', floors[i].labels[l].fields.color);
@@ -789,6 +800,7 @@ function addCategory(e) {
             {
                 map.removeLayer(floors[i].labels[l].layer)
             }
+
         }
     }
 
@@ -879,8 +891,8 @@ function changeFloor(e) {
 
     for (var lab in floor_x.labels) {
         if (checked == lab) {
-            jQuery('input[type=checkbox].leaflet-control-layers-selector:eq(' + lab + ')').css('background', floor_x.labels[lab].fields.color);
-            jQuery('input[type=checkbox].leaflet-control-layers-selector:eq(' + lab + ')').prop("checked", true);
+            $('input[type=checkbox].leaflet-control-layers-selector:eq(' + lab + ')').css('background', floor_x.labels[lab].fields.color);
+            $('input[type=checkbox].leaflet-control-layers-selector:eq(' + lab + ')').prop("checked", true);
         }
     }
 
@@ -968,9 +980,8 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
 
     for (pos = 0; pos < $('input[type=checkbox].leaflet-control-layers-selector').length; pos++) {
         if ($('input[type=checkbox].leaflet-control-layers-selector:eq(' + pos + ')').is(':checked')) {
-            checked[pos] = true;
-        } else {
-            checked[pos] = false;
+            checked = pos;
+            break;
         }
     }
 
@@ -979,7 +990,7 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
             floors[i].layer.removeLayer(arrow[i]);
             map.removeLayer(arrowHead[i]);
         }
-        map.removeLayer(floors[i].layer)
+        map.removeLayer(floors[i].layer);
     }
 
     var check = null,
@@ -1073,15 +1084,16 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
             }
         }
     }
+/*
     for (var f in floors) {
         for (var l in floors[f].labels) {
             if (jQuery('input[type=checkbox].leaflet-control-layers-selector:eq(' + l + ')').is(':checked')) {
-                checked[l] = true;
-            } else {
-                checked[l] = false;
+                checked = l;
+                break;
             }
         }
     }
+*/
     var floorToShow = route.fields.destiny.fields.floor;
     var floorToHide = route.fields.origin.fields.floor;
     if (showOrigin) {
@@ -1094,6 +1106,7 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
     for (var f in floors) {
         if (route.fields.origin.fields.floor !== route.fields.destiny.fields.floor) {
 
+            // Si la planta que tengo que ocultar es la current
             if (floorToHide === floors[f].id) {
                 map.removeLayer(floors[f].layer);
 
@@ -1104,29 +1117,35 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
 
                 map.removeLayer(floors[f].photo);
 
+            // Si la planta que tengo que mostrar es la current
             } else if (floorToShow === floors[f].id) {
+                map.addLayer(floors[f].layer);
+                map.addLayer(floors[f].photo);
 
                 for (var l in floors[f].labels) {
                     layersControl.addOverlay(floors[f].labels[l].layer, '<i class="icon-' + floors[f].labels[l].fields.icon + ' icon-white"></i>');
-                    if (checked[l] === true) {
+                    if (checked == l) {
                         map.addLayer(floors[f].labels[l].layer);
+                        $('input[type=checkbox].leaflet-control-layers-selector:eq(' + l + ')').css('background', floors[f].labels[l].fields.color);
+                        break;
                     }
                 }
 
-                for (var l in floors[f].labels) {
-                    if (checked[l] === true) {
-                        jQuery('input[type=checkbox].leaflet-control-layers-selector:eq(' + l + ')').css('background', floors[f].labels[l].fields.color);
-                        jQuery('input[type=checkbox].leaflet-control-layers-selector:eq(' + l + ')').prop("checked", true);
-                    }
-                }
-                map.addLayer(floors[f].layer);
-                map.addLayer(floors[f].photo);
+//                for (var l in floors[f].labels) {
+//                    if (checked == l) {
+//                        jQuery('input[type=checkbox].leaflet-control-layers-selector:eq(' + l + ')').css('background', floors[f].labels[l].fields.color);
+//                        jQuery('input[type=checkbox].leaflet-control-layers-selector:eq(' + l + ')').prop("checked", true);
+//                    }
+//                }
                 map.addLayer(arrowHead[f]);
                 flechita = arrowHead[f];
                 arrowAnim(flechita, floors[f].name);
 //                map.setView(arrow[f].getBounds().pad(15).getCenter(), 0);
                 qrMarker.openPopup();
+                break;
 
+            // Si la planta actual (current) no es ni la que tengo que mostrar, ni la que tengo que ocultar
+            // Por ejemplo en ruta desde la -1 hasta la 1 pasando poor la 0
             } else {
 
                 for (var l in floors[f].labels) {
@@ -1146,35 +1165,36 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
                     map.removeLayer(floors[f].labels[l].layer);
                 }
 
-
             }
             else {
+
+                map.addLayer(floors[f].layer);
+                map.addLayer(floors[f].photo);
+
                 for (var l in floors[f].labels) {
-                    if (jQuery('input[type=checkbox].leaflet-control-layers-selector:eq(' + l + ')').is(':checked')) {
-                        checked[l] = true;
-                    } else {
-                        checked[l] = false;
+                    if ($('input[type=checkbox].leaflet-control-layers-selector:eq(' + l + ')').is(':checked')) {
+                        checked = l;
                     }
                 }
 
                 for (var l in floors[f].labels) {
                     layersControl.addOverlay(floors[f].labels[l].layer, '<i class="icon-' + floors[f].labels[l].fields.icon + ' icon-white"></i>');
-                    if (checked[l] === true) {
+                    if (checked == l) {
                         map.addLayer(floors[f].labels[l].layer);
+                        $('input[type=checkbox].leaflet-control-layers-selector:eq(' + l + ')').css('background', floors[f].labels[l].fields.color);
+                        break;
                     }
                 }
 
-                map.addLayer(floors[f].layer);
-                map.addLayer(floors[f].photo);
+
 //                map.setView(arrow[f].getBounds().pad(15).getCenter(), 0);
                 map.addLayer(arrowHead[f]);
                 flechita = arrowHead[f];
                 arrowAnim(flechita, floors[f].name);
 //                map.setView(arrow[f].getBounds().pad(15).getCenter(), 0);
-
+                break;
             }
         }
-
     }
 
     if (map.hasLayer(destMarker)) {
@@ -1265,7 +1285,7 @@ function isPoiVisibleByDefault(categ_name) {
 Map.locateCar = function () {
     var miCoche = JSON.parse(localStorage.getItem('miCoche'));
 
-    if (!miCoche) {
+    if (!miCoche || miCoche.dest.enclosure.id != enclosure_id) {
         alert('Please, scan the QR code at your parking place to' +
             ' locate your car.');
         return;
@@ -1275,9 +1295,7 @@ Map.locateCar = function () {
 
     for (pos = 0; pos < $('input[type=checkbox].leaflet-control-layers-selector').length; pos++) {
         if ($('input[type=checkbox].leaflet-control-layers-selector:eq(' + pos + ')').is(':checked')) {
-            checked[pos] = true;
-        } else {
-            checked[pos] = false;
+            checked = pos;
         }
     }
 
@@ -1299,7 +1317,7 @@ Map.locateCar = function () {
             floor_x.layer.addLayer(carMarker);
             for (var l in floors[i].labels) {
                 layersControl.addOverlay(floor_x.labels[l].layer, '<i class="icon-' + floors[i].labels[l].fields.icon + ' icon-white"></i>');
-                if (checked[l] === true) {
+                if (checked == l) {
                     map.addLayer(floor_x.labels[l].layer);
                 }
             }
@@ -1334,7 +1352,7 @@ Map.locateCar = function () {
     }
 
     for (var lab in floor_x.labels) {
-        if (checked[lab] === true) {
+        if (checked == lab) {
             jQuery('input[type=checkbox].leaflet-control-layers-selector:eq(' + lab + ')').css('background', floor_x.labels[lab].fields.color);
             jQuery('input[type=checkbox].leaflet-control-layers-selector:eq(' + lab + ')').prop("checked", true);
         }
@@ -1348,9 +1366,7 @@ Map.locateCar = function () {
 Map.locatePosition = function () {
     for (pos = 0; pos < $('input[type=checkbox].leaflet-control-layers-selector').length; pos++) {
         if ($('input[type=checkbox].leaflet-control-layers-selector:eq(' + pos + ')').is(':checked')) {
-            checked[pos] = true;
-        } else {
-            checked[pos] = false;
+            checked = pos;
         }
     }
 
@@ -1360,7 +1376,7 @@ Map.locatePosition = function () {
             floor_x = floors[i];
             for (var l in floors[i].labels) {
                 layersControl.addOverlay(floor_x.labels[l].layer, '<i class="icon-' + floors[i].labels[l].fields.icon + ' icon-white"></i>');
-                if (checked[l] === true) {
+                if (checked == l) {
                     map.addLayer(floor_x.labels[l].layer);
                 }
             }
@@ -1394,7 +1410,7 @@ Map.locatePosition = function () {
     }
 
     for (var lab in qrFloor.labels) {
-        if (checked[lab] === true) {
+        if (checked == lab) {
             jQuery('input[type=checkbox].leaflet-control-layers-selector:eq(' + lab + ')').css('background', floor_x.labels[lab].fields.color);
             jQuery('input[type=checkbox].leaflet-control-layers-selector:eq(' + lab + ')').prop("checked", true);
         }
