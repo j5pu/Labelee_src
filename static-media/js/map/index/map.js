@@ -792,8 +792,6 @@ function changeFloor(e) {
         }
     }
 
-    console.log('2 - ' + checked);
-
     var floor_x = {};
     var key;
     for (var i in floors) {
