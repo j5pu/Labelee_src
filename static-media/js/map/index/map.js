@@ -271,7 +271,12 @@ for (var i in floors) {
 
 //Carga de planos
 
-var solotxt="/media/img/enclosures/26/floors/60.gif";
+//Textos GIF transparentes
+var solotxt={};
+solotxt[3]=["/media/img/enclosures/26/floors/60.gif","/media/img/enclosures/26/floors/60.gif","/media/img/enclosures/26/floors/60.gif","/media/img/enclosures/26/floors/60.gif"];
+solotxt[1]=["/media/img/enclosures/26/floors/60.gif","/media/img/enclosures/26/floors/60.gif","/media/img/enclosures/26/floors/60.gif","/media/img/enclosures/26/floors/60.gif"];
+solotxt[2]=["/media/img/enclosures/26/floors/60_n.gif","/media/img/enclosures/26/floors/60_n.gif","/media/img/enclosures/26/floors/60_n.gif","/media/img/enclosures/26/floors/60_n.gif"];
+solotxt[0]=["/media/img/enclosures/26/floors/60_3.gif","/media/img/enclosures/26/floors/60_3.gif","/media/img/enclosures/26/floors/60_3.gif","/media/img/enclosures/26/floors/60_3.gif"];
 
 
 var name = null, img, bounds;
@@ -315,7 +320,7 @@ function loopFloors() {
 
         floors[floor_index].photo = new L.LayerGroup();
         floors[floor_index].img= new L.imageOverlay(img, bounds);
-        floors[floor_index].solotxt= new L.imageOverlay(solotxt, bounds);
+        floors[floor_index].solotxt= new L.imageOverlay(solotxt[floor_index][0], bounds);
 
         floors[floor_index].photo.addLayer(floors[floor_index].img);
         floors[floor_index].photo.addLayer(floors[floor_index].solotxt);
@@ -526,7 +531,7 @@ var map = L.map('map', {
     crs: L.CRS.Simple,
     zoom: 0,
     minZoom: 0,
-    maxZoom: 3,
+    maxZoom: 2,
 //Ojo, 'trackResize' desactiva la gestión 'orientationchange' automática
 //    trackResize: false,
     zoomControl: false
@@ -1000,7 +1005,7 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
                     break;
                 }
             }
-            arrow[f] = L.polyline(subarrow[f], {color: 'orange', opacity: 0.8, weight:2 });
+            arrow[f] = L.polyline(subarrow[f], {color: 'orange', opacity: 0.8, weight:3 });
             arrowHead[f] = L.polylineDecorator(arrow[f]);
             map.addLayer(arrowHead[f]);
         }
@@ -1017,7 +1022,7 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
                     break;
                 }
             }
-            arrow[f] = L.polyline(subarrow[f], {color: 'orange', opacity: 0.8, weight:2});
+            arrow[f] = L.polyline(subarrow[f], {color: 'orange', opacity: 0.8, weight:4});
             arrowHead[f] = L.polylineDecorator(arrow[f]);
             map.addLayer(arrowHead[f]);
         }
@@ -1432,6 +1437,7 @@ function bindContent(marker) {
     marker.contentBinded = true;
 }
 
+/*
 
 map.on("viewreset", function () {
     var zoom = map.getZoom();
@@ -1452,10 +1458,15 @@ map.on("viewreset", function () {
                 break;
         }
 
-        floors[i].solotxt = new L.imageOverlay(solotxt, bounds);
+        floors[i].solotxt = new L.imageOverlay(solotxt[i], bounds);
+ floors[i].solotxt= new L.imageOverlay(solotxt[i][0], bounds);
 
-    }
+ floors[floor_index].photo.addLayer(floors[floor_index].img);
+ floors[floor_index].photo.addLayer(floors[floor_index].solotxt);
+
+
+ }
 
 });
+*/
 
-//floors[i].solotxt= new L.imageOverlay(solotxt, bounds);
