@@ -298,7 +298,8 @@ function EnclosureCtrl($scope, $rootScope)
 
     $scope.search_coupon = function (row) {
         return !$scope.query_coupon ||
-            row.label.name.toUpperCase().indexOf($scope.query_coupon.toUpperCase() || '') !== -1;
+            (row.label && row.label.name.toUpperCase().indexOf($scope.query_coupon.toUpperCase() || '') !== -1) ||
+            (row.name && row.name.toUpperCase().indexOf($scope.query_coupon.toUpperCase() || '') !== -1);
     };
 
     $scope.show_create_form_enclosure = function($event) {

@@ -27,7 +27,7 @@ def manager(request, enclosure_id=None):
     if is_shop_owner:
         manager['for_shop_owner'] = True
         labels = Label.objects.filter(owner=request.user)
-        manager['coupon'] = get_coupons_for_labels(labels)[0]
+        manager['coupons'] = get_coupons_for_labels(labels)
     elif is_enclosure_owner:
         manager['for_enclosure_owner'] = True
         enclosures = Enclosure.objects.filter(owner=request.user)
