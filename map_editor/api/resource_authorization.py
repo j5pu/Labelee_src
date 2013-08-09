@@ -21,6 +21,7 @@ class ResourceAuthorization(Authorization):
         'point',
         'label',
         'label-category',
+        'coupon',
     ]
 
     # Para indicar si un registro para el recurso ha sido creado justo antes

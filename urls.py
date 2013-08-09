@@ -22,10 +22,13 @@ v1_api.register(ConnectionResource())
 v1_api.register(RouteResource())
 v1_api.register(StepResource())
 v1_api.register(LogEntryResource())
+v1_api.register(CouponResource())
 
 
 urlpatterns = patterns('',
-    url(r'^$', TemplateView.as_view(template_name="index.html")),
+    # url(r'^$', TemplateView.as_view(template_name="index.html")),
+
+    url(r'^$', 'map.views.qr_code_redirect'),
 
     # APIS
     url(r'^api/', include(v1_api.urls)),

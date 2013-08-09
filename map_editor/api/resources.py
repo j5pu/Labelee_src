@@ -12,6 +12,7 @@ from tastypie.validation import FormValidation
 # from tastypie.authentication import Authentication
 
 from tastypie.resources import ModelResource, ALL, ALL_WITH_RELATIONS
+from coupon_manager.models import Coupon
 from utils.constants import USER_GROUPS
 from utils.helpers import random_string_generator, delete_file
 from django.contrib.auth.models import Group
@@ -290,6 +291,23 @@ class LogEntryResource(ModelResource):
             'message': ALL,
             'when': ALL
         }
+
+    def determine_format(self, request):
+        return 'application/json'
+
+
+class CouponResource(ModelResource):
+    enclosure = fields.ToOneField(EnclosureResource, 'enclosure', null=True)
+
+    class Meta:
+        resource_name = 'coupon'
+        queryset = Coupon.objects.all()
+        authorization = ResourceAuthorization('enclosure__owner')
+        always_return_data = True
+        filtering = {
+            'enclosure': ALL_WITH_RELATIONS,
+        }
+        max_limit = 5000
 
     def determine_format(self, request):
         return 'application/json'

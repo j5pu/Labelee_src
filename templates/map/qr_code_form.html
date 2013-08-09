@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% load i18n %}
+
+{% block content %}
+<form action="{% url 'map.views.qr_code_redirect' %}" method="post">
+    <div style="display:none">
+        <input type="hidden" value="{{ csrf_token }}" name="csrfmiddlewaretoken">
+    </div>
+    <table>
+        <tr>
+            <td>
+                <label for="qr_code_id">{% trans "Introduzca el código de QR que aparece en el cartel" %}:</label>
+            </td>
+            <td>
+                <input type="text" id="qr_code_id" name="qr_code_id">
+            </td>
+        </tr>
+        <tr>
+            <td></td>
+            <td><input type="submit" value="{% trans "Entrar a la aplicación" %}" /></td>
+        </tr>
+    </table>
+</form>
+{% endblock %}

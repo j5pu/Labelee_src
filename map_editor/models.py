@@ -13,6 +13,7 @@ FIXED_CATEGORIES = {
     1: 'Connectors',
     2: 'Intermediate',
     3: 'Parking',
+    4: 'Toilet',
 }
 
 

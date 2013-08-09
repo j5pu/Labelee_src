@@ -663,6 +663,8 @@ function DashboardResource()
 
 function CouponResource()
 {
+    Resource.call(this, 'coupon');
+
     this.coupons_url = '/coupon/';
 
     this.getManager = function()

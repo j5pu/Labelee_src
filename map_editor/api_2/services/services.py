@@ -17,8 +17,10 @@ class ImgService:
         /api-2/[resource]/[id]/img
 
     Por ejemplo, para el recurso 'floor' con id=16:
-        - Subir imágen para la planta: 	POST > /api-2/floor/16/img
-        - Eliminar imágen: 				DELETE > api-2/floor/16/img
+        - Subir imágen para la planta:
+            POST > /api-2/floor/16/img
+        - Eliminar imágen:
+            DELETE > api-2/floor/16/img
     """
     model_img_attr = None
 
