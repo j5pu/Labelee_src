@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from PIL import Image
 from django.db.models import Sum
 
 from tastypie.models import ApiKey
@@ -132,6 +133,22 @@ def delete_file(fileField):
     storage, path = fileField.storage, fileField.path
     storage.delete(path)
 
+
+def resize_img_width(img_path, fixed_width):
+    img = Image.open(img_path)
+    if img.size[0] != fixed_width:
+        wpercent = (fixed_width / float(img.size[0]))
+        hsize = int((float(img.size[1]) * float(wpercent)))
+        img = img.resize((fixed_width, hsize), Image.ANTIALIAS)
+        img.save(img_path)
+
+def resize_img_height(img_path, fixed_height):
+    img = Image.open(img_path)
+    if img.size[1] != fixed_height:
+        hpercent = (fixed_height / float(img.size[1]))
+        wsize = int((float(img.size[0]) * float(hpercent)))
+        img = img.resize((wsize, fixed_height), Image.ANTIALIAS)
+        img.save(img_path)
 
 if __name__ == "__main__":
     pass

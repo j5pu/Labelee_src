@@ -3,7 +3,7 @@
 import os
 from django.db import models
 from map_editor.models import Enclosure
-from utils.helpers import delete_file
+from utils.helpers import delete_file, resize_img_width
 
 
 def get_coupon_img_path(instance, filename):
@@ -19,6 +19,14 @@ class Coupon(models.Model):
 
     def __unicode__(self):
         return self.name
+
+    def save(self, *args, **kwargs):
+        """
+        Cada vez que guardamos el cupón comprobamos que su imágen se redimensionó
+        """
+        if self.img:
+            resize_img_width(self.img.path, 350)
+        super(Coupon, self).save(*args, **kwargs)
 
     def delete(self, *args, **kwargs):
         """
