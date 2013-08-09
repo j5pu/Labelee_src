@@ -726,6 +726,7 @@ $('input[type=checkbox].leaflet-control-layers-selector').on('click change', fun
     addCategory(e);
 });
 
+
 //EVENTOS - Añadir layer
 map.on('layeradd', function (e) {
     addCategory(e);
@@ -760,11 +761,45 @@ function addCategory(e) {
 
     var selected_category = e.layer.category;
 
+    // Si había un selector antes del nuevo
+    if($('input[type=checkbox].leaflet-control-layers-selector:checked').length == 2)
+    {
+        $('input[type=checkbox].leaflet-control-layers-selector').each(function(index){
+            if($(this).is(':checked') && index != checked)
+            {
+                // desactivo todos y activo el seleccionado
+                $('input[type=checkbox].leaflet-control-layers-selector').prop('checked', false);
+                $('input[type=checkbox].leaflet-control-layers-selector').css('background', '#333');
+                $(this).prop('checked', true);
+                for(var i in floors)
+                {
+                    map.removeLayer(floors[i].labels[checked].layer);
+                }
+                checked = index;
+                $('input[type=checkbox].leaflet-control-layers-selector:eq(' + checked + ')')
+                    .css('background', floors[0].labels[checked].fields.color);
+                return false;
+            }
+        });
+    }
+    else
+    {
+        $('input[type=checkbox].leaflet-control-layers-selector').each(function(index){
+            if($(this).is(':checked'))
+            {
+                checked = index;
+                $('input[type=checkbox].leaflet-control-layers-selector:eq(' + checked + ')')
+                    .css('background', floors[0].labels[checked].fields.color);
+                return false;
+            }
+        });
+    }
+
+
+
+
     if(!selected_category)
         return;
-
-    console.log(selected_category);
-
 
 
     // Cada vez que añade una layer se dispara esto
@@ -793,14 +828,13 @@ function addCategory(e) {
                 myCat.css('background', floors[i].labels[l].fields.color);
                 myCat.prop('checked', true);
                 checked = l;
-                console.log('1 - ' + checked);
+                checked_category = selected_category;
                 break;
             }
             else
             {
                 map.removeLayer(floors[i].labels[l].layer)
             }
-
         }
     }
 
@@ -825,18 +859,22 @@ function removeCategory(e) {
 }
 
 var checked;
+var checked_category;
 
 function changeFloor(e) {
 
     SocialMenu.close();
 
+    var allUnchecked = true;
     for (pos = 0; pos < $('input[type=checkbox].leaflet-control-layers-selector').length; pos++) {
         if ($('input[type=checkbox].leaflet-control-layers-selector:eq(' + pos + ')').is(':checked')) {
             checked = pos;
+            $('input[type=checkbox].leaflet-control-layers-selector:eq(' + pos + ')').prop('checked', false);
+            allUnchecked = false;
         }
     }
-
-    console.log('2 - ' + checked);
+    if(allUnchecked)
+        checked = null;
 
     var floor_x = {};
     var key;
