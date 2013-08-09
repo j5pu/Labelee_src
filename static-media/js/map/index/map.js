@@ -1,28 +1,4 @@
-(function() {
-    var lastTime = 0;
-    var vendors = ['webkit', 'moz'];
-    for(var x = 0; x < vendors.length && !window.requestAnimationFrame; ++x) {
-        window.requestAnimationFrame = window[vendors[x]+'RequestAnimationFrame'];
-        window.cancelAnimationFrame =
-            window[vendors[x]+'CancelAnimationFrame'] || window[vendors[x]+'CancelRequestAnimationFrame'];
-    }
-
-    if (!window.requestAnimationFrame)
-        window.requestAnimationFrame = function(callback, element) {
-            var currTime = new Date().getTime();
-            var timeToCall = Math.max(0, 16 - (currTime - lastTime));
-            var id = window.setTimeout(function() { callback(currTime + timeToCall); },
-                timeToCall);
-            lastTime = currTime + timeToCall;
-            return id;
-        };
-
-    if (!window.cancelAnimationFrame)
-        window.cancelAnimationFrame = function(id) {
-            clearTimeout(id);
-        };
-}());
-
+;
 var blinkingMode = null;
 function blinker(element) {
     if (blinkingMode != null && element != null && element.parentElement.innerText.trimLeft() == blinkingMode) {
@@ -46,44 +22,24 @@ var Map = {};
 var showOrigin = false;
 
 //Configuración de iconos
-
-//var txtIcon = L.divIcon({className: 'txt-icon'});
 var carIcon = L.divIcon({className: 'my-div-icon car-icon'}),
     destIcon = L.divIcon({className: 'my-div-icon dest-icon'}),
     originIcon = L.divIcon({className: 'my-div-icon locate-icon'});
+/*
 var txtIcon = new L.icon({
     iconUrl: '/media/texticon.png',
     iconRetinaUrl: '/media/texticon.png',
     iconSize: [1, 1],
     iconAnchor: [0, 0],
-    //popupAnchor: [0,0],
     labelAnchor: [-12, 17]
 });
+*/
 
 
 var loadedLabels = false;
 
 var anim = null;
 var flechita = null;
-/*var floorChecks = [];
- //Parpadeo a la planta del POI destino
- var blinkingMode = null;
- function blinker(element) {
- if (blinkingMode != null) {
- var color = element.css('background-color');
- if (color == "rgb(255, 0, 0)") {
- element.css('background-color','');
- } else {
- element.css('background-color','rgb(255, 0, 0)');
- }
- window.setTimeout(function () {
- blinker(element);
- }, 1000);
- } else {
- element.css('background-color','');
- }
- }*/
-
 
 function loadIcon(shape) {
     var icon = L.divIcon({
@@ -300,7 +256,6 @@ var mapW = Math.min($(window).innerWidth(), $(window).innerHeight()),
     route = {},
     arrow = [],
     arrowHead = [],
-    arrowOffset = 0,
     qrMarker = new L.Marker(),
     destMarker = new L.Marker(),
     subpath = [],
@@ -316,26 +271,18 @@ for (var i in floors) {
 
 //Carga de planos
 
-var name = null, img;
+var solotxt="/media/img/enclosures/26/floors/60.gif";
+
+
+var name = null, img, bounds;
 function loopFloors() {
     if (floor_index == floors.length) {
         loadPOIs();
         LocalStorageHandler.draw();
         initMap(qrPoint);
         $('div#cupones, div#header, span.locator, div#marquee').show();
-//recolocar controles
-        $('span:has(i.icon-film)').css('left', '11px');
-        $('span:has(i.icon-glass)').css('left', '11px');
         Coupon.init();
 
-
-
-
-//       if(( ua.indexOf("Android") >= 0 ) && (androidversion >=3.0))
-
-        //Coupon.init();
-
-        // fin de loopFloors
         return;
     }
 
@@ -355,12 +302,11 @@ function loopFloors() {
     //floors[floor_index].img||
     var floorImg = new Image();
     floorImg.src = img;
-    var solotxt="/media/img/enclosures/26/floors/solotextos.gif";
 
     floorImg.onload = function () {
 //        var mapH = (floorImg.height / floorImg.width) * mapW;
         var mapH=mapW;
-        var bounds = new L.LatLngBounds(new L.LatLng(0, 0), new L.LatLng(mapH, mapW));
+        bounds = new L.LatLngBounds(new L.LatLng(0, 0), new L.LatLng(mapH, mapW));
 
         floors[floor_index].scaleX = mapW / floors[floor_index].num_cols;
         floors[floor_index].scaleY = mapH / floors[floor_index].num_rows;
@@ -418,7 +364,6 @@ function loadPOIs() {
         floors[fl].layer = new L.LayerGroup();
 
         for (j = 0; j < floors[fl].pois.length; j++) {
-            console.log(floors[fl].pois[j].id);
             if (floors[fl].pois[j].id === poi_id) {
                 // Si es el último no hacemos nada. Si no, lo sacamos
                 if (j == floors[fl].pois.length-1)
@@ -760,11 +705,33 @@ function addCategory(e) {
 
     var selected_category = e.layer.category;
 
+    var category_has_pois = e.layer._layers && Object.keys(e.layer._layers).length != 0;
+
+    var new_checked = null;
+
+    if(!category_has_pois)
+    {
+        $('input[type=checkbox].leaflet-control-layers-selector').each(function(index){
+            if($(this).is(':checked') && index != checked)
+            {
+                new_checked = index;
+                return false;
+            }
+        });
+
+        if(new_checked || new_checked == 0)
+        {
+            $('input[type=checkbox].leaflet-control-layers-selector:eq(' + new_checked + ')')
+                .prop('checked', false);
+        }
+
+        setIconColor();
+//        return;
+    }
+
+
     if(!selected_category)
         return;
-
-    console.log(selected_category);
-
 
 
     // Cada vez que añade una layer se dispara esto
@@ -773,27 +740,16 @@ function addCategory(e) {
         cats.css('background', '#333');
         cats.prop('checked', false);
 
+
         for (var l in floors[i].labels) {
             var myCat = $('input[type=checkbox].leaflet-control-layers-selector:eq(' + l + ')');
             var current_category = floors[i].labels[l].fields.name;
 
-/*
-            if (myCat.is(':checked'))
-            {
-                myCat.css('background', floors[i].labels[l].fields.color);
-                myCat.prop('checked', true);
-                checked = l;
-                console.log('1 - ' + checked);
-                break;
-            }
-
-*/
             if (current_category == selected_category)
             {
                 myCat.css('background', floors[i].labels[l].fields.color);
                 myCat.prop('checked', true);
                 checked = l;
-                console.log('1 - ' + checked);
                 break;
             }
             else
@@ -1479,170 +1435,29 @@ function bindContent(marker) {
 }
 
 
-/*
- var    drawnItems = new L.MarkerClusterGroup({
- disableClusteringAtZoom: 0
- }),
- */
+map.on("viewreset", function () {
+    var zoom = map.getZoom();
 
-//PRUEBA FONT-ICONS
+    for (var i in floors) {
+        switch (zoom) {
+            case 1:
+                solotxt = "/media/img/enclosures/26/floors/60.gif";
+                break;
+            case 2:
+                solotxt = "/media/img/enclosures/26/floors/60_n.gif";
+                break;
+            case 3:
+                solotxt = "/media/img/enclosures/26/floors/60_n.gif";
+                break;
+            default:
+                solotxt = "/media/img/enclosures/26/floors/60.gif";
+                break;
+        }
 
+        floors[i].solotxt = new L.imageOverlay(solotxt, bounds);
 
-/*
- markers = [];
-
-// addMarker(new L.LatLng(300,300), {icon: "\ue002", color: "#ff0000"});
-// addMarker(new L.LatLng(400,400), {icon: "\ue002", color: "#00ff00"});
-// addMarker(new L.LatLng(350,350), {icon: "\ue002", color: "#0000ff"});
-// addMarker(new L.LatLng(300,300), {icon: "\ue070", color: "#ff0000"});
-// addMarker(new L.LatLng(400,400), {icon: "\ue025", color: "#00ff00"});
-// addMarker(new L.LatLng(350,350), {icon: "\u2605", color: "#0000ff"});
-
-
-
- //addMarker(new L.LatLng(150, 150), {icon: "\ue002", color: "#8B668B", iconFont: 'iconic'}); // pin only display
-
-// addMarker(new L.LatLng(250,250), {icon: "\uf030", color: "#990000", iconFont: 'awesome'}); //camera
-// addMarker(new L.LatLng(200,200), {icon: "\uf06e", color: "#009900", iconFont: 'awesome'}); // eye open
-// addMarker(new L.LatLng(100,300), {icon: "\uf005", color: "#000099", iconFont: 'awesome'}); // star
-
- addMarker(new L.LatLng(175,175), {icon: "\uf041", color: "#4F2F4F"}); // pin only
-
-
-//map.addLayer(drawnItems);
-
-// map.on("viewreset", function() {
-// var zoom = map.getZoom(),
-// size = computeSizeFromZoom();
-// //console.log("resize, zoom " + zoom + " size " + size);
-// for (var i = 0; i < markers.length; i++) {
-// markers[i].setFontSize(size * 1.2);
-// }
-// });
-//
-// function computeSizeFromZoom() {
-// var max = map.getMaxZoom(),
-// zoom = map.getZoom(),
-// diff = max - zoom,
-// table = [2, 1, 0.5];
-// return  (diff < table.length) ? table[diff] : 0.5;
-// }
-
-
-
-addMarker(new L.LatLng(175,175), {icon: "\uf041", color: "#4F2F4F"}); // pin only
-
- function addMarker(latLng, opts) {
- var icon = opts.icon || "\ue002",
- color = opts.color || "blue",
- font = opts.iconFont || "awesome",
- sz = 1;
-// sz = computeSizeFromZoom();
-
- marker = new cilogi.L.Marker(latLng, {
- fontIconSize: sz *1.3,
- fontIconName: icon,
- fontIconColor: color,
- fontIconFont: font,
- opacity: 1
- });
- //    drawnItems.addLayer(marker);
- map.addLayer(marker);
- //    markers.push(marker);
- }
-
-*/
-
-
-
-
-//PRUEBA GEOJSON
-
-
-/*
-function onEachFeature(feature, layer) {
-    var popupContent = "<p>I started out as a GeoJSON " +
-        feature.geometry.type + ", but now I'm a Leaflet vector!</p>";
-
-    if (feature.properties && feature.properties.popupContent) {
-        popupContent += feature.properties.popupContent;
     }
 
-    layer.bindPopup(popupContent);
-}
+});
 
-*/
-
-
-
-/*
-L.geoJson(mimapa, {
-        style: function (feature) {
-            return feature.properties && feature.properties.style;
-        }}
-).addTo(map);
-*/
-
-
-/*
-
-var micuad={"geometry": {"type": "Polygon", "coordinates": [
-    [
-        [157.5, 293],
-        [157.5, 334.5],
-        [213, 334.5],
-        [213, 293],
-        [157.5, 293]
-    ]
-]}, "type": "Feature"}
-
-L.geoJson(micuad, {
-        style: function (feature) {
-            return feature.properties && feature.properties.style;
-        }}
-).addTo(map);
-
-for (var i in micuad.geometry.coordinates) {
-    for (var j in micuad.geometry.coordinates[i]) {
-        for (var k in micuad.geometry.coordinates[i][j]) {
-        micuad.geometry.coordinates[i][j][k] = micuad.geometry.coordinates[i][j][k] * floors[0].scaleY + (floors[0].scaleY);
-    }
-    }
-}
-*/
-
-//L.marker([300, 300.57], {icon: carIcon}).addTo(map);
-
-
-
-
-//PRUEBA PARA LOS LABELMARKERS
-/*
-
-var geojsonFeature = {
-    "type": "Feature",
-    "properties": {
-        "name": "Coors Field",
-        "amenity": "Baseball Stadium",
-        "popupContent": "This is where the Rockies play!"
-    },
-    "geometry": {
-        "type": "Point",
-        "coordinates": [-104.99404, 39.75621]
-    }
-};
-var geojsonMarkerOptions = {
-    radius: 8,
-    fillColor: "#ff7800",
-    color: "#000",
-    weight: 1,
-    opacity: 1,
-    fillOpacity: 0.8
-};
-
-L.geoJson(someGeojsonFeature, {
-    pointToLayer: function (feature, latlng) {
-        return L.circleMarker(latlng, geojsonMarkerOptions);
-    }
-}).addTo(map);
-*/
+//floors[i].solotxt= new L.imageOverlay(solotxt, bounds);
