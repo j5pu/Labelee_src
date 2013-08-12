@@ -305,7 +305,15 @@ var mapW = Math.min($(window).innerWidth(), $(window).innerHeight()),
     destMarker = new L.Marker(),
     subpath = [],
     subarrow = [],
-    floors = new FloorResource().readFromEnclosure(qrPoint.enclosure.id);
+    floors_indexed = {},
+    current_floor = null,
+    floors = floorResource.readFromEnclosure(qrPoint.enclosure.id);
+
+    // Indexamos la lista de plantas por su id
+    for(var i in floors)
+    {
+        floors_indexed[floors[i].id] = floors[i];
+    }
 
 
 //POIs de cada floor, separados para pintarlos por capas
@@ -320,8 +328,8 @@ var name = null, img;
 function loopFloors() {
     if (floor_index == floors.length) {
         loadPOIs();
-        LocalStorageHandler.draw();
         initMap(qrPoint);
+        LocalStorageHandler.draw();
         $('div#cupones, div#header, span.locator, div#marquee').show();
 //recolocar controles
         $('span:has(i.icon-film)').css('left', '11px');
@@ -605,6 +613,7 @@ function initMap(qrPoint) {
 
         if (floors[i].id === qrPoint.floor.id) {
             qrFloor = floors[i];
+            current_floor = floors[i];
             map.addLayer(qrFloor.photo);
             map.addLayer(qrFloor.layer);
 
@@ -885,7 +894,7 @@ function changeFloor(e) {
 //        if ((e.layer && (e.layer._url === floors[i].photo._url)) || (e._url === floors[i].photo._url)) {
         if ((e.layer._layers[key] && (e.layer._layers[key]._url === floors[i].photo._layers[key]._url)) || (e._url === floors[i].photo._layers[key]._url)) {
             floor_x = floors[i];
-
+            current_floor = floor_x;
             map.addLayer(floor_x.photo);
             map.addLayer(floor_x.layer);
             
@@ -1132,106 +1141,135 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
     }
 */
     var floorToShow = route.fields.destiny.fields.floor;
-    var floorToHide = route.fields.origin.fields.floor;
+    var floorToHide = current_floor.id;
     if (showOrigin) {
         var floorToShow = route.fields.origin.fields.floor;
-        var floorToHide = route.fields.destiny.fields.floor;
         showOrigin = false;
-
     }
     //PINTADO DE CAPAS
-    for (var f in floors) {
-        if (route.fields.origin.fields.floor !== route.fields.destiny.fields.floor) {
+    //
+    // Eliminamos en la planta seleccionada (current_floor),
+    // independientemente de que sea origen o no
+    map.removeLayer(floors_indexed[floorToHide].layer);
 
-            // Si la planta que tengo que ocultar es la current
-            if (floorToHide === floors[f].id) {
-                map.removeLayer(floors[f].layer);
+    for (var l in floors_indexed[floorToHide].labels) {
+        layersControl.removeLayer(floors_indexed[floorToHide].labels[l].layer);
+        map.removeLayer(floors_indexed[floorToHide].labels[l].layer);
+    }
 
-                for (var l in floors[f].labels) {
-                    layersControl.removeLayer(floors[f].labels[l].layer);
-                    map.removeLayer(floors[f].labels[l].layer);
-                }
+    map.removeLayer(floors_indexed[floorToHide].photo);
 
-                map.removeLayer(floors[f].photo);
+    //
+    // Añadimos en la planta a mostrar
+    map.addLayer(floors_indexed[floorToShow].layer);
+    map.addLayer(floors_indexed[floorToShow].photo);
 
-            // Si la planta que tengo que mostrar es la current
-            } else if (floorToShow === floors[f].id) {
-                map.addLayer(floors[f].layer);
-                map.addLayer(floors[f].photo);
-
-                for (var l in floors[f].labels) {
-                    layersControl.addOverlay(floors[f].labels[l].layer, '<i class="icon-' + floors[f].labels[l].fields.icon + ' icon-white"></i>');
-                    if (checked == l) {
-                        map.addLayer(floors[f].labels[l].layer);
-                        $('input[type=checkbox].leaflet-control-layers-selector:eq(' + l + ')').css('background', floors[f].labels[l].fields.color);
-                    }
-                }
-
-//                for (var l in floors[f].labels) {
-//                    if (checked == l) {
-//                        jQuery('input[type=checkbox].leaflet-control-layers-selector:eq(' + l + ')').css('background', floors[f].labels[l].fields.color);
-//                        jQuery('input[type=checkbox].leaflet-control-layers-selector:eq(' + l + ')').prop("checked", true);
-//                    }
-//                }
-                map.addLayer(arrowHead[f]);
-                flechita = arrowHead[f];
-                arrowAnim(flechita, floors[f].name);
-//                map.setView(arrow[f].getBounds().pad(15).getCenter(), 0);
-                qrMarker.openPopup();
-
-            // Si la planta actual (current) no es ni la que tengo que mostrar, ni la que tengo que ocultar
-            // Por ejemplo en ruta desde la -1 hasta la 1 pasando poor la 0
-            } else {
-
-                for (var l in floors[f].labels) {
-                    if(floors[f].labels[l].e)
-                    {
-                        layersControl.removeLayer(floors[f].labels[l].e);
-                        map.removeLayer(floors[f].labels[l].layer);
-                    }
-                }
-
-                map.removeLayer(floors[f].photo);
-            }
-//MONOPLANTA
-        } else {
-            if (route.fields.destiny.fields.floor !== floors[f].id) {
-                map.removeLayer(floors[f].layer);
-                map.removeLayer(floors[f].photo);
-                for (var l in floors[f].labels) {
-                    layersControl.removeLayer(floors[f].labels[l].layer);
-                    map.removeLayer(floors[f].labels[l].layer);
-                }
-
-            }
-            else {
-
-                map.addLayer(floors[f].layer);
-                map.addLayer(floors[f].photo);
-
-                for (var l in floors[f].labels) {
-                    if ($('input[type=checkbox].leaflet-control-layers-selector:eq(' + l + ')').is(':checked')) {
-                        checked = l;
-                    }
-                }
-
-                for (var l in floors[f].labels) {
-                    layersControl.addOverlay(floors[f].labels[l].layer, '<i class="icon-' + floors[f].labels[l].fields.icon + ' icon-white"></i>');
-                    if (checked == l) {
-                        map.addLayer(floors[f].labels[l].layer);
-                        $('input[type=checkbox].leaflet-control-layers-selector:eq(' + l + ')').css('background', floors[f].labels[l].fields.color);
-                    }
-                }
-
-
-//                map.setView(arrow[f].getBounds().pad(15).getCenter(), 0);
-                map.addLayer(arrowHead[f]);
-                flechita = arrowHead[f];
-                arrowAnim(flechita, floors[f].name);
-//                map.setView(arrow[f].getBounds().pad(15).getCenter(), 0);
-            }
+    for (var l in floors_indexed[floorToShow].labels) {
+        layersControl.addOverlay(floors_indexed[floorToShow].labels[l].layer, '<i class="icon-' + floors_indexed[floorToShow].labels[l].fields.icon + ' icon-white"></i>');
+        if (checked == l) {
+            map.addLayer(floors_indexed[floorToShow].labels[l].layer);
+            $('input[type=checkbox].leaflet-control-layers-selector:eq(' + l + ')').css('background', floors_indexed[floorToShow].labels[l].fields.color);
         }
     }
+
+//    map.addLayer(arrowHead[f]);
+//    flechita = arrowHead[f];
+//    arrowAnim(flechita, floors_indexed[floorToShow].name);
+//                map.setView(arrow[f].getBounds().pad(15).getCenter(), 0);
+    qrMarker.openPopup();
+
+//    for (var f in floors) {
+//        if (route.fields.origin.fields.floor !== route.fields.destiny.fields.floor) {
+//
+//            // Si la planta que tengo que ocultar es la current
+//            if (floorToHide === floors[f].id) {
+//                map.removeLayer(floors[f].layer);
+//
+//                for (var l in floors[f].labels) {
+//                    layersControl.removeLayer(floors[f].labels[l].layer);
+//                    map.removeLayer(floors[f].labels[l].layer);
+//                }
+//
+//                map.removeLayer(floors[f].photo);
+//
+//            // Si la planta que tengo que mostrar es la current
+//            } else if (floorToShow === floors[f].id) {
+//                map.addLayer(floors[f].layer);
+//                map.addLayer(floors[f].photo);
+//
+//                for (var l in floors[f].labels) {
+//                    layersControl.addOverlay(floors[f].labels[l].layer, '<i class="icon-' + floors[f].labels[l].fields.icon + ' icon-white"></i>');
+//                    if (checked == l) {
+//                        map.addLayer(floors[f].labels[l].layer);
+//                        $('input[type=checkbox].leaflet-control-layers-selector:eq(' + l + ')').css('background', floors[f].labels[l].fields.color);
+//                    }
+//                }
+//
+////                for (var l in floors[f].labels) {
+////                    if (checked == l) {
+////                        jQuery('input[type=checkbox].leaflet-control-layers-selector:eq(' + l + ')').css('background', floors[f].labels[l].fields.color);
+////                        jQuery('input[type=checkbox].leaflet-control-layers-selector:eq(' + l + ')').prop("checked", true);
+////                    }
+////                }
+//                map.addLayer(arrowHead[f]);
+//                flechita = arrowHead[f];
+//                arrowAnim(flechita, floors[f].name);
+////                map.setView(arrow[f].getBounds().pad(15).getCenter(), 0);
+//                qrMarker.openPopup();
+//
+//            // Si la planta actual (current) no es ni la que tengo que mostrar, ni la que tengo que ocultar
+//            // Por ejemplo en ruta desde la -1 hasta la 1 pasando poor la 0
+//            } else {
+//
+//                for (var l in floors[f].labels) {
+//                    if(floors[f].labels[l].e)
+//                    {
+//                        layersControl.removeLayer(floors[f].labels[l].e);
+//                        map.removeLayer(floors[f].labels[l].layer);
+//                    }
+//                }
+//
+//                map.removeLayer(floors[f].photo);
+//            }
+////MONOPLANTA
+//        } else {
+//            if (route.fields.destiny.fields.floor !== floors[f].id) {
+//                map.removeLayer(floors[f].layer);
+//                map.removeLayer(floors[f].photo);
+//                for (var l in floors[f].labels) {
+//                    layersControl.removeLayer(floors[f].labels[l].layer);
+//                    map.removeLayer(floors[f].labels[l].layer);
+//                }
+//
+//            }
+//            else {
+//
+//                map.addLayer(floors[f].layer);
+//                map.addLayer(floors[f].photo);
+//
+//                for (var l in floors[f].labels) {
+//                    if ($('input[type=checkbox].leaflet-control-layers-selector:eq(' + l + ')').is(':checked')) {
+//                        checked = l;
+//                    }
+//                }
+//
+//                for (var l in floors[f].labels) {
+//                    layersControl.addOverlay(floors[f].labels[l].layer, '<i class="icon-' + floors[f].labels[l].fields.icon + ' icon-white"></i>');
+//                    if (checked == l) {
+//                        map.addLayer(floors[f].labels[l].layer);
+//                        $('input[type=checkbox].leaflet-control-layers-selector:eq(' + l + ')').css('background', floors[f].labels[l].fields.color);
+//                    }
+//                }
+//
+//
+////                map.setView(arrow[f].getBounds().pad(15).getCenter(), 0);
+//                map.addLayer(arrowHead[f]);
+//                flechita = arrowHead[f];
+//                arrowAnim(flechita, floors[f].name);
+////                map.setView(arrow[f].getBounds().pad(15).getCenter(), 0);
+//            }
+//        }
+//    }
 
     if (map.hasLayer(destMarker)) {
         destMarker.openPopup();
@@ -1339,6 +1377,7 @@ Map.locateCar = function () {
     for (var i in floors) {
         if (floors[i].id === miCoche.floor.id) {
             floor_x = floors[i];
+            current_floor = floor_x;
             carLoc = [((miCoche.point.row) * floor_x.scaleY) + floor_x.scaleY,
                 (miCoche.point.col * floor_x.scaleX) + floor_x.scaleX];
             carMarker = new L.marker(carLoc, {
@@ -1410,6 +1449,7 @@ Map.locatePosition = function () {
     for (var i in floors) {
         if (floors[i].id === qrFloor.id) {
             floor_x = floors[i];
+            current_floor = floor_x;
         } else {
             map.removeLayer(floors[i].layer);
             map.removeLayer(floors[i].photo);
