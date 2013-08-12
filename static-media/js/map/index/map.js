@@ -1414,25 +1414,6 @@ Map.locatePosition = function () {
     for (var i in floors) {
         if (floors[i].id === qrFloor.id) {
             floor_x = floors[i];
-            for (var l in floors[i].labels) {
-                layersControl.addOverlay(floor_x.labels[l].layer, '<i class="icon-' + floors[i].labels[l].fields.icon + ' icon-white"></i>');
-                if (checked == l) {
-                    map.addLayer(floor_x.labels[l].layer);
-                }
-            }
-
-            map.addLayer(floor_x.photo);
-            map.addLayer(floor_x.layer);
-
-            if (arrowHead[i] && subarrow[i]) {
-                map.addLayer(arrowHead[i]);
-                flechita = arrowHead[i];
-                arrowAnim(flechita, floor_x.name);
-                map.setView(arrow[i].getBounds().pad(15).getCenter(), 0);
-            } else {
-                map.setView(qrLoc, 0);
-            }
-
         } else {
             map.removeLayer(floors[i].layer);
             map.removeLayer(floors[i].photo);
@@ -1453,6 +1434,25 @@ Map.locatePosition = function () {
 //            }
         }
     }
+
+
+    map.addLayer(floor_x.photo);
+    map.addLayer(floor_x.layer);
+    for (var l in floor_x.labels) {
+        layersControl.addOverlay(floor_x.labels[l].layer, '<i class="icon-' + floor_x.labels[l].fields.icon + ' icon-white"></i>');
+        if (checked == l) {
+            map.addLayer(floor_x.labels[l].layer);
+        }
+    }
+//    if (arrowHead[i] && subarrow[i]) {
+//        map.addLayer(arrowHead[i]);
+//        flechita = arrowHead[i];
+//        arrowAnim(flechita, floor_x.name);
+//        map.setView(arrow[i].getBounds().pad(15).getCenter(), 0);
+//    } else {
+//        map.setView(qrLoc, 0);
+//    }
+
 
     for (var lab in qrFloor.labels) {
         if (checked == lab) {
