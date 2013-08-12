@@ -1222,7 +1222,7 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
                     if (checked == l) {
                         map.addLayer(floors[f].labels[l].layer);
                         $('input[type=checkbox].leaflet-control-layers-selector:eq(' + l + ')').css('background', floors[f].labels[l].fields.color);
-                        break;
+//                        break;
                     }
                 }
 
@@ -1232,7 +1232,7 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
                 flechita = arrowHead[f];
                 arrowAnim(flechita, floors[f].name);
 //                map.setView(arrow[f].getBounds().pad(15).getCenter(), 0);
-                break;
+//                break;
             }
         }
     }
