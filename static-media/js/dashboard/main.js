@@ -29,12 +29,19 @@ function drawGraph(svgId, chartType, data) {
 }
 
 
-var scansByCat = dashBoardResource.getScansByCategory(16),
+var scansByCat = dashBoardResource.getScansByCategory(enclosure_id),
     totalScans = scansByCat,
-    totalRoutes = dashBoardResource.getDisplayedRoutesByCategory(16),
+    totalRoutes = dashBoardResource.getDisplayedRoutesByCategory(enclosure_id),
     routesByCat = totalRoutes,
-    topScans = dashBoardResource.getScansForTopPois(16),
-    topRoutes = dashBoardResource.getDisplayedRoutesForTopPois(16);
+    topScans = dashBoardResource.getScansForTopPois(enclosure_id),
+    topRoutes = dashBoardResource.getDisplayedRoutesForTopPois(enclosure_id);
+
+
+function rotate_x_labels(chart)
+{
+    chart.xAxis.rotateLabels(-45);
+    chart.margin({bottom:120, left:60});
+}
 
 //TOTAL SCANS
 nv.addGraph(function () {
@@ -45,18 +52,23 @@ nv.addGraph(function () {
         .y(function (d) {
             return d.value
         })
-        .staggerLabels(true)
+//        .staggerLabels(true)
         .tooltips(false)
         .showValues(true);
+
+    rotate_x_labels(chart);
+//    chart.xAxis.rotateLabels(x_axis_labels_rotation);
+//    chart.margin({bottom:120, left:120});
 
     d3.select('#chart0')
         .datum(totalScans)
         .transition().duration(500)
         .call(chart);
 
-    //chart.margin({top:0, right:0, bottom:0, left:-20});
     //chart.width(352);
+
     nv.utils.windowResize(chart.update);
+
 
     return chart;
 });
@@ -71,9 +83,11 @@ nv.addGraph(function () {
             return d.value
         })
 //.color(d3.scale.category20c().range())
-        .staggerLabels(true)
+//        .staggerLabels(true)
         .tooltips(true)
         .showValues(true);
+
+    rotate_x_labels(chart);
 
     d3.select('#chart1')
         .datum(totalRoutes)
@@ -81,6 +95,7 @@ nv.addGraph(function () {
         .call(chart);
 
     nv.utils.windowResize(chart.update);
+
 
     return chart;
 });
@@ -101,13 +116,15 @@ nv.addGraph(function () {
         .y(function (d) {
             return d.value
         })
-        //.labelThreshold(-.03)
-        .showLabels(true)
+        .labelThreshold(-.03)
+        .showLabels(false)
         .color(d3.scale.myColors().range())
         //.color(['blue', 'green', 'yellow'])
         .donut(true);
 
-    chart.pie.donutLabelsOutside(true);
+//    chart.margin({left:0, top:100});
+
+    chart.pie.donutLabelsOutside(false);
     d3.select("#chart2")
         .datum(scansByCat)
         .transition().duration(1200)
@@ -150,9 +167,11 @@ nv.addGraph(function () {
             return d.value
         })
 //.color(d3.scale.category20c().range())
-        .staggerLabels(true)
+//        .staggerLabels(true)
         .tooltips(false)
         .showValues(true);
+
+    rotate_x_labels(chart);
 
     d3.select('#chart4')
         .datum(topScans)
@@ -173,9 +192,11 @@ nv.addGraph(function () {
             return d.value
         })
 //.color(d3.scale.category10().range())
-        .staggerLabels(true)
+//        .staggerLabels(true)
         .tooltips(false)
         .showValues(true);
+
+    rotate_x_labels(chart);
 
     d3.select('#chart5')
         .datum(topRoutes)
@@ -184,5 +205,26 @@ nv.addGraph(function () {
 
     nv.utils.windowResize(chart.update);
 
+//    rotate_x_labels(chart, '#chart5');
+//    chart.xAxis.rotateLabels(-45);
     return chart;
 });
+
+
+//
+//function rotate_x_labels(chart, chartId)
+//{
+////    chart.margin({bottom: 60});
+//    var xTicks = d3.select(chartId).select('.nv-x.nv-axis > g').selectAll('g');
+//    xTicks
+//        .selectAll('text')
+//        .style("text-anchor", "end")
+//            .attr("dx", "-.8em")
+//            .attr("dy", ".15em")
+//            .attr("transform", function(d) {
+//                return "rotate(-65)"
+//            });
+////        .attr('transform', function(d,i,j) { return 'translate (-10, 25) rotate(-45 0,0)' })
+////        .attr('text-anchor', 'right');
+//}
+

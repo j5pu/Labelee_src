@@ -29,7 +29,10 @@
     </style>
  {% endblock %}
 {% block js %}
-    <script>//AÑADIR TITULO REAL</script>
+    <script>
+        //AÑADIR TITULO REAL
+        var enclosure_id = {{ enclosure_id }};
+    </script>
     <script src="{{ STATIC_URL }}vendor/NVD3.js    Live Code examples powered by CodeMirror_files/d3.v2.js"></script>
     <!--script src="{{ STATIC_URL }}vendor/NVD3.js    Live Code examples powered by CodeMirror_files/fisheye.js"></script-->
     <script src="{{ STATIC_URL }}vendor/NVD3.js    Live Code examples powered by CodeMirror_files/nv.d3.js"></script>

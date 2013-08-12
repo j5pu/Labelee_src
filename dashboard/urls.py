@@ -4,7 +4,7 @@ from dashboard.services import scans_by_category
 
 urlpatterns = patterns('dashboard.views',
 
-    url(r'^$', 'index', name='dashboard__index'),
+    url(r'^(?P<enclosure_id>\d+)$', 'index', name='dashboard__index'),
 
     # SERVICIOS
     url(r'^Services/CreateDisplayedRoute', 'saveRouteRequest'),

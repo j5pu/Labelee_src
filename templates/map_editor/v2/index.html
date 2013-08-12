@@ -112,8 +112,8 @@
                     <div class="urls">
                         <a ng-show="enclosure.url_enclosure"
                            href="[[enclosure.url_enclosure | url]]"><i class="icon-link"></i>{% trans  "Web del recinto" %}</a>
-                        <a ng-show="enclosure.url_dashboard"
-                           href="[[enclosure.url_dashboard | url]]"><i class="icon-dashboard"></i>{% trans  "Ver dashboard" %}</a>
+                        <a
+                           href="/dashboard/[[enclosure.id]]"><i class="icon-dashboard"></i>{% trans  "Ver dashboard" %}</a>
                     </div>
 
                     <div class="buttons">
