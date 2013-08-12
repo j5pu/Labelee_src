@@ -355,7 +355,7 @@ function loopFloors() {
     //floors[floor_index].img||
     var floorImg = new Image();
     floorImg.src = img;
-    var solotxt="/media/img/enclosures/26/floors/solotextos.gif";
+//    var solotxt="/media/img/enclosures/26/floors/solotextos.gif";
 
     floorImg.onload = function () {
 //        var mapH = (floorImg.height / floorImg.width) * mapW;
@@ -369,10 +369,10 @@ function loopFloors() {
 
         floors[floor_index].photo = new L.LayerGroup();
         floors[floor_index].img= new L.imageOverlay(img, bounds);
-        floors[floor_index].solotxt= new L.imageOverlay(solotxt, bounds);
+//        floors[floor_index].solotxt= new L.imageOverlay(solotxt, bounds);
 
         floors[floor_index].photo.addLayer(floors[floor_index].img);
-        floors[floor_index].photo.addLayer(floors[floor_index].solotxt);
+//        floors[floor_index].photo.addLayer(floors[floor_index].solotxt);
 
 /*
         var centerHeading = [(floors[floor_index].num_rows/4)*3 *floors[floor_index].scaleY + (floors[floor_index].scaleY),
@@ -418,7 +418,6 @@ function loadPOIs() {
         floors[fl].layer = new L.LayerGroup();
 
         for (j = 0; j < floors[fl].pois.length; j++) {
-            console.log(floors[fl].pois[j].id);
             if (floors[fl].pois[j].id === poi_id) {
                 // Si es el último no hacemos nada. Si no, lo sacamos
                 if (j == floors[fl].pois.length-1)
@@ -722,11 +721,6 @@ function loadHeadings(n) {
 
 }
 
-$('input[type=checkbox].leaflet-control-layers-selector').on('click change', function(e){
-    addCategory(e);
-});
-
-
 //EVENTOS - Añadir layer
 map.on('layeradd', function (e) {
     addCategory(e);
@@ -773,11 +767,13 @@ function addCategory(e) {
                 $(this).prop('checked', true);
                 for(var i in floors)
                 {
-                    map.removeLayer(floors[i].labels[checked].layer);
+                    if(floors[0].labels && floors[0].labels[checked])
+                        map.removeLayer(floors[i].labels[checked].layer);
                 }
                 checked = index;
-                $('input[type=checkbox].leaflet-control-layers-selector:eq(' + checked + ')')
-                    .css('background', floors[0].labels[checked].fields.color);
+                if(floors[0].labels && floors[0].labels[checked])
+                    $('input[type=checkbox].leaflet-control-layers-selector:eq(' + checked + ')')
+                        .css('background', floors[0].labels[checked].fields.color);
                 return false;
             }
         });
@@ -788,8 +784,11 @@ function addCategory(e) {
             if($(this).is(':checked'))
             {
                 checked = index;
-                $('input[type=checkbox].leaflet-control-layers-selector:eq(' + checked + ')')
-                    .css('background', floors[0].labels[checked].fields.color);
+                if(floors[0].labels && floors[0].labels[checked])
+                {
+                    $('input[type=checkbox].leaflet-control-layers-selector:eq(' + checked + ')')
+                        .css('background', floors[0].labels[checked].fields.color);
+                }
                 return false;
             }
         });
@@ -1165,7 +1164,7 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
                     if (checked == l) {
                         map.addLayer(floors[f].labels[l].layer);
                         $('input[type=checkbox].leaflet-control-layers-selector:eq(' + l + ')').css('background', floors[f].labels[l].fields.color);
-                        break;
+//                        break;
                     }
                 }
 
@@ -1187,8 +1186,11 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
             } else {
 
                 for (var l in floors[f].labels) {
-                    layersControl.removeLayer(floors[f].labels[l].layer);
-                    map.removeLayer(floors[f].labels[l].layer);
+                    if(floors[f].labels[l].e)
+                    {
+                        layersControl.removeLayer(floors[f].labels[l].e);
+                        map.removeLayer(floors[f].labels[l].layer);
+                    }
                 }
 
                 map.removeLayer(floors[f].photo);
@@ -1435,7 +1437,6 @@ Map.locatePosition = function () {
             map.removeLayer(floors[i].layer);
             map.removeLayer(floors[i].photo);
 
-
             for (var l in floors[i].labels) {
                 layersControl.removeLayer(floors[i].labels[l].layer);
                 map.removeLayer(floors[i].labels[l].layer);
@@ -1443,8 +1444,14 @@ Map.locatePosition = function () {
 
             if (arrowHead[i] != null)
                 map.removeLayer(arrowHead[i]);
-        }
 
+//            if(layersControl._overlaysList.childElementCount > 8)
+//            {
+//                for (var l=8;l<floors[i].labels.length-1; l++) {
+//                    layersControl.removeLayer(floors[i].labels[l].layer);
+//                }
+//            }
+        }
     }
 
     for (var lab in qrFloor.labels) {

@@ -236,6 +236,8 @@ td *
     display: inline-block;
     margin-top: 0.27em;
     margin: 0.15em;
+    font-size: 1.2em;
+    padding: 0.2em 0.6em;
 }
 
 #logout a

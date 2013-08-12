@@ -135,6 +135,9 @@ def delete_file(fileField):
 
 
 def resize_img_width(img_path, fixed_width):
+    """
+    Redimensiona una imágen dado el ancho deseado y la ruta donde queremos guardarla
+    """
     img = Image.open(img_path)
     if img.size[0] != fixed_width:
         wpercent = (fixed_width / float(img.size[0]))

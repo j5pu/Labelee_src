@@ -52,7 +52,9 @@
                         {% if user.is_authenticated %}
                             <div id="logout" class="box box-1">
                                 {% trans "Bienvenido" %}, {{ user.username }}
-                                <a href="{% url 'django.contrib.auth.views.logout' %}"> <i class="icon-signout"></i> Logout</a>
+                                <a class="link-1" href="{% url 'django.contrib.auth.views.logout' %}">
+                                    <i class="icon-signout"></i> {% trans "Salir" %}
+                                </a>
                             </div>
                         {% endif %}
                     </li>

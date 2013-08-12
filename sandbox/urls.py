@@ -1,6 +1,5 @@
-from django.conf.urls.defaults import *
-
 # /sandbox/..
+from django.conf.urls import patterns, url
 
 urlpatterns = patterns('sandbox.views',
 
@@ -33,5 +32,8 @@ urlpatterns = patterns('sandbox.views',
 	url(r'^i18n-2$', 'i18n_2'),
 
 	url(r'^db-log$', 'dblog'),
+)
 
+urlpatterns += patterns('',
+    url(r'^grid-processor/(?P<floor_id>\d+)$', 'sandbox.grid_processor.services.process'),
 )
