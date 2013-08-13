@@ -25,7 +25,7 @@ var Floor = {
     init: function()
     {
         Floor._getData();
-        Floor.img.src = Floor.data.img;
+        Floor.img.src = Floor.data.img || Floor.data.imgB;
         Floor.img.onload = function(){
 
             //

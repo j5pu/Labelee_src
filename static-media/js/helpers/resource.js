@@ -178,7 +178,7 @@ function Resource(resource_name) {
 		// xej para la planta con id 16:
 		//		POST -> /api-2/floor/16/img
 
-		var action_url = this.api2_url + element_id + '/img';
+		var action_url = this.api2_url + element_id + '/img/';
 		form.attr('action', action_url);
 
 		// mandamos el formulario, no sin antes agregarle el csrfmiddlewaretoken
@@ -191,12 +191,12 @@ function Resource(resource_name) {
 	};
 
 
-    this.delImg = function(element_id){
+    this.delImg = function(element_id, img_field){
 
         //		DELETE -> /api-2/floor/16/img
 
         $.ajax({
-            url : this.api2_url + element_id + '/img',
+            url : this.api2_url + element_id + '/img/?field=' + img_field,
             type : 'delete',
             headers : {
                 'Content-Type' : 'application/json'
@@ -509,7 +509,7 @@ function PointResource()
     this.readConnectionsFromEnclosure = function(enclosure_id)
     {
         return this.readAllFiltered(
-            '?label__category__name__icontains=arista' +
+            '?label__category__name_en__iexact=Connectors' +
                 '&floor__enclosure__id=' + enclosure_id +
                 '&order_by=description'
         );
@@ -661,6 +661,32 @@ function DashboardResource()
 }
 
 
+function CouponResource()
+{
+    Resource.call(this, 'coupon');
+
+    this.coupons_url = '/coupon/';
+
+    this.getManager = function()
+    {
+        // /coupon/manager/
+        return ajaxGetElements(this.coupons_url, 'manager/');
+    };
+
+    this.getCoupon = function(label_id)
+    {
+        // /coupon/manager/label/<label_id>
+        return ajaxGetElements(this.coupons_url, 'label/' + label_id);
+    };
+
+    this.delCoupon = function(label_id)
+    {
+        // /coupon/manager/label/<label_id>
+        return ajaxGetElements(this.coupons_url, 'label/' + label_id);
+    };
+}
+
+
 FloorResource.prototype = new Resource();
 var floorResource = new FloorResource();
 LabelResource.prototype = new Resource();
@@ -678,3 +704,4 @@ UserResource.prototype = new Resource();
 var userResource = new UserResource();
 var qrCodeResource = new QrCodeResource();
 var dashBoardResource = new DashboardResource();
+var couponResource = new CouponResource();

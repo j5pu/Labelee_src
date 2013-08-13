@@ -13,11 +13,13 @@ from map_editor.models import Point
 import settings
 
 @login_required(login_url=settings.LOGIN_URL)
-def index(request):
+def index(request, enclosure_id):
 
     # translation.activate(request.session['django_language'])
-
-    return render_to_response('dashboard/index.html', context_instance=RequestContext(request))
+    ctx = {
+        'enclosure_id': enclosure_id
+    }
+    return render_to_response('dashboard/index.html', ctx, context_instance=RequestContext(request))
 
 
 

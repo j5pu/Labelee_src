@@ -47,11 +47,14 @@
 {#                        </div>#}
 {#                    </li>#}
 {#                    <li>#}
+                    <li>
                         <!-- CAJITA DE LOGOUT -->
                         {% if user.is_authenticated %}
                             <div id="logout" class="box box-1">
                                 {% trans "Bienvenido" %}, {{ user.username }}
-                                <a href="{% url 'django.contrib.auth.views.logout' %}"> <i class="icon-signout"></i> Logout</a>
+                                <a class="link-1" href="{% url 'django.contrib.auth.views.logout' %}">
+                                    <i class="icon-signout"></i> {% trans "Salir" %}
+                                </a>
                             </div>
                         {% endif %}
                     </li>
@@ -109,8 +112,8 @@
                     <div class="urls">
                         <a ng-show="enclosure.url_enclosure"
                            href="[[enclosure.url_enclosure | url]]"><i class="icon-link"></i>{% trans  "Web del recinto" %}</a>
-                        <a ng-show="enclosure.url_dashboard"
-                           href="[[enclosure.url_dashboard | url]]"><i class="icon-dashboard"></i>{% trans  "Ver dashboard" %}</a>
+                        <a
+                           href="/dashboard/[[enclosure.id]]"><i class="icon-dashboard"></i>{% trans  "Ver dashboard" %}</a>
                     </div>
 
                     <div class="buttons">

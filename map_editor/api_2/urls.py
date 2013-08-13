@@ -6,7 +6,7 @@ from django.conf.urls.defaults import *
 urlpatterns = patterns('map_editor.api_2',
 
 	# /api-2/map/16/img
-	url(r'^(?P<resource>.*)/(?P<id>\d*)/img$', 'services.views.img'),
+	url(r'^(?P<resource>.*)/(?P<id>\d*)/img/$', 'services.views.img'),
 
     # ENCLOSURE
 	url(r'^enclosure/manager/$', 'resources.enclosure.manager'),

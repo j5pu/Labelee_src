@@ -5,7 +5,7 @@ from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.http import HttpResponse
 import sys
-from map_editor.models import Point
+from map_editor.models import Point, Floor
 
 
 def angular(request):

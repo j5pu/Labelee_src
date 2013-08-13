@@ -23,14 +23,31 @@
         };
 }());
 
+var blinkingMode = null;
+function blinker(element) {
+    if (blinkingMode != null && element != null && element.parentElement.innerText.trimLeft() == blinkingMode) {
+        var color = element.style.background;
+        if (color == "red") {
+            element.style.background = "";
+        } else {
+            element.style.background = "red";
+        }
+        window.setTimeout(function () {
+            blinker(element);
+        }, 1000);
+    } else {
+        if (element != null) element.style.background = "";
+    }
+}
+
+
 var Map = {};
 
 var showOrigin = false;
 
 //Configuración de iconos
 
-var myIcon = L.divIcon({className: 'my-div-icon'});
-// you can set .my-div-icon styles in CSS
+//var txtIcon = L.divIcon({className: 'txt-icon'});
 var carIcon = L.divIcon({className: 'my-div-icon car-icon'}),
     destIcon = L.divIcon({className: 'my-div-icon dest-icon'}),
     originIcon = L.divIcon({className: 'my-div-icon locate-icon'});
@@ -40,7 +57,7 @@ var txtIcon = new L.icon({
     iconSize: [1, 1],
     iconAnchor: [0, 0],
     //popupAnchor: [0,0],
-    labelAnchor: [-46, 6]
+    labelAnchor: [-12, 17]
 });
 
 
@@ -288,7 +305,15 @@ var mapW = Math.min($(window).innerWidth(), $(window).innerHeight()),
     destMarker = new L.Marker(),
     subpath = [],
     subarrow = [],
-    floors = new FloorResource().readFromEnclosure(qrPoint.enclosure.id);
+    floors_indexed = {},
+    current_floor = null,
+    floors = floorResource.readFromEnclosure(qrPoint.enclosure.id);
+
+    // Indexamos la lista de plantas por su id
+    for(var i in floors)
+    {
+        floors_indexed[floors[i].id] = floors[i];
+    }
 
 
 //POIs de cada floor, separados para pintarlos por capas
@@ -303,8 +328,8 @@ var name = null, img;
 function loopFloors() {
     if (floor_index == floors.length) {
         loadPOIs();
-        LocalStorageHandler.draw();
         initMap(qrPoint);
+        LocalStorageHandler.draw();
         $('div#cupones, div#header, span.locator, div#marquee').show();
 //recolocar controles
         $('span:has(i.icon-film)').css('left', '11px');
@@ -324,16 +349,22 @@ function loopFloors() {
 
     name = floors[floor_index].name;
 
+/*
    if (!Modernizr.svg) {
         img = floors[floor_index].imgB;
 //       Logger.log('png');
     }
 
    else {
-    img = floors[floor_index].img || floors[floor_index].imgB;
+    img = floors[floor_index].img;
    }
+*/
+    img = floors[floor_index].imgB;
+    //floors[floor_index].img||
     var floorImg = new Image();
     floorImg.src = img;
+//    var solotxt="/media/img/enclosures/26/floors/solotextos.gif";
+
     floorImg.onload = function () {
 //        var mapH = (floorImg.height / floorImg.width) * mapW;
         var mapH=mapW;
@@ -342,7 +373,28 @@ function loopFloors() {
         floors[floor_index].scaleX = mapW / floors[floor_index].num_cols;
         floors[floor_index].scaleY = mapH / floors[floor_index].num_rows;
         floors[floor_index].bounds = bounds;
-        floors[floor_index].photo = new L.imageOverlay(img, bounds);
+//        floors[floor_index].photo= new L.imageOverlay(img, bounds);
+
+        floors[floor_index].photo = new L.LayerGroup();
+        floors[floor_index].img= new L.imageOverlay(img, bounds);
+//        floors[floor_index].solotxt= new L.imageOverlay(solotxt, bounds);
+
+        floors[floor_index].photo.addLayer(floors[floor_index].img);
+//        floors[floor_index].photo.addLayer(floors[floor_index].solotxt);
+
+/*
+        var centerHeading = [(floors[floor_index].num_rows/4)*3 *floors[floor_index].scaleY + (floors[floor_index].scaleY),
+            floors[floor_index].num_cols/3.5 * floors[floor_index].scaleX + (floors[floor_index].scaleX)];
+
+        floors[floor_index].heading= new L.marker(centerHeading, {icon: txtIcon})
+            .bindLabel('ALCALA MAGNA', { noHide: true })
+            .addTo(floors[floor_index].photo)
+            //.addTo(map)
+            .showLabel();
+*/
+
+
+
 /*
         floors[floor_index].photo = new L.geoJson(mimapa, {
                 style: function (feature) {
@@ -376,7 +428,7 @@ function loadPOIs() {
         for (j = 0; j < floors[fl].pois.length; j++) {
             if (floors[fl].pois[j].id === poi_id) {
                 // Si es el último no hacemos nada. Si no, lo sacamos
-                if (j == floors[fl].pois.length)
+                if (j == floors[fl].pois.length-1)
                     break;
                 else
                     floors[fl].pois.splice(j, 1);
@@ -397,7 +449,7 @@ function loadPOIs() {
                     floors[fl].pois[j].center_y * sX + (sX)],
                 labelid = floors[fl].pois[j].label.id,
                 category = floors[fl].pois[j].label.category.name,
-                category_es = floors[fl].pois[j].label.category.name_es;
+                category_en = floors[fl].pois[j].label.category.name_en;
 
             var popupTitle = description;
             if (panorama) {
@@ -405,7 +457,7 @@ function loadPOIs() {
             }
             popupTitle += SocialMenu.renderIcon(id);
 
-            floors[fl].pois[j].marker =new L.marker(loc, {
+            floors[fl].pois[j].marker =new L.marker(center, {
                 icon: loadIcon(shapeIcon)});
 
             floors[fl].pois[j].marker.poid = id;
@@ -415,7 +467,7 @@ function loadPOIs() {
             floors[fl].pois[j].marker.loc = loc;
             floors[fl].pois[j].marker.center = center;
             floors[fl].pois[j].marker.category = category;
-            floors[fl].pois[j].marker.category_es = category_es;
+            floors[fl].pois[j].marker.category_en = category_en;
             floors[fl].pois[j].marker.label = labelid;
             floors[fl].pois[j].marker.panorama = panorama;
             floors[fl].pois[j].marker.coupon = coupon;
@@ -453,11 +505,11 @@ function loadPOIs() {
                 }
             }
 
-            if (isCategoryVisibleOnButtons(floors[fl].pois[j].marker.category_es))
+            if (isCategoryVisibleOnButtons(floors[fl].pois[j].marker.category_en))
                 totalPois.addLayer(floors[fl].pois[j].marker);
 
-            if (isPoiVisibleByDefault(floors[fl].pois[j].marker.category_es))
-                floors[fl].layer.addLayer(floors[fl].pois[j].marker);
+            if (isPoiVisibleByDefault(floors[fl].pois[j].marker.category_en))
+               floors[fl].layer.addLayer(floors[fl].pois[j].marker);
         }
 
 
@@ -561,6 +613,7 @@ function initMap(qrPoint) {
 
         if (floors[i].id === qrPoint.floor.id) {
             qrFloor = floors[i];
+            current_floor = floors[i];
             map.addLayer(qrFloor.photo);
             map.addLayer(qrFloor.layer);
 
@@ -578,11 +631,15 @@ function initMap(qrPoint) {
             bindContent(qrMarker);
             map.setMaxBounds(map.getBounds());
             qrMarker.openPopup();
+            qrMarker._bringToFront();
+
 
             if (qrPoint.point.coupon) {
                 $('div.leaflet-popup-content-wrapper').addClass('withCoupon');
             }
             bindContent(qrMarker);
+
+            //loadHeadings(i);
 
         }
     }
@@ -599,6 +656,79 @@ function initMap(qrPoint) {
 //    map.invalidateSize();
 }
 
+function escapeHtml(unsafe) {
+    return unsafe
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+}
+
+function drawHeadings(n){
+    var descr = escapeHtml(floors[n].pois[p].description);
+    L.marker(floors[n].pois[p].marker.center, {icon: txtIcon})
+        .bindLabel(descr, { noHide: true })
+        .addTo(floors[n].layer)
+        .showLabel();
+    var $myLabel = $('div.leaflet-label:contains(' + descr + ')');
+    var $width = $myLabel.width();
+    $myLabel.css('margin-left', -$width / 2);
+
+    if (floors[n].pois[p].isVertical) {
+        $myLabel.addClass('isVertical');
+    }
+}
+
+function loadHeadings(n) {
+    for (var p in floors[n].pois) {
+
+        if (map.getZoom() < 2)
+        {
+            if (floors[n].pois[p].alwaysVisible)
+            {
+                var descr = escapeHtml(floors[n].pois[p].description);
+                L.marker(floors[n].pois[p].marker.center, {icon: txtIcon})
+                    .bindLabel(descr, { noHide: true })
+                    .addTo(floors[n].layer)
+                    .showLabel();
+                var $myLabel = $('div.leaflet-label:contains(' + descr + ')');
+                var $width = $myLabel.width();
+                $myLabel.css('margin-left', -$width / 2);
+
+                if (floors[n].pois[p].isVertical) {
+                    $myLabel.addClass('isVertical');
+                }
+
+            }
+        }
+        else
+        {
+            var descr = escapeHtml(floors[n].pois[p].description);
+            L.marker(floors[n].pois[p].marker.center, {icon: txtIcon})
+                .bindLabel(descr, { noHide: true })
+                .addTo(floors[n].layer)
+                .showLabel();
+            var $myLabel = $('div.leaflet-label:contains(' + descr + ')');
+            var $width = $myLabel.width();
+            $myLabel.css('margin-left', -$width / 2);
+
+            if (floors[n].pois[p].isVertical) {
+                $myLabel.addClass('isVertical');
+            }
+
+        }
+    }
+
+    var centerHeading = [(floors[n].num_rows/5)*4 *floors[n].scaleY + (floors[n].scaleY),
+        floors[n].num_cols/5 * floors[n].scaleX + (floors[n].scaleX)];
+
+    L.marker(centerHeading, {icon: txtIcon})
+        .bindLabel('ALCALA MAGNA - Planta '+floors[n].name, { noHide: true })
+        .addTo(floors[n].layer)
+        .showLabel();
+
+}
 
 //EVENTOS - Añadir layer
 map.on('layeradd', function (e) {
@@ -614,26 +744,8 @@ map.on('baselayerchange', function (e) {
     changeFloor(e);
 });
 
-/*$('#route-button').on('click', function(){
-alert('GO!');
-});*/
 
 // Sacar panorámica para el punto
-
-function addCategory(e) {
-    // Cada vez que añade una layer se dispara esto
-    for (var i in floors) {
-        for (var l in floors[i].labels) {
-            if (map.hasLayer(floors[i].labels[l].layer) &&
-                $('input[type=checkbox].leaflet-control-layers-selector:eq(' + l + ')').is(':checked')) {
-                $('input[type=checkbox].leaflet-control-layers-selector:eq(' + l + ')').css('background', floors[i].labels[l].fields.color);
-            }
-        }
-    }
-
-    setIconColor();
-}
-
 function setIconColor()
 {
     for(var i in floors)
@@ -647,6 +759,97 @@ function setIconColor()
     }
 
 }
+
+function addCategory(e) {
+
+    var selected_category = e.layer.category;
+
+    // Si había un selector antes del nuevo
+    if($('input[type=checkbox].leaflet-control-layers-selector:checked').length == 2)
+    {
+        $('input[type=checkbox].leaflet-control-layers-selector').each(function(index){
+            if($(this).is(':checked') && index != checked)
+            {
+                // desactivo todos y activo el seleccionado
+                $('input[type=checkbox].leaflet-control-layers-selector').prop('checked', false);
+                $('input[type=checkbox].leaflet-control-layers-selector').css('background', '#333');
+                $(this).prop('checked', true);
+                for(var i in floors)
+                {
+                    if(floors[0].labels && floors[0].labels[checked])
+                        map.removeLayer(floors[i].labels[checked].layer);
+                }
+                checked = index;
+                if(floors[0].labels && floors[0].labels[checked])
+                    $('input[type=checkbox].leaflet-control-layers-selector:eq(' + checked + ')')
+                        .css('background', floors[0].labels[checked].fields.color);
+                return false;
+            }
+        });
+    }
+    else
+    {
+        $('input[type=checkbox].leaflet-control-layers-selector').each(function(index){
+            if($(this).is(':checked'))
+            {
+                checked = index;
+                if(floors[0].labels && floors[0].labels[checked])
+                {
+                    $('input[type=checkbox].leaflet-control-layers-selector:eq(' + checked + ')')
+                        .css('background', floors[0].labels[checked].fields.color);
+                }
+                return false;
+            }
+        });
+    }
+
+
+
+
+    if(!selected_category)
+        return;
+
+
+    // Cada vez que añade una layer se dispara esto
+    for (var i in floors) {
+        var cats = $('input[type=checkbox].leaflet-control-layers-selector');
+        cats.css('background', '#333');
+        cats.prop('checked', false);
+
+        for (var l in floors[i].labels) {
+            var myCat = $('input[type=checkbox].leaflet-control-layers-selector:eq(' + l + ')');
+            var current_category = floors[i].labels[l].fields.name;
+
+/*
+            if (myCat.is(':checked'))
+            {
+                myCat.css('background', floors[i].labels[l].fields.color);
+                myCat.prop('checked', true);
+                checked = l;
+                console.log('1 - ' + checked);
+                break;
+            }
+
+*/
+            if (current_category == selected_category)
+            {
+                myCat.css('background', floors[i].labels[l].fields.color);
+                myCat.prop('checked', true);
+                checked = l;
+                checked_category = selected_category;
+                break;
+            }
+            else
+            {
+                map.removeLayer(floors[i].labels[l].layer)
+            }
+        }
+    }
+
+    setIconColor();
+}
+
+
 
 function removeCategory(e) {
     if (e.layer._layers) {
@@ -663,34 +866,47 @@ function removeCategory(e) {
 
 }
 
-var checked = [];
+var checked;
+var checked_category;
 
 function changeFloor(e) {
 
     SocialMenu.close();
 
+    var allUnchecked = true;
     for (pos = 0; pos < $('input[type=checkbox].leaflet-control-layers-selector').length; pos++) {
         if ($('input[type=checkbox].leaflet-control-layers-selector:eq(' + pos + ')').is(':checked')) {
-            checked[pos] = true;
-        } else {
-            checked[pos] = false;
+            checked = pos;
+            $('input[type=checkbox].leaflet-control-layers-selector:eq(' + pos + ')').prop('checked', false);
+            allUnchecked = false;
         }
     }
+    if(allUnchecked)
+        checked = null;
 
     var floor_x = {};
+    var key;
     for (var i in floors) {
-        if ((e.layer && (e.layer._url === floors[i].photo._url)) || (e._url === floors[i].photo._url)) {
+        for (var k in floors[i].photo._layers){
+            key=k;
+            break;
+        }
+//        if ((e.layer && (e.layer._url === floors[i].photo._url)) || (e._url === floors[i].photo._url)) {
+        if ((e.layer._layers[key] && (e.layer._layers[key]._url === floors[i].photo._layers[key]._url)) || (e._url === floors[i].photo._layers[key]._url)) {
             floor_x = floors[i];
-
+            current_floor = floor_x;
+            map.addLayer(floor_x.photo);
+            map.addLayer(floor_x.layer);
+            
             for (var l in floors[i].labels) {
                 layersControl.addOverlay(floor_x.labels[l].layer, '<i class="icon-' + floors[i].labels[l].fields.icon + ' icon-white"></i>');
-                if (checked[l] === true) {
-                    map.addLayer(floor_x.labels[l].layer);
+                if (checked == l) {
+                    if (floor_x.labels[l].layer)
+                        map.addLayer(floor_x.labels[l].layer);
                 }
             }
 
-            map.addLayer(floor_x.photo);
-            map.addLayer(floor_x.layer);
+
 
             if (arrowHead[i] && subarrow[i]) {
                 map.addLayer(arrowHead[i]);
@@ -704,6 +920,7 @@ function changeFloor(e) {
 
         } else {
             map.removeLayer(floors[i].layer);
+            map.removeLayer(floors[i].photo);
 
             for (var l in floors[i].labels) {
                 layersControl.removeLayer(floors[i].labels[l].layer);
@@ -714,15 +931,19 @@ function changeFloor(e) {
                 map.removeLayer(arrowHead[i]);
         }
 
+        //loadHeadings(i);
+
     }
 
     for (var lab in floor_x.labels) {
-        if (checked[lab] === true) {
-            jQuery('input[type=checkbox].leaflet-control-layers-selector:eq(' + lab + ')').css('background', floor_x.labels[lab].fields.color);
-            jQuery('input[type=checkbox].leaflet-control-layers-selector:eq(' + lab + ')').prop("checked", true);
+        if (checked == lab) {
+            $('input[type=checkbox].leaflet-control-layers-selector:eq(' + lab + ')').css('background', floor_x.labels[lab].fields.color);
+            $('input[type=checkbox].leaflet-control-layers-selector:eq(' + lab + ')').prop("checked", true);
         }
     }
 
+
+/*
     for (var p in floor_x.pois) {
         if (floor_x.pois[p].alwaysVisible) {
             L.marker(floor_x.pois[p].marker.center, {icon: txtIcon})
@@ -730,11 +951,23 @@ function changeFloor(e) {
                 .addTo(floor_x.layer)
                 //.addTo(map)
                 .showLabel();
+            var $width=$('div.leaflet-label:contains(' + floor_x.pois[p].description + ')').width();
+            $('div.leaflet-label:contains(' + floor_x.pois[p].description + ')').css('margin-left',-$width/2);
             if (floor_x.pois[p].isVertical) {
                 $('div.leaflet-label:contains(' + floor_x.pois[p].description + ')').addClass('isVertical');
             }
         }
     }
+
+    var centerHeading = [(floor_x.num_rows/4)*3 *floor_x.scaleY + (floor_x.scaleY),
+        floor_x.num_cols/3.5 * floor_x.scaleX + (floor_x.scaleX)];
+    L.marker(centerHeading, {icon: txtIcon})
+        .bindLabel('ALCALA MAGNA', { noHide: true })
+        .addTo(floor_x.layer)
+        //.addTo(map)
+        .showLabel();
+*/
+
     if (map.hasLayer(qrMarker)) {
         qrMarker.openPopup();
         if (qrPoint.point.coupon) {
@@ -793,9 +1026,8 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
 
     for (pos = 0; pos < $('input[type=checkbox].leaflet-control-layers-selector').length; pos++) {
         if ($('input[type=checkbox].leaflet-control-layers-selector:eq(' + pos + ')').is(':checked')) {
-            checked[pos] = true;
-        } else {
-            checked[pos] = false;
+            checked = pos;
+            break;
         }
     }
 
@@ -804,7 +1036,7 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
             floors[i].layer.removeLayer(arrow[i]);
             map.removeLayer(arrowHead[i]);
         }
-        map.removeLayer(floors[i].layer)
+        map.removeLayer(floors[i].layer);
     }
 
     var check = null,
@@ -898,109 +1130,149 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
             }
         }
     }
+/*
     for (var f in floors) {
         for (var l in floors[f].labels) {
             if (jQuery('input[type=checkbox].leaflet-control-layers-selector:eq(' + l + ')').is(':checked')) {
-                checked[l] = true;
-            } else {
-                checked[l] = false;
+                checked = l;
+                break;
             }
         }
     }
+*/
     var floorToShow = route.fields.destiny.fields.floor;
-    var floorToHide = route.fields.origin.fields.floor;
+    var floorToHide = current_floor.id;
+    current_floor = floors_indexed[floorToShow];
     if (showOrigin) {
-        var floorToShow = route.fields.origin.fields.floor;
-        var floorToHide = route.fields.destiny.fields.floor;
+        floorToShow = route.fields.origin.fields.floor;
         showOrigin = false;
-
     }
+
+    //
     //PINTADO DE CAPAS
-    for (var f in floors) {
-        if (route.fields.origin.fields.floor !== route.fields.destiny.fields.floor) {
+    //
 
-            if (floorToHide === floors[f].id) {
-                map.removeLayer(floors[f].layer);
-
-                for (var l in floors[f].labels) {
-                    layersControl.removeLayer(floors[f].labels[l].layer);
-                    map.removeLayer(floors[f].labels[l].layer);
-                }
-
-                map.removeLayer(floors[f].photo);
-
-            } else if (floorToShow === floors[f].id) {
-
-                for (var l in floors[f].labels) {
-                    layersControl.addOverlay(floors[f].labels[l].layer, '<i class="icon-' + floors[f].labels[l].fields.icon + ' icon-white"></i>');
-                    if (checked[l] === true) {
-                        map.addLayer(floors[f].labels[l].layer);
-                    }
-                }
-
-                for (var l in floors[f].labels) {
-                    if (checked[l] === true) {
-                        jQuery('input[type=checkbox].leaflet-control-layers-selector:eq(' + l + ')').css('background', floors[f].labels[l].fields.color);
-                        jQuery('input[type=checkbox].leaflet-control-layers-selector:eq(' + l + ')').prop("checked", true);
-                    }
-                }
-                map.addLayer(floors[f].layer);
-                map.addLayer(floors[f].photo);
-                map.addLayer(arrowHead[f]);
-                flechita = arrowHead[f];
-                arrowAnim(flechita, floors[f].name);
-//                map.setView(arrow[f].getBounds().pad(15).getCenter(), 0);
-                qrMarker.openPopup();
-
-            } else {
-
-                for (var l in floors[f].labels) {
-                    layersControl.removeLayer(floors[f].labels[l].layer);
-                    map.removeLayer(floors[f].labels[l].layer);
-                }
-
-                map.removeLayer(floors[f].photo);
-            }
-//MONOPLANTA
-        } else {
-            if (route.fields.destiny.fields.floor !== floors[f].id) {
-                map.removeLayer(floors[f].layer);
-                map.removeLayer(floors[f].photo);
-                for (var l in floors[f].labels) {
-                    layersControl.removeLayer(floors[f].labels[l].layer);
-                    map.removeLayer(floors[f].labels[l].layer);
-                }
-
-
-            }
-            else {
-                for (var l in floors[f].labels) {
-                    if (jQuery('input[type=checkbox].leaflet-control-layers-selector:eq(' + l + ')').is(':checked')) {
-                        checked[l] = true;
-                    } else {
-                        checked[l] = false;
-                    }
-                }
-
-                for (var l in floors[f].labels) {
-                    layersControl.addOverlay(floors[f].labels[l].layer, '<i class="icon-' + floors[f].labels[l].fields.icon + ' icon-white"></i>');
-                    if (checked[l] === true) {
-                        map.addLayer(floors[f].labels[l].layer);
-                    }
-                }
-
-                map.addLayer(floors[f].layer);
-                map.addLayer(floors[f].photo);
-//                map.setView(arrow[f].getBounds().pad(15).getCenter(), 0);
-                map.addLayer(arrowHead[f]);
-                flechita = arrowHead[f];
-                arrowAnim(flechita, floors[f].name);
-//                map.setView(arrow[f].getBounds().pad(15).getCenter(), 0);
-
-            }
-        }
-
+    //
+    // Eliminamos en la planta seleccionada (current_floor),
+    // independientemente de que sea origen o no
+    map.removeLayer(floors_indexed[floorToHide].layer);
+    for (var l in floors_indexed[floorToHide].labels) {
+        layersControl.removeLayer(floors_indexed[floorToHide].labels[l].layer);
+        map.removeLayer(floors_indexed[floorToHide].labels[l].layer);
     }
+    map.removeLayer(floors_indexed[floorToHide].photo);
+
+    //
+    // Añadimos en la planta a mostrar
+    map.addLayer(floors_indexed[floorToShow].layer);
+    map.addLayer(floors_indexed[floorToShow].photo);
+    for (var l in floors_indexed[floorToShow].labels) {
+        layersControl.addOverlay(floors_indexed[floorToShow].labels[l].layer, '<i class="icon-' + floors_indexed[floorToShow].labels[l].fields.icon + ' icon-white"></i>');
+        if (checked == l) {
+            map.addLayer(floors_indexed[floorToShow].labels[l].layer);
+            $('input[type=checkbox].leaflet-control-layers-selector:eq(' + l + ')').css('background', floors_indexed[floorToShow].labels[l].fields.color);
+        }
+    }
+
+    qrMarker.openPopup();
+
+
+
+
+
+
+//    for (var f in floors) {
+//        if (route.fields.origin.fields.floor !== route.fields.destiny.fields.floor) {
+//
+//            // Si la planta que tengo que ocultar es la current
+//            if (floorToHide === floors[f].id) {
+//                map.removeLayer(floors[f].layer);
+//
+//                for (var l in floors[f].labels) {
+//                    layersControl.removeLayer(floors[f].labels[l].layer);
+//                    map.removeLayer(floors[f].labels[l].layer);
+//                }
+//
+//                map.removeLayer(floors[f].photo);
+//
+//            // Si la planta que tengo que mostrar es la current
+//            } else if (floorToShow === floors[f].id) {
+//                map.addLayer(floors[f].layer);
+//                map.addLayer(floors[f].photo);
+//
+//                for (var l in floors[f].labels) {
+//                    layersControl.addOverlay(floors[f].labels[l].layer, '<i class="icon-' + floors[f].labels[l].fields.icon + ' icon-white"></i>');
+//                    if (checked == l) {
+//                        map.addLayer(floors[f].labels[l].layer);
+//                        $('input[type=checkbox].leaflet-control-layers-selector:eq(' + l + ')').css('background', floors[f].labels[l].fields.color);
+//                    }
+//                }
+//
+////                for (var l in floors[f].labels) {
+////                    if (checked == l) {
+////                        jQuery('input[type=checkbox].leaflet-control-layers-selector:eq(' + l + ')').css('background', floors[f].labels[l].fields.color);
+////                        jQuery('input[type=checkbox].leaflet-control-layers-selector:eq(' + l + ')').prop("checked", true);
+////                    }
+////                }
+//                map.addLayer(arrowHead[f]);
+//                flechita = arrowHead[f];
+//                arrowAnim(flechita, floors[f].name);
+////                map.setView(arrow[f].getBounds().pad(15).getCenter(), 0);
+//                qrMarker.openPopup();
+//
+//            // Si la planta actual (current) no es ni la que tengo que mostrar, ni la que tengo que ocultar
+//            // Por ejemplo en ruta desde la -1 hasta la 1 pasando poor la 0
+//            } else {
+//
+//                for (var l in floors[f].labels) {
+//                    if(floors[f].labels[l].e)
+//                    {
+//                        layersControl.removeLayer(floors[f].labels[l].e);
+//                        map.removeLayer(floors[f].labels[l].layer);
+//                    }
+//                }
+//
+//                map.removeLayer(floors[f].photo);
+//            }
+////MONOPLANTA
+//        } else {
+//            if (route.fields.destiny.fields.floor !== floors[f].id) {
+//                map.removeLayer(floors[f].layer);
+//                map.removeLayer(floors[f].photo);
+//                for (var l in floors[f].labels) {
+//                    layersControl.removeLayer(floors[f].labels[l].layer);
+//                    map.removeLayer(floors[f].labels[l].layer);
+//                }
+//
+//            }
+//            else {
+//
+//                map.addLayer(floors[f].layer);
+//                map.addLayer(floors[f].photo);
+//
+//                for (var l in floors[f].labels) {
+//                    if ($('input[type=checkbox].leaflet-control-layers-selector:eq(' + l + ')').is(':checked')) {
+//                        checked = l;
+//                    }
+//                }
+//
+//                for (var l in floors[f].labels) {
+//                    layersControl.addOverlay(floors[f].labels[l].layer, '<i class="icon-' + floors[f].labels[l].fields.icon + ' icon-white"></i>');
+//                    if (checked == l) {
+//                        map.addLayer(floors[f].labels[l].layer);
+//                        $('input[type=checkbox].leaflet-control-layers-selector:eq(' + l + ')').css('background', floors[f].labels[l].fields.color);
+//                    }
+//                }
+//
+//
+////                map.setView(arrow[f].getBounds().pad(15).getCenter(), 0);
+//                map.addLayer(arrowHead[f]);
+//                flechita = arrowHead[f];
+//                arrowAnim(flechita, floors[f].name);
+////                map.setView(arrow[f].getBounds().pad(15).getCenter(), 0);
+//            }
+//        }
+//    }
 
     if (map.hasLayer(destMarker)) {
         destMarker.openPopup();
@@ -1026,28 +1298,29 @@ function drawRoute(org, osX, osY, dst, sX, sY) {
 
 //Función que gestiona la animación de la flecha
 function arrowAnim(arrow, idFloor) {
-    if (anim != null) {
+/*    if (anim != null) {
         window.clearInterval(anim);
 
     }
     anim = window.setInterval(function () {
         setArrow(arrow, idFloor)
-    }, 50);
-
+    }, 100);*/
 }
 
 var arrowsOffset = 0;
 
 //Función que define la animación (en este caso, flecha azul) que marca la ruta
 var setArrow = function (flecha, idFloor) {
-
+/*
     flecha.setPatterns([
-        {offset: arrowsOffset + '%', repeat: 0, symbol: new L.Symbol.ArrowHead({pixelSize: 8, polygon: false, pathOptions: { stroke: true, weight:2}})}
-            //Dash({pixelSize: 1, pathOptions: { stroke: true, weight:10}})}
+        {offset: arrowsOffset + '%', repeat: 0, symbol: new L.Symbol.Dash({pixelSize: 0, pathOptions: { stroke: true, weight:10}})}
+            //ArrowHead({pixelSize: 8, polygon: false, pathOptions: { stroke: true, weight:2}})}
+
 
     ]);
     if (++arrowsOffset > 100)
         arrowsOffset = 0;
+*/
 };
 /*
 var fps = 15;
@@ -1082,14 +1355,14 @@ function isCategoryVisibleOnButtons(categ_name) {
 }
 
 function isPoiVisibleByDefault(categ_name) {
-    return categ_name == "Aristas" || categ_name == "Aseos" || categ_name == "Entrance";
+    return categ_name == "Connectors" || categ_name == "Toilet" || categ_name == "Entrance";
 }
 
 
 Map.locateCar = function () {
     var miCoche = JSON.parse(localStorage.getItem('miCoche'));
 
-    if (!miCoche) {
+    if (!miCoche || miCoche.dest.enclosure.id != enclosure_id) {
         alert('Please, scan the QR code at your parking place to' +
             ' locate your car.');
         return;
@@ -1099,9 +1372,7 @@ Map.locateCar = function () {
 
     for (pos = 0; pos < $('input[type=checkbox].leaflet-control-layers-selector').length; pos++) {
         if ($('input[type=checkbox].leaflet-control-layers-selector:eq(' + pos + ')').is(':checked')) {
-            checked[pos] = true;
-        } else {
-            checked[pos] = false;
+            checked = pos;
         }
     }
 
@@ -1109,6 +1380,7 @@ Map.locateCar = function () {
     for (var i in floors) {
         if (floors[i].id === miCoche.floor.id) {
             floor_x = floors[i];
+            current_floor = floor_x;
             carLoc = [((miCoche.point.row) * floor_x.scaleY) + floor_x.scaleY,
                 (miCoche.point.col * floor_x.scaleX) + floor_x.scaleX];
             carMarker = new L.marker(carLoc, {
@@ -1123,7 +1395,7 @@ Map.locateCar = function () {
             floor_x.layer.addLayer(carMarker);
             for (var l in floors[i].labels) {
                 layersControl.addOverlay(floor_x.labels[l].layer, '<i class="icon-' + floors[i].labels[l].fields.icon + ' icon-white"></i>');
-                if (checked[l] === true) {
+                if (checked == l) {
                     map.addLayer(floor_x.labels[l].layer);
                 }
             }
@@ -1158,7 +1430,7 @@ Map.locateCar = function () {
     }
 
     for (var lab in floor_x.labels) {
-        if (checked[lab] === true) {
+        if (checked == lab) {
             jQuery('input[type=checkbox].leaflet-control-layers-selector:eq(' + lab + ')').css('background', floor_x.labels[lab].fields.color);
             jQuery('input[type=checkbox].leaflet-control-layers-selector:eq(' + lab + ')').prop("checked", true);
         }
@@ -1172,9 +1444,7 @@ Map.locateCar = function () {
 Map.locatePosition = function () {
     for (pos = 0; pos < $('input[type=checkbox].leaflet-control-layers-selector').length; pos++) {
         if ($('input[type=checkbox].leaflet-control-layers-selector:eq(' + pos + ')').is(':checked')) {
-            checked[pos] = true;
-        } else {
-            checked[pos] = false;
+            checked = pos;
         }
     }
 
@@ -1182,29 +1452,10 @@ Map.locatePosition = function () {
     for (var i in floors) {
         if (floors[i].id === qrFloor.id) {
             floor_x = floors[i];
-            for (var l in floors[i].labels) {
-                layersControl.addOverlay(floor_x.labels[l].layer, '<i class="icon-' + floors[i].labels[l].fields.icon + ' icon-white"></i>');
-                if (checked[l] === true) {
-                    map.addLayer(floor_x.labels[l].layer);
-                }
-            }
-
-            map.addLayer(floor_x.photo);
-            map.addLayer(floor_x.layer);
-
-            if (arrowHead[i] && subarrow[i]) {
-                map.addLayer(arrowHead[i]);
-                flechita = arrowHead[i];
-                arrowAnim(flechita, floor_x.name);
-                map.setView(arrow[i].getBounds().pad(15).getCenter(), 0);
-            } else {
-                map.setView(qrLoc, 0);
-            }
-
+            current_floor = floor_x;
         } else {
             map.removeLayer(floors[i].layer);
             map.removeLayer(floors[i].photo);
-
 
             for (var l in floors[i].labels) {
                 layersControl.removeLayer(floors[i].labels[l].layer);
@@ -1213,12 +1464,37 @@ Map.locatePosition = function () {
 
             if (arrowHead[i] != null)
                 map.removeLayer(arrowHead[i]);
-        }
 
+//            if(layersControl._overlaysList.childElementCount > 8)
+//            {
+//                for (var l=8;l<floors[i].labels.length-1; l++) {
+//                    layersControl.removeLayer(floors[i].labels[l].layer);
+//                }
+//            }
+        }
     }
 
+
+    map.addLayer(floor_x.photo);
+    map.addLayer(floor_x.layer);
+    for (var l in floor_x.labels) {
+        layersControl.addOverlay(floor_x.labels[l].layer, '<i class="icon-' + floor_x.labels[l].fields.icon + ' icon-white"></i>');
+        if (checked == l) {
+            map.addLayer(floor_x.labels[l].layer);
+        }
+    }
+//    if (arrowHead[i] && subarrow[i]) {
+//        map.addLayer(arrowHead[i]);
+//        flechita = arrowHead[i];
+//        arrowAnim(flechita, floor_x.name);
+//        map.setView(arrow[i].getBounds().pad(15).getCenter(), 0);
+//    } else {
+//        map.setView(qrLoc, 0);
+//    }
+
+
     for (var lab in qrFloor.labels) {
-        if (checked[lab] === true) {
+        if (checked == lab) {
             jQuery('input[type=checkbox].leaflet-control-layers-selector:eq(' + lab + ')').css('background', floor_x.labels[lab].fields.color);
             jQuery('input[type=checkbox].leaflet-control-layers-selector:eq(' + lab + ')').prop("checked", true);
         }
@@ -1420,3 +1696,37 @@ for (var i in micuad.geometry.coordinates) {
 */
 
 //L.marker([300, 300.57], {icon: carIcon}).addTo(map);
+
+
+
+
+//PRUEBA PARA LOS LABELMARKERS
+/*
+
+var geojsonFeature = {
+    "type": "Feature",
+    "properties": {
+        "name": "Coors Field",
+        "amenity": "Baseball Stadium",
+        "popupContent": "This is where the Rockies play!"
+    },
+    "geometry": {
+        "type": "Point",
+        "coordinates": [-104.99404, 39.75621]
+    }
+};
+var geojsonMarkerOptions = {
+    radius: 8,
+    fillColor: "#ff7800",
+    color: "#000",
+    weight: 1,
+    opacity: 1,
+    fillOpacity: 0.8
+};
+
+L.geoJson(someGeojsonFeature, {
+    pointToLayer: function (feature, latlng) {
+        return L.circleMarker(latlng, geojsonMarkerOptions);
+    }
+}).addTo(map);
+*/

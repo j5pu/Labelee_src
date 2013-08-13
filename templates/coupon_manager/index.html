@@ -1,0 +1,116 @@
+{% extends "base.html" %}
+
+{% load i18n %}
+
+
+{% block css %}
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/map_editor/styles.css"/>
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/coupon_manager/styles.css"/>
+{% endblock %}
+
+{% block js %}
+    <script src="{{ STATIC_URL }}vendor/bootstrap/bootstrap.file-input.js"></script>
+    <script src="{{ STATIC_URL }}js/coupon_manager/main.js"></script>
+{% endblock %}
+
+
+{% block content %}
+    {% csrf_token %}
+
+{#    {% include "_manager_navbar.html" with section="Coupon Manager"%}#}
+    {% if user.is_authenticated %}
+        <div id="menu" class="box box-1">
+            {% trans "Bienvenido" %}, {{ user.username }}
+            <a href="{% url 'django.contrib.auth.views.logout' %}"> <i class="icon-signout"></i> Logout</a>
+            <a href="{% url 'django.contrib.auth.views.password_change' %}"> <i class="icon-signout"></i> Cambiar contraseña</a>
+        </div>
+    {% endif %}
+
+    <div ng-controller="MainCtrl">
+
+{#        <h1>[[manager.title]]</h1>#}
+
+        <div id="filter_box" ng-show="!manager.for_shop_owner">
+            <label class="search_box">
+                {% trans "Buscar recinto" %}:
+                <input class="input-large search-query"
+                       type="text" ng-model="query_enclosure"
+                       placeholder="{% trans "Introduzca nombre del recinto a buscar" %}..">
+            </label>
+
+            <label class="search_box">{% trans "Buscar cupón" %}:
+                <input class="input-large search-query"
+                       type="text" ng-model="query_coupon"
+                       placeholder="{% trans "Introduzca nombre del POI a buscar" %}..">
+            </label>
+
+            <div id="search_box2">
+                <span>Filtrar por:</span>
+                <div>
+                    <label>{% trans "Tiendas sin cupón" %}:
+                        <input type="checkbox" ng-model="show_only_empty">
+                    </label>
+                    <label>{% trans "Tiendas con cupón" %}:
+                        <input type="checkbox" ng-model="show_only_unempty">
+                    </label>
+{#                    <label>{% trans "Tiendas sin POI dibujado aún" %}:#}
+{#                        <input type="checkbox" ng-model="show_only_undrawed">#}
+{#                    </label>#}
+                </div>
+            </div>
+        </div>
+
+
+        <table class="enclosures table table-bordered" ng-show="!manager.for_shop_owner">
+            <thead>
+                <tr>
+                    <th>{% trans "Recinto" %}</th>
+                    <th>{% trans "Cupones para las tiendas" %}</th>
+                    <th>{% trans "Cupones para el recinto" %}</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="enclosure"
+{#                    ng-repeat="enclosure in manager.enclosures | orderBy:'name':reverse"#}
+                    ng-repeat="enclosure in manager.enclosures | orderBy:'name':reverse | filter:search_enclosure"
+                    ng-controller="EnclosureCtrl">
+                    <td>[[enclosure.name]]</td>
+                    <td>
+                        <div class="coupon"
+                             ng-repeat="coupon in enclosure.shop_coupons | orderBy:'label.name':reverse | filter:search_coupon | filter:filter_coupon"
+                             ng-controller="CouponLabelCtrl">
+                            <div>[[coupon.label.name]]</div>
+                            <div>{% include "_coupon_manager/_coupon_for_shop.html" %}</div>
+                        </div>
+                    </td>
+                    <td>
+                        <button class="btn" ng-click="show_create_form_enclosure($event)">{% trans "Añadir cupón" %}</button>
+
+                        <div class="coupon"
+                             ng-repeat="coupon in enclosure.enclosure_coupons | orderBy:'label.name':reverse | filter:search_coupon | filter:filter_coupon"
+                             ng-controller="CouponEnclosureCtrl">
+                            <div>[[coupon.name]]</div>
+                            <div class="img_wrapper">
+                                <img ng-src="[[coupon.img]]">
+                            </div>
+                            <button class="btn link-2" ng-click="show_update_form($event)">
+                                <i class="icon-pencil icon-white"></i>{% trans "Editar" %}
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+
+        <div class="coupons" ng-show="manager.for_shop_owner">
+            <div class="coupon" ng-repeat="coupon in manager.coupons" ng-controller="CouponLabelCtrl">
+                {% include "_coupon_manager/_coupon_for_shop.html" %}
+            </div>
+        </div>
+
+        {% include "_coupon_manager/_dialogs.html" %}
+    </div>
+
+    {% include "_uploading_iframe.html" %}
+{% endblock %}

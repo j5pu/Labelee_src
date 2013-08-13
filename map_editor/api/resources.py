@@ -12,8 +12,9 @@ from tastypie.validation import FormValidation
 # from tastypie.authentication import Authentication
 
 from tastypie.resources import ModelResource, ALL, ALL_WITH_RELATIONS
+from coupon_manager.models import Coupon
 from utils.constants import USER_GROUPS
-from utils.helpers import random_string_generator
+from utils.helpers import random_string_generator, delete_file
 from django.contrib.auth.models import Group
 
 #
@@ -35,6 +36,7 @@ class CustomUserResource(ModelResource):
         authorization = ResourceAuthorization('user')
         filtering = {
             'id': ALL,
+            'username': ALL,
             }
 
     def determine_format(self, request):
@@ -56,7 +58,8 @@ class EnclosureResource(ModelResource):
         always_return_data = True
         filtering = {
             'owner': ALL_WITH_RELATIONS,
-            'id': ALL
+            'id': ALL,
+            'name': ALL
             }
 
     def determine_format(self, request):
@@ -75,6 +78,7 @@ class FloorResource(ModelResource):
         filtering = {
             'enclosure': ALL_WITH_RELATIONS,
             'id': ALL,
+            'name': ALL,
         }
         ordering = {
             'floor_number': ALL
@@ -102,7 +106,8 @@ class PointResource(ModelResource):
             'row': ALL,
             'col': ALL,
             'description': ALL,
-            'panorama': ALL
+            'panorama': ALL,
+            'coupon': ALL
         }
         ordering = {
             'description': ALL
@@ -144,11 +149,12 @@ class LabelResource(ModelResource):
             password = '1234'
             # password = random_string_generator(6)
 
-            user = CustomUser.objects.create_user(username, '', password)
-            g = Group.objects.get(id=USER_GROUPS['shop_owners'])
-            g.user_set.add(user)
+            custom_user = CustomUser().create(username, password)
 
-            label_created.obj.owner = user
+            g = Group.objects.get(id=USER_GROUPS['shop_owners'])
+            g.user_set.add(custom_user.user_ptr)
+
+            label_created.obj.owner = custom_user
             label_created.obj.save()
 
         return label_created
@@ -169,24 +175,14 @@ class LabelResource(ModelResource):
 
         return label_updated
 
-
-    def obj_delete(self, bundle, **kwargs):
-        """
-        Si editamos el nombre para la etiqueta también se modifica el nombre
-        de usuario para su dueño
-        """
-        label_id = kwargs['pk']
-        user = CustomUser.objects.filter(labels__id=label_id)
-        user.delete()
-
     def determine_format(self, request):
-        return 'application/json'
+            return 'application/json'
 
 
 
 class LabelCategoryResource(ModelResource):
     labels = fields.ToManyField('map_editor.api.resources.LabelResource', 'labels', null=True, blank=True, full=True)
-    enclosure = fields.OneToOneField('map_editor.api.resources.EnclosureResource', 'enclosure', null=True, full=True)
+    enclosure = fields.OneToOneField('map_editor.api.resources.EnclosureResource', 'enclosure', null=True, blank=True, full=True)
 
     class Meta:
         resource_name = 'label-category'
@@ -196,6 +192,7 @@ class LabelCategoryResource(ModelResource):
         filtering = {
             'id': ALL,
             'name': ALL,
+            'name_en': ALL,
             'color': ALL,
             'icon': ALL,
             'labels': ALL_WITH_RELATIONS,
@@ -294,6 +291,23 @@ class LogEntryResource(ModelResource):
             'message': ALL,
             'when': ALL
         }
+
+    def determine_format(self, request):
+        return 'application/json'
+
+
+class CouponResource(ModelResource):
+    enclosure = fields.ToOneField(EnclosureResource, 'enclosure', null=True)
+
+    class Meta:
+        resource_name = 'coupon'
+        queryset = Coupon.objects.all()
+        authorization = ResourceAuthorization('enclosure__owner')
+        always_return_data = True
+        filtering = {
+            'enclosure': ALL_WITH_RELATIONS,
+        }
+        max_limit = 5000
 
     def determine_format(self, request):
         return 'application/json'

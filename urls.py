@@ -22,10 +22,13 @@ v1_api.register(ConnectionResource())
 v1_api.register(RouteResource())
 v1_api.register(StepResource())
 v1_api.register(LogEntryResource())
+v1_api.register(CouponResource())
 
 
 urlpatterns = patterns('',
-    url(r'^$', TemplateView.as_view(template_name="index.html")),
+    # url(r'^$', TemplateView.as_view(template_name="index.html")),
+
+    url(r'^$', 'map.views.qr_code_redirect'),
 
     # APIS
     url(r'^api/', include(v1_api.urls)),
@@ -35,6 +38,7 @@ urlpatterns = patterns('',
     url(r'^map/', include('map.urls')),
     url(r'^map-editor/', include('map_editor.urls')),
     url(r'^dashboard/', include('dashboard.urls')),
+    url(r'^coupon/', include('coupon_manager.urls')),
 
     # ADMIN:
     # Uncomment the admin/doc line below to enable admin documentation:
@@ -45,6 +49,7 @@ urlpatterns = patterns('',
     # LOGIN / LOGOUT
     (r'^accounts/login/$', 'django.contrib.auth.views.login'),
     (r'^accounts/logout/$', 'django.contrib.auth.views.logout', {'next_page': '/map-editor/'}),
+    (r'^accounts/password/change/$', 'django.contrib.auth.views.password_change', {'post_change_redirect' : '/map-editor/'}),
 
     # Calculo de rutas
     url(r'^calculate-routes/(?P<enclosure_id>\d+)', 'route.calculateRoutes.calculate_routes'),

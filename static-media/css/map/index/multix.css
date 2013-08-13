@@ -504,13 +504,13 @@ html{
     -webkit-box-shadow: inset 2px 2px 4px rgba(0,0,0,0.4);
     box-shadow: inset 2px 2px 4px rgba(0,0,0,0.4);
 
-    background: rgba(234, 236, 230, 1);
+/*    background: rgba(234, 236, 230, 1);*/
 
-/*    background-color: #ededed;*/
-    background-image: -webkit-linear-gradient(60deg, transparent, rgba(189, 189, 189, 0.1), transparent 65px, white);
+    background-color: #ededed;
+/*    background-image: -webkit-linear-gradient(60deg, transparent, rgba(189, 189, 189, 0.1), transparent 65px, white);
     background-image: -moz-linear-gradient(60deg, transparent, #666, transparent 65px, white);
     background-image: linear-gradient(60deg, transparent, rgba(189, 189, 189, 0.1), transparent 65px, white);
-    background-size: 1.5em 1.5em;
+    background-size: 1.5em 1.5em;*/
 
 /*
     background-image:
@@ -599,10 +599,13 @@ html{
     top: -5.25%;
     margin-top: -13px;
     position: absolute;
-    left: -187px;
+    left: -167px;
     float: left;
     height: 36px;
+/*
     width: 185px;
+*/
+    width: 165px;
     display: block;
 }
 
@@ -684,7 +687,7 @@ label > span {
     position:absolute;
     top:0;
     line-height:36px;
-    left: 12px;
+    left: 11px;
     font-size: 14px;
     font-weight: bold;
     text-shadow: 1px 1px 1px #bbb;
@@ -1084,7 +1087,7 @@ Instead of a list of all class selectors,
 you can use the generic selector below, but it's slower:
 [class*="icon-"] {
 */
-.icon-food, .icon-female, .icon-male, .icon-gamepad, .icon-sort, .icon-signin, .icon-glass, .icon-film, .icon-screenshot, .icon-twitter-sign, .icon-google-plus-sign, .icon-facebook-sign, .icon-gift, .icon-camera {
+.icon-food, .icon-female, .icon-male,.icon-sort, .icon-signin, .icon-screenshot, .icon-twitter-sign, .icon-google-plus-sign, .icon-facebook-sign, .icon-camera, .icon-star,.icon-basket, .icon-microwave,.icon-barbell, .icon-user, .icon-user-2, .icon-user-3, .icon-tshirt {
     font-family: 'carFont';
     speak: none;
     font-style: normal;
@@ -1103,21 +1106,14 @@ you can use the generic selector below, but it's slower:
 .icon-male:before {
     content: "\f183";
 }
-.icon-gamepad:before {
-    content: "\f11b";
-}
+
 .icon-sort:before {
     content: "\f0dc";
 }
 .icon-signin:before {
     content: "\f090";
 }
-.icon-glass:before {
-    content: "\f000";
-}
-.icon-film:before {
-    content: "\f008";
-}
+
 .icon-screenshot:before {
     content: "\f05b";
 }
@@ -1130,14 +1126,32 @@ you can use the generic selector below, but it's slower:
 .icon-facebook-sign:before {
     content: "\f082";
 }
-.icon-gift:before {
-    content: "\f06b";
-}
+
 .icon-smile:before {
     content: "\f182|\f183";
 }
 .icon-camera:before {
     content: "\f030";
+}
+.icon-basket:before {
+    content: "\e003";
+}
+
+.icon-microwave:before {
+    content: "\e005";
+}
+
+.icon-user:before {
+    content: "\e001";
+}
+.icon-user-2:before {
+    content: "\e004";
+}
+.icon-user-3:before {
+    content: "\e006";
+}
+.icon-tshirt:before {
+    content: "\e007";
 }
 
 @font-face {
@@ -1168,11 +1182,15 @@ you can use the generic selector below, but it's slower:
     content: "\f23a";
     font-size: 0.85em;
 }
-
-
 .icon-smile:before {
     content: "\f182|\f183";
     font-size: 0.85em;
+}
+.icon-star:before {
+    content: "\e000";
+}
+.icon-barbell:before {
+    content: "\e002";
 }
 *:focus{
     outline:none;
@@ -1214,6 +1232,7 @@ para el botón GO!
     width: 192px;*/
     height: auto;
     width: auto;
+    box-shadow: 0 3px 5px rgba(0,0,0,0.2);
 }
 
 .withCoupon:after {
@@ -1251,20 +1270,29 @@ img.cupImg{
     background: none;
     color: #8C8C87;
     display: block;
-    font: 0.9em "Raleway", "Noto-Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+    font: 0.7em "Raleway", "Noto-Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
 
-    font-weight: bold;
+    font-weight: normal;
    position: absolute;
     -webkit-user-select: none;
+    padding: 0;
+/*
+    margin-top:0.6rem;
+    margin-left:15px;
+*/
+/*
     right: 50%;
+*/
 }
 
 .leaflet-label:before {
     border:none;
     content: "";
     position: absolute;
-//    top: 5px;
-//    left: -10px;
+/*
+    top: 5px;
+    left: -10px;
+*/
 }
 
 .isVertical{
@@ -1315,7 +1343,7 @@ leaflet-marker-icon{
     opacity: 0.8;
     margin-top:-1.65em !important;
     margin-left:-0.75em !important;
-    box-shadow: 3px -2px 8px 1px #888;
+    box-shadow: 3px -2px 5px rgba(0,0,0,0.2);
 }
 
 .my-div-icon:before{
@@ -1374,6 +1402,7 @@ leaflet-marker-icon{
     font-family: 'carFont';
     background: red;
     opacity:1;
+    font-size: 0.6em;
 }
 .dest-icon:before {
     content: "\f05b";
@@ -1434,4 +1463,12 @@ div#marquee{
     top:50%;
     left:50%;
     z-index:4;
+}
+
+.txt-icon{
+    width: 1px;
+    height: 1px;
+    z-index: 475;
+    color:white;
+    background-color: transparent;
 }

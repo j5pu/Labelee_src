@@ -141,6 +141,7 @@ INSTALLED_APPS = (
     'dashboard',
     # 'panorama',
     'analytics',
+    'coupon_manager',
 )
 
 # A sample logging configuration. The only tangible logging
@@ -230,7 +231,7 @@ else:
             "HOST": "192.168.1.201",
             "PORT": "",
             }
-        }
+    }
 
 #     Estas aplicaciones solo se usaran en desarrollo..
     INSTALLED_APPS += ('south', 'sandbox',)

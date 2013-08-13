@@ -19,15 +19,17 @@ def read_only_valid_categories(request, enclosure_id):
         &
         Q(enclosure__id = enclosure_id)
     ).exclude(
-        name_es = 'Bloqueantes'
+        name_en = 'Blockers'
     ).exclude(
-        name_es = 'Aseos'
+        name_en = 'Toilet'
     ).exclude(
-        name_es = 'Intermedias'
+        name_en = 'Intermediate'
     ).exclude(
-        name_es = 'Parquing'
+        name_en = 'Parking'
     ).exclude(
-        name_es = 'Pasillo Parking'
+        name_en = 'Entrance'
+    ).exclude(
+        name_en = 'Connectors'
     ).annotate(total=Sum('id'))
 
 

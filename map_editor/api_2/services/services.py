@@ -17,8 +17,10 @@ class ImgService:
         /api-2/[resource]/[id]/img
 
     Por ejemplo, para el recurso 'floor' con id=16:
-        - Subir imágen para la planta: 	POST > /api-2/floor/16/img
-        - Eliminar imágen: 				DELETE > api-2/floor/16/img
+        - Subir imágen para la planta:
+            POST > /api-2/floor/16/img
+        - Eliminar imágen:
+            DELETE > api-2/floor/16/img
     """
     model_img_attr = None
 
@@ -42,7 +44,8 @@ class ImgService:
         img_name = uploaded_file.field_name
         self.model_img_attr = getattr(resource_obj, img_name)
         if self.model_img_attr.name:
-            self.delete_img()
+            storage, path = self.model_img_attr.storage, self.model_img_attr.path
+            storage.delete(path)
 
         # Guardamos la nueva imágen
         filename = uploaded_file.name.replace(" ", "_")
@@ -52,14 +55,12 @@ class ImgService:
         resource_obj.save()
 
 
-
-
-
     def delete_img(self):
         """
         Elimina la imágen para el recurso
         """
         obj = self.resource_class.objects.get(id=self.id)
+        self.model_img_attr = getattr(obj, self.request.GET.get('field'))
         # You have to prepare what you need before delete the model
         storage, path = self.model_img_attr.storage, self.model_img_attr.path
         # Delete the model before the file
@@ -67,5 +68,9 @@ class ImgService:
         # # Delete the file after the model
         # print path
         storage.delete(path)
+
+        # deja nulo el campo para la imágen
+        setattr(obj, self.request.GET.get('field'), None)
+        obj.save()
 
         return responseJSON(data={'id': self.id})

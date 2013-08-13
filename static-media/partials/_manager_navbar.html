@@ -1,0 +1,34 @@
+{% load i18n %}
+<div class="navbar navbar-inverse navbar-fixed-top">
+    <div class="navbar-inner">
+        <div class="container">
+            <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </a>
+            <span class="brand" style="color:white;">{{ section }} | Enclosure Name</span>
+
+            <div class="nav-collapse">
+                <ul class="nav">
+                    <li><a href="#"><i class="icon-white icon-picture"></i> Enclosure Website</a>
+                    </li>
+                    <li><a href="#"><i class="icon-white icon-play-circle"></i>
+                        Labelee App</a></li>
+                    <li><a href="#"><i class="icon-white icon-book"></i> Coupons Manager</a></li>
+                </ul>
+                <ul class="nav pull-right">
+                    <li>
+                        <!-- CAJITA DE LOGOUT -->
+                        {% if user.is_authenticated %}
+                            <div id="logout" class="box box-1">
+                                {% trans "Bienvenido" %}, {{ user.username }}
+                                <a href="{% url 'django.contrib.auth.views.logout' %}"> <i class="icon-signout"></i> Logout</a>
+                            </div>
+                        {% endif %}
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>

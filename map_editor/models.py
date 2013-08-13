@@ -3,15 +3,17 @@
 import os
 from django.db import models
 # from django.utils.translation import ugettext_lazy as _
-from django.contrib.auth.models import User, UserManager
+from django.contrib.auth.models import User, UserManager, Group
 from map_editor.api_2.utils.point import filterAsPois
 from file_paths import *
+from utils.helpers import delete_file
 
 FIXED_CATEGORIES = {
     0: 'Blockers',
     1: 'Connectors',
     2: 'Intermediate',
     3: 'Parking',
+    4: 'Toilet',
 }
 
 
@@ -26,6 +28,17 @@ class CustomUser(User):
         if type(self) is CustomUser and not self.pk:
             self.set_password(self.password)
         super(CustomUser, self).save(*args, **kwargs)
+
+    def is_in_group(self, group_id):
+        users_in_group = Group.objects.get(id=group_id).user_set.all()
+        return self.user_ptr in users_in_group
+
+    def create(self, username, password):
+        c = CustomUser(username=username)
+        c.save()
+        c.set_password(password)
+        c.save()
+        return c
 
     class Meta:
         verbose_name = 'CustomUser'
@@ -80,14 +93,11 @@ class Floor(models.Model):
 		Sobreescribimos el método delete() para también eliminar su imagen del disco duro
 		"""
         if self.img:
-            # You have to prepare what you need before delete the model
-            storage, path = self.img.storage, self.img.path
-            # Delete the model before the file
-            super(Floor, self).delete(*args, **kwargs)
-            # Delete the file after the model
-            storage.delete(path)
-        else:
-            super(Floor, self).delete(*args, **kwargs)
+            delete_file(self.img)
+        if self.imgB:
+            delete_file(self.imgB)
+
+        super(Floor, self).delete(*args, **kwargs)
 
 
 class LabelCategory(models.Model):
@@ -95,7 +105,7 @@ class LabelCategory(models.Model):
     img = models.FileField(upload_to=get_label_category_path, blank=True, null=True)
     color = models.CharField(max_length=50, blank=False)
     icon = models.CharField(max_length=50, blank=True, null=True)
-    enclosure = models.ForeignKey(Enclosure, related_name='enclosure', blank=False, null=True)
+    enclosure = models.ForeignKey(Enclosure, related_name='enclosure', blank=True, null=True)
 
     class Meta:
         verbose_name_plural = 'Label categories'
@@ -131,15 +141,20 @@ class Label(models.Model):
         return self.name
 
     def delete(self, *args, **kwargs):
-        if self.img:
-            # You have to prepare what you need before delete the model
-            storage, path = self.img.storage, self.img.path
-            # Delete the model before the file
-            super(Label, self).delete(*args, **kwargs)
-            # Delete the file after the model
-            storage.delete(path)
-        else:
-            super(Label, self).delete(*args, **kwargs)
+        """
+        Antes eliminamos:
+            - imágen de su cupón (si existe)
+            - su usuario, dueño de la etiqueta (tienda)
+        """
+        points = Point.objects.filter(label__id=self.pk)
+        for point in points:
+            if point.coupon:
+                delete_file(point.coupon)
+
+        user = CustomUser.objects.filter(labels__id=self.pk)
+        user.delete()
+
+        super(Label, self).delete(*args, **kwargs)
 
 
 class Point(models.Model):
@@ -150,8 +165,8 @@ class Point(models.Model):
     floor = models.ForeignKey(Floor, related_name='points', on_delete=models.CASCADE)
     # panorama_thumbnail = models.FileField(upload_to=get_panorama_path, null=True, blank=True)
     alwaysVisible = models.NullBooleanField()
-    center_x = models.PositiveIntegerField(null=True)
-    center_y = models.PositiveIntegerField(null=True)
+    center_x = models.PositiveIntegerField(null=True, blank=True)
+    center_y = models.PositiveIntegerField(null=True, blank=True)
     isVertical = models.NullBooleanField()
     panorama = models.FileField(upload_to=get_panorama_path, null=True, blank=True)
     coupon = models.FileField(upload_to=get_coupon_path,null=True, blank=True)

@@ -3,6 +3,7 @@ Created on 25/04/2013
 
 @author: yomac
 '''
+from coupon_manager.models import Coupon
 
 from map_editor.models import Enclosure, Floor, LabelCategory, Label, Point
 
@@ -13,5 +14,6 @@ CLASSES = {
     'label-category': LabelCategory,
     'category': LabelCategory,
     'label': Label,
-    'point': Point
+    'point': Point,
+    'coupon': Coupon
 }

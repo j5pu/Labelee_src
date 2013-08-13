@@ -107,6 +107,14 @@ def your_position(request, label_id):
     return render_to_response('map/your_position.html', ctx, context_instance=RequestContext(request))
 
 
+def qr_code_redirect(request):
+    if request.method == 'POST':
+        qr = QR_Code.objects.get(id=request.POST['qr_code_id'])
+        return HttpResponseRedirect('/map/origin/' + qr.code)
+
+    return render_to_response('map/qr_code_form.html', context_instance=RequestContext(request))
+
+
 def fuera(request, id, row, column):
     url = 'http://inmap.eu01.aws.af.cm/routesFrom.php?id=' + id + \
           '&row=' + row + '&column=' + column
