@@ -124,7 +124,7 @@ class Dijkstra():
         #mira si el punto tiene una conexión con otra planta
         if key in self.mapConnections:
             for mapConnection in self.mapConnections[key]:
-                connection[mapConnection] = 10000
+                connection[mapConnection] = 10000 # More weigh in connections, so the route changes of floor only if needed
 
         return connection
     #crea el grafo del mapa

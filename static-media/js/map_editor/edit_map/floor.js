@@ -65,27 +65,22 @@ var Floor = {
         // Limpiamos el grid si estaba creado
         $grid.empty();
 
+        var gridHtml = '';
         for(var row = Floor.num_rows-1; row >= 0; row--)
         {
             // Crea fila
-            $grid.append('<div class="row"></div>');
-            var current_row = $grid.find('.row:last');
-
-            current_row.attr('data-row', row);
-            current_row.css({'height': Floor.block_height});
+            gridHtml += '<div class="row" data-row="' + row +'" style="height: ' + Floor.block_height + 'px;">';
 
             for(var col = 0; col < Floor.num_cols; col++)
             {
                 // Crea bloque
-                current_row.append('<div class="block"></div>');
-                var current_block = current_row.find('.block:last');
-                current_block.attr('data-col', col);
-                current_block.css({
-                    'height': Floor.block_height,
-                    'width': Floor.block_width
-                });
+                gridHtml += '<div class="block" data-col="' + col +'" style="height: ' + Floor.block_height +
+                    'px; width: ' + Floor.block_width + 'px;"></div>';
             }
+
+            gridHtml += '</div>';
         }
+        $grid.append(gridHtml);
 
         // Cargamos en el mapeador 'elements.js' los bloques creados
         $e.floor.blocks = $('.block');
