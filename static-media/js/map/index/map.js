@@ -772,7 +772,7 @@ function drawRoute(org, dst) {
                 blinker(check,dst);
 
                 // Cambia a la planta del origen si estamos en otra
-                if(current_floor.id != qrFloor.id)
+                if(current_floor.id != qrFloor.id && current_floor.id != dest_floor.id)
                 {
                     var floor_to_show_name = floors_indexed[qrFloor.id].name;
                     $('.leaflet-control-layers-base input[type=radio]')
