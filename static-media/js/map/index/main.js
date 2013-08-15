@@ -167,7 +167,7 @@ $(function() {
             cupFloor = parseInt(cupFloor.substring(strL-3, strL-1));
 
 
-        preDrawRoute(qrPoint.point.id, qrFloor.id, cupPoint, cupFloor);
+        drawRoute(qrPoint.point.id, cupPoint);
         $('div.device').fadeOut();
 
     });
@@ -178,7 +178,7 @@ $(function() {
 function hideSplash() {
     var d = new Date();
     $('div#page').fadeIn(100);
-    loopFloors(floor_index);
+    loadFloors();
     LocalStorageHandler.init();
     $('div.splash').fadeOut(200);
 }

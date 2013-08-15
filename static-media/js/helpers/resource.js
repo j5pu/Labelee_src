@@ -699,6 +699,7 @@ EnclosureResource.prototype = new Resource();
 var enclosureResource = new EnclosureResource();
 ConnectionResource.prototype = new Resource();
 RouteResource.prototype = new Resource();
+var routeResource = new RouteResource();
 StepResource.prototype = new Resource();
 UserResource.prototype = new Resource();
 var userResource = new UserResource();
