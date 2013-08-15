@@ -96,7 +96,8 @@ class PointResource(ModelResource):
     qr_code = fields.ToOneField('map_editor.api.resources.QRCodeResource', 'qr_code', null=True)
 
     class Meta:
-        queryset = Point.objects.all()
+        queryset = Point.objects.select_related('floor', 'label', 'qr_code').all()
+        #queryset = Point.objects.all()
         authorization = ResourceAuthorization('floor__enclosure__owner')
         always_return_data = True
         filtering = {
@@ -208,7 +209,7 @@ class QRCodeResource(ModelResource):
 
     class Meta:
         resource_name = 'qr-code'
-        queryset = QR_Code.objects.all()
+        queryset = QR_Code.objects.select_related('point__floor').all()
         authorization = DjangoAuthorization()
         always_return_data = True
         filtering = {
