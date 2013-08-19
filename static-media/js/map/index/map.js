@@ -918,7 +918,6 @@ function bindContent(marker) {
 
     // Se bindea el contenido del popup abierto para el marker
     Panorama.bindShow(marker);
-    SocialMenu.bindShow(marker);
     Coupon.bindShowFromMarker();
 
     marker.contentBinded = true;
