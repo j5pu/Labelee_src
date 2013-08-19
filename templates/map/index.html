@@ -187,7 +187,7 @@
     </div>{% endcomment %}
 
     {% if coupons %}
-        <div id="cupones">
+        <div id="cupones" style="width:118px;height:142px">
             <img id="cupon-img" src="/media/cupones_lab.png"
                  alt="Cupones" usemap="#cupon">
             <map name="cupon">
@@ -240,7 +240,7 @@
 
     <div id="marquee">
             <marquee align="center" direction="left" loop="40"
-                 style="width:100%; z-index: 10000; font-size:14px;line-height:16px; position: absolute;bottom: 0;background:rgba(17, 17, 17, 0.4);color: #ddd">
+                 style="width:100%; z-index: 10000; font-size:14px;line-height:24px; position: absolute;bottom: 0;background:rgba(17, 17, 17, 0.4);color: #ddd">
             {% for text in marquee %}
                 <span>{{ text }}</span>
             {% endfor %}

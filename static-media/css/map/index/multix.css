@@ -929,7 +929,7 @@ span.locator
 
 div#cupones{
     position: absolute;
-    left: 58%;
+    right: 0px;
     bottom: 0;
     z-index:6;
     width: 28%;
