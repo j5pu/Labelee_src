@@ -447,7 +447,7 @@ function loadPOIs() {
 
             var popupTitle = description;
             if (panorama) {
-                popupTitle += Panorama.renderIcon(id);
+                popupTitle += Panorama.renderIcon(id, panorama);
             }
             popupTitle += SocialMenu.renderIcon(id);
 
@@ -491,8 +491,8 @@ function loadPOIs() {
                         drawRoute(qrPoint.point.id, this.poid);
                     }
 
-                    qrMarker.contentBinded = false;
-                    bindContent(qrMarker);
+                    destMarker.contentBinded = false;
+                    bindContent(destMarker);
                 });
 
             var category_index = label_categories_indexed[current_poi.marker.category];
@@ -521,7 +521,7 @@ function loadPOIs() {
 
         var originLegend = gettext("You are right here:") + '<br>' + point_description;
         if (qrPoint.point.panorama)
-            originLegend = originLegend + Panorama.renderIcon(qrPoint.point.id);
+            originLegend = originLegend + Panorama.renderIcon(qrPoint.point.id, qrPoint.point.panorama);
         originLegend += SocialMenu.renderIcon(qrPoint.point.id);
 
         qrMarker = L.marker(qrLoc, {icon: originIcon})
@@ -535,7 +535,7 @@ function loadPOIs() {
     }
     else {
         var msg = gettext("Please, scan a QR code to get here:") + ' ';
-        var photoIcon = qrPoint.point.panorama ? Panorama.renderIcon(qrPoint.point.id) : "";
+        var photoIcon = qrPoint.point.panorama ? Panorama.renderIcon(qrPoint.point.id, qrPoint.point.panorama) : "";
 
         qrMarker = L.marker(qrLoc, {
             icon: destIcon}).bindPopup(msg + '<br>'+ qrPoint.point.description + photoIcon + SocialMenu.renderIcon(qrPoint.point.id))
@@ -725,7 +725,7 @@ function drawRoute(org, dst) {
 
             var destLegend = route.fields.destiny.fields.description;
             if (route.fields.destiny.fields.panorama) {
-                destLegend += Panorama.renderIcon(dst);
+                destLegend += Panorama.renderIcon(dst, route.fields.destiny.fields.panorama);
             }
             destLegend += SocialMenu.renderIcon(dst);
 
