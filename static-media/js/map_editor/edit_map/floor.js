@@ -56,7 +56,7 @@ var Floor = {
         $grid.css({
             'height': Floor.grid_height,
             'width': Floor.grid_width,
-            'background-image': 'url("' + Floor.data.img + '")',
+            'background-image': 'url("' + Floor.img.src + '")',
             'background-size': Floor.grid_width + 'px' + ' ' + Floor.grid_height + 'px'
         });
 
