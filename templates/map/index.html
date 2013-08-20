@@ -123,7 +123,7 @@
 
     <div id="header">
         <a href="#menu-right">
-            <img src="/media/logomenu.png"/>
+            <img src="{{ MEDIA_URL }}menuLab.png"/>
         </a>
         <!--
         <span id="fake"></span>
@@ -156,7 +156,7 @@
                 <li>
                 <li class="Label" style="background:{{ colors|get_item:category.name }};">{{ category.name }}</li>
                 {% for destination in category.items %}
-                    <li onclick="$('#menu-right').trigger( 'close' );preDrawRoute({{ poi_id }},floor_id,{{ destination.id }},{{ destination.floor_id }});LocalStorageHandler.setPrevDestByPoi({{ destination.id }})">
+                    <li onclick="$('#menu-right').trigger( 'close' );drawRoute({{ poi_id }},{{ destination.id }});LocalStorageHandler.setPrevDestByPoi({{ destination.id }})">
                         {% if destination.label.category.enclosure %}
                             {{ destination.label.name }}
                         {% else %}
@@ -186,16 +186,16 @@
         </a>
     </div>{% endcomment %}
 
+    {% if coupons %}
+        <div id="cupones" style="width:118px;height:142px">
+            <img id="cupon-img" src="/media/cupones_lab.png"
+                 alt="Cupones" usemap="#cupon">
+            <map name="cupon">
+                <area shape="poly" coords="" href="#" alt="{% trans "Cupones" %}" title="Cupon">
+            </map>
 
-    <div id="cupones">
-        <img id="cupon-img" src="/media/cupones_lab.png"
-             alt="Cupones" usemap="#cupon">
-        <map name="cupon">
-            <area shape="poly" coords="" href="#" alt="{% trans "Cupones" %}" title="Cupon">
-        </map>
-
-        <!-- Lets create a CSS3 stamp -->
-        {% comment %}       <div class="stamp" id="stamp1">
+            <!-- Lets create a CSS3 stamp -->
+            {% comment %}       <div class="stamp" id="stamp1">
             <!-- the image -->
             <div class="miKupon"></div>
         </div>
@@ -215,37 +215,37 @@
 
 
 {% endcomment %}
-    </div>
-    <div class="device">
-        <a class="arrow-left" href="#"></a>
-        <a class="arrow-right" href="#"></a>
-        <button id="closeCoupon">x</button>
+        </div>
+        <div class="device">
+            <a class="arrow-left" href="#"></a>
+            <a class="arrow-right" href="#"></a>
+            <button id="closeCoupon">x</button>
 
-        <div class="swiper-container">
-            <div class="swiper-wrapper">
-                {% for point,img in coupons.items %}
+            <div class="swiper-container">
+                <div class="swiper-wrapper">
+                    {% for point,img in coupons.items %}
 
-                    <div class="swiper-slide">
-                        <img id="{{ point }}" class="cupImg" src="{{ img }}">
-                    </div>
-                {% endfor %}
+                        <div class="swiper-slide">
+                            <img id="{{ point }}" class="cupImg" src="{{ img }}">
+                        </div>
+                    {% endfor %}
+
+                </div>
 
             </div>
-
+            <div class="pagination"></div>
         </div>
-        <div class="pagination"></div>
-    </div>
+    {% endif %}
 
-    {% comment %}
+
     <div id="marquee">
             <marquee align="center" direction="left" loop="40"
-                 style="width:100%; z-index: 10000; font-size:14px;line-height:16px; position: absolute;bottom: 0;background:rgba(17, 17, 17, 0.4);color: #ddd">
+                 style="width:100%; z-index: 10000; font-size:14px;line-height:24px; position: absolute;bottom: 0;background:rgba(17, 17, 17, 0.4);color: #ddd">
             {% for text in marquee %}
                 <span>{{ text }}</span>
             {% endfor %}
         </marquee>
     </div>
-{% endcomment %}
 </div>
 
 </body>

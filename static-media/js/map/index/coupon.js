@@ -119,7 +119,7 @@ var Coupon = {
 
             self.$el.find('span').hammer({prevent_default: true })
                 .bind('tap', function(){
-                    preDrawRoute(qrPoint.point.id, qrFloor.id, 5894, 41);
+                    drawRoute(qrPoint.point.id, 5894);
                     self.top_new = self.initial_top;
                     self.$el.css({'margin-top': self.top_new + 'px'});
                     self.opened = false;
