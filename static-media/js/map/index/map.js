@@ -112,7 +112,7 @@ var mapW = Math.min($(window).innerWidth(), $(window).innerHeight()),
     carMarker,
     route = {},
     pathLine = {},
-    arrowHead = [],
+    arrowHead = {},
     arrowOffset = 0,
     qrMarker = new L.Marker(),
     destMarker = new L.Marker(),
@@ -661,6 +661,15 @@ function changeFloor(e) {
     // Añadimos capas de la planta actual
     current_floor = floors_indexed[e.layer.floor_id];
     map.addLayer(current_floor.layer);
+    if(anim!=null)
+    {
+          window.clearInterval(anim);
+          anim=null;
+    }
+    if(arrowHead[current_floor.id])
+    {
+         arrowAnim(arrowHead[current_floor.id],current_floor.id);
+    }
     Map.reloadPois();
 
     if (map.hasLayer(qrMarker)) {
@@ -695,7 +704,11 @@ Map.reloadPois = function()
 
 function drawRoute(org, dst) {
     //Creación de la ruta (con subrutas correspondientes), desde el origen hasta el POI destino
-
+    for(var floor_id in arrowHead)
+    {
+         floors_indexed[floor_id].layer.removeLayer(arrowHead[floor_id]);
+    }
+    arrowHead = {};
     if (org != dst && dst != prev_dest)
     {
         prev_dest = dst;
@@ -762,7 +775,15 @@ function drawRoute(org, dst) {
                             (route.fields.subroutes[subroute_index].steps[step_index].fields.column) * osX + osX]);
                     }
                     pathLine[floor_id] = L.polyline(path[floor_id], {color: 'orange', opacity: 0.8, weight:2 });
+                    arrowHead[floor_id] = L.polylineDecorator(pathLine[floor_id]);
                     floors_indexed[floor_id].layer.addLayer(pathLine[floor_id]);
+                    floors_indexed[floor_id].layer.addLayer(arrowHead[floor_id]);
+
+                }
+
+                if(arrowHead[current_floor.id])
+                {
+                     arrowAnim(arrowHead[current_floor.id],current_floor.id);
                 }
 
                 // Parpadeo en el botón de la planta destino
@@ -922,3 +943,28 @@ function bindContent(marker) {
 
     marker.contentBinded = true;
 }
+
+
+//Función que gestiona la animación de la flecha
+function arrowAnim(arrow, idFloor) {
+
+    if (anim != null) {
+        window.clearInterval(anim);
+
+    }
+    anim = window.setInterval(function () {
+
+        setArrow(arrow, idFloor)
+    }, 100);
+
+}
+var arrowsOffset = 0;
+//Función que define la animación (en este caso, flecha azul) que marca la ruta
+var setArrow = function (flecha, idFloor) {
+
+    flecha.setPatterns([
+        {offset: arrowsOffset + '%', repeat: 0, symbol: new L.Symbol.ArrowHead({pixelSize: 15, polygon: false, pathOptions: { stroke: true}})}
+    ]);
+    if (++arrowsOffset > 100)
+        arrowsOffset = 0;
+};

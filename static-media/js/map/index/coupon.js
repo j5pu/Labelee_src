@@ -1,3 +1,4 @@
+/*
 var Coupon = {
 
     limit_margin_top: 0.3,
@@ -177,4 +178,4 @@ var Coupon = {
 
 
 
-};
+};*/
