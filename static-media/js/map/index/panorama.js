@@ -15,23 +15,23 @@ var Panorama = {
 
     },
 
-    renderIcon: function(pointId)
+    renderIcon: function(pointId, panorama)
     {
-        return  '<button onclick="Panorama.show(this)" class="panorama"  id="' + pointId + '">' +
+        return  '<button onclick="Panorama.show(this)" class="panorama"  id="' + pointId + '" data-panorama="' + panorama + '">' +
             '<i class="icon-camera"></i>' +
             '</button>'
     },
 
     bindShow: function(marker)
     {
-        Panorama.marker = marker;
-        $('.leaflet-popup-content button.panorama').on('click', function(e){
-            e.preventDefault();
-            Panorama.show();
-        });
+//        Panorama.marker = marker;
+//        $('.leaflet-popup-content button.panorama').on('click', function(e){
+//            e.preventDefault();
+//            Panorama.show();
+//        });
     },
 
-    show: function()
+    show: function(marker)
     {
 //        console.log('yaaa');
         Coupon.close();
@@ -39,7 +39,13 @@ var Panorama = {
 
         var newWidth=window.innerWidth*0.9,
             newHeight=newWidth*9/16;
-        addSamplePano(Panorama.marker.panorama,{height: newHeight, ratio:9/16, minSpeed:30});
+
+        var panoramaImage = marker.getAttribute('data-panorama')
+        if (panoramaImage.indexOf("media") == -1) {
+            panoramaImage = "/media/" + panoramaImage;
+        }
+
+        addSamplePano(panoramaImage,{height: newHeight, ratio:9/16, minSpeed:30});
     },
 
     resize: function()
