@@ -1,3 +1,4 @@
+import locale
 import tweepy
 from log.logger import Logger
 
@@ -24,6 +25,7 @@ class TwitterHelper:
 
     def getTweets(self):
         try:
+            locale.setlocale(locale.LC_ALL, '')
             auth = tweepy.OAuthHandler(self.consumer_key,self.consumer_secret)
             auth.set_access_token(self.access_token,self.access_token_secret)
             api = tweepy.API(auth)
