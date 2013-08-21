@@ -8,16 +8,21 @@ from django.shortcuts import render_to_response
 from django.template import RequestContext
 import simplejson
 from dashboard.models import DisplayedRoutes
-from map_editor.models import Point
+from map_editor.models import Floor
 
 import settings
 
 @login_required(login_url=settings.LOGIN_URL)
 def index(request, enclosure_id):
 
+    floors = Floor.objects.filter(enclosure_id=enclosure_id)
+    floorImages = {}
+    for floor in floors:
+        floorImages[floor.name] = floor.imgB.url
     # translation.activate(request.session['django_language'])
     ctx = {
-        'enclosure_id': enclosure_id
+        'enclosure_id': enclosure_id,
+        'floorImages': floorImages
     }
     return render_to_response('dashboard/index.html', ctx, context_instance=RequestContext(request))
 

@@ -25,7 +25,8 @@ class TwitterHelper:
 
     def getTweets(self):
         try:
-            locale.setlocale(locale.LC_ALL, '')
+            locale.setlocale(locale.LC_ALL, 'en_US.UTF-8')
+            locale.setlocale(locale.LC_TIME, '')
             auth = tweepy.OAuthHandler(self.consumer_key,self.consumer_secret)
             auth.set_access_token(self.access_token,self.access_token_secret)
             api = tweepy.API(auth)

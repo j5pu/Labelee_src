@@ -39,12 +39,186 @@
     <script src="{{ STATIC_URL }}vendor/NVD3.js    Live Code examples powered by CodeMirror_files/jquery.min.js"></script>
     <script src="{{ STATIC_URL }}vendor/NVD3.js    Live Code examples powered by CodeMirror_files/bootstrap.js"></script>
     <script src="{{ STATIC_URL }}js/helpers/resource.js"></script>
+    <script src="{{ STATIC_URL }}js/dashboard/heatmap.js"></script>
     <script src="{{ STATIC_URL }}js/dashboard/main.js"></script>
+
 
 
     <!--[if lt IE 9]>
       <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
+
+     <script type="text/javascript">
+            var djConfig = {
+                parseOnLoad: true
+            };
+        </script>
+
+
+
+
+
+	<script type="text/javascript">
+
+    function findPositionX(obj)
+{
+    var left = 0;
+    if(obj.offsetParent)
+    {
+        while(1)
+        {
+          left += obj.offsetLeft;
+          if(!obj.offsetParent)
+            break;
+          obj = obj.offsetParent;
+        }
+    }
+    else if(obj.x)
+    {
+        left += obj.x;
+    }
+    return left;
+}
+
+
+function findPosY(obj)
+{
+    var top = 0;
+    if(obj.offsetParent)
+    {
+        while(1)
+        {
+          top += obj.offsetTop;
+          if(!obj.offsetParent)
+            break;
+          obj = obj.offsetParent;
+        }
+    }
+    else if(obj.y)
+    {
+        top += obj.y;
+    }
+    return top;
+  }
+
+	{% comment %}	function ConversionPuntoX( numColumnas, cellx,width)
+		{
+		    var w= width;
+			//alert(w);
+			var widthCell=w / numColumnas;
+			var x=(cellx*widthCell)+(widthCell / 2);
+			return x;
+
+		}
+	    function ConversionPuntoY(  numFilas, celly,height)
+		{
+			var h= height;
+			//alert(h);
+			var heigthCell= h / numFilas;
+			var y=(celly*heigthCell)+(heigthCell/2);
+			return y;
+		}{% endcomment %}
+
+    function ConversionPuntoX( numColumnas, cellx)
+		{
+		    var w= document.getElementById('imgMapa').width;
+			//alert(w);
+			var widthCell=w / numColumnas;
+			var x=(cellx*widthCell)+(widthCell / 2);
+			return x;
+
+		}
+	    function ConversionPuntoY(  numFilas, celly)
+		{
+			var h=document.getElementById('imgMapa').height;
+			//alert(h);
+			var heigthCell= h / numFilas;
+			var y=(celly*heigthCell)+(heigthCell/2);
+			return y;
+		}
+
+        window.onload = function(){
+
+			// heatmap configuration
+			document.getElementById('heatmapArea').setAttribute('style','width:'+document.getElementById('imgMapa').width+'px;');
+			document.getElementById('heatmapArea').setAttribute('style','height:'+document.getElementById('imgMapa').height+'px;');
+			var config = {
+				element: document.getElementById("heatmapArea"),
+				radius: 35,
+				opacity: 50
+			};
+
+			//creates and initializes the heatmap
+			var heatmap = h337.create(config);
+
+			// numero de filas y columnas
+			var columnas=100;
+			var filas=100;
+			//Calculo de puntos por celda
+			var celdaX=35;
+			var celdaY=15;
+
+				var x2=Math.floor(ConversionPuntoX(columnas,celdaX));
+				var y2=Math.floor(ConversionPuntoY(filas,celdaY));
+
+            x2+=findPositionX(document.getElementById('imgMapa'));
+
+            y2+=findPosY(document.getElementById('imgMapa'));
+
+			//alert("Y vale: "+y2 + " X vale:"+x2);
+			//Array de puntos
+			var data = {
+				max: 100,
+				data: [
+
+					{ x: x2, y:y2, count:100},
+					{ x:30 , y:15, count:5}
+				]
+			};
+
+			heatmap.store.setDataSet(data);
+		};
+
+		  function setHeatMap(element){
+
+			// heatmap configuration
+			//document.getElementById('heatmapArea').setAttribute('style','width:'+document.getElementById('imgMapa').width+'px;');
+			//document.getElementById('heatmapArea').setAttribute('style','height:'+document.getElementById('imgMapa').height+'px;');
+			var config = {
+				element: element,
+				radius: 35,
+				opacity: 50
+			};
+
+			//creates and initializes the heatmap
+			var heatmap = h337.create(config);
+
+			// numero de filas y columnas
+			var columnas=100;
+			var filas=100;
+			//Calculo de puntos por celda
+			var celdaX=35;
+			var celdaY=15;
+
+				var x2=Math.floor(ConversionPuntoX(columnas,celdaX,element.width));
+				var y2=Math.floor(ConversionPuntoY(filas,celdaY,element.height));
+
+
+
+			//alert("Y vale: "+y2 + " X vale:"+x2);
+			//Array de puntos
+			var data = {
+				max: 100,
+				data: [
+
+					{ x: x2, y:y2, count:100},
+					{ x:15 , y:15, count:5}
+				]
+			};
+
+			heatmap.store.setDataSet(data);
+		};
+	</script>
 
 {% endblock %}
 
@@ -143,7 +317,27 @@
                 <svg  id="chart5"></svg>
             </div>
         </li>
+       <!-- {% for floorName,img in floorImages.items %}
+                        <li class="span6">
+                        <h2 id="floor_{{ floorName }}">Planta {{ floorName }}</h2>
+                        <div>
+                            <img id="{{ floorName }}"  src="{{ img }}" onload="setHeatMap(this)">
+                        </div>
+                        </li>
+         {% endfor %}
+         -->
+    <li class="span6">
+                        <h2 id="floor_1">Planta 1</h2>
+                         <div id="heatmapArea" class="well"
+	 style="padding:0;cursor:pointer;position:relative; top:10em; left: 15em; border:2px;">
+                <div id="heatLayer"></div>
+                <div id="map" style="border:1px">
 
+                            <img id="imgMapa" src="/media/img/enclosures/26/floors/60_b_1.png" />
+                        </div>
+                             </div>
+
+                        </li>
 
     </ul>
 
