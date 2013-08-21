@@ -1,5 +1,5 @@
 import tweepy
-
+from log.logger import Logger
 
 class TwitterHelper:
     consumer_key = ""
@@ -29,6 +29,7 @@ class TwitterHelper:
             api = tweepy.API(auth)
             return api.user_timeline(self.twitter_user)
         except Exception as ex:
+            Logger.error(ex.message)
             return []
 
 
