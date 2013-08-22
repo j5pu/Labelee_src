@@ -1,7 +1,2 @@
-django>=1.5
-mysql-python
-django-tastypie
-simplejson
-Pillow
-tweepy>=2.0
-django-modeltranslation
+# Install all of our production dependencies only
+-r requirements/prod.txt
