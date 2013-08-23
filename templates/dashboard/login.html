@@ -1,0 +1,77 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+<!-----Meta----->
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>Demo:: Beautiful HTML login Form</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+<!--Stylesheets-->
+
+<link href="{{ STATIC_URL }}css/dashboard/login.css" rel="stylesheet" type="text/css" />
+
+<!--Scripts-->
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+<!--Sliding icons-->
+<script type="text/javascript">
+$(document).ready(function() {
+	$(".username").focus(function() {
+		$(".user-icon").css("left","-48px");
+	});
+	$(".username").blur(function() {
+		$(".user-icon").css("left","0px");
+	});
+
+	$(".password").focus(function() {
+		$(".pass-icon").css("left","-48px");
+	});
+	$(".password").blur(function() {
+		$(".pass-icon").css("left","0px");
+	});
+});
+</script>
+
+</head>
+<body>
+
+<div id="wrapper">
+	<!--Sliding icons-->
+    <div class="user-icon"></div>
+    <div class="pass-icon"></div>
+    <!--END Sliding icons-->
+
+<!--login form inputs-->
+<form name="login-form" class="login-form" action="./{{ enclosure_id }}" method="post"> {% csrf_token %}
+
+	<!--Header-->
+    <div class="header">
+    <h1>Login</h1>
+    <span> {{ state }}</span>
+    </div>
+    <!--END header-->
+
+	<!--Input fields-->
+    <div class="content">
+	<!--USERNAME--><input name="username" type="text" class="input username" placeholder="Nombre de usuario" /><!--END USERNAME-->
+    <!--PASSWORD--><input name="password" type="password" class="input password" placeholder="Contraseña" /><!--END PASSWORD-->
+    </div>
+    <!--END Input fields-->
+
+    <!--Buttons-->
+    <div class="footer">
+    <!--Login button--><input type="submit" name="submit" value="Login" class="button" /><!--END Login button-->
+
+    </div>
+    <!--END Buttons-->
+
+</form>
+<!--end login form-->
+
+</div>
+
+
+
+</body>
+</html>

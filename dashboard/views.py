@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import datetime
 from django.contrib.auth.decorators import login_required
+from django.core.context_processors import csrf
 from django.core.serializers import json
 from django.http import HttpResponse
 
@@ -9,33 +10,61 @@ from django.template import RequestContext
 import simplejson
 from dashboard.models import DisplayedRoutes
 from map_editor.models import Floor
+from route.models import Route, Step
+from route.services import getHeatMapSteps
 
 import settings
 
-@login_required(login_url=settings.LOGIN_URL)
+
 def index(request, enclosure_id):
-
-    floors = Floor.objects.filter(enclosure_id=enclosure_id)
-    floorImages = {}
-    for floor in floors:
-        floorImages[floor.name] = floor.imgB.url
-    # translation.activate(request.session['django_language'])
+    state = "Registrate para acceder al dashboard"
+    username = password = ''
     ctx = {
-        'enclosure_id': enclosure_id,
-        'floorImages': floorImages
+        'state': state,
+        'enclosure_id': enclosure_id
+
     }
-    return render_to_response('dashboard/index.html', ctx, context_instance=RequestContext(request))
+    url = 'dashboard/login.html'
+    userlogged = request.session.get('userlogged')
 
+    if request.POST or userlogged is not None:
+        username = request.POST.get('username')
+        password = request.POST.get('password')
 
+        if username == "alcala" and password == "labelee2013" or userlogged is not None:
+            request.session['userlogged'] = 'alacala'
+            allPoints = getHeatMapSteps(enclosure_id)
+
+            floors = Floor.objects.filter(enclosure_id=enclosure_id)
+            floorsDict = {}
+            for floor in floors:
+                floorsDict[floor.name] = floor
+                # floorsDict.activate(request.session['django_language'])
+            ctx = {
+                'enclosure_id': enclosure_id,
+                'floorsDict': floorsDict,
+                'currentSteps': allPoints
+            }
+            url = 'dashboard/index.html'
+        else:
+            ctx = {
+                'state': 'Nombre de usuario y/o incorrectos',
+                'enclosure_id': enclosure_id
+
+            }
+
+    ctx.update(csrf(request))
+    return render_to_response(url, ctx, context_instance=RequestContext(request))
 
 
 def saveRouteRequest(request):
     json_data = request.body
     point_list = simplejson.loads(json_data)
     dispRoute = DisplayedRoutes()
-    dispRoute.origin_id= point_list['originpoi']
+    dispRoute.origin_id = point_list['originpoi']
     dispRoute.destination_id = point_list['destinationpoi']
     dispRoute.date = datetime.datetime.utcnow()
     dispRoute.save()
     return HttpResponse(simplejson.dumps('ok'))
+
 
