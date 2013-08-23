@@ -10,7 +10,7 @@ import simplejson
 from dashboard.models import DisplayedRoutes
 from map_editor.models import Floor
 
-import settings
+from django.conf import settings
 
 @login_required(login_url=settings.LOGIN_URL)
 def index(request, enclosure_id):

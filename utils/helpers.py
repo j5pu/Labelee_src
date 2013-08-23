@@ -6,7 +6,7 @@ from tastypie.models import ApiKey
 from django.http import HttpResponse
 import simplejson
 from django.core.serializers import serialize
-import settings
+from django.conf import settings
 
 
 def responseJSON(**kwargs):
