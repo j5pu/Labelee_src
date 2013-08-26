@@ -69,11 +69,11 @@ def show_map(request, qr_type, enclosure_id, floor_id, poi_id):
     ordered_categories = sorted(categories_list, key=itemgetter('name'))
 
     marquee = []
-    twitterhelper = TwitterHelper(enclosure[0].twitter_account)
-    tweets = twitterhelper.getTweets()
-    for tweet in tweets:
-        marquee.append(tweet.text)
-        break
+    # twitterhelper = TwitterHelper(enclosure[0].twitter_account)
+    # tweets = twitterhelper.getTweets()
+    # for tweet in tweets:
+    #     marquee.append(tweet.text)
+    #     break
 
     ctx = {
         'enclosure_id': enclosure_id,
