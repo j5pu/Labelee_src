@@ -48,13 +48,11 @@
 
 }
 .splash .sp-container div.frame-5 img {
-	-webkit-animation: blurFadeIn 1s;
-	-moz-animation: blurFadeIn 1s;
-	animation: blurFadeIn 1s;
+
     width: 80%;
 
 }
-
+/*
 #find {
 	top: 80%;
 	font-family: 'Just Me Again Down Here';
@@ -64,7 +62,7 @@
 	animation: fadeInBack2 1s;
 	color: black;
 	transform: rotate(-7deg);
-	-webkit-transform: rotate(-7deg); /* Safari and Chrome */
+	-webkit-transform: rotate(-7deg); *//* Safari and Chrome *//*
 }
 
 #your{
@@ -76,7 +74,7 @@
 	animation: fadeInBack2 4s;
 	color: black;
 	transform: rotate(-7deg);
-	-webkit-transform: rotate(-7deg); /* Safari and Chrome */
+	-webkit-transform: rotate(-7deg); *//* Safari and Chrome *//*
 }
 #way{
 	top: 80%;
@@ -87,9 +85,9 @@
 	animation: fadeInBack2 3s;
 	color: black;
 	transform: rotate(-7deg);
-	-webkit-transform: rotate(-7deg); /* Safari and Chrome */
+	-webkit-transform: rotate(-7deg); *//* Safari and Chrome *//*
 }
-
+*/
 @-webkit-keyframes blurFadeIn{
 	0%{
 		opacity: 0;

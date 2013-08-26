@@ -405,6 +405,7 @@ function loadFloors()
                 $('span:has(i.icon-film)').css('left', '11px');
                 $('span:has(i.icon-glass)').css('left', '11px');
                 Coupon.init();
+                $('div.splash').fadeOut(100);
             }
         }(floor_index);
     }
