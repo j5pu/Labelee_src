@@ -1087,8 +1087,18 @@ Instead of a list of all class selectors,
 you can use the generic selector below, but it's slower:
 [class*="icon-"] {
 */
-.icon-food, .icon-female, .icon-male,.icon-sort, .icon-signin, .icon-screenshot, .icon-twitter-sign, .icon-google-plus-sign, .icon-facebook-sign, .icon-camera, .icon-star,.icon-basket, .icon-microwave,.icon-barbell, .icon-user, .icon-user-2, .icon-user-3, .icon-tshirt {
+.icon-food, .icon-female, .icon-male,.icon-sort, .icon-signin, .icon-screenshot, .icon-twitter-sign , .icon-google-plus-sign, .icon-facebook-sign, .icon-camera, .icon-star,.icon-basket, .icon-microwave,.icon-barbell, .icon-user, .icon-user-2, .icon-user-3, .icon-tshirt {
     font-family: 'carFont';
+    speak: none;
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+    -webkit-font-smoothing: antialiased;
+}
+.icon-phone-sign {
+    font-family: 'whatsapp';
     speak: none;
     font-style: normal;
     font-weight: normal;
@@ -1127,6 +1137,10 @@ you can use the generic selector below, but it's slower:
     content: "\f082";
 }
 
+.icon-phone-sign:before {
+    content: "\f098";
+}
+
 .icon-smile:before {
     content: "\f182|\f183";
 }
@@ -1161,6 +1175,17 @@ you can use the generic selector below, but it's slower:
     url('../font/carFont.woff') format('woff'),
     url('../font/carFont.ttf') format('truetype'),
     url('../font/carFont.svg#carFont') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'whatsapp';
+    src:url('../font/whatsapp.eot');
+    src:url('../font/whatsapp.eot?#iefix') format('embedded-opentype'),
+    url('../font/whatsapp.woff') format('woff'),
+    url('../font/whatsapp.ttf') format('truetype'),
+    url('../font/whatsapp.svg#whatsapp') format('svg');
     font-weight: normal;
     font-style: normal;
 }
