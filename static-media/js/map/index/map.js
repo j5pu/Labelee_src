@@ -86,17 +86,7 @@ var txtIcon = new L.icon({
 });
 
 //Carga de datos globales
-var qrPoint = {
-    point: pointResource.read(poi_id),
-    floor: floorResource.read(floor_id),
-    enclosure: enclosureResource.read(enclosure_id)
-};
-qrPoint.label = labelCategoryResource.readFromUri(qrPoint.point.label);
-qrPoint.labelCategory = labelCategoryResource.readFromUri(qrPoint.label.category);
-qrPoint.isParking = function () {
-    return this.labelCategory.name_en == 'Parking';
-};
-
+var qrPoint = mapData.qrPoint;
 
 var mapW = Math.min($(window).innerWidth(), $(window).innerHeight()),
 //var mapH = $(document).height(),//Altura de la pantalla
@@ -112,7 +102,7 @@ var mapW = Math.min($(window).innerWidth(), $(window).innerHeight()),
     carMarker,
     route = {},
     pathLine = {},
-    arrowHead = {},
+    arrowHead = [],
     arrowOffset = 0,
     qrMarker = new L.Marker(),
     destMarker = new L.Marker(),
@@ -120,16 +110,16 @@ var mapW = Math.min($(window).innerWidth(), $(window).innerHeight()),
     subarrow = [],
     floors_indexed = {},
     current_floor = null,
-    floors = floorResource.readFromEnclosure(qrPoint.enclosure.id);
+    floors = mapData.floors;
 
-var label_categories = labelCategoryResource.readValidAsPois(qrPoint.enclosure.id);
+var label_categories = mapData.label_categories;
 var layercategories_indexed = {};
 var selected_category_index;
 
 var label_categories_indexed = {};
 for(var category_index in label_categories)
 {
-    var category_name = label_categories[category_index].fields.name;
+    var category_name = label_categories[category_index].name;
     label_categories_indexed[category_name]  = category_index;
     label_categories[category_index].layer = new L.LayerGroup();
 
@@ -138,13 +128,12 @@ for(var category_index in label_categories)
 
     layersControl.addOverlay(
         label_categories[category_index].layer,
-        '<i class="icon-' + label_categories[category_index].fields.icon + ' icon-white"></i>'
+        '<i class="icon-' + label_categories[category_index].icon + ' icon-white"></i>'
     );
 }
 
 //POIs de cada floor, separados para pintarlos por capas
 for (var i in floors) {
-    floors[i].pois = pointResource.readOnlyPois(floors[i].id);
     // Clonamos cada objeto label_categories para asignarlo a cada planta
     floors[i].categories = jQuery.extend(true, {}, label_categories);
     for(var category_index in floors[i].categories)
@@ -202,7 +191,7 @@ var LocalStorageHandler = {
     },
 
     setValues: function () {
-        if (qrPoint.isParking()) {
+        if (qrPoint.isParking) {
             if (confirm(gettext('Do you want to remember your parking space?'))) {
                 var miCoche = {
                     dest: qrPoint,
@@ -447,7 +436,7 @@ function loadPOIs() {
 
             var popupTitle = description;
             if (panorama) {
-                popupTitle += Panorama.renderIcon(id, panorama);
+                popupTitle += Panorama.renderIcon(id);
             }
             popupTitle += SocialMenu.renderIcon(id);
 
@@ -491,8 +480,8 @@ function loadPOIs() {
                         drawRoute(qrPoint.point.id, this.poid);
                     }
 
-                    destMarker.contentBinded = false;
-                    bindContent(destMarker);
+                    qrMarker.contentBinded = false;
+                    bindContent(qrMarker);
                 });
 
             var category_index = label_categories_indexed[current_poi.marker.category];
@@ -521,7 +510,7 @@ function loadPOIs() {
 
         var originLegend = gettext("You are right here:") + '<br>' + point_description;
         if (qrPoint.point.panorama)
-            originLegend = originLegend + Panorama.renderIcon(qrPoint.point.id, qrPoint.point.panorama);
+            originLegend = originLegend + Panorama.renderIcon(qrPoint.point.id);
         originLegend += SocialMenu.renderIcon(qrPoint.point.id);
 
         qrMarker = L.marker(qrLoc, {icon: originIcon})
@@ -535,7 +524,7 @@ function loadPOIs() {
     }
     else {
         var msg = gettext("Please, scan a QR code to get here:") + ' ';
-        var photoIcon = qrPoint.point.panorama ? Panorama.renderIcon(qrPoint.point.id, qrPoint.point.panorama) : "";
+        var photoIcon = qrPoint.point.panorama ? Panorama.renderIcon(qrPoint.point.id) : "";
 
         qrMarker = L.marker(qrLoc, {
             icon: destIcon}).bindPopup(msg + '<br>'+ qrPoint.point.description + photoIcon + SocialMenu.renderIcon(qrPoint.point.id))
@@ -638,7 +627,7 @@ function addCategory(category_index) {
     if(!map.hasLayer(label_categories[category_index].layer))
         map.addLayer(label_categories[category_index].layer);
     checkboxes.eq(category_index)
-        .css('background', label_categories[category_index].fields.color);
+        .css('background', label_categories[category_index].color);
 
     selected_category_index = category_index;
 }
@@ -661,15 +650,6 @@ function changeFloor(e) {
     // Añadimos capas de la planta actual
     current_floor = floors_indexed[e.layer.floor_id];
     map.addLayer(current_floor.layer);
-    if(anim!=null)
-    {
-          window.clearInterval(anim);
-          anim=null;
-    }
-    if(arrowHead[current_floor.id])
-    {
-         arrowAnim(arrowHead[current_floor.id],current_floor.id);
-    }
     Map.reloadPois();
 
     if (map.hasLayer(qrMarker)) {
@@ -704,11 +684,7 @@ Map.reloadPois = function()
 
 function drawRoute(org, dst) {
     //Creación de la ruta (con subrutas correspondientes), desde el origen hasta el POI destino
-    for(var floor_id in arrowHead)
-    {
-         floors_indexed[floor_id].layer.removeLayer(arrowHead[floor_id]);
-    }
-    arrowHead = {};
+
     if (org != dst && dst != prev_dest)
     {
         prev_dest = dst;
@@ -738,7 +714,7 @@ function drawRoute(org, dst) {
 
             var destLegend = route.fields.destiny.fields.description;
             if (route.fields.destiny.fields.panorama) {
-                destLegend += Panorama.renderIcon(dst, route.fields.destiny.fields.panorama);
+                destLegend += Panorama.renderIcon(dst);
             }
             destLegend += SocialMenu.renderIcon(dst);
 
@@ -775,15 +751,7 @@ function drawRoute(org, dst) {
                             (route.fields.subroutes[subroute_index].steps[step_index].fields.column) * osX + osX]);
                     }
                     pathLine[floor_id] = L.polyline(path[floor_id], {color: 'orange', opacity: 0.8, weight:2 });
-                    arrowHead[floor_id] = L.polylineDecorator(pathLine[floor_id]);
                     floors_indexed[floor_id].layer.addLayer(pathLine[floor_id]);
-                    floors_indexed[floor_id].layer.addLayer(arrowHead[floor_id]);
-
-                }
-
-                if(arrowHead[current_floor.id])
-                {
-                     arrowAnim(arrowHead[current_floor.id],current_floor.id);
                 }
 
                 // Parpadeo en el botón de la planta destino
@@ -933,38 +901,13 @@ Map.events =
 
 
 function bindContent(marker) {
-    if (marker.contentBinded)
-        if (marker.contentBinded)
-            return;
+    if (!marker.contentBinded)
+    {
+        // Se bindea el contenido del popup abierto para el marker
+        Panorama.bindShow(marker);
+//        SocialMenu.bindShow(marker);
+        Coupon.bindShowFromMarker();
 
-    // Se bindea el contenido del popup abierto para el marker
-    Panorama.bindShow(marker);
-    Coupon.bindShowFromMarker();
-
-    marker.contentBinded = true;
-}
-
-
-//Función que gestiona la animación de la flecha
-function arrowAnim(arrow, idFloor) {
-
-    if (anim != null) {
-        window.clearInterval(anim);
-
+        marker.contentBinded = true;
     }
-    anim = window.setInterval(function () {
-
-        setArrow(arrow, idFloor)
-    }, 100);
-
 }
-var arrowsOffset = 0;
-//Función que define la animación (en este caso, flecha azul) que marca la ruta
-var setArrow = function (flecha, idFloor) {
-
-    flecha.setPatterns([
-        {offset: arrowsOffset + '%', repeat: 0, symbol: new L.Symbol.ArrowHead({pixelSize: 15, polygon: false, pathOptions: { stroke: true}})}
-    ]);
-    if (++arrowsOffset > 100)
-        arrowsOffset = 0;
-};

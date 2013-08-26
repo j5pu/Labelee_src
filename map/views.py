@@ -8,9 +8,11 @@ from django.http import HttpResponseRedirect
 # from touching_log import log
 
 import json
+import simplejson
 from dashboard.models import Qr_shot
 from log.logger import Logger
 from map.twitterHelper import TwitterHelper
+from map.utils_ import get_map_data
 from map_editor.models import *
 from django.db.models.query import Q
 
@@ -81,7 +83,8 @@ def show_map(request, qr_type, enclosure_id, floor_id, poi_id):
         'marquee': marquee,
         'qr_type': qr_type,
         'coupons': coupons,
-        'colors': colors
+        'colors': colors,
+        'map_data': simplejson.dumps(get_map_data(qr_type, poi_id))
     }
     return render_to_response('map/index.html', ctx, context_instance=RequestContext(request))
 
