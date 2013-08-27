@@ -13,7 +13,7 @@ def get_map_data(qr_type, poi_id, poisByFloor):
     """
     response = {}
 
-    qrPoint = Point.objects.select_related('floor','floor__enclosure').get(pk=poi_id)
+    qrPoint = Point.objects.select_related('floor','floor__enclosure','floor__enclosure__floors').get(pk=poi_id)
     response['qrPoint'] = {
         'point': t_obj_to_dict(PointResource(), qrPoint),
         'floor': t_obj_to_dict(FloorResource(), qrPoint.floor),
