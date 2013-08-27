@@ -17,6 +17,12 @@ import os
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "settings")
 
+# Get New Relic configuration data if present
+if os.environ.get("NEW_RELIC_CONFIG_FILE", False):
+    import newrelic.agent
+    newrelic.agent.initialize(os.environ["NEW_RELIC_CONFIG_FILE"])
+
+
 # This application object is used by any WSGI server configured to use this
 # file. This includes Django's development server, if the WSGI_APPLICATION
 # setting points here.
