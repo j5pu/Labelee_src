@@ -932,15 +932,15 @@ div#cupones{
     right: 0px;
     bottom: 0;
     z-index:6;
-    width: 28%;
+
 
 }
 #cupones img{
-    width: 100%;
+
     position: absolute;
     bottom: 0;
+    right: 0;
 }
-
 
 .device {
     width: 86%;

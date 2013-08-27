@@ -7,20 +7,20 @@ from map_editor.models import Point
 from utils.helpers import queryset_to_dict, t_obj_to_dict
 
 
-def get_map_data(qr_type, poi_id):
+def get_map_data(qr_type, poi_id, poisByFloor):
     """
     Devuelve un diccionario con todos los datos necesarios a usar por el JS
     """
     response = {}
 
-    qrPoint = Point.objects.get(pk=poi_id)
+    qrPoint = Point.objects.select_related('floor','floor__enclosure').get(pk=poi_id)
     response['qrPoint'] = {
         'point': t_obj_to_dict(PointResource(), qrPoint),
         'floor': t_obj_to_dict(FloorResource(), qrPoint.floor),
         'enclosure': t_obj_to_dict(EnclosureResource(), qrPoint.floor.enclosure),
         'label': t_obj_to_dict(LabelResource(), qrPoint.label),
         'labelCategory': queryset_to_dict([qrPoint.label.category])[0],
-        # 'labelCategory': qrPoint.label.category
+
     }
     response['qrPoint']['isParking'] = qrPoint.label.category.name_en == FIXED_CATEGORIES[3]
 
@@ -29,6 +29,6 @@ def get_map_data(qr_type, poi_id):
     response['floors'] = queryset_to_dict(qrPoint.floor.enclosure.floors.all())
 
     for floor in response['floors']:
-        floor['pois'] = readOnlyPois(floor['id'])
+        floor['pois'] = poisByFloor[floor['id']]
 
     return response

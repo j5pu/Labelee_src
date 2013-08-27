@@ -91,7 +91,7 @@ def tx_serialized_json_list(json_list):
         d = {}
         d['id'] = el['pk']
         for key,val in el['fields'].items():
-            if isinstance(val, str) and 'img/' in val:
+            if (isinstance(val, str) or isinstance(val, unicode))and 'img/' in val:
                 d[key] = settings.MEDIA_URL + val
             else:
                 d[key] = val
