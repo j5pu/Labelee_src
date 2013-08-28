@@ -1,14 +1,13 @@
 # -*- coding: utf-8 -*-
 import datetime
 
+
 from django.core.cache import cache
 from django.template import RequestContext
 from django.shortcuts import render_to_response
-from django.http import HttpResponse
 from django.http import HttpResponseRedirect
 # from touching_log import log
 
-import json
 import simplejson
 from dashboard.models import Qr_shot
 from log.logger import Logger
@@ -33,13 +32,7 @@ def show_map(request, qr_type, enclosure_id, floor_id, poi_id):
     cache_key = 'show_map_enclosure_' + enclosure_id
     cache_time = 43200
     cacheEnclosure =cache.get(cache_key)
-    try:
-        qrShot = Qr_shot()
-        qrShot.point_id = poi_id
-        qrShot.date = datetime.datetime.utcnow()
-        qrShot.save()
-    except Exception as ex:
-        Logger.error(ex.message)
+    saveQrShot(poi_id)
     poisByFloor = {}
     categories = {}
     colors = {}
@@ -112,10 +105,18 @@ def show_map(request, qr_type, enclosure_id, floor_id, poi_id):
         'qr_type': qr_type,
         'coupons': coupons,
         'colors': colors,
-        'map_data': simplejson.dumps(get_map_data(qr_type, poi_id, poisByFloor))
+        'map_data': simplejson.dumps(get_map_data(qr_type, poi_id, poisByFloor, enclosure_id))
     }
     return render_to_response('map/index.html', ctx, context_instance=RequestContext(request))
 
+def saveQrShot(poi_id):
+    try:
+        qrShot = Qr_shot()
+        qrShot.point_id = poi_id
+        qrShot.date = datetime.datetime.utcnow()
+        qrShot.save()
+    except Exception as ex:
+        Logger.error(ex.message)
 
 def your_position(request, label_id):
     """
@@ -140,7 +141,7 @@ def your_position(request, label_id):
 
 def qr_code_redirect(request):
     if request.method == 'POST':
-        qr = QR_Code.objects.get(id=request.POST['qr_code_id'])
+        qr = QR_Code.objects.get(point_id=request.POST['qr_code_id'])
         return HttpResponseRedirect('/map/origin/' + qr.code)
 
     return render_to_response('map/qr_code_form.html', context_instance=RequestContext(request))
