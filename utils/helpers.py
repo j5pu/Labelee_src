@@ -164,7 +164,7 @@ def t_obj_to_dict(tastypieResource, obj):
 
 def t_queryset_to_dict(tastypieResource, queryset):
     """
-    Con tastypie transforma en una lista de diccionarios la queryset devuelta por el ORM
+    ransforma en una lista de diccionarios la queryset devuelta por el ORM
     """
     bundles = [tastypieResource.build_bundle(obj=q) for q in queryset]
     data = [tastypieResource.full_dehydrate(bundle).data for bundle in bundles]

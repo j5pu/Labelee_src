@@ -1,22 +1,22 @@
 ﻿/**
-* Defines several classes of symbol factories,
-* to be used with L.PolylineDecorator
-*/
+ * Defines several classes of symbol factories,
+ * to be used with L.PolylineDecorator
+ */
 
 L.Symbol = L.Symbol || {};
 
 /**
-* A simple dash symbol, drawn as a Polyline.
-* Can also be used for dots, if 'pixelSize' option is given the 0 value.
-*/
+ * A simple dash symbol, drawn as a Polyline.
+ * Can also be used for dots, if 'pixelSize' option is given the 0 value.
+ */
 L.Symbol.Dash = L.Class.extend({
     isZoomDependant: true,
-    
+
     options: {
         pixelSize: 10,
         pathOptions: { }
     },
-    
+
     initialize: function (options) {
         L.Util.setOptions(this, options);
         this.options.pathOptions.clickable = false;
@@ -24,18 +24,18 @@ L.Symbol.Dash = L.Class.extend({
 
     buildSymbol: function(dirPoint, latLngs, map, index, total) {
         var opts = this.options;
-        
+
         // for a dot, nothing more to compute
         if(opts.pixelSize <= 1) {
             return new L.Polyline([dirPoint.latLng, dirPoint.latLng], opts.pathOptions);
         }
-        
+
         var midPoint = map.project(dirPoint.latLng);
         var angle = (-(dirPoint.heading - 90)) * L.LatLng.DEG_TO_RAD;
         var a = new L.Point(
-                midPoint.x + opts.pixelSize * Math.cos(angle + Math.PI) / 2,
-                midPoint.y + opts.pixelSize * Math.sin(angle) / 2
-            );
+            midPoint.x + opts.pixelSize * Math.cos(angle + Math.PI) / 2,
+            midPoint.y + opts.pixelSize * Math.sin(angle) / 2
+        );
         // compute second point by central symmetry to avoid unecessary cos/sin
         var b = midPoint.add(midPoint.subtract(a));
         return new L.Polyline([map.unproject(a), map.unproject(b)], opts.pathOptions);
@@ -44,7 +44,7 @@ L.Symbol.Dash = L.Class.extend({
 
 L.Symbol.ArrowHead = L.Class.extend({
     isZoomDependant: true,
-    
+
     options: {
         polygon: true,
         pixelSize: 10,
@@ -54,7 +54,7 @@ L.Symbol.ArrowHead = L.Class.extend({
             weight: 2
         }
     },
-    
+
     initialize: function (options) {
         L.Util.setOptions(this, options);
         this.options.pathOptions.clickable = false;
@@ -70,12 +70,12 @@ L.Symbol.ArrowHead = L.Class.extend({
         }
         return path;
     },
-    
+
     _buildArrowPath: function (dirPoint, map) {
         var tipPoint = map.project(dirPoint.latLng);
         var direction = (-(dirPoint.heading - 90)) * L.LatLng.DEG_TO_RAD;
-        var radianArrowAngle = this.options.headAngle / 2 * L.LatLng.DEG_TO_RAD; 
-        
+        var radianArrowAngle = this.options.headAngle / 2 * L.LatLng.DEG_TO_RAD;
+
         var headAngle1 = direction + radianArrowAngle,
             headAngle2 = direction - radianArrowAngle;
         var arrowHead1 = new L.Point(
@@ -100,7 +100,7 @@ L.Symbol.Marker = L.Class.extend({
         markerOptions: { },
         rotate: false
     },
-    
+
     initialize: function (options) {
         L.Util.setOptions(this, options);
         this.options.markerOptions.clickable = false;
@@ -118,5 +118,3 @@ L.Symbol.Marker = L.Class.extend({
         }
     }
 });
-
-

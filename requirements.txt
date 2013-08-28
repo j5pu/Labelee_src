@@ -6,3 +6,4 @@ Pillow
 tweepy>=2.0
 django-modeltranslation
 python-memcached>=1.53
+django-pipeline
