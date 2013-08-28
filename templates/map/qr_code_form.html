@@ -1,25 +1,63 @@
-{% extends "base.html" %}
-
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 {% load i18n %}
+<html>
+<head>
+<!-----Meta----->
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-{% block content %}
-<form action="{% url 'map.views.qr_code_redirect' %}" method="post">
-    <div style="display:none">
-        <input type="hidden" value="{{ csrf_token }}" name="csrfmiddlewaretoken">
+
+<!--Stylesheets-->
+
+<link href="{{ STATIC_URL }}css/map/insertQrCode.css" rel="stylesheet" type="text/css" />
+
+<!--Scripts-->
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+<!--Sliding icons-->
+<script type="text/javascript">
+
+</script>
+
+</head>
+<body>
+
+<div id="wrapper">
+	<!--Sliding icons-->
+    <div class="user-icon"></div>
+    <div class="pass-icon"></div>
+    <!--END Sliding icons-->
+
+<!--login form inputs-->
+<form name="login-form" class="login-form" action="{% url 'map.views.qr_code_redirect' %}" method="post"> {% csrf_token %}
+
+	<!--Header-->
+    <div class="header">
+    <h1>{% trans "Introduzca el código de QR que aparece en el cartel" %}:</h1>
+    <span> {{ state }}</span>
     </div>
-    <table>
-        <tr>
-            <td>
-                <label for="qr_code_id">{% trans "Introduzca el código de QR que aparece en el cartel" %}:</label>
-            </td>
-            <td>
-                <input type="text" id="qr_code_id" name="qr_code_id">
-            </td>
-        </tr>
-        <tr>
-            <td></td>
-            <td><input type="submit" value="{% trans "Entrar a la aplicación" %}" /></td>
-        </tr>
-    </table>
+    <!--END header-->
+
+	<!--Input fields-->
+    <div class="content">
+	<input id="qr_code_id" name="qr_code_id" type="text" class="input qr" placeholder="Código QR" />
+
+    </div>
+    <!--END Input fields-->
+
+    <!--Buttons-->
+    <div class="footer">
+    <!--Login button--><input type="submit" name="submit" value="{% trans "Entrar a la aplicación" %}" class="button" /><!--END Login button-->
+    </div>
+
 </form>
-{% endblock %}
+<!--end login form-->
+
+</div>
+
+
+
+</body>
+</html>
+
+

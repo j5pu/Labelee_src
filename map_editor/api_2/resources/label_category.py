@@ -3,35 +3,19 @@ from django.core.serializers import serialize
 from django.db.models import Sum, Q
 from django.http.response import HttpResponse
 import simplejson
-from map_editor.api_2.utils.label_category import getLabelCategoriesForManager, getLabelCategories
+from map_editor.api_2.utils.label_category import getLabelCategoriesForManager, getLabelCategories, read_only_valid_for_enclosure
 from map_editor.models import LabelCategory
 from utils.helpers import to_dict, group_by_pk, queryset_to_dict
 
 
 def read_only_valid_categories(request, enclosure_id):
     """
-    Lee las categorías válidas para pois
-    /api-2/label-category/valid/<enclosure_id>
+    Lee las categorías válidas dado el recinto
+
+        /api-2/label-category/valid/<enclosure_id>
     """
 
-    label_categories = LabelCategory.objects.filter(
-        Q(labels__points__floor__enclosure__id = enclosure_id)
-        &
-        Q(enclosure__id = enclosure_id)
-    ).exclude(
-        name_en = 'Blockers'
-    ).exclude(
-        name_en = 'Toilet'
-    ).exclude(
-        name_en = 'Intermediate'
-    ).exclude(
-        name_en = 'Parking'
-    ).exclude(
-        name_en = 'Entrance'
-    ).exclude(
-        name_en = 'Connectors'
-    ).annotate(total=Sum('id'))
-
+    label_categories = read_only_valid_for_enclosure(enclosure_id)
 
     return HttpResponse(serialize('json', label_categories), mimetype='application/json')
 

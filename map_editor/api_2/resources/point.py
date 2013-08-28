@@ -9,6 +9,7 @@ import simplejson
 from map_editor.api.resources import PointResource
 from map_editor.models import Point, Label, Floor, QR_Code, Enclosure
 from django.contrib.auth.models import User
+
 from utils.helpers import tx_serialized_json_list
 
 
@@ -105,6 +106,13 @@ def readOnlyPois(request, floor_id):
     """
        /api-2/point/pois/17
     """
+    tx_pois = readOnlyPois(floor_id)
+
+    return HttpResponse(simplejson.dumps(tx_pois), mimetype='application/json')
+
+
+def readOnlyPois(floor_id):
+
     pois = Point.objects.filter(
         floor = floor_id
     ).exclude(
@@ -114,10 +122,6 @@ def readOnlyPois(request, floor_id):
     ).exclude(
         label__category__name_es = 'Parquing'
     )
-    # por hacer: las aristas deben llevar QR
-    # ).exclude(
-    #     qr_code = None
-    # )
 
     json_pois = serialize('json', pois)
     tx_pois = tx_serialized_json_list(json_pois)
@@ -130,7 +134,7 @@ def readOnlyPois(request, floor_id):
         tx_categ = tx_serialized_json_list(categ)[0]
         tx_pois[i]['label']['category'] = tx_categ
 
-    return HttpResponse(simplejson.dumps(tx_pois), mimetype='application/json')
+    return tx_pois
 
 
 def countPoisFromEnclosure(request, enclosure_id):

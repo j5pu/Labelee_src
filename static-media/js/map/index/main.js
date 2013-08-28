@@ -156,8 +156,9 @@ $(function() {
     $('#cupones, #header, span.locator, div#marquee').hide();
 
 //    $('div#page').hide();
-    $('body').prepend('<div class="splash">    <div class="container">        <div class="sp-container"             >            <div class="frame-5"><span><img src="/media/logosplash.png"></span></div>            <div id="find" class="frame-6">find<span id="your"> your<span id="way"> way!</span></span></div>        </div>    </div></div>')
-    setTimeout(hideSplash, 3000);
+    $('body').prepend('<div class="splash">    <div class="container">        <div class="sp-container"    >            <div class="frame-5"><span><img src="/media/alcalamagna.png"></span></div>                   </div>    </div></div>')
+
+   setTimeout(hideSplash, 100);
 
     $('div.swiper-slide img').on('click', function (e) {
         e.preventDefault();
@@ -180,7 +181,7 @@ function hideSplash() {
     $('div#page').fadeIn(100);
     loadFloors();
     LocalStorageHandler.init();
-    $('div.splash').fadeOut(200);
+
 }
 
 var Coupon = {

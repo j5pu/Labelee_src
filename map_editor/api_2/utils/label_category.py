@@ -3,7 +3,7 @@
 #
 # Funciones de utilidad
 #
-from django.db.models import Q
+from django.db.models import Q, Sum
 from map_editor.models import LabelCategory, Point
 from utils.helpers import queryset_to_dict
 
@@ -60,3 +60,25 @@ def getLabelCategoriesForManager(enclosure_id):
 
     return label_categories
 
+
+def read_only_valid_for_enclosure(enclosure_id):
+    """
+    Devuelve las categorías válidas para el recinto dado
+    """
+    return LabelCategory.objects.filter(
+        Q(labels__points__floor__enclosure__id = enclosure_id)
+        &
+        Q(enclosure__id = enclosure_id)
+    ).exclude(
+        name_en = 'Blockers'
+    ).exclude(
+        name_en = 'Toilet'
+    ).exclude(
+        name_en = 'Intermediate'
+    ).exclude(
+        name_en = 'Parking'
+    ).exclude(
+        name_en = 'Entrance'
+    ).exclude(
+        name_en = 'Connectors'
+    ).annotate(total=Sum('id'))

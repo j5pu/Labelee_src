@@ -1,4 +1,7 @@
 # -*- coding: utf-8 -*-
+from django.core.serializers import serialize
+from utils.helpers import tx_serialized_json_list
+
 
 def filterAsPois(points):
     """
@@ -13,3 +16,5 @@ def filterAsPois(points):
     ).exclude(
         qr_code = None
     )
+
+

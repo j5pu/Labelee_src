@@ -1,7 +1,6 @@
 # coding=utf-8
 import threading
 
-from django.core.mail import EmailMessage
 from django.db import transaction
 from django.http import *
 from django.utils.translation import gettext as _
@@ -17,8 +16,10 @@ from log.logger import Logger
 
 LIMIT_PER_BULK_SAVE = 30000
 
+
 class RouteInconsistencyException(Exception):
     pass
+
 
 class StepIterator:
     """ Iterates over single steps in a route, looking for lines
@@ -100,11 +101,7 @@ class StepIterator:
         return self._findLineEnd()
 
 
-
-
-
 def calculate_routes(request, enclosure_id):
-
     try:
         t1 = threading.Thread(target=threadCalculateRoute, args=[enclosure_id])
         t1.start()
@@ -153,7 +150,8 @@ def threadCalculateRoute(enclosure_id):
 
         # Get all needed related information of points in a single db hit performing a join. This avoids to query the database
         # several times for each point
-        points = list(Point.objects.select_related('label', 'label__category', 'qr_code', 'floor').filter(floor_id__in=floorIds))
+        points = list(
+            Point.objects.select_related('label', 'label__category', 'qr_code', 'floor').filter(floor_id__in=floorIds))
         ###
         qrlist = [] #qrs
         walls = [] #muros
@@ -173,7 +171,8 @@ def threadCalculateRoute(enclosure_id):
                 pmapconnections = Connection.objects.filter(init__id=point.id)
                 for pmapconnection in pmapconnections:
                     keyinit = Dijkstra.getKey(point.row, point.col, point.floor.id)
-                    keyend = Dijkstra.getKey(pmapconnection.end.row, pmapconnection.end.col, pmapconnection.end.floor.id)
+                    keyend = Dijkstra.getKey(pmapconnection.end.row, pmapconnection.end.col,
+                                             pmapconnection.end.floor.id)
                     if keyinit in mapConnections:
                         mapConnections[keyinit].append(keyend)
                     else:
@@ -229,14 +228,32 @@ def threadCalculateRoute(enclosure_id):
 
     final_time = time.clock()
     if len(errors) == 0:
-        report = "Calculate routes finished correctly. Load to memory time = " + str(pre_dijkstra_time - initial_time) + "s -- " +\
-            "Dijkstra algorithm time = " + str(post_dijkstra_time - pre_dijkstra_time) + "s -- " +\
-            "Save to database time = " + str(final_time - post_dijkstra_time) + "s -- " +\
-            "Total time = " + str(final_time - initial_time) + "s."
+        report = "Calculate routes finished correctly. Load to memory time = " + str(
+            pre_dijkstra_time - initial_time) + "s -- " + \
+                 "Dijkstra algorithm time = " + str(post_dijkstra_time - pre_dijkstra_time) + "s -- " + \
+                 "Save to database time = " + str(final_time - post_dijkstra_time) + "s -- " + \
+                 "Total time = " + str(final_time - initial_time) + "s."
         Logger.info(report)
     else:
         report = "Calculate routes finished with errors. "
         for error in errors:
             report += error + '--'
         Logger.error(report[:200])
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

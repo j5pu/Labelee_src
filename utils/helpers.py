@@ -79,7 +79,7 @@ def tx_serialized_json_list(json_list):
         d = {}
         d['id'] = el['pk']
         for key,val in el['fields'].items():
-            if isinstance(val, str) and 'img/' in val:
+            if (isinstance(val, str) or isinstance(val, unicode))and 'img/' in val:
                 d[key] = settings.MEDIA_URL + val
             else:
                 d[key] = val
@@ -140,6 +140,23 @@ def resize_img_height(img_path, fixed_height):
         wsize = int((float(img.size[0]) * float(hpercent)))
         img = img.resize((wsize, fixed_height), Image.ANTIALIAS)
         img.save(img_path)
+
+
+def t_obj_to_dict(tastypieResource, obj):
+    """
+    Con tastypie ransforma en un diccionario el objeto devuelto por el ORM de django
+    """
+    bundle = tastypieResource.build_bundle(obj)
+    dic = tastypieResource.full_dehydrate(bundle).data
+    return dic
+
+def t_queryset_to_dict(tastypieResource, queryset):
+    """
+    ransforma en una lista de diccionarios la queryset devuelta por el ORM
+    """
+    bundles = [tastypieResource.build_bundle(obj=q) for q in queryset]
+    data = [tastypieResource.full_dehydrate(bundle).data for bundle in bundles]
+    return data
 
 if __name__ == "__main__":
     pass
