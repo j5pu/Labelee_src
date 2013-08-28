@@ -5,7 +5,7 @@ from settings.common import *
 DATABASES = {
     "default": {
     "ENGINE": "django.db.backends.mysql",
-    "NAME": "labelee_dev",
+    "NAME": "test_alfredo",
     "USER": "root",
     "PASSWORD": "1aragon1",
     "HOST": "localhost",

@@ -7,10 +7,10 @@ from common import *
 DATABASES = {
     "default": {
     "ENGINE": "django.db.backends.mysql",
-    "NAME": "labelee_dev",
+    "NAME": "labelee",
     "USER": "root",
     "PASSWORD": "1aragon1",
-    "HOST": "localhost",
+    "HOST": "",
     "PORT": "",
     }
 }
@@ -25,12 +25,12 @@ TEMPLATE_DEBUG = DEBUG
 
 # Only allowed hosts!!
 ####################################
-ALLOWED_HOSTS = ['localhost:8000', '127.0.0.1', '192.168.1.33', '.compute.amazonaws.com']   #TODO: dejar el que toque!
+ALLOWED_HOSTS = ['localhost:8000', '127.0.0.1', '192.168.1.33', '.compute.amazonaws.com', '.compute-1.amazonaws.com']   #TODO: dejar el que toque!
 ####################################
 
 
-#ADMINS = (
-#    ('Alfredo', 'alfredo.lainez@mnopi.com'),
-#)
+ADMINS = (
+    ('Alfredo', 'alfredo.lainez@mnopi.com'),
+)
 
-#MANAGERS = ADMINS
+MANAGERS = ADMINS
