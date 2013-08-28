@@ -29,6 +29,8 @@ ALLOWED_HOSTS = ['localhost:8000', '127.0.0.1', '192.168.1.33', '.compute.amazon
 ####################################
 
 
+# YahooId  : labelee_server@yahoo.com
+# Password : 1Aragon1
 ADMINS = (
     ('Labeloncio', 'labelee_server@yahoo.com'),
 )
