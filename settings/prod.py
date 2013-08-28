@@ -30,7 +30,7 @@ ALLOWED_HOSTS = ['localhost:8000', '127.0.0.1', '192.168.1.33', '.compute.amazon
 
 
 ADMINS = (
-    ('Alfredo', 'alfredo.lainez@mnopi.com'),
+    ('Labeloncio', 'labelee_server@yahoo.com'),
 )
 
 MANAGERS = ADMINS
