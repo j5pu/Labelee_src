@@ -1,4 +1,5 @@
 from settings.common import *
+from settings.dev import *
 
 #Alfredo's local database
 #

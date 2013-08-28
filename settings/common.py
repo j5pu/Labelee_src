@@ -10,13 +10,6 @@ PROJECT_ROOT = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
-ADMINS = (
-    # ('Your Name', 'your_email@example.com'),
-)
-
-MANAGERS = ADMINS
-
-
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
 # although not all choices may be available on all operating systems.
@@ -148,6 +141,7 @@ INSTALLED_APPS = (
     'coupon_manager',
     'pipeline',
 )
+
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to
 # the site admins on every HTTP 500 error when DEBUG=False.
@@ -180,65 +174,16 @@ INSTALLED_APPS = (
 
 API_LIMIT_PER_PAGE = 5000
 
-#
-# Para ver si estamos en desarrollo o produccion
-## Pull in CloudFoundry's production settings
-if 'VCAP_SERVICES' in os.environ:
-    import json
-    vcap_services = json.loads(os.environ['VCAP_SERVICES'])
-    # XXX: avoid hardcoding here
-    mysql_srv = vcap_services['mysql-5.1'][0]
-    cred = mysql_srv['credentials']
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.mysql',
-            'NAME': cred['name'],
-            'USER': cred['user'],
-            'PASSWORD': cred['password'],
-            'HOST': cred['hostname'],
-            'PORT': cred['port'],
-            }
+DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.mysql",
+        "NAME": "labelee_dev",
+        "USER": "mnopi",
+        "PASSWORD": "1aragon1",
+        "HOST": "192.168.1.201",
+        "PORT": "",
         }
-
-#     De momento dejamos el debugger activo (DEBUG=True)..
-#     DEBUG = TEMPLATE_DEBUG = False
-
-    # print os.environ['VCAP_SERVICES']
-
-else:
-    # DATABASES = {
-    #     "default": {
-    #         "ENGINE": "django.db.backends.mysql",
-    #         "NAME": "db6ce67ef80534c99820cbe0c4d3370c8",
-    #         "USER": "u9MqeM0rqx6Ai",
-    #         "PASSWORD": "pHirV24N1fsHU",
-    #         "HOST": "127.0.0.1",
-    #         "PORT": "10001",
-    #     }
-    # }
-    # DATABASES = {
-    #     "default": {
-    #         "ENGINE": "django.db.backends.mysql",
-    #         "NAME": "labelee_dev",
-    #         "USER": "root",
-    #         "PASSWORD": "",
-    #         "HOST": "",
-    #         "PORT": "",
-    #         }
-    # }
-    DATABASES = {
-        "default": {
-            "ENGINE": "django.db.backends.mysql",
-            "NAME": "labelee_dev",
-            "USER": "mnopi",
-            "PASSWORD": "1aragon1",
-            "HOST": "192.168.1.201",
-            "PORT": "",
-            }
     }
-
-    #     Estas aplicaciones solo se usaran en desarrollo..
-    INSTALLED_APPS += ('south', 'sandbox',)
 
 
 EMAIL_USE_TLS = True
