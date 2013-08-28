@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-
+{% load i18n %}
 {% block css %}
     <link href="http://nvd3.org/css/bootstrap.css" rel="stylesheet">
     <link href="http://nvd3.org/src/nv.d3.css" rel="stylesheet">
@@ -87,27 +87,20 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </a>
-                <span class="brand" style="color:white;">Dashboard | Enclosure Name</span>
+                <span class="brand" style="color:white;">Dashboard {{ enclosureName }}</span>
 
                 <div class="nav-collapse">
                     <ul class="nav">
-                        <li><a href="#"><i class="icon-white icon-picture"></i> Enclosure Website</a>
+                        <!--
+                        <li><a href="#"><i class="icon-white icon-picture"></i>  {% trans 'Web Corporativa'   %} </a>
                         </li>
                         <li><a href="#"><i class="icon-white icon-play-circle"></i>
-                            Labelee App</a></li>
-                        <li><a href="#"><i class="icon-white icon-book"></i> Coupons Manager</a></li>
+                            {% trans ' Labelee App'   %}</a></li>
+                        <li><a href="#"><i class="icon-white icon-book"></i> {% trans 'Administración de Cupones'   %} </a></li>
+                        -->
                     </ul>
                     <ul class="nav pull-right">
-                        {% comment %}
-                    <li><p class="navbar-text"><i class="icon-white icon-download"></i> Download:</p></li>
-                    <li>
-                        <div class="btn-group">
-                            <a class="btn btn-small btn-primary"
-                               href="#">PDF</a>
-                            <a class="btn btn-small btn-primary" href="#">E-MAIL</a>
-                        </div>
-                    </li>
-{% endcomment %}
+
                     </ul>
                 </div>
                 <!--/.nav-collapse -->
@@ -125,7 +118,7 @@
         <ul class="thumbnails">
 
             <li class="span6">
-                <h2 id="total_scans">Total Scans</h2>
+                <h2 id="total_scans"> {% trans 'Total de Lecturas QR'   %}</h2>
 
                 <div>
                     <svg id="chart0"></svg>
@@ -133,7 +126,7 @@
             </li>
 
             <li class="span6">
-                <h2 id="total_routes">Total Routes</h2>
+                <h2 id="total_routes">{% trans 'Total Rutas'   %}</h2>
 
                 <div>
                     <svg id="chart1"></svg>
@@ -141,7 +134,7 @@
             </li>
 
             <li class="span6">
-                <h2 id="scan_categories">Scans by Categories</h2>
+                <h2 id="scan_categories">{% trans 'Lecturas QR por Categorías'   %}</h2>
 
                 <div>
                     <svg id="chart2"></svg>
@@ -149,14 +142,14 @@
             </li>
 
             <li class="span6">
-                <h2 id="routes_categories">Routes by Categories</h2>
+                <h2 id="routes_categories">{% trans 'Rutas por Categorías'   %}</h2>
 
                 <div>
                     <svg id="chart3"></svg>
                 </div>
             </li>
             <li class="span6">
-                <h2 id="top_scans">Top 10 Scans</h2>
+                <h2 id="top_scans">{% trans 'Top 10 de Lecturas QR'   %}</h2>
 
                 <div>
                     <svg id="chart4"></svg>
@@ -164,7 +157,7 @@
             </li>
 
             <li class="span6">
-                <h2 id="top_routes">Top 10 Routes</h2>
+                <h2 id="top_routes">{% trans 'Top 10 de Rutas'   %}</h2>
 
                 <div>
                     <svg id="chart5"></svg>
@@ -172,7 +165,7 @@
             </li>
             {% for floorName,floor in floorsDict.items %}
                         <li class="span6">
-                        <h2 id="floor_{{ floorName }}">Planta {{ floorName }}</h2>
+                        <h2 id="floor_{{ floorName }}">{% trans 'Planta'   %}: {{ floorName }}</h2>
                         <div id="heatmapArea_{{ floorName }}" class="heatmapArea">
                         <div style="border:1px;">
                             <img id="{{ floorName }}"  src="{{ floor.imgB.url }}" onload="setHeatMap(this,{{ floorName }},{{ floor.num_cols }},{{ floor.num_rows }})">
@@ -182,18 +175,7 @@
 
          {% endfor %}
 
-           {% comment %} <li class="span6">
-                <h2 id="floor_1">Planta 1</h2>
 
-                <div id="heatmapArea" class="heatmapArea">
-
-                    <div id="map" style="border:1px; ">
-
-                        <img id="imgMapa" src="/media/img/enclosures/26/floors/60_b_1.png" onload="setHeatMap(this,'1')"/>
-                    </div>
-                </div>
-
-            </li>{% endcomment %}
 
         </ul>
 

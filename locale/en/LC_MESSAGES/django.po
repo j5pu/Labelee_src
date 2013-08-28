@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-08-02 13:02+0200\n"
+"POT-Creation-Date: 2013-08-28 18:02+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,530 +17,724 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: coupon_manager/services.py:25
-#, fuzzy
-msgid "Mis cupones"
-msgstr "Coupons"
-
-#: coupon_manager/services.py:26
-msgid "Mi cupón"
-msgstr ""
-
-#: dashboard/services.py:25 map_editor/api_2/resources/qr_shot.py:25
+#: .\dashboard\services.py:25 .\map_editor\api_2\resources\qr_shot.py:25
 #, fuzzy
 msgid "Total de escaneos"
 msgstr "Connection list"
 
-#: dashboard/services.py:43
+#: .\dashboard\services.py:43
 msgid "POIs más escaneados"
 msgstr ""
 
-#: dashboard/services.py:61
+#: .\dashboard\services.py:61
 msgid "Total de rutas"
 msgstr ""
 
-#: dashboard/services.py:79
+#: .\dashboard\services.py:79
 msgid "Rutas más solicitadas"
 msgstr ""
 
-#: route/calculateRoutes.py:119
+#: .\route\calculateRoutes.py:116
 msgid "Se están calculando las rutas"
 msgstr "Routes are being processed"
 
-#: sandbox/i18n/test.html:13
+#: .\sandbox\i18n\test.html.py:13 .\static\i18n\test.html.py:13
 msgid "Esto es un titulo"
 msgstr "This is a title"
 
-#: templates/coupon_manager/index.html:27
-msgid "Cupón"
-msgstr ""
+#: .\static-media\partials\_manager_navbar.html.py:25
+#: .\static\partials\_manager_navbar.html.py:25
+#: .\templates\coupon_manager\index.html.py:23
+#: .\templates\map_editor\v2\index.html.py:54
+msgid "Bienvenido"
+msgstr "Welcome"
 
-#: templates/coupon_manager/index.html:35
-#: templates/coupon_manager/index.html:50
-#: templates/map_editor/v1/index.html:98
-#: templates/map_editor/v1/index.html:202
-#: templates/map_editor/v2/edit.html:134 templates/map_editor/v2/edit.html:155
-#: templates/map_editor/v2/index.html:118
+#: .\static-media\partials\_coupon_manager\_coupon_for_shop.html.py:12
+#: .\static\partials\_coupon_manager\_coupon_for_shop.html.py:12
+#: .\templates\coupon_manager\index.html.py:97
+#: .\templates\map_editor\v1\index.html.py:98
+#: .\templates\map_editor\v1\index.html.py:202
+#: .\templates\map_editor\v2\edit.html.py:134
+#: .\templates\map_editor\v2\edit.html.py:155
+#: .\templates\map_editor\v2\index.html.py:121
 msgid "Editar"
 msgstr "Edit"
 
-#: templates/coupon_manager/index.html:54
-#: templates/coupon_manager/index.html:86
+#: .\static-media\partials\_coupon_manager\_coupon_for_shop.html.py:16
+#: .\static-media\partials\_coupon_manager\_dialogs.html.py:23
+#: .\static\partials\_coupon_manager\_coupon_for_shop.html.py:16
+#: .\static\partials\_coupon_manager\_dialogs.html.py:23
+#: .\templates\coupon_manager\index.html.py:87
 #, fuzzy
 msgid "Añadir cupón"
 msgstr "Add floor"
 
-#: templates/coupon_manager/index.html:59
+#: .\static-media\partials\_coupon_manager\_coupon_for_shop.html.py:20
+#: .\static\partials\_coupon_manager\_coupon_for_shop.html.py:20
 msgid ""
 "\n"
-"                    Este POI, <b>[[manager.coupon.label.name]]</b>, no "
-"aparece como dibujado\n"
-"                    en ninguna planta del recinto <b>[[manager.coupon."
-"enclosure.name]]</b>.\n"
-"                    Consulte con el administrador.\n"
-"                "
+"        Este POI, <b>[[coupon.label.name]]</b>, no aparece como dibujado\n"
+"        en ninguna planta del recinto <b>[[$parent.enclosure.name]]</b>.\n"
+"        Consulte con el administrador.\n"
+"    "
 msgstr ""
 
-#: templates/coupon_manager/index.html:77
+#: .\static-media\partials\_coupon_manager\_coupon_list_enclosure.html.py:7
+#: .\static\partials\_coupon_manager\_coupon_list_enclosure.html.py:7
+msgid "Cupón"
+msgstr ""
+
+#: .\static-media\partials\_coupon_manager\_dialogs.html.py:14
+#: .\static-media\partials\_coupon_manager\_dialogs.html.py:63
+#: .\static\partials\_coupon_manager\_dialogs.html.py:14
+#: .\static\partials\_coupon_manager\_dialogs.html.py:63
 #, fuzzy
 msgid "Imagen para el cupón:"
 msgstr "POI image"
 
-#: templates/coupon_manager/index.html:82
-#: templates/map_editor/v2/index.html:206
+#: .\static-media\partials\_coupon_manager\_dialogs.html.py:19
+#: .\static-media\partials\_coupon_manager\_dialogs.html.py:68
+#: .\static\partials\_coupon_manager\_dialogs.html.py:19
+#: .\static\partials\_coupon_manager\_dialogs.html.py:68
+#: .\templates\map_editor\v2\index.html.py:209
 msgid "Subir imagen"
 msgstr "Upload image"
 
-#: templates/coupon_manager/index.html:85
-#: templates/coupon_manager/index.html:104
-#: templates/map_editor/v1/edit.html:163 templates/map_editor/v1/edit.html:187
-#: templates/map_editor/v1/index.html:97
-#: templates/map_editor/v1/index.html:201
-#: templates/map_editor/v2/edit.html:179 templates/map_editor/v2/edit.html:197
-#: templates/map_editor/v2/edit.html:219 templates/map_editor/v2/edit.html:240
-#: templates/map_editor/v2/index.html:263
-#: templates/map_editor/v2/index.html:336
+#: .\static-media\partials\_coupon_manager\_dialogs.html.py:22
+#: .\static-media\partials\_coupon_manager\_dialogs.html.py:42
+#: .\static-media\partials\_coupon_manager\_dialogs.html.py:71
+#: .\static-media\partials\_coupon_manager\_dialogs.html.py:96
+#: .\static\partials\_coupon_manager\_dialogs.html.py:22
+#: .\static\partials\_coupon_manager\_dialogs.html.py:42
+#: .\static\partials\_coupon_manager\_dialogs.html.py:71
+#: .\static\partials\_coupon_manager\_dialogs.html.py:96
+#: .\templates\map_editor\v1\edit.html.py:163
+#: .\templates\map_editor\v1\edit.html.py:187
+#: .\templates\map_editor\v1\index.html.py:97
+#: .\templates\map_editor\v1\index.html.py:201
+#: .\templates\map_editor\v2\edit.html.py:179
+#: .\templates\map_editor\v2\edit.html.py:197
+#: .\templates\map_editor\v2\edit.html.py:219
+#: .\templates\map_editor\v2\edit.html.py:240
+#: .\templates\map_editor\v2\index.html.py:266
+#: .\templates\map_editor\v2\index.html.py:339
 msgid "Cancelar"
 msgstr "Cancel"
 
-#: templates/coupon_manager/index.html:97
+#: .\static-media\partials\_coupon_manager\_dialogs.html.py:34
+#: .\static-media\partials\_coupon_manager\_dialogs.html.py:88
+#: .\static\partials\_coupon_manager\_dialogs.html.py:34
+#: .\static\partials\_coupon_manager\_dialogs.html.py:88
 #, fuzzy
 msgid "Nueva imagen para el cupón:"
 msgstr "New name for the enclosure"
 
-#: templates/coupon_manager/index.html:101
-#: templates/map_editor/v1/index.html:198
-#: templates/map_editor/v2/index.html:248
-#: templates/map_editor/v2/index.html:328
-#: templates/map_editor/v2/index.html:333
+#: .\static-media\partials\_coupon_manager\_dialogs.html.py:39
+#: .\static-media\partials\_coupon_manager\_dialogs.html.py:93
+#: .\static\partials\_coupon_manager\_dialogs.html.py:39
+#: .\static\partials\_coupon_manager\_dialogs.html.py:93
+#: .\templates\map_editor\v1\index.html.py:198
+#: .\templates\map_editor\v2\index.html.py:251
+#: .\templates\map_editor\v2\index.html.py:331
+#: .\templates\map_editor\v2\index.html.py:336
 msgid "Cambiar imagen"
 msgstr "Change image"
 
-#: templates/coupon_manager/index.html:105
-#: templates/map_editor/v1/edit.html:61 templates/map_editor/v2/edit.html:63
-#: templates/map_editor/v2/edit.html:198 templates/map_editor/v2/edit.html:241
-#: templates/map_editor/v2/index.html:264
-#: templates/map_editor/v2/index.html:337
+#: .\static-media\partials\_coupon_manager\_dialogs.html.py:43
+#: .\static-media\partials\_coupon_manager\_dialogs.html.py:97
+#: .\static\partials\_coupon_manager\_dialogs.html.py:43
+#: .\static\partials\_coupon_manager\_dialogs.html.py:97
+#: .\templates\map_editor\v1\edit.html.py:61
+#: .\templates\map_editor\v2\edit.html.py:63
+#: .\templates\map_editor\v2\edit.html.py:198
+#: .\templates\map_editor\v2\edit.html.py:241
+#: .\templates\map_editor\v2\index.html.py:267
+#: .\templates\map_editor\v2\index.html.py:340
 msgid "Guardar"
 msgstr "Save"
 
-#: templates/coupon_manager/index.html:106
+#: .\static-media\partials\_coupon_manager\_dialogs.html.py:44
+#: .\static-media\partials\_coupon_manager\_dialogs.html.py:98
+#: .\static\partials\_coupon_manager\_dialogs.html.py:44
+#: .\static\partials\_coupon_manager\_dialogs.html.py:98
 #, fuzzy
 msgid "Eliminar cupón"
 msgstr "Delete floor"
 
-#: templates/map/index.html:156
+#: .\static-media\partials\_coupon_manager\_dialogs.html.py:58
+#: .\static-media\partials\_coupon_manager\_dialogs.html.py:83
+#: .\static\partials\_coupon_manager\_dialogs.html.py:58
+#: .\static\partials\_coupon_manager\_dialogs.html.py:83
+#, fuzzy
+msgid "Nombre del cupón"
+msgstr "Enclosure name"
+
+#: .\static-media\partials\_coupon_manager\_dialogs.html.py:72
+#: .\static\partials\_coupon_manager\_dialogs.html.py:72
+#, fuzzy
+msgid "Crear cupón"
+msgstr "Add floor"
+
+#: .\templates\coupon_manager\index.html.py:35
+#: .\templates\map_editor\v2\index.html.py:78
+msgid "Buscar recinto"
+msgstr "Search for enclosure"
+
+#: .\templates\coupon_manager\index.html.py:38
+#, fuzzy
+msgid "Introduzca nombre del recinto a buscar"
+msgstr "Insert the enclosure URL"
+
+#: .\templates\coupon_manager\index.html.py:41
+#, fuzzy
+msgid "Buscar cupón"
+msgstr "Add floor"
+
+#: .\templates\coupon_manager\index.html.py:44
+#, fuzzy
+msgid "Introduzca nombre del POI a buscar"
+msgstr "Insert the dashboard URL"
+
+#: .\templates\coupon_manager\index.html.py:50
+#, fuzzy
+msgid "Tiendas sin cupón"
+msgstr "Delete floor"
+
+#: .\templates\coupon_manager\index.html.py:53
+#, fuzzy
+msgid "Tiendas con cupón"
+msgstr "Delete floor"
+
+#: .\templates\coupon_manager\index.html.py:67
+#, fuzzy
+msgid "Recinto"
+msgstr "Enclosures"
+
+#: .\templates\coupon_manager\index.html.py:68
+msgid "Cupones para las tiendas"
+msgstr ""
+
+#: .\templates\coupon_manager\index.html.py:69
+#, fuzzy
+msgid "Cupones para el recinto"
+msgstr "Enclosure name"
+
+#: .\templates\dashboard\index.html.py:95
+msgid "Web Corporativa"
+msgstr "Company Web Site"
+
+#: .\templates\dashboard\index.html.py:98
+#, fuzzy
+msgid " Labelee App"
+msgstr "Labelee App"
+
+#: .\templates\dashboard\index.html.py:99
+#, fuzzy
+msgid "Administración de Cupones"
+msgstr "Enclosure manager"
+
+#: .\templates\dashboard\index.html.py:129
+#, fuzzy
+msgid "Total de Lecturas QR"
+msgstr "Total Scans"
+
+#: .\templates\dashboard\index.html.py:137
+msgid "Total Rutas"
+msgstr "Total Routes"
+
+#: .\templates\dashboard\index.html.py:145
+#, fuzzy
+msgid "Lecturas QR por Categorías"
+msgstr "Scans by Categories"
+
+#: .\templates\dashboard\index.html.py:153
+#, fuzzy
+msgid "Rutas por Categorías"
+msgstr "Routes by Categories"
+
+#: .\templates\dashboard\index.html.py:160
+msgid "Top 10 de Lecturas QR"
+msgstr "Top 10 Scans"
+
+#: .\templates\dashboard\index.html.py:168
+msgid "Top 10 de Rutas"
+msgstr "Top 10 Routes"
+
+#: .\templates\dashboard\index.html.py:176
+#, fuzzy
+msgid "Planta"
+msgstr "Floor"
+
+#: .\templates\map\index.html.py:105
 msgid "Selecciona tu destino"
 msgstr "Select destination"
 
-#: templates/map/index.html:167
+#: .\templates\map\index.html.py:122
 msgid "Lo sentimos, no se ha encontrado ningún resultado."
 msgstr "No results found, sorry."
 
-#: templates/map/index.html:191
+#: .\templates\map\index.html.py:147
 msgid "Cupones"
 msgstr "Coupons"
 
-#: templates/map_editor/v1/connections.html:23
-#: templates/map_editor/v1/index.html:69
-#: templates/map_editor/v2/connections.html:23
-#: templates/map_editor/v2/index.html:124
+#: .\templates\map\qr_code_form.html.py:36
+msgid "Introduzca el código de QR que aparece en el cartel"
+msgstr ""
+
+#: .\templates\map\qr_code_form.html.py:50
+msgid "Entrar a la aplicación"
+msgstr ""
+
+#: .\templates\map_editor\v1\connections.html.py:23
+#: .\templates\map_editor\v1\index.html.py:69
+#: .\templates\map_editor\v2\connections.html.py:23
+#: .\templates\map_editor\v2\index.html.py:127
 msgid "Conexiones entre plantas"
 msgstr "Map connections"
 
-#: templates/map_editor/v1/connections.html:25
-#: templates/map_editor/v1/edit.html:60
-#: templates/map_editor/v2/connections.html:25
-#: templates/map_editor/v2/edit.html:62
+#: .\templates\map_editor\v1\connections.html.py:25
+#: .\templates\map_editor\v1\edit.html.py:60
+#: .\templates\map_editor\v2\connections.html.py:25
+#: .\templates\map_editor\v2\edit.html.py:62
 msgid "Volver al menú"
 msgstr "Back to menu"
 
-#: templates/map_editor/v1/connections.html:31
-#: templates/map_editor/v2/connections.html:30
+#: .\templates\map_editor\v1\connections.html.py:31
+#: .\templates\map_editor\v2\connections.html.py:30
 msgid "Lista de conexiones"
 msgstr "Connection list"
 
-#: templates/map_editor/v1/connections.html:42
+#: .\templates\map_editor\v1\connections.html.py:42
 msgid "Nueva conexión"
 msgstr "New connection"
 
-#: templates/map_editor/v1/connections.html:45
-#: templates/map_editor/v2/connections.html:43
+#: .\templates\map_editor\v1\connections.html.py:45
+#: .\templates\map_editor\v2\connections.html.py:43
 msgid "Arista1"
 msgstr "Connector1"
 
-#: templates/map_editor/v1/connections.html:51
-#: templates/map_editor/v2/connections.html:49
+#: .\templates\map_editor\v1\connections.html.py:51
+#: .\templates\map_editor\v2\connections.html.py:49
 msgid "Arista2"
 msgstr "Connector2"
 
-#: templates/map_editor/v1/connections.html:56
-#: templates/map_editor/v2/connections.html:54
+#: .\templates\map_editor\v1\connections.html.py:56
+#: .\templates\map_editor\v2\connections.html.py:54
 msgid "Guardar conexión"
 msgstr "Save connection"
 
-#: templates/map_editor/v1/edit.html:40 templates/map_editor/v2/edit.html:42
+#: .\templates\map_editor\v1\edit.html.py:40
+#: .\templates\map_editor\v2\edit.html.py:42
 msgid "Antes de cambiar la descripción o el QR de un punto guardar el plano"
 msgstr ""
 "You need to save the floor before assign QR or changing description for a "
 "point"
 
-#: templates/map_editor/v1/edit.html:41 templates/map_editor/v2/edit.html:43
+#: .\templates\map_editor\v1\edit.html.py:41
+#: .\templates\map_editor\v2\edit.html.py:43
 msgid "No aumentar el tamaño de la página"
 msgstr "Don't zooming on this page"
 
-#: templates/map_editor/v1/edit.html:52 templates/map_editor/v2/edit.html:54
+#: .\templates\map_editor\v1\edit.html.py:52
+#: .\templates\map_editor\v2\edit.html.py:54
 msgid "Filas"
 msgstr "Rows"
 
-#: templates/map_editor/v1/edit.html:57 templates/map_editor/v2/edit.html:59
+#: .\templates\map_editor\v1\edit.html.py:57
+#: .\templates\map_editor\v2\edit.html.py:59
 msgid "Refrescar filas"
 msgstr "Update rows"
 
-#: templates/map_editor/v1/edit.html:62 templates/map_editor/v2/edit.html:64
+#: .\templates\map_editor\v1\edit.html.py:62
+#: .\templates\map_editor\v2\edit.html.py:64
 msgid "Limpiar"
 msgstr "Clear"
 
-#: templates/map_editor/v1/edit.html:69 templates/map_editor/v2/edit.html:72
+#: .\templates\map_editor\v1\edit.html.py:69
+#: .\templates\map_editor\v2\edit.html.py:72
 msgid "Puntos"
 msgstr "Points"
 
-#: templates/map_editor/v1/edit.html:72 templates/map_editor/v2/edit.html:75
+#: .\templates\map_editor\v1\edit.html.py:72
+#: .\templates\map_editor\v2\edit.html.py:75
 msgid "Guardados"
 msgstr "Saved"
 
-#: templates/map_editor/v1/edit.html:76 templates/map_editor/v2/edit.html:79
+#: .\templates\map_editor\v1\edit.html.py:76
+#: .\templates\map_editor\v2\edit.html.py:79
 msgid "Por guardar"
 msgstr "To save"
 
-#: templates/map_editor/v1/edit.html:80
+#: .\templates\map_editor\v1\edit.html.py:80
 #, fuzzy
 msgid "Por elminar"
 msgstr "To delete"
 
-#: templates/map_editor/v1/edit.html:89 templates/map_editor/v2/edit.html:92
+#: .\templates\map_editor\v1\edit.html.py:89
+#: .\templates\map_editor\v2\edit.html.py:92
 msgid "Ver rejilla"
 msgstr "View block borders"
 
-#: templates/map_editor/v1/edit.html:92 templates/map_editor/v2/edit.html:95
+#: .\templates\map_editor\v1\edit.html.py:92
+#: .\templates\map_editor\v2\edit.html.py:95
 msgid "Modo borrar"
 msgstr "Erase mode"
 
-#: templates/map_editor/v1/edit.html:98 templates/map_editor/v2/edit.html:102
+#: .\templates\map_editor\v1\edit.html.py:98
+#: .\templates\map_editor\v2\edit.html.py:102
 msgid "Lista de QRs"
 msgstr "QR list"
 
-#: templates/map_editor/v1/edit.html:100 templates/map_editor/v2/edit.html:104
+#: .\templates\map_editor\v1\edit.html.py:100
+#: .\templates\map_editor\v2\edit.html.py:104
 msgid "Resaltar todos"
 msgstr "Highlight all"
 
-#: templates/map_editor/v1/edit.html:112 templates/map_editor/v2/edit.html:116
-#: templates/map_editor/v2/edit.html:143
+#: .\templates\map_editor\v1\edit.html.py:112
+#: .\templates\map_editor\v2\edit.html.py:116
+#: .\templates\map_editor\v2\edit.html.py:143
 msgid "Elegir POI"
 msgstr "Choose POI"
 
-#: templates/map_editor/v1/edit.html:116 templates/map_editor/v2/edit.html:120
+#: .\templates\map_editor\v1\edit.html.py:116
+#: .\templates\map_editor\v2\edit.html.py:120
 msgid "Categoría"
 msgstr "Category"
 
-#: templates/map_editor/v1/edit.html:119 templates/map_editor/v2/edit.html:129
-#: templates/map_editor/v2/edit.html:150
+#: .\templates\map_editor\v1\edit.html.py:119
+#: .\templates\map_editor\v2\edit.html.py:129
+#: .\templates\map_editor\v2\edit.html.py:150
 msgid "Nueva"
 msgstr "New"
 
-#: templates/map_editor/v1/edit.html:121 templates/map_editor/v1/edit.html:130
+#: .\templates\map_editor\v1\edit.html.py:121
+#: .\templates\map_editor\v1\edit.html.py:130
 msgid "Eliminar"
 msgstr "Delete"
 
-#: templates/map_editor/v1/edit.html:128
+#: .\templates\map_editor\v1\edit.html.py:128
 msgid "Nuevo"
 msgstr "New"
 
-#: templates/map_editor/v1/edit.html:139
+#: .\templates\map_editor\v1\edit.html.py:139
 msgid "Crear categoría"
 msgstr "Create category"
 
-#: templates/map_editor/v1/edit.html:147 templates/map_editor/v2/edit.html:170
+#: .\templates\map_editor\v1\edit.html.py:147
+#: .\templates\map_editor\v2\edit.html.py:170
 msgid "Nombre para la categoría"
 msgstr "Category name"
 
-#: templates/map_editor/v1/edit.html:154
+#: .\templates\map_editor\v1\edit.html.py:154
 msgid "Elegir icono"
 msgstr "Choose icon"
 
-#: templates/map_editor/v1/edit.html:157
+#: .\templates\map_editor\v1\edit.html.py:157
 msgid "Color de bloque"
 msgstr "Block color"
 
-#: templates/map_editor/v1/edit.html:159 templates/map_editor/v2/edit.html:172
-#: templates/map_editor/v2/edit.html:190
+#: .\templates\map_editor\v1\edit.html.py:159
+#: .\templates\map_editor\v2\edit.html.py:172
+#: .\templates\map_editor\v2\edit.html.py:190
 msgid "Color"
 msgstr "Color"
 
-#: templates/map_editor/v1/edit.html:162 templates/map_editor/v1/edit.html:186
-#: templates/map_editor/v2/edit.html:220
+#: .\templates\map_editor\v1\edit.html.py:162
+#: .\templates\map_editor\v1\edit.html.py:186
+#: .\templates\map_editor\v2\edit.html.py:220
 msgid "Crear"
 msgstr "Create"
 
-#: templates/map_editor/v1/edit.html:168 templates/map_editor/v2/edit.html:204
+#: .\templates\map_editor\v1\edit.html.py:168
+#: .\templates\map_editor\v2\edit.html.py:204
 msgid "Crear POI"
 msgstr "Create POI"
 
-#: templates/map_editor/v1/edit.html:175 templates/map_editor/v2/edit.html:209
+#: .\templates\map_editor\v1\edit.html.py:175
+#: .\templates\map_editor\v2\edit.html.py:209
 msgid "Nombre para el POI"
 msgstr "POI name"
 
-#: templates/map_editor/v1/edit.html:177 templates/map_editor/v2/edit.html:212
-#: templates/map_editor/v2/edit.html:233
+#: .\templates\map_editor\v1\edit.html.py:177
+#: .\templates\map_editor\v2\edit.html.py:212
+#: .\templates\map_editor\v2\edit.html.py:233
 msgid "Para la categoría"
 msgstr "For category"
 
-#: templates/map_editor/v1/edit.html:180
+#: .\templates\map_editor\v1\edit.html.py:180
 msgid "Imágen para el POI"
 msgstr "POI image"
 
-#: templates/map_editor/v1/edit.html:184
-#: templates/map_editor/v1/index.html:134
-#: templates/map_editor/v2/index.html:293
+#: .\templates\map_editor\v1\edit.html.py:184
+#: .\templates\map_editor\v1\index.html.py:134
+#: .\templates\map_editor\v2\index.html.py:296
 msgid "Elegir imagen"
 msgstr "Choose image"
 
-#: templates/map_editor/v1/index.html:30 templates/map_editor/v2/index.html:30
+#: .\templates\map_editor\v1\index.html.py:30
+#: .\templates\map_editor\v2\index.html.py:30
 msgid "Administración de recintos"
 msgstr "Enclosure manager"
 
-#: templates/map_editor/v1/index.html:41 templates/map_editor/v2/index.html:78
+#: .\templates\map_editor\v1\index.html.py:41
+#: .\templates\map_editor\v2\index.html.py:81
 msgid "Nombre del recinto"
 msgstr "Enclosure name"
 
-#: templates/map_editor/v1/index.html:43
-#: templates/map_editor/v2/index.html:221
+#: .\templates\map_editor\v1\index.html.py:43
+#: .\templates\map_editor\v2\index.html.py:224
 msgid "Añadir recinto"
 msgstr "Add enclosure"
 
-#: templates/map_editor/v1/index.html:66
-#: templates/map_editor/v2/index.html:121
+#: .\templates\map_editor\v1\index.html.py:66
+#: .\templates\map_editor\v2\index.html.py:124
 msgid "Calcular rutas"
 msgstr "Calculate routes"
 
-#: templates/map_editor/v1/index.html:84
-#: templates/map_editor/v2/index.html:234
+#: .\templates\map_editor\v1\index.html.py:84
+#: .\templates\map_editor\v2\index.html.py:237
 msgid "Nuevo nombre para el recinto"
 msgstr "New name for the enclosure"
 
-#: templates/map_editor/v1/index.html:93
-#: templates/map_editor/v2/index.html:199
-#: templates/map_editor/v2/index.html:241
+#: .\templates\map_editor\v1\index.html.py:93
+#: .\templates\map_editor\v2\index.html.py:202
+#: .\templates\map_editor\v2\index.html.py:244
 msgid "Cuenta de twitter"
 msgstr "Twitter account"
 
-#: templates/map_editor/v1/index.html:112
+#: .\templates\map_editor\v1\index.html.py:112
 msgid "Nueva planta"
 msgstr "New floor"
 
-#: templates/map_editor/v1/index.html:120
-#: templates/map_editor/v1/index.html:123
-#: templates/map_editor/v2/index.html:280
-#: templates/map_editor/v2/index.html:283
+#: .\templates\map_editor\v1\index.html.py:120
+#: .\templates\map_editor\v1\index.html.py:123
+#: .\templates\map_editor\v2\index.html.py:283
+#: .\templates\map_editor\v2\index.html.py:286
 msgid "Nombre de planta"
 msgstr "Floor name"
 
-#: templates/map_editor/v1/index.html:125
-#: templates/map_editor/v1/index.html:128
-#: templates/map_editor/v1/index.html:186
-#: templates/map_editor/v1/index.html:192
-#: templates/map_editor/v2/index.html:285
-#: templates/map_editor/v2/index.html:288
-#: templates/map_editor/v2/index.html:317
-#: templates/map_editor/v2/index.html:322
+#: .\templates\map_editor\v1\index.html.py:125
+#: .\templates\map_editor\v1\index.html.py:128
+#: .\templates\map_editor\v1\index.html.py:186
+#: .\templates\map_editor\v1\index.html.py:192
+#: .\templates\map_editor\v2\index.html.py:288
+#: .\templates\map_editor\v2\index.html.py:291
+#: .\templates\map_editor\v2\index.html.py:320
+#: .\templates\map_editor\v2\index.html.py:325
 msgid "Número"
 msgstr "Number"
 
-#: templates/map_editor/v1/index.html:137
-#: templates/map_editor/v2/index.html:296
+#: .\templates\map_editor\v1\index.html.py:137
+#: .\templates\map_editor\v2\index.html.py:299
 msgid "Añadir planta"
 msgstr "Add floor"
 
-#: templates/map_editor/v1/index.html:145
-#: templates/map_editor/v2/index.html:92
-#: templates/map_editor/v2/index.html:142
+#: .\templates\map_editor\v1\index.html.py:145
+#: .\templates\map_editor\v2\index.html.py:95
+#: .\templates\map_editor\v2\index.html.py:145
 msgid "Plantas"
 msgstr "Floors"
 
-#: templates/map_editor/v1/index.html:178
-#: templates/map_editor/v2/edit.html:167 templates/map_editor/v2/edit.html:185
-#: templates/map_editor/v2/edit.html:207
-#: templates/map_editor/v2/index.html:310
+#: .\templates\map_editor\v1\index.html.py:178
+#: .\templates\map_editor\v2\edit.html.py:167
+#: .\templates\map_editor\v2\edit.html.py:185
+#: .\templates\map_editor\v2\edit.html.py:207
+#: .\templates\map_editor\v2\index.html.py:313
 msgid "Nombre"
 msgstr "Name"
 
-#: templates/map_editor/v1/index.html:183
-#: templates/map_editor/v2/index.html:314
+#: .\templates\map_editor\v1\index.html.py:183
+#: .\templates\map_editor\v2\index.html.py:317
 msgid "Nuevo nombre para la planta"
 msgstr "New floor name"
 
-#: templates/map_editor/v2/edit.html:83
+#: .\templates\map_editor\v2\edit.html.py:83
 msgid "Por eliminar"
 msgstr "To delete"
 
-#: templates/map_editor/v2/edit.html:123 templates/map_editor/v2/edit.html:215
-#: templates/map_editor/v2/edit.html:236
+#: .\templates\map_editor\v2\edit.html.py:123
+#: .\templates\map_editor\v2\edit.html.py:215
+#: .\templates\map_editor\v2\edit.html.py:236
 msgid "Elegir categoría"
 msgstr "Select category"
 
-#: templates/map_editor/v2/edit.html:175
+#: .\templates\map_editor\v2\edit.html.py:175
 msgid "Color para la categoría"
 msgstr "Color for the category"
 
-#: templates/map_editor/v2/edit.html:180
+#: .\templates\map_editor\v2\edit.html.py:180
 msgid "Añadir categoría"
 msgstr "Add category"
 
-#: templates/map_editor/v2/edit.html:188
+#: .\templates\map_editor\v2\edit.html.py:188
 msgid "Nuevo nombre para la categoría"
 msgstr "New category name"
 
-#: templates/map_editor/v2/edit.html:193
+#: .\templates\map_editor\v2\edit.html.py:193
 msgid "Nuevo color para la categoría"
 msgstr "New color for the category"
 
-#: templates/map_editor/v2/edit.html:199
+#: .\templates\map_editor\v2\edit.html.py:199
 msgid "Eliminar categoría"
 msgstr "Delete category"
 
-#: templates/map_editor/v2/edit.html:224
+#: .\templates\map_editor\v2\edit.html.py:224
 msgid "Editar POI"
 msgstr "Edit POI"
 
-#: templates/map_editor/v2/edit.html:228
+#: .\templates\map_editor\v2\edit.html.py:228
 msgid "Nuevo nombre"
 msgstr "New name"
 
-#: templates/map_editor/v2/edit.html:230
+#: .\templates\map_editor\v2\edit.html.py:230
 msgid "Nuevo nombre para el POI"
 msgstr "New POI name"
 
-#: templates/map_editor/v2/edit.html:242
+#: .\templates\map_editor\v2\edit.html.py:242
 msgid "Eliminar etiqueta"
 msgstr "Delete label"
 
-#: templates/map_editor/v2/index.html:34
+#: .\templates\map_editor\v2\index.html.py:34
 msgid "Dashboard"
 msgstr "Dashboard"
 
-#: templates/map_editor/v2/index.html:35
-#: templates/map_editor/v2/index.html:111
+#: .\templates\map_editor\v2\index.html.py:35
+#: .\templates\map_editor\v2\index.html.py:114
 #, fuzzy
 msgid "Web del recinto"
 msgstr "Enclosure website"
 
-#: templates/map_editor/v2/index.html:38
+#: .\templates\map_editor\v2\index.html.py:38
 msgid "Labelee App"
 msgstr "Labelee App"
 
-#: templates/map_editor/v2/index.html:39
+#: .\templates\map_editor\v2\index.html.py:39
 msgid "Ayuda"
 msgstr "Help"
 
-#: templates/map_editor/v2/index.html:53
-msgid "Bienvenido"
-msgstr "Welcome"
+#: .\templates\map_editor\v2\index.html.py:56
+msgid "Salir"
+msgstr ""
 
-#: templates/map_editor/v2/index.html:75
-msgid "Buscar recinto"
-msgstr "Search for enclosure"
-
-#: templates/map_editor/v2/index.html:83
+#: .\templates\map_editor\v2\index.html.py:86
 msgid "Agregar nuevo recinto"
 msgstr "Add a new enclosure"
 
-#: templates/map_editor/v2/index.html:89
+#: .\templates\map_editor\v2\index.html.py:92
 msgid "Recintos"
 msgstr "Enclosures"
 
-#: templates/map_editor/v2/index.html:113
+#: .\templates\map_editor\v2\index.html.py:116
 msgid "Ver dashboard"
 msgstr "Go to dashboard"
 
-#: templates/map_editor/v2/index.html:143
+#: .\templates\map_editor\v2\index.html.py:146
 msgid "Puntos de interés"
 msgstr "POIs"
 
-#: templates/map_editor/v2/index.html:152
+#: .\templates\map_editor\v2\index.html.py:155
 msgid "Editar planta"
 msgstr "Edit floor"
 
-#: templates/map_editor/v2/index.html:158
+#: .\templates\map_editor\v2\index.html.py:161
 msgid "Editar POIs"
 msgstr "Edit POIs"
 
-#: templates/map_editor/v2/index.html:167
+#: .\templates\map_editor\v2\index.html.py:170
 msgid "Agregar nueva planta"
 msgstr "Add new floor"
 
-#: templates/map_editor/v2/index.html:189
-#: templates/map_editor/v2/index.html:231
+#: .\templates\map_editor\v2\index.html.py:192
+#: .\templates\map_editor\v2\index.html.py:234
 msgid "Nuevo nombre:"
 msgstr "New name:"
 
-#: templates/map_editor/v2/index.html:192
+#: .\templates\map_editor\v2\index.html.py:195
 msgid "Nombre para el recinto"
 msgstr "Enclosure name"
 
-#: templates/map_editor/v2/index.html:196
-#: templates/map_editor/v2/index.html:238
+#: .\templates\map_editor\v2\index.html.py:199
+#: .\templates\map_editor\v2\index.html.py:241
 msgid "Cuenta de Twitter:"
 msgstr "Twitter account:"
 
-#: templates/map_editor/v2/index.html:202
-#: templates/map_editor/v2/index.html:244
+#: .\templates\map_editor\v2\index.html.py:205
+#: .\templates\map_editor\v2\index.html.py:247
 msgid "Logo del recinto:"
 msgstr "Enclosure logo:"
 
-#: templates/map_editor/v2/index.html:209
-#: templates/map_editor/v2/index.html:251
+#: .\templates\map_editor\v2\index.html.py:212
+#: .\templates\map_editor\v2\index.html.py:254
 msgid "URL del recinto:"
 msgstr "Enclosure URL:"
 
-#: templates/map_editor/v2/index.html:212
-#: templates/map_editor/v2/index.html:254
+#: .\templates\map_editor\v2\index.html.py:215
+#: .\templates\map_editor\v2\index.html.py:257
 msgid "Introduzca la URL del recinto"
 msgstr "Insert the enclosure URL"
 
-#: templates/map_editor/v2/index.html:215
-#: templates/map_editor/v2/index.html:257
+#: .\templates\map_editor\v2\index.html.py:218
+#: .\templates\map_editor\v2\index.html.py:260
 msgid "URL del dashboard:"
 msgstr "Dashboard URL"
 
-#: templates/map_editor/v2/index.html:218
-#: templates/map_editor/v2/index.html:260
+#: .\templates\map_editor\v2\index.html.py:221
+#: .\templates\map_editor\v2\index.html.py:263
 msgid "Introduzca la URL del dashboard"
 msgstr "Insert the dashboard URL"
 
-#: templates/map_editor/v2/index.html:266
+#: .\templates\map_editor\v2\index.html.py:269
 msgid "Eliminar recinto"
 msgstr "Delete enclosure"
 
-#: templates/map_editor/v2/index.html:324
+#: .\templates\map_editor\v2\index.html.py:327
 msgid "Imagen .svg"
 msgstr "Image .svg"
 
-#: templates/map_editor/v2/index.html:329
+#: .\templates\map_editor\v2\index.html.py:332
 msgid "Imagen .png"
 msgstr "Image .png"
 
-#: templates/map_editor/v2/index.html:338
+#: .\templates\map_editor\v2\index.html.py:341
 msgid "Eliminar planta"
 msgstr "Delete floor"
+
+#: .\templates\registration\password_change_form.html.py:6
+msgid ""
+"\n"
+"        <p>Por favor, introduzca su nueva contraseña 2 veces,\n"
+"            de manera que podamos verificar si se escribió correctamente.</"
+"p>\n"
+"    "
+msgstr ""
+
+#: .\templates\registration\password_change_form.html.py:20
+msgid "Contraseña actual"
+msgstr ""
+
+#: .\templates\registration\password_change_form.html.py:25
+#, fuzzy
+msgid "Nueva contraseña"
+msgstr "New connection"
+
+#: .\templates\registration\password_change_form.html.py:31
+msgid "Confirmar nueva contraseña"
+msgstr ""
+
+#: .\templates\registration\password_change_form.html.py:38
+#, fuzzy
+msgid "Cambiar contraseña"
+msgstr "Change image"
+
+#, fuzzy
+#~ msgid "Mis cupones"
+#~ msgstr "Coupons"
 
 #~ msgid "Dashboard del recinto"
 #~ msgstr "Enclosure Dashboard"
 
 #~ msgid "Algo"
 #~ msgstr "Anything"
-
-#~ msgid "Categorías"
-#~ msgstr "Categories"
 
 #~ msgid "Número de POIS/QRs:"
 #~ msgstr "POIS/QRs count"

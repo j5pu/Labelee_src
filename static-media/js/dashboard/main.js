@@ -143,7 +143,7 @@ nv.addGraph(function () {
                 return d.value
             })
 //.color(d3.scale.category20().range())
-            .showLabels(true)
+            .showLabels(false)
             .color(d3.scale.myColors().range())
         ;
 

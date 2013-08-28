@@ -9,7 +9,7 @@ from django.shortcuts import render_to_response
 from django.template import RequestContext
 import simplejson
 from dashboard.models import DisplayedRoutes
-from map_editor.models import Floor
+from map_editor.models import Floor, Enclosure
 from route.models import Route, Step
 from route.services import getHeatMapSteps
 
@@ -34,7 +34,7 @@ def index(request, enclosure_id):
         if username == "alcala" and password == "labelee2013" or userlogged is not None:
             request.session['userlogged'] = 'alacala'
             allPoints = getHeatMapSteps(enclosure_id)
-
+            enclosure = Enclosure.objects.get(id=enclosure_id)
             floors = Floor.objects.filter(enclosure_id=enclosure_id)
             floorsDict = {}
             for floor in floors:
@@ -43,7 +43,8 @@ def index(request, enclosure_id):
             ctx = {
                 'enclosure_id': enclosure_id,
                 'floorsDict': floorsDict,
-                'currentSteps': allPoints
+                'currentSteps': allPoints,
+                'enclosureName' : enclosure.name
             }
             url = 'dashboard/index.html'
         else:
