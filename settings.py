@@ -3,6 +3,7 @@
 # Django settings for a generic project.
 import os
 from django.utils.translation import ugettext
+from databases import *
 
 PROJECT_ROOT = os.path.abspath(os.path.dirname(__file__))
 
@@ -78,8 +79,13 @@ STATICFILES_DIRS = (
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-#    'django.contrib.staticfiles.finders.DefaultStorageFinder',
 )
+
+
+# Hosts/domain names that are valid for this site; required if DEBUG is False
+# See https://docs.djangoproject.com/en/1.5/ref/settings/#allowed-hosts
+# http://stackoverflow.com/a/15128309
+ALLOWED_HOSTS = ['localhost']
 
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = '0tc6gk^8x=lfzyh0&amp;%1u^7tu0wb(aho7o6+6!*yr!=#c#b4c$@'
@@ -92,6 +98,9 @@ TEMPLATE_LOADERS = (
 )
 
 MIDDLEWARE_CLASSES = (
+    'django.middleware.gzip.GZipMiddleware',
+    'pipeline.middleware.MinifyHTMLMiddleware',
+
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     #
@@ -121,6 +130,7 @@ TEMPLATE_DIRS = (
     os.path.join(PROJECT_ROOT, 'sandbox'),
 )
 
+
 INSTALLED_APPS = (
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -142,8 +152,8 @@ INSTALLED_APPS = (
     # 'panorama',
     'analytics',
     'coupon_manager',
+    'pipeline',
 )
-
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to
 # the site admins on every HTTP 500 error when DEBUG=False.
@@ -202,39 +212,13 @@ if 'VCAP_SERVICES' in os.environ:
     # print os.environ['VCAP_SERVICES']
 
 else:
-    # DATABASES = {
-    #     "default": {
-    #         "ENGINE": "django.db.backends.mysql",
-    #         "NAME": "db6ce67ef80534c99820cbe0c4d3370c8",
-    #         "USER": "u9MqeM0rqx6Ai",
-    #         "PASSWORD": "pHirV24N1fsHU",
-    #         "HOST": "127.0.0.1",
-    #         "PORT": "10001",
-    #     }
-    # }
-    # DATABASES = {
-    #     "default": {
-    #         "ENGINE": "django.db.backends.mysql",
-    #         "NAME": "labelee_dev",
-    #         "USER": "root",
-    #         "PASSWORD": "",
-    #         "HOST": "",
-    #         "PORT": "",
-    #         }
-    # }
-    DATABASES = {
-        "default": {
-            "ENGINE": "django.db.backends.mysql",
-            "NAME": "labelee_dev",
-            "USER": "mnopi",
-            "PASSWORD": "1aragon1",
-            "HOST": "192.168.1.201",
-            "PORT": "",
-            }
-    }
+    # DATABASES = LOCAL
+    DATABASES = DEV
+    # DATABASES = DEV_COUPONS
 
-#     Estas aplicaciones solo se usaran en desarrollo..
+    #     Estas aplicaciones solo se usaran en desarrollo..
     INSTALLED_APPS += ('south', 'sandbox',)
+
 
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'
@@ -269,6 +253,9 @@ LOGIN_URL = '/accounts/login/'
 AUTHENTICATION_BACKENDS = (
     'auth_backends.CustomUserModelBackend',
 )
+
+from pipeline_settings import *
+
 
 CACHES = {
     'default': {

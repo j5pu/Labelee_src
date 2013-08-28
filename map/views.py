@@ -73,7 +73,8 @@ def show_map(request, qr_type, enclosure_id, floor_id, poi_id):
                         coupons[point.id] = point.coupon.url
                 except Exception as ex:
                     pass
-            categories_list = []  # [{'name': 'toilets', 'items': [...]}, ...]
+
+        categories_list = []  # [{'name': 'toilets', 'items': [...]}, ...]
         for key, value in categories.iteritems():
             d = {
                 'name': key,
