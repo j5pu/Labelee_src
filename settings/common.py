@@ -140,6 +140,7 @@ INSTALLED_APPS = (
     'analytics',
     'coupon_manager',
     'pipeline',
+    'memcache_status'
 )
 
 # A sample logging configuration. The only tangible logging
