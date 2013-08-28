@@ -5,7 +5,7 @@ from django.http.response import HttpResponseRedirect
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 
-import settings
+from django.conf import settings
 from utils.constants import USER_GROUPS
 
 

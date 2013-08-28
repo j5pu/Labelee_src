@@ -13,7 +13,7 @@ from map_editor.models import Floor, Enclosure
 from route.models import Route, Step
 from route.services import getHeatMapSteps
 
-import settings
+from django.conf import settings
 
 
 def index(request, enclosure_id):

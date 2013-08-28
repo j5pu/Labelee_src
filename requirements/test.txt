@@ -1,0 +1,3 @@
+# requirements/test.txt
+# Requirements for test environments
+-r common.txt

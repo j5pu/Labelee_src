@@ -1,7 +1,7 @@
 from django.conf.urls.defaults import *
 from django.views.generic import TemplateView
 from django.contrib import admin
-import settings
+from django.conf import settings
 from django.contrib.auth.models import User
 
 admin.autodiscover()
