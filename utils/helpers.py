@@ -2,7 +2,6 @@
 from PIL import Image
 from django.db.models import Sum
 
-from tastypie.models import ApiKey
 from django.http import HttpResponse
 import simplejson
 from django.core.serializers import serialize
@@ -48,17 +47,6 @@ def slug_to_class_name(slug):
         sal += word.capitalize()
 
     return sal
-
-
-def create_api_key(user):
-    try:
-        api_key = ApiKey.objects.get(user=user)
-        api_key.key = None
-        api_key.save()
-
-    except ApiKey.DoesNotExist:
-        api_key = ApiKey.objects.create(user=user)
-
 
 def to_dict(model_object):
     """
