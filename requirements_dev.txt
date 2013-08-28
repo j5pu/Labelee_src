@@ -9,3 +9,4 @@ django-modeltranslation
 Pillow
 python-memcached>=1.53
 django-pipeline
+django-memcache-status
