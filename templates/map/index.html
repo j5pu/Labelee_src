@@ -17,37 +17,15 @@
     <script src="{% url 'django.views.i18n.javascript_catalog' %}"></script>
 
     {% compressed_js 'map' %}
-{#    <script src="{{ STATIC_URL }}vendor/jquery-2.0.3.min.js"></script>#}
-{#    <script src="{{ STATIC_URL }}vendor/prefixfree.min.js"></script>#}
-{#    <script src="{{ STATIC_URL }}js/map/index/modernizr.js"></script>#}
-{#    <script src="{{ STATIC_URL }}vendor/hammer.js_v1.0.3/dist/jquery.hammer.min.js"></script>#}
-
-{#    <script src="{{ STATIC_URL }}vendor/leaflet/leaflet.js"></script>#}
-{#    <script src="{{ STATIC_URL }}vendor/leaflet/plugins/scale.fix.js"></script>#}
-{#    <script src="{{ STATIC_URL }}vendor/leaflet/plugins/L.GeometryUtil.js"></script>#}
-{#    <script src="{{ STATIC_URL }}vendor/leaflet/plugins/L.RotatedMarker.js"></script>#}
-{#    <script src="{{ STATIC_URL }}vendor/leaflet/plugins/L.Symbol.js"></script>#}
-{#    <script src="{{ STATIC_URL }}vendor/leaflet/plugins/L.PolylineDecorator.js"></script>#}
-{#    <script src="{{ STATIC_URL }}vendor/leaflet/plugins/jquery.mmenu.js"></script>#}
-{#    <script src="{{ STATIC_URL }}vendor/leaflet/plugins/leaflet.label.js"></script>#}
-
-{#    <script src="{{ STATIC_URL }}vendor/leaflet/plugins/idangerous.swiper-2.0.min.js"></script>#}
-{#    <script src="{{ STATIC_URL }}vendor/leaflet/plugins/jquery.ba-outside-events.min.js"></script>#}
-{#    <script src="{{ STATIC_URL }}vendor/leaflet/plugins/ddpanorama.js"></script>#}
-{#    <script src="{{ STATIC_URL }}vendor/leaflet/plugins/ddpanorama.gensample.js"></script>#}
-
-{#    <script src="{{ STATIC_URL }}js/helpers/base.js"></script>#}
-{#    <script src="{{ STATIC_URL }}js/helpers/ajax_helpers.js"></script>#}
-{#    <script src="{{ STATIC_URL }}js/helpers/resource.js"></script>#}
-{##}
-{#    <script src="{{ STATIC_URL }}js/log/logger.js"></script>#}
-{##}
-{#    <script src="{{ STATIC_URL }}js/map/index/panorama.js"></script>#}
-{#    <script src="{{ STATIC_URL }}js/map/index/socialmenu.js"></script>#}
-{#    <script src="{{ STATIC_URL }}js/map/index/main.js"></script>#}
-{#    <script src="{{ STATIC_URL }}js/map/index/convert.js"></script>#}
 
     <script type="text/javascript">
+
+        // Elimina la cookie para mostrar el splash en las siguientes peticiones que se hagan
+        if(getCookie('redirected_from_splash'))
+        {
+            document.cookie = 'redirected_from_splash=y; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+        }
+
 
         var _gaq = _gaq || [];
         _gaq.push(['_setAccount', 'UA-30904444-4']);
@@ -77,9 +55,6 @@
         <a href="#menu-right">
             <img src="{{ MEDIA_URL }}menuLab.png"/>
         </a>
-        <!--
-        <span id="fake"></span>
-        labelee-->
     </div>
     <div id="content">
         <div id="map"></div>
@@ -93,7 +68,6 @@
     </script>
 
     {% compressed_js 'map2' %}
-{#    <script src="{{ STATIC_URL }}js/map/index/map.js"></script>#}
 
     <nav id="menu-right">
         <!--
@@ -122,21 +96,9 @@
             <li class="no-results"><span>{% trans "Lo sentimos, no se ha encontrado ningún resultado." %}</span></li>
         </ul>
     </nav>
-    <!--Inicio menú social networks -->
-
-    <!--Fin menú social networks -->
-
 
     <span class="locator icon-navigation" id="location"></span>
-    <!--span class="locator" id="myCar"><i class="icon-truck icon-white"></i></span-->
     <span class="locator icon-automobile" id="myCar"></span>
-    <!--<span id="navigator"><i class="icon-navigation icon-white"></i></span>-->
-
-    {% comment %}   <div id="cupones">
-        <a href="#">
-            COUPONS
-        </a>
-    </div>{% endcomment %}
 
     {% if coupons %}
         <div id="cupones">
@@ -145,29 +107,8 @@
             <map name="cupon">
                 <area shape="poly" coords="" href="#" alt="{% trans "Cupones" %}" title="Cupon">
             </map>
-
-            <!-- Lets create a CSS3 stamp -->
-            {% comment %}       <div class="stamp" id="stamp1">
-            <!-- the image -->
-            <div class="miKupon"></div>
-        </div>
- {% endcomment %} {% comment %}
-        <div class="stamp" id="stamp2">
-            <!-- the image -->
-            <div class="miKupon"></div>
         </div>
 
-        <div class="stamp" id="stamp3">
-            <!-- the image -->
-            <div class="miKupon"></div>
-        </div>
-
-        <!-- prefixfree to deal with vendor prefixes -->
-        <!--script src="http://thecodeplayer.com/uploads/js/prefixfree-1.0.7.js" type="text/javascript" type="text/javascript"></script-->
-
-
-{% endcomment %}
-        </div>
         <div class="device">
             <a class="arrow-left" href="#"></a>
             <a class="arrow-right" href="#"></a>

@@ -22,14 +22,11 @@ def get_map_data(qr_type, poi_id, poisByFloor, enclosure_id):
         'enclosure': t_obj_to_dict(EnclosureResource(), qrPoint.floor.enclosure),
         'label': t_obj_to_dict(LabelResource(), qrPoint.label),
         'labelCategory': queryset_to_dict([qrPoint.label.category])[0],
-
     }
     response['qrPoint']['isParking'] = qrPoint.label.category.name_en == FIXED_CATEGORIES[3]
     response['label_categories'] = queryset_to_dict(read_only_valid_for_enclosure(qrPoint.floor.enclosure.pk))
     response['floors'] = queryset_to_dict(qrPoint.floor.enclosure.floors.all().order_by('-floor_number'))
     for floor in response['floors']:
         floor['pois'] = poisByFloor[floor['id']]
-
-
 
     return response
