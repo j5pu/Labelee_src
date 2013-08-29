@@ -1,4 +1,3 @@
-
 //FUNCION BASE COMUN
 
 function drawGraph(svgId, chartType, data) {
@@ -37,10 +36,9 @@ var scansByCat = dashBoardResource.getScansByCategory(enclosure_id),
     topRoutes = dashBoardResource.getDisplayedRoutesForTopPois(enclosure_id);
 
 
-function rotate_x_labels(chart)
-{
+function rotate_x_labels(chart) {
     chart.xAxis.rotateLabels(-45);
-    chart.margin({bottom:120, left:60});
+    chart.margin({bottom: 120, left: 60});
 }
 
 //TOTAL SCANS
@@ -53,8 +51,11 @@ nv.addGraph(function () {
             return d.value
         })
 //        .staggerLabels(true)
-        .tooltips(false)
+        .tooltips(true)
         .showValues(true);
+    chart.yAxis
+        .tickFormat(d3.format('d'));
+    chart.valueFormat(d3.format('d'));
 
     rotate_x_labels(chart);
 //    chart.xAxis.rotateLabels(x_axis_labels_rotation);
@@ -72,7 +73,7 @@ nv.addGraph(function () {
 
     return chart;
 });
-
+var testChart = null;
 //TOTAL ROUTES
 nv.addGraph(function () {
     var chart = nv.models.discreteBarChart()
@@ -86,6 +87,10 @@ nv.addGraph(function () {
 //        .staggerLabels(true)
         .tooltips(true)
         .showValues(true);
+    chart.yAxis
+        .tickFormat(d3.format('d'));
+    chart.valueFormat(d3.format('d'));
+
 
     rotate_x_labels(chart);
 
@@ -95,7 +100,7 @@ nv.addGraph(function () {
         .call(chart);
 
     nv.utils.windowResize(chart.update);
-
+    testChart = chart;
 
     return chart;
 });
@@ -121,6 +126,7 @@ nv.addGraph(function () {
         .color(d3.scale.myColors().range())
         //.color(['blue', 'green', 'yellow'])
         .donut(true);
+    chart.valueFormat(d3.format('d'));
 
 //    chart.margin({left:0, top:100});
 
@@ -147,7 +153,7 @@ nv.addGraph(function () {
             .color(d3.scale.myColors().range())
         ;
 
-
+    chart.valueFormat(d3.format('d'));
     d3.select("#chart3")
         .datum(routesByCat)
         .transition().duration(1200)
@@ -168,9 +174,11 @@ nv.addGraph(function () {
         })
 //.color(d3.scale.category20c().range())
 //        .staggerLabels(true)
-        .tooltips(false)
+        .tooltips(true)
         .showValues(true);
-
+    chart.yAxis
+        .tickFormat(d3.format('d'));
+    chart.valueFormat(d3.format('d'));
     rotate_x_labels(chart);
 
     d3.select('#chart4')
@@ -193,9 +201,11 @@ nv.addGraph(function () {
         })
 //.color(d3.scale.category10().range())
 //        .staggerLabels(true)
-        .tooltips(false)
+        .tooltips(true)
         .showValues(true);
-
+    chart.yAxis
+        .tickFormat(d3.format('d'));
+    chart.valueFormat(d3.format('d'));
     rotate_x_labels(chart);
 
     d3.select('#chart5')
