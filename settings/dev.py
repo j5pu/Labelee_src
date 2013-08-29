@@ -6,5 +6,5 @@ from common import *
 INSTALLED_APPS += ('south', 'sandbox',)
 
 
-# DEBUG =
-# TEMPLATE_DEBUG = DEBUG
+## DEBUG =
+## TEMPLATE_DEBUG = DEBUG
