@@ -10,3 +10,4 @@ django-modeltranslation
 python-memcached>=1.53
 django-pipeline
 django-memcache-status
+django_hudson

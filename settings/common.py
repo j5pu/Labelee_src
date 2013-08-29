@@ -140,7 +140,8 @@ INSTALLED_APPS = (
     'analytics',
     'coupon_manager',
     'pipeline',
-    'memcache_status'
+    'memcache_status',
+    'django_hudson'
 )
 
 # A sample logging configuration. The only tangible logging
