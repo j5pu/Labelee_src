@@ -19,14 +19,6 @@
     {% compressed_js 'map' %}
 
     <script type="text/javascript">
-
-        // Elimina la cookie para mostrar el splash en las siguientes peticiones que se hagan
-        if(getCookie('redirected_from_splash'))
-        {
-            document.cookie = 'redirected_from_splash=y; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
-        }
-
-
         var _gaq = _gaq || [];
         _gaq.push(['_setAccount', 'UA-30904444-4']);
         _gaq.push(['_trackPageview']);
@@ -40,12 +32,24 @@
             s.parentNode.insertBefore(ga, s);
         })();
 
-
         var mapData = {{ map_data|safe }};
     </script>
 </head>
 
 <body>
+<!--
+        SPLASH
+    -->
+<div class="splash">
+    <div class="container">
+        <div class="sp-container">
+            <div class="frame-5">
+                <span><img src="{{ MEDIA_URL }}alcalamagna.png"></span>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 {% csrf_token %}
 

@@ -25,13 +25,6 @@ def show_map(request, qr_type, enclosure_id, floor_id, poi_id):
         map/origin/1_25_91234
         map/dest/1_25_91234
     """
-    if not 'redirected_from_splash' in request.COOKIES:
-        ctx = {
-            'url': '/map/' + qr_type + '/' +
-                   enclosure_id + '_' + floor_id + '_' + poi_id
-        }
-        return render_to_response('map/index_splash.html', ctx, context_instance=RequestContext(request))
-
     enclosure = None
     ordered_categories = None
     cache_key = 'show_map_enclosure_' + enclosure_id

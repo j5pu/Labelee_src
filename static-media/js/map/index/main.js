@@ -155,10 +155,6 @@ $(function() {
 
     $('#cupones, #header, span.locator, div#marquee').hide();
 
-//    $('div#page').hide();
-//    $('body').prepend('<div class="splash">    <div class="container">        <div class="sp-container"    >            <div class="frame-5"><span><img src="/media/alcalamagna.png"></span></div>                   </div>    </div></div>')
-    $('div.splash').show();
-
    setTimeout(hideSplash, 100);
 
     $('div.swiper-slide img').on('click', function (e) {
@@ -178,11 +174,12 @@ $(function() {
 
 
 function hideSplash() {
-    var d = new Date();
     $('div#page').fadeIn(100);
+    $('div.splash').fadeOut(100);
     loadFloors();
     LocalStorageHandler.init();
 }
+
 
 var Coupon = {
     opened: false,
@@ -281,10 +278,6 @@ var Coupon = {
         $('div.device').fadeOut(100);
     }
 };
-
-
-
-
 
 
 var ScrollMenu = {

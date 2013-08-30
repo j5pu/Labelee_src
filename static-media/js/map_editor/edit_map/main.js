@@ -255,11 +255,13 @@ function PoisCtrl($scope, $rootScope)
         if(!$scope.selected_category)
             return;
 
+        // Cuando guardamos los puntos el Painter.label_category cambia,
+        // así que lo dejamos como estaba antes
         Painter.label_category = $scope.selected_category;
-        // Cuando guardamos los puntos el Painter.label_category cambia, así que lo dejamos como estaba antes
         Painter.label_category_pre_update_floor = $scope.selected_category;
-        Menu.labels = $scope.selected_category.labels;
         Painter.label = null;
+        Painter.label_pre_update_floor = null;
+        Menu.labels = $scope.selected_category.labels;
 
         // Si no, en caso de haber elegido la categoría 'Bloqueantes' se selecciona muro
         if(LabelCategory.isBlocker(Painter.label_category))
@@ -271,6 +273,7 @@ function PoisCtrl($scope, $rootScope)
     $scope.$watch('selected_label', function(){
         $scope.can_edit_label = $scope.selected_label && $scope.can_edit_category;
         Painter.label = $scope.selected_label;
+        Painter.label_pre_update_floor = $scope.selected_label;
         Painter.label_category = $scope.selected_category;
     });
 }
