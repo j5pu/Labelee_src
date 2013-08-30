@@ -53,6 +53,7 @@ urlpatterns = patterns('',
 
     # Calculo de rutas
     url(r'^calculate-routes/(?P<enclosure_id>\d+)', 'route.calculateRoutes.calculate_routes'),
+    url(r'^refresh-cache/(?P<enclosure_id>\d+)', 'map_editor.api_2.resources.enclosure.refresh_cache'),
     url(r'^get-route/(?P<origin>\d+)_(?P<destiny>\d+)', 'route.services.get_route'),
 
     # Para poder crear un superusuario en appfog

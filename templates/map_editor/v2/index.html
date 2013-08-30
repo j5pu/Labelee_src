@@ -126,6 +126,9 @@
                         <a class="btn link-2" id="aristas" href='edit/connections/[[enclosure.id]]'>
                             <i class="icon-random icon-white"></i> {% trans "Conexiones entre plantas" %}
                         </a>
+                        <a class="btn link-2" ng-click="refreshCache()">
+                            <i class="icon-refresh icon-white"></i> {% trans "Refrescar caché" %}
+                        </a>
                     </div>
                 </div>
 
@@ -347,5 +350,7 @@
 
 
     {% include "_uploading_iframe.html" %}
+
+    <div id="loadingScreen"></div>
 
 {% endblock content %}

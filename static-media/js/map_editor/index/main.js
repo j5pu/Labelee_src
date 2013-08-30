@@ -40,6 +40,11 @@ function EnclosureCtrl($scope, $rootScope, $element)
             enclosureResource.calculateRoutes($scope.enclosure.id);
     };
 
+    $scope.refreshCache = function()
+    {
+        enclosureResource.refreshCache($scope.enclosure.id);
+    };
+
     $scope.$on('sync_enclosure', function(ev, enclosure) {
         if($scope.enclosure.id == enclosure.id)
         {

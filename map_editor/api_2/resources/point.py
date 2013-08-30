@@ -34,11 +34,8 @@ def create_from_list(request):
 
     json_data = request.body
     point_list = simplejson.loads(json_data)
-    # pr = PointResource()
 
     for point in point_list:
-        # bundle = pr.build_bundle(data=point, request=request)
-        # pr.obj_create(bundle)
         point_obj = Point(
             row=point['row'],
             col=point['col'],
@@ -98,9 +95,6 @@ def delete_from_list(request):
     if not request.user.is_staff:
         return HttpResponse('UNAUTHORIZED!!')
 
-    user = User.objects.get(username='mnopi')
-    #create_api_key(user)
-    request.user = user
     json_data = request.body
     point_list = simplejson.loads(json_data)
 

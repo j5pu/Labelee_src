@@ -37,10 +37,6 @@
     </script>
 
 
-
-
-
-
     <script src="{{ STATIC_URL }}vendor/NVD3.js    Live Code examples powered by CodeMirror_files/d3.v2.js"></script>
     <!--script src="{{ STATIC_URL }}vendor/NVD3.js    Live Code examples powered by CodeMirror_files/fisheye.js"></script-->
     <script src="{{ STATIC_URL }}vendor/NVD3.js    Live Code examples powered by CodeMirror_files/nv.d3.js"></script>
@@ -71,10 +67,6 @@
       {% endif %}
 
     </script>
-
-
-
-
 
 {% endblock %}
 
@@ -165,16 +157,22 @@
                 </div>
             </li>
             {% for floorName,floor in floorsDict.items %}
-                        <li class="span6">
-                        <h2 id="floor_{{ floorName }}">{% trans 'Planta'   %}: {{ floorName }}</h2>
-                        <div id="heatmapArea_{{ floorName }}" class="heatmapArea">
+                <li class="span6">
+                    <h2 id="floor_{{ floorName }}">{% trans 'Planta'   %}: {{ floorName }}</h2>
+                    <div id="heatmapArea_{{ floorName }}" class="heatmapArea">
                         <div style="border:1px;">
-                            <img id="{{ floorName }}"  src="{{ floor.imgB.url }}" onload="setHeatMap(this,{{ floorName }},{{ floor.num_cols }},{{ floor.num_rows }})">
+                            {% if floor.imgB %}
+                                <img id="{{ floorName }}"  src="{{ floor.imgB.url }}"
+                                     onload="setHeatMap(this,{{ floorName }},{{ floor.num_cols }},{{ floor.num_rows }})">
+                            {% else %}
+                                <div>
+                                    {% trans "Esta planta no tiene imagen." %}
+                                </div>
+                            {% endif %}
                         </div>
-                         </div>
-                        </li>
-
-         {% endfor %}
+                    </div>
+                </li>
+            {% endfor %}
 
 
 

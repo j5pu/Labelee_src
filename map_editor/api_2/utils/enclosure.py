@@ -24,3 +24,4 @@ def getEnclosureForManager(enclosure_id):
     # enclosure_dict['label_categories'] = getLabelCategoriesForManager(enclosure.id)
 
     return enclosure_dict
+

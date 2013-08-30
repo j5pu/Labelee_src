@@ -24,7 +24,7 @@ def index(request, enclosure_id):
         'enclosure_id': enclosure_id
 
     }
-    url = 'dashboard/login.html'
+    template = 'dashboard/login.html'
     userlogged = request.session.get('userlogged')
 
     if request.POST or userlogged is not None:
@@ -46,7 +46,7 @@ def index(request, enclosure_id):
                 'currentSteps': allPoints,
                 'enclosureName' : enclosure.name
             }
-            url = 'dashboard/index.html'
+            template = 'dashboard/index.html'
         else:
             ctx = {
                 'state': 'Nombre de usuario y/o incorrectos',
@@ -55,7 +55,7 @@ def index(request, enclosure_id):
             }
 
     ctx.update(csrf(request))
-    return render_to_response(url, ctx, context_instance=RequestContext(request))
+    return render_to_response(template, ctx, context_instance=RequestContext(request))
 
 
 def saveRouteRequest(request):

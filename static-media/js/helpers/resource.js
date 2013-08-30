@@ -555,6 +555,27 @@ function EnclosureResource()
         });
     };
 
+    this.refreshCache = function(enclosure_id){
+        WaitingDialog.init();
+        WaitingDialog.open(
+            gettext('Refreshing memcache for this enclosure') + '..',
+            function(){
+                $.ajax({
+                    url : '/refresh-cache/' + enclosure_id,
+                    type : 'get',
+                    async : false,
+                    success : function(response) {
+                        var new_element = response;
+                        WaitingDialog.close();
+                    },
+                    error : function(response) {
+                        var j = response;
+                    }
+                });
+            }
+        );
+    };
+
     this.getForManagerIndex = function(enclosure_id)
     {
         // Nos da toda la info necesaria para cargar el index de map-editor

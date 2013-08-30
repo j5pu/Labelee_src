@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
+from django.core.cache import cache
 from django.db.models import Sum
 from django.http import HttpResponse
 import simplejson
+from map.utils_ import cache_show_map
 from map_editor.api_2.utils.enclosure import getEnclosureForManager
 from map_editor.api_2.utils.label_category import getLabelCategoriesForManager
 from map_editor.api_2.utils.point import filterAsPois
@@ -32,3 +34,17 @@ def manager(request, enclosure_id=None):
         enclosures.append(getEnclosureForManager(enclosure.id))
 
     return HttpResponse(simplejson.dumps(enclosures), mimetype='application/json')
+
+
+def refresh_cache(request, enclosure_id):
+    """
+    Refresca memcache para un recinto dado
+    """
+    if not request.user.is_staff:
+        return HttpResponse('UNAUTHORIZED!!')
+
+    cache_key = 'show_map_enclosure_' + enclosure_id
+    cache.delete(cache_key)
+    cache_show_map(enclosure_id)
+
+    return HttpResponse('ok')
