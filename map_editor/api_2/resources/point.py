@@ -29,6 +29,9 @@ def create_from_list(request):
         },..
     ]
     """
+    if not request.user.is_staff:
+        return HttpResponse('UNAUTHORIZED!!')
+
     json_data = request.body
     point_list = simplejson.loads(json_data)
     # pr = PointResource()
@@ -67,6 +70,9 @@ def update_from_list(request):
         },..
     ]
     """
+    if not request.user.is_staff:
+        return HttpResponse('UNAUTHORIZED!!')
+
     json_data = request.body
     point_list = simplejson.loads(json_data)
 
@@ -89,6 +95,9 @@ def update_from_list(request):
 
 
 def delete_from_list(request):
+    if not request.user.is_staff:
+        return HttpResponse('UNAUTHORIZED!!')
+
     user = User.objects.get(username='mnopi')
     #create_api_key(user)
     request.user = user

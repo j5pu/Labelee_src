@@ -211,6 +211,7 @@ var Floor = {
         Floor.loadGrid();
 
         Painter.label_category = Painter.label_category_pre_update_floor;
+        Painter.label = Painter.label_pre_update_floor;
     },
 
 

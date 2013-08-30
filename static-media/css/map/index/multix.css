@@ -1486,3 +1486,15 @@ div#marquee{
     color:white;
     background-color: transparent;
 }
+
+
+marquee
+{
+    height: 25px;
+}
+
+marquee span
+{
+    position: relative;
+    top: 4px;
+}
