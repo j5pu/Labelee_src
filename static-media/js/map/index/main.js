@@ -180,7 +180,6 @@ function hideSplash() {
     LocalStorageHandler.init();
 }
 
-
 var Coupon = {
     opened: false,
 
@@ -278,6 +277,10 @@ var Coupon = {
         $('div.device').fadeOut(100);
     }
 };
+
+
+
+
 
 
 var ScrollMenu = {

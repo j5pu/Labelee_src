@@ -18,6 +18,8 @@ from django.db.models.query import Q
 from utils.helpers import queryset_to_dict
 
 
+
+
 def show_map(request, qr_type, enclosure_id, floor_id, poi_id):
     """
         map/[poi_type]/[enclosure_id]_[floor_id]_[poi_id]
@@ -78,13 +80,8 @@ def show_map(request, qr_type, enclosure_id, floor_id, poi_id):
         ordered_categories = sorted(categories_list, key=itemgetter('name'))
 
         enclosure = Enclosure.objects.filter(id=enclosure_id)
-        cacheEnclosure = {
-            'poisByFloor': poisByFloor,
-            'ordered_categories': ordered_categories,
-            'colors': colors,
-            'coupons': coupons,
-            'enclosure':enclosure
-        }
+        cacheEnclosure = {'poisByFloor': poisByFloor, 'ordered_categories': ordered_categories, 'colors': colors,
+                                   'coupons': coupons, 'enclosure':enclosure}
         cache.set(cache_key,cacheEnclosure,cache_time)
     else:
         poisByFloor = cacheEnclosure['poisByFloor']
@@ -101,19 +98,17 @@ def show_map(request, qr_type, enclosure_id, floor_id, poi_id):
         break
 
     ctx = {
-        'qr_type': qr_type,
         'enclosure_id': enclosure_id,
         'floor_id': floor_id,
         'poi_id': poi_id,
         'categories': ordered_categories,
         'marquee': marquee,
+        'qr_type': qr_type,
         'coupons': coupons,
         'colors': colors,
         'map_data': simplejson.dumps(get_map_data(qr_type, poi_id, poisByFloor, enclosure_id))
     }
-
     return render_to_response('map/index.html', ctx, context_instance=RequestContext(request))
-
 
 def saveQrShot(poi_id):
     try:

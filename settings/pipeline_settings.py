@@ -13,15 +13,6 @@ PIPELINE_UGLIFYJS_ARGUMENTS = '-nm'
 PIPELINE_DISABLE_WRAPPER = True
 
 PIPELINE_CSS = {
-    'map_splash': {
-        'source_filenames': (
-            'css/map/index/animation.css',
-            'css/map/index/multix.css',
-            'css/map/index/styles.css',
-        ),
-        'output_filename': 'map_splash.min.css',
-        'variant': 'datauri',
-    },
     'map': {
         'source_filenames': (
             'vendor/leaflet/leaflet.css',
@@ -34,16 +25,10 @@ PIPELINE_CSS = {
         ),
         'output_filename': 'map.min.css',
         'variant': 'datauri',
-    }
+        }
 }
 
 PIPELINE_JS = {
-    'map_splash': {
-        'source_filenames': (
-            'vendor/jquery-2.0.3.min.js',
-        ),
-        'output_filename': 'map_splash.min.js',
-        },
     'map': {
         'source_filenames': (
             'vendor/prefixfree.min.js',
@@ -71,12 +56,12 @@ PIPELINE_JS = {
             'js/map/index/main.js',
         ),
         'output_filename': 'map.min.js',
-    },
+        },
     'map2': {
         'source_filenames': (
             'js/map/index/map.js',
         ),
         'output_filename': 'map2.min.js',
-    },
+        },
 
-}
+    }

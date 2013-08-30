@@ -1,30 +1,32 @@
-(function() {
+(function () {
     var lastTime = 0;
     var vendors = ['webkit', 'moz'];
-    for(var x = 0; x < vendors.length && !window.requestAnimationFrame; ++x) {
-        window.requestAnimationFrame = window[vendors[x]+'RequestAnimationFrame'];
+    for (var x = 0; x < vendors.length && !window.requestAnimationFrame; ++x) {
+        window.requestAnimationFrame = window[vendors[x] + 'RequestAnimationFrame'];
         window.cancelAnimationFrame =
-            window[vendors[x]+'CancelAnimationFrame'] || window[vendors[x]+'CancelRequestAnimationFrame'];
+            window[vendors[x] + 'CancelAnimationFrame'] || window[vendors[x] + 'CancelRequestAnimationFrame'];
     }
 
     if (!window.requestAnimationFrame)
-        window.requestAnimationFrame = function(callback, element) {
+        window.requestAnimationFrame = function (callback, element) {
             var currTime = new Date().getTime();
             var timeToCall = Math.max(0, 16 - (currTime - lastTime));
-            var id = window.setTimeout(function() { callback(currTime + timeToCall); },
+            var id = window.setTimeout(function () {
+                    callback(currTime + timeToCall);
+                },
                 timeToCall);
             lastTime = currTime + timeToCall;
             return id;
         };
 
     if (!window.cancelAnimationFrame)
-        window.cancelAnimationFrame = function(id) {
+        window.cancelAnimationFrame = function (id) {
             clearTimeout(id);
         };
 }());
 
 var blinkingMode = null;
-function blinker(element,dst) {
+function blinker(element, dst) {
     if (blinkingMode != null && element != null
         && element.parentElement.innerText.trimLeft() == blinkingMode
         && dst == prev_dest) {
@@ -35,7 +37,7 @@ function blinker(element,dst) {
             element.style.background = "red";
         }
         window.setTimeout(function () {
-            blinker(element,dst);
+            blinker(element, dst);
         }, 1000);
     } else {
         if (element != null) element.style.background = "";
@@ -117,10 +119,9 @@ var layercategories_indexed = {};
 var selected_category_index;
 
 var label_categories_indexed = {};
-for(var category_index in label_categories)
-{
+for (var category_index in label_categories) {
     var category_name = label_categories[category_index].name;
-    label_categories_indexed[category_name]  = category_index;
+    label_categories_indexed[category_name] = category_index;
     label_categories[category_index].layer = new L.LayerGroup();
 
     label_categories[category_index].layer.index = category_index;
@@ -136,15 +137,13 @@ for(var category_index in label_categories)
 for (var i in floors) {
     // Clonamos cada objeto label_categories para asignarlo a cada planta
     floors[i].categories = jQuery.extend(true, {}, label_categories);
-    for(var category_index in floors[i].categories)
-    {
+    for (var category_index in floors[i].categories) {
         floors[i].categories[category_index] = [];
     }
 }
 
 // Indexamos la lista de plantas por su id
-for(var i in floors)
-{
+for (var i in floors) {
     floors_indexed[floors[i].id] = floors[i];
 }
 
@@ -160,10 +159,9 @@ var flechita = null;
 //=============== FIN DE VARIABLES GLOBALES ==================
 
 
-
 function loadIcon(shape) {
     var icon = L.divIcon({
-        className: "my-div-icon icon-white icon-"+ shape
+        className: "my-div-icon icon-white icon-" + shape
     });
     return icon;
 }
@@ -349,18 +347,15 @@ var LocalStorageHandler = {
 
 
 //Carga de plantas
-function loadFloors()
-{
-    for(var floor_index in floors)
-    {
+function loadFloors() {
+    for (var floor_index in floors) {
         var img;
         var name = floors[floor_index].name;
 
         if (!Modernizr.svg) {
             img = floors[floor_index].imgB;
         }
-        else
-        {
+        else {
             img = floors[floor_index].img || floors[floor_index].imgB;
         }
 
@@ -368,7 +363,7 @@ function loadFloors()
         floorImg.src = img;
 
         floorImg.onload = function (index) {
-            var mapH=mapW;
+            var mapH = mapW;
             var bounds = new L.LatLngBounds(new L.LatLng(0, 0), new L.LatLng(mapH, mapW));
 
             floors[index].scaleX = mapW / floors[index].num_cols;
@@ -376,7 +371,7 @@ function loadFloors()
             floors[index].bounds = bounds;
 
             floors[index].photo = new L.LayerGroup();
-            floors[index].img= new L.imageOverlay(img, bounds);
+            floors[index].img = new L.imageOverlay(img, bounds);
             floors[index].img.position = index;
 
             floors[index].photo.addLayer(floors[index].img);
@@ -384,8 +379,7 @@ function loadFloors()
 
             floor_loaded_index++;
 
-            if(floor_loaded_index == floors.length)
-            {
+            if (floor_loaded_index == floors.length) {
                 loadPOIs();
                 initMap(qrPoint);
                 LocalStorageHandler.draw();
@@ -402,7 +396,7 @@ function loadFloors()
 
 //Carga de POIs
 function loadPOIs() {
-    var layer_index=1;
+    var layer_index = 1;
     for (var floor_index in floors) {
         floors[floor_index].layer = new L.layerGroup();
 
@@ -412,7 +406,7 @@ function loadPOIs() {
 
             if (current_poi.id === poi_id) {
                 // Si es el último no hacemos nada. Si no, lo sacamos
-                if (poi_index == floors[floor_index].pois.length-1)
+                if (poi_index == floors[floor_index].pois.length - 1)
                     break;
                 else
                     floors[floor_index].pois.splice(poi_index, 1);
@@ -428,7 +422,7 @@ function loadPOIs() {
                 sX = floors[floor_index].scaleX,
                 sY = floors[floor_index].scaleY,
                 loc = [(current_poi.row) * sY + (sY),
-                    current_poi.col * sX +(sX)],
+                    current_poi.col * sX + (sX)],
                 center = [(current_poi.center_x) * sY + (sY),
                     current_poi.center_y * sX + (sX)],
                 labelid = current_poi.label.id,
@@ -437,11 +431,11 @@ function loadPOIs() {
 
             var popupTitle = description;
             if (panorama) {
-                popupTitle += Panorama.renderIcon(id,panorama);
+                popupTitle += Panorama.renderIcon(id, panorama);
             }
             popupTitle += SocialMenu.renderIcon(id);
 
-            current_poi.marker =new L.marker(center, {
+            current_poi.marker = new L.marker(center, {
                 icon: loadIcon(shapeIcon)});
 
             current_poi.marker.poid = id;
@@ -457,8 +451,8 @@ function loadPOIs() {
             current_poi.marker.coupon = coupon;
             current_poi.marker.description = description;
             current_poi.marker.type = 2; // 2 significa de tipo marcador
-            current_poi.marker.category_icon =  shapeIcon;
-            current_poi.marker.category_color =  colorIcon;
+            current_poi.marker.category_icon = shapeIcon;
+            current_poi.marker.category_color = colorIcon;
 
             current_poi.marker.changeTitle = function () {
                 this.popupTitle = gettext("Scan a QR code to get here:") + " " + this.description + this.panoramaIcon + SocialMenu.renderIcon(this.poid);
@@ -476,8 +470,7 @@ function loadPOIs() {
 
                     LocalStorageHandler.setPrevDest(this);
                     if (Panorama.opened) Panorama.close();
-                    if (qrMarker)
-                    {
+                    if (qrMarker) {
                         drawRoute(qrPoint.point.id, this.poid);
                     }
 
@@ -487,14 +480,13 @@ function loadPOIs() {
 
             var category_index = label_categories_indexed[current_poi.marker.category];
 
-            if(category_index)
-            {
+            if (category_index) {
 
                 floors[floor_index].categories[category_index].push(current_poi.marker);
             }
 
             if (isPoiVisibleByDefault(current_poi.marker.category_en))
-               floors[floor_index].layer.addLayer(current_poi.marker);
+                floors[floor_index].layer.addLayer(current_poi.marker);
         }
     }
 
@@ -511,7 +503,7 @@ function loadPOIs() {
 
         var originLegend = gettext("You are right here:") + '<br>' + point_description;
         if (qrPoint.point.panorama)
-            originLegend = originLegend + Panorama.renderIcon(qrPoint.point.id,qrPoint.point.panorama);
+            originLegend = originLegend + Panorama.renderIcon(qrPoint.point.id, qrPoint.point.panorama);
         originLegend += SocialMenu.renderIcon(qrPoint.point.id);
 
         qrMarker = L.marker(qrLoc, {icon: originIcon})
@@ -528,7 +520,7 @@ function loadPOIs() {
         var photoIcon = qrPoint.point.panorama ? Panorama.renderIcon(qrPoint.point.id, qrPoint.point.panorama) : "";
 
         qrMarker = L.marker(qrLoc, {
-            icon: destIcon}).bindPopup(msg + '<br>'+ qrPoint.point.description + photoIcon + SocialMenu.renderIcon(qrPoint.point.id))
+            icon: destIcon}).bindPopup(msg + '<br>' + qrPoint.point.description + photoIcon + SocialMenu.renderIcon(qrPoint.point.id))
             .on('click', function () {
                 LocalStorageHandler.setPrevDest(this);
                 bindContent(this);
@@ -578,20 +570,20 @@ function initMap(qrPoint) {
 //EVENTOS - Añadir layer
 map.on('layeradd', function (e) {
     // Si agregamos una categoría (tipo 1)
-    if(e.layer.type  && e.layer.type == 1 && loadedLabels)
+    if (e.layer.type && e.layer.type == 1 && loadedLabels)
         addCategory(e.layer.index);
 
     // Si agregamos un marker (tipo 2)
-    if(current_floor && e.layer.type && e.layer.type == 2)
+    if (current_floor && e.layer.type && e.layer.type == 2)
         setMarkerColor(e);
 });
 //EVENTOS - Quitar layer
 map.on('layerremove', function (e) {
-    if(e.layer._map)
+    if (e.layer._map)
         loadedLabels = false;
 
     // Si eliminamos una categoría (tipo 1)
-    if(e.layer.type  && e.layer.type == 1 && loadedLabels)
+    if (e.layer.type && e.layer.type == 1 && loadedLabels)
         removeCategory(e.layer.index);
 });
 
@@ -603,13 +595,12 @@ map.on('baselayerchange', function (e) {
 });
 
 
-function setMarkerColor(eventparameter)
-{
+function setMarkerColor(eventparameter) {
     var shapeIcon = eventparameter.layer.category_icon;
     var colorIcon = eventparameter.layer.category_color;
-    $('div.icon-'+ shapeIcon).css({
+    $('div.icon-' + shapeIcon).css({
         'background': colorIcon,
-        'border-top-color':colorIcon
+        'border-top-color': colorIcon
     });
 }
 
@@ -617,15 +608,14 @@ function addCategory(category_index) {
 
     var checkboxes = $('input[type=checkbox].leaflet-control-layers-selector');
 
-    if((selected_category_index >= 0) &&
-        selected_category_index != category_index)
-    {
+    if ((selected_category_index >= 0) &&
+        selected_category_index != category_index) {
         map.removeLayer(label_categories[selected_category_index].layer);
     }
     checkboxes.prop('checked', false);
     checkboxes.css('background', '#333');
     checkboxes.eq(category_index).prop('checked', true);
-    if(!map.hasLayer(label_categories[category_index].layer))
+    if (!map.hasLayer(label_categories[category_index].layer))
         map.addLayer(label_categories[category_index].layer);
     checkboxes.eq(category_index)
         .css('background', label_categories[category_index].color);
@@ -634,10 +624,9 @@ function addCategory(category_index) {
 }
 
 
-
 function removeCategory(category_index) {
     $('input[type=checkbox].leaflet-control-layers-selector:eq(' + category_index + ')').css('background', '#333');
-    selected_category_index=-1;
+    selected_category_index = -1;
 }
 
 
@@ -651,6 +640,13 @@ function changeFloor(e) {
     // Añadimos capas de la planta actual
     current_floor = floors_indexed[e.layer.floor_id];
     map.addLayer(current_floor.layer);
+    if (anim != null) {
+        window.clearInterval(anim);
+        anim = null;
+    }
+    if (arrowHead[current_floor.id]) {
+        arrowAnim(arrowHead[current_floor.id], current_floor.id);
+    }
     Map.reloadPois();
 
     if (map.hasLayer(qrMarker)) {
@@ -670,13 +666,11 @@ function changeFloor(e) {
 }
 
 
-Map.reloadPois = function()
-{
+Map.reloadPois = function () {
     // Cargamos todos los POIs de las categorías para la planta actual
     for (var category_index in label_categories) {
         label_categories[category_index].layer.clearLayers();
-        for(var layer_poi in current_floor.categories[category_index])
-        {
+        for (var layer_poi in current_floor.categories[category_index]) {
             label_categories[category_index].layer.addLayer(current_floor.categories[category_index][layer_poi]);
         }
     }
@@ -686,16 +680,18 @@ Map.reloadPois = function()
 function drawRoute(org, dst) {
     //Creación de la ruta (con subrutas correspondientes), desde el origen hasta el POI destino
 
-    if (org != dst && dst != prev_dest)
-    {
+    for (var floor_id in arrowHead) {
+        floors_indexed[floor_id].layer.removeLayer(arrowHead[floor_id]);
+    }
+    arrowHead = {};
+    if (org != dst && dst != prev_dest) {
         prev_dest = dst;
         route = routeResource.getRoute(org, dst);
 
         if (!route) {
             alert(gettext('We are sorry, that route does not exist.'));
         }
-        else
-        {
+        else {
             // Limpia la ruta anteriormente trazada
             for (var floor_index in pathLine) {
                 floors_indexed[floor_index].layer.removeLayer(pathLine[floor_index]);
@@ -708,14 +704,13 @@ function drawRoute(org, dst) {
             //
             //MARKER DESTINO
             // Quitamos el marker destino si existe y creamos el nuevo para la ruta actual
-            if (destMarker.floor_id)
-            {
+            if (destMarker.floor_id) {
                 floors_indexed[destMarker.floor_id].layer.removeLayer(destMarker);
             }
 
             var destLegend = route.fields.destiny.fields.description;
             if (route.fields.destiny.fields.panorama) {
-                destLegend += Panorama.renderIcon(dst,route.fields.destiny.fields.panorama);
+                destLegend += Panorama.renderIcon(dst, route.fields.destiny.fields.panorama);
             }
             destLegend += SocialMenu.renderIcon(dst);
 
@@ -738,8 +733,7 @@ function drawRoute(org, dst) {
             floors_indexed[destMarker.floor_id].layer.addLayer(destMarker);
 
 
-            if (qr_type != 'dest')
-            {
+            if (qr_type != 'dest') {
                 // Añadimos el pathline (polilínea naranja)
                 for (var subroute_index in route.fields.subroutes) {
                     var floor_id = route.fields.subroutes[subroute_index].floor.pk;
@@ -751,19 +745,25 @@ function drawRoute(org, dst) {
                         path[floor_id].push([(route.fields.subroutes[subroute_index].steps[step_index].fields.row) * osY + osY,
                             (route.fields.subroutes[subroute_index].steps[step_index].fields.column) * osX + osX]);
                     }
-                    pathLine[floor_id] = L.polyline(path[floor_id], {color: 'orange', opacity: 0.8, weight:2 });
+                    pathLine[floor_id] = L.polyline(path[floor_id], {color: 'orange', opacity: 0.8, weight: 2 });
+                    arrowHead[floor_id] = L.polylineDecorator(pathLine[floor_id]);
                     floors_indexed[floor_id].layer.addLayer(pathLine[floor_id]);
+                    floors_indexed[floor_id].layer.addLayer(arrowHead[floor_id]);
+                }
+
+                if(arrowHead[current_floor.id])
+                {
+                     arrowAnim(arrowHead[current_floor.id],current_floor.id);
                 }
 
                 // Parpadeo en el botón de la planta destino
                 var floor_name = floors_indexed[route.fields.destiny.fields.floor].name;
                 var check = floorChecks[floor_name];
                 blinkingMode = floor_name;
-                blinker(check,dst);
+                blinker(check, dst);
 
                 // Cambia a la planta del origen si estamos en otra
-                if(current_floor.id != qrFloor.id && current_floor.id != dest_floor.id)
-                {
+                if (current_floor.id != qrFloor.id && current_floor.id != dest_floor.id) {
                     var floor_to_show_name = floors_indexed[qrFloor.id].name;
                     $('.leaflet-control-layers-base input[type=radio]')
                         .eq(baseLayers[floor_to_show_name].position)
@@ -798,7 +798,7 @@ function drawRoute(org, dst) {
 
 function isCategoryVisibleOnButtons(categ_name) {
     return categ_name !== "Parking" && categ_name !== "Blockers" &&
-         categ_name !== "Connectors" && categ_name !== "Entrance" &&
+        categ_name !== "Connectors" && categ_name !== "Entrance" &&
         categ_name !== "Toilet";
 }
 
@@ -819,8 +819,7 @@ Map.locateCar = function () {
 
     miCoche = miCoche.dest;
 
-    if(current_floor.id != miCoche.floor.id)
-    {
+    if (current_floor.id != miCoche.floor.id) {
         var floor_to_show_name = floors_indexed[miCoche.floor.id].name;
         $('.leaflet-control-layers-base input[type=radio]')
             .eq(baseLayers[floor_to_show_name].position)
@@ -847,8 +846,7 @@ Map.locateCar = function () {
 
 Map.locatePosition = function () {
 
-    if(current_floor.id != qrFloor.id)
-    {
+    if (current_floor.id != qrFloor.id) {
         var floor_to_show_name = floors_indexed[qrFloor.id].name;
         $('.leaflet-control-layers-base input[type=radio]')
             .eq(baseLayers[floor_to_show_name].position)
@@ -902,8 +900,7 @@ Map.events =
 
 
 function bindContent(marker) {
-    if (!marker.contentBinded)
-    {
+    if (!marker.contentBinded) {
         // Se bindea el contenido del popup abierto para el marker
         Panorama.bindShow(marker);
 //        SocialMenu.bindShow(marker);
@@ -912,3 +909,27 @@ function bindContent(marker) {
         marker.contentBinded = true;
     }
 }
+
+//Función que gestiona la animación de la flecha
+function arrowAnim(arrow, idFloor) {
+
+    if (anim != null) {
+        window.clearInterval(anim);
+
+    }
+    anim = window.setInterval(function () {
+
+        setArrow(arrow, idFloor)
+    }, 100);
+
+}
+var arrowsOffset = 0;
+//Función que define la animación (en este caso, flecha azul) que marca la ruta
+var setArrow = function (flecha, idFloor) {
+
+    flecha.setPatterns([
+        {offset: arrowsOffset + '%', repeat: 0, symbol: new L.Symbol.ArrowHead({pixelSize: 15, polygon: false, pathOptions: { stroke: true}})}
+    ]);
+    if (++arrowsOffset > 100)
+        arrowsOffset = 0;
+};
