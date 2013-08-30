@@ -18,7 +18,8 @@ def scans_by_category(request, enclosure_id):
 
     Muestra el número de escaneos de QRs para todos los recintos del dueño o para uno dado
     """
-    categories = getLabelCategories(enclosure_id)
+    categories = getLabelCategories(enclosure_id)\
+        .filter(labels__points__floor__enclosure__id=enclosure_id)
     categories = filterAsValidCategories(categories).order_by('name')
     c = categories.annotate(num_shots=Count('labels__points__qr_shots'))
 
@@ -54,7 +55,8 @@ def top_scans_by_poi(request, enclosure_id):
 
 
 def routes_by_category(request, enclosure_id):
-    categories = getLabelCategories(enclosure_id)
+    categories = getLabelCategories(enclosure_id) \
+        .filter(labels__points__floor__enclosure__id=enclosure_id)
     categories = filterAsValidCategories(categories).order_by('name')
     c = categories.annotate(displayed_destination_count=Count('labels__points__displayed_destination'))
 
