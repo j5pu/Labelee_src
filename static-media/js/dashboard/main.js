@@ -28,20 +28,13 @@ function drawGraph(svgId, chartType, data) {
 }
 
 
-var scansByCat = dashBoardResource.getScansByCategory(enclosure_id),
-    totalScans = scansByCat,
-    totalRoutes = dashBoardResource.getDisplayedRoutesByCategory(enclosure_id),
-    routesByCat = totalRoutes,
-    topScans = dashBoardResource.getScansForTopPois(enclosure_id),
-    topRoutes = dashBoardResource.getDisplayedRoutesForTopPois(enclosure_id);
-
-
 function rotate_x_labels(chart) {
     chart.xAxis.rotateLabels(-45);
     chart.margin({bottom: 120, left: 60});
 }
 
-//TOTAL SCANS
+//
+//SCANS BY CATEGORY
 nv.addGraph(function () {
     var chart = nv.models.discreteBarChart()
         .x(function (d) {
@@ -50,7 +43,6 @@ nv.addGraph(function () {
         .y(function (d) {
             return d.value
         })
-//        .staggerLabels(true)
         .tooltips(true)
         .showValues(true);
     chart.yAxis
@@ -58,23 +50,21 @@ nv.addGraph(function () {
     chart.valueFormat(d3.format('d'));
 
     rotate_x_labels(chart);
-//    chart.xAxis.rotateLabels(x_axis_labels_rotation);
-//    chart.margin({bottom:120, left:120});
 
     d3.select('#chart0')
-        .datum(totalScans)
+        .datum(scansByCategory)
         .transition().duration(500)
         .call(chart);
 
-    //chart.width(352);
-
     nv.utils.windowResize(chart.update);
-
 
     return chart;
 });
+
+
+//
+//ROUTES BY CATEGORY
 var testChart = null;
-//TOTAL ROUTES
 nv.addGraph(function () {
     var chart = nv.models.discreteBarChart()
         .x(function (d) {
@@ -83,8 +73,6 @@ nv.addGraph(function () {
         .y(function (d) {
             return d.value
         })
-//.color(d3.scale.category20c().range())
-//        .staggerLabels(true)
         .tooltips(true)
         .showValues(true);
     chart.yAxis
@@ -95,7 +83,7 @@ nv.addGraph(function () {
     rotate_x_labels(chart);
 
     d3.select('#chart1')
-        .datum(totalRoutes)
+        .datum(routesByCategory)
         .transition().duration(500)
         .call(chart);
 
@@ -105,13 +93,18 @@ nv.addGraph(function () {
     return chart;
 });
 
+
+//
+// PIE CHARTS:
+//
 var myColors = [];
-for (var i in scansByCat[0].values) {
-    myColors.push(scansByCat[0].values[i].color)
+for (var i in scansByCategory[0].values) {
+    myColors.push(scansByCategory[0].values[i].color)
 }
 d3.scale.myColors = function () {
     return d3.scale.ordinal().range(myColors);
 };
+//
 //SCANS BY CATEGORIES
 nv.addGraph(function () {
     var chart = nv.models.pieChart()
@@ -127,18 +120,15 @@ nv.addGraph(function () {
         //.color(['blue', 'green', 'yellow'])
         .donut(true);
     chart.valueFormat(d3.format('d'));
-
-//    chart.margin({left:0, top:100});
-
     chart.pie.donutLabelsOutside(false);
     d3.select("#chart2")
-        .datum(scansByCat)
+        .datum(scansByCategory)
         .transition().duration(1200)
         .call(chart);
 
     return chart;
 });
-
+//
 //ROUTES BY CATEGORIES
 nv.addGraph(function () {
     var chart = nv.models.pieChart()
@@ -148,14 +138,11 @@ nv.addGraph(function () {
             .y(function (d) {
                 return d.value
             })
-//.color(d3.scale.category20().range())
             .showLabels(false)
-            .color(d3.scale.myColors().range())
-        ;
-
+            .color(d3.scale.myColors().range());
     chart.valueFormat(d3.format('d'));
     d3.select("#chart3")
-        .datum(routesByCat)
+        .datum(routesByCategory)
         .transition().duration(1200)
         .call(chart);
 
@@ -163,7 +150,8 @@ nv.addGraph(function () {
 });
 
 
-//5 TOP SCANS
+//
+// TOP SCANS BY POI
 nv.addGraph(function () {
     var chart = nv.models.discreteBarChart()
         .x(function (d) {
@@ -172,8 +160,6 @@ nv.addGraph(function () {
         .y(function (d) {
             return d.value
         })
-//.color(d3.scale.category20c().range())
-//        .staggerLabels(true)
         .tooltips(true)
         .showValues(true);
     chart.yAxis
@@ -182,7 +168,7 @@ nv.addGraph(function () {
     rotate_x_labels(chart);
 
     d3.select('#chart4')
-        .datum(topScans)
+        .datum(topScansByPoi)
         .transition().duration(500)
         .call(chart);
 
@@ -190,7 +176,9 @@ nv.addGraph(function () {
 
     return chart;
 });
-//6 TOP ROUTES
+
+//
+// TOP ROUTES BY POI
 nv.addGraph(function () {
     var chart = nv.models.discreteBarChart()
         .x(function (d) {
@@ -209,7 +197,7 @@ nv.addGraph(function () {
     rotate_x_labels(chart);
 
     d3.select('#chart5')
-        .datum(topRoutes)
+        .datum(topRoutesByPoi)
         .transition().duration(500)
         .call(chart);
 
@@ -219,22 +207,3 @@ nv.addGraph(function () {
 //    chart.xAxis.rotateLabels(-45);
     return chart;
 });
-
-
-//
-//function rotate_x_labels(chart, chartId)
-//{
-////    chart.margin({bottom: 60});
-//    var xTicks = d3.select(chartId).select('.nv-x.nv-axis > g').selectAll('g');
-//    xTicks
-//        .selectAll('text')
-//        .style("text-anchor", "end")
-//            .attr("dx", "-.8em")
-//            .attr("dy", ".15em")
-//            .attr("transform", function(d) {
-//                return "rotate(-65)"
-//            });
-////        .attr('transform', function(d,i,j) { return 'translate (-10, 25) rotate(-45 0,0)' })
-////        .attr('text-anchor', 'right');
-//}
-

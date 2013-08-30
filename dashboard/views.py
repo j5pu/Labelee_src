@@ -1,19 +1,15 @@
 # -*- coding: utf-8 -*-
 import datetime
-from django.contrib.auth.decorators import login_required
 from django.core.context_processors import csrf
-from django.core.serializers import json
 from django.http import HttpResponse
 
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 import simplejson
 from dashboard.models import DisplayedRoutes
+from dashboard.utils import *
 from map_editor.models import Floor, Enclosure
-from route.models import Route, Step
 from route.services import getHeatMapSteps
-
-from django.conf import settings
 
 
 def index(request, enclosure_id):
@@ -44,14 +40,17 @@ def index(request, enclosure_id):
                 'enclosure_id': enclosure_id,
                 'floorsDict': floorsDict,
                 'currentSteps': allPoints,
-                'enclosureName' : enclosure.name
+                'enclosureName' : enclosure.name,
+                'scansByCategory' : simplejson.dumps(getScansByCategory(enclosure_id)),
+                'routesByCategory' : simplejson.dumps(getRoutesByCategory(enclosure_id)),
+                'topScansByPoi' : simplejson.dumps(getTopScansByPoi(enclosure_id)),
+                'topRoutesByPoi' : simplejson.dumps(getTopRoutesByPoi(enclosure_id)),
             }
             template = 'dashboard/index.html'
         else:
             ctx = {
                 'state': 'Nombre de usuario y/o incorrectos',
                 'enclosure_id': enclosure_id
-
             }
 
     ctx.update(csrf(request))

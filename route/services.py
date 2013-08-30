@@ -1,6 +1,9 @@
+import datetime
 from django.http import HttpResponse
 from django.core import serializers
 from django.db.models import Sum
+from dashboard.models import DisplayedRoutes
+from log.logger import Logger
 
 from route.models import *
 from map_editor.models import *
@@ -62,8 +65,22 @@ def get_route(request, origin, destiny):
             for step in steps:
                 floor['steps'].append(step_filter(to_dict(step)))
 
+    # Guardamos la ruta ofrecida para el dashboard
+    saveDisplayedRoute(origin, destiny)
 
     return HttpResponse(simplejson.dumps(route_dict), mimetype='application/json')
+
+
+def saveDisplayedRoute(origin_id, destination_id):
+    try:
+        displayedRoute = DisplayedRoutes()
+        displayedRoute.origin_id = origin_id
+        displayedRoute.destination_id = destination_id
+        displayedRoute.date = datetime.datetime.utcnow()
+        displayedRoute.save()
+    except Exception as ex:
+        Logger.error(ex.message)
+
 
 #Obtienen todos los pasos para generar los heatmaps de un recinto
 def getHeatMapSteps(enclosure_id):

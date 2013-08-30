@@ -5,7 +5,7 @@ from map_editor.models import Label, FIXED_CATEGORIES
 
 
 def getLabelsForDashboard(enclosure_id):
-    labels = Label.objects.filter(category__enclosure_id=enclosure_id)
+    labels = Label.objects.filter(points__floor__enclosure_id=enclosure_id).distinct()
     return filterAsPois(labels)
 
 
