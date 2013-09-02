@@ -179,6 +179,18 @@ function hideSplash() {
     loadFloors();
 }
 
+
+function showRouteFromMenu(origin_id, destination_id)
+{
+    if(origin_id != destination_id)
+    {
+        drawRoute(origin_id, destination_id);
+        LocalStorageHandler.setPrevDestByPoi(destination_id);
+        $('#menu-right').trigger('close');
+    }
+}
+
+
 var Coupon = {
     opened: false,
 
@@ -276,10 +288,6 @@ var Coupon = {
         $('div.device').fadeOut(100);
     }
 };
-
-
-
-
 
 
 var ScrollMenu = {

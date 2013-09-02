@@ -87,7 +87,9 @@
                 <li>
                 <li class="Label" style="background:{{ colors|get_item:category.name }};">{{ category.name }}</li>
                 {% for destination in category.items %}
-                    <li onclick="$('#menu-right').trigger( 'close' );drawRoute({{ poi_id }},{{ destination.id }});LocalStorageHandler.setPrevDestByPoi({{ destination.id }})">
+                    <li class="destiny"
+                        data-destiny-id="{{ destination.id }}"
+                        onclick="showRouteFromMenu({{ poi_id }}, {{ destination.id }});">
                         {% if destination.label.category.enclosure %}
                             {{ destination.label.name }}
                         {% else %}

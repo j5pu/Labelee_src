@@ -390,6 +390,8 @@ function loadFloors() {
                 $('span:has(i.icon-glass)').css('left', '11px');
                 Coupon.init();
                 $('div.splash').fadeOut(100);
+                $('#scrollMenu .destiny[data-destiny-id=' + qrPoint.point.id + ']')
+                    .addClass('origin');
             }
         }(floor_index);
     }
@@ -695,12 +697,20 @@ function drawRoute(org, dst) {
     arrowHead = {};
     if (org != dst && dst != prev_dest) {
         prev_dest = dst;
+
+        // Marcamos en el menú lateral el destino escogido
+        $('#scrollMenu .destiny.selected').removeClass('selected');
+        $('#scrollMenu .destiny[data-destiny-id=' + dst + ']').addClass('selected');
+
         route = routeResource.getRoute(org, dst);
 
         if (!route) {
+            $('#scrollMenu .destiny.selected').removeClass('selected');
             alert(gettext('We are sorry, that route does not exist.'));
         }
         else {
+            $('#scrollMenu .destiny[data-destiny-id=' + dst + ']').addClass('selected');
+
             // Limpia la ruta anteriormente trazada
             for (var floor_index in pathLine) {
                 floors_indexed[floor_index].layer.removeLayer(pathLine[floor_index]);
