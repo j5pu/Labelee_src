@@ -177,7 +177,6 @@ function hideSplash() {
     $('div#page').fadeIn(100);
     $('div.splash').fadeOut(100);
     loadFloors();
-    LocalStorageHandler.init();
 }
 
 var Coupon = {

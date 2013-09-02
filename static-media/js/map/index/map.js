@@ -172,6 +172,7 @@ var LocalStorageHandler = {
     init: function () {
         this.checkExpire();
         this.setValues();
+        this.draw();
     },
 
     checkExpire: function () {
@@ -200,7 +201,6 @@ var LocalStorageHandler = {
                 localStorage.removeItem('miCoche')
             }
         }
-
 
         if (qr_type == 'dest') {
             this.setSharedDest();
@@ -313,7 +313,8 @@ var LocalStorageHandler = {
         if (qr_type == 'origin') {
             // DESTINO PREVIO
             var prevDest = JSON.parse(localStorage.getItem('prevDest'));
-            if (prevDest) {
+            if (prevDest)
+            {
                 if (prevDest.dest && prevDest.dest.enclosure.id == qrPoint.enclosure.id) {
                     if (prevDest.shooted_origin)
                         if (confirm(prevDest.mesg)) {
@@ -382,7 +383,7 @@ function loadFloors() {
             if (floor_loaded_index == floors.length) {
                 loadPOIs();
                 initMap(qrPoint);
-                LocalStorageHandler.draw();
+                LocalStorageHandler.init();
                 $('div#cupones, div#header, span.locator, div#marquee').show();
                 //recolocar controles
                 $('span:has(i.icon-film)').css('left', '11px');
@@ -455,33 +456,41 @@ function loadPOIs() {
             current_poi.marker.category_color = colorIcon;
 
             current_poi.marker.changeTitle = function () {
-                this.popupTitle = gettext("Scan a QR code to get here:") + " " + this.description + this.panoramaIcon + SocialMenu.renderIcon(this.poid);
-                this.bindPopup(popupTitle).openPopup();
+                this.popupTitle = gettext("Scan a QR code to get here:") + " " + this.description;
+                if (this.panorama) {
+                    this.popupTitle += Panorama.renderIcon(this.poid, this.panorama);
+                }
+                this.popupTitle += SocialMenu.renderIcon(this.poid);
+                this.bindPopup(this.popupTitle).openPopup();
                 bindContent(this);
             };
 
             current_poi.marker
                 .bindPopup(popupTitle)
                 .on('click tap touchstart touch', function () {
-                    if (qr_type == 'dest') {
-                        this.changeTitle();
-                        return;
+                    if (qr_type == 'dest')
+                    {
+                        if (this.poid == qrPoint.point.id)
+                        {
+                            this.changeTitle();
+                        }
                     }
+                    else
+                    {
+                        LocalStorageHandler.setPrevDest(this);
+                        if (Panorama.opened) Panorama.close();
+                        if (qrMarker) {
+                            drawRoute(qrPoint.point.id, this.poid);
+                        }
 
-                    LocalStorageHandler.setPrevDest(this);
-                    if (Panorama.opened) Panorama.close();
-                    if (qrMarker) {
-                        drawRoute(qrPoint.point.id, this.poid);
+                        qrMarker.contentBinded = false;
+                        bindContent(qrMarker);
                     }
-
-                    qrMarker.contentBinded = false;
-                    bindContent(qrMarker);
                 });
 
             var category_index = label_categories_indexed[current_poi.marker.category];
 
             if (category_index) {
-
                 floors[floor_index].categories[category_index].push(current_poi.marker);
             }
 
