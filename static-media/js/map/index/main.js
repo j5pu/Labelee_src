@@ -52,19 +52,24 @@ window.addEventListener("orientationchange", hideAddressBar );
 ///	Activación y configuración del menú
 $(function() {
 
-//    Logger.initSender();
-
     //SwipeMenu.init();
-    ScrollMenu.init();
+    if(androidversion <= 2.3)
+    {
+        ScrollMenu.init();
+    }
     Panorama.init();
 
     Map.events.bindAll();
 
     var $menu = $('nav#menu-right');
-    $menu.mmenu({
-        position: 'left',
-        slideDuration    : 300
-    });
+    try{
+        $menu.mmenu({
+            position: 'left',
+            slideDuration    : 300
+        });
+    }catch(e){
+        console.log($menu);
+    }
 
     //	Añadir contadores
     $menu.find( 'i' ).bind(
@@ -132,7 +137,6 @@ $(function() {
     );
 
 
-
     $('button#closeCoupon').on('click', function () {
         $('div.device').fadeOut(100);
     });
@@ -175,6 +179,10 @@ function hideSplash() {
     $('div#page').fadeIn(100);
     $('div.splash').fadeOut(100);
     loadFloors();
+    if(qr_type == 'dest')
+    {
+        $('#header, #cupones, #myCar').hide();
+    }
 }
 
 
@@ -293,7 +301,7 @@ var ScrollMenu = {
     init: function()
     {
         this.$listMenu = $('#scrollMenu');
-        this.$wrapper = $('nav');
+        this.$wrapper = $('nav#menu-right');
         this.top = this.$listMenu.position().top;
 
         this.scrollEvent();
@@ -306,9 +314,12 @@ var ScrollMenu = {
         ev.preventDefault();
 
         self.top_new = self.top + ev.gesture['deltaY'];
+        console.log(ev.gesture['deltaY']);
         self.$listMenu.css({
             'top': parseInt(self.top_new) + 'px'
         });
+
+        console.log('SCROLL:\n\ttop:' + self.top + '\n\ttop_new:' + self.top_new);
     },
 
     scrollEnd: function(ev)
@@ -320,7 +331,7 @@ var ScrollMenu = {
         if(self.top_new > 0 || self.$listMenu.height() < self.$wrapper.height())
             self.top_new = 0;
         else if(Math.abs(self.top_new) > self.$listMenu.height() - self.$wrapper.height())
-            self.top_new = $('nav').height() - self.$listMenu.height();
+            self.top_new = self.$listMenu.height() - self.$wrapper.height();
 
 
         // map.css({
@@ -332,16 +343,15 @@ var ScrollMenu = {
         });
 
         self.top = self.top_new;
+
+        console.log('SCROLLEND:\n\ttop:' + self.top + '\n\ttop_new:' + self.top_new);
     },
 
     scrollEvent: function()
     {
         var self = this;
 
-        self.$listMenu
-            .hammer()
-
-            // SCROLL
+        self.$listMenu.hammer()
             .bind('drag', self.scroll)
             .bind('dragend', self.scrollEnd)
     }
