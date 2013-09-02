@@ -167,9 +167,7 @@ $(function() {
 
         drawRoute(qrPoint.point.id, cupPoint);
         $('div.device').fadeOut();
-
     });
-
 });
 
 
@@ -203,7 +201,7 @@ var Coupon = {
 
     bindOpen: function()
     {
-        $('div#cupones area').on('click', function (ev) {
+        $('div#cupones').on('click', function (ev) {
             ev.stopPropagation();
             if (!Coupon.opened)
             {

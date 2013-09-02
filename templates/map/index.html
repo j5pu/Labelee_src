@@ -97,7 +97,6 @@
                         {% endif %}
                     </li>
                 {% endfor %}
-
                 </li>
             {% endfor %}
             <li class="no-results"><span>{% trans "Lo sentimos, no se ha encontrado ningún resultado." %}</span></li>
@@ -109,11 +108,7 @@
 
     {% if coupons %}
         <div id="cupones">
-            <img id="cupon-img" src="/media/cupones_lab.png"
-                 alt="Cupones" usemap="#cupon">
-            <map name="cupon">
-                <area shape="poly" coords="" href="#" alt="{% trans "Cupones" %}" title="Cupon">
-            </map>
+            <img id="cupon-img" src="{{ MEDIA_URL }}menuTick.png" alt="Cupones">
         </div>
 
         <div class="device">
@@ -129,9 +124,7 @@
                             <img id="{{ point }}" class="cupImg" src="{{ img }}">
                         </div>
                     {% endfor %}
-
                 </div>
-
             </div>
             <div class="pagination"></div>
         </div>

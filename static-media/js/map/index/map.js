@@ -709,8 +709,6 @@ function drawRoute(org, dst) {
             alert(gettext('We are sorry, that route does not exist.'));
         }
         else {
-            $('#scrollMenu .destiny[data-destiny-id=' + dst + ']').addClass('selected');
-
             // Limpia la ruta anteriormente trazada
             for (var floor_index in pathLine) {
                 floors_indexed[floor_index].layer.removeLayer(pathLine[floor_index]);
