@@ -390,8 +390,14 @@ function loadFloors() {
                 $('span:has(i.icon-glass)').css('left', '11px');
                 Coupon.init();
                 $('div.splash').fadeOut(100);
+
+                // Marcamos en el menú lateral el POI origen
                 $('#scrollMenu .destiny[data-destiny-id=' + qrPoint.point.id + ']')
                     .addClass('origin');
+
+                // Si se trata de un destino compartido ni mostramos la cuponera,
+                // ni el menú lateral
+                $()
             }
         }(floor_index);
     }

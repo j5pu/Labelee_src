@@ -56,11 +56,14 @@
 
 <div id="page">
 
-    <div id="header">
-        <a href="#menu-right">
-            <img src="{{ MEDIA_URL }}menuLab.png"/>
-        </a>
-    </div>
+    {% if qr_type == 'origin' %}
+        <div id="header">
+            <a href="#menu-right">
+                <img src="{{ MEDIA_URL }}menuLab.png"/>
+            </a>
+        </div>
+    {% endif %}
+
     <div id="content">
         <div id="map"></div>
     </div>
@@ -104,9 +107,12 @@
     </nav>
 
     <span class="locator icon-navigation" id="location"></span>
-    <span class="locator icon-automobile" id="myCar"></span>
 
-    {% if coupons %}
+    {% if qr_type == 'origin' %}
+        <span class="locator icon-automobile" id="myCar"></span>
+    {% endif %}
+
+    {% if coupons and qr_type == 'origin'%}
         <div id="cupones">
             <img id="cupon-img" src="{{ MEDIA_URL }}menuTick.png" alt="Cupones">
         </div>
