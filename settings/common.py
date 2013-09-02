@@ -141,8 +141,16 @@ INSTALLED_APPS = (
     'coupon_manager',
     'pipeline',
     'memcache_status',
-    'django_hudson'
+    'django_jenkins'
 )
+
+
+JENKINS_TASKS = (
+        'django_jenkins.tasks.with_coverage',
+        'django_jenkins.tasks.django_tests',
+        'django_jenkins.tasks.run_pep8',
+        'django_jenkins.tasks.run_pyflakes',
+    )
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to
