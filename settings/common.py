@@ -132,7 +132,6 @@ INSTALLED_APPS = (
     'tastypie',
     'map_editor',
     'map',
-    'route',
     'modeltranslation',
     'log',
     'dashboard',
@@ -144,6 +143,10 @@ INSTALLED_APPS = (
     'django_jenkins'
 )
 
+PROJECT_APPS = (
+    'route',
+)
+INSTALLED_APPS += PROJECT_APPS
 
 JENKINS_TASKS = (
         'django_jenkins.tasks.with_coverage',
