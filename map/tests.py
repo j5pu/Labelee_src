@@ -62,7 +62,9 @@ class FunctionalTests(LiveServerTestCase):
             # Get local session of firefox
             browser = webdriver.Firefox()
             browser.get("http://localhost:8000/map/origin/26_60_30902")
+            time.sleep(8)
             elem = browser.find_element_by_name("map")
+            time.sleep(0.2)
             assert elem is not None
             browser.get("http://www.yahoo.com") # Load page
             assert "Yahoo!" in browser.title
