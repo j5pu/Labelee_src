@@ -55,12 +55,15 @@ class FunctionalTests(LiveServerTestCase):
         pass
 
     def test_Selenium(self):
-        #crea un monitor virtual para ejecutar el navegador.
+        #crea un monitor virtual para ejecutar el navegador. Necesitas instalar para que funcione:sudo apt-get install xvfb
         display = Display()
         display.start()
         try:
             # Get local session of firefox
             browser = webdriver.Firefox()
+            browser.get("http://localhost:8000/map/origin/26_60_30902")
+            elem = browser.find_element_by_name("map")
+            assert elem is not None
             browser.get("http://www.yahoo.com") # Load page
             assert "Yahoo!" in browser.title
             elem = browser.find_element_by_name("p") # Find the query box
