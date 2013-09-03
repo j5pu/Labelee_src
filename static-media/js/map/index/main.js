@@ -201,6 +201,15 @@ function showRouteFromMenu(origin_id, destination_id)
         drawRoute(origin_id, destination_id);
         LocalStorageHandler.setPrevDestByPoi(destination_id);
         $('#menu-right').trigger('close');
+
+        // Cambia a la planta del origen si estamos en otra
+        var dest_floor = floors_indexed[route.fields.destiny.fields.floor];
+        if (current_floor.id != qrFloor.id && current_floor.id != dest_floor.id) {
+            var floor_to_show_name = floors_indexed[qrFloor.id].name;
+            $('.leaflet-control-layers-base input[type=radio]')
+                .eq(baseLayers[floor_to_show_name].position)
+                .trigger('click');
+        }
     }
 }
 

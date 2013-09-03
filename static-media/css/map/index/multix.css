@@ -105,7 +105,7 @@ html.mmenu-left.mmenu-opening #mmenu-blocker
     margin-left: -65px;
 */
     left: 100%;
-    margin-left: -35%;
+    margin-left: -27%;
 /*border: 2px solid #cfcfcf;*/
 z-index: 90;
 
@@ -350,7 +350,8 @@ html.mmenu-right .mmenu a.mmenu-subclose:before
     html.mmenu-left.mmenu-opening .mmenu-page,
     html.mmenu-left.mmenu-opening #mmenu-blocker
     {
-        left: 500px;
+        /*left: 500px;*/
+        left: 50%;
     }
     html.mmenu-right.mmenu-opening .mmenu-page,
     html.mmenu-right.mmenu-opening #mmenu-blocker
