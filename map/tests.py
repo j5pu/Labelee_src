@@ -16,6 +16,7 @@ from selenium.webdriver.firefox.webdriver import WebDriver
 from selenium.webdriver.support.select import Select
 from selenium.webdriver.support.wait import WebDriverWait
 import time
+from pyvirtualdisplay import Display
 
 
 
@@ -53,6 +54,9 @@ class FunctionalTests(LiveServerTestCase):
         pass
 
     def test_Selenium(self):
+        #crea un monitor virtual para ejecutar el navegador.
+        display = Display()
+        display.start()
         # Get local session of firefox
         self.driver.get("http://www.yahoo.com") # Load page
         assert "Yahoo!" in self.driver.title
@@ -64,3 +68,4 @@ class FunctionalTests(LiveServerTestCase):
         except NoSuchElementException:
             assert 0, "can't find seleniumhq"
         self.driver.close()
+        display.stop()
