@@ -35,7 +35,9 @@ function addSamplePano(options)
         try{
             jQuery('div#page').find('img[id*=pano]').ddpanorama(options);
         }
-        catch(e){}
+        catch(e){
+            console.log(e);
+        }
         finally
         {
             ++panoIndex;
