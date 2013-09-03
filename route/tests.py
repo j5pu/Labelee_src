@@ -5,7 +5,10 @@ when you run "manage.py test".
 Replace this with more appropriate tests for your application.
 """
 from calculateRoutes import StepIterator
+from calculateRoutes import BeautifyIterator
 from calculateRoutes import RouteInconsistencyException
+from map_editor.models import Point, Floor
+from route.models import Step
 
 from django.test import TestCase
 
@@ -67,4 +70,81 @@ class StepIteratorTest(TestCase):
         result = [point for point in StepIterator(path)]
         self.assertEqual(result, correct_result)
 
+
+class BeautifyIteratorTest(TestCase):
+
+    @staticmethod
+    def point_to_step(point):
+        step = Step()
+        step.row, step.column, step.floor_id = point.split("_")
+        return step
+
+    def test_zero_case(self):
+        path = ['1_1_1']
+        correct_result = ['1_1_1']
+        result = [point for point in BeautifyIterator(path,[])]
+        self.assertEqual(result, correct_result)
+
+    def test_single_case(self):
+        path = ['1_1_1', '5_3_1']
+        correct_result = ['1_1_1', '5_3_1']
+        result = [point for point in BeautifyIterator(path,[])]
+        self.assertEqual(result, correct_result)
+
+    def test_no_walls_1(self):
+        path = ['1_1_1', '3_3_1', '3_4_1']
+        correct_result = ['1_1_1', '3_4_1']
+        result = [point for point in BeautifyIterator(path,[])]
+        self.assertEqual(result, correct_result)
+
+    def test_no_walls_2(self):
+        path = ['1_1_1', '3_3_1', '3_4_1', '7_4_1']
+        correct_result = ['1_1_1', '7_4_1']
+        correct_result = [point for point in correct_result]
+        result = [point for point in BeautifyIterator(path,[])]
+        self.assertEqual(result, correct_result)
+
+    def test_distinct_floors(self):
+        path = ['1_1_1', '2_2_1', '2_2_2']
+        correct_result = ['1_1_1', '2_2_1', '2_2_2']
+        result = [point for point in BeautifyIterator(path,[])]
+        self.assertEqual(result, correct_result)
+
+
+    def test_wall_1(self):
+        path = ['1_1_1', '2_2_1', '2_3_1']
+        correct_result = ['1_1_1', '2_2_1', '2_3_1']
+
+        walls = ['1_2_1']
+
+        result = [point for point in BeautifyIterator(path, walls)]
+        self.assertEqual(result, correct_result)
+
+
+    def test_wall_2(self):
+        path = ['1_1_1', '2_2_1', '2_5_1']
+        correct_result = ['1_1_1', '2_2_1', '2_5_1']
+
+        walls = ['1_3_1']
+
+        result = [point for point in BeautifyIterator(path, walls)]
+        self.assertEqual(result, correct_result)
+
+    def test_wall_3(self):
+        path = ['1_1_1', '2_2_1', '2_5_1']
+        correct_result = ['1_1_1', '2_5_1']
+
+        walls = ['5_1_1']
+
+        result = [point for point in BeautifyIterator(path,walls)]
+        self.assertEqual(result, correct_result)
+
+    def test_wall_4(self):
+        path = ['1_1_1', '2_2_1', '2_3_1', '3_4_1', '4_4_1', '5_4_1', '5_3_1']
+        correct_result = ['1_1_1', '2_3_1', '3_4_1','5_3_1']
+
+        walls = ['3_3_1', '3_2_1']
+
+        result = [point for point in BeautifyIterator(path,walls)]
+        self.assertEqual(result, correct_result)
 
