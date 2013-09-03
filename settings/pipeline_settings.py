@@ -35,7 +35,7 @@ PIPELINE_JS = {
             'js/map/index/modernizr.js',
             'vendor/jquery-2.0.3.min.js',
             'vendor/leaflet/plugins/jquery.mmenu.js',
-            'vendor/hammer.js_v1.0.3/dist/jquery.hammer.min.js',
+            'vendor/hammer.js_v1.0.3/dist/hammer.min.js',
             'vendor/leaflet/leaflet.js',
             'vendor/leaflet/plugins/L.PolylineDecorator.js',
             'vendor/leaflet/plugins/scale.fix.js',

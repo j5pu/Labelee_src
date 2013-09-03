@@ -249,10 +249,12 @@ var HelpMenu = {
 
     _close: function()
     {
-        this.$entry_list.eq(this.current_entry_index).removeClass('current');
-        this.$entry_list.eq(0).addClass('current');
-        this.$e.find('*').off();
         this.$e.fadeOut(300);
+        setTimeout(function(){
+            HelpMenu.$entry_list.eq(HelpMenu.current_entry_index).removeClass('current');
+            HelpMenu.$entry_list.eq(0).addClass('current');
+            HelpMenu.$e.find('*').off();
+        },400);
     },
 
     show: function()
@@ -395,6 +397,9 @@ var ScrollMenu = {
     {
         this.$listMenu = $('#scrollMenu');
         this.$wrapper = $('nav#menu-right');
+        this.$wrapper.css({
+            'overflow-y': 'hidden'
+        });
         this.top = this.$listMenu.position().top;
 
         this.scrollEvent();
@@ -407,12 +412,9 @@ var ScrollMenu = {
         ev.preventDefault();
 
         self.top_new = self.top + ev.gesture['deltaY'];
-        console.log(ev.gesture['deltaY']);
         self.$listMenu.css({
             'top': parseInt(self.top_new) + 'px'
         });
-
-        console.log('SCROLL:\n\ttop:' + self.top + '\n\ttop_new:' + self.top_new);
     },
 
     scrollEnd: function(ev)
@@ -421,10 +423,12 @@ var ScrollMenu = {
 
         ev.preventDefault();
 
+        self.top_new = self.top + ev.gesture['deltaY'];
+
         if(self.top_new > 0 || self.$listMenu.height() < self.$wrapper.height())
             self.top_new = 0;
         else if(Math.abs(self.top_new) > self.$listMenu.height() - self.$wrapper.height())
-            self.top_new = self.$listMenu.height() - self.$wrapper.height();
+            self.top_new = self.$wrapper.height() - self.$listMenu.height();
 
 
         // map.css({
@@ -436,17 +440,15 @@ var ScrollMenu = {
         });
 
         self.top = self.top_new;
-
-        console.log('SCROLLEND:\n\ttop:' + self.top + '\n\ttop_new:' + self.top_new);
     },
 
     scrollEvent: function()
     {
         var self = this;
 
-        self.$listMenu.hammer()
-            .bind('drag', self.scroll)
-            .bind('dragend', self.scrollEnd)
+        Hammer(self.$listMenu[0], {prevent_default: true})
+            .on('drag', self.scroll)
+            .on('dragend', self.scrollEnd);
     }
 };
 
