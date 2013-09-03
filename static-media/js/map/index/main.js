@@ -4,7 +4,6 @@ var androidversion = parseFloat(ua.slice(ua.indexOf("Android")+8));
 var mySwiper;
 
 
-
 //PREFIX-FREE PLUG-INS
 (function($, self){
 
@@ -62,14 +61,14 @@ $(function() {
     Map.events.bindAll();
 
     var $menu = $('nav#menu-right');
-    try{
+//    try{
         $menu.mmenu({
             position: 'left',
             slideDuration    : 300
         });
-    }catch(e){
-        console.log($menu);
-    }
+//    }catch(e){
+//        console.log($menu);
+//    }
 
     //	Añadir contadores
     $menu.find( 'i' ).bind(
@@ -178,11 +177,20 @@ $(function() {
 function hideSplash() {
     $('div#page').fadeIn(100);
     $('div.splash').fadeOut(100);
+
+    if(!localStorage.getItem('first_shoot'))
+    {
+        HelpMenu.show();
+    }
+
     loadFloors();
+
     if(qr_type == 'dest')
     {
         $('#header, #cupones, #myCar').hide();
     }
+
+
 }
 
 
@@ -195,6 +203,91 @@ function showRouteFromMenu(origin_id, destination_id)
         $('#menu-right').trigger('close');
     }
 }
+
+
+var HelpMenu = {
+    _updateButtons: function()
+    {
+        if(this.current_entry_index == 0)
+        {
+            this.$prev_button.hide();
+            this.$next_button.show();
+        }
+        else if(this.current_entry_index >= this.$entry_list.length-1)
+        {
+            this.$prev_button.show();
+            this.$next_button.hide();
+            this.$finish_button.show();
+        }
+        else
+        {
+            this.$prev_button.show();
+            this.$next_button.show();
+            this.$finish_button.hide();
+        }
+    },
+
+    _showPrevEntry: function()
+    {
+        if(this.current_entry_index > 0)
+        {
+            this.$entry_list.eq(this.current_entry_index).removeClass('current');
+            this.$entry_list.eq(--this.current_entry_index).addClass('current');
+            this._updateButtons();
+        }
+    },
+
+    _showNextEntry: function()
+    {
+        if(this.current_entry_index < this.$entry_list.length)
+        {
+            this.$entry_list.eq(this.current_entry_index).removeClass('current');
+            this.$entry_list.eq(++this.current_entry_index).addClass('current');
+            this._updateButtons();
+        }
+    },
+
+    _close: function()
+    {
+        this.$entry_list.eq(this.current_entry_index).removeClass('current');
+        this.$entry_list.eq(0).addClass('current');
+        this.$e.find('*').off();
+        this.$e.fadeOut(300);
+    },
+
+    show: function()
+    {
+        this.$e = $('#help_menu');
+        this.$e.css({
+            width: $(window).width(),
+            height: $(window).height()
+        });
+
+        // asignamos los eventos sobre los botones de anterior y siguiente
+        this.$prev_button = this.$e.find('.prev');
+        this.$next_button = this.$e.find('.next');
+        this.$finish_button = this.$e.find('.finish');
+        this.$entry_list = this.$e.find('.entry');
+        this.current_entry_index = 0;
+        this.$prev_button.hide();
+        this.$next_button.show();
+        this.$finish_button.hide();
+
+        this.$prev_button.on('click', function(){
+            HelpMenu._showPrevEntry();
+        });
+
+        this.$next_button.on('click', function(e){
+            HelpMenu._showNextEntry();
+        });
+
+        this.$finish_button.on('click', function(e){
+            HelpMenu._close();
+        });
+
+        this.$e.show(200);
+    }
+};
 
 
 var Coupon = {

@@ -142,5 +142,67 @@
     </div>
 </div>
 
+
+<div id="help_menu">
+    <div class="entry current">
+        <h5>
+            Sigue los sencillos pasos que indicamos a continuación para aprender a utilizar este novedoso sistema de localización en interiores.
+        </h5>
+        <h5>
+            Recuerda que <b style="color:#194b7e;">labelee</b> funciona a través de tu navegador web, así que para utilizarlo debes estar conectado a  Internet, ya sea mediante Wi-Fi o con tu plan de datos.
+        </h5>
+        <img src="{{ STATIC_URL }}img/help_menu/logo-labelee-sin-slogan.jpg" title="labelee" alt="logo de labelee" style="max-height:50%;">
+    </div>
+
+    <div class="entry">
+        <h2>PASO 1. ESCANEA</h2>
+        <h5>
+            Utiliza cualquier aplicación de escaneo de códigos QR para capturar la información contenida en cada una de las etiquetas
+            de localización.
+        </h5>
+        <img src="{{ STATIC_URL }}img/help_menu/t2.jpg" title="escaneo" alt="imagen de escaneo de un qr" style="max-height:50%;">
+    </div>
+
+    <div class="entry">
+        <h2>PASO 2. ORIÉNTATE</h2>
+        <h5>
+            Busca la flecha (azul) de señalización que indica tu posición actual y alinéala con la flecha (blanca) que aparece impresa en la pegatina, sobre el código QR que acabas de escanear.
+        </h5>
+        <img src="{{ STATIC_URL }}img/help_menu/t3.png" title="alineacion" alt="captura de pantalla de la alineación de las flechas" style="max-height:50%;">
+    </div>
+
+    <div class="entry">
+        <h2>PASO 3. NAVEGA</h2>
+        <h5>
+            Utiliza el desplegable para buscar en el directorio el destino al que deseas ir.
+            Una vez hayas seleccionado uno de los elementos de la lista, aparecerá sobre el mapa el camino más corto entre el punto donde te encuentras y tu destino.
+        </h5>
+        <img src="{{ STATIC_URL }}img/help_menu/t5.png" title="ruta" alt="captura de pantalla de muestra de ruta" style="max-height:50%;">
+    </div>
+
+    <div class="entry">
+        <h2>PASO 4. RECUERDA</h2>
+        <h5>
+            Recuerda que en cualquier momento puedes escanear otro código para actualizar tu posición en el mapa
+            o elegir otro destino del menú desplegable.
+        </h5>
+        <img src="{{ STATIC_URL }}img/help_menu/t4.png" title="ruta" alt="captura de pantalla de reelegir ruta" style="max-height:50%;">
+    </div>
+
+    <div class="button_wrapper">
+        <button class="btn info prev">
+            {% trans "Anterior"%}
+        </button>
+
+        <button class="btn info next">
+            {% trans "Siguiente"%}
+        </button>
+
+        <button class="btn info finish">
+            {% trans "Usar la aplicación"%}
+        </button>
+    </div>
+</div>
+
 </body>
 </html>

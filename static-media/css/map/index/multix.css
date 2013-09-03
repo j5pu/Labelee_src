@@ -874,6 +874,12 @@ box-shadow: 0 0 15px rgba( 0, 0, 0, 0.2 );
     background: skyblue;
 }
 
+#scrollMenu .help
+{
+    background: darkgray;
+    padding: 3% 0 2% 5%;
+}
+
 nav
 {
     position: absolute;
@@ -1517,4 +1523,48 @@ marquee span
 {
     position: relative;
     top: 4px;
+}
+
+
+#help_menu
+{
+    display: none;
+    background: white;
+    z-index: 10000;
+    position: absolute;
+    opacity: 0.85;
+    top: 0;
+    left: 0;
+}
+
+#help_menu .entry
+{
+    text-align: justify;
+    padding: 1em;
+    height: 83%;
+}
+
+#help_menu .entry img {
+    max-height: 50%;
+    margin: 0 auto;
+    display: block;
+    max-width: 74%;
+}
+
+#help_menu .entry:not(.current)
+{
+    display: none;
+}
+
+#help_menu .button_wrapper
+{
+    text-align: center;
+}
+
+#help_menu .button_wrapper button
+{
+    display: inline-block;
+    background: darkgray;
+    border-radius: 0.3em;
+    padding: 1.5% 4%;
 }

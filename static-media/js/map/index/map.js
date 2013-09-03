@@ -190,6 +190,8 @@ var LocalStorageHandler = {
     },
 
     setValues: function () {
+        //
+        // guarda parquing
         if (qrPoint.isParking) {
             if (confirm(gettext('Do you want to remember your parking space?'))) {
                 var miCoche = {
@@ -203,9 +205,12 @@ var LocalStorageHandler = {
         }
 
         if (qr_type == 'dest') {
+            // guarda destino compartido
             this.setSharedDest();
         }
-        else {
+        else
+        {
+            // guarda destino previo
             var sharedDest = JSON.parse(localStorage.getItem('sharedDest'));
             if (sharedDest) {
                 localStorage.removeItem('sharedDest');
@@ -214,6 +219,22 @@ var LocalStorageHandler = {
                 localStorage.setItem('prevDest', JSON.stringify(sharedDest));
             }
         }
+
+        // guarda hora de escaneo y cadena aleatoria para la primera captura
+        if(!localStorage.getItem('first_shoot'))
+        {
+            var first_shoot = {
+                time: new Date().getTime(),
+                key: randString(8)
+            };
+
+            localStorage.setItem('first_shoot', JSON.stringify(first_shoot));
+        }
+
+
+//        Convert a Date to a string when setting, and parse it when getting
+//        localStorage.lastRead = (new Date()).toUTCString();
+//        var lastRead = new Date(Date.parse(localStorage.lastRead));
     },
 
     setSideMenu: function () {
@@ -254,8 +275,14 @@ var LocalStorageHandler = {
                     '</li>' +
                     '</li>'
             );
-
         }
+
+        $('#scrollMenu').prepend(
+            '<li    class="help" ' +
+                'onclick="' + "$('#menu-right').trigger( 'close' );" + 'HelpMenu.show();">' +
+                gettext('HELP MENU') +
+                '</li>'
+        );
     },
 
     setPrevDest: function (marker) {
