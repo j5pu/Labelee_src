@@ -131,7 +131,6 @@ INSTALLED_APPS = (
     'django.contrib.admindocs',
     'tastypie',
     'map_editor',
-    'map',
     'modeltranslation',
     'log',
     'dashboard',
@@ -145,6 +144,8 @@ INSTALLED_APPS = (
 
 PROJECT_APPS = (
     'route',
+    'map',
+
 )
 INSTALLED_APPS += PROJECT_APPS
 
