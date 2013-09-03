@@ -15,6 +15,7 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.firefox.webdriver import WebDriver
 from selenium.webdriver.support.select import Select
 from selenium.webdriver.support.wait import WebDriverWait
+from selenium import webdriver
 import time
 from pyvirtualdisplay import Display
 
@@ -36,13 +37,13 @@ class FunctionalTests(LiveServerTestCase):
     @classmethod
     def setUpClass(cls):
         """ Setup class needed by Selenium. It will setup the driver and assign live_server_url etc."""
-        cls.driver = WebDriver()
+
         super(LiveServerTestCase, cls).setUpClass()
 
     @classmethod
     def tearDownClass(cls):
         """ The teardown will make sure that you close the browser and shutdown the test server etc """
-        cls.driver.quit()
+
         super(LiveServerTestCase, cls).tearDownClass()
 
     def setUp(self):
@@ -57,15 +58,19 @@ class FunctionalTests(LiveServerTestCase):
         #crea un monitor virtual para ejecutar el navegador.
         display = Display()
         display.start()
-        # Get local session of firefox
-        self.driver.get("http://www.yahoo.com") # Load page
-        assert "Yahoo!" in self.driver.title
-        elem = self.driver.find_element_by_name("p") # Find the query box
-        elem.send_keys("seleniumhq" + Keys.RETURN)
-        time.sleep(0.2) # Let the page load, will be added to the API
         try:
-            self.driver.find_element_by_xpath("//a[contains(@href,'http://seleniumhq.org')]")
-        except NoSuchElementException:
-            assert 0, "can't find seleniumhq"
-        self.driver.close()
-        display.stop()
+            # Get local session of firefox
+            browser = webdriver.Firefox()
+            browser.get("http://www.yahoo.com") # Load page
+            assert "Yahoo!" in browser.title
+            elem = browser.find_element_by_name("p") # Find the query box
+            elem.send_keys("seleniumhq" + Keys.RETURN)
+            time.sleep(0.2) # Let the page load, will be added to the API
+            try:
+                browser.find_element_by_xpath("//a[contains(@href,'http://seleniumhq.org')]")
+            except NoSuchElementException:
+                assert 0, "can't find seleniumhq"
+        finally:
+            browser.close()
+            browser.quit()
+            display.stop()
