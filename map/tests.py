@@ -58,7 +58,7 @@ class FunctionalTests(LiveServerTestCase):
         #crea un monitor virtual para ejecutar el navegador. Necesitas instalar para que funcione:sudo apt-get install xvfb
         display = Display()
         display.start()
-        browser = webdriver.Firefox()
+        browser = webdriver.Chrome()
         try:
             # Get local session of firefox
 
