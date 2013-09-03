@@ -14,3 +14,5 @@ django-jenkins
 pep8
 pylint
 pyflakes
+selenium
+pyvirtualdisplay
