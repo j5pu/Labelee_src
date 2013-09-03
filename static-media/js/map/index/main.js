@@ -167,9 +167,9 @@ $(function() {
             strL = cupFloor.length,
             cupFloor = parseInt(cupFloor.substring(strL-3, strL-1));
 
-
         drawRoute(qrPoint.point.id, cupPoint);
         $('div.device').fadeOut();
+        LocalStorageHandler.setPrevDestByPoi(cupPoint)
     });
 });
 
