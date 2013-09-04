@@ -868,22 +868,26 @@ Map.locateCar = function () {
             .trigger('click');
     }
 
-    carLoc = [((miCoche.point.row) * current_floor.scaleY) + current_floor.scaleY,
-        (miCoche.point.col * current_floor.scaleX) + current_floor.scaleX];
-    carMarker = new L.marker(carLoc, {
-        icon: carIcon})
-        .bindPopup(gettext("My car"));
-    carMarker.poid = miCoche.point.id;
-    carMarker.floorid = miCoche.floor.id;
-    carMarker.enclosureid = miCoche.enclosure.id;
-    carMarker.description = gettext('My car');
-    carMarker.title = carMarker.description;
-    carMarker.on('click', function () {
-        LocalStorageHandler.setPrevDest(this);
-        if (Panorama.opened) Panorama.close();
-        drawRoute(qrPoint.point.id, miCoche.point.id);
-    });
-    current_floor.layer.addLayer(carMarker);
+    if(!carMarker || !map.hasLayer(carMarker))
+    {
+        carLoc = [((miCoche.point.row) * current_floor.scaleY) + current_floor.scaleY,
+            (miCoche.point.col * current_floor.scaleX) + current_floor.scaleX];
+        carMarker = new L.marker(carLoc, {
+            icon: carIcon})
+            .bindPopup(gettext("My car"));
+        carMarker.poid = miCoche.point.id;
+        carMarker.floorid = miCoche.floor.id;
+        carMarker.enclosureid = miCoche.enclosure.id;
+        carMarker.description = gettext('My car');
+        carMarker.title = carMarker.description;
+        carMarker.on('click', function () {
+            LocalStorageHandler.setPrevDest(this);
+            if (Panorama.opened) Panorama.close();
+            drawRoute(qrPoint.point.id, miCoche.point.id);
+        });
+
+        current_floor.layer.addLayer(carMarker);
+    }
 
     carMarker.openPopup();
     carMarker._bringToFront();
