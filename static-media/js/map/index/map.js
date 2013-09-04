@@ -249,7 +249,7 @@ var LocalStorageHandler = {
                     '<li class="Label mmenu-label">' + miCoche.dest.labelCategory.name + '</li>' +
                     '<li ' +
                     'onclick="' + "$('#menu-right').trigger( 'close' );" +
-                    "drawRoute(" + qrPoint.point.id + ', ' + miCoche.dest.point.id + ');">' +
+                    "showRouteFromMenu(" + qrPoint.point.id + ', ' + miCoche.dest.point.id + ');">' +
                     miCoche.dest.point.description +
                     '</li>' +
                     '</li>'
@@ -270,7 +270,7 @@ var LocalStorageHandler = {
                     '<li class="Label mmenu-label">' + gettext('PREVIOUS DESTINATION') + '</li>' +
                     '<li ' +
                     'onclick="' + "$('#menu-right').trigger( 'close' );" +
-                    "drawRoute(" + qrPoint.point.id + ', ' + point_dest_id + ');">' +
+                    "showRouteFromMenu(" + qrPoint.point.id + ', ' + point_dest_id + ');">' +
                     description +
                     '</li>' +
                     '</li>'
