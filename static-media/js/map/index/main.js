@@ -221,6 +221,7 @@ var HelpMenu = {
         {
             this.$prev_button.hide();
             this.$next_button.show();
+            this.$finish_button.hide();
         }
         else if(this.current_entry_index >= this.$entry_list.length-1)
         {
@@ -233,6 +234,17 @@ var HelpMenu = {
             this.$prev_button.show();
             this.$next_button.show();
             this.$finish_button.hide();
+        }
+
+        // También actualizamos la posición de los botones en ciertas entradas
+        // donde hay poco contenido y hay que moverlos un poco hacia arriba
+        switch(this.current_entry_index)
+        {
+            case 0:
+                this.$buttons.css({'margin-top':'-16%'});
+                break;
+            default:
+                this.$buttons.css({'margin-top':'0'});
         }
     },
 
@@ -275,14 +287,13 @@ var HelpMenu = {
         });
 
         // asignamos los eventos sobre los botones de anterior y siguiente
+        this.$buttons = this.$e.find('.button_wrapper');
         this.$prev_button = this.$e.find('.prev');
         this.$next_button = this.$e.find('.next');
         this.$finish_button = this.$e.find('.finish');
         this.$entry_list = this.$e.find('.entry');
         this.current_entry_index = 0;
-        this.$prev_button.hide();
-        this.$next_button.show();
-        this.$finish_button.hide();
+        this._updateButtons();
 
         this.$prev_button.on('click', function(){
             HelpMenu._showPrevEntry();

@@ -351,7 +351,7 @@ html.mmenu-right .mmenu a.mmenu-subclose:before
     html.mmenu-left.mmenu-opening #mmenu-blocker
     {
         /*left: 500px;*/
-        left: 50%;
+        left: 54%;
     }
     html.mmenu-right.mmenu-opening .mmenu-page,
     html.mmenu-right.mmenu-opening #mmenu-blocker
@@ -1530,10 +1530,9 @@ marquee span
 #help_menu
 {
     display: none;
-    background: white;
+    background: rgba(255, 255, 255, 0.9);
     z-index: 10000;
     position: absolute;
-    opacity: 0.85;
     top: 0;
     left: 0;
 }
@@ -1545,12 +1544,44 @@ marquee span
     height: 83%;
 }
 
-#help_menu .entry img {
-    max-height: 50%;
+#help_menu .entry p
+{
+    line-height: 118%;
+}
+
+#help_menu .entry img
+{
     margin: 0 auto;
     display: block;
-    max-width: 74%;
 }
+
+#help_menu .entry #img0
+{
+    max-width: 80%;
+    margin-top: 9%;
+}
+
+#help_menu .entry #img1
+{
+    width: 93%;
+    margin-top: 6%;
+}
+
+#help_menu .entry #img2
+{
+    max-height: 64%;
+}
+
+#help_menu .entry #img3
+{
+    max-height: 60%;
+}
+
+#help_menu .entry #img4
+{
+    max-height: 69%;
+}
+
 
 #help_menu .entry:not(.current)
 {
