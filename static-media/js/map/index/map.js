@@ -564,7 +564,7 @@ function loadPOIs() {
         var photoIcon = qrPoint.point.panorama ? Panorama.renderIcon(qrPoint.point.id, qrPoint.point.panorama) : "";
 
         qrMarker = L.marker(qrLoc, {
-            icon: destIcon}).bindPopup(msg + '<br>' + qrPoint.point.description + photoIcon + SocialMenu.renderIcon(qrPoint.point.id))
+            icon: destIcon}).bindPopup('<p style="width:16em;text-align:center;">'+msg + '<br>' + qrPoint.point.description + photoIcon + SocialMenu.renderIcon(qrPoint.point.id) +'<p>')
             .on('click', function () {
                 LocalStorageHandler.setPrevDest(this);
                 bindContent(this);
