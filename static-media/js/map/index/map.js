@@ -873,6 +873,11 @@ Map.locateCar = function () {
     carMarker = new L.marker(carLoc, {
         icon: carIcon})
         .bindPopup(gettext("My car"));
+    carMarker.poid = miCoche.point.id;
+    carMarker.floorid = miCoche.floor.id;
+    carMarker.enclosureid = miCoche.enclosure.id;
+    carMarker.description = gettext('My car');
+    carMarker.title = carMarker.description;
     carMarker.on('click', function () {
         LocalStorageHandler.setPrevDest(this);
         if (Panorama.opened) Panorama.close();
