@@ -4,6 +4,7 @@ when you run "manage.py test".
 
 Replace this with more appropriate tests for your application.
 """
+import os
 
 from django.test import TestCase
 from map_editor.models import Floor
@@ -58,7 +59,9 @@ class FunctionalTests(LiveServerTestCase):
         #crea un monitor virtual para ejecutar el navegador. Necesitas instalar para que funcione:sudo apt-get install xvfb
         display = Display()
         display.start()
-        browser = webdriver.Chrome()
+        chromedriver = "/usr/local/bin/chromedriver"
+        os.environ["webdriver.chrome.driver"] = chromedriver
+        browser = webdriver.Chrome(chromedriver)
         try:
             # Get local session of firefox
 
