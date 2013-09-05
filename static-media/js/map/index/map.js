@@ -280,8 +280,9 @@ var LocalStorageHandler = {
         $('#scrollMenu').prepend(
             '<li    class="help" ' +
                 'onclick="' + "$('#menu-right').trigger( 'close' );" + 'HelpMenu.show();">' +
-                gettext('HELP MENU') +
-                '</li>'
+                '<img src="/static/img/help_menu/logo_nuevo.png">' +
+                '<button>?</button>' +
+            '</li>'
         );
     },
 

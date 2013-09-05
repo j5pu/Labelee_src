@@ -144,6 +144,9 @@
 
 
 <div id="help_menu">
+
+    <button class="exit">x</button>
+
     <div class="entry current">
         <h5>
             Sigue los sencillos pasos que indicamos a continuación para aprender a utilizar este novedoso sistema de localización en interiores.
@@ -151,8 +154,7 @@
         <h5>
             Recuerda que <b style="color:#194b7e;">labelee</b> funciona a través de tu navegador web, así que para utilizarlo debes estar conectado a  Internet, ya sea mediante Wi-Fi o con tu plan de datos.
         </h5>
-        <img id="img0" src="{{ STATIC_URL }}img/help_menu/logo_nuevo.png" title="labelee"
-             alt="logo de labelee" style="max-height:50%;margin-top: 9%;">
+        <img id="img0" src="{{ STATIC_URL }}img/help_menu/logo_nuevo.png" title="labelee" alt="logo de labelee">
     </div>
 
     <div class="entry">
@@ -190,6 +192,21 @@
         <img id="img4" src="{{ STATIC_URL }}img/help_menu/c2.png" title="ruta" alt="captura de pantalla de reelegir ruta">
     </div>
 
+    <div class="entry disclaimer">
+        <h2>TÉRMINOS DE PRIVACIDAD:</h2>
+        <p>
+            Recuerda que en cualquier momento puedes escanear otro código para actualizar tu posición en el mapa
+            o elegir otro destino del menú desplegable.
+        </p>
+        <p>
+            Recuerda que en cualquier momento puedes escanear otro código para actualizar tu posición en el mapa
+            o elegir otro destino del menú desplegable.
+        </p>
+        <p>
+            bla bla bah bla bla bahbla bla bahbla bla bahbla bla bahbla bla bahbla bla bahbla bla bahbla bla bah
+        </p>
+    </div>
+
     <div class="button_wrapper">
         <button class="btn info prev">
             {% trans "Anterior"%}
@@ -201,6 +218,14 @@
 
         <button class="btn info finish">
             {% trans "Usar la aplicación"%}
+        </button>
+
+        <button class="btn info open_disclaimer">
+            {% trans "Privacidad"%}
+        </button>
+
+        <button class="btn info close_disclaimer">
+            {% trans "Volver a la ayuda"%}
         </button>
     </div>
 </div>

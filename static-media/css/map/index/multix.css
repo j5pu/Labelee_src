@@ -275,13 +275,7 @@ html.mmenu-right .mmenu a.mmenu-subopen
 /*
 	Labels
 */
-.mmenu li.mmenu-label
-{
-    background: #444;
-    font-size: 0.9rem;
-    text-transform: uppercase;
-    line-height: 20px;
-}
+
 /*
 	Arrows
 */
@@ -847,13 +841,17 @@ box-shadow: 0 0 15px rgba( 0, 0, 0, 0.2 );
 {
     background: #eee;
 }
-.mmenu li.mmenu-label
-{
-    text-shadow: 1px 1px 1px #bbb;
+
+.mmenu li.mmenu-label {
+    background: #444;
+    font-size: 1.1rem;
+    line-height: 20px;
+    height: 1.4em;
+    padding-top: 0.25em;
+    margin-bottom: -0.1em;
     color: white;
-    border-color: #F2EFE4;
-    border-bottom: 2px;
 }
+
 .mmenu a.mmenu-subopen:after,
 .mmenu a.mmenu-subclose:before
 {
@@ -877,8 +875,24 @@ box-shadow: 0 0 15px rgba( 0, 0, 0, 0.2 );
 
 #scrollMenu .help
 {
-    background: darkgray;
-    padding: 3% 0 2% 5%;
+    background: #E7E6E6;
+}
+
+#scrollMenu .help img {
+    width: 67.4%;
+    position: relative;
+    top: 0.4em;
+}
+
+#scrollMenu .help button {
+    background: #1293CD;
+    border-radius: 5px;
+    color: #FFFDFD;
+    border: 2px solid #EEE;
+    font-family: 'font_awesome_icons';
+    font-size: 26px;
+    margin-left: 6%;
+    padding: 2px 5px 1px 4px;
 }
 
 nav
@@ -1202,6 +1216,17 @@ you can use the generic selector below, but it's slower:
     url('../font/whatsapp.woff') format('woff'),
     url('../font/whatsapp.ttf') format('truetype'),
     url('../font/whatsapp.svg#whatsapp') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'font_awesome_icons';
+    src:url('../../../fonts/font_awesome_icons/fontawesome.eot');
+    src:url('../../../fonts/font_awesome_icons/fontawesome.eot?#iefix') format('embedded-opentype'),
+    url('../../../fonts/font_awesome_icons/fontawesome.woff') format('woff'),
+    url('../../../fonts/font_awesome_icons/fontawesome.ttf') format('truetype'),
+    url('../../../fonts/font_awesome_icons/fontawesome.svg#carFont') format('svg');
     font-weight: normal;
     font-style: normal;
 }
@@ -1588,6 +1613,17 @@ marquee span
     display: none;
 }
 
+#help_menu .entry.disclaimer
+{
+    margin-top: 9%;
+}
+
+#help_menu .entry.disclaimer h2
+{
+    text-align: center;
+    margin: 0 -1% 4% -3%;
+}
+
 #help_menu .button_wrapper
 {
     text-align: center;
@@ -1595,8 +1631,150 @@ marquee span
 
 #help_menu .button_wrapper button
 {
-    display: inline-block;
-    background: darkgray;
-    border-radius: 0.3em;
-    padding: 1.5% 4%;
+    background: #1293CD;
+    border-radius: 5px;
+    color: #FFFDFD;
+    border: 2px solid #EEE;
+    padding: 2% 3%;
 }
+
+#help_menu .button_wrapper.zero
+{
+    margin-top: -19%;
+}
+
+#help_menu button.exit
+{
+    font-family: 'font_awesome_icons';
+    margin-top: 3%;
+    margin-right: 4%;
+    font-size: 18px;
+    position: absolute;
+    right: 0;
+}
+
+
+#help_menu button.open_disclaimer {
+    ext-decoration: underline;
+    background: #EEE;
+    position: relative;
+    display: block;
+    margin: 2.5% auto 0 auto;
+    border-radius: 0;
+    color: black;
+    font-size: 0.9em;
+}
+
+
+/*
+ * IPHONE 4S
+ *      portrait:
+ *          320x356 con navbar
+ *      landscape:
+ *          480x208 con navbar
+ *          480x320 sin navbar
+ */
+@media only screen
+and (min-device-width : 320px)
+and (max-device-width : 480px)
+and (orientation : portrait)
+{
+    /*#help_menu .entry h2*/
+    /*{*/
+        /*margin-top: 2%;*/
+    /*}*/
+
+    /*#help_menu .button_wrapper {*/
+        /*position: relative;*/
+        /*top: -14px;*/
+    /*}*/
+
+    /*#help_menu .button_wrapper.zero*/
+    /*{*/
+        /*top: -8%;*/
+    /*}*/
+
+    /*#help_menu .entry img*/
+    /*{*/
+        /*position: relative;*/
+    /*}*/
+
+    /*#help_menu .entry #img1 {*/
+        /*width: 86%;*/
+        /*top: -4%;*/
+    /*}*/
+
+    /*#help_menu .entry #img2 {*/
+        /*height: 13em;*/
+        /*top: -1em;*/
+    /*}*/
+
+    /*#help_menu .entry #img3 {*/
+        /*max-height: 57%;*/
+        /*top: -1em;*/
+    /*}*/
+
+    /*#scrollMenu .help img {*/
+        /*width: 8.8em;*/
+    /*}*/
+
+    /*#help_menu .entry #img4 {*/
+        /*max-height: 65%;*/
+        /*top: -0.4em;*/
+    /*}*/
+}
+
+@media only screen
+and (min-device-width : 320px)
+and (max-device-width : 480px)
+and (orientation : landscape)
+{
+    #scrollMenu .help button {
+        top: -0.25em;
+        left: 1em;
+    }
+
+    #scrollMenu .help img {
+        width: 11em;
+    }
+}
+
+
+/*
+ * GALAXY S4: 360x640
+ *      portrait:
+ *          360x567 con navbar
+ *      landscape:
+ *          640x287 con navbar
+ */
+@media  only screen and (min--moz-device-pixel-ratio: 3),
+        only screen and (-o-min-device-pixel-ratio: 3/1),
+        only screen and (-webkit-min-device-pixel-ratio: 3),
+        only screen and (min-device-pixel-ratio: 3)
+                    and (min-device-width : 360px)
+                    and (max-device-width : 640px)
+                    and (orientation : portrait)
+{
+
+}
+
+@media  only screen and (min--moz-device-pixel-ratio: 3),
+        only screen and (-o-min-device-pixel-ratio: 3/1),
+        only screen and (-webkit-min-device-pixel-ratio: 3),
+        only screen and (min-device-pixel-ratio: 3)
+            and (min-device-width : 360px)
+            and (max-device-width : 640px)
+            and (orientation : landscape)
+{
+
+}
+
+@media only screen and (min-device-height: 567px)
+{
+
+}
+
+
+
+
+        /*@media screen and (device-aspect-ratio: 9/16)*/
