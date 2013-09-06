@@ -91,11 +91,13 @@
                     <li class="destiny"
                         data-destiny-id="{{ destination.id }}"
                         onclick="showRouteFromMenu({{ poi_id }}, {{ destination.id }});">
-                        {% if destination.label.category.enclosure %}
-                            {{ destination.label.name }}
-                        {% else %}
-                            {{ destination.description }}
-                        {% endif %}
+                        <button>
+                            {% if destination.label.category.enclosure %}
+                                {{ destination.label.name }}
+                            {% else %}
+                                {{ destination.description }}
+                            {% endif %}
+                        </button>
                     </li>
                 {% endfor %}
                 </li>
@@ -147,7 +149,7 @@
 
     <button class="exit">x</button>
 
-    <div class="entry current">
+    <div class="entry first current">
         <h5>
             Sigue los sencillos pasos que indicamos a continuación para aprender a utilizar este novedoso sistema de localización en interiores.
         </h5>
@@ -193,17 +195,22 @@
     </div>
 
     <div class="entry disclaimer">
-        <h2>TÉRMINOS DE PRIVACIDAD:</h2>
+        <h2>CLÁUSULA DE PRIVACIDAD:</h2>
         <p>
-            Recuerda que en cualquier momento puedes escanear otro código para actualizar tu posición en el mapa
-            o elegir otro destino del menú desplegable.
+            En cumplimiento de la Ley Orgánica 15/1999, de 13 de Diciembre, de
+            Protección de Datos de Carácter Personal, Bizeu Consulting, S.L.
+            comunica a los usuarios de este sitio web, que no recogeremos ni
+            solicitamos ninguna información personal sobre usted (como su nombre,
+            dirección, número de teléfono, etc).
         </p>
+        <h5>Cookies</h5>
         <p>
-            Recuerda que en cualquier momento puedes escanear otro código para actualizar tu posición en el mapa
-            o elegir otro destino del menú desplegable.
-        </p>
-        <p>
-            bla bla bah bla bla bahbla bla bahbla bla bahbla bla bahbla bla bahbla bla bahbla bla bahbla bla bah
+            Una cookie es un pequeño archivo de datos que se envía desde un
+            servidor web a su navegador y se almacena en su computadora. Los
+            sitios web generalmente usan cookies para ofrecerle la mejor
+            experiencia de usuario. En Bizeu Consulting no utilizamos cookies para
+            almacenar ningún tipo de información personal. Utilizamos cookies para
+            personalizar la experiencia en nuestro sitio web.
         </p>
     </div>
 

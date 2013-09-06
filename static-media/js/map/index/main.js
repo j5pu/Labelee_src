@@ -219,6 +219,7 @@ var HelpMenu = {
     {
         if(this.$disclaimer_page.hasClass('current'))
         {
+            this.$buttons.removeClass('zero');
             this.$close_disclaimer_button.show();
             this.$next_button.hide();
             this.$open_disclaimer_button.hide();
@@ -252,8 +253,8 @@ var HelpMenu = {
         }
 
 
-//        Logger.log($(window).width() + 'x' + $(window).height())
-//        Logger.log(screen.width + 'x' + screen.height)
+        Logger.log($(window).width() + 'x' + $(window).height())
+        Logger.log(screen.width + 'x' + screen.height)
     },
 
     _showPrevEntry: function()
