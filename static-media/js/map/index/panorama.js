@@ -64,6 +64,7 @@ var Panorama = {
         jQuery('#canvasPan').remove();
         jQuery('button#close').remove();
         jQuery('div#page').find('img[id*=pano]').remove();
+        clearInterval(ddpanoramas.timerId);
         Panorama.opened = false;
 
     }

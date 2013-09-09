@@ -1837,6 +1837,20 @@ and (orientation : landscape)
  *
  */
 
+.locate-icon {
+    font-family: 'carFont';
+    background: rgb(6, 84, 150);
+    line-height: 1.3em;
+    width: 1.8em !important;
+    height: 1.7em !important;
+    -webkit-transform: rotate(0deg);
+    border-radius: 1em;
+    padding-top: 0.1em;
+}
+
+.locate-icon:after {
+    border: 0px;
+}
 
 
 
