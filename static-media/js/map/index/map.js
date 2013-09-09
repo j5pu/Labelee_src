@@ -773,6 +773,7 @@ function drawRoute(org, dst) {
         if (!route) {
             $('#scrollMenu .destiny.selected').removeClass('selected');
             alert(gettext('We are sorry, that route does not exist.'));
+            throw 'INVALID ROUTE';
         }
         else {
             // Limpia la ruta anteriormente trazada
