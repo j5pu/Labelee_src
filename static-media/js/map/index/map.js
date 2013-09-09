@@ -730,6 +730,7 @@ function changeFloor(e) {
         }
         bindContent(qrMarker);
         qrMarker._bringToFront();
+        Compass.init();
     }
     if (map.hasLayer(destMarker)) {
         destMarker.openPopup();
