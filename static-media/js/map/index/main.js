@@ -167,9 +167,9 @@ $(function() {
             strL = cupFloor.length,
             cupFloor = parseInt(cupFloor.substring(strL-3, strL-1));
 
-
         drawRoute(qrPoint.point.id, cupPoint);
         $('div.device').fadeOut();
+        LocalStorageHandler.setPrevDestByPoi(cupPoint)
     });
 });
 
@@ -201,6 +201,15 @@ function showRouteFromMenu(origin_id, destination_id)
         drawRoute(origin_id, destination_id);
         LocalStorageHandler.setPrevDestByPoi(destination_id);
         $('#menu-right').trigger('close');
+
+        // Cambia a la planta del origen si estamos en otra
+        var dest_floor = floors_indexed[route.fields.destiny.fields.floor];
+        if (current_floor.id != qrFloor.id && current_floor.id != dest_floor.id) {
+            var floor_to_show_name = floors_indexed[qrFloor.id].name;
+            $('.leaflet-control-layers-base input[type=radio]')
+                .eq(baseLayers[floor_to_show_name].position)
+                .trigger('click');
+        }
     }
 }
 
@@ -208,23 +217,44 @@ function showRouteFromMenu(origin_id, destination_id)
 var HelpMenu = {
     _updateButtons: function()
     {
-        if(this.current_entry_index == 0)
+        if(this.$disclaimer_page.hasClass('current'))
         {
-            this.$prev_button.hide();
-            this.$next_button.show();
-        }
-        else if(this.current_entry_index >= this.$entry_list.length-1)
-        {
-            this.$prev_button.show();
+            this.$buttons.removeClass('zero');
+            this.$close_disclaimer_button.show();
             this.$next_button.hide();
-            this.$finish_button.show();
+            this.$open_disclaimer_button.hide();
         }
         else
         {
-            this.$prev_button.show();
-            this.$next_button.show();
-            this.$finish_button.hide();
+            if(this.current_entry_index == 0)
+            {
+                this.$buttons.addClass('zero')
+                this.$prev_button.hide();
+                this.$next_button.show();
+                this.$finish_button.hide();
+                this.$open_disclaimer_button.show();
+                this.$close_disclaimer_button.hide();
+            }
+            else if(this.current_entry_index >= this.$entry_list.length-1)
+            {
+                this.$prev_button.show();
+                this.$next_button.hide();
+                this.$finish_button.show();
+                this.$open_disclaimer_button.hide();
+            }
+            else
+            {
+                this.$buttons.removeClass('zero');
+                this.$prev_button.show();
+                this.$next_button.show();
+                this.$finish_button.hide();
+                this.$open_disclaimer_button.hide();
+            }
         }
+
+
+        Logger.log($(window).width() + 'x' + $(window).height())
+        Logger.log(screen.width + 'x' + screen.height)
     },
 
     _showPrevEntry: function()
@@ -247,11 +277,29 @@ var HelpMenu = {
         }
     },
 
+    _openDisclaimer: function()
+    {
+        this.$entry_list.eq(this.current_entry_index).removeClass('current');
+        this.$disclaimer_page.addClass('current');
+        this._updateButtons();
+    },
+
+    _closeDisclaimer: function()
+    {
+        this.$disclaimer_page.removeClass('current');
+        this.current_entry_index = 0;
+        this.$entry_list.eq(this.current_entry_index).addClass('current');
+        this._updateButtons();
+    },
+
     _close: function()
     {
         this.$e.fadeOut(300);
         setTimeout(function(){
-            HelpMenu.$entry_list.eq(HelpMenu.current_entry_index).removeClass('current');
+            if(HelpMenu.$disclaimer_page.hasClass('current'))
+                HelpMenu.$disclaimer_page.removeClass('current');
+            else
+                HelpMenu.$entry_list.eq(HelpMenu.current_entry_index).removeClass('current');
             HelpMenu.$entry_list.eq(0).addClass('current');
             HelpMenu.$e.find('*').off();
         },400);
@@ -266,14 +314,17 @@ var HelpMenu = {
         });
 
         // asignamos los eventos sobre los botones de anterior y siguiente
+        this.$buttons = this.$e.find('.button_wrapper');
         this.$prev_button = this.$e.find('.prev');
         this.$next_button = this.$e.find('.next');
         this.$finish_button = this.$e.find('.finish');
-        this.$entry_list = this.$e.find('.entry');
+        this.$exit_button = this.$e.find('.exit');
+        this.$open_disclaimer_button = this.$e.find('.open_disclaimer');
+        this.$close_disclaimer_button = this.$e.find('.close_disclaimer');
+        this.$disclaimer_page = this.$e.find('.entry.disclaimer');
+        this.$entry_list = this.$e.find('.entry:not(.disclaimer)');
         this.current_entry_index = 0;
-        this.$prev_button.hide();
-        this.$next_button.show();
-        this.$finish_button.hide();
+        this._updateButtons();
 
         this.$prev_button.on('click', function(){
             HelpMenu._showPrevEntry();
@@ -286,6 +337,19 @@ var HelpMenu = {
         this.$finish_button.on('click', function(e){
             HelpMenu._close();
         });
+
+        this.$exit_button.on('click', function(e){
+            HelpMenu._close();
+        });
+
+        this.$open_disclaimer_button.on('click', function(e){
+            HelpMenu._openDisclaimer();
+        });
+
+        this.$close_disclaimer_button.on('click', function(e){
+            HelpMenu._closeDisclaimer();
+        });
+
 
         this.$e.show(200);
     }
@@ -409,7 +473,7 @@ var ScrollMenu = {
     {
         var self = ScrollMenu;
 
-        ev.preventDefault();
+        ev.gesture.preventDefault();
 
         self.top_new = self.top + ev.gesture['deltaY'];
         self.$listMenu.css({
@@ -421,7 +485,7 @@ var ScrollMenu = {
     {
         var self = ScrollMenu;
 
-        ev.preventDefault();
+        ev.gesture.preventDefault();
 
         self.top_new = self.top + ev.gesture['deltaY'];
 
@@ -446,7 +510,7 @@ var ScrollMenu = {
     {
         var self = this;
 
-        Hammer(self.$listMenu[0], {prevent_default: true})
+        self.$listMenu.hammer()
             .on('drag', self.scroll)
             .on('dragend', self.scrollEnd);
     }

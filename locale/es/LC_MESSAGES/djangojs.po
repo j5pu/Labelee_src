@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-07-31 11:40+0200\n"
+"POT-Creation-Date: 2013-09-04 15:57+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,39 +18,56 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: static-media/js/map/index/map.js:90
+#: static-media/js/coupon_manager/main.js:173
+#: static-media/js/coupon_manager/main.js:271
+msgid "Are you sure you want to remove this coupon?"
+msgstr "¿Estás seguro de que desea eliminar este cupón?"
+
+#: static-media/js/coupon_manager/main.js:208
+msgid "You must specify the coupon image"
+msgstr "Debe indicar la imagen para el cupón"
+
+#: static-media/js/helpers/resource.js:561
+msgid "Refreshing memcache for this enclosure"
+msgstr "Refrescando memcache para este recinto"
+
+#: static-media/js/map/index/map.js:196
 msgid "Do you want to remember your parking space?"
 msgstr "¿Desea recordar su plaza de parquing?"
 
-#: static-media/js/map/index/map.js:109
+#: static-media/js/map/index/map.js:217
 msgid "Do you still want to go to the previous destination?"
 msgstr "¿Todavía quieres llegar al destino anterior?"
 
-#: static-media/js/map/index/map.js:146
+#: static-media/js/map/index/map.js:270
 msgid "PREVIOUS DESTINATION"
 msgstr "DESTINO PREVIO"
 
-#: static-media/js/map/index/map.js:164 static-media/js/map/index/map.js:190
+#: static-media/js/map/index/map.js:283
+msgid "HELP MENU"
+msgstr "MENÚ DE AYUDA"
+
+#: static-media/js/map/index/map.js:294 static-media/js/map/index/map.js:320
 msgid "Do you still want to go to"
 msgstr "¿Todavía quieres llegar a"
 
-#: static-media/js/map/index/map.js:399
+#: static-media/js/map/index/map.js:494
 msgid "Scan a QR code to get here:"
 msgstr "Escanea un código QR para llegar hasta aquí:"
 
-#: static-media/js/map/index/map.js:471
+#: static-media/js/map/index/map.js:548
 msgid "You are right here:"
 msgstr "Estás justo aquí:"
 
-#: static-media/js/map/index/map.js:486
+#: static-media/js/map/index/map.js:563
 msgid "Please, scan a QR code to get here:"
 msgstr "Por favor, escanee un código QR para llegar hasta aquí:"
 
-#: static-media/js/map/index/map.js:773
+#: static-media/js/map/index/map.js:742
 msgid "We are sorry, that route does not exist."
 msgstr "Lo sentimos, esa ruta no existe."
 
-#: static-media/js/map/index/map.js:1066
+#: static-media/js/map/index/map.js:877 static-media/js/map/index/map.js:881
 msgid "My car"
 msgstr "Mi coche"
 
@@ -74,15 +91,15 @@ msgstr "Cargando grid para la planta"
 msgid "blocks"
 msgstr "bloques"
 
-#: static-media/js/map_editor/edit_map/floor.js:575
+#: static-media/js/map_editor/edit_map/floor.js:573
 msgid "Changing number of rows will erase all points on the floor. Continue?"
 msgstr ""
 "Al cambiar el número de filas se eliminarán todos los puntos. ¿Continuar?"
 
-#: static-media/js/map_editor/edit_map/floor.js:580
-#: static-media/js/map_editor/edit_map/floor.js:593
-#: static-media/js/map_editor/edit_map/main.js:139
-#: static-media/js/map_editor/edit_map/main.js:202
+#: static-media/js/map_editor/edit_map/floor.js:578
+#: static-media/js/map_editor/edit_map/floor.js:591
+#: static-media/js/map_editor/edit_map/main.js:150
+#: static-media/js/map_editor/edit_map/main.js:213
 #: static-media/js/map_editor/edit_map/menu.js:142
 msgid "Redrawing grid"
 msgstr "Redibujando grid"
@@ -101,7 +118,7 @@ msgstr "Color no válido"
 msgid "You must specify a name with at least 4 characters"
 msgstr "Debe especificar un nombre con 4 caracteres como mínimo"
 
-#: static-media/js/map_editor/edit_map/main.js:134
+#: static-media/js/map_editor/edit_map/main.js:145
 msgid ""
 "Are you sure you want to remove this category?  It will erase ALL points "
 "with that category and not saved points yet"
@@ -109,7 +126,7 @@ msgstr ""
 "¿Seguro que desea eliminar esta categoría? (esto eliminará todos los puntos "
 "de la categoría y los que no se hayan guardado todavía)"
 
-#: static-media/js/map_editor/edit_map/main.js:197
+#: static-media/js/map_editor/edit_map/main.js:208
 msgid ""
 "Are you sure you want to remove this label? It will erase ALL points with "
 "that label and not saved points yet."
@@ -117,7 +134,7 @@ msgstr ""
 "¿Seguro que desea eliminar esta etiqueta? (esto eliminará todos los puntos "
 "que no hayan sido guardados)"
 
-#: static-media/js/map_editor/edit_map/main.js:283
+#: static-media/js/map_editor/edit_map/main.js:299
 msgid "zooming disabled!"
 msgstr "Zoom deshabilitado"
 
@@ -155,39 +172,19 @@ msgid ""
 "Previous routes will be removed for this enclosure. Do you want to continue?"
 msgstr "Todas las rutas previas serán borradas del recinto. ¿Desea continuar?"
 
-#: static-media/js/map_editor/index/main.js:164
+#: static-media/js/map_editor/index/main.js:169
 msgid ""
 "Are you sure you want to remove this enclosure? (this will erase all their "
 "floors)"
 msgstr ""
 "¿Seguro que desea eliminar este recinto? (esto eliminará todas sus plantas)"
 
-#: static-media/js/map_editor/index/main.js:207
+#: static-media/js/map_editor/index/main.js:212
 msgid "You must specify the floor image too"
 msgstr "También debe subir la imágen del plano para la planta"
 
-#: static-media/js/map_editor/index/main.js:283
+#: static-media/js/map_editor/index/main.js:288
 msgid "Are you sure you want to remove this floor?"
 msgstr ""
 "¿Seguro que desea eliminar la planta? (también se perderá toda la "
 "información relativa a ella)"
-
-#~ msgid "Are you sure you want to remove this category?"
-#~ msgstr ""
-#~ "¿Seguro que desea eliminar la categoría? (también se eliminarán todas sus "
-#~ "etiquetas y POIs en los mapas)"
-
-#~ msgid "Are you sure you want to remove this label?"
-#~ msgstr "¿Seguro que desea eliminar esta etiqueta?"
-
-#~ msgid "floor"
-#~ msgstr "planta"
-
-#~ msgid "Select category"
-#~ msgstr "Selecc. categoría"
-
-#~ msgid "Select label"
-#~ msgstr "Selecc. etiqueta"
-
-#~ msgid "Delete category? (all its labels will be removed)"
-#~ msgstr "¿Eliminar categoría? (se eliminarán todas sus etiquetas)"

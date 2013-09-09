@@ -249,7 +249,7 @@ var LocalStorageHandler = {
                     '<li class="Label mmenu-label">' + miCoche.dest.labelCategory.name + '</li>' +
                     '<li ' +
                     'onclick="' + "$('#menu-right').trigger( 'close' );" +
-                    "drawRoute(" + qrPoint.point.id + ', ' + miCoche.dest.point.id + ');">' +
+                    "showRouteFromMenu(" + qrPoint.point.id + ', ' + miCoche.dest.point.id + ');">' +
                     miCoche.dest.point.description +
                     '</li>' +
                     '</li>'
@@ -270,7 +270,7 @@ var LocalStorageHandler = {
                     '<li class="Label mmenu-label">' + gettext('PREVIOUS DESTINATION') + '</li>' +
                     '<li ' +
                     'onclick="' + "$('#menu-right').trigger( 'close' );" +
-                    "drawRoute(" + qrPoint.point.id + ', ' + point_dest_id + ');">' +
+                    "showRouteFromMenu(" + qrPoint.point.id + ', ' + point_dest_id + ');">' +
                     description +
                     '</li>' +
                     '</li>'
@@ -280,8 +280,9 @@ var LocalStorageHandler = {
         $('#scrollMenu').prepend(
             '<li    class="help" ' +
                 'onclick="' + "$('#menu-right').trigger( 'close' );" + 'HelpMenu.show();">' +
-                gettext('HELP MENU') +
-                '</li>'
+                '<img src="/static/img/help_menu/logo_nuevo.png">' +
+                '<button>?</button>' +
+            '</li>'
         );
     },
 
@@ -564,7 +565,7 @@ function loadPOIs() {
         var photoIcon = qrPoint.point.panorama ? Panorama.renderIcon(qrPoint.point.id, qrPoint.point.panorama) : "";
 
         qrMarker = L.marker(qrLoc, {
-            icon: destIcon}).bindPopup(msg + '<br>' + qrPoint.point.description + photoIcon + SocialMenu.renderIcon(qrPoint.point.id))
+            icon: destIcon}).bindPopup('<p style="width:16em;text-align:center;">'+msg + '<br>' + qrPoint.point.description + photoIcon + SocialMenu.renderIcon(qrPoint.point.id) +'<p>')
             .on('click', function () {
                 LocalStorageHandler.setPrevDest(this);
                 bindContent(this);
@@ -812,14 +813,6 @@ function drawRoute(org, dst) {
                 blinkingMode = floor_name;
                 blinker(check, dst);
 
-                // Cambia a la planta del origen si estamos en otra
-                if (current_floor.id != qrFloor.id && current_floor.id != dest_floor.id) {
-                    var floor_to_show_name = floors_indexed[qrFloor.id].name;
-                    $('.leaflet-control-layers-base input[type=radio]')
-                        .eq(baseLayers[floor_to_show_name].position)
-                        .trigger('click');
-                }
-
                 qrMarker.openPopup();
 
                 if (map.hasLayer(destMarker)) {
@@ -838,7 +831,7 @@ function drawRoute(org, dst) {
                 try {
                     DisplayedRoutes.createDisplayedRoute(org, dst);
                 } catch (Exception) {
-
+                    console.log(Exception);
                 }
             }
         }
@@ -876,17 +869,26 @@ Map.locateCar = function () {
             .trigger('click');
     }
 
-    carLoc = [((miCoche.point.row) * current_floor.scaleY) + current_floor.scaleY,
-        (miCoche.point.col * current_floor.scaleX) + current_floor.scaleX];
-    carMarker = new L.marker(carLoc, {
-        icon: carIcon})
-        .bindPopup(gettext("My car"));
-    carMarker.on('click', function () {
-        LocalStorageHandler.setPrevDest(this);
-        if (Panorama.opened) Panorama.close();
-        drawRoute(qrPoint.point.id, miCoche.point.id);
-    });
-    current_floor.layer.addLayer(carMarker);
+    if(!carMarker || !map.hasLayer(carMarker))
+    {
+        carLoc = [((miCoche.point.row) * current_floor.scaleY) + current_floor.scaleY,
+            (miCoche.point.col * current_floor.scaleX) + current_floor.scaleX];
+        carMarker = new L.marker(carLoc, {
+            icon: carIcon})
+            .bindPopup(gettext("My car"));
+        carMarker.poid = miCoche.point.id;
+        carMarker.floorid = miCoche.floor.id;
+        carMarker.enclosureid = miCoche.enclosure.id;
+        carMarker.description = gettext('My car');
+        carMarker.title = carMarker.description;
+        carMarker.on('click', function () {
+            LocalStorageHandler.setPrevDest(this);
+            if (Panorama.opened) Panorama.close();
+            drawRoute(qrPoint.point.id, miCoche.point.id);
+        });
+
+        current_floor.layer.addLayer(carMarker);
+    }
 
     carMarker.openPopup();
     carMarker._bringToFront();
