@@ -91,11 +91,13 @@
                     <li class="destiny"
                         data-destiny-id="{{ destination.id }}"
                         onclick="showRouteFromMenu({{ poi_id }}, {{ destination.id }});">
-                        {% if destination.label.category.enclosure %}
-                            {{ destination.label.name }}
-                        {% else %}
-                            {{ destination.description }}
-                        {% endif %}
+                        <button>
+                            {% if destination.label.category.enclosure %}
+                                {{ destination.label.name }}
+                            {% else %}
+                                {{ destination.description }}
+                            {% endif %}
+                        </button>
                     </li>
                 {% endfor %}
                 </li>
@@ -144,49 +146,72 @@
 
 
 <div id="help_menu">
-    <div class="entry current">
+
+    <button class="exit">x</button>
+
+    <div class="entry first current">
         <h5>
             Sigue los sencillos pasos que indicamos a continuación para aprender a utilizar este novedoso sistema de localización en interiores.
         </h5>
         <h5>
             Recuerda que <b style="color:#194b7e;">labelee</b> funciona a través de tu navegador web, así que para utilizarlo debes estar conectado a  Internet, ya sea mediante Wi-Fi o con tu plan de datos.
         </h5>
-        <img src="{{ STATIC_URL }}img/help_menu/logo-labelee-sin-slogan.jpg" title="labelee" alt="logo de labelee" style="max-height:50%;">
+        <img id="img0" src="{{ STATIC_URL }}img/help_menu/logo_nuevo.png" title="labelee" alt="logo de labelee">
     </div>
 
     <div class="entry">
         <h2>PASO 1. ESCANEA</h2>
-        <h5>
+        <p>
             Utiliza cualquier aplicación de escaneo de códigos QR para capturar la información contenida en cada una de las etiquetas
             de localización.
-        </h5>
-        <img src="{{ STATIC_URL }}img/help_menu/t2.jpg" title="escaneo" alt="imagen de escaneo de un qr" style="max-height:50%;">
+        </p>
+        <img id="img1" src="{{ STATIC_URL }}img/help_menu/foto_escaneo.jpg" title="escaneo" alt="imagen de escaneo de un qr">
     </div>
 
     <div class="entry">
         <h2>PASO 2. ORIÉNTATE</h2>
-        <h5>
+        <p>
             Busca la flecha (azul) de señalización que indica tu posición actual y alinéala con la flecha (blanca) que aparece impresa en la pegatina, sobre el código QR que acabas de escanear.
-        </h5>
-        <img src="{{ STATIC_URL }}img/help_menu/t3.png" title="alineacion" alt="captura de pantalla de la alineación de las flechas" style="max-height:50%;">
+        </p>
+        <img id="img2" src="{{ STATIC_URL }}img/help_menu/c1.png" title="alineacion" alt="captura de pantalla de la alineación de las flechas">
     </div>
 
     <div class="entry">
         <h2>PASO 3. NAVEGA</h2>
-        <h5>
+        <p>
             Utiliza el desplegable para buscar en el directorio el destino al que deseas ir.
             Una vez hayas seleccionado uno de los elementos de la lista, aparecerá sobre el mapa el camino más corto entre el punto donde te encuentras y tu destino.
-        </h5>
-        <img src="{{ STATIC_URL }}img/help_menu/t5.png" title="ruta" alt="captura de pantalla de muestra de ruta" style="max-height:50%;">
+        </p>
+        <img id="img3" src="{{ STATIC_URL }}img/help_menu/c4.png" title="ruta" alt="captura de pantalla de muestra de ruta">
     </div>
 
     <div class="entry">
         <h2>PASO 4. RECUERDA</h2>
-        <h5>
+        <p>
             Recuerda que en cualquier momento puedes escanear otro código para actualizar tu posición en el mapa
             o elegir otro destino del menú desplegable.
-        </h5>
-        <img src="{{ STATIC_URL }}img/help_menu/t4.png" title="ruta" alt="captura de pantalla de reelegir ruta" style="max-height:50%;">
+        </p>
+        <img id="img4" src="{{ STATIC_URL }}img/help_menu/c2.png" title="ruta" alt="captura de pantalla de reelegir ruta">
+    </div>
+
+    <div class="entry disclaimer">
+        <h2>CLÁUSULA DE PRIVACIDAD:</h2>
+        <p>
+            En cumplimiento de la Ley Orgánica 15/1999, de 13 de Diciembre, de
+            Protección de Datos de Carácter Personal, Bizeu Consulting, S.L.
+            comunica a los usuarios de este sitio web, que no recogeremos ni
+            solicitamos ninguna información personal sobre usted (como su nombre,
+            dirección, número de teléfono, etc).
+        </p>
+        <h5>Cookies</h5>
+        <p>
+            Una cookie es un pequeño archivo de datos que se envía desde un
+            servidor web a su navegador y se almacena en su computadora. Los
+            sitios web generalmente usan cookies para ofrecerle la mejor
+            experiencia de usuario. En Bizeu Consulting no utilizamos cookies para
+            almacenar ningún tipo de información personal. Utilizamos cookies para
+            personalizar la experiencia en nuestro sitio web.
+        </p>
     </div>
 
     <div class="button_wrapper">
@@ -200,6 +225,14 @@
 
         <button class="btn info finish">
             {% trans "Usar la aplicación"%}
+        </button>
+
+        <button class="btn info open_disclaimer">
+            {% trans "Privacidad"%}
+        </button>
+
+        <button class="btn info close_disclaimer">
+            {% trans "Volver a la ayuda"%}
         </button>
     </div>
 </div>

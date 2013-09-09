@@ -4,6 +4,7 @@ when you run "manage.py test".
 
 Replace this with more appropriate tests for your application.
 """
+import os
 
 from django.test import TestCase
 from map_editor.models import Floor
@@ -58,12 +59,15 @@ class FunctionalTests(LiveServerTestCase):
         #crea un monitor virtual para ejecutar el navegador. Necesitas instalar para que funcione:sudo apt-get install xvfb
         display = Display()
         display.start()
+        #para que funcione el driver de Chrome hay que bajarselo de https://code.google.com/p/chromedriver/downloads/list
+        #ponerlo en el path y luego darle permisos a todos los usuarios chmod 777 chromedriver
+        browser = webdriver.Chrome()
         try:
             # Get local session of firefox
-            browser = webdriver.Chrome()
+
             browser.get("http://localhost:8000/map/origin/26_60_30902")
             time.sleep(8)
-            elem = browser.find_element_by_name("map")
+            elem = browser.find_element_by_id("map")
             time.sleep(0.2)
             assert elem is not None
             browser.get("http://www.yahoo.com") # Load page

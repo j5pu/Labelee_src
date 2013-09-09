@@ -105,7 +105,7 @@ html.mmenu-left.mmenu-opening #mmenu-blocker
     margin-left: -65px;
 */
     left: 100%;
-    margin-left: -35%;
+    margin-left: -27%;
 /*border: 2px solid #cfcfcf;*/
 z-index: 90;
 
@@ -131,10 +131,6 @@ html.mmenu-right.mmenu-opening #mmenu-blocker
 {
 /*background: #333;*/
     }
-.mmenu *
-{
-    text-shadow: 0 1px 2px rgba( 0, 0, 0, 0.5 );
-}
 .mmenu li
 {
     border: none;
@@ -275,13 +271,7 @@ html.mmenu-right .mmenu a.mmenu-subopen
 /*
 	Labels
 */
-.mmenu li.mmenu-label
-{
-    background: #444;
-    font-size: 0.9rem;
-    text-transform: uppercase;
-    line-height: 20px;
-}
+
 /*
 	Arrows
 */
@@ -350,7 +340,8 @@ html.mmenu-right .mmenu a.mmenu-subclose:before
     html.mmenu-left.mmenu-opening .mmenu-page,
     html.mmenu-left.mmenu-opening #mmenu-blocker
     {
-        left: 500px;
+        /*left: 500px;*/
+        left: 54%;
     }
     html.mmenu-right.mmenu-opening .mmenu-page,
     html.mmenu-right.mmenu-opening #mmenu-blocker
@@ -817,6 +808,7 @@ box-shadow: 0 0 15px rgba( 0, 0, 0, 0.2 );
 .mmenu *
 {
     text-shadow: none;
+    text-align: left;
 }
 .mmenu li
 {
@@ -846,13 +838,17 @@ box-shadow: 0 0 15px rgba( 0, 0, 0, 0.2 );
 {
     background: #eee;
 }
-.mmenu li.mmenu-label
-{
-    text-shadow: 1px 1px 1px #bbb;
+
+.mmenu li.mmenu-label {
+    background: #444;
+    font-size: 1.1rem;
+    line-height: 20px;
+    height: 1.4em;
+    padding-top: 0.25em;
+    margin-bottom: -0.1em;
     color: white;
-    border-color: #F2EFE4;
-    border-bottom: 2px;
 }
+
 .mmenu a.mmenu-subopen:after,
 .mmenu a.mmenu-subclose:before
 {
@@ -864,20 +860,39 @@ box-shadow: 0 0 15px rgba( 0, 0, 0, 0.2 );
     position: absolute;
 }
 
-#scrollMenu .selected
-{
+#scrollMenu .selected button {
     background: orange;
+    border-radius: 0.8em;
 }
 
-#scrollMenu .origin
+#scrollMenu .origin button
 {
     background: skyblue;
+    border-radius: 0.8em;
 }
 
 #scrollMenu .help
 {
-    background: darkgray;
-    padding: 3% 0 2% 5%;
+    background: #E7E6E6;
+}
+
+#scrollMenu .help img {
+    width: 154px;
+    position: relative;
+    top: 0.4em;
+}
+
+#scrollMenu .help button {
+    background: #1293CD;
+    border-radius: 5px;
+    color: #FFFDFD;
+    border: 2px solid #EEE;
+    font-family: 'font_awesome_icons';
+    font-size: 26px;
+    margin-left: 6%;
+    padding: 2px 5px 1px 4px;
+    position: absolute;
+    top: 2px;
 }
 
 nav
@@ -1201,6 +1216,17 @@ you can use the generic selector below, but it's slower:
     url('../font/whatsapp.woff') format('woff'),
     url('../font/whatsapp.ttf') format('truetype'),
     url('../font/whatsapp.svg#whatsapp') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'font_awesome_icons';
+    src:url('../../../fonts/font_awesome_icons/fontawesome.eot');
+    src:url('../../../fonts/font_awesome_icons/fontawesome.eot?#iefix') format('embedded-opentype'),
+    url('../../../fonts/font_awesome_icons/fontawesome.woff') format('woff'),
+    url('../../../fonts/font_awesome_icons/fontawesome.ttf') format('truetype'),
+    url('../../../fonts/font_awesome_icons/fontawesome.svg#carFont') format('svg');
     font-weight: normal;
     font-style: normal;
 }
@@ -1529,10 +1555,9 @@ marquee span
 #help_menu
 {
     display: none;
-    background: white;
+    background: rgba(255, 255, 255, 0.9);
     z-index: 10000;
     position: absolute;
-    opacity: 0.85;
     top: 0;
     left: 0;
 }
@@ -1541,19 +1566,74 @@ marquee span
 {
     text-align: justify;
     padding: 1em;
-    height: 83%;
 }
 
-#help_menu .entry img {
-    max-height: 50%;
+#help_menu .entry.first
+{
+    height: 54%;
+}
+
+#help_menu .entry:not(.first)
+{
+    height: 84%;
+}
+
+
+
+#help_menu .entry p
+{
+    line-height: 118%;
+}
+
+#help_menu .entry img
+{
     margin: 0 auto;
     display: block;
-    max-width: 74%;
 }
+
+#help_menu .entry #img0
+{
+    max-width: 80%;
+    margin-top: 9%;
+}
+
+#help_menu .entry #img1
+{
+    width: 93%;
+    margin-top: 6%;
+}
+
+#help_menu .entry #img2
+{
+    max-height: 64%;
+}
+
+#help_menu .entry #img3
+{
+    max-height: 60%;
+}
+
+#help_menu .entry #img4
+{
+    max-height: 69%;
+}
+
 
 #help_menu .entry:not(.current)
 {
     display: none;
+}
+
+#help_menu .entry.disclaimer
+{
+    margin-top: 9%;
+    height: 74%;
+}
+
+#help_menu .entry.disclaimer h2
+{
+    text-align: center;
+    margin: 0 -1% 4% -3%;
 }
 
 #help_menu .button_wrapper
@@ -1563,8 +1643,200 @@ marquee span
 
 #help_menu .button_wrapper button
 {
-    display: inline-block;
-    background: darkgray;
-    border-radius: 0.3em;
-    padding: 1.5% 4%;
+    background: #1293CD;
+    border-radius: 5px;
+    color: #FFFDFD;
+    border: 2px solid #EEE;
+    padding: 2% 3%;
 }
+
+#help_menu button.exit
+{
+    font-family: 'font_awesome_icons';
+    margin-top: 3%;
+    margin-right: 4%;
+    font-size: 18px;
+    position: absolute;
+    right: 0;
+}
+
+
+#help_menu button.open_disclaimer {
+    text-decoration: underline;
+    background: #EEE;
+    position: relative;
+    display: block;
+    margin: 7.5% auto 0 auto;
+    border-radius: 0;
+    color: black;
+    font-size: 0.9em;
+}
+
+#help_menu .entry.first {
+    margin-top: 1em;
+}
+
+
+ /* IPHONE 4S -> 320x480, pixel ratio: 2
+  *      portrait:
+  *          320x356 con navbar
+  *      landscape:
+  *          480x208 con navbar
+  *          480x320 sin navbar
+ */
+@media (min-height: 356px) and (max-height: 400px) and
+(min-width: 320px) and (max-width: 340px)
+{
+    #help_menu .entry
+    {
+        height: 83%;
+    }
+
+    #help_menu .entry.first {
+        margin-top: 1%;
+        height: 83%;
+    }
+
+    #help_menu .button_wrapper {
+        margin-top: -4%;
+    }
+
+    #help_menu .button_wrapper.zero {
+        margin-top: -14%;
+    }
+
+    #help_menu .entry.disclaimer p {
+        font-size: 0.9em;
+    }
+
+    #help_menu .entry.disclaimer {
+        margin-top: 2%;
+    }
+
+    #help_menu .entry.disclaimer h5{
+        margin-top: 0em;
+        margin-bottom: 0.3em;
+    }
+
+    #help_menu .close_disclaimer {
+        margin-top: 8%;
+    }
+
+    #help_menu .entry.disclaimer h2
+    {
+        text-align: left;
+        margin: 0 -1% 4% 0;
+    }
+
+    #help_menu .entry:not(.disclaimer) h2
+    {
+        margin-top: 0.3em;
+    }
+
+    #help_menu .entry.first h5
+    {
+        margin-top: 7%;
+        margin-bottom: -2%;
+    }
+
+    #help_menu #img0
+    {
+        width: 70%;
+        margin-top: 9%;
+    }
+
+
+    #help_menu button.open_disclaimer
+    {
+        background: none;
+        border: 0px;
+        margin: 0.5% auto 0 auto;
+        right: -9em;
+        bottom: 0em;
+    }
+
+    /*#scrollMenu .help button {*/
+        /*top: -1px;*/
+    /*}*/
+
+    #help_menu .button_wrapper
+    {
+
+    }
+
+    #help_menu .entry img
+    {
+        position: relative;
+    }
+
+    #help_menu .entry #img1 {
+        width: 86%;
+        top: -4%;
+    }
+
+    #help_menu .entry #img2 {
+        height: 13em;
+        top: -1em;
+    }
+
+    #help_menu .entry #img3 {
+        height: 57%;
+        top: -1em;
+    }
+
+    #help_menu .entry #img4 {
+        height: 65%;
+        top: -0.4em;
+    }
+}
+
+
+@media (min-height: 401px) and (max-height: 600px)
+{
+    /*#scrollMenu .help button {*/
+        /*top: -0.1em;*/
+    /*}*/
+}
+
+
+
+
+
+/*
+ * GALAXY S4: -> 360x640, pixel ratio: 3
+ *      portrait:
+ *          360x567 con navbar
+ *      landscape:
+ *          640x287 con navbar
+ */
+@media  only screen and (min--moz-device-pixel-ratio: 3),
+only screen and (-o-min-device-pixel-ratio: 3/1),
+only screen and (-webkit-min-device-pixel-ratio: 3),
+only screen and (min-device-pixel-ratio: 3)
+and (min-device-width : 360px)
+and (max-device-width : 640px)
+and (orientation : portrait)
+{
+
+}
+
+@media  only screen and (min--moz-device-pixel-ratio: 3),
+only screen and (-o-min-device-pixel-ratio: 3/1),
+only screen and (-webkit-min-device-pixel-ratio: 3),
+only screen and (min-device-pixel-ratio: 3)
+and (min-device-width : 360px)
+and (max-device-width : 640px)
+and (orientation : landscape)
+{
+
+}
+
+
+/*
+ * 320x488
+ *
+ */
+
+
+
+
