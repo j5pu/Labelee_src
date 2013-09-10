@@ -50,18 +50,13 @@ window.addEventListener("orientationchange", hideAddressBar );
 ///	Activación y configuración del menú
 $(function() {
 
-//    if(device.isCompatible())
-    if(false)
+    if(device.isCompatible())
     {
         main();
     }
     else
     {
         $('.splash').hide();
-//        $('#unsupported_mobile_msg').css({
-//            width: $(window).width(),
-//            height: $(window).height()
-//        });
         $('#unsupported_mobile_msg').show();
     }
 });
