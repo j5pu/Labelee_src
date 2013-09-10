@@ -2,6 +2,12 @@ var panoIndex=0;
 var panoDefaultImageName="night3.jpeg";
 function addSamplePano(options)
 {
+    ddpanoramas.timerId = window.setInterval(function() {
+        for ( var i = 0; i < ddpanoramas.animations.length; ++i) {
+            ddpanoramas.animations[i].update();
+        }
+    }, 1000 / 30);
+
     var panoId="pano"+panoIndex;
 
     if(jQuery('div#page').find('img[id*=pano]').length > 0)
