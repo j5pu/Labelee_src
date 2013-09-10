@@ -40,15 +40,6 @@ var LabelCategory = {
         return label_category.name_es.toUpperCase() === 'ARISTAS';
     },
 
-    isPanorama: function(label_category)
-    {
-        //Nos indica si la categoria es panorama
-        if(!label_category.name_es)
-            return false;
-
-        return label_category.name_es.toUpperCase() === 'PANORAMAS'
-    },
-
 
     isGeneric: function(label_category)
     {
@@ -324,14 +315,6 @@ var Menu = {
                     break;
                 }
             }
-
-//        if (LabelCategory.isPanorama(Painter.label_category))
-//            for (var i in Menu.labels)
-//            {
-//
-//            }
-
-
 
         // Se mostrará new/edit/delete sólo para etiquetas de categorías no genéricas,
         // a menos que seamos staff

@@ -15,13 +15,6 @@ var Panorama = {
 
     },
 
-//    renderIcon: function(pointId, panorama)
-//    {
-//        return  '<button onclick="Panorama.show(this)" class="panorama"  id="' + pointId + '" data-panorama="' + panorama + '">' +
-//            '<i class="icon-camera"></i>' +
-//            '</button>'
-//    },
-
     bindShow: function(marker)
     {
 //        Panorama.marker = marker;
