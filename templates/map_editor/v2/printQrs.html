@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/map_editor/edit_map/printQr.css"/>
+
+</head>
+<body class="body">
+
+    {% for code,qrUrl in qrUrls.items %}
+
+        <div  class="divqrimage" style="float: {%cycle 'left' 'right' %}" id="imgcode_{{ code }}">
+
+         <img class="qrimage" src="{{ qrUrl }}">
+         <label class="qrlabel"> {{ code }}</label>
+
+        </div>
+
+
+    {% endfor %}
+
+
+</body>
+</html>

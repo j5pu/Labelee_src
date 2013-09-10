@@ -6,9 +6,10 @@
  * Date: Sat Jul 28 10:59:36 KST 2012
  */
 
+var ddpanoramas;
 
 (function($) {
-	var ddpanoramas = {
+	ddpanoramas = {
 		animations : [],
 		timerId : -1,
 		max_speed : 43000,
@@ -16,17 +17,12 @@
 		cursorX : 0,
 		cursorY : 0,
 		currentTime : (new Date()).getTime()
-	}
-	// ddpanoramas.timerIdCursor=window.setInterval(function()
-	//                                           {
-	//                                           }, 1000/10
-	//                                           );
-	ddpanoramas.timerId = window.setInterval(function() {
-		for ( var i = 0; i < ddpanoramas.animations.length; ++i) {
-			ddpanoramas.animations[i].update();
-		}
-
-	}, 1000 / 30);
+	};
+//	ddpanoramas.timerId = window.setInterval(function() {
+//		for ( var i = 0; i < ddpanoramas.animations.length; ++i) {
+//			ddpanoramas.animations[i].update();
+//		}
+//	}, 1000 / 30);
 
 	ddpanoramas.mousedown = function(x, y) {
 		ddpanoramas.cursorXOld = ddpanoramas.cursorX = x;

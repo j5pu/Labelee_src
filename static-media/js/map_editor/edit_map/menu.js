@@ -222,7 +222,13 @@ var Menu = {
         window.scrollTo(offset_x, offset_y);
     },
 
+    printQrs: function()
+    {
 
+       var win = window.open(location.origin+'/api-2/print_qrs/' + floor_id,'QR','width=600,height=845');
+        win.print();
+
+    },
     setPointStats: function()
     {
         if(!Floor.hasPoints()&& !Floor.isPainted())

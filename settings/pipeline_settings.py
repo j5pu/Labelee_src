@@ -53,6 +53,7 @@ PIPELINE_JS = {
             'js/log/logger.js',
             'js/map/index/panorama.js',
             'js/map/index/socialmenu.js',
+            'js/map/index/compass.js',
             'js/map/index/main.js',
         ),
         'output_filename': 'map.min.js',
