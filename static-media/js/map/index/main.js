@@ -47,10 +47,28 @@ window.addEventListener("orientationchange", hideAddressBar );
 */
 
 
-
 ///	Activación y configuración del menú
 $(function() {
 
+//    if(device.isCompatible())
+    if(false)
+    {
+        main();
+    }
+    else
+    {
+        $('.splash').hide();
+//        $('#unsupported_mobile_msg').css({
+//            width: $(window).width(),
+//            height: $(window).height()
+//        });
+        $('#unsupported_mobile_msg').show();
+    }
+});
+
+
+function main()
+{
     //SwipeMenu.init();
     if(androidversion <= 2.3)
     {
@@ -62,10 +80,10 @@ $(function() {
 
     var $menu = $('nav#menu-right');
 //    try{
-        $menu.mmenu({
-            position: 'left',
-            slideDuration    : 300
-        });
+    $menu.mmenu({
+        position: 'left',
+        slideDuration    : 300
+    });
 //    }catch(e){
 //        console.log($menu);
 //    }
@@ -158,7 +176,7 @@ $(function() {
 
     $('#cupones, #header, span.locator, div#marquee').hide();
 
-   setTimeout(hideSplash, 100);
+    setTimeout(hideSplash, 100);
 
     $('div.swiper-slide img').on('click', function (e) {
         e.preventDefault();
@@ -171,7 +189,8 @@ $(function() {
         $('div.device').fadeOut();
         LocalStorageHandler.setPrevDestByPoi(cupPoint)
     });
-});
+}
+
 
 
 function hideSplash() {
@@ -584,5 +603,35 @@ var SwipeMenu = {
             // SCROLL
             .bind('drag', self.swipe)
             .bind('dragend', self.swipeEnd)
+    }
+};
+
+
+var device = {
+    Android: function() {
+        return navigator.userAgent.match(/Android/i);
+    },
+    BlackBerry: function() {
+        return navigator.userAgent.match(/BlackBerry/i);
+    },
+    iOS: function() {
+        return navigator.userAgent.match(/iPhone|iPad|iPod/i);
+    },
+    Opera: function() {
+        return navigator.userAgent.match(/Opera Mini/i);
+    },
+    Windows: function() {
+        return navigator.userAgent.match(/IEMobile/i);
+    },
+    Chrome: function() {
+        return navigator.userAgent.match(/Chrome/i);
+    },
+    isAny: function() {
+        return (device.Android() || device.BlackBerry() || device.iOS() || device.Opera() || device.Windows());
+    },
+
+    isCompatible: function() {
+        // Sólo los compatibles con la aplicación
+        return (device.Android() || device.BlackBerry() || device.iOS() || device.Chrome());
     }
 };

@@ -1843,7 +1843,7 @@ and (orientation : landscape)
     line-height: 1.3em;
     width: 1.8em !important;
     height: 1.7em !important;
-    -webkit-transform: rotate(0deg);
+    /*-webkit-transform: rotate(0deg);*/
     border-radius: 1em;
     padding-top: 0.1em;
 }
@@ -1852,5 +1852,37 @@ and (orientation : landscape)
     border: 0px;
 }
 
+
+#unsupported_mobile_msg
+{
+    background: white;
+    display: none;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+}
+
+#unsupported_mobile_msg h5
+{
+    margin-top: 22%;
+}
+
+#unsupported_mobile_msg div
+{
+    margin-top: 9%;
+}
+
+#unsupported_mobile_msg #ios
+{
+    position: relative;
+    top: 0.6em;
+}
+
+#unsupported_mobile_msg #blackberry
+{
+    margin-top: 3%;
+    margin-left: -3%;
+}
 
 
