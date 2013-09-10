@@ -119,7 +119,7 @@ class QRCode:
     def createMovieClip(self):
         raise Exception("Method not relevant to Python port")
     def makeImage(self):
-        boxsize = 10 #pixels per box
+        boxsize = 86 #pixels per box
         offset = 4 #boxes as border
         pixelsize = (self.getModuleCount() + offset + offset) * boxsize
 
