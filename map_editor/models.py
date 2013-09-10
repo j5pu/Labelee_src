@@ -14,6 +14,7 @@ FIXED_CATEGORIES = {
     2: 'Intermediate',
     3: 'Parking',
     4: 'Toilet',
+    5: 'Panoramas',
 }
 
 
@@ -127,7 +128,8 @@ class LabelCategory(models.Model):
     def qr_can_be_assigned(self):
         # Comprueba si la categoría no es ni bloqueante ni arista
         return not self.name_en or (self.name_en.upper() != FIXED_CATEGORIES[0].upper() and \
-            self.name_en.upper() != FIXED_CATEGORIES[1].upper())
+            self.name_en.upper() != FIXED_CATEGORIES[1].upper() and \
+            self.name_en.upper() != FIXED_CATEGORIES[5].upper())
 
 
 class Label(models.Model):

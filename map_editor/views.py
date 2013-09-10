@@ -17,6 +17,7 @@ def index(request):
             '1': 'Bloqueantes',
             '2': 'Aristas',
             '3': 'Intermedias',
+            '4': 'Panoramas'
         }
     }
 
