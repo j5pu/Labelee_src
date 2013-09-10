@@ -54,11 +54,13 @@ function addSamplePano(options)
                 'position': 'absolute',
                 'z-index': 9,
                 'top': '5px',
-                'left':newWidth *0.049 +'px',
-//            'box-sizing':'content-box',
-//            'margin':'0px, ' +(newWidth *0.049) +'px, 0px, ' +(newWidth *0.049) +'px',
-//            'width':$width * 0.74,
-                'border-radius':'.5em',
+//                'left':newWidth *0.049 +'px',
+                'left': '2%',
+                'border-radius':'1.2em',
+                'margin': '0 auto',
+                'overflow': 'hidden',
+                'padding': '3%',
+                'background': 'black',
                 'border': '2px solid rgba(255, 255, 255, 0.9)'
             });
             jQuery('div#page').prepend('<button id="close">x</button>');
@@ -66,8 +68,8 @@ function addSamplePano(options)
                 'position': 'absolute',
                 'z-index': 100000,
                 'top': '-2rem',
-                'right':'-0.3rem',
-                'margin': 6+'%',
+                'right':'-1.2rem',
+                'margin': 5+'%',
                 'font-size':'1.4em',
                 'color':'rgba(255, 255, 255, 0.9)',
                 'text-shadow': '2px 2px 2px #555'
@@ -83,7 +85,6 @@ function addSamplePano(options)
             Panorama.opened = true;
         }
 
-//        $('canvas').trigger('click tap touch swipe drag');
     });
 }
 

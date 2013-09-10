@@ -38,7 +38,6 @@ urlpatterns = patterns('map_editor.api_2',
 
     #QR-CODE
     url(r'^url_to_qr/(?P<url>.+)', 'resources.qr_code.generate_qr_from_url'),
-    url(r'^print_qrs/(?P<floor_id>\d+)', 'resources.qr_code.print_Qrs'),
 
 
 	# 	/api-2/grid/1/point/object/*/*..

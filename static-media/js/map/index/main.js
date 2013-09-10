@@ -47,106 +47,31 @@ window.addEventListener("orientationchange", hideAddressBar );
 */
 
 
+
 ///	Activación y configuración del menú
 $(function() {
 
-    if(device.isCompatible())
-    {
-        main();
-    }
-    else
-    {
-        $('.splash').hide();
-        $('#unsupported_mobile_msg').show();
-    }
-});
 
-
-function main()
-{
-    //SwipeMenu.init();
-    if(androidversion <= 2.3)
-    {
+//    if(androidversion <= 2.3)
+//    {
         ScrollMenu.init();
-    }
+//    }
     Panorama.init();
 
     Map.events.bindAll();
 
-    var $menu = $('nav#menu-right');
-//    try{
-    $menu.mmenu({
-        position: 'left',
-        slideDuration    : 300
+    $('nav#menu-right').mmenu({
+        dragOpen: true,
+        slidingSubmenus: false,
+        counters	: true,
+        searchfield   : {
+            add           : true,
+            search        : true,
+            placeholder   : "Busca tu destino...",
+            noResults     : "No hay ningún resultado.",
+            showLinksOnly : true
+        }
     });
-//    }catch(e){
-//        console.log($menu);
-//    }
-
-    //	Añadir contadores
-    $menu.find( 'i' ).bind(
-        'count.search',
-        function()
-        {
-            var $t = $(this);
-            var $li = $t.parents( 'li' );
-            var length = $( $t.parent().prev().attr( 'href' ) ).children().not( '.mmenu-label' ).not( '.hidden' ).length - 1;
-
-            $li.show();
-            $t.text( length );
-            if ( length == 0 )
-            {
-                $li.hide();
-            }
-        }
-    ).trigger( 'count.search' );
-
-    //	Búsqueda en el menú (a varios niveles)
-    var $input = $menu.find( 'div.search input' );
-    var $items = $menu.find( '.mmenu-submenu li' ).not( ':first-child' ).not( '.mmenu-label' ).not( '.no-results' );
-    var $labels = $menu.find( 'li.mmenu-label' );
-    var $noresults = $menu.find( 'li.no-results' );
-    var $counters = $menu.find( 'i' );
-
-    $input.bind(
-        'keyup.search',
-        function()
-        {
-            var search = $(this).val().toLowerCase();
-            $items.each(
-                function()
-                {
-                    var $t = $(this).show().removeClass( 'hidden' );
-                    if ( $t.text().toLowerCase().indexOf( search ) == -1 )
-                    {
-                        $t.hide().addClass( 'hidden' );
-                    }
-                }
-            );
-            $labels.hide();
-            $items.each(
-                function()
-                {
-                    $(this).not( '.hidden' ).prevAll( '.mmenu-label' ).first().show();
-                }
-            );
-
-            $noresults[ $items.not( '.hidden' ).length ? 'hide' : 'show' ]();
-            $counters.trigger( 'count.search' );
-        }
-    );
-
-    //	Clic sobre un elemento del menú
-    var $confirm = $('#confirmation');
-    $('#menu-right a').not( '.mmenu-subopen' ).not( '.mmenu-subclose' ).bind(
-        'click.example',
-        function( e )
-        {
-            e.preventDefault();
-            $confirm.show().text( 'You clicked "' + $(this).text() + '"' );
-            $('#menu-right').trigger( 'close' );
-        }
-    );
 
 
     $('button#closeCoupon').on('click', function () {
@@ -171,7 +96,7 @@ function main()
 
     $('#cupones, #header, span.locator, div#marquee').hide();
 
-    setTimeout(hideSplash, 100);
+   setTimeout(hideSplash, 100);
 
     $('div.swiper-slide img').on('click', function (e) {
         e.preventDefault();
@@ -184,8 +109,7 @@ function main()
         $('div.device').fadeOut();
         LocalStorageHandler.setPrevDestByPoi(cupPoint)
     });
-}
-
+});
 
 
 function hideSplash() {
@@ -212,26 +136,18 @@ function showRouteFromMenu(origin_id, destination_id)
 {
     if(origin_id != destination_id)
     {
-        try
-        {
-            drawRoute(origin_id, destination_id);
-            LocalStorageHandler.setPrevDestByPoi(destination_id);
-            $('#menu-right').trigger('close');
+        drawRoute(origin_id, destination_id);
+        LocalStorageHandler.setPrevDestByPoi(destination_id);
+        $('#menu-right').trigger('close');
 
-            // Cambia a la planta del origen si estamos en otra
-            var dest_floor = floors_indexed[route.fields.destiny.fields.floor];
-            if (current_floor.id != qrFloor.id && current_floor.id != dest_floor.id) {
-                var floor_to_show_name = floors_indexed[qrFloor.id].name;
-                $('.leaflet-control-layers-base input[type=radio]')
-                    .eq(baseLayers[floor_to_show_name].position)
-                    .trigger('click');
-            }
+        // Cambia a la planta del origen si estamos en otra
+        var dest_floor = floors_indexed[route.fields.destiny.fields.floor];
+        if (current_floor.id != qrFloor.id && current_floor.id != dest_floor.id) {
+            var floor_to_show_name = floors_indexed[qrFloor.id].name;
+            $('.leaflet-control-layers-base input[type=radio]')
+                .eq(baseLayers[floor_to_show_name].position)
+                .trigger('click');
         }
-        catch(err)
-        {
-            console.error(err);
-        }
-
     }
 }
 
@@ -383,7 +299,7 @@ var Coupon = {
 
     init: function()
     {
-        Coupon.calculateCouponArea();
+        //Coupon.calculateCouponArea();
         Coupon.bindOpen();
     },
 
@@ -414,9 +330,7 @@ var Coupon = {
                     myImg="img[id='"+imgID+"']",
                     myPos=$(myImg).parent()[0].index($(myImg).parent().parent());
 
-//VERSION CORTA
-
-                window.setTimeout(function(){
+           window.setTimeout(function(){
                     mySwiper.swipeTo(myPos-1);
                 },500);
 
@@ -424,11 +338,7 @@ var Coupon = {
 
 
                  e.stopPropagation();
-
-
-//VERSION CORTA
                  Coupon.open();
-
 
             }
 
@@ -442,7 +352,7 @@ var Coupon = {
 
         $('div.device').fadeIn(100);
 
-        $(document).on('click', function(ev){
+        $(document).on('click tap touch', function(ev){
             ev.stopPropagation();
             if(Coupon.opened &&
                 ($('div.device').has($(ev.target)).length === 0 &&
@@ -455,7 +365,7 @@ var Coupon = {
     },
 
 
-    calculateCouponArea: function()
+/*    calculateCouponArea: function()
     {
         var $img = $('img#cupon-img');
 
@@ -466,7 +376,7 @@ var Coupon = {
             $area = $('div#cupones area');
 
         $area.attr({'coords': imgCoords});
-    },
+    },*/
 
 
     close: function()
@@ -482,7 +392,8 @@ var ScrollMenu = {
     init: function()
     {
         this.$listMenu = $('#scrollMenu');
-        this.$wrapper = $('nav#menu-right');
+        this.$wrapper = $('nav');
+//        this.$wrapper = $('nav#menu-right');
         this.$wrapper.css({
             'overflow-y': 'hidden'
         });
@@ -511,15 +422,10 @@ var ScrollMenu = {
 
         self.top_new = self.top + ev.gesture['deltaY'];
 
-        if(self.top_new > 0 || self.$listMenu.height() < self.$wrapper.height())
-            self.top_new = 0;
-        else if(Math.abs(self.top_new) > self.$listMenu.height() - self.$wrapper.height())
-            self.top_new = self.$wrapper.height() - self.$listMenu.height();
-
-
-        // map.css({
-        // 	'transition': 'top 1s linear 2s, left 1s linear 2s'
-        // });
+        if(self.top_new > 50 || self.$listMenu.height() < self.$wrapper.height())
+            self.top_new = 50;
+        else if(Math.abs(self.top_new) > self.$listMenu.height() - self.$wrapper.height() )
+            self.top_new = self.$wrapper.height() - self.$listMenu.height()-25;
 
         self.$listMenu.css({
             'top': self.top_new + 'px'
@@ -539,94 +445,3 @@ var ScrollMenu = {
 };
 
 
-var SwipeMenu = {
-
-    init: function()
-    {
-        this.$swipeTab = $('#menuTab');
-        this.left = this.$swipeTab.position().left;
-
-        this.swipeEvent();
-    },
-
-
-
-    // SWIPE
-    swipe: function(ev)
-    {
-        var self = SwipeMenu;
-
-        var i = this;
-
-        self.left_new = self.left + ev.gesture['deltaX'];
-        self.$swipeTab.css({
-            'left': parseInt(self.left_new) + 'px'
-        });
-        $('.mmenu-page').css({
-            'left': parseInt(self.left_new) + 'px'
-        })
-    },
-
-    swipeEnd: function()
-    {
-        var self = SwipeMenu;
-
-        var limit = $(document).width() * 0.8;
-        if(self.left_new > limit)
-            self.left_new = limit;
-        else if(self.left_new < 0 || self.left_new < limit *  0.5)
-            self.left_new = 0;
-
-        // map.css({
-        // 	'transition': 'top 1s linear 2s, left 1s linear 2s'
-        // });
-
-        self.$swipeTab.css({
-            'left': self.left_new + 'px'
-        });
-
-        self.left = self.left_new;
-    },
-
-    swipeEvent: function()
-    {
-        var self = this;
-
-        self.$swipeTab
-            .hammer({prevent_default: true})
-
-            // SCROLL
-            .bind('drag', self.swipe)
-            .bind('dragend', self.swipeEnd)
-    }
-};
-
-
-var device = {
-    Android: function() {
-        return navigator.userAgent.match(/Android/i);
-    },
-    BlackBerry: function() {
-        return navigator.userAgent.match(/BlackBerry/i);
-    },
-    iOS: function() {
-        return navigator.userAgent.match(/iPhone|iPad|iPod/i);
-    },
-    Opera: function() {
-        return navigator.userAgent.match(/Opera Mini/i);
-    },
-    Windows: function() {
-        return navigator.userAgent.match(/IEMobile/i);
-    },
-    Chrome: function() {
-        return navigator.userAgent.match(/Chrome/i);
-    },
-    isAny: function() {
-        return (device.Android() || device.BlackBerry() || device.iOS() || device.Opera() || device.Windows());
-    },
-
-    isCompatible: function() {
-        // Sólo los compatibles con la aplicación
-        return (device.Android() || device.BlackBerry() || device.iOS() || device.Chrome());
-    }
-};

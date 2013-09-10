@@ -46,6 +46,7 @@ def show_map(request, qr_type, enclosure_id, floor_id, poi_id):
         'qr_type': qr_type,
         'coupons': cached['coupons'],
         'colors': cached['colors'],
+        'icons': cached['icons'],
         'map_data': simplejson.dumps(
             get_map_data(qr_type, poi_id, cached['poisByFloor'], enclosure_id)
         )

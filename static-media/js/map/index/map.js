@@ -285,7 +285,7 @@ var LocalStorageHandler = {
                 );
             }
         }
-
+/*
 
         $('#scrollMenu').prepend(
             '<li    class="help" ' +
@@ -293,7 +293,7 @@ var LocalStorageHandler = {
                 '<img src="/static/img/help_menu/logo_nuevo.png">' +
                 '<button>?</button>' +
             '</li>'
-        );
+        );*/
     },
 
     setPrevDest: function (marker) {
@@ -434,7 +434,7 @@ function loadFloors() {
                 $('div.splash').fadeOut(100);
 
                 // Marcamos en el menú lateral el POI origen
-                $('#scrollMenu .destiny[data-destiny-id=' + qrPoint.point.id + ']')
+                $('.mm-submenu .destiny[data-destiny-id=' + qrPoint.point.id + ']')
                     .addClass('origin');
 
                 // Si se trata de un destino compartido ni mostramos la cuponera,
@@ -730,7 +730,6 @@ function changeFloor(e) {
         }
         bindContent(qrMarker);
         qrMarker._bringToFront();
-        Compass.init();
     }
     if (map.hasLayer(destMarker)) {
         destMarker.openPopup();
@@ -765,15 +764,14 @@ function drawRoute(org, dst) {
         prev_dest = dst;
 
         // Marcamos en el menú lateral el destino escogido
-        $('#scrollMenu .destiny.selected').removeClass('selected');
-        $('#scrollMenu .destiny[data-destiny-id=' + dst + ']').addClass('selected');
+        $('.mm-submenu .destiny.selected').removeClass('selected');
+        $('.mm-submenu .destiny[data-destiny-id=' + dst + ']').addClass('selected');
 
         route = routeResource.getRoute(org, dst);
 
         if (!route) {
             $('#scrollMenu .destiny.selected').removeClass('selected');
             alert(gettext('We are sorry, that route does not exist.'));
-            throw 'INVALID ROUTE';
         }
         else {
             // Limpia la ruta anteriormente trazada
@@ -958,7 +956,7 @@ Map.locatePosition = function () {
 
 
 Map.resize = function () {
-    Coupon.calculateCouponArea();
+//    Coupon.calculateCouponArea();
     Panorama.resize();
 };
 
