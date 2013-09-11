@@ -443,6 +443,20 @@ function loadFloors() {
                 loadPOIs();
                 initMap(qrPoint);
                 LocalStorageHandler.init();
+
+                $('nav#menu-right').mmenu({
+                    dragOpen: true,
+                    slidingSubmenus: false,
+                    counters	: true,
+                    searchfield   : {
+                        add           : true,
+                        search        : true,
+                        placeholder   : "Busca tu destino...",
+                        noResults     : "Lo sentimos, no hay resultados.",
+                        showLinksOnly : true
+                    }
+                });
+
                 $('div#cupones, div#header, span.locator, div#marquee').show();
 
                 //recolocar controles

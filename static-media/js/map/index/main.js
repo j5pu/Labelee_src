@@ -60,20 +60,6 @@ $(function() {
 
     Map.events.bindAll();
 
-    $('nav#menu-right').mmenu({
-        dragOpen: true,
-        slidingSubmenus: false,
-        counters	: true,
-        searchfield   : {
-            add           : true,
-            search        : true,
-            placeholder   : "Busca tu destino...",
-            noResults     : "Lo sentimos, no hay resultados.",
-            showLinksOnly : true
-        }
-    });
-
-
     $('button#closeCoupon').on('click', function () {
         $('div.device').fadeOut(100);
     });
@@ -296,7 +282,7 @@ var ScrollMenu = {
     {
         var self = this;
 
-        self.$listMenu.hammer()
+        self.$listMenu.parent().hammer()
             .on('drag', self.scroll)
             .on('dragend', self.scrollEnd);
     }
