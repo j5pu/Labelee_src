@@ -960,6 +960,7 @@ Map.locatePosition = function () {
 Map.resize = function () {
     Coupon.calculateCouponArea();
     Panorama.resize();
+    HelpMenu.resize();
 };
 
 

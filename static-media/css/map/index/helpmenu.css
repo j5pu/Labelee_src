@@ -1,0 +1,131 @@
+#help_menu
+{
+    display: none;
+    background: rgba(255, 255, 255, 0.9);
+    z-index: 10000;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+#help_menu .entry:not(.current)
+{
+    display: none;
+}
+
+#help_menu .entry
+{
+    overflow-x: hidden;
+    overflow-y: scroll;
+    width: 96%;
+    padding: 15% 2% 2% 2%;
+    height: 72%;
+}
+
+#help_menu .entry h5
+{
+    text-align: justify;
+    margin-top: 0;
+    margin-bottom: 1.3em;
+}
+
+#help_menu .entry h2
+{
+    margin-top: -1.3em;
+}
+
+#help_menu .entry p
+{
+    margin: 0 0 10px 0;
+    line-height: 1.3em;
+    text-align: justify;
+}
+
+#help_menu .entry.disclaimer h5
+{
+    margin-bottom: 0.3em;
+    margin-top: 1em;
+}
+
+#help_menu button.exit
+{
+    font-family: 'font_awesome_icons';
+    margin-top: 0%;
+    margin-right: 8.5%;
+    font-size: 22px;
+    position: absolute;
+    right: 0;
+    background: white;
+    padding: 0.5em;
+    border-radius: 0 0 5px 5px;
+    border: solid gray;
+    border-top: none;
+}
+
+#help_menu button.open_disclaimer {
+    text-decoration: underline;
+    background: none !important;
+    color: black !important;
+    font-size: 0.9em;
+    border: 0px solid !important;
+}
+
+#help_menu .button_wrapper
+{
+    width: 100%;
+    text-align: center;
+}
+
+#help_menu .button_wrapper button
+{
+    background: #1293CD;
+    border-radius: 5px;
+    color: #FFFDFD;
+    border: 2px solid #EEE;
+    padding: 1.2% 3%;
+}
+
+#help_menu .entry img
+{
+    max-width: 95%;
+    margin: 0 auto;
+    display: block;
+}
+
+
+/* IPHONE 4S -> 320x480, pixel ratio: 2
+ *      portrait:
+ *          320x356 con navbar
+ *      landscape:
+ *          480x208 con navbar
+ *          480x320 sin navbar
+*/
+
+@media (max-height: 320px)
+{
+    #help_menu .entry
+    {
+        height: 62%;
+        padding-top: 11%;
+    }
+
+    #help_menu .entry img {
+        max-width: 50%;
+    }
+
+    #help_menu .button_wrapper {
+        margin-top: 1%;
+    }
+}
+
+@media (max-height: 208px)
+{
+    #help_menu button.exit {
+        padding: 0.3em;
+    }
+
+    #help_menu .entry {
+        padding-top: 9%;
+        height: 49%;
+    }
+}
