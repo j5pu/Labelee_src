@@ -211,12 +211,15 @@ var LocalStorageHandler = {
         else
         {
             // guarda destino previo
-            var sharedDest = JSON.parse(localStorage.getItem('sharedDest'));
-            if (sharedDest) {
-                localStorage.removeItem('sharedDest');
-                sharedDest.mesg = gettext('Do you still want to go to the previous destination?');
+            if(localStorage.getItem('sharedDest'))
+            {
+                var sharedDest = JSON.parse(localStorage.getItem('sharedDest'));
+                if (sharedDest) {
+                    localStorage.removeItem('sharedDest');
+                    sharedDest.mesg = gettext('Do you still want to go to the previous destination?');
 
-                localStorage.setItem('prevDest', JSON.stringify(sharedDest));
+                    localStorage.setItem('prevDest', JSON.stringify(sharedDest));
+                }
             }
         }
 
@@ -238,44 +241,69 @@ var LocalStorageHandler = {
     },
 
     setSideMenu: function () {
-        // MICOCHE
-        var miCoche = JSON.parse(localStorage.getItem('miCoche'));
-        if (miCoche) {
-            if (qrPoint.enclosure.id != miCoche.dest.enclosure.id)
-                return;
 
-            $('#scrollMenu').prepend(
-                '<li>' +
-                    '<li class="Label mmenu-label">' + miCoche.dest.labelCategory.name + '</li>' +
-                    '<li ' +
-                    'onclick="' + "$('#menu-right').trigger( 'close' );" +
-                    "showRouteFromMenu(" + qrPoint.point.id + ', ' + miCoche.dest.point.id + ');">' +
-                    miCoche.dest.point.description +
-                    '</li>' +
-                    '</li>'
-            );
-        }
 
-        var prevDest = JSON.parse(localStorage.getItem('prevDest'));
-        if (prevDest) {
-            if (qrPoint.enclosure.id != prevDest.enclosureid)
-                return;
+        if(localStorage.getItem('prevDest'))
+        {
+            var prevDest = JSON.parse(localStorage.getItem('prevDest'));
+            if (prevDest) {
+                if (qrPoint.enclosure.id != prevDest.enclosureid)
+                    return;
 
-            var point_dest_id = prevDest.poid,
-                floor_dest_id = prevDest.floorid,
-                description = prevDest.description_for_menu;
+                var point_dest_id = prevDest.poid,
+                    floor_dest_id = prevDest.floorid,
+                    description = prevDest.description_for_menu;
 
-            $('#scrollMenu').prepend(
-                '<li>' +
-                    '<li class="Label mmenu-label">' + gettext('PREVIOUS DESTINATION') + '</li>' +
-                    '<li ' +
-                    'onclick="' + "$('#menu-right').trigger( 'close' );" +
+/*                $('#scrollMenu').prepend(
+                    '<li>'+
+                        '<span style="background:red;"'+ 'onclick="' + "$('#menu-right').trigger( 'close' );" +
+                        "showRouteFromMenu(" + qrPoint.point.id + ', ' + point_dest_id + ');">' +
+                        gettext('PREVIOUS DESTINATION') +
+                        '<i class="icon-screenshot"></i>'+' - '+
+                        description+ '</span>'+
+                        '</li>'
+                );*/
+
+                $('ul#destList').append(
+                        '<li>'+
+                        '<a href="#" ' +
+                'onclick="' + "$('#menu-right').trigger( 'close' );" +
                     "showRouteFromMenu(" + qrPoint.point.id + ', ' + point_dest_id + ');">' +
-                    description +
-                    '</li>' +
-                    '</li>'
-            );
+                    description + "</a></li>"
+                );
+            }
         }
+
+        // MICOCHE
+        if(localStorage.getItem('miCoche'))
+        {
+            var miCoche = JSON.parse(localStorage.getItem('miCoche'));
+            if (miCoche) {
+                if (qrPoint.enclosure.id != miCoche.dest.enclosure.id)
+                    return;
+
+                $('#scrollMenu').prepend(
+                    '<li>'+
+                        '<span style="background:cadetblue;"'+ 'onclick="' + "$('#menu-right').trigger( 'close' );" +
+                        "showRouteFromMenu(" + qrPoint.point.id + ', ' + miCoche.dest.point.id + ');">' +
+                        miCoche.dest.labelCategory.name +
+                        '<i class="icon-automobile"></i>'+' - '+
+                        miCoche.dest.point.description+ '</span>'+
+                        '</li>'
+
+                    /*           '<li>' +
+                     '<li class="Label mmenu-label">' + miCoche.dest.labelCategory.name + '</li>' +
+                     '<li ' +
+                     'onclick="' + "$('#menu-right').trigger( 'close' );" +
+                     "showRouteFromMenu(" + qrPoint.point.id + ', ' + miCoche.dest.point.id + ');">' +
+                     miCoche.dest.point.description +
+                     '</li>' +
+                     '</li>'
+                     */
+                );
+            }
+        }
+/*
 
         $('#scrollMenu').prepend(
             '<li    class="help" ' +
@@ -283,7 +311,7 @@ var LocalStorageHandler = {
                 '<img src="/static/img/help_menu/logo_nuevo.png">' +
                 '<button>?</button>' +
             '</li>'
-        );
+        );*/
     },
 
     setPrevDest: function (marker) {
@@ -340,31 +368,34 @@ var LocalStorageHandler = {
     draw: function () {
         if (qr_type == 'origin') {
             // DESTINO PREVIO
-            var prevDest = JSON.parse(localStorage.getItem('prevDest'));
-            if (prevDest)
+            if(localStorage.getItem('prevDest'))
             {
-                if (prevDest.dest && prevDest.dest.enclosure.id == qrPoint.enclosure.id) {
-                    if (prevDest.shooted_origin)
-                        if (confirm(prevDest.mesg)) {
+                var prevDest = JSON.parse(localStorage.getItem('prevDest'));
+                if (prevDest)
+                {
+                    if (prevDest.dest && prevDest.dest.enclosure.id == qrPoint.enclosure.id) {
+                        if (prevDest.shooted_origin)
+                            if (confirm(prevDest.mesg)) {
+                                showOrigin = true;
+                                drawRoute(qrPoint.point.id, prevDest.dest.point.id);
+                            }
+                            else
+                                localStorage.removeItem('prevDest');
+                        else {
                             showOrigin = true;
                             drawRoute(qrPoint.point.id, prevDest.dest.point.id);
+                            prevDest.shooted_origin = true;
+                            localStorage.setItem('prevDest', JSON.stringify(prevDest));
+                        }
+                    }
+                    else if (prevDest.enclosureid == qrPoint.enclosure.id) {
+                        if (confirm(prevDest.mesg)) {
+                            showOrigin = true;
+                            drawRoute(qrPoint.point.id, prevDest.poid);
                         }
                         else
                             localStorage.removeItem('prevDest');
-                    else {
-                        showOrigin = true;
-                        drawRoute(qrPoint.point.id, prevDest.dest.point.id);
-                        prevDest.shooted_origin = true;
-                        localStorage.setItem('prevDest', JSON.stringify(prevDest));
                     }
-                }
-                else if (prevDest.enclosureid == qrPoint.enclosure.id) {
-                    if (confirm(prevDest.mesg)) {
-                        showOrigin = true;
-                        drawRoute(qrPoint.point.id, prevDest.poid);
-                    }
-                    else
-                        localStorage.removeItem('prevDest');
                 }
             }
 
@@ -412,20 +443,14 @@ function loadFloors() {
                 loadPOIs();
                 initMap(qrPoint);
                 LocalStorageHandler.init();
+                initSideMenu();
                 $('div#cupones, div#header, span.locator, div#marquee').show();
-                //recolocar controles
-                $('span:has(i.icon-film)').css('left', '11px');
-                $('span:has(i.icon-glass)').css('left', '11px');
                 Coupon.init();
                 $('div.splash').fadeOut(100);
 
-                // Marcamos en el menú lateral el POI origen
-                $('#scrollMenu .destiny[data-destiny-id=' + qrPoint.point.id + ']')
-                    .addClass('origin');
-
-                // Si se trata de un destino compartido ni mostramos la cuponera,
-                // ni el menú lateral
-                $()
+                //
+                // Habilitamos el uso de la brújula para orientar la flecha
+                Compass.init();
             }
         }(floor_index);
     }
@@ -539,8 +564,8 @@ function loadPOIs() {
     qrFloor.sX = qrFloor.scaleX;
     qrFloor.sY = qrFloor.scaleY;
 
-    qrLoc = [((qrPoint.point.row) * qrFloor.scaleY) + qrFloor.scaleY,
-        (qrPoint.point.col * qrFloor.scaleX) + qrFloor.scaleX];
+    qrLoc = [((qrPoint.point.row) * qrFloor.scaleY) - qrFloor.scaleY,
+        (qrPoint.point.col * qrFloor.scaleX)];
 
     if (qr_type == 'origin') {
         var point_description = qrPoint.label.name_en == 'My car' ?
@@ -639,6 +664,17 @@ map.on('baselayerchange', function (e) {
     loadedLabels = true;
 });
 
+//EVENTOS - HACER ZOOM AL MAPA
+map.on('zoomend', function (e) {
+    if (map.hasLayer(qrMarker)) {
+        qrMarker._bringToFront();
+    }
+    if (map.hasLayer(destMarker)) {
+        destMarker._bringToFront();
+    }
+});
+
+
 
 function setMarkerColor(eventparameter) {
     var shapeIcon = eventparameter.layer.category_icon;
@@ -700,6 +736,7 @@ function changeFloor(e) {
             $('div.leaflet-popup-content-wrapper').addClass('withCoupon');
         }
         bindContent(qrMarker);
+        qrMarker._bringToFront();
     }
     if (map.hasLayer(destMarker)) {
         destMarker.openPopup();
@@ -707,6 +744,7 @@ function changeFloor(e) {
             $('div.leaflet-popup-content-wrapper').addClass('withCoupon');
         }
         bindContent(destMarker);
+        destMarker._bringToFront();
     }
 }
 
@@ -733,8 +771,8 @@ function drawRoute(org, dst) {
         prev_dest = dst;
 
         // Marcamos en el menú lateral el destino escogido
-        $('#scrollMenu .destiny.selected').removeClass('selected');
-        $('#scrollMenu .destiny[data-destiny-id=' + dst + ']').addClass('selected');
+        $('.mm-submenu .destiny.selected').removeClass('selected');
+        $('.mm-submenu .destiny[data-destiny-id=' + dst + ']').addClass('selected');
 
         route = routeResource.getRoute(org, dst);
 
@@ -852,7 +890,12 @@ function isPoiVisibleByDefault(categ_name) {
 
 
 Map.locateCar = function () {
-    var miCoche = JSON.parse(localStorage.getItem('miCoche'));
+    var miCoche = null;
+
+    if(localStorage.getItem('miCoche'))
+    {
+        miCoche = JSON.parse(localStorage.getItem('miCoche'));
+    }
 
     if (!miCoche || miCoche.dest.enclosure.id != enclosure_id) {
         alert('Please, scan the QR code at your parking place to' +
@@ -920,8 +963,11 @@ Map.locatePosition = function () {
 
 
 Map.resize = function () {
-    Coupon.calculateCouponArea();
+//    Coupon.calculateCouponArea();
+
     Panorama.resize();
+    HelpMenu.resize();
+    ScrollMenu.init();
 };
 
 
@@ -985,3 +1031,24 @@ var setArrow = function (flecha, idFloor) {
     if (++arrowsOffset > 100)
         arrowsOffset = 0;
 };
+
+
+function initSideMenu()
+{
+    $('nav#menu-right').mmenu({
+        dragOpen: true,
+        slidingSubmenus: false,
+        counters	: true,
+        searchfield   : {
+            add           : true,
+            search        : true,
+            placeholder   : "Busca tu destino...",
+            noResults     : "Lo sentimos, no hay resultados.",
+            showLinksOnly : true
+        }
+    });
+
+    // Marcamos en el menú lateral el POI origen
+    $('.mm-submenu .destiny[data-destiny-id=' + qrPoint.point.id + ']')
+        .addClass('origin');
+}

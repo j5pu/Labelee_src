@@ -1,0 +1,188 @@
+#help_menu
+{
+    display: none;
+    background: rgba(255, 255, 255, 0.9);
+    z-index: 10000;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+#help_menu .entry:not(.current)
+{
+    display: none;
+}
+
+#help_menu .entry
+{
+    overflow-x: hidden;
+    overflow-y: scroll;
+    width: 93%;
+    padding-left: 7%;
+    height: 78%;
+}
+
+#help_menu .entry:not(.first) {
+    padding-top: 15%;
+}
+
+#help_menu .entry h5
+{
+    margin-top: 0;
+    margin-bottom: 1.3em;
+}
+
+#help_menu .entry h2
+{
+    margin-top: -1.3em;
+}
+
+#help_menu .entry p
+{
+    margin: 0 0 10px 0;
+    line-height: 1.3em;
+    padding-right: 1.5%;
+}
+
+#help_menu .entry.disclaimer h2
+{
+    font-size: 14px;
+}
+
+#help_menu .entry.disclaimer h5
+{
+    margin-bottom: 0.3em;
+    margin-top: 1em;
+}
+
+#help_menu button.exit
+{
+    font-family: 'font_awesome_icons';
+    margin-top: 0%;
+    margin-right: 8.5%;
+    font-size: 22px;
+    position: absolute;
+    right: 0;
+    background: white;
+    padding: 0.5em;
+    border-radius: 0 0 5px 5px;
+    border: solid gray;
+    border-top: none;
+}
+
+#help_menu button.open_disclaimer {
+    text-decoration: underline;
+    background: none !important;
+    color: black !important;
+    font-size: 0.9em;
+    border: 0px solid !important;
+}
+
+#help_menu .button_wrapper
+{
+    width: 100%;
+    text-align: center;
+    position: absolute;
+    bottom: 10px;
+    box-shadow: 0px -16px 43px 0px rgb(221, 221, 221);
+}
+
+#help_menu .button_wrapper button
+{
+    background: #1293CD;
+    border-radius: 5px;
+    color: #FFFDFD;
+    border: 2px solid #EEE;
+    padding: 1.2% 3%;
+}
+
+#help_menu .entry img
+{
+    max-width: 95%;
+    margin: 0 auto;
+    display: block;
+}
+
+#help_menu .entry #img0
+{
+    margin-left: -2%;
+    width: 72%;
+    margin-top: 6%;
+    margin-bottom: 6%;
+}
+
+
+
+/* IPHONE 4S -> 320x480, pixel ratio: 2
+ *      portrait:
+ *          320x356 con navbar
+ *      landscape:
+ *          480x208 con navbar
+ *          480x320 sin navbar
+*/
+@media (max-height: 208px)
+{
+    #help_menu button.exit {
+        padding: 0.3em;
+    }
+
+    #help_menu .button_wrapper {
+        bottom: 4px;
+    }
+
+    #help_menu .entry.first {
+        height: 75%;
+    }
+
+    #help_menu .entry #img0 {
+        width: 53%;
+        margin-top: 2%;
+        margin-bottom: 2%;
+    }
+
+    #help_menu .entry:not(.first) {
+        padding-top: 8%;
+        height: 58%;
+    }
+
+}
+
+@media (min-height: 209px) and (max-height: 356px)
+{
+    #help_menu .entry {
+        height: 69.5%;
+    }
+
+    #help_menu .entry:not(.first) {
+        padding-top: 10%;
+    }
+
+    #help_menu .entry.first
+    {
+        height: 74%;
+        overflow-y: hidden;
+    }
+
+    #help_menu .entry.disclaimer h2
+    {
+        font-size: 14px;
+    }
+
+    #help_menu .entry img {
+        max-width: 76%;
+    }
+
+    #help_menu .entry #img0 {
+        margin: 4% 3% 4% -1%;
+    }
+
+    #help_menu .button_wrapper {
+        margin-top: 1%;
+    }
+
+    #help_menu .entry h5 {
+        margin-top: 0;
+        margin-bottom: 0.5em;
+    }
+}
+

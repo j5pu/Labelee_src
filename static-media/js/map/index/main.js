@@ -51,90 +51,14 @@ window.addEventListener("orientationchange", hideAddressBar );
 ///	Activación y configuración del menú
 $(function() {
 
-    //SwipeMenu.init();
-    if(androidversion <= 2.3)
-    {
+
+//    if(androidversion <= 2.3)
+//    {
         ScrollMenu.init();
-    }
+//    }
     Panorama.init();
 
     Map.events.bindAll();
-
-    var $menu = $('nav#menu-right');
-//    try{
-        $menu.mmenu({
-            position: 'left',
-            slideDuration    : 300
-        });
-//    }catch(e){
-//        console.log($menu);
-//    }
-
-    //	Añadir contadores
-    $menu.find( 'i' ).bind(
-        'count.search',
-        function()
-        {
-            var $t = $(this);
-            var $li = $t.parents( 'li' );
-            var length = $( $t.parent().prev().attr( 'href' ) ).children().not( '.mmenu-label' ).not( '.hidden' ).length - 1;
-
-            $li.show();
-            $t.text( length );
-            if ( length == 0 )
-            {
-                $li.hide();
-            }
-        }
-    ).trigger( 'count.search' );
-
-    //	Búsqueda en el menú (a varios niveles)
-    var $input = $menu.find( 'div.search input' );
-    var $items = $menu.find( '.mmenu-submenu li' ).not( ':first-child' ).not( '.mmenu-label' ).not( '.no-results' );
-    var $labels = $menu.find( 'li.mmenu-label' );
-    var $noresults = $menu.find( 'li.no-results' );
-    var $counters = $menu.find( 'i' );
-
-    $input.bind(
-        'keyup.search',
-        function()
-        {
-            var search = $(this).val().toLowerCase();
-            $items.each(
-                function()
-                {
-                    var $t = $(this).show().removeClass( 'hidden' );
-                    if ( $t.text().toLowerCase().indexOf( search ) == -1 )
-                    {
-                        $t.hide().addClass( 'hidden' );
-                    }
-                }
-            );
-            $labels.hide();
-            $items.each(
-                function()
-                {
-                    $(this).not( '.hidden' ).prevAll( '.mmenu-label' ).first().show();
-                }
-            );
-
-            $noresults[ $items.not( '.hidden' ).length ? 'hide' : 'show' ]();
-            $counters.trigger( 'count.search' );
-        }
-    );
-
-    //	Clic sobre un elemento del menú
-    var $confirm = $('#confirmation');
-    $('#menu-right a').not( '.mmenu-subopen' ).not( '.mmenu-subclose' ).bind(
-        'click.example',
-        function( e )
-        {
-            e.preventDefault();
-            $confirm.show().text( 'You clicked "' + $(this).text() + '"' );
-            $('#menu-right').trigger( 'close' );
-        }
-    );
-
 
     $('button#closeCoupon').on('click', function () {
         $('div.device').fadeOut(100);
@@ -214,154 +138,12 @@ function showRouteFromMenu(origin_id, destination_id)
 }
 
 
-var HelpMenu = {
-    _updateButtons: function()
-    {
-        if(this.$disclaimer_page.hasClass('current'))
-        {
-            this.$buttons.removeClass('zero');
-            this.$close_disclaimer_button.show();
-            this.$next_button.hide();
-            this.$open_disclaimer_button.hide();
-        }
-        else
-        {
-            if(this.current_entry_index == 0)
-            {
-                this.$buttons.addClass('zero')
-                this.$prev_button.hide();
-                this.$next_button.show();
-                this.$finish_button.hide();
-                this.$open_disclaimer_button.show();
-                this.$close_disclaimer_button.hide();
-            }
-            else if(this.current_entry_index >= this.$entry_list.length-1)
-            {
-                this.$prev_button.show();
-                this.$next_button.hide();
-                this.$finish_button.show();
-                this.$open_disclaimer_button.hide();
-            }
-            else
-            {
-                this.$buttons.removeClass('zero');
-                this.$prev_button.show();
-                this.$next_button.show();
-                this.$finish_button.hide();
-                this.$open_disclaimer_button.hide();
-            }
-        }
-
-
-        Logger.log($(window).width() + 'x' + $(window).height())
-        Logger.log(screen.width + 'x' + screen.height)
-    },
-
-    _showPrevEntry: function()
-    {
-        if(this.current_entry_index > 0)
-        {
-            this.$entry_list.eq(this.current_entry_index).removeClass('current');
-            this.$entry_list.eq(--this.current_entry_index).addClass('current');
-            this._updateButtons();
-        }
-    },
-
-    _showNextEntry: function()
-    {
-        if(this.current_entry_index < this.$entry_list.length)
-        {
-            this.$entry_list.eq(this.current_entry_index).removeClass('current');
-            this.$entry_list.eq(++this.current_entry_index).addClass('current');
-            this._updateButtons();
-        }
-    },
-
-    _openDisclaimer: function()
-    {
-        this.$entry_list.eq(this.current_entry_index).removeClass('current');
-        this.$disclaimer_page.addClass('current');
-        this._updateButtons();
-    },
-
-    _closeDisclaimer: function()
-    {
-        this.$disclaimer_page.removeClass('current');
-        this.current_entry_index = 0;
-        this.$entry_list.eq(this.current_entry_index).addClass('current');
-        this._updateButtons();
-    },
-
-    _close: function()
-    {
-        this.$e.fadeOut(300);
-        setTimeout(function(){
-            if(HelpMenu.$disclaimer_page.hasClass('current'))
-                HelpMenu.$disclaimer_page.removeClass('current');
-            else
-                HelpMenu.$entry_list.eq(HelpMenu.current_entry_index).removeClass('current');
-            HelpMenu.$entry_list.eq(0).addClass('current');
-            HelpMenu.$e.find('*').off();
-        },400);
-    },
-
-    show: function()
-    {
-        this.$e = $('#help_menu');
-        this.$e.css({
-            width: $(window).width(),
-            height: $(window).height()
-        });
-
-        // asignamos los eventos sobre los botones de anterior y siguiente
-        this.$buttons = this.$e.find('.button_wrapper');
-        this.$prev_button = this.$e.find('.prev');
-        this.$next_button = this.$e.find('.next');
-        this.$finish_button = this.$e.find('.finish');
-        this.$exit_button = this.$e.find('.exit');
-        this.$open_disclaimer_button = this.$e.find('.open_disclaimer');
-        this.$close_disclaimer_button = this.$e.find('.close_disclaimer');
-        this.$disclaimer_page = this.$e.find('.entry.disclaimer');
-        this.$entry_list = this.$e.find('.entry:not(.disclaimer)');
-        this.current_entry_index = 0;
-        this._updateButtons();
-
-        this.$prev_button.on('click', function(){
-            HelpMenu._showPrevEntry();
-        });
-
-        this.$next_button.on('click', function(e){
-            HelpMenu._showNextEntry();
-        });
-
-        this.$finish_button.on('click', function(e){
-            HelpMenu._close();
-        });
-
-        this.$exit_button.on('click', function(e){
-            HelpMenu._close();
-        });
-
-        this.$open_disclaimer_button.on('click', function(e){
-            HelpMenu._openDisclaimer();
-        });
-
-        this.$close_disclaimer_button.on('click', function(e){
-            HelpMenu._closeDisclaimer();
-        });
-
-
-        this.$e.show(200);
-    }
-};
-
-
 var Coupon = {
     opened: false,
 
     init: function()
     {
-        Coupon.calculateCouponArea();
+        //Coupon.calculateCouponArea();
         Coupon.bindOpen();
     },
 
@@ -392,9 +174,7 @@ var Coupon = {
                     myImg="img[id='"+imgID+"']",
                     myPos=$(myImg).parent()[0].index($(myImg).parent().parent());
 
-//VERSION CORTA
-
-                window.setTimeout(function(){
+           window.setTimeout(function(){
                     mySwiper.swipeTo(myPos-1);
                 },500);
 
@@ -402,11 +182,7 @@ var Coupon = {
 
 
                  e.stopPropagation();
-
-
-//VERSION CORTA
                  Coupon.open();
-
 
             }
 
@@ -420,7 +196,7 @@ var Coupon = {
 
         $('div.device').fadeIn(100);
 
-        $(document).on('click', function(ev){
+        $(document).on('click tap touch', function(ev){
             ev.stopPropagation();
             if(Coupon.opened &&
                 ($('div.device').has($(ev.target)).length === 0 &&
@@ -433,7 +209,7 @@ var Coupon = {
     },
 
 
-    calculateCouponArea: function()
+/*    calculateCouponArea: function()
     {
         var $img = $('img#cupon-img');
 
@@ -444,7 +220,7 @@ var Coupon = {
             $area = $('div#cupones area');
 
         $area.attr({'coords': imgCoords});
-    },
+    },*/
 
 
     close: function()
@@ -460,7 +236,8 @@ var ScrollMenu = {
     init: function()
     {
         this.$listMenu = $('#scrollMenu');
-        this.$wrapper = $('nav#menu-right');
+        this.$wrapper = $('nav');
+//        this.$wrapper = $('nav#menu-right');
         this.$wrapper.css({
             'overflow-y': 'hidden'
         });
@@ -489,15 +266,10 @@ var ScrollMenu = {
 
         self.top_new = self.top + ev.gesture['deltaY'];
 
-        if(self.top_new > 0 || self.$listMenu.height() < self.$wrapper.height())
-            self.top_new = 0;
-        else if(Math.abs(self.top_new) > self.$listMenu.height() - self.$wrapper.height())
-            self.top_new = self.$wrapper.height() - self.$listMenu.height();
-
-
-        // map.css({
-        // 	'transition': 'top 1s linear 2s, left 1s linear 2s'
-        // });
+        if(self.top_new > 50 || self.$listMenu.height() < self.$wrapper.height())
+            self.top_new = 50;
+        else if(Math.abs(self.top_new) > self.$listMenu.height() - self.$wrapper.height()+25 )
+            self.top_new = self.$wrapper.height() - self.$listMenu.height()-25;
 
         self.$listMenu.css({
             'top': self.top_new + 'px'
@@ -510,71 +282,10 @@ var ScrollMenu = {
     {
         var self = this;
 
-        self.$listMenu.hammer()
+        self.$listMenu.parent().hammer()
             .on('drag', self.scroll)
             .on('dragend', self.scrollEnd);
     }
 };
 
 
-var SwipeMenu = {
-
-    init: function()
-    {
-        this.$swipeTab = $('#menuTab');
-        this.left = this.$swipeTab.position().left;
-
-        this.swipeEvent();
-    },
-
-
-
-    // SWIPE
-    swipe: function(ev)
-    {
-        var self = SwipeMenu;
-
-        var i = this;
-
-        self.left_new = self.left + ev.gesture['deltaX'];
-        self.$swipeTab.css({
-            'left': parseInt(self.left_new) + 'px'
-        });
-        $('.mmenu-page').css({
-            'left': parseInt(self.left_new) + 'px'
-        })
-    },
-
-    swipeEnd: function()
-    {
-        var self = SwipeMenu;
-
-        var limit = $(document).width() * 0.8;
-        if(self.left_new > limit)
-            self.left_new = limit;
-        else if(self.left_new < 0 || self.left_new < limit *  0.5)
-            self.left_new = 0;
-
-        // map.css({
-        // 	'transition': 'top 1s linear 2s, left 1s linear 2s'
-        // });
-
-        self.$swipeTab.css({
-            'left': self.left_new + 'px'
-        });
-
-        self.left = self.left_new;
-    },
-
-    swipeEvent: function()
-    {
-        var self = this;
-
-        self.$swipeTab
-            .hammer({prevent_default: true})
-
-            // SCROLL
-            .bind('drag', self.swipe)
-            .bind('dragend', self.swipeEnd)
-    }
-};

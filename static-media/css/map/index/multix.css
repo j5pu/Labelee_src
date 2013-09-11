@@ -467,7 +467,7 @@ body {
     background: #ddd;
 }
 
-body:before {
+/*body:before {
     content: "";
     position: fixed;
     top: -10px;
@@ -479,7 +479,7 @@ body:before {
     box-shadow: 0 0 10px rgba(0,0,0,.8);
 
     z-index: 100;
-}
+}*/
 html, body, #map {
     height: 100%;
 }
@@ -708,6 +708,9 @@ span>span{
 .leaflet-container img.leaflet-image-layer {
     z-index: -1;
 }
+.leaflet-container img.leaflet-image-layer[src*='png'] {
+    z-index: -2;
+}
 
 .leaflet-popup-pane, .leaflet-control {
     opacity: 0.85;
@@ -860,16 +863,6 @@ box-shadow: 0 0 15px rgba( 0, 0, 0, 0.2 );
     position: absolute;
 }
 
-#scrollMenu .selected button {
-    background: orange;
-    border-radius: 0.8em;
-}
-
-#scrollMenu .origin button
-{
-    background: skyblue;
-    border-radius: 0.8em;
-}
 
 #scrollMenu .help
 {
@@ -1098,6 +1091,19 @@ font-size:1.2em;
 color:rgba(255, 255, 255, 0.8);
 }
 
+.mm-menu {
+    background: white;
+}
+
+.mm-menu, .mm-menu * {
+    -webkit-text-size-adjust: none;
+    font-family: 'Raleway', 'Noto Sans', Arial, Helvetica, Garuda, sans-serif;
+    font-size: 0.8rem;
+}
+
+.mm-menu * {
+    text-shadow: none;
+}
 
 /* Use the following CSS code if you want to use data attributes for inserting your icons */
 [data-icon]:before {
@@ -1455,6 +1461,7 @@ leaflet-marker-icon{
     line-height: 1.3em;
 
 }
+
 .locate-icon::before {
     content: "\f23a";
     font-size: 0.8em;
@@ -1545,291 +1552,14 @@ marquee
     height: 25px;
 }
 
-marquee span
+marquee > span
 {
     position: relative;
     top: 4px;
 }
 
 
-#help_menu
-{
-    display: none;
-    background: rgba(255, 255, 255, 0.9);
-    z-index: 10000;
-    position: absolute;
-    top: 0;
-    left: 0;
-}
 
-#help_menu .entry
-{
-    text-align: justify;
-    padding: 1em;
-}
-
-#help_menu .entry.first
-{
-    height: 54%;
-}
-
-#help_menu .entry:not(.first)
-{
-    height: 84%;
-}
-
-
-
-#help_menu .entry p
-{
-    line-height: 118%;
-}
-
-#help_menu .entry img
-{
-    margin: 0 auto;
-    display: block;
-}
-
-#help_menu .entry #img0
-{
-    max-width: 80%;
-    margin-top: 9%;
-}
-
-#help_menu .entry #img1
-{
-    width: 93%;
-    margin-top: 6%;
-}
-
-#help_menu .entry #img2
-{
-    max-height: 64%;
-}
-
-#help_menu .entry #img3
-{
-    max-height: 60%;
-}
-
-#help_menu .entry #img4
-{
-    max-height: 69%;
-}
-
-
-#help_menu .entry:not(.current)
-{
-    display: none;
-}
-
-#help_menu .entry.disclaimer
-{
-    margin-top: 9%;
-    height: 74%;
-}
-
-#help_menu .entry.disclaimer h2
-{
-    text-align: center;
-    margin: 0 -1% 4% -3%;
-}
-
-#help_menu .button_wrapper
-{
-    text-align: center;
-}
-
-#help_menu .button_wrapper button
-{
-    background: #1293CD;
-    border-radius: 5px;
-    color: #FFFDFD;
-    border: 2px solid #EEE;
-    padding: 2% 3%;
-}
-
-#help_menu button.exit
-{
-    font-family: 'font_awesome_icons';
-    margin-top: 3%;
-    margin-right: 4%;
-    font-size: 18px;
-    position: absolute;
-    right: 0;
-}
-
-
-#help_menu button.open_disclaimer {
-    text-decoration: underline;
-    background: #EEE;
-    position: relative;
-    display: block;
-    margin: 7.5% auto 0 auto;
-    border-radius: 0;
-    color: black;
-    font-size: 0.9em;
-}
-
-#help_menu .entry.first {
-    margin-top: 1em;
-}
-
-
- /* IPHONE 4S -> 320x480, pixel ratio: 2
-  *      portrait:
-  *          320x356 con navbar
-  *      landscape:
-  *          480x208 con navbar
-  *          480x320 sin navbar
- */
-@media (min-height: 356px) and (max-height: 400px) and
-(min-width: 320px) and (max-width: 340px)
-{
-    #help_menu .entry
-    {
-        height: 83%;
-    }
-
-    #help_menu .entry.first {
-        margin-top: 1%;
-        height: 83%;
-    }
-
-    #help_menu .button_wrapper {
-        margin-top: -4%;
-    }
-
-    #help_menu .button_wrapper.zero {
-        margin-top: -14%;
-    }
-
-    #help_menu .entry.disclaimer p {
-        font-size: 0.9em;
-    }
-
-    #help_menu .entry.disclaimer {
-        margin-top: 2%;
-    }
-
-    #help_menu .entry.disclaimer h5{
-        margin-top: 0em;
-        margin-bottom: 0.3em;
-    }
-
-    #help_menu .close_disclaimer {
-        margin-top: 8%;
-    }
-
-    #help_menu .entry.disclaimer h2
-    {
-        text-align: left;
-        margin: 0 -1% 4% 0;
-    }
-
-    #help_menu .entry:not(.disclaimer) h2
-    {
-        margin-top: 0.3em;
-    }
-
-    #help_menu .entry.first h5
-    {
-        margin-top: 7%;
-        margin-bottom: -2%;
-    }
-
-    #help_menu #img0
-    {
-        width: 70%;
-        margin-top: 9%;
-    }
-
-
-    #help_menu button.open_disclaimer
-    {
-        background: none;
-        border: 0px;
-        margin: 0.5% auto 0 auto;
-        right: -9em;
-        bottom: 0em;
-    }
-
-    /*#scrollMenu .help button {*/
-        /*top: -1px;*/
-    /*}*/
-
-    #help_menu .button_wrapper
-    {
-
-    }
-
-    #help_menu .entry img
-    {
-        position: relative;
-    }
-
-    #help_menu .entry #img1 {
-        width: 86%;
-        top: -4%;
-    }
-
-    #help_menu .entry #img2 {
-        height: 13em;
-        top: -1em;
-    }
-
-    #help_menu .entry #img3 {
-        height: 57%;
-        top: -1em;
-    }
-
-    #help_menu .entry #img4 {
-        height: 65%;
-        top: -0.4em;
-    }
-}
-
-
-@media (min-height: 401px) and (max-height: 600px)
-{
-    /*#scrollMenu .help button {*/
-        /*top: -0.1em;*/
-    /*}*/
-}
-
-
-
-
-
-/*
- * GALAXY S4: -> 360x640, pixel ratio: 3
- *      portrait:
- *          360x567 con navbar
- *      landscape:
- *          640x287 con navbar
- */
-@media  only screen and (min--moz-device-pixel-ratio: 3),
-only screen and (-o-min-device-pixel-ratio: 3/1),
-only screen and (-webkit-min-device-pixel-ratio: 3),
-only screen and (min-device-pixel-ratio: 3)
-and (min-device-width : 360px)
-and (max-device-width : 640px)
-and (orientation : portrait)
-{
-
-}
-
-@media  only screen and (min--moz-device-pixel-ratio: 3),
-only screen and (-o-min-device-pixel-ratio: 3/1),
-only screen and (-webkit-min-device-pixel-ratio: 3),
-only screen and (min-device-pixel-ratio: 3)
-and (min-device-width : 360px)
-and (max-device-width : 640px)
-and (orientation : landscape)
-{
-
-}
 
 
 /*
@@ -1837,6 +1567,366 @@ and (orientation : landscape)
  *
  */
 
+.locate-icon {
+    font-family: 'carFont';
+    background: rgb(6, 84, 150);
+    line-height: 1.4em;
+    width: 1.8em !important;
+    height: 1.8em !important;
+    -webkit-transform: rotate(0deg);
+    border-radius: 0.9em;
+    padding-top: 0.1em;
+}
+
+.locate-icon:after {
+    border: 0px;
+}
+
+
+.mm-menu a.mm-subopen:after {
+    border-top: none;
+    border-left: none;
+    margin-top: -4px;
+    /*
+        right: 80px;
+    */
+}
+
+.mm-menu a.mm-subopen:after, .mm-menu a.mm-subclose:before {
+    border-color: rgba( 255, 255, 255, 0.8 );
+}
+
+.mm-menu > ul {
+    background: inherit;
+    width: 100%;
+    padding: 0;
+}
+
+#page, nav {
+    /*    display: none;
+        position: relative;
+    */    height: 100%;
+}
+
+.mm-menu div.mm-search {
+    background: #F2EFE4;
+    border: none;
+    border-bottom: 2px solid #F2EFE4;
+    width: 100%;
+    height: 50px;
+    padding: 10px 0;
+    position: fixed;
+    padding-right: 17%;
+    display:block;
+}
+.mm-menu em.mm-counter + a.mm-fullsubopen + span {
+    padding-right: 0;
+    margin-right: 0;
+}
+.mm-menu.mm-vertical li.mm-opened.mm-selected > a.mm-subopen + span {
+    padding-right: 0;
+    margin-right: 0;
+}
+
+#header {
+    font-size: 16px;
+    font-weight: bold;
+    color: #fff;
+    text-align: center;
+    line-height: 36px;
+    height: 36px;
+    padding: 0 50px;
+    top: 6px;
+    left: 0;
+    background-color: rgba(186, 186, 186, 0.23);
+}
+#header a {
+    display: block;
+    width: 55px;
+    height: 30px;
+    line-height: 30px;
+    position: absolute;
+    bottom: 25px;
+    left: 0;
+    z-index: 99;
+    opacity: 1;
+    -webkit-box-shadow: 2px 2px 2px rgba(0,0,0,0.3);
+    box-shadow: 2px 2px 2px rgba(0,0,0,0.3);
+    border: 3px solid #8C8C87;
+    border-left: none;
+    border-radius: 0 6px 6px 0;
+    background-color: white;
+    top:auto;
+}
+
+.mm-menu li {
+    /*
+        position: relative;
+    */
+    width: 100%;
+}
+
+html.mm-opened .mm-page {
+    box-shadow: none;
+}
+
+.mm-menu a.mm-subopen:after {
+//right: 6%;
+    right: 30%;
+    margin-top: -6px;
+}
+html.mm-left.mm-opening .mm-page,
+html.mm-left.mm-opening #mm-blocker
+{
+    margin-left: -27%;
+    left: 100%;
+}
+
+.mm-menu li > a, .mm-menu li > span {
+    text-indent: 33px;
+}
+
+
+.mm-menu.mm-left, .mm-menu.mm-right {
+    width: 100%;
+}
+
+.mm-menu.mm-left {
+    padding-right: 65px;
+}
+
+.mm-menu.mm-vertical li.mm-opened.mm-selected > em.mm-counter + a.mm-subopen + span {
+    margin-right: 0;
+}
+
+.mm-menu div.mm-search input {
+    width: 60%;
+    height: 30px;
+    -webkit-border-radius: 4px;
+    border-radius: 4px;
+
+    margin: 0 auto auto 22px;
+    padding: 0 0 0 10px;
+    display:inline-block;
+    background: white;
+    color: rgb(111, 107, 97);
+    border: 1px solid #ccc;
+}
+
+a.search-cancel {
+    width: auto;
+    height: auto;
+    position: absolute;
+    right: 31%;
+    text-decoration: none;
+
+}
+.search-cancel:hover {
+    filter: alpha(opacity=100);
+    opacity: 1;
+}
+.search-cancel span {
+    font-size: 30px;
+    line-height: 30px;
+    color: #6f6b61;
+    /* font-weight:bold; */
+    height: 27px;
+}
+.search-cancel:hover span {
+    color:#aaa;
+}
+
+#scrollMenu
+{
+    position: absolute;
+    z-index:-1;
+    top:50px;
+}
 
 
 
+.mm-menu ul, .mm-menu li, .mm-menu li > a, .mm-menu li > span {
+    display: block;
+    padding: 0;
+    margin: 0;
+}
+
+.mm-menu li {
+    border: none;
+    position: relative;
+}
+
+.mm-menu li {
+    border-top-color: #F2EFE4;
+    border-bottom-color: #F2EFE4;
+    position: relative;
+    color: rgb(111, 107, 97);
+    background: white;
+}
+
+.mm-menu li > a, .mm-menu li > span {
+    line-height: 20px;
+}
+
+.mm-menu a.mm-subopen {
+    height: 22px;
+}
+
+.mm-menu li > a, .mm-menu li > span {
+    text-indent: 4px;
+}
+.mm-menu em.mm-counter {
+    border-radius: 3px;
+    background: rgba(255, 255, 255, 0.4);
+    box-shadow: 0 0 2px rgba(0, 0, 0, 0.4);
+    text-shadow: 0 0 2px rgba(0, 0, 0, 0.4);
+    font-size: 12px;
+    font-style: normal;
+    color: rgba(255, 255, 255, 1);
+    right: 36%;
+    top: 3px;
+    width: 17px;
+    text-align: center;
+    padding: 0;
+    line-height: 14px;
+    display: block;
+    height: 14px;
+    font-family: sans-serif;
+}
+
+.mm-menu li > a{
+    color: #6f6b61;
+    font-size: 0.9rem;
+    margin-left: 20px;
+}
+
+.mm-menu.mm-vertical ul ul {
+    padding: 0;
+}
+
+.mm-menu li > span {
+    color: white;
+    text-transform: uppercase;
+    text-shadow: 1px 1px 1px #bbb;
+    color: white;
+    border-color: #F2EFE4;
+    border-bottom: 2px;
+    background: #444;
+    font-size: 0.9rem;
+    line-height: 20px;
+}
+.mm-menu li:after {
+    border-bottom: 2px solid #F2EFE4;
+}
+
+.mm-menu li.mm-label {
+    font-size: 14px;
+    color: inherit;
+}
+.mm-menu li.mm-label {
+    text-transform: uppercase;
+    text-indent: 20px;
+    line-height: 25px;
+}
+
+.mm-menu li.mm-noresults {
+    color: inherit;
+    text-align: left;
+}
+
+a#destPrev {
+    background: red;
+    font-size: 0.8rem;
+    color: white;
+    text-shadow: 1px 1px 1px #bbb;
+}
+
+.mm-menu.mm-opened {
+    display: block;
+    overflow: hidden;
+    overflow-x: hidden;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+}
+
+.mm-menu li span i {
+    float: left;
+    margin-right: 4px;
+    margin-top: 2px;
+    text-shadow: 1px 1px 1px #bbb;
+    font-size: 0.9rem;
+    width: 15px;
+}
+.mm-menu em.mm-counter + a.mm-subopen {
+    padding-left: 0;
+}
+
+.mm-menu li.mm-noresults {
+    padding-top: 0;
+    color: #6f6b61;
+    font-size: 0.9rem;
+    margin-left: 22px;
+}
+
+.mm-menu ul li {
+    padding-bottom: 2px;
+}
+
+div.help{
+    background: #F2EFE4;
+    border: none;
+    width: 100%;
+    height: 25px;
+    position: fixed;
+    bottom: 0px;
+    padding: 2px 17% 0 20px;
+    display: block;
+    /*box-shadow: 0px -16px 43px 0px #F2EFE4;*/
+}
+
+div.help img{
+    width: 100px;
+    display: inline-block;
+}
+
+.help button, .search-cancel button {
+    display: inline-block;
+    background: white;
+    border-radius: 4px;
+    color: #999;
+    border: 1px solid #ccc;
+    font-size: 19px;
+    padding: 0;
+    position: absolute;
+    width: 23px;
+    height: 23px;
+    right: 43.5%;
+}
+
+.search-cancel button {
+    margin-top:4px;
+    font-size: 17px;
+    color: #aaa;
+}
+
+li a button {
+    padding: 0;
+    margin: 0;
+}
+
+.selected a button {
+    background: orange;
+    border-radius: 0.8em;
+    color: white;
+    padding: 0 4px;
+    margin-left: -4px;
+}
+
+.origin a button
+{
+    background: skyblue;
+    border-radius: 0.8em;
+    color: white;
+    padding: 0 4px;
+    margin-left: -4px;
+}

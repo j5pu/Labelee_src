@@ -2,6 +2,12 @@ var panoIndex=0;
 var panoDefaultImageName="night3.jpeg";
 function addSamplePano(options)
 {
+    ddpanoramas.timerId = window.setInterval(function() {
+        for ( var i = 0; i < ddpanoramas.animations.length; ++i) {
+            ddpanoramas.animations[i].update();
+        }
+    }, 1000 / 30);
+
     var panoId="pano"+panoIndex;
 
     if(jQuery('div#page').find('img[id*=pano]').length > 0)
@@ -44,24 +50,26 @@ function addSamplePano(options)
             var newWidth = window.innerWidth;
 
 
-            jQuery('canvas').css({
+            jQuery('#canvasPan').css({
                 'position': 'absolute',
                 'z-index': 9,
                 'top': '5px',
-                'left':newWidth *0.049 +'px',
-//            'box-sizing':'content-box',
-//            'margin':'0px, ' +(newWidth *0.049) +'px, 0px, ' +(newWidth *0.049) +'px',
-//            'width':$width * 0.74,
-                'border-radius':'.5em',
+//                'left':newWidth *0.049 +'px',
+                'left': '2%',
+                'border-radius':'1.2em',
+                'margin': '0 auto',
+                'overflow': 'hidden',
+                'padding': '3%',
+                'background-color': 'black',
                 'border': '2px solid rgba(255, 255, 255, 0.9)'
             });
             jQuery('div#page').prepend('<button id="close">x</button>');
             $('button#close').css({
                 'position': 'absolute',
                 'z-index': 100000,
-                'top': '-2rem',
-                'right':'-0.3rem',
-                'margin': 6+'%',
+                'top': '-1.8rem',
+                'right':'-1.7rem',
+                'margin': 5+'%',
                 'font-size':'1.4em',
                 'color':'rgba(255, 255, 255, 0.9)',
                 'text-shadow': '2px 2px 2px #555'
@@ -77,7 +85,6 @@ function addSamplePano(options)
             Panorama.opened = true;
         }
 
-//        $('canvas').trigger('click tap touch swipe drag');
     });
 }
 

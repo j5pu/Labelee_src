@@ -12,6 +12,9 @@
     <meta name="apple-mobile-web-app-capable" content="yes"/>
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
 
+   <link href="http://fonts.googleapis.com/css?family=Raleway" rel="stylesheet"
+          type="text/css">
+
     {% compressed_css 'map' %}
 
     <script src="{% url 'django.views.i18n.javascript_catalog' %}"></script>
@@ -76,20 +79,24 @@
     {% compressed_js 'map2' %}
 
     <nav id="menu-right">
-        <!--
-        <div class="search">
-            <input type="text" name="search" placeholder="Buscar..." autocomplete="off" />
-        </div>
-        -->
+
         <ul id="scrollMenu">
-            <li class="Label">{% trans "Selecciona tu destino" %}</li>
+            <li>
+                <span style="background:red;"><i class="icon-screenshot"></i>Destino Previo</span>
+                <ul id="destList">
+
+                </ul>
+
+            </li>
 
             {% for category in categories %}
                 <li>
-                <li class="Label" style="background:{{ colors|get_item:category.name }};">{{ category.name }}</li>
+                    <span style="background:{{ colors|get_item:category.name }};"><i class="icon-{{ icons|get_item:category.name }}"></i>{{ category.name }}</span>
+                <ul>
                 {% for destination in category.items %}
                     <li class="destiny"
-                        data-destiny-id="{{ destination.id }}"
+                        data-destiny-id="{{ destination.id }}">
+                        <a href="#"
                         onclick="showRouteFromMenu({{ poi_id }}, {{ destination.id }});">
                         <button>
                             {% if destination.label.category.enclosure %}
@@ -98,13 +105,22 @@
                                 {{ destination.description }}
                             {% endif %}
                         </button>
+                        </a>
                     </li>
                 {% endfor %}
+                </ul>
                 </li>
             {% endfor %}
-            <li class="no-results"><span>{% trans "Lo sentimos, no se ha encontrado ningún resultado." %}</span></li>
+
         </ul>
+
+        <div class="help" onclick="$('#menu-right').trigger( 'close' );HelpMenu.show();">
+            <img src="/static/img/help_menu/logo_nuevo.png">
+            <button>?</button>
+        </div>
     </nav>
+    <script src="{{ STATIC_URL }}vendor/leaflet/plugins/jquery.mmenuV1.js"></script>
+
 
     <span class="locator icon-navigation" id="location"></span>
     <span class="locator icon-automobile" id="myCar"></span>
@@ -150,13 +166,13 @@
     <button class="exit">x</button>
 
     <div class="entry first current">
+        <img id="img0" src="{{ STATIC_URL }}img/help_menu/logo_nuevo.png" title="labelee" alt="logo de labelee">
         <h5>
             Sigue los sencillos pasos que indicamos a continuación para aprender a utilizar este novedoso sistema de localización en interiores.
         </h5>
         <h5>
             Recuerda que <b style="color:#194b7e;">labelee</b> funciona a través de tu navegador web, así que para utilizarlo debes estar conectado a  Internet, ya sea mediante Wi-Fi o con tu plan de datos.
         </h5>
-        <img id="img0" src="{{ STATIC_URL }}img/help_menu/logo_nuevo.png" title="labelee" alt="logo de labelee">
     </div>
 
     <div class="entry">
@@ -215,6 +231,10 @@
     </div>
 
     <div class="button_wrapper">
+        <button class="btn info open_disclaimer">
+            {% trans "Privacidad"%}
+        </button>
+
         <button class="btn info prev">
             {% trans "Anterior"%}
         </button>
@@ -225,10 +245,6 @@
 
         <button class="btn info finish">
             {% trans "Usar la aplicación"%}
-        </button>
-
-        <button class="btn info open_disclaimer">
-            {% trans "Privacidad"%}
         </button>
 
         <button class="btn info close_disclaimer">
