@@ -443,35 +443,10 @@ function loadFloors() {
                 loadPOIs();
                 initMap(qrPoint);
                 LocalStorageHandler.init();
-
-                $('nav#menu-right').mmenu({
-                    dragOpen: true,
-                    slidingSubmenus: false,
-                    counters	: true,
-                    searchfield   : {
-                        add           : true,
-                        search        : true,
-                        placeholder   : "Busca tu destino...",
-                        noResults     : "Lo sentimos, no hay resultados.",
-                        showLinksOnly : true
-                    }
-                });
-
+                initSideMenu();
                 $('div#cupones, div#header, span.locator, div#marquee').show();
-
-                //recolocar controles
-//                $('span:has(i.icon-film)').css('left', '11px');
-//                $('span:has(i.icon-glass)').css('left', '11px');
                 Coupon.init();
                 $('div.splash').fadeOut(100);
-
-                // Marcamos en el menú lateral el POI origen
-                $('.mm-submenu .destiny[data-destiny-id=' + qrPoint.point.id + ']')
-                    .addClass('origin');
-
-                // Si se trata de un destino compartido ni mostramos la cuponera,
-                // ni el menú lateral
-                $();
 
                 //
                 // Habilitamos el uso de la brújula para orientar la flecha
@@ -1056,3 +1031,24 @@ var setArrow = function (flecha, idFloor) {
     if (++arrowsOffset > 100)
         arrowsOffset = 0;
 };
+
+
+function initSideMenu()
+{
+    $('nav#menu-right').mmenu({
+        dragOpen: true,
+        slidingSubmenus: false,
+        counters	: true,
+        searchfield   : {
+            add           : true,
+            search        : true,
+            placeholder   : "Busca tu destino...",
+            noResults     : "Lo sentimos, no hay resultados.",
+            showLinksOnly : true
+        }
+    });
+
+    // Marcamos en el menú lateral el POI origen
+    $('.mm-submenu .destiny[data-destiny-id=' + qrPoint.point.id + ']')
+        .addClass('origin');
+}

@@ -31,24 +31,25 @@ var Compass = {
 //                    Compass.dirg = eventData.gamma;
                 }
 
-                if(!Compass.previous)
+                if(Compass.angle)
                 {
-                    Compass._rotate(eventData);
-                    Compass.previous.timestamp = eventData.timeStamp;
-                }
-                else
-                {
-                    var angle_diff = Math.abs(Compass.angle - Compass.previous.angle);
-                    var time_diff = eventData.timeStamp - Compass.previous.timestamp;
-                    if(angle_diff > 20 && time_diff > 400)
+                    if(!Compass.previous)
                     {
                         Compass._rotate(eventData);
                         Compass.previous.timestamp = eventData.timeStamp;
                     }
+                    else
+                    {
+                        var angle_diff = Math.abs(Compass.angle - Compass.previous.angle);
+                        var time_diff = eventData.timeStamp - Compass.previous.timestamp;
+                        if(angle_diff > 20 && time_diff > 400)
+                        {
+                            Compass._rotate(eventData);
+                            Compass.previous.timestamp = eventData.timeStamp;
+                        }
 
-
+                    }
                 }
-
             }, false);
         }
         $(window).trigger('deviceorientation');
