@@ -273,15 +273,12 @@ var LocalStorageHandler = {
                     floor_dest_id = prevDest.floorid,
                     description = prevDest.description_for_menu;
 
-                $('#scrollMenu').prepend(
-                    '<li>' +
-                        '<li class="Label mmenu-label">' + gettext('PREVIOUS DESTINATION') + '</li>' +
-                        '<li ' +
-                        'onclick="' + "$('#menu-right').trigger( 'close' );" +
-                        "showRouteFromMenu(" + qrPoint.point.id + ', ' + point_dest_id + ');">' +
-                        description +
-                        '</li>' +
-                        '</li>'
+                $('ul#destList').append(
+                        '<li>'+
+                        '<span' +
+                'onclick="' + "$('#menu-right').trigger( 'close' );" +
+                    "showRouteFromMenu(" + qrPoint.point.id + ', ' + point_dest_id + ');">' +
+                    description + "</span></li>"
                 );
             }
         }
@@ -957,7 +954,9 @@ Map.locatePosition = function () {
 
 Map.resize = function () {
 //    Coupon.calculateCouponArea();
+
     Panorama.resize();
+    ScrollMenu.init();
 };
 
 

@@ -68,7 +68,7 @@ $(function() {
             add           : true,
             search        : true,
             placeholder   : "Busca tu destino...",
-            noResults     : "No hay ningún resultado.",
+            noResults     : "Lo sentimos, no hay resultados.",
             showLinksOnly : true
         }
     });
@@ -424,7 +424,7 @@ var ScrollMenu = {
 
         if(self.top_new > 50 || self.$listMenu.height() < self.$wrapper.height())
             self.top_new = 50;
-        else if(Math.abs(self.top_new) > self.$listMenu.height() - self.$wrapper.height() )
+        else if(Math.abs(self.top_new) > self.$listMenu.height() - self.$wrapper.height()+25 )
             self.top_new = self.$wrapper.height() - self.$listMenu.height()-25;
 
         self.$listMenu.css({

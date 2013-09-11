@@ -2014,23 +2014,23 @@ a.search-cancel {
 .mm-menu li > a, .mm-menu li > span {
     text-indent: 4px;
 }
-
 .mm-menu em.mm-counter {
-    border-radius: 20%;
+    border-radius: 3px;
     background: rgba(255, 255, 255, 0.4);
     box-shadow: 0 0 2px rgba(0, 0, 0, 0.4);
     text-shadow: 0 0 2px rgba(0, 0, 0, 0.4);
-    font-size: 10px;
+    font-size: 12px;
     font-style: normal;
     color: rgba(255, 255, 255, 1);
     right: 36%;
     top: 3px;
-    width: 16px;
+    width: 17px;
     text-align: center;
     padding: 0;
-    line-height: 15px;
+    line-height: 14px;
     display: block;
-    height: 13px;
+    height: 14px;
+    font-family: sans-serif;
 }
 
 .mm-menu li > a{
@@ -2107,13 +2107,17 @@ a#destPrev {
     margin-left: 22px;
 }
 
+.mm-menu ul li {
+    padding-bottom: 2px;
+}
+
 div.help{
     background: #F2EFE4;
     border: none;
     width: 100%;
     height: 25px;
     position: fixed;
-    bottom: -2px;
+    bottom: 0px;
     padding: 2px 17% 0 20px;
     display: block;
 }
