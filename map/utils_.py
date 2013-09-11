@@ -44,6 +44,7 @@ def cache_show_map(enclosure_id):
     poisByFloor = {}
     categories = {}
     colors = {}
+    icons = {}
     coupons = {}
     cache_key = 'show_map_enclosure_' + enclosure_id
     cache_time = 43200
@@ -64,11 +65,12 @@ def cache_show_map(enclosure_id):
             poisByFloor[point.floor.id][poiIndex]['label'] = queryset_to_dict([point.label])[0]
             poisByFloor[point.floor.id][poiIndex]['label']['category'] = queryset_to_dict([point.label.category])[0]
 
-            if point.label.category.name_en not in FIXED_CATEGORIES['hidden_on_side_menu'].values():
+            if point.label.category.name_en not in FIXED_CATEGORIES.values():
                 if point.label.category.name in categories:
                     categories[point.label.category.name].append(point)
                 else:
                     colors[point.label.category.name] = point.label.category.color
+                    icons[point.label.category.name] = point.label.category.icon
                     categories[point.label.category.name] = [point]
 
             if point.coupon.name is not None:
@@ -95,6 +97,7 @@ def cache_show_map(enclosure_id):
             'poisByFloor': poisByFloor,
             'ordered_categories': ordered_categories,
             'colors': colors,
+            'icons': icons,
             'coupons': coupons,
             'enclosure':enclosure
         }
@@ -103,6 +106,7 @@ def cache_show_map(enclosure_id):
         poisByFloor = cacheEnclosure['poisByFloor']
         ordered_categories = cacheEnclosure['ordered_categories']
         colors = cacheEnclosure['colors']
+        icons = cacheEnclosure['icons']
         coupons = cacheEnclosure['coupons']
         enclosure = cacheEnclosure['enclosure']
 
@@ -110,6 +114,7 @@ def cache_show_map(enclosure_id):
         'poisByFloor': poisByFloor,
         'ordered_categories': ordered_categories,
         'colors': colors,
+        'icons': icons,
         'coupons': coupons,
         'enclosure': enclosure,
     }

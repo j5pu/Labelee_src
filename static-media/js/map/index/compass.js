@@ -8,16 +8,17 @@ var Compass = {
         this.previous = null;
 
         if (window.DeviceOrientationEvent) {
-
             window.addEventListener('compassneedscalibration', function (eventData) {
-                alert('Necesita calibrar la brújula');
+                alert('Necesita calibrar');
+
+                // Aquí se abriría
             });
 
             window.addEventListener('deviceorientation', function (eventData) {
                 // El parámetro alpha hace referencia a la brujula,
                 // los parámetros beta y gamma hacen referencia al giroscopio
-                // var hor = eventData.gamma;
-                // var ver = eventData.beta;
+//                var hor = eventData.gamma;
+//                var ver = eventData.beta;
                 if(Compass.navigator == 1)
                 {
                     Compass.angle = (360 - eventData.webkitCompassHeading); //Si el usuario navega desde iOS debe usarse esta función, restándole 360 conseguimos que la imagen rote correctamente
@@ -26,29 +27,33 @@ var Compass = {
                 {
                     //En otro caso utilizaremos el alpha, que es soportado por los demás dispositivos.
                     Compass.angle = eventData.alpha;
+//                    Compass.dirb = eventData.beta;
+//                    Compass.dirg = eventData.gamma;
                 }
 
-                if(Compass.angle)
+                if(!Compass.previous)
                 {
-                    if(!Compass.previous)
+                    Compass._rotate(eventData);
+                    Compass.previous.timestamp = eventData.timeStamp;
+                }
+                else
+                {
+                    var angle_diff = Math.abs(Compass.angle - Compass.previous.angle);
+                    var time_diff = eventData.timeStamp - Compass.previous.timestamp;
+                    if(angle_diff > 20 && time_diff > 400)
                     {
                         Compass._rotate(eventData);
                         Compass.previous.timestamp = eventData.timeStamp;
                     }
-                    else
-                    {
-                        var angle_diff = Math.abs(Compass.angle - Compass.previous.angle);
-                        var time_diff = eventData.timeStamp - Compass.previous.timestamp;
-                        if(angle_diff > 20 && time_diff > 400)
-                        {
-                            Compass._rotate(eventData);
-                            Compass.previous.timestamp = eventData.timeStamp;
-                        }
-                    }
+
+
                 }
+
             }, false);
         }
         $(window).trigger('deviceorientation');
+//        if(this.interval) clearInterval(this.interval);
+//        this.interval = setInterval(Compass._rotate, 500);
     },
 
     _setNavigator: function()
@@ -64,6 +69,9 @@ var Compass = {
 
     _rotate: function()
     {
+//        console.log('alpha: ' + Compass.angle);
+//        console.log('\tbeta: ' + Compass.dirb);
+//        console.log('\tgamma: ' + Compass.dirg);
         var rotation;
         if (window.orientation == 0) {
             rotation = Compass.angle;
@@ -74,7 +82,6 @@ var Compass = {
         else {
             rotation = Compass.angle+90;
         }
-
         Compass.$e.css({'transform': 'rotate(' + -rotation + 'deg)'});
 
         Compass.previous = {};

@@ -241,26 +241,7 @@ var LocalStorageHandler = {
     },
 
     setSideMenu: function () {
-        // MICOCHE
-        if(localStorage.getItem('miCoche'))
-        {
-            var miCoche = JSON.parse(localStorage.getItem('miCoche'));
-            if (miCoche) {
-                if (qrPoint.enclosure.id != miCoche.dest.enclosure.id)
-                    return;
 
-                $('#scrollMenu').prepend(
-                    '<li>' +
-                        '<li class="Label mmenu-label">' + miCoche.dest.labelCategory.name + '</li>' +
-                        '<li ' +
-                        'onclick="' + "$('#menu-right').trigger( 'close' );" +
-                        "showRouteFromMenu(" + qrPoint.point.id + ', ' + miCoche.dest.point.id + ');">' +
-                        miCoche.dest.point.description +
-                        '</li>' +
-                        '</li>'
-                );
-            }
-        }
 
         if(localStorage.getItem('prevDest'))
         {
@@ -273,19 +254,56 @@ var LocalStorageHandler = {
                     floor_dest_id = prevDest.floorid,
                     description = prevDest.description_for_menu;
 
-                $('#scrollMenu').prepend(
-                    '<li>' +
-                        '<li class="Label mmenu-label">' + gettext('PREVIOUS DESTINATION') + '</li>' +
-                        '<li ' +
-                        'onclick="' + "$('#menu-right').trigger( 'close' );" +
+/*                $('#scrollMenu').prepend(
+                    '<li>'+
+                        '<span style="background:red;"'+ 'onclick="' + "$('#menu-right').trigger( 'close' );" +
                         "showRouteFromMenu(" + qrPoint.point.id + ', ' + point_dest_id + ');">' +
-                        description +
-                        '</li>' +
+                        gettext('PREVIOUS DESTINATION') +
+                        '<i class="icon-screenshot"></i>'+' - '+
+                        description+ '</span>'+
                         '</li>'
+                );*/
+
+                $('ul#destList').append(
+                        '<li>'+
+                        '<a href="#" ' +
+                'onclick="' + "$('#menu-right').trigger( 'close' );" +
+                    "showRouteFromMenu(" + qrPoint.point.id + ', ' + point_dest_id + ');">' +
+                    description + "</a></li>"
                 );
             }
         }
 
+        // MICOCHE
+        if(localStorage.getItem('miCoche'))
+        {
+            var miCoche = JSON.parse(localStorage.getItem('miCoche'));
+            if (miCoche) {
+                if (qrPoint.enclosure.id != miCoche.dest.enclosure.id)
+                    return;
+
+                $('#scrollMenu').prepend(
+                    '<li>'+
+                        '<span style="background:cadetblue;"'+ 'onclick="' + "$('#menu-right').trigger( 'close' );" +
+                        "showRouteFromMenu(" + qrPoint.point.id + ', ' + miCoche.dest.point.id + ');">' +
+                        miCoche.dest.labelCategory.name +
+                        '<i class="icon-automobile"></i>'+' - '+
+                        miCoche.dest.point.description+ '</span>'+
+                        '</li>'
+
+                    /*           '<li>' +
+                     '<li class="Label mmenu-label">' + miCoche.dest.labelCategory.name + '</li>' +
+                     '<li ' +
+                     'onclick="' + "$('#menu-right').trigger( 'close' );" +
+                     "showRouteFromMenu(" + qrPoint.point.id + ', ' + miCoche.dest.point.id + ');">' +
+                     miCoche.dest.point.description +
+                     '</li>' +
+                     '</li>'
+                     */
+                );
+            }
+        }
+/*
 
         $('#scrollMenu').prepend(
             '<li    class="help" ' +
@@ -293,7 +311,7 @@ var LocalStorageHandler = {
                 '<img src="/static/img/help_menu/logo_nuevo.png">' +
                 '<button>?</button>' +
             '</li>'
-        );
+        );*/
     },
 
     setPrevDest: function (marker) {
@@ -434,7 +452,7 @@ function loadFloors() {
                 $('div.splash').fadeOut(100);
 
                 // Marcamos en el menú lateral el POI origen
-                $('#scrollMenu .destiny[data-destiny-id=' + qrPoint.point.id + ']')
+                $('.mm-submenu .destiny[data-destiny-id=' + qrPoint.point.id + ']')
                     .addClass('origin');
 
                 // Si se trata de un destino compartido ni mostramos la cuponera,
@@ -730,7 +748,6 @@ function changeFloor(e) {
         }
         bindContent(qrMarker);
         qrMarker._bringToFront();
-        Compass.init();
     }
     if (map.hasLayer(destMarker)) {
         destMarker.openPopup();
@@ -765,15 +782,14 @@ function drawRoute(org, dst) {
         prev_dest = dst;
 
         // Marcamos en el menú lateral el destino escogido
-        $('#scrollMenu .destiny.selected').removeClass('selected');
-        $('#scrollMenu .destiny[data-destiny-id=' + dst + ']').addClass('selected');
+        $('.mm-submenu .destiny.selected').removeClass('selected');
+        $('.mm-submenu .destiny[data-destiny-id=' + dst + ']').addClass('selected');
 
         route = routeResource.getRoute(org, dst);
 
         if (!route) {
             $('#scrollMenu .destiny.selected').removeClass('selected');
             alert(gettext('We are sorry, that route does not exist.'));
-            throw 'INVALID ROUTE';
         }
         else {
             // Limpia la ruta anteriormente trazada
@@ -958,9 +974,11 @@ Map.locatePosition = function () {
 
 
 Map.resize = function () {
-    Coupon.calculateCouponArea();
+//    Coupon.calculateCouponArea();
+
     Panorama.resize();
     HelpMenu.resize();
+    ScrollMenu.init();
 };
 
 

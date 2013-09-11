@@ -15,12 +15,6 @@ FIXED_CATEGORIES = {
     3: 'Parking',
     4: 'Toilet',
 }
-FIXED_CATEGORIES['hidden_on_side_menu'] = {
-    0: FIXED_CATEGORIES[0],
-    1: FIXED_CATEGORIES[1],
-    2: FIXED_CATEGORIES[2],
-    3: FIXED_CATEGORIES[3],
-}
 
 
 class CustomUser(User):

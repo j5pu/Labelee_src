@@ -45,11 +45,6 @@ function EnclosureCtrl($scope, $rootScope, $element)
         enclosureResource.refreshCache($scope.enclosure.id);
     };
 
-    $scope.qrDownload = function()
-    {
-        enclosureResource.qrDownload($scope.enclosure.id);
-    };
-
     $scope.$on('sync_enclosure', function(ev, enclosure) {
         if($scope.enclosure.id == enclosure.id)
         {
