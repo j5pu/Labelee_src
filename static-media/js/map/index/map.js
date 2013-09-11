@@ -266,7 +266,7 @@ var LocalStorageHandler = {
 
                 $('ul#destList').append(
                         '<li>'+
-                        '<a href="#" ' +
+                        '<a href="#" style="font-size:0.8rem; color:#333"' +
                 'onclick="' + "$('#menu-right').trigger( 'close' );" +
                     "showRouteFromMenu(" + qrPoint.point.id + ', ' + point_dest_id + ');">' +
                     description + "</a></li>"
@@ -451,6 +451,8 @@ function loadFloors() {
                 //
                 // Habilitamos el uso de la brújula para orientar la flecha
                 Compass.init();
+                pedometer_navigator = new PedometerNavigator($('span#navigator'));
+                pedometer_navigator.init();
             }
         }(floor_index);
     }

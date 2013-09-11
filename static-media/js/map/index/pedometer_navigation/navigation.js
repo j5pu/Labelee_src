@@ -1,3 +1,5 @@
+
+
 var STEPS_UNTIL_NAVIGATION_END = 15;
 var IDLE_NAVIGATOR_TIMEOUT = 5000;
 
@@ -18,39 +20,7 @@ var ultimaCota = 1;// 1 es inf 0 es sup
 
 $(function () {
 
-    pedometer_navigator = new PedometerNavigator($('span#navigator'));
 
-    $('#walk').click(function(){
-        pedometer_navigator.walk();
-    });
-
-    $('#orienta').click(function(){
-        pedometer_navigator.changeOrientation(pedometer_navigator.orientation + 90);
-    });
-
-    $('#more_step').click(function(){
-        pedometer_navigator.stepLength = ++pedometer_navigator.stepLength;
-    });
-
-    $('#less_step').click(function(){
-        pedometer_navigator.stepLength = --pedometer_navigator.stepLength;
-    });
-
-
-    // Only available in Apple devices
-    if (navigator.userAgent.match(/iPhone/i) || navigator.userAgent.match(/iPad/i) || navigator.userAgent.match(/iPod/i)) {
-
-        // Compass listener
-        if (window.DeviceOrientationEvent) {
-            window.addEventListener('deviceorientation', deviceOrientationListener, false);
-        };
-
-        // Motion listener
-       if (window.DeviceMotionEvent) {
-            window.addEventListener('devicemotion', deviceMotionListener, false);
-       };
-
-    };
 
 });
 
@@ -109,8 +79,8 @@ function PedometerNavigator (navigator_object) {
     // Recibe un marker:
     //      - extrae loc
     //      - recalcula desplazamiento
-    this.xPosition = 730
-    this.yPosition = 600;
+    this.xPosition = qrMarker._icon._leaflet_pos.x;
+    this.yPosition = qrMarker._icon._leaflet_pos.y;
     this.orientation = 0;
     this.stepLength = 3;
     this.currentSteps = 0;
@@ -119,6 +89,43 @@ function PedometerNavigator (navigator_object) {
     this.navigatorActive = false;
     this.navigatorDestroyed = false;
     this.lastInteractionTime = null;
+
+    this.init = function()
+    {
+        $('#walk').click(function(){
+            pedometer_navigator.navigator_object.show();
+            pedometer_navigator.walk();
+        });
+
+        $('#orienta').click(function(){
+            pedometer_navigator.navigator_object.show();
+            pedometer_navigator.changeOrientation(pedometer_navigator.orientation + 90);
+        });
+
+        $('#more_step').click(function(){
+            pedometer_navigator.stepLength = ++pedometer_navigator.stepLength;
+        });
+
+        $('#less_step').click(function(){
+            pedometer_navigator.stepLength = --pedometer_navigator.stepLength;
+        });
+
+
+        // Only available in Apple devices
+        if (navigator.userAgent.match(/iPhone/i) || navigator.userAgent.match(/iPad/i) || navigator.userAgent.match(/iPod/i)) {
+
+            // Compass listener
+            if (window.DeviceOrientationEvent) {
+                window.addEventListener('deviceorientation', deviceOrientationListener, false);
+            };
+
+            // Motion listener
+            if (window.DeviceMotionEvent) {
+                window.addEventListener('devicemotion', deviceMotionListener, false);
+            };
+
+        };
+    }
 
     // User changes orientation
     this.changeOrientation = function (orientation){

@@ -74,6 +74,8 @@
         var floor_id = {{ floor_id }};
         var poi_id = {{ poi_id }};
         var qr_type = "{{ qr_type }}";
+
+        var pedometer_navigator;
     </script>
 
     {% compressed_js 'map2' %}
@@ -148,6 +150,34 @@
             <div class="pagination"></div>
         </div>
     {% endif %}
+
+<!-- PRUEBA PODÓMETRO-->
+
+    <span id="navigator" style="font-size: 25; position:absolute; z-index:700; display: none"><i
+            class="icon-pedometer"></i></span>
+    <div id="pedoWrapper">
+    <p>
+        <button id="walk">Walk</button>
+    </p>
+    <p>
+        <button id="orienta">Orienta</button>
+    </p>
+    <p>
+        <button id="more_step">Step +1</button>
+    </p>
+    <p>
+        <button id="less_step">Step -1</button>
+    </p>
+    </div>
+    <script src="{{ STATIC_URL }}js/map/index/pedometer_navigation/navigation.js"></script>
+    <script>
+        function changeStep(step_size) {
+            pedometer_navigator.stepLength = step_size;
+            document.getElementById("step").innerHTML = "Step size: " + pedometer_navigator.stepLength;
+        }
+    </script>
+
+<!-- PRUEBA PODÓMETRO-->
 
 
     <div id="marquee">
