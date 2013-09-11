@@ -241,26 +241,7 @@ var LocalStorageHandler = {
     },
 
     setSideMenu: function () {
-        // MICOCHE
-        if(localStorage.getItem('miCoche'))
-        {
-            var miCoche = JSON.parse(localStorage.getItem('miCoche'));
-            if (miCoche) {
-                if (qrPoint.enclosure.id != miCoche.dest.enclosure.id)
-                    return;
 
-                $('#scrollMenu').prepend(
-                    '<li>' +
-                        '<li class="Label mmenu-label">' + miCoche.dest.labelCategory.name + '</li>' +
-                        '<li ' +
-                        'onclick="' + "$('#menu-right').trigger( 'close' );" +
-                        "showRouteFromMenu(" + qrPoint.point.id + ', ' + miCoche.dest.point.id + ');">' +
-                        miCoche.dest.point.description +
-                        '</li>' +
-                        '</li>'
-                );
-            }
-        }
 
         if(localStorage.getItem('prevDest'))
         {
@@ -273,12 +254,52 @@ var LocalStorageHandler = {
                     floor_dest_id = prevDest.floorid,
                     description = prevDest.description_for_menu;
 
+/*                $('#scrollMenu').prepend(
+                    '<li>'+
+                        '<span style="background:red;"'+ 'onclick="' + "$('#menu-right').trigger( 'close' );" +
+                        "showRouteFromMenu(" + qrPoint.point.id + ', ' + point_dest_id + ');">' +
+                        gettext('PREVIOUS DESTINATION') +
+                        '<i class="icon-screenshot"></i>'+' - '+
+                        description+ '</span>'+
+                        '</li>'
+                );*/
+
                 $('ul#destList').append(
                         '<li>'+
-                        '<span' +
+                        '<a href="#" ' +
                 'onclick="' + "$('#menu-right').trigger( 'close' );" +
                     "showRouteFromMenu(" + qrPoint.point.id + ', ' + point_dest_id + ');">' +
-                    description + "</span></li>"
+                    description + "</a></li>"
+                );
+            }
+        }
+
+        // MICOCHE
+        if(localStorage.getItem('miCoche'))
+        {
+            var miCoche = JSON.parse(localStorage.getItem('miCoche'));
+            if (miCoche) {
+                if (qrPoint.enclosure.id != miCoche.dest.enclosure.id)
+                    return;
+
+                $('#scrollMenu').prepend(
+                    '<li>'+
+                        '<span style="background:cadetblue;"'+ 'onclick="' + "$('#menu-right').trigger( 'close' );" +
+                        "showRouteFromMenu(" + qrPoint.point.id + ', ' + miCoche.dest.point.id + ');">' +
+                        miCoche.dest.labelCategory.name +
+                        '<i class="icon-automobile"></i>'+' - '+
+                        miCoche.dest.point.description+ '</span>'+
+                        '</li>'
+
+                    /*           '<li>' +
+                     '<li class="Label mmenu-label">' + miCoche.dest.labelCategory.name + '</li>' +
+                     '<li ' +
+                     'onclick="' + "$('#menu-right').trigger( 'close' );" +
+                     "showRouteFromMenu(" + qrPoint.point.id + ', ' + miCoche.dest.point.id + ');">' +
+                     miCoche.dest.point.description +
+                     '</li>' +
+                     '</li>'
+                     */
                 );
             }
         }

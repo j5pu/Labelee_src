@@ -50,7 +50,7 @@ function addSamplePano(options)
             var newWidth = window.innerWidth;
 
 
-            jQuery('canvas').css({
+            jQuery('#canvasPan').css({
                 'position': 'absolute',
                 'z-index': 9,
                 'top': '5px',
@@ -60,7 +60,7 @@ function addSamplePano(options)
                 'margin': '0 auto',
                 'overflow': 'hidden',
                 'padding': '3%',
-                'background': 'black',
+                'background-color': 'black',
                 'border': '2px solid rgba(255, 255, 255, 0.9)'
             });
             jQuery('div#page').prepend('<button id="close">x</button>');
