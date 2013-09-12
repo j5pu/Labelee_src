@@ -51,13 +51,21 @@ window.addEventListener("orientationchange", hideAddressBar );
 ///	Activación y configuración del menú
 $(function() {
 
+    if(device.isCompatible())
+    {
+        main();
+    }
+    else
+    {
+        $('.splash').hide();
+        $('#unsupported_mobile_msg').show();
+    }
+});
 
-//    if(androidversion <= 2.3)
-//    {
-        ScrollMenu.init();
-//    }
+function main()
+{
+    ScrollMenu.init();
     Panorama.init();
-
     Map.events.bindAll();
 
     $('button#closeCoupon').on('click', function () {
@@ -95,7 +103,7 @@ $(function() {
         $('div.device').fadeOut();
         LocalStorageHandler.setPrevDestByPoi(cupPoint)
     });
-});
+}
 
 
 function hideSplash() {
@@ -113,8 +121,6 @@ function hideSplash() {
     {
         $('#header, #cupones, #myCar').hide();
     }
-
-
 }
 
 
@@ -122,21 +128,27 @@ function showRouteFromMenu(origin_id, destination_id)
 {
     if(origin_id != destination_id)
     {
-        drawRoute(origin_id, destination_id);
-        LocalStorageHandler.setPrevDestByPoi(destination_id);
-        $('#menu-right').trigger('close');
+        try
+        {
+            drawRoute(origin_id, destination_id);
+            LocalStorageHandler.setPrevDestByPoi(destination_id);
+            $('#menu-right').trigger('close');
 
-        // Cambia a la planta del origen si estamos en otra
-        var dest_floor = floors_indexed[route.fields.destiny.fields.floor];
-        if (current_floor.id != qrFloor.id && current_floor.id != dest_floor.id) {
-            var floor_to_show_name = floors_indexed[qrFloor.id].name;
-            $('.leaflet-control-layers-base input[type=radio]')
-                .eq(baseLayers[floor_to_show_name].position)
-                .trigger('click');
+            // Cambia a la planta del origen si estamos en otra
+            var dest_floor = floors_indexed[route.fields.destiny.fields.floor];
+            if (current_floor.id != qrFloor.id && current_floor.id != dest_floor.id) {
+                var floor_to_show_name = floors_indexed[qrFloor.id].name;
+                $('.leaflet-control-layers-base input[type=radio]')
+                    .eq(baseLayers[floor_to_show_name].position)
+                    .trigger('click');
+            }
+        }
+        catch(err)
+        {
+            console.error(err);
         }
     }
 }
-
 
 var Coupon = {
     opened: false,
@@ -289,3 +301,31 @@ var ScrollMenu = {
 };
 
 
+var device = {
+    Android: function() {
+        return navigator.userAgent.match(/Android/i);
+    },
+    BlackBerry: function() {
+        return navigator.userAgent.match(/BlackBerry/i);
+    },
+    iOS: function() {
+        return navigator.userAgent.match(/iPhone|iPad|iPod/i);
+    },
+    Opera: function() {
+        return navigator.userAgent.match(/Opera Mini/i);
+    },
+    Windows: function() {
+        return navigator.userAgent.match(/IEMobile/i);
+    },
+    Chrome: function() {
+        return navigator.userAgent.match(/Chrome/i);
+    },
+    isAny: function() {
+        return (device.Android() || device.BlackBerry() || device.iOS() || device.Opera() || device.Windows());
+    },
+
+    isCompatible: function() {
+        // Sólo los compatibles con la aplicación
+        return (device.Android() || device.BlackBerry() || device.iOS() || device.Chrome());
+    }
+};

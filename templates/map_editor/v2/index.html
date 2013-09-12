@@ -18,61 +18,11 @@
 
     {% csrf_token %}
 
-    <div class="navbar navbar-inverse navbar-fixed-top">
-        <div class="navbar-inner">
-            <div class="container">
-                <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </a>
-                {% include "_lang_selector.html" %}
-                <a class="brand" href="#">{% trans "Administración de recintos" %}</a>
-
-                <div class="nav-collapse">
-                <ul class="nav">
-                    <li><a href="#"><i class="icon-white icon-dashboard"></i>{% trans "Dashboard" %}</a></li>
-                    <li><a href="#"><i class="icon-white icon-link"></i>{% trans "Web del recinto" %}</a>
-                    </li>
-                    <li><a href="#"><i class="icon-white icon-play-circle"></i>
-                        {% trans "Labelee App" %}</a></li>
-                    <li><a href="#"><i class="icon-white icon-book"></i> {% trans "Ayuda" %}</a></li>
-                </ul>
-                <ul class="nav pull-right">
-{#                    <li><p class="navbar-text"><i class="icon-white icon-download"></i> Download:</p></li>#}
-{#                    <li>#}
-{#                        <div class="btn-group">#}
-{#                            <a class="btn btn-small btn-primary" href="#">PDF</a>#}
-{#                            <a class="btn btn-small btn-primary" href="#">E-MAIL</a>#}
-{#                        </div>#}
-{#                    </li>#}
-{#                    <li>#}
-                    <li>
-                        <!-- CAJITA DE LOGOUT -->
-                        {% if user.is_authenticated %}
-                            <div id="logout" class="box box-1">
-                                {% trans "Bienvenido" %}, {{ user.username }}
-                                <a class="link-1" href="{% url 'django.contrib.auth.views.logout' %}">
-                                    <i class="icon-signout"></i> {% trans "Salir" %}
-                                </a>
-                            </div>
-                        {% endif %}
-                    </li>
-                </ul>
-            </div>
-            <!--/.nav-collapse -->
-
-
-        </div>
-    </div>
-</div>
-
-{#    <h1>{% trans "Administración de recintos" %}</h1>#}
+    {% include "_manager_navbar.html" with current_page="main" %}
 
     {% if user.logo %}
         <img src="{{ MEDIA_URL }}{{ user.logo }}">
     {% endif %}
-
 
     <div ng-controller="EnclosureListCtrl">
         <label id="search_box">{% trans "Buscar recinto" %}:

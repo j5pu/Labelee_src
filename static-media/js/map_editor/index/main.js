@@ -1,8 +1,8 @@
 var modalDialog;
 
-$(function() {
-    I18n.selectLang(lang_code);
-});
+//$(function() {
+//    I18n.selectLang(lang_code);
+//});
 
 
 function EnclosureListCtrl($scope, $rootScope, UserService, FormService)

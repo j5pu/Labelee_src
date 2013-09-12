@@ -779,6 +779,7 @@ function drawRoute(org, dst) {
         if (!route) {
             $('#scrollMenu .destiny.selected').removeClass('selected');
             alert(gettext('We are sorry, that route does not exist.'));
+            throw 'INVALID ROUTE';
         }
         else {
             // Limpia la ruta anteriormente trazada
@@ -1051,4 +1052,10 @@ function initSideMenu()
     // Marcamos en el menú lateral el POI origen
     $('.mm-submenu .destiny[data-destiny-id=' + qrPoint.point.id + ']')
         .addClass('origin');
+
+    // Sombreado en la parte baja del menú
+    if(androidversion >= 4.0 || device.Chrome())
+    {
+        $('div.help').css({'box-shadow': '0px -16px 43px 0px #F2EFE4'})
+    }
 }
