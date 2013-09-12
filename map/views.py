@@ -12,7 +12,7 @@ import simplejson
 from dashboard.models import Qr_shot
 from log.logger import Logger
 from map.twitterHelper import TwitterHelper
-from map.utils_ import get_map_data, cache_show_map, saveQrShot
+from map.utils_ import get_map_data, cache_show_map, get_incompatible_map_data, saveQrShot
 from map_editor.models import *
 from django.db.models.query import Q
 from utils.helpers import queryset_to_dict
@@ -76,6 +76,26 @@ def your_position(request, label_id):
     }
 
     return render_to_response('map/your_position.html', ctx, context_instance=RequestContext(request))
+
+
+def show_incompatible_map(request, enclosure_id):
+    """
+    Loads a simple map with a directory for incompatible devices.
+
+        map/incompatible-devices/[enclosure_id]_[floor_id]_[poi_id]
+
+        map/incompatible-devices/26
+    """
+    cached = cache_show_map(enclosure_id)
+
+    ctx = {
+        'enclosure_id': enclosure_id,
+        'categories': cached['ordered_categories'],
+        'map_data': simplejson.dumps(
+            get_incompatible_map_data(cached['poisByFloor'], enclosure_id)
+        )
+    }
+    return render_to_response('map/index_incompatible_devices.html', ctx, context_instance=RequestContext(request))
 
 
 def qr_code_redirect(request):
