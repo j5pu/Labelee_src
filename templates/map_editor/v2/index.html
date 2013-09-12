@@ -11,6 +11,7 @@
 {% block js %}
     <script src="{{ STATIC_URL }}vendor/bootstrap/bootstrap.file-input.js"></script>
     <script src="{{ STATIC_URL }}js/map_editor/index/main.js"></script>
+    <script src="{{ STATIC_URL }}js/map_editor/downloadplugin.js"></script>
 {% endblock js %}
 
 
@@ -128,6 +129,9 @@
                         </a>
                         <a class="btn link-2" ng-click="refreshCache()">
                             <i class="icon-refresh icon-white"></i> {% trans "Refrescar caché" %}
+                        </a>
+                          <a class="btn link-2" ng-click="qrDownload()">
+                            <i class="icon-refresh icon-white"></i> {% trans "Descargar QRs" %}
                         </a>
                     </div>
                 </div>

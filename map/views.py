@@ -53,31 +53,6 @@ def show_map(request, qr_type, enclosure_id, floor_id, poi_id):
     }
     return render_to_response('map/index.html', ctx, context_instance=RequestContext(request))
 
-
-
-
-
-def your_position(request, label_id):
-    """
-    Muestra el mapa justo donde haces la foto al qr
-    """
-    labels = {
-        '001': [0, 0],
-        '002': [8, 8],
-        '003': [25, 40],
-        '004': [1, 1],
-        '005': [20, 10]
-    }
-
-    ctx = {
-        'label': labels[label_id],
-        'block_size': 10,
-        'map_img': '/static/img/map.jpg'
-    }
-
-    return render_to_response('map/your_position.html', ctx, context_instance=RequestContext(request))
-
-
 def qr_code_redirect(request):
     if request.method == 'POST':
         qr = QR_Code.objects.get(point_id=request.POST['qr_code_id'])
