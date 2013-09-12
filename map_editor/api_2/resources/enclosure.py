@@ -66,11 +66,15 @@ def qrDownload(request, enclosure_id):
    Crea un fichero zip con todos los qr de un recinto.
     """
     path = os.path.join(PROJECT_ROOT, 'TEMP')
+    try:
+        os.mkdir(path)
+    except Exception, ex:
+        pass
     path = os.path.join(path,str(enclosure_id))
     # create the folder if it doesn't exist.
     try:
         os.mkdir(path)
-    except:
+    except Exception, ex:
         pass
 
     qrCodes = QR_Code.objects.filter(point__floor__enclosure__id=enclosure_id)
