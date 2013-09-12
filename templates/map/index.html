@@ -153,9 +153,9 @@
 
 <!-- PRUEBA PODÓMETRO-->
 
-    <span id="navigator" style="font-size: 25; position:absolute; z-index:700; display: none"><i
-            class="icon-pedometer"></i></span>
-    <div id="pedoWrapper">
+    <span id="navigator"><i
+            class="icon-navigation"></i></span>
+{% comment %}    <div id="pedoWrapper">
     <p>
         <button id="walk">Walk</button>
     </p>
@@ -168,7 +168,7 @@
     <p>
         <button id="less_step">Step -1</button>
     </p>
-    </div>
+    </div>{% endcomment %}
     <script src="{{ STATIC_URL }}js/map/index/pedometer_navigation/navigation.js"></script>
     <script>
         function changeStep(step_size) {

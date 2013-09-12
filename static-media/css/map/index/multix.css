@@ -1471,6 +1471,21 @@ leaflet-marker-icon{
 }
 
 
+.podo-icon {
+    font-family: 'carFont';
+    background: purple;
+    line-height: 1.3em;
+    display:none;
+}
+
+.podo-icon::before {
+    content: "\f23a";
+    font-size: 0.8em;
+}
+.podo-icon:after {
+    border-top-color: purple;
+}
+
 .dest-icon {
     font-family: 'carFont';
     background: red;
@@ -1530,13 +1545,6 @@ div#marquee{
     animation: blink 1.5s linear infinite;
 }
 
-#navigator {
-    font-size: 25px;
-    position:absolute;
-    top:50%;
-    left:50%;
-    z-index:4;
-}
 
 .txt-icon{
     width: 1px;
@@ -1931,6 +1939,14 @@ li a button {
     margin-left: -4px;
 }
 
+span#navigator{
+    font-size: 25;
+    position:absolute;
+    z-index:700;
+    top:50%;
+    left:50%;
+    display: none;
+}
 
 #pedoWrapper{
     position: absolute;
