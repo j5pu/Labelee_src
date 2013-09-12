@@ -10,7 +10,8 @@
 </head>
 
 <body background="{{ MEDIA_URL }}recinto_podometro2.png">
-<span id="navigator" style="font-size: 25; position:absolute; top:600; left:730"><i class="icon-location-arrow icon-white"></i></span>
+<span id="navigator" style="font-size: 25; position:absolute; top:600; left:730"><i
+        class="icon-location-arrow icon-white"></i></span>
 
 <p id="lol"></p>
 
@@ -22,11 +23,21 @@
         document.getElementById("step").innerHTML = "Step size: " + pedometer_navigator.stepLength;
     }
 </script>
+{% comment %}
 
-<p><button id="walk">Walk</button></p>
-<p><button id="orienta">Orienta</button></p>
-<p><button id="more_step">Step +1</button></p>
-<p><button id="less_step">Step -1</button></p>
+<p>
+    <button id="walk">Walk</button>
+</p>
+<p>
+    <button id="orienta">Orienta</button>
+</p>
+<p>
+    <button id="more_step">Step +1</button>
+</p>
+<p>
+    <button id="less_step">Step -1</button>
+</p>
+{% endcomment %}
 
 
 </body>
