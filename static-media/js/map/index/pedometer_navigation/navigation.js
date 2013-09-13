@@ -1,3 +1,5 @@
+
+
 var STEPS_UNTIL_NAVIGATION_END = 15;
 var IDLE_NAVIGATOR_TIMEOUT = 5000;
 
@@ -18,39 +20,7 @@ var ultimaCota = 1;// 1 es inf 0 es sup
 
 $(function () {
 
-    pedometer_navigator = new PedometerNavigator($('span#navigator'));
 
-    $('#walk').click(function(){
-        pedometer_navigator.walk();
-    });
-
-    $('#orienta').click(function(){
-        pedometer_navigator.changeOrientation(pedometer_navigator.orientation + 90);
-    });
-
-    $('#more_step').click(function(){
-        pedometer_navigator.stepLength = ++pedometer_navigator.stepLength;
-    });
-
-    $('#less_step').click(function(){
-        pedometer_navigator.stepLength = --pedometer_navigator.stepLength;
-    });
-
-
-    // Only available in Apple devices
-    if (navigator.userAgent.match(/iPhone/i) || navigator.userAgent.match(/iPad/i) || navigator.userAgent.match(/iPod/i)) {
-
-        // Compass listener
-        if (window.DeviceOrientationEvent) {
-            window.addEventListener('deviceorientation', deviceOrientationListener, false);
-        };
-
-        // Motion listener
-       if (window.DeviceMotionEvent) {
-            window.addEventListener('devicemotion', deviceMotionListener, false);
-       };
-
-    };
 
 });
 
@@ -105,24 +75,65 @@ function cuentaPasos(x, y, z) {
 }
 
 
-function PedometerNavigator (navigator_object) {
+function PedometerNavigator () {
     // Recibe un marker:
     //      - extrae loc
     //      - recalcula desplazamiento
-    this.xPosition = 730
-    this.yPosition = 600;
+    this.marker = L.marker(qrLoc, {icon: podometerIcon});
+    map.addLayer(this.marker);
+    this.lat = qrLoc[0];
+    this.long = qrLoc[1];
     this.orientation = 0;
     this.stepLength = 3;
+    this.stepLat = this.stepLength * map.getSize().x / $(window).height();
+    this.stepLong = this.stepLength * map.getSize().y / $(window).width();
     this.currentSteps = 0;
 
-    this.navigator_object = navigator_object;
     this.navigatorActive = false;
     this.navigatorDestroyed = false;
     this.lastInteractionTime = null;
 
+
+    this.init = function()
+    {
+        $('#walk').click(function(){
+            pedometer_navigator.walk();
+        });
+
+        $('#orienta').click(function(){
+            pedometer_navigator.changeOrientation(pedometer_navigator.orientation + 90);
+        });
+
+        $('#more_step').click(function(){
+            pedometer_navigator.stepLength = ++pedometer_navigator.stepLength;
+        });
+
+        $('#less_step').click(function(){
+            pedometer_navigator.stepLength = --pedometer_navigator.stepLength;
+        });
+
+
+        // Only available in Apple devices
+        if (navigator.userAgent.match(/iPhone/i) || navigator.userAgent.match(/iPad/i) || navigator.userAgent.match(/iPod/i)) {
+
+            // Compass listener
+            if (window.DeviceOrientationEvent) {
+                window.addEventListener('deviceorientation', deviceOrientationListener, false);
+            };
+
+            // Motion listener
+            if (window.DeviceMotionEvent) {
+                window.addEventListener('devicemotion', deviceMotionListener, false);
+            };
+
+        };
+    }
+
     // User changes orientation
     this.changeOrientation = function (orientation){
 
+
+        $('.podo-icon').show();
         // If the device is oriented horizontally the angle must be changed accordingly
         if (window.orientation == null || window.orientation == 0){
             this.orientation = orientation;
@@ -137,8 +148,8 @@ function PedometerNavigator (navigator_object) {
 
     // User advances one step
     this.walk = function () {
-        this.yPosition = this.yPosition - this.stepLength * Math.round(Math.cos(this.orientation *  Math.PI / 180));
-        this.xPosition = this.xPosition + this.stepLength * Math.round(Math.sin(this.orientation * Math.PI / 180));
+        this.long = this.long - this.stepLong * Math.round(Math.cos(this.orientation *  Math.PI / 180));
+        this.lat = this.lat + this.stepLat * Math.round(Math.sin(this.orientation * Math.PI / 180));
         this.currentSteps++;
 
         // The first step sets the navigator as active (the user is moving)
@@ -152,7 +163,6 @@ function PedometerNavigator (navigator_object) {
             this._paint();
             this.lastInteractionTime = new Date().getTime();
         }
-
     };
 
 
@@ -167,28 +177,23 @@ function PedometerNavigator (navigator_object) {
                 this._endNavigation();
             }
         }
-
     };
 
     this._endNavigation = function() {
-
-        this.navigator_object.remove();
+        map.removeLayer(this.marker);
         this.navigatorActive = false;
         this.navigatorDestroyed = true;
         window.removeEventListener('deviceorientation', deviceOrientationListener);
         window.removeEventListener('devicemotion', deviceMotionListener);
-
     };
 
     this._paint = function() {
 
         if (!this.navigatorDestroyed){
-            this.navigator_object.css('-webkit-transform', 'rotate(' + this.orientation + 'deg)');
-            this.navigator_object.css('opacity', 1.0 - this.currentSteps / STEPS_UNTIL_NAVIGATION_END)
-            this.navigator_object.css('left', this.xPosition);
-            this.navigator_object.css('top', this.yPosition);
+            //this.navigator_object.css('-webkit-transform', 'rotate(' + this.orientation + 'deg)');
+            $('.podo-icon').css('opacity', 1.0 - this.currentSteps / STEPS_UNTIL_NAVIGATION_END)
+            this.marker.setLatLng([this.lat, this.long]);
         }
-
     };
 
 };

@@ -139,3 +139,21 @@ form .txt
 iframe {
     display: none;
 }
+
+
+#choose-lang
+{
+    display: inline-block;
+    float: left;
+    margin: 0.25em 2em 0 -1em;
+}
+
+#choose-lang img
+{
+    cursor: pointer;
+}
+
+#choose-lang select
+{
+    display: none;
+}

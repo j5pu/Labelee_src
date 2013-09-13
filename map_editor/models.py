@@ -14,6 +14,15 @@ FIXED_CATEGORIES = {
     2: 'Intermediate',
     3: 'Parking',
     4: 'Toilet',
+    5: 'Panoramas',
+}
+
+FIXED_CATEGORIES['hidden_on_side_menu'] = {
+    0: FIXED_CATEGORIES[0],
+    1: FIXED_CATEGORIES[1],
+    2: FIXED_CATEGORIES[2],
+    3: FIXED_CATEGORIES[3],
+    5: FIXED_CATEGORIES[5],
 }
 
 

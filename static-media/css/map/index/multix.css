@@ -1123,7 +1123,7 @@ Instead of a list of all class selectors,
 you can use the generic selector below, but it's slower:
 [class*="icon-"] {
 */
-.icon-food, .icon-female, .icon-male,.icon-sort, .icon-signin, .icon-screenshot, .icon-twitter-sign , .icon-google-plus-sign, .icon-facebook-sign, .icon-camera, .icon-star,.icon-basket, .icon-microwave,.icon-barbell, .icon-user, .icon-user-2, .icon-user-3, .icon-tshirt {
+.icon-food, .icon-female, .icon-male,.icon-sort, .icon-signin, .icon-screenshot, .icon-twitter-sign , .icon-google-plus-sign, .icon-facebook-sign, .icon-camera, .icon-star,.icon-basket, .icon-microwave,.icon-barbell, .icon-user, .icon-user-2, .icon-user-3, .icon-tshirt, .icon-smile {
     font-family: 'carFont';
     speak: none;
     font-style: normal;
@@ -1471,6 +1471,21 @@ leaflet-marker-icon{
 }
 
 
+.podo-icon {
+    font-family: 'carFont';
+    background: purple;
+    line-height: 1.3em;
+    display:none;
+}
+
+.podo-icon::before {
+    content: "\f23a";
+    font-size: 0.8em;
+}
+.podo-icon:after {
+    border-top-color: purple;
+}
+
 .dest-icon {
     font-family: 'carFont';
     background: red;
@@ -1530,13 +1545,6 @@ div#marquee{
     animation: blink 1.5s linear infinite;
 }
 
-#navigator {
-    font-size: 25px;
-    position:absolute;
-    top:50%;
-    left:50%;
-    z-index:4;
-}
 
 .txt-icon{
     width: 1px;
@@ -1851,7 +1859,7 @@ a#destPrev {
 
 .mm-menu li span i {
     float: left;
-    margin-right: 4px;
+    margin-right: 7px;
     margin-top: 2px;
     text-shadow: 1px 1px 1px #bbb;
     font-size: 0.9rem;
@@ -1929,4 +1937,82 @@ li a button {
     color: white;
     padding: 0 4px;
     margin-left: -4px;
+}
+
+
+#unsupported_mobile_msg
+{
+    background: white;
+    display: none;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+}
+
+#unsupported_mobile_msg h5
+{
+    margin-top: 22%;
+}
+
+#unsupported_mobile_msg div
+{
+    margin-top: 9%;
+}
+
+#unsupported_mobile_msg #ios
+{
+    position: relative;
+    top: 0.6em;
+}
+
+#unsupported_mobile_msg #blackberry
+{
+    margin-top: 3%;
+    margin-left: -3%;
+}
+
+
+
+span#navigator{
+    font-size: 25;
+    position:absolute;
+    z-index:700;
+    top:50%;
+    left:50%;
+    display: none;
+}
+
+#pedoWrapper{
+    position: absolute;
+    bottom: 7%;
+    display: inline-block;
+    margin-left: 33%;}
+
+#pedoWrapper p {
+    float: left;
+    margin: 0 0 10px 0;
+    position: relative;
+    z-index: 6;
+}
+#pedoWrapper p button {
+    border: 2px solid buttonface;
+    font-size: 1.2em;
+    background-color: buttonface;
+    color: #333;
+}
+
+.icon-pedometer {
+    font-family: 'carFont';
+    opacity: 1;
+    font-size: 1.6em;
+    position: relative;
+    top: -0.8em;
+    color: white;
+    font-style: normal;
+    text-shadow: 0px 0px 2px black;
+}
+
+.icon-pedometer:before {
+    content: "\f183";
 }

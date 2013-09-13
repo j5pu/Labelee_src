@@ -66,6 +66,10 @@ def cache_show_map(enclosure_id):
                     floor__enclosure__id=enclosure_id) \
             .order_by('label__category__name', 'description', 'label__name')
 
+        # Avoid saving in cache non-existent enclosures
+        if len(points) == 0:
+            return {}
+
         for point in points:
             poi = queryset_to_dict([point])[0]
             if point.floor.id in poisByFloor:
@@ -76,7 +80,7 @@ def cache_show_map(enclosure_id):
             poisByFloor[point.floor.id][poiIndex]['label'] = queryset_to_dict([point.label])[0]
             poisByFloor[point.floor.id][poiIndex]['label']['category'] = queryset_to_dict([point.label.category])[0]
 
-            if point.label.category.name_en not in FIXED_CATEGORIES.values():
+            if point.label.category.name_en not in FIXED_CATEGORIES['hidden_on_side_menu'].values():
                 if point.label.category.name in categories:
                     categories[point.label.category.name].append(point)
                 else:

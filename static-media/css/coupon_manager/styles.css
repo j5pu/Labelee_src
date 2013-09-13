@@ -46,3 +46,9 @@ table.coupons tbody td
 {
     width: 19em;
 }
+
+#menu a
+{
+    color: orange;
+    margin-left: 2em;
+}

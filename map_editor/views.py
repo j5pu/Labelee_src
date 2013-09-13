@@ -53,3 +53,9 @@ def connections(request, enclosure_id):
     return render_to_response('map_editor/v1/connections.html', ctx, context_instance=RequestContext(request))
 
 
+@login_required(login_url=settings.LOGIN_URL)
+def help_page(request):
+    if request.user.is_in_group(USER_GROUPS['shop_owners']):
+        return HttpResponseRedirect('/coupon/')
+    return render_to_response('map_editor/help.html', context_instance=RequestContext(request))
+
