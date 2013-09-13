@@ -177,9 +177,9 @@ var Coupon = {
     bindShowFromMarker: function()
     {
         $('div.leaflet-popup-content-wrapper').on('click', function (e) {
-            //console.log(e.clientX +':'+ $(this).offset().left+':'+e.clientY +':'+ $(this).offset().top)
-            if (e.clientX > $(this).offset().left + 135 &&
-                e.clientY > $(this).offset().top + 67)
+//            console.log(e.clientX +':'+ $(this).offset().left+':'+e.clientY +':'+ $(this).offset().top)
+            if (e.clientX > $(this).offset().left + 120 &&
+                e.clientY > $(this).offset().top + 15)
 
             {
                 var imgID=$(this).find('p>button').data('socialmenu'),
@@ -189,9 +189,6 @@ var Coupon = {
            window.setTimeout(function(){
                     mySwiper.swipeTo(myPos-1);
                 },500);
-
-
-
 
                  e.stopPropagation();
                  Coupon.open();
