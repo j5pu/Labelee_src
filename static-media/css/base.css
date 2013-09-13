@@ -34,7 +34,9 @@ a{
 h1
 {
 	font-family: 'raleway';
-    color: rgb(196, 190, 170);
+    
+	color: rgb(196, 190, 170);
+	margin-top: 67px;
 }
 
 h2, h3 {
