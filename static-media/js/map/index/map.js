@@ -77,7 +77,8 @@ var showOrigin = false;
 //var txtIcon = L.divIcon({className: 'txt-icon'});
 var carIcon = L.divIcon({className: 'my-div-icon car-icon'}),
     destIcon = L.divIcon({className: 'my-div-icon dest-icon'}),
-    originIcon = L.divIcon({className: 'my-div-icon locate-icon'});
+    originIcon = L.divIcon({className: 'my-div-icon locate-icon'}),
+    podometerIcon = L.divIcon({className: 'my-div-icon podo-icon'});
 var txtIcon = new L.icon({
     iconUrl: '/media/texticon.png',
     iconRetinaUrl: '/media/texticon.png',
@@ -451,6 +452,7 @@ function loadFloors() {
                 //
                 // Habilitamos el uso de la brújula para orientar la flecha
                 Compass.init();
+
                 pedometer_navigator = new PedometerNavigator($('span#navigator'));
                 pedometer_navigator.init();
             }
@@ -583,6 +585,7 @@ function loadPOIs() {
             .on('click', function () {
                 bindContent(this);
             });
+
 
         qrMarker.panorama = qrPoint.point.panorama;
         qrMarker.coupon = qrPoint.point.coupon;
@@ -781,6 +784,7 @@ function drawRoute(org, dst) {
         if (!route) {
             $('#scrollMenu .destiny.selected').removeClass('selected');
             alert(gettext('We are sorry, that route does not exist.'));
+            throw 'INVALID ROUTE';
         }
         else {
             // Limpia la ruta anteriormente trazada
@@ -1038,7 +1042,7 @@ var setArrow = function (flecha, idFloor) {
 function initSideMenu()
 {
     $('nav#menu-right').mmenu({
-        dragOpen: true,
+        dragOpen: false,
         slidingSubmenus: false,
         counters	: true,
         searchfield   : {
@@ -1053,4 +1057,10 @@ function initSideMenu()
     // Marcamos en el menú lateral el POI origen
     $('.mm-submenu .destiny[data-destiny-id=' + qrPoint.point.id + ']')
         .addClass('origin');
+
+    // Sombreado en la parte baja del menú
+    if(androidversion >= 4.0 || device.Chrome())
+    {
+        $('div.help').css({'box-shadow': '0px -16px 43px 0px #F2EFE4'})
+    }
 }

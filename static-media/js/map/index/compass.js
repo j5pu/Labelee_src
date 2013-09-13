@@ -47,7 +47,6 @@ var Compass = {
                             Compass._rotate(eventData);
                             Compass.previous.timestamp = eventData.timeStamp;
                         }
-
                     }
                 }
             }, false);
