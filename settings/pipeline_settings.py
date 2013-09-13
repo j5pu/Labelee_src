@@ -25,6 +25,7 @@ PIPELINE_CSS = {
             'css/map/index/helpmenu.css',
             'css/map/index/mmenu.css',
             'css/map/index/multix.css',
+            'css/map/index/jqdialog.css',
         ),
         'output_filename': 'map.min.css',
         'variant': 'datauri',
