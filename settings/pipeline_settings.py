@@ -60,6 +60,7 @@ PIPELINE_JS = {
             'js/map/index/compass.js',
             'js/map/index/helpmenu.js',
             'js/map/index/main.js',
+            'js/map/index/jqdialog.min.js'
         ),
         'output_filename': 'map.min.js',
         },

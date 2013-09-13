@@ -21,6 +21,10 @@
     {% compressed_js 'map' %}
 
     <script type="text/javascript">
+
+
+
+
         var _gaq = _gaq || [];
         _gaq.push(['_setAccount', 'UA-30904444-4']);
         _gaq.push(['_trackPageview']);
@@ -36,6 +40,8 @@
 
 
         var mapData = {{ map_data|safe }};
+
+
     </script>
 </head>
 
@@ -56,7 +62,7 @@
 
 {% csrf_token %}
 
-<div id="page">
+<div id="page" >
 
     <div id="header">
         <a href="#menu-right">
@@ -75,6 +81,7 @@
         var qr_type = "{{ qr_type }}";
 
         var pedometer_navigator;
+         showCookiesMessage();
     </script>
 
     {% compressed_js 'map2' %}
@@ -254,8 +261,41 @@
             servidor web a su navegador y se almacena en su computadora. Los
             sitios web generalmente usan cookies para ofrecerle la mejor
             experiencia de usuario. En Bizeu Consulting no utilizamos cookies para
-            almacenar ningún tipo de información personal. Utilizamos cookies para
-            personalizar la experiencia en nuestro sitio web.
+            almacenar ningún tipo de información personal. Utilizamos las siguientes cookies para
+            personalizar la experiencia en nuestro sitio web:
+        </p>
+        <p>
+           Google Analytics (__utma, __utmb,  __utmc, __utmz, __utmv):  Estas cookies se usan para recopilar
+            información sobre el uso que los visitantes hacen de nuestro sitio. Dicha información nos sirve
+            para compilar informes y nos permite mejorar el sitio. Las cookies recogen información de forma anónima,
+            incluido el número de visitantes del sitio, la procedencia de los mismos y las páginas que han visitado.
+        </p>
+        <p>
+           miCoche : Esta cookie almacena la información relativa a una pegatina ubicada en algún parking. Dicha
+            información nos sirve para saber donde están aparcados los coches de los usuarios.
+        </p>
+        <p>
+           shareDest : Esta cookie almacena la información relativa a un enlace compartido. Dicha información nos sirve
+            para que después de que un usuario reciba un enlace compartido de la aplicación, este pueda usarlo como
+            destino de una ruta.
+        </p>
+          <p>
+           prevDest : Esta cookie almacena la información relativa al último destino que ha seleecionado el usuario
+              . Dicha información nos sirve para que el usuario siempre pueda trazar una ruta al último destino
+              seleccionado.
+        </p>
+        <p>
+            first_shoot: Esta cookie almacena la información relativa a un identificador único asignado al usuario
+              .Dicha información nos sirve para saber si un usuario accede por primera vez a la aplicación o no, también
+            puede ser utilizada para fines estadísticos.
+        </p>
+        <p>
+            csrftoken: Esta cookie almacena la información relativa a un valor generado aleatoriamente. Dicha
+            información no sirve para proteger la aplicación de ciertos ataques informáticos.
+        </p>
+        <p>
+            sessionid: Esta cookie almacena la información relativa a un valor generado aleatoriamente. Dicha
+            información nos sirve para identificar de manera única un explorador con datos de la sesión en el servidor.
         </p>
     </div>
 

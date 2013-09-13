@@ -147,5 +147,10 @@ var HelpMenu = {
 
 
         this.$e.show(200);
+    },
+    showDisclaimer: function()
+    {
+        this.show()
+        this._openDisclaimer();
     }
 };
