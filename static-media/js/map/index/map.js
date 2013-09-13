@@ -496,9 +496,6 @@ function loadPOIs() {
                 category_en = current_poi.label.category.name_en;
 
             var popupTitle = description;
-            if (panorama) {
-                popupTitle += Panorama.renderIcon(id, panorama);
-            }
             popupTitle += SocialMenu.renderIcon(id);
 
             current_poi.marker = new L.marker(center, {
@@ -522,36 +519,47 @@ function loadPOIs() {
 
             current_poi.marker.changeTitle = function () {
                 this.popupTitle = gettext("Scan a QR code to get here:") + " " + this.description;
-                if (this.panorama) {
-                    this.popupTitle += Panorama.renderIcon(this.poid, this.panorama);
-                }
                 this.popupTitle += SocialMenu.renderIcon(this.poid);
                 this.bindPopup(this.popupTitle).openPopup();
                 bindContent(this);
             };
 
-            current_poi.marker
-                .bindPopup(popupTitle)
-                .on('click tap touchstart touch', function () {
-                    if (qr_type == 'dest')
-                    {
-                        if (this.poid == qrPoint.point.id)
-                        {
-                            this.changeTitle();
-                        }
-                    }
-                    else
-                    {
-                        LocalStorageHandler.setPrevDest(this);
-                        if (Panorama.opened) Panorama.close();
-                        if (qrMarker) {
-                            drawRoute(qrPoint.point.id, this.poid);
-                        }
+            if (current_poi.marker.category == "Panoramas") {
 
-                        qrMarker.contentBinded = false;
-                        bindContent(qrMarker);
-                    }
-                });
+                // Panorama buttons don't have popups: they show panoramas when clicked
+                  current_poi.marker.on('click tap touchstart touch', function () {
+                      if (Panorama.opened) {
+                          Panorama.close();
+                      }
+                      Panorama.show(this);
+                  });
+
+            } else {
+
+                current_poi.marker
+                    .bindPopup(popupTitle)
+                    .on('click tap touchstart touch', function () {
+                        if (qr_type == 'dest')
+                        {
+                            if (this.poid == qrPoint.point.id)
+                            {
+                                this.changeTitle();
+                            }
+                        }
+                        else
+                        {
+                            LocalStorageHandler.setPrevDest(this);
+                            if (Panorama.opened) Panorama.close();
+
+                            if (qrMarker) {
+                                drawRoute(qrPoint.point.id, this.poid);
+                            }
+
+                            qrMarker.contentBinded = false;
+                            bindContent(qrMarker);
+                        }
+                    });
+            }
 
             var category_index = label_categories_indexed[current_poi.marker.category];
 
@@ -576,8 +584,6 @@ function loadPOIs() {
             qrPoint.label.name : qrPoint.point.description;
 
         var originLegend = gettext("You are right here:") + '<br>' + point_description;
-        if (qrPoint.point.panorama)
-            originLegend = originLegend + Panorama.renderIcon(qrPoint.point.id, qrPoint.point.panorama);
         originLegend += SocialMenu.renderIcon(qrPoint.point.id);
 
         qrMarker = L.marker(qrLoc, {icon: originIcon})
@@ -592,10 +598,9 @@ function loadPOIs() {
     }
     else {
         var msg = gettext("Please, scan a QR code to get here:") + ' ';
-        var photoIcon = qrPoint.point.panorama ? Panorama.renderIcon(qrPoint.point.id, qrPoint.point.panorama) : "";
 
         qrMarker = L.marker(qrLoc, {
-            icon: destIcon}).bindPopup('<p style="width:16em;text-align:center;">'+msg + '<br>' + qrPoint.point.description + photoIcon + SocialMenu.renderIcon(qrPoint.point.id) +'<p>')
+            icon: destIcon}).bindPopup('<p style="width:16em;text-align:center;">'+msg + '<br>' + qrPoint.point.description + SocialMenu.renderIcon(qrPoint.point.id) +'<p>')
             .on('click', function () {
                 LocalStorageHandler.setPrevDest(this);
                 bindContent(this);
@@ -784,7 +789,6 @@ function drawRoute(org, dst) {
         if (!route) {
             $('#scrollMenu .destiny.selected').removeClass('selected');
             alert(gettext('We are sorry, that route does not exist.'));
-            throw 'INVALID ROUTE';
         }
         else {
             // Limpia la ruta anteriormente trazada
@@ -804,9 +808,6 @@ function drawRoute(org, dst) {
             }
 
             var destLegend = route.fields.destiny.fields.description;
-            if (route.fields.destiny.fields.panorama) {
-                destLegend += Panorama.renderIcon(dst, route.fields.destiny.fields.panorama);
-            }
             destLegend += SocialMenu.renderIcon(dst);
 
             var dest_floor = floors_indexed[route.fields.destiny.fields.floor];
@@ -891,7 +892,7 @@ function isCategoryVisibleOnButtons(categ_name) {
 
 
 function isPoiVisibleByDefault(categ_name) {
-    return categ_name == "Connectors" || categ_name == "Toilet" || categ_name == "Entrance";
+    return categ_name == "Connectors" || categ_name == "Toilet" || categ_name == "Entrance" || categ_name == "Panoramas";
 }
 
 
@@ -1064,3 +1065,5 @@ function initSideMenu()
         $('div.help').css({'box-shadow': '0px -16px 43px 0px #F2EFE4'})
     }
 }
+
+

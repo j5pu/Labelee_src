@@ -1,6 +1,10 @@
 from settings.common import *
 from settings.dev import *
 
+
+ALLOWED_HOSTS = ['*']
+DEBUG = True
+
 #Alfredo's local database
 #
 DATABASES = {

@@ -1308,9 +1308,9 @@ para el botón GO!
 }
 
 .withCoupon:after {
-    content: 'COUPON!';
-    right: -70%;
-    bottom: -12px;
+    content: '%';
+    left: 120px;
+    top: 15px;
     background: orange;
     border: 3px solid crimson;
     padding: 4px;
@@ -1319,8 +1319,9 @@ para el botón GO!
     border-radius: 8px;
     position: relative;
     text-align: center;
-    font-size: 10px !important;
+    font-size: 18px !important;
     cursor:pointer;
+    text-shadow: 1px 1px 2px black;
 }
 
 
@@ -2015,4 +2016,21 @@ span#navigator{
 
 .icon-pedometer:before {
     content: "\f183";
+}
+
+.cuponButt{
+    display: inline-block;
+    left: 75%;
+    bottom: -10px;
+    width: auto;
+    height: auto;
+    background: orange;
+    border: 3px solid crimson;
+    padding: 3px;
+    color: white;
+    font-weight: bolder;
+    border-radius: 8px;
+    position: relative;
+    text-align: center;
+    font-size: 12px !important;
 }

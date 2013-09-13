@@ -1,17 +1,17 @@
 var ua = navigator.userAgent;
-var androidversion = parseFloat(ua.slice(ua.indexOf("Android")+8));
+var androidversion = parseFloat(ua.slice(ua.indexOf("Android") + 8));
 
 var mySwiper;
 
 
 //PREFIX-FREE PLUG-INS
-(function($, self){
+(function ($, self) {
 
-    if(!$ || !self) {
+    if (!$ || !self) {
         return;
     }
 
-    for(var i=0; i<self.properties.length; i++) {
+    for (var i = 0; i < self.properties.length; i++) {
         var property = self.properties[i],
             camelCased = StyleFix.camelCase(property),
             PrefixCamelCased = self.prefixProperty(property, true);
@@ -20,36 +20,59 @@ var mySwiper;
     }
 
 })(window.jQuery, window.PrefixFree);
-(function(a){if(a)a.events={DOMNodeInserted:function(b){var b=b.target,c=b.nodeName;b.nodeType==1&&(/link/i.test(c)?a.link(b):/style/i.test(c)?a.styleElement(b):b.hasAttribute("style")&&a.styleAttribute(b))},DOMAttrModified:function(b){b.attrName==="style"&&(document.removeEventListener("DOMAttrModified",a.events.DOMAttrModified,false),a.styleAttribute(b.target),document.addEventListener("DOMAttrModified",a.events.DOMAttrModified,false))}},document.addEventListener("DOMContentLoaded",function(){document.addEventListener("DOMNodeInserted",
-    a.events.DOMNodeInserted,false);document.addEventListener("DOMAttrModified",a.events.DOMAttrModified,false)},false)})(window.StyleFix);
-(function(a){if(a&&window.CSSStyleDeclaration)for(var b=0;b<a.properties.length;b++){var c=StyleFix.camelCase(a.properties[b]),d=a.prefixProperty(c),e=CSSStyleDeclaration.prototype,f=function(a){return function(){return this[a]}}(d),d=function(a){return function(b){this[a]=b}}(d);Object.defineProperty?Object.defineProperty(e,c,{get:f,set:d,enumerable:true,configurable:true}):e.__defineGetter__&&(e.__defineGetter__(c,f),e.__defineSetter__(c,d))}})(window.PrefixFree);
-/*
-//Pantalla completa
-function hideAddressBar()
-{
-
-    if(( ua.indexOf("Android") >= 0 ) && (androidversion < 2.3))
-            return;
-
-    if(!window.location.hash)
-    {
-        if(document.height < window.outerHeight)
-        {
-            document.body.style.height = (window.outerHeight + 50) + 'px';
-        }
-
-        setTimeout( function(){ window.scrollTo(0, 1); }, 50 );
+(function (a) {
+    if (a)a.events = {DOMNodeInserted: function (b) {
+        var b = b.target, c = b.nodeName;
+        b.nodeType == 1 && (/link/i.test(c) ? a.link(b) : /style/i.test(c) ? a.styleElement(b) : b.hasAttribute("style") && a.styleAttribute(b))
+    }, DOMAttrModified: function (b) {
+        b.attrName === "style" && (document.removeEventListener("DOMAttrModified", a.events.DOMAttrModified, false), a.styleAttribute(b.target), document.addEventListener("DOMAttrModified", a.events.DOMAttrModified, false))
+    }}, document.addEventListener("DOMContentLoaded", function () {
+        document.addEventListener("DOMNodeInserted",
+            a.events.DOMNodeInserted, false);
+        document.addEventListener("DOMAttrModified", a.events.DOMAttrModified, false)
+    }, false)
+})(window.StyleFix);
+(function (a) {
+    if (a && window.CSSStyleDeclaration)for (var b = 0; b < a.properties.length; b++) {
+        var c = StyleFix.camelCase(a.properties[b]), d = a.prefixProperty(c), e = CSSStyleDeclaration.prototype, f = function (a) {
+            return function () {
+                return this[a]
+            }
+        }(d), d = function (a) {
+            return function (b) {
+                this[a] = b
+            }
+        }(d);
+        Object.defineProperty ? Object.defineProperty(e, c, {get: f, set: d, enumerable: true, configurable: true}) : e.__defineGetter__ && (e.__defineGetter__(c, f), e.__defineSetter__(c, d))
     }
-}
+})(window.PrefixFree);
+/*
+ //Pantalla completa
+ function hideAddressBar()
+ {
 
-window.addEventListener("load", function(){ if(!window.pageYOffset){ hideAddressBar(); } } );
-window.addEventListener("orientationchange", hideAddressBar );
-*/
+ if(( ua.indexOf("Android") >= 0 ) && (androidversion < 2.3))
+ return;
+
+ if(!window.location.hash)
+ {
+ if(document.height < window.outerHeight)
+ {
+ document.body.style.height = (window.outerHeight + 50) + 'px';
+ }
+
+ setTimeout( function(){ window.scrollTo(0, 1); }, 50 );
+ }
+ }
+
+ window.addEventListener("load", function(){ if(!window.pageYOffset){ hideAddressBar(); } } );
+ window.addEventListener("orientationchange", hideAddressBar );
+ */
 
 
 
 ///	Activación y configuración del menú
-$(function() {
+$(function () {
 
     if(device.isCompatible())
     {
@@ -90,14 +113,14 @@ function main()
 
     $('#cupones, #header, span.locator, div#marquee').hide();
 
-   setTimeout(hideSplash, 100);
+    setTimeout(hideSplash, 100);
 
     $('div.swiper-slide img').on('click', function (e) {
         e.preventDefault();
         var cupPoint = parseInt($(this).prop('id')),
             cupFloor = new PointResource().read(cupPoint).floor,
             strL = cupFloor.length,
-            cupFloor = parseInt(cupFloor.substring(strL-3, strL-1));
+            cupFloor = parseInt(cupFloor.substring(strL - 3, strL - 1));
 
         drawRoute(qrPoint.point.id, cupPoint);
         $('div.device').fadeOut();
@@ -110,76 +133,68 @@ function hideSplash() {
     $('div#page').fadeIn(100);
     $('div.splash').fadeOut(100);
 
-    if(!localStorage.getItem('first_shoot'))
-    {
+    if (!localStorage.getItem('first_shoot')) {
         HelpMenu.show();
     }
 
     loadFloors();
 
-    if(qr_type == 'dest')
-    {
+    if (qr_type == 'dest') {
         $('#header, #cupones, #myCar').hide();
     }
 }
 
 
-function showRouteFromMenu(origin_id, destination_id)
-{
-    if(origin_id != destination_id)
-    {
+function showRouteFromMenu(origin_id, destination_id) {
+    if (origin_id != destination_id) {
         try
         {
-            drawRoute(origin_id, destination_id);
-            LocalStorageHandler.setPrevDestByPoi(destination_id);
-            $('#menu-right').trigger('close');
+        drawRoute(origin_id, destination_id);
+        LocalStorageHandler.setPrevDestByPoi(destination_id);
+        $('#menu-right').trigger('close');
 
-            // Cambia a la planta del origen si estamos en otra
-            var dest_floor = floors_indexed[route.fields.destiny.fields.floor];
-            if (current_floor.id != qrFloor.id && current_floor.id != dest_floor.id) {
-                var floor_to_show_name = floors_indexed[qrFloor.id].name;
-                $('.leaflet-control-layers-base input[type=radio]')
-                    .eq(baseLayers[floor_to_show_name].position)
-                    .trigger('click');
-            }
+        // Cambia a la planta del origen si estamos en otra
+        var dest_floor = floors_indexed[route.fields.destiny.fields.floor];
+        if (current_floor.id != qrFloor.id && current_floor.id != dest_floor.id) {
+            var floor_to_show_name = floors_indexed[qrFloor.id].name;
+            $('.leaflet-control-layers-base input[type=radio]')
+                .eq(baseLayers[floor_to_show_name].position)
+                .trigger('click');
         }
+    }
         catch(err)
         {
             console.error(err);
-        }
+}
     }
 }
 
 var Coupon = {
     opened: false,
 
-    init: function()
-    {
+    init: function () {
         //Coupon.calculateCouponArea();
         Coupon.bindOpen();
     },
 
 
-    bindOpen: function()
-    {
+    bindOpen: function () {
         $('div#cupones').on('click', function (ev) {
             ev.stopPropagation();
-            if (!Coupon.opened)
-            {
+            if (!Coupon.opened) {
                 Coupon.open();
-            }else{
+            } else {
                 Coupon.close();
             }
         });
     },
 
 
-    bindShowFromMarker: function()
-    {
+    bindShowFromMarker: function () {
         $('div.leaflet-popup-content-wrapper').on('click', function (e) {
-            //console.log(e.clientX +':'+ $(this).offset().left+':'+e.clientY +':'+ $(this).offset().top)
-            if (e.clientX > $(this).offset().left + 135 &&
-                e.clientY > $(this).offset().top + 67)
+//            console.log(e.clientX +':'+ $(this).offset().left+':'+e.clientY +':'+ $(this).offset().top)
+            if (e.clientX > $(this).offset().left + 120 &&
+                e.clientY > $(this).offset().top + 15)
 
             {
                 var imgID=$(this).find('p>button').data('socialmenu'),
@@ -190,11 +205,8 @@ var Coupon = {
                     mySwiper.swipeTo(myPos-1);
                 },500);
 
-
-
-
-                 e.stopPropagation();
-                 Coupon.open();
+                e.stopPropagation();
+                Coupon.open();
 
             }
 
@@ -202,17 +214,15 @@ var Coupon = {
     },
 
 
-    open: function()
-    {
-        if(Panorama.opened) Panorama.close();
+    open: function () {
+        if (Panorama.opened) Panorama.close();
 
         $('div.device').fadeIn(100);
 
-        $(document).on('click tap touch', function(ev){
+        $(document).on('click tap touch', function (ev) {
             ev.stopPropagation();
-            if(Coupon.opened &&
-                ($('div.device').has($(ev.target)).length === 0 &&
-                    !$(ev.target).hasClass('device')))
+            if (Coupon.opened &&
+                ($('div.device').has($(ev.target)).length === 0 && !$(ev.target).hasClass('device')))
                 Coupon.close();
         });
 
@@ -221,22 +231,21 @@ var Coupon = {
     },
 
 
-/*    calculateCouponArea: function()
-    {
-        var $img = $('img#cupon-img');
+    /*    calculateCouponArea: function()
+     {
+     var $img = $('img#cupon-img');
 
-        var ancho = $img.width(),
-            alto = $img.height(),
-            vert = 360 / 469 * ancho,
-            imgCoords = "0," + alto + "," + ancho + "," + alto + "," + vert + ",0,0," + alto,
-            $area = $('div#cupones area');
+     var ancho = $img.width(),
+     alto = $img.height(),
+     vert = 360 / 469 * ancho,
+     imgCoords = "0," + alto + "," + ancho + "," + alto + "," + vert + ",0,0," + alto,
+     $area = $('div#cupones area');
 
-        $area.attr({'coords': imgCoords});
-    },*/
+     $area.attr({'coords': imgCoords});
+     },*/
 
 
-    close: function()
-    {
+    close: function () {
         Coupon.opened = false;
         $('div.device').fadeOut(100);
     }
@@ -245,8 +254,7 @@ var Coupon = {
 
 var ScrollMenu = {
 
-    init: function()
-    {
+    init: function () {
         this.$listMenu = $('#scrollMenu');
         this.$wrapper = $('nav');
 //        this.$wrapper = $('nav#menu-right');
@@ -258,8 +266,7 @@ var ScrollMenu = {
         this.scrollEvent();
     },
 
-    scroll: function(ev)
-    {
+    scroll: function (ev) {
         var self = ScrollMenu;
 
         ev.gesture.preventDefault();
@@ -270,26 +277,24 @@ var ScrollMenu = {
         });
     },
 
-    scrollEnd: function(ev)
-    {
+    scrollEnd: function (ev) {
         var self = ScrollMenu;
 
         self.top_new = self.top + ev.gesture['deltaY'];
 
-        if(self.top_new > 50 || self.$listMenu.height() < self.$wrapper.height())
+        if (self.top_new > 50 || self.$listMenu.height() < self.$wrapper.height())
             self.top_new = 50;
-        else if(Math.abs(self.top_new) > self.$listMenu.height() - self.$wrapper.height()+25 )
-            self.top_new = self.$wrapper.height() - self.$listMenu.height()-25;
+        else if (Math.abs(self.top_new) > self.$listMenu.height() - self.$wrapper.height() + 25)
+            self.top_new = self.$wrapper.height() - self.$listMenu.height() - 25;
 
         self.$listMenu.css({
             'top': self.top_new + 'px'
         });
 
-        self.top = self.top_new; 
+        self.top = self.top_new;
     },
 
-    scrollEvent: function()
-    {
+    scrollEvent: function () {
         var self = this;
 
         self.$listMenu.parent().hammer()
@@ -299,6 +304,7 @@ var ScrollMenu = {
             });
     }
 };
+
 
 
 var device = {
@@ -328,4 +334,15 @@ var device = {
         // Sólo los compatibles con la aplicación
         return (device.Android() || device.BlackBerry() || device.iOS() || device.Chrome());
     }
+};
+function showCookiesMessage() {
+ 
+    $.jqDialog.confirm("Usamos cookies para asegurarnos de que te ofrecemos la mejor experiencia posible en nuestro sitio web, para más información pulsa <a onclick='HelpMenu.showDisclaimer();'>aquí</a>. ¿Deseas activarlas? ",
+        function () {
+            alert("This intrusive alert says you clicked YES");
+        },		// callback function for 'YES' button
+        function () {
+            alert("This intrusive alert says you clicked NO");
+        }		// callback function for 'NO' button
+    );
 };
