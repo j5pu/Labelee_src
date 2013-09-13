@@ -1,38 +1,9 @@
-{% extends "base.html" %}
+{% extends "map_editor/help/section_base.html" %}
 
 {% load i18n %}
 
-{% block css %}
-    <link rel="stylesheet" href="{{ STATIC_URL }}css/map_editor/styles.css"/>
-    <link rel="stylesheet" href="{{ STATIC_URL }}css/map_editor/help/styles.css"/>
-{% endblock %}
-
-{% block js %}
-{#    <script src="{{ STATIC_URL }}js/map_editor/connections/main.js"></script>#}
-{% endblock %}
-
-
-{% block content %}
-    {% include "_manager_navbar.html" with current_page="help" %}
-
-    <div id="header">
-        <span class="lib-name">Template Library for CodeIgniter, the PHP Framework</span>
-        <div id="search">
-            <form action="http://www.google.com/search" method="get">
-                <input type="hidden" value="williamsconcepts.com/codeigniter/libraries/template/" id="as_sitesearch" name="as_sitesearch"/>
-                <label for="q">Search User Guide</label>
-                <input type="text" value="" maxlength="255" size="31" id="q" name="q" style="width: 200px;" class="input"/>
-                <input type="submit" value="Go" name="sa" class="submit"/>
-            </form>
-        </div>
-        <ul id="navigation">
-            <li class="active"><a href="./index.html">Introduction</a></li>
-            <li><a href="./start.html">Getting Started</a></li>
-            <li><a href="./reference.html">User Guide</a></li>
-            <li><a href="./download.html">Download Template Library</a></li>
-            <li><a href="./discussion.html">Discussion</a></li>
-        </ul>
-    </div>
+{% block section %}
+    {% include "_help_navbar.html" with current_page="enclosure_manager" %}
 
     <!-- START CONTENT -->
     <div id="content">
@@ -109,18 +80,8 @@
 
     </div>
 
-    <script type="text/javascript">
-        var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
-        document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
-    </script>
-    <script type="text/javascript">
-        var pageTracker = _gat._getTracker("UA-1894650-2");
-        pageTracker._trackPageview();
-    </script>
-
-    </body>
-    </html>
-
 {% endblock %}
+
+
 
 

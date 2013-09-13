@@ -1,0 +1,28 @@
+{% load i18n %}
+
+<script>
+    $(function(){
+        var current_page = '{{ current_page }}';
+        $('#navigation li.' + current_page).addClass('active');
+    });
+</script>
+
+<div id="header">
+    <ul id="navigation">
+        <li class="enclosure_manager">
+            <a href="{% url 'map_editor.views.help_page' %}enclosure-manager">
+                {% trans "Gestión de recintos" %}
+            </a>
+        </li>
+        <li class="map_editor">
+            <a href="{% url 'map_editor.views.help_page' %}map-editor">
+                {% trans "Edición de mapas" %}
+            </a>
+        </li>
+        <li class="coupon_manager">
+            <a href="{% url 'map_editor.views.help_page' %}coupon-manager">
+                {% trans "Gestión de cupones" %}
+            </a>
+        </li>
+    </ul>
+</div>
