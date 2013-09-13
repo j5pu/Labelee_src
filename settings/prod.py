@@ -2,6 +2,10 @@
 
 from common import *
 
+# Production secret
+#########################################
+SECRET_KEY = os.environ['SECRET_KEY']
+
 # Production database
 #########################################
 DATABASES = {
@@ -9,7 +13,7 @@ DATABASES = {
     "ENGINE": "django.db.backends.mysql",
     "NAME": "labelee",
     "USER": "root",
-    "PASSWORD": "1aragon1",
+    "PASSWORD": os.environ['DB_PASSWORD'],
     "HOST": "",
     "PORT": "",
     }
