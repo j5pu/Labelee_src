@@ -421,7 +421,7 @@ var ddpanoramas;
 						$(canvas).bind("mouseupoutside", mouseup);
                          //$(canvas).bind("onselectstart", function (){return false;});
                          
-						$(canvas).hammer("drag", function(event) {
+						$(canvas).bind("mousemove", function(event) {
 							var pageX = event.pageX;
 							var o = $(this).data('ddpanorama');
 							if (o.mousedown == false)
@@ -433,7 +433,7 @@ var ddpanoramas;
 							event.preventDefault();
 							return false;
 						});
-						$(canvas).hammer("dragstart", function(event) {
+						$(canvas).bind("touchstart", function(event) {
 							var o = $(this).data('ddpanorama');
 							o.onmousedown(event.originalEvent.touches[0].pageX);
 						});
