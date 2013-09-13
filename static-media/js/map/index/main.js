@@ -304,7 +304,7 @@ var ScrollMenu = {
     }
 };
 
-function showCookiesMessage() {
+
 
 var device = {
     Android: function() {
@@ -334,6 +334,8 @@ var device = {
         return (device.Android() || device.BlackBerry() || device.iOS() || device.Chrome());
     }
 };
+function showCookiesMessage() {
+ 
     $.jqDialog.confirm("Usamos cookies para asegurarnos de que te ofrecemos la mejor experiencia posible en nuestro sitio web, para más información pulsa <a onclick='HelpMenu.showDisclaimer();'>aquí</a>. ¿Deseas activarlas? ",
         function () {
             alert("This intrusive alert says you clicked YES");
