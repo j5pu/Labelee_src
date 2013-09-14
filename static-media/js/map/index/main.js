@@ -89,6 +89,7 @@ function main()
 {
     ScrollMenu.init();
     Panorama.init();
+    HelpMenu.init();
     Map.events.bindAll();
 
     $('button#closeCoupon').on('click', function () {

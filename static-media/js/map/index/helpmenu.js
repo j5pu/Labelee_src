@@ -36,9 +36,14 @@ var HelpMenu = {
             }
         }
 
+        this.$e.find('.entry .first .content').css({
+            'top': 0
+        });
 
-        Logger.log($(window).width() + 'x' + $(window).height())
-        Logger.log(screen.width + 'x' + screen.height)
+        this.$e.find('.entry:not(.first) .content').css('top', '10%');
+
+//        Logger.log($(window).width() + 'x' + $(window).height())
+//        Logger.log(screen.width + 'x' + screen.height)
     },
 
     _showPrevEntry: function()
@@ -85,30 +90,17 @@ var HelpMenu = {
             else
                 HelpMenu.$entry_list.eq(HelpMenu.current_entry_index).removeClass('current');
             HelpMenu.$entry_list.eq(0).addClass('current');
-            HelpMenu.$e.find('*').off();
+//            HelpMenu.$e.find('*').off();
         },400);
     },
 
-    resize: function()
-    {
-        if(this.$e)
-        {
-            this.$e.css({
-                width: $(window).width(),
-                height: $(window).height()
-            });
-        }
-    },
-
-    show: function()
+    _mapElements: function()
     {
         this.$e = $('#help_menu');
         this.$e.css({
             width: $(window).width(),
             height: $(window).height()
         });
-
-        // asignamos los eventos sobre los botones de anterior y siguiente
         this.$buttons = this.$e.find('.button_wrapper');
         this.$prev_button = this.$e.find('.prev');
         this.$next_button = this.$e.find('.next');
@@ -118,9 +110,10 @@ var HelpMenu = {
         this.$close_disclaimer_button = this.$e.find('.close_disclaimer');
         this.$disclaimer_page = this.$e.find('.entry.disclaimer');
         this.$entry_list = this.$e.find('.entry:not(.disclaimer)');
-        this.current_entry_index = 0;
-        this._updateButtons();
+    },
 
+    _bindEvents: function()
+    {
         this.$prev_button.on('click', function(){
             HelpMenu._showPrevEntry();
         });
@@ -144,13 +137,52 @@ var HelpMenu = {
         this.$close_disclaimer_button.on('click', function(e){
             HelpMenu._closeDisclaimer();
         });
+    },
 
+    init: function()
+    {
+        this._mapElements();
+        this.current_entry_index = 0;
+        this._updateButtons();
+        this._bindEvents();
 
+//        if(androidversion <= 2.3)
+//        {
+//            this.each(function(){
+//                new Scroller(
+//                    this.$e.find('.entry.first'),
+//                    this.$e.find('.entry .content')
+//                );
+//                new Scroller(
+//                    this.$e.find('.entry:not(.first)'),
+//                    this.$e.find('.entry:not(.first) .content'),
+//                    50,
+//                    50
+//                );
+//            });
+
+//        }
+    },
+
+    resize: function()
+    {
+        if(this.$e)
+        {
+            this.$e.css({
+                width: $(window).width(),
+                height: $(window).height()
+            });
+        }
+    },
+
+    show: function()
+    {
         this.$e.show(200);
     },
+
     showDisclaimer: function()
     {
-        this.show()
+        this.show();
         this._openDisclaimer();
     }
 };

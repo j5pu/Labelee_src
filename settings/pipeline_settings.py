@@ -55,6 +55,7 @@ PIPELINE_JS = {
             'js/helpers/base.js',
             'js/helpers/ajax_helpers.js',
             'js/helpers/resource.js',
+            'js/helpers/scroller.js',
             'js/log/logger.js',
             'js/map/index/panorama.js',
             'js/map/index/socialmenu.js',
