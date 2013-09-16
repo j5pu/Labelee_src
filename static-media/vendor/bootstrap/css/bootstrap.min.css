@@ -3425,9 +3425,9 @@ button.btn.btn-mini, input[type="submit"].btn.btn-mini {
 }
 
 .nav {
-    margin-bottom: 20px;
     margin-left: 0;
     list-style: none
+;
 }
 
 .nav>li>a {
@@ -3797,11 +3797,14 @@ button.btn.btn-mini, input[type="submit"].btn.btn-mini {
 .navbar {
     *position: relative;
     *z-index: 2;
-    margin-bottom: 20px;
-    overflow: visible
+    /* margin-bottom: 20px; */
+    /* overflow: visible
+; */
 }
 
 .navbar-inner {
+    padding: 0;
+    margin: 0;
     min-height: 40px;
     padding-right: 20px;
     padding-left: 20px;
@@ -3821,6 +3824,7 @@ button.btn.btn-mini, input[type="submit"].btn.btn-mini {
     -webkit-box-shadow: 0 1px 4px rgba(0, 0, 0, 0.065);
     -moz-box-shadow: 0 1px 4px rgba(0, 0, 0, 0.065);
     box-shadow: 0 1px 4px rgba(0, 0, 0, 0.065)
+;
 }
 
 .navbar-inner:before, .navbar-inner:after {
@@ -3835,6 +3839,7 @@ button.btn.btn-mini, input[type="submit"].btn.btn-mini {
 
 .navbar .container {
     width: auto
+;
 }
 
 .nav-collapse.collapse {
@@ -3958,8 +3963,7 @@ button.btn.btn-mini, input[type="submit"].btn.btn-mini {
     right: 0;
     left: 0;
     z-index: 1030;
-    margin-bottom: 0
-}
+    margin-bottom: 0}
 
 .navbar-fixed-top .navbar-inner, .navbar-static-top .navbar-inner {
     border-width: 0 0 1px
@@ -4005,14 +4009,10 @@ button.btn.btn-mini, input[type="submit"].btn.btn-mini {
     position: relative;
     left: 0;
     display: block;
-    float: left;
-    margin: 0 10px 0 0
+    margin: 0 10px 0 0;
 }
 
-.navbar .nav.pull-right {
-    float: right;
-    margin-right: 0
-}
+.navbar .nav.pull-right {}
 
 .navbar .nav>li {
     float: left

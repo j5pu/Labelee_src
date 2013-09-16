@@ -4,21 +4,6 @@ body {
     max-width: 80%;
 }
 
-#choose-lang
-{
-    display: inline-block;
-float: left;
-margin: 0.25em 2em 0 -1em;
-}
-#choose-lang img
-{
-    cursor: pointer;
-}
-
-#choose-lang select
-{
-    display: none;
-}
 
 table
 {
@@ -230,26 +215,7 @@ td *
     margin: 0.5em auto;
 }
 
-#logout
-{
-    float: right;
-    display: inline-block;
-    margin-top: 0.27em;
-    margin: 0.15em;
-    font-size: 1.2em;
-    padding: 0.2em 0.6em;
-}
 
-#logout a
-{
-    color: rgb(196, 190, 170);
-}
-
-#logout a:hover
-{
-    color: #FEFAF1;
-    background-color: rgb(196, 190, 170);
-}
 .add_new
 {
     margin: 1.75em 0 0em 1.9em;

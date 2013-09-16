@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% load i18n %}
+
+{% block css %}
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/map_editor/styles.css"/>
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/map_editor/help/styles.css"/>
+{% endblock %}
+
+{% block js %}
+{#    <script src="{{ STATIC_URL }}js/map_editor/connections/main.js"></script>#}
+{% endblock %}
+
+
+{% block content %}
+    {% include "_manager_navbar.html" with current_page="help" %}
+
+    {% block section %}
+    {% endblock %}
+{% endblock %}
+
+
