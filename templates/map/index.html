@@ -22,21 +22,41 @@
 
     <script type="text/javascript">
 
+        $(document).ready(function () {
+// activate cookie cutter
+$.cookieCuttr({
+cookieDeclineButton: true,
 
+cookieAnalyticsMessage: "Usamos cookies para asegurarnos de que te ofrecemos la mejor experiencia posible en nuestro sitio web, para más información pulsa <a onclick='HelpMenu.showDisclaimer();'>aquí</a>. En cumplimiento del Real Decreto-ley 13/2012, ¿Deseas activarlas? "
+});
+});
 
+if (jQuery.cookie('cc_cookie_accept') == "cc_cookie_accept") {
+    alert(1);
+var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-30904444-4']);
+_gaq.push(['_trackPageview']);
 
-        var _gaq = _gaq || [];
-        _gaq.push(['_setAccount', 'UA-30904444-4']);
-        _gaq.push(['_trackPageview']);
+(function() {
+var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+var s = document. getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();
+}
 
-        (function () {
-            var ga = document.createElement('script');
-            ga.type = 'text/javascript';
-            ga.async = true;
-            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-            var s = document.getElementsByTagName('script')[0];
-            s.parentNode.insertBefore(ga, s);
-        })();
+{#     // showCookiesMessage();#}
+{#        var _gaq = _gaq || [];#}
+{#        _gaq.push(['_setAccount', 'UA-30904444-4']);#}
+{#        _gaq.push(['_trackPageview']);#}
+{##}
+{#        (function () {#}
+{#            var ga = document.createElement('script');#}
+{#            ga.type = 'text/javascript';#}
+{#            ga.async = true;#}
+{#            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';#}
+{#            var s = document.getElementsByTagName('script')[0];#}
+{#            s.parentNode.insertBefore(ga, s);#}
+{#        })();#}
 
 
         var mapData = {{ map_data|safe }};
@@ -81,7 +101,7 @@
         var qr_type = "{{ qr_type }}";
 
         var pedometer_navigator;
-        showCookiesMessage();
+
     </script>
 
     {% compressed_js 'map2' %}
