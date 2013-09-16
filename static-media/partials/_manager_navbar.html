@@ -1,4 +1,15 @@
 {% load i18n %}
+
+<script>
+    $(function(){
+        var current_page = '{{ current_page }}';
+        $('li.' + current_page).addClass('active');
+
+        if (current_page != 'main')
+            $('li.main').show();
+    });
+</script>
+
 <div class="navbar navbar-inverse navbar-fixed-top">
     <div class="navbar-inner">
         <div class="container">
@@ -7,23 +18,43 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </a>
-            <span class="brand" style="color:white;">{{ section }} | Enclosure Name</span>
+            {% include "_lang_selector.html" %}
+            <a class="brand" href="#">{% trans "Administración de recintos" %}</a>
 
             <div class="nav-collapse">
                 <ul class="nav">
-                    <li><a href="#"><i class="icon-white icon-picture"></i> Enclosure Website</a>
+{#                    <li><a href="#"><i class="icon-white icon-dashboard"></i>{% trans "Dashboard" %}</a></li>#}
+{#                    <li><a href="#"><i class="icon-white icon-link"></i>{% trans "Web del recinto" %}</a>#}
+{#                    </li>#}
+{#                    <li><a href="#"><i class="icon-white icon-play-circle"></i>#}
+{#                        {% trans "Labelee App" %}</a></li>#}
+                    <li class="main" style="display: none">
+                        <a href="{% url 'map_editor.views.index' %}">
+                            <i class="icon-white icon-home"></i> {% trans "Página principal" %}
+                        </a>
                     </li>
-                    <li><a href="#"><i class="icon-white icon-play-circle"></i>
-                        Labelee App</a></li>
-                    <li><a href="#"><i class="icon-white icon-book"></i> Coupons Manager</a></li>
+                    <li class="help">
+                        <a href="{% url 'map_editor.views.help_page' %}">
+                            <i class="icon-white icon-book"></i> {% trans "Ayuda" %}
+                        </a>
+                    </li>
                 </ul>
                 <ul class="nav pull-right">
+{#                    <li><p class="navbar-text"><i class="icon-white icon-download"></i> Download:</p></li>#}
+{#                    <li>#}
+{#                        <div class="btn-group">#}
+{#                            <a class="btn btn-small btn-primary" href="#">PDF</a>#}
+{#                            <a class="btn btn-small btn-primary" href="#">E-MAIL</a>#}
+{#                        </div>#}
+{#                    </li>#}
                     <li>
                         <!-- CAJITA DE LOGOUT -->
                         {% if user.is_authenticated %}
                             <div id="logout" class="box box-1">
-                                {% trans "Bienvenido" %}, {{ user.username }}
-                                <a href="{% url 'django.contrib.auth.views.logout' %}"> <i class="icon-signout"></i> Logout</a>
+                                <span>{% trans "Bienvenido" %}, {{ user.username }}</span>
+                                <a class="link-1" href="{% url 'django.contrib.auth.views.logout' %}">
+                                    <i class="icon-signout"></i> {% trans "Salir" %}
+                                </a>
                             </div>
                         {% endif %}
                     </li>

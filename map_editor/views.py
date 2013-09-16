@@ -17,6 +17,7 @@ def index(request):
             '1': 'Bloqueantes',
             '2': 'Aristas',
             '3': 'Intermedias',
+            '4': 'Panoramas'
         }
     }
 
@@ -53,3 +54,10 @@ def connections(request, enclosure_id):
     return render_to_response('map_editor/v1/connections.html', ctx, context_instance=RequestContext(request))
 
 
+@login_required(login_url=settings.LOGIN_URL)
+def help_page(request, section=None):
+    if request.user.is_in_group(USER_GROUPS['shop_owners']):
+        return HttpResponseRedirect('/coupon/')
+
+    template = 'enclosure-manager' if not section else section
+    return render_to_response('map_editor/help/' + template + '.html', context_instance=RequestContext(request))

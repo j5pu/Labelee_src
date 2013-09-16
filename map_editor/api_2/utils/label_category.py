@@ -20,6 +20,8 @@ def filterAsValidCategories(label_categories):
         name_es = 'Parquing'
     ).exclude(
         name_es = 'Pasillo Parking'
+    ).exclude(
+        name_es = 'Panoramas'
     )
 
 

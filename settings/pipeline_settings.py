@@ -25,6 +25,7 @@ PIPELINE_CSS = {
             'css/map/index/helpmenu.css',
             'css/map/index/mmenu.css',
             'css/map/index/multix.css',
+            'css/map/index/jqdialog.css',
         ),
         'output_filename': 'map.min.css',
         'variant': 'datauri',
@@ -34,7 +35,7 @@ PIPELINE_CSS = {
 PIPELINE_JS = {
     'map': {
         'source_filenames': (
-            'vendor/prefixfree.min.js',
+            # 'vendor/prefixfree.min.js',
             'js/map/index/modernizr.js',
             'vendor/jquery-2.0.3.min.js',
             # 'vendor/leaflet/plugins/jquery.mmenu.js',
@@ -60,6 +61,7 @@ PIPELINE_JS = {
             'js/map/index/compass.js',
             'js/map/index/helpmenu.js',
             'js/map/index/main.js',
+            'js/map/index/jqdialog.min.js'
         ),
         'output_filename': 'map.min.js',
         },

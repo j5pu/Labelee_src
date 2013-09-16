@@ -1,5 +1,11 @@
 {% load i18n %}
 
+<script>
+    $(function() {
+        I18n.selectLang(lang_code);
+    });
+</script>
+
 <form id="choose-lang" action="/i18n/setlang/" method="post">
     {% csrf_token %}
     <input name="next" type="hidden" value="{{ redirect_to }}" />

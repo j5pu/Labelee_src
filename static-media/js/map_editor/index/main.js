@@ -1,8 +1,8 @@
 var modalDialog;
 
-$(function() {
-    I18n.selectLang(lang_code);
-});
+//$(function() {
+//    I18n.selectLang(lang_code);
+//});
 
 
 function EnclosureListCtrl($scope, $rootScope, UserService, FormService)
@@ -43,6 +43,11 @@ function EnclosureCtrl($scope, $rootScope, $element)
     $scope.refreshCache = function()
     {
         enclosureResource.refreshCache($scope.enclosure.id);
+    };
+
+    $scope.qrDownload = function()
+    {
+        enclosureResource.qrDownload($scope.enclosure.id);
     };
 
     $scope.$on('sync_enclosure', function(ev, enclosure) {

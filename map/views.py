@@ -1,11 +1,10 @@
 # -*- coding: utf-8 -*-
 import datetime
 
-
 from django.core.cache import cache
 from django.template import RequestContext
 from django.shortcuts import render_to_response
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, Http404
 # from touching_log import log
 
 import simplejson
@@ -27,8 +26,17 @@ def show_map(request, qr_type, enclosure_id, floor_id, poi_id):
         map/origin/1_25_91234
         map/dest/1_25_91234
     """
+    if enclosure_id == None or floor_id == None or poi_id == None:
+        raise Http404
+
     saveQrShot(poi_id)
     cached = cache_show_map(enclosure_id)
+
+    # Check that the enclosure, floor and point exist
+    if cached == {} or int(floor_id) not in cached['poisByFloor'] or \
+        int(poi_id) not in [x['id'] for x in cached['poisByFloor'][int(floor_id)]]:
+
+        raise Http404
 
     marquee = []
     twitterhelper = TwitterHelper(cached['enclosure'][0].twitter_account)
@@ -52,31 +60,6 @@ def show_map(request, qr_type, enclosure_id, floor_id, poi_id):
         )
     }
     return render_to_response('map/index.html', ctx, context_instance=RequestContext(request))
-
-
-
-
-
-def your_position(request, label_id):
-    """
-    Muestra el mapa justo donde haces la foto al qr
-    """
-    labels = {
-        '001': [0, 0],
-        '002': [8, 8],
-        '003': [25, 40],
-        '004': [1, 1],
-        '005': [20, 10]
-    }
-
-    ctx = {
-        'label': labels[label_id],
-        'block_size': 10,
-        'map_img': '/static/img/map.jpg'
-    }
-
-    return render_to_response('map/your_position.html', ctx, context_instance=RequestContext(request))
-
 
 def qr_code_redirect(request):
     if request.method == 'POST':

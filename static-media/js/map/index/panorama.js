@@ -15,13 +15,6 @@ var Panorama = {
 
     },
 
-    renderIcon: function(pointId, panorama)
-    {
-        return  '<button onclick="Panorama.show(this)" class="panorama"  id="' + pointId + '" data-panorama="' + panorama + '">' +
-            '<i class="icon-camera"></i>' +
-            '</button>'
-    },
-
     bindShow: function(marker)
     {
 //        Panorama.marker = marker;
@@ -35,12 +28,13 @@ var Panorama = {
     {
 //        console.log('yaaa');
         Coupon.close();
+        Panorama.element = marker;
         Panorama.opened = true;
 
         var newWidth=window.innerWidth*0.9,
             newHeight=newWidth*9/16;
 
-        var panoramaImage = marker.getAttribute('data-panorama')
+        var panoramaImage = marker.panorama; // marker.getAttribute('data-panorama')
         if (panoramaImage.indexOf("media") == -1) {
             panoramaImage = "/media/" + panoramaImage;
         }

@@ -139,3 +139,51 @@ form .txt
 iframe {
     display: none;
 }
+
+
+#choose-lang
+{
+    display: inline-block;
+    float: left;
+    margin: 0.25em 2em 0 -1em;
+}
+
+#choose-lang img
+{
+    cursor: pointer;
+}
+
+#choose-lang select
+{
+    display: none;
+}
+
+#logout
+{
+    float: right;
+    display: inline-block;
+    font-size: 1.1em;
+    padding: 0.2em 0.6em;
+    margin-top: 0.4em;
+    background: rgb(238, 238, 238);
+    width: 226px;
+    border-radius: 0;
+    font-family: raleway;
+}
+
+#logout a
+{
+    color: #999;
+    display: inline-block;
+    padding: 1px 6px;
+    margin-left: 2%;
+    background: black;
+    font-size: 1em;
+    float: right;
+    border-radius: 4px;
+}
+
+#logout a:hover
+{
+    color: white;
+}

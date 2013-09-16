@@ -31,6 +31,8 @@
 
     {% csrf_token %}
 
+    {% include "_manager_navbar.html" with current_page="edit" %}
+
     <div ng-controller="FloorCtrl">
 
         <!-- GRID PARA EL PLANO DE LA PLANTA -->
@@ -103,6 +105,7 @@
                         <label class="checkbox">
                             <input type="checkbox" id="toggle_qrs">{% trans "Resaltar todos" %}
                         </label>
+                           <button class="btn" id="printQR" onclick="Menu.printQrs()">{% trans "Imprimir Qrs" %}</button>
                         <ul></ul>
                     </div>
                 </div>
