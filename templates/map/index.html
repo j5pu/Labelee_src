@@ -104,6 +104,8 @@
                 {% for destination in category.items %}
                     <li class="destiny"
                         data-destiny-id="{{ destination.id }}">
+                    <span class="miniCup">%</span>
+{#                    <em class="mm-counter">1</em>#}
                         <a href="#"
                         onclick="showRouteFromMenu({{ poi_id }}, {{ destination.id }});">
                         <button>

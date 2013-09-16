@@ -1060,7 +1060,7 @@ function initSideMenu()
         .addClass('origin');
 
     // Sombreado en la parte baja del menú
-    if(androidversion >= 4.0 || device.Chrome())
+    if(androidversion >= 4.0 || device.Chrome()|| device.iOS())
     {
         $('div.help').css({'box-shadow': '0px -16px 43px 0px #F2EFE4'})
     }
