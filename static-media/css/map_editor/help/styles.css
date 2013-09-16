@@ -156,11 +156,13 @@ abbr {
 }
 
 #header {
+    margin-top: 42px;
     float: left;
     width: 100%;
     background: #333;
     color: #EEE;
     border-bottom: 16px solid #FFF;
+    padding-top: 8px;
 }
 #header .lib-name {
     font-size: 1.3em;
@@ -193,9 +195,10 @@ abbr {
 }
 #navigation a {
     float: left;
-    padding: 7px 13px;
+    padding: 8px 13px;
     color: #CCC;
     list-style: none;
+    font-family: Lucida Grande, Verdana, Geneva, sans-serif;
 }
 #navigation a:hover,
 #navigation .active a {
@@ -215,6 +218,7 @@ abbr {
 
 #content p {
     margin: 10px 20px 12px 0;
+    text-align: justify;
 }
 
 #content h1 {
@@ -224,6 +228,8 @@ abbr {
     font-size: 22px;
     margin: 0 0 15px 0;
     padding: 3px 2px 3px 10px;
+    font-family: Lucida Grande, Verdana, Geneva, sans-serif;
+    text-align: left;
 }
 
 #content h2 {

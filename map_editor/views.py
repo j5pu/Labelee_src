@@ -51,12 +51,13 @@ def connections(request, enclosure_id):
     }
     if request.user.is_in_group(USER_GROUPS['shop_owners']):
         return HttpResponseRedirect('/coupon/')
-    return render_to_response('map_editor/v1/connections.html', ctx, context_instance=RequestContext(request))
+    return render_to_response('map_editor/connections.html', ctx, context_instance=RequestContext(request))
 
 
 @login_required(login_url=settings.LOGIN_URL)
-def help_page(request):
+def help_page(request, section=None):
     if request.user.is_in_group(USER_GROUPS['shop_owners']):
         return HttpResponseRedirect('/coupon/')
-    return render_to_response('map_editor/help.html', context_instance=RequestContext(request))
 
+    template = 'enclosure-manager' if not section else section
+    return render_to_response('map_editor/help/' + template + '.html', context_instance=RequestContext(request))

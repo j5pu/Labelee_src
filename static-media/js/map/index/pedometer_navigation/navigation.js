@@ -119,15 +119,15 @@ function PedometerNavigator () {
             // Compass listener
             if (window.DeviceOrientationEvent) {
                 window.addEventListener('deviceorientation', deviceOrientationListener, false);
-            };
+            }
 
             // Motion listener
             if (window.DeviceMotionEvent) {
                 window.addEventListener('devicemotion', deviceMotionListener, false);
-            };
+            }
 
-        };
-    }
+        }
+    };
 
     // User changes orientation
     this.changeOrientation = function (orientation){
@@ -196,4 +196,4 @@ function PedometerNavigator () {
         }
     };
 
-};
+}

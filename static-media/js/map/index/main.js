@@ -89,6 +89,7 @@ function main()
 {
     ScrollMenu.init();
     Panorama.init();
+    HelpMenu.init();
     Map.events.bindAll();
 
     $('button#closeCoupon').on('click', function () {
@@ -192,17 +193,18 @@ var Coupon = {
 
     bindShowFromMarker: function () {
         $('div.leaflet-popup-content-wrapper').on('click', function (e) {
-            //console.log(e.clientX +':'+ $(this).offset().left+':'+e.clientY +':'+ $(this).offset().top)
-            if (e.clientX > $(this).offset().left + 135 &&
-                e.clientY > $(this).offset().top + 67) {
-                var imgID = $(this).find('p>button').data('socialmenu'),
-                    myImg = "img[id='" + imgID + "']",
-                    myPos = $(myImg).parent()[0].index($(myImg).parent().parent());
+//            console.log(e.clientX +':'+ $(this).offset().left+':'+e.clientY +':'+ $(this).offset().top)
+            if (e.clientX > $(this).offset().left + 120 &&
+                e.clientY > $(this).offset().top + 15)
 
-                window.setTimeout(function () {
-                    mySwiper.swipeTo(myPos - 1);
-                }, 500);
+            {
+                var imgID=$(this).find('p>button').data('socialmenu'),
+                    myImg="img[id='"+imgID+"']",
+                    myPos=$(myImg).parent()[0].index($(myImg).parent().parent());
 
+           window.setTimeout(function(){
+                    mySwiper.swipeTo(myPos-1);
+                },500);
 
                 e.stopPropagation();
                 Coupon.open();
