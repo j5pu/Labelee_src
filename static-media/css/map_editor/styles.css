@@ -188,6 +188,7 @@ iframe {
     width: auto;
     vertical-align: top;
     margin: 0;
+    float:none;
 }
 
 #logout a:hover
