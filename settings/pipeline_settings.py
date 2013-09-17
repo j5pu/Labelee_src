@@ -65,7 +65,8 @@ PIPELINE_JS = {
             'js/map/index/main.js',
             'js/map/index/jqdialog.min.js',
             'js/map/index/jquery.cookie.js',
-            'js/map/index/jquery.cookiecuttr.js'
+            'js/map/index/jquery.cookiecuttr.js',
+            'js/map/index/cookiemanager.js'
         ),
         'output_filename': 'map.min.js',
         },

@@ -1,26 +1,3 @@
-/**
- * Copyright (C) 2012 Chris Wharton (chris@weare2ndfloor.com)
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- * 
- * THIS SOFTWARE AND DOCUMENTATION IS PROVIDED "AS IS," AND COPYRIGHT
- * HOLDERS MAKE NO REPRESENTATIONS OR WARRANTIES, EXPRESS OR IMPLIED,
- * INCLUDING BUT NOT LIMITED TO, WARRANTIES OF MERCHANTABILITY OR
- * FITNESS FOR ANY PARTICULAR PURPOSE OR THAT THE USE OF THE SOFTWARE
- * OR DOCUMENTATION WILL NOT INFRINGE ANY THIRD PARTY PATENTS,
- * COPYRIGHTS, TRADEMARKS OR OTHER RIGHTS.COPYRIGHT HOLDERS WILL NOT
- * BE LIABLE FOR ANY DIRECT, INDIRECT, SPECIAL OR CONSEQUENTIAL
- * DAMAGES ARISING OUT OF ANY USE OF THE SOFTWARE OR DOCUMENTATION.
- * 
- * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://gnu.org/licenses/>.
- 
- Documentation available at http://cookiecuttr.com
- 
- */
 (function ($) {
     $.cookieCuttr = function (options) {
         var defaults = {
@@ -116,7 +93,8 @@
         } else {
             var appOrPre = false;
         }
-        if (($cookieAccepted) || ($cookieDeclined)) {
+        //Si no se aceptan las cookies se muestra siempre el mensaje
+        if (($cookieAccepted) /*|| ($cookieDeclined)*/) {
             // write cookie reset button
             if ((cookieResetButton) && (cookieDiscreetReset)) {
                 if (appOrPre) {
@@ -255,8 +233,14 @@
                 });
             }
             $(".cc-cookies").fadeOut(function () {
+
+                LocalStorageHandler.setFirstShoot();
+
+                //eliminita todas las cookies
+                LocalStorageHandler.clearAll();
                 // reload page to activate cookies
-                location.reload();
+
+                //  location.reload();
             });
         });
         //reset cookies
@@ -270,7 +254,7 @@
             });
             $(".cc-cookies").fadeOut(function () {
                 // reload page to activate cookies
-                location.reload();
+                // location.reload();
             });
         });
         //cookie error accept
@@ -284,7 +268,7 @@
                 path: '/'
             });
             // reload page to activate cookies
-            location.reload();
+            //location.reload();
         });
     };
 })(jQuery);
