@@ -19,7 +19,7 @@
                 <span class="icon-bar"></span>
             </a>
             {% include "_lang_selector.html" %}
-            <a class="brand" href="#">{% trans "Administración de recintos" %}</a>
+            <a class="brand" href="">{% trans "Administración Labelee" %}</a>
 
             <div class="nav-collapse">
                 <ul class="nav">
@@ -28,12 +28,16 @@
 {#                    </li>#}
 {#                    <li><a href="#"><i class="icon-white icon-play-circle"></i>#}
 {#                        {% trans "Labelee App" %}</a></li>#}
-                    <li class="main" style="display: none">
+
+
+{#                    <li class="main" style="display: none">#}
+                    <li class="main">
                         <a href="{% url 'map_editor.views.index' %}"><i class="icon-white icon-home"></i> {% trans "Página principal" %}</a>
                     </li>
                     <li class="help">
                         <a href="{% url 'map_editor.views.help_page' %}"><i class="icon-white icon-book"></i> {% trans "Ayuda" %}</a>
-                    </li>                    <li class="help">
+                    </li>
+                    <li>
                         <a href="{% url 'coupon_manager.views.index' %}"><i class="icon-white icon-bookmark"></i> {% trans "Cupones" %}</a>
                     </li>
                 </ul>
