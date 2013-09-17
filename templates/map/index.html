@@ -104,8 +104,11 @@
                 {% for destination in category.items %}
                     <li class="destiny"
                         data-destiny-id="{{ destination.id }}">
-                    <span class="miniCup">%</span>
-{#                    <em class="mm-counter">1</em>#}
+                        {% if destination.coupon %}
+                        <span class="miniCup">%</span>
+                        {% else %}
+                        <span class="nominiCup"></span>
+                        {% endif %}
                         <a href="#"
                         onclick="showRouteFromMenu({{ poi_id }}, {{ destination.id }});">
                         <button>
@@ -115,6 +118,7 @@
                                 {{ destination.description }}
                             {% endif %}
                         </button>
+                        <span>{{ destination.floor.name}}</span>
                         </a>
                     </li>
                 {% endfor %}
