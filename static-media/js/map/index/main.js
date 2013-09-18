@@ -74,15 +74,15 @@ var mySwiper;
 ///	Activación y configuración del menú
 $(function () {
 
-    if(device.isCompatible())
-    {
+/*    if(device.isCompatible())
+    {*/
         main();
-    }
+/*    }
     else
     {
         $('.splash').hide();
         $('#unsupported_mobile_msg').show();
-    }
+    }*/
 });
 
 function main()

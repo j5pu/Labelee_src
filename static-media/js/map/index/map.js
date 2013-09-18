@@ -1,4 +1,4 @@
-(function () {
+/*(function () {
     var lastTime = 0;
     var vendors = ['webkit', 'moz'];
     for (var x = 0; x < vendors.length && !window.requestAnimationFrame; ++x) {
@@ -23,7 +23,7 @@
         window.cancelAnimationFrame = function (id) {
             clearTimeout(id);
         };
-}());
+}());*/
 
 var blinkingMode = null;
 function blinker(element, dst) {
@@ -803,6 +803,9 @@ var setArrow = function (flecha, idFloor) {
 };
 
 
+
+
+//MENU LATERAL
 function initSideMenu()
 {
     $('nav#menu-right').mmenu({

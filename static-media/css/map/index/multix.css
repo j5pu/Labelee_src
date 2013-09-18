@@ -1412,8 +1412,9 @@ leaflet-marker-icon{
     font-size: 1.3em;
     text-align: center;
     line-height: 1.4em;
-   -webkit-border-radius: 13px 13px 20px 20px;
     -moz-border-radius: 50% 50% 80% 80%;
+   -webkit-border-radius: 13px 13px 20px 20px;
+    border-radius: 13px 13px 20px 20px;
     opacity: 0.8;
     margin-top:-1.65em !important;
     margin-left:-0.75em !important;
