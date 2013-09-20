@@ -80,9 +80,18 @@ var s = document. getElementsByTagName('script')[0]; s.parentNode.insertBefore(g
 
 <div id="page" >
 
+{% comment %}
     <div id="header">
         <a href="#menu-right">
             <img src="{{ MEDIA_URL }}menuLab.png"/>
+        </a>
+    </div>
+{% endcomment %}
+    <div id="header">
+        <a href="#menu-right">
+            <span class="labeleeLogo" id="blueLab">&#160</span>
+            <span class="labeleeLogo" id="orangeLab">&#160</span>
+            <span class="labeleeLogo" id="redLab">&#160</span>
         </a>
     </div>
 
@@ -156,8 +165,13 @@ var s = document. getElementsByTagName('script')[0]; s.parentNode.insertBefore(g
     <span class="locator icon-automobile" id="myCar"></span>
 
     {% if coupons and qr_type == 'origin'%}
+{% comment %}
         <div id="cupones">
             <img id="cupon-img" src="{{ MEDIA_URL }}menuTick.png" alt="Cupones">
+        </div>
+{% endcomment %}
+        <div id="cupones">
+            <span id="cuponLogo">/</span>
         </div>
 
         <div class="device">

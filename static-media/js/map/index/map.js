@@ -244,7 +244,10 @@ function loadPOIs() {
                 nameIcon = current_poi.label.name,
                 shapeIcon = current_poi.label.category.icon,
                 id = current_poi.id,
-                floorid = current_poi.floor;
+                floorid = current_poi.floor,
+                floorname = floors_indexed[floorid].name;
+
+
             var description = current_poi.description,
                 panorama = current_poi.panorama,
                 coupon = current_poi.coupon,
@@ -266,6 +269,7 @@ function loadPOIs() {
 
             current_poi.marker.poid = id;
             current_poi.marker.floorid = floorid;
+            current_poi.marker.floorname = floorname;
             current_poi.marker.psX = sX;
             current_poi.marker.psY = sY;
             current_poi.marker.loc = loc;
@@ -405,6 +409,7 @@ function initMap(qrPoint) {
     if (map.hasLayer(destMarker)) {
         destMarker.openPopup();
         bindContent(destMarker);
+        destMarker._bringToFront();
     }
     loadedLabels = true;
 }
@@ -629,6 +634,7 @@ function drawRoute(org, dst) {
                         $('div.leaflet-popup-content-wrapper').addClass('withCoupon');
                     }
                     bindContent(destMarker);
+                    destMarker._bringToFront();
                 }
 
                 if (carMarker && map.hasLayer(carMarker)) {
@@ -825,11 +831,13 @@ function initSideMenu()
     $('.mm-submenu .destiny[data-destiny-id=' + qrPoint.point.id + ']')
         .addClass('origin');
 
+/*
     // Sombreado en la parte baja del menú
     if(androidversion >= 4.0 || device.Chrome()|| device.iOS())
     {
         $('div.help').css({'box-shadow': '0px -16px 43px 0px #F2EFE4'})
     }
+*/
 }
 
 

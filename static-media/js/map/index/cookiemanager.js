@@ -71,6 +71,8 @@ var LocalStorageHandler = {
 
                 var point_dest_id = prevDest.poid,
                     floor_dest_id = prevDest.floorid,
+                    floorname = prevDest.floorname,
+                    coupon = prevDest.coupon,
                     description = prevDest.description_for_menu;
 
                 /*                $('#scrollMenu').prepend(
@@ -84,12 +86,26 @@ var LocalStorageHandler = {
                  );*/
 
                 $('ul#destList').append(
-                    '<li>' +
-                        '<a href="#" style="font-size:0.8rem; color:#333"' +
+//                    '<li>' +
+//                        '<a href="#" style="font-size:0.8rem; color:#333"' +
+//                        'onclick="' + "$('#menu-right').trigger( 'close' );" +
+//                        "showRouteFromMenu(" + qrPoint.point.id + ', ' + point_dest_id + ');">' +
+//                        description + "</a></li>"
+
+                    '<li class="destiny">' +
+                        '<span class="nominiCup"></span>' +
+                        '<a href="#"'+
                         'onclick="' + "$('#menu-right').trigger( 'close' );" +
                         "showRouteFromMenu(" + qrPoint.point.id + ', ' + point_dest_id + ');">' +
-                        description + "</a></li>"
+                     '<button>'+description +
+                         '</button>' +
+                        '<span>'+ floorname+ '</span>' +
+                        '</a></li>'
                 );
+                if (coupon){
+                    $('ul#destList li span:first').removeClass('nominiCup');
+                    $('ul#destList li span:first').text('%').addClass('miniCup');
+                }
             }
         }
 
@@ -106,30 +122,14 @@ var LocalStorageHandler = {
                         "showRouteFromMenu(" + qrPoint.point.id + ', ' + miCoche.dest.point.id + ');">' +
                         miCoche.dest.labelCategory.name +
                         '<i class="icon-automobile"></i>' + ' - ' +
-                        miCoche.dest.point.description + '</span>' +
+                        miCoche.dest.point.description + '<span id="miCocheFloor">' + miCoche.dest.floor.name + '</span>'
+                        + '</span>' +
                         '</li>'
 
-                    /*           '<li>' +
-                     '<li class="Label mmenu-label">' + miCoche.dest.labelCategory.name + '</li>' +
-                     '<li ' +
-                     'onclick="' + "$('#menu-right').trigger( 'close' );" +
-                     "showRouteFromMenu(" + qrPoint.point.id + ', ' + miCoche.dest.point.id + ');">' +
-                     miCoche.dest.point.description +
-                     '</li>' +
-                     '</li>'
-                     */
                 );
             }
         }
-        /*
 
-         $('#scrollMenu').prepend(
-         '<li    class="help" ' +
-         'onclick="' + "$('#menu-right').trigger( 'close' );" + 'HelpMenu.show();">' +
-         '<img src="/static/img/help_menu/logo_nuevo.png">' +
-         '<button>?</button>' +
-         '</li>'
-         );*/
     },
 
     setPrevDest: function (marker) {
@@ -137,6 +137,8 @@ var LocalStorageHandler = {
             'prevDate': new Date().getTime(),
             'poid': marker.poid,
             'floorid': marker.floorid,
+            'floorname': marker.floorname,
+            'coupon': marker.coupon,
             'enclosureid': qrPoint.enclosure.id,
             'mesg': gettext('Do you still want to go to') + ' ' + marker.description + '?',
             'description': marker.title,
@@ -163,6 +165,8 @@ var LocalStorageHandler = {
                 'prevDate': new Date().getTime(),
                 'poid': poi.id,
                 'floorid': poi.floor,
+                'floorname': poi.marker.floorname,
+                'coupon': poi.marker.coupon,
                 'enclosureid': qrPoint.enclosure.id,
                 'mesg': gettext('Do you still want to go to') + ' ' + poi.marker.description + '?',
                 'description': poi.marker.title,

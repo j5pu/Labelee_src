@@ -960,7 +960,7 @@ div#cupones{
     line-height: 30px;
     position: absolute;
     bottom: 25px;
-    z-index: 99;
+    z-index: 8;
     opacity: 1;
     -webkit-box-shadow: 2px 2px 2px rgba(0,0,0,0.2);
     box-shadow: 2px 2px 2px rgba(0,0,0,0.2);
@@ -969,6 +969,38 @@ div#cupones{
     border-radius: 6px 0 0 6px;
     background-color: white;
 }
+
+span#cuponLogo{
+    color: darkorange;
+    font-size:2em;
+    margin-left: 8px;
+    font-weight: bold;
+    zoom: 1.08;
+}
+
+
+span#cuponLogo:before{
+    content:'o';
+    color:rgb(23, 165, 245);
+    font-size: 0.5em;
+    position: relative;
+    top: -45%;
+    font-family:sans-serif;
+    font-weight: bold;
+    left: 0.5em;
+}
+
+span#cuponLogo:after{
+    content:'o';
+    color:rgb(221, 55, 55);
+    font-size: 0.5em;
+    position: relative;
+    font-family:sans-serif;
+    font-weight: bold;
+    left:-0.5em;
+}
+
+/*
 #cupones img{
     position: relative;
     display: block;
@@ -976,6 +1008,7 @@ div#cupones{
     margin: 0 auto;
     margin-top: 2%;
 }
+*/
 
 .device {
     width: 86%;
@@ -988,7 +1021,7 @@ div#cupones{
     margin-top:-15px;
     position: relative;
     box-shadow: 0px 0px 5px #000;
-    z-index:9999;
+    z-index:7;
     display:none;
 }
 .device .arrow-left {
@@ -1653,22 +1686,40 @@ marquee > span
 }
 #header a {
     display: block;
-    width: 55px;
-    height: 30px;
+    width: 35px;
+    height: 20px;
     line-height: 30px;
     position: absolute;
     bottom: 25px;
     left: 0;
-    z-index: 99;
+    z-index: 8;
     opacity: 1;
-    -webkit-box-shadow: 2px 2px 2px rgba(0,0,0,0.3);
-    box-shadow: 2px 2px 2px rgba(0,0,0,0.3);
+    -webkit-box-shadow: 2px 2px 2px rgba(0,0,0,0.2);
+    box-shadow: 2px 2px 2px rgba(0,0,0,0.2);
     border: 3px solid #8C8C87;
     border-left: none;
     border-radius: 0 6px 6px 0;
     background-color: white;
-    top:auto;
+    top: auto;
+    padding: 5px 10px 5px 12px;
 }
+
+
+
+span.labeleeLogo{
+    border-top: 4px solid rgb(221, 55, 55);
+    width:27px;
+    height: 4px;
+    display:block;
+}
+span#blueLab{
+    border-top-color: rgb(23, 165, 245);
+}
+
+span#orangeLab{
+    border-top-color: darkorange;
+}
+
 
 .mm-menu li {
     /*
@@ -1889,11 +1940,13 @@ div.help{
     border: none;
     width: 100%;
     height: 25px;
-    position: fixed;
-    bottom: 0px;
+    position: absolute;
+    /*bottom: 0px;*/
+    top: 100%;
+    margin-top: -27px;
     padding: 2px 17% 0 20px;
     display: block;
-    /*box-shadow: 0px -16px 43px 0px #F2EFE4;*/
+    box-shadow: 0px -6px 43px 0px #F2EFE4;
 }
 
 div.help img{
@@ -1912,7 +1965,7 @@ div.help img{
     position: absolute;
     width: 23px;
     height: 23px;
-    right: 42.5%;
+    right: 40.5%;
 }
 
 .search-cancel button {
@@ -2083,3 +2136,62 @@ span#navigator{
     height: 16px;
     font-family: sans-serif;
 }
+
+/* //HACK FOR IE10//
+*/
+/*
+
+input.leaflet-control-layers-selector{
+    visibility:hidden;
+}
+
+.leaflet-control-layers label {
+    background-color: rgb(51,51,51);
+    border-radius: 4px;
+    line-height: 34px;
+    text-align: center;
+}
+
+label > span {
+    position: absolute;
+    top: -2px;
+    line-height: 36px;
+    left: 9px;
+    font-size: 14px;
+    font-weight: bold;
+    text-shadow: 1px 1px 1px #bbb;
+    text-align: left;
+    margin: 0 auto;
+    width: 100%;
+    height: 100%;
+}
+
+.leaflet-control-layers-base span,.leaflet-control-layers-overlays span {
+    font-size: 17px;
+    font-family: 'Raleway','Noto Sans', SANS-SERIF;
+    width: inherit;
+    height: inherit;
+    left: -1px;
+    text-align: center;
+    top: 0px;
+    line-height: 31px;
+}
+*/
+span#miCocheFloor{
+border-radius: 4px;
+background: #bbb;
+box-shadow: 0 0 2px rgba(0, 0, 0, 0.4);
+text-shadow: 0 0 2px rgba(0, 0, 0, 0.4);
+font-size: 12px;
+font-style: normal;
+color: rgba(255, 255, 255, 1);
+position: absolute;
+right: 30%;
+top: 2px;
+width: 20px;
+text-align: center;
+padding-right: 3px;
+line-height: 16px;
+height: 16px;
+font-family: sans-serif;
+    }
