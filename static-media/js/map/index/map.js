@@ -32,15 +32,15 @@ function blinker(element, dst) {
         && dst == prev_dest) {
         var color = element.style.background;
         if (color == "red") {
-            element.style.background = "";
+            element.parentElement.style.background = "";
         } else {
-            element.style.background = "red";
+            element.parentElement.style.background = "red";
         }
         window.setTimeout(function () {
             blinker(element, dst);
         }, 1000);
     } else {
-        if (element != null) element.style.background = "";
+        if (element != null) element.parentElement.style.background = "";
     }
 }
 
@@ -472,11 +472,11 @@ function addCategory(category_index) {
         map.removeLayer(label_categories[selected_category_index].layer);
     }
     checkboxes.prop('checked', false);
-    checkboxes.css('background', '#333');
+    checkboxes.parent().css('background', '#333');
     checkboxes.eq(category_index).prop('checked', true);
     if (!map.hasLayer(label_categories[category_index].layer))
         map.addLayer(label_categories[category_index].layer);
-    checkboxes.eq(category_index)
+    checkboxes.eq(category_index).parent()
         .css('background', label_categories[category_index].color);
 
     selected_category_index = category_index;

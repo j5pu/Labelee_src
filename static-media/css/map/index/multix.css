@@ -414,7 +414,7 @@ pre
     background-color: rgba(186, 186, 186, 0.23);
 }
 
-#header a {
+/*#header a {
 display: block;
 width: 55px;
 height: 30px;
@@ -436,7 +436,7 @@ border-radius: 0 6px 6px 0;
 #header a img {
     width: 48%;
     margin-top: 1px;
-}
+}*/
 span#fake{
     bottom:0;
     position: absolute;
@@ -2139,7 +2139,6 @@ span#navigator{
 
 /* //HACK FOR IE10//
 */
-/*
 
 input.leaflet-control-layers-selector{
     visibility:hidden;
@@ -2176,7 +2175,7 @@ label > span {
     top: 0px;
     line-height: 31px;
 }
-*/
+
 span#miCocheFloor{
 border-radius: 4px;
 background: #bbb;
