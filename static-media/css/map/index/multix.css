@@ -1012,18 +1012,25 @@ span#cuponLogo:after{
 
 .device {
     width: 86%;
-    height: 40%;
+    height: 100px;
     padding: 5%;
     border-radius: 1em;
     background: #111;
     border: 3px solid white;
+/*
     margin: 15px auto;
     margin-top:-15px;
-    position: relative;
+*/
+    margin: 0 5px;
+    top:15px;
+    position: absolute;
     box-shadow: 0px 0px 5px #000;
     z-index:7;
     display:none;
 }
+
+
+
 .device .arrow-left {
     background: url(images/arrows.png) no-repeat left top;
     position: absolute;

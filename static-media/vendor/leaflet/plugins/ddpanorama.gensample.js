@@ -52,12 +52,12 @@ function addSamplePano(options)
 
             jQuery('#canvasPan').css({
                 'position': 'absolute',
-                'z-index': 9,
+                'z-index': 8,
                 'top': '5px',
 //                'left':newWidth *0.049 +'px',
                 'left': '2%',
                 'border-radius':'1.2em',
-                'margin': '0 auto',
+                'margin': '5px auto 25px auto',
                 'overflow': 'hidden',
                 'padding': '3%',
                 'background-color': 'black',
