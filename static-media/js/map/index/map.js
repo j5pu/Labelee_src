@@ -27,12 +27,17 @@
 
 var blinkingMode = null;
 function blinker(element, dst) {
+    //var prevcolor= element.parentElement.style.background;
     if (blinkingMode != null && element != null
         && element.parentElement.innerText.trimLeft() == blinkingMode
         && dst == prev_dest) {
-        var color = element.style.background;
+        color = element.parentElement.style.background;
         if (color == "red") {
+            if (element.checked)
+            element.parentElement.style.background = "darkorange";
+            else {
             element.parentElement.style.background = "";
+            }
         } else {
             element.parentElement.style.background = "red";
         }
@@ -173,7 +178,7 @@ function loadIcon(shape) {
 //Carga de plantas
 function loadFloors() {
 
-    alert(floors);
+
     for (var floor_index in floors) {
 
         var img;
@@ -221,10 +226,12 @@ function loadFloors() {
 
                 //
                 // Habilitamos el uso de la brújula para orientar la flecha
+/*
                 Compass.init();
 
                 pedometer_navigator = new PedometerNavigator($('span#navigator'));
                 pedometer_navigator.init();
+*/
             }
         }(floor_index);
     }
@@ -387,7 +394,7 @@ function loadPOIs() {
 
 //Localización del origen (QR) y carga del mapa
 function initMap(qrPoint) {
-    alert(1);
+
     map.addControl(new L.Control.Zoom());
     layersControl.addTo(map);
 
@@ -405,6 +412,7 @@ function initMap(qrPoint) {
     map.setView(qrFloor.bounds.getCenter(), 0);
     bindContent(qrMarker);
     map.setMaxBounds(map.getBounds());
+    $('input[type=radio].leaflet-control-layers-selector:checked').parent().css('background-color', 'darkorange');
     qrMarker.openPopup();
     qrMarker._bringToFront();
 
@@ -419,7 +427,7 @@ function initMap(qrPoint) {
         destMarker._bringToFront();
     }
     loadedLabels = true;
-    alert(2);
+
 }
 
 
@@ -500,6 +508,11 @@ function removeCategory(category_index) {
 function changeFloor(e) {
 
     SocialMenu.close();
+
+    //Cambiamos color de la planta actual a naranja
+    $('input[type=radio].leaflet-control-layers-selector').parent().css('background-color', '#333');
+    $('input[type=radio].leaflet-control-layers-selector:checked').parent().css('background-color', 'darkorange');
+
 
     // Eliminamos capas de la planta anterior
     map.removeLayer(current_floor.layer);
