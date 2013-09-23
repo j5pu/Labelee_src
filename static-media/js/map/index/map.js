@@ -27,12 +27,17 @@
 
 var blinkingMode = null;
 function blinker(element, dst) {
+    //var prevcolor= element.parentElement.style.background;
     if (blinkingMode != null && element != null
         && element.parentElement.innerText.trimLeft() == blinkingMode
         && dst == prev_dest) {
-        var color = element.style.background;
+        color = element.parentElement.style.background;
         if (color == "red") {
+            if (element.checked)
+            element.parentElement.style.background = "darkorange";
+            else {
             element.parentElement.style.background = "";
+            }
         } else {
             element.parentElement.style.background = "red";
         }
@@ -398,6 +403,7 @@ function initMap(qrPoint) {
     map.setView(qrFloor.bounds.getCenter(), 0);
     bindContent(qrMarker);
     map.setMaxBounds(map.getBounds());
+    $('input[type=radio].leaflet-control-layers-selector:checked').parent().css('background-color', 'darkorange');
     qrMarker.openPopup();
     qrMarker._bringToFront();
 
@@ -492,6 +498,11 @@ function removeCategory(category_index) {
 function changeFloor(e) {
 
     SocialMenu.close();
+
+    //Cambiamos color de la planta actual a naranja
+    $('input[type=radio].leaflet-control-layers-selector').parent().css('background-color', '#333');
+    $('input[type=radio].leaflet-control-layers-selector:checked').parent().css('background-color', 'darkorange');
+
 
     // Eliminamos capas de la planta anterior
     map.removeLayer(current_floor.layer);
