@@ -87,10 +87,15 @@ $(function () {
 
 function main()
 {
+
     ScrollMenu.init();
+
     Panorama.init();
+
     HelpMenu.init();
+
     Map.events.bindAll();
+
 
     $('button#closeCoupon').on('click', function () {
         $('div.device').fadeOut(100);
@@ -127,10 +132,12 @@ function main()
         $('div.device').fadeOut();
         LocalStorageHandler.setPrevDestByPoi(cupPoint)
     });
+
 }
 
 
 function hideSplash() {
+
     $('div#page').fadeIn(100);
     $('div.splash').fadeOut(100);
 

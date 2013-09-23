@@ -172,20 +172,26 @@ function loadIcon(shape) {
 
 //Carga de plantas
 function loadFloors() {
+
+    alert(floors);
     for (var floor_index in floors) {
+
         var img;
         var name = floors[floor_index].name;
 
         if (!Modernizr.svg) {
+
             img = floors[floor_index].imgB;
+
         }
         else {
+
             img = floors[floor_index].img || floors[floor_index].imgB;
+
         }
 
         var floorImg = new Image();
         floorImg.src = img;
-
         floorImg.onload = function (index) {
             var mapH = mapW;
             var bounds = new L.LatLngBounds(new L.LatLng(0, 0), new L.LatLng(mapH, mapW));
@@ -204,6 +210,7 @@ function loadFloors() {
             floor_loaded_index++;
 
             if (floor_loaded_index == floors.length) {
+
                 loadPOIs();
                 initMap(qrPoint);
                 LocalStorageHandler.init();
@@ -380,7 +387,7 @@ function loadPOIs() {
 
 //Localización del origen (QR) y carga del mapa
 function initMap(qrPoint) {
-
+    alert(1);
     map.addControl(new L.Control.Zoom());
     layersControl.addTo(map);
 
@@ -412,6 +419,7 @@ function initMap(qrPoint) {
         destMarker._bringToFront();
     }
     loadedLabels = true;
+    alert(2);
 }
 
 

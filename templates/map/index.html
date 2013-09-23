@@ -12,7 +12,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes"/>
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
 
-   <link href="http://fonts.googleapis.com/css?family=Raleway" rel="stylesheet" type="text/css">
+    <link href="http://fonts.googleapis.com/css?family=Raleway" rel="stylesheet" type="text/css">
 
     {% compressed_css 'map' %}
 
@@ -22,40 +22,51 @@
 
     <script type="text/javascript">
 
-     //   $(document).ready(function () {
-// Muestra el mensaje de advertencia por ahora está deshabilitado
-{% comment %}$.cookieCuttr({
-cookieDeclineButton: true,
+        //   $(document).ready(function () {
+        // Muestra el mensaje de advertencia por ahora está deshabilitado
+        {% comment %}$.cookieCuttr({
+        cookieDeclineButton: true,
 
-cookieAnalyticsMessage: "Usamos cookies para asegurarnos de que te ofrecemos la mejor experiencia posible en nuestro sitio web, para más información pulsa <a onclick='HelpMenu.showDisclaimer();'>aquí</a>. En cumplimiento del Real Decreto-ley 13/2012, ¿Deseas activarlas? "
+        cookieAnalyticsMessage: "Usamos cookies para asegurarnos de que te ofrecemos la mejor experiencia posible en nuestro sitio web, para más información pulsa <a onclick='HelpMenu.showDisclaimer();'>aquí</a>. En cumplimiento del Real Decreto-ley 13/2012, ¿Deseas activarlas? "
 
-});{% endcomment %}
+        });{% endcomment %}
 
 
 
-//});
-     
- //se aceptan todas las cookies por ahora
- $.cookie("cc_cookie_accept", "cc_cookie_accept", {
-                    expires: 365,
-                    path: '/'
-                });
- LocalStorageHandler.setFirstShoot();
-if (jQuery.cookie('cc_cookie_accept') == "cc_cookie_accept") {
-
-var _gaq = _gaq || [];
-_gaq.push(['_setAccount', 'UA-30904444-4']);
-_gaq.push(['_trackPageview']);
-
-(function() {
-var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-var s = document. getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-})();
-}
+        //});
 
 
         var mapData = {{ map_data|safe }};
+
+
+        //se aceptan todas las cookies por ahora
+        try {
+            $.cookie("cc_cookie_accept", "cc_cookie_accept", {
+                expires: 365,
+                path: '/'
+            });
+        } catch (err) {
+
+        }
+
+
+        LocalStorageHandler.setFirstShoot();
+
+        if (jQuery.cookie('cc_cookie_accept') == "cc_cookie_accept") {
+
+            var _gaq = _gaq || [];
+            _gaq.push(['_setAccount', 'UA-30904444-4']);
+            _gaq.push(['_trackPageview']);
+
+            (function () {
+                var ga = document.createElement('script');
+                ga.type = 'text/javascript';
+                ga.async = true;
+                ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+                var s = document.getElementsByTagName('script')[0];
+                s.parentNode.insertBefore(ga, s);
+            })();
+        }
 
 
     </script>
@@ -78,9 +89,9 @@ var s = document. getElementsByTagName('script')[0]; s.parentNode.insertBefore(g
 
 {% csrf_token %}
 
-<div id="page" >
+<div id="page">
 
-{% comment %}
+    {% comment %}
     <div id="header">
         <a href="#menu-right">
             <img src="{{ MEDIA_URL }}menuLab.png"/>
@@ -124,30 +135,31 @@ var s = document. getElementsByTagName('script')[0]; s.parentNode.insertBefore(g
 
             {% for category in categories %}
                 <li>
-                    <span style="background:{{ colors|get_item:category.name }};"><i class="icon-{{ icons|get_item:category.name }}"></i>{{ category.name }}</span>
-                <ul>
-                {% for destination in category.items %}
-                    <li class="destiny"
-                        data-destiny-id="{{ destination.id }}">
-                        {% if destination.coupon %}
-                        <span class="miniCup">%</span>
-                        {% else %}
-                        <span class="nominiCup"></span>
-                        {% endif %}
-                        <a href="#"
-                        onclick="showRouteFromMenu({{ poi_id }}, {{ destination.id }});">
-                        <button>
-                            {% if destination.label.category.enclosure %}
-                                {{ destination.label.name }}
-                            {% else %}
-                                {{ destination.description }}
-                            {% endif %}
-                        </button>
-                        <span>{{ destination.floor.name}}</span>
-                        </a>
-                    </li>
-                {% endfor %}
-                </ul>
+                    <span style="background:{{ colors|get_item:category.name }};"><i
+                            class="icon-{{ icons|get_item:category.name }}"></i>{{ category.name }}</span>
+                    <ul>
+                        {% for destination in category.items %}
+                            <li class="destiny"
+                                data-destiny-id="{{ destination.id }}">
+                                {% if destination.coupon %}
+                                    <span class="miniCup">%</span>
+                                {% else %}
+                                    <span class="nominiCup"></span>
+                                {% endif %}
+                                <a href="#"
+                                   onclick="showRouteFromMenu({{ poi_id }}, {{ destination.id }});">
+                                    <button>
+                                        {% if destination.label.category.enclosure %}
+                                            {{ destination.label.name }}
+                                        {% else %}
+                                            {{ destination.description }}
+                                        {% endif %}
+                                    </button>
+                                    <span>{{ destination.floor.name }}</span>
+                                </a>
+                            </li>
+                        {% endfor %}
+                    </ul>
                 </li>
             {% endfor %}
 
@@ -164,8 +176,8 @@ var s = document. getElementsByTagName('script')[0]; s.parentNode.insertBefore(g
     <span class="locator icon-navigation" id="location"></span>
     <span class="locator icon-automobile" id="myCar"></span>
 
-    {% if coupons and qr_type == 'origin'%}
-{% comment %}
+    {% if coupons and qr_type == 'origin' %}
+        {% comment %}
         <div id="cupones">
             <img id="cupon-img" src="{{ MEDIA_URL }}menuTick.png" alt="Cupones">
         </div>
@@ -193,11 +205,11 @@ var s = document. getElementsByTagName('script')[0]; s.parentNode.insertBefore(g
         </div>
     {% endif %}
 
-<!-- PRUEBA PODÓMETRO-->
+    <!-- PRUEBA PODÓMETRO-->
 
     <span id="navigator"><i
             class="icon-navigation"></i></span>
-{% comment %}    <div id="pedoWrapper">
+    {% comment %}    <div id="pedoWrapper">
     <p>
         <button id="walk">Walk</button>
     </p>
@@ -219,11 +231,11 @@ var s = document. getElementsByTagName('script')[0]; s.parentNode.insertBefore(g
         }
     </script>
 
-<!-- PRUEBA PODÓMETRO-->
+    <!-- PRUEBA PODÓMETRO-->
 
 
     <div id="marquee">
-            <marquee align="center" direction="left" loop="40"
+        <marquee align="center" direction="left" loop="40"
                  style="width:100%; z-index: 10000; font-size:14px;line-height:16px; position: absolute;bottom: 0;background:rgba(17, 17, 17, 0.4);color: #ddd">
             {% for text in marquee %}
                 <span>{{ text }}</span>
@@ -241,10 +253,12 @@ var s = document. getElementsByTagName('script')[0]; s.parentNode.insertBefore(g
         <div class="content">
             <img id="img0" src="{{ STATIC_URL }}img/help_menu/logo_nuevo.png" title="labelee" alt="logo de labelee">
             <h5>
-                Sigue los sencillos pasos que indicamos a continuación para aprender a utilizar este novedoso sistema de localización en interiores.
+                Sigue los sencillos pasos que indicamos a continuación para aprender a utilizar este novedoso sistema de
+                localización en interiores.
             </h5>
             <h5>
-                Recuerda que <b style="color:#194b7e;">labelee</b> funciona a través de tu navegador web, así que para utilizarlo debes estar conectado a  Internet, ya sea mediante Wi-Fi o con tu plan de datos.
+                Recuerda que <b style="color:#194b7e;">labelee</b> funciona a través de tu navegador web, así que para
+                utilizarlo debes estar conectado a Internet, ya sea mediante Wi-Fi o con tu plan de datos.
             </h5>
         </div>
     </div>
@@ -252,49 +266,61 @@ var s = document. getElementsByTagName('script')[0]; s.parentNode.insertBefore(g
     <div class="entry">
         <div class="content">
             <h2>PASO 1. ESCANEA</h2>
+
             <p>
-                Utiliza cualquier aplicación de escaneo de códigos QR para capturar la información contenida en cada una de las etiquetas
+                Utiliza cualquier aplicación de escaneo de códigos QR para capturar la información contenida en cada una
+                de las etiquetas
                 de localización.
             </p>
-            <img id="img1" src="{{ STATIC_URL }}img/help_menu/foto_escaneo.jpg" title="escaneo" alt="imagen de escaneo de un qr">
+            <img id="img1" src="{{ STATIC_URL }}img/help_menu/foto_escaneo.jpg" title="escaneo"
+                 alt="imagen de escaneo de un qr">
         </div>
     </div>
 
     <div class="entry">
         <div class="content">
             <h2>PASO 2. ORIÉNTATE</h2>
+
             <p>
-                Busca la flecha (azul) de señalización que indica tu posición actual y alinéala con la flecha (blanca) que aparece impresa en la pegatina, sobre el código QR que acabas de escanear.
+                Busca la flecha (azul) de señalización que indica tu posición actual y alinéala con la flecha (blanca)
+                que aparece impresa en la pegatina, sobre el código QR que acabas de escanear.
             </p>
-            <img id="img2" src="{{ STATIC_URL }}img/help_menu/c1.png" title="alineacion" alt="captura de pantalla de la alineación de las flechas">
+            <img id="img2" src="{{ STATIC_URL }}img/help_menu/c1.png" title="alineacion"
+                 alt="captura de pantalla de la alineación de las flechas">
         </div>
     </div>
 
     <div class="entry">
         <div class="content">
             <h2>PASO 3. NAVEGA</h2>
+
             <p>
                 Utiliza el desplegable para buscar en el directorio el destino al que deseas ir.
-                Una vez hayas seleccionado uno de los elementos de la lista, aparecerá sobre el mapa el camino más corto entre el punto donde te encuentras y tu destino.
+                Una vez hayas seleccionado uno de los elementos de la lista, aparecerá sobre el mapa el camino más corto
+                entre el punto donde te encuentras y tu destino.
             </p>
-            <img id="img3" src="{{ STATIC_URL }}img/help_menu/c4.png" title="ruta" alt="captura de pantalla de muestra de ruta">
+            <img id="img3" src="{{ STATIC_URL }}img/help_menu/c4.png" title="ruta"
+                 alt="captura de pantalla de muestra de ruta">
         </div>
     </div>
 
     <div class="entry">
         <div class="content">
             <h2>PASO 4. RECUERDA</h2>
+
             <p>
                 Recuerda que en cualquier momento puedes escanear otro código para actualizar tu posición en el mapa
                 o elegir otro destino del menú desplegable.
             </p>
-            <img id="img4" src="{{ STATIC_URL }}img/help_menu/c2.png" title="ruta" alt="captura de pantalla de reelegir ruta">
+            <img id="img4" src="{{ STATIC_URL }}img/help_menu/c2.png" title="ruta"
+                 alt="captura de pantalla de reelegir ruta">
         </div>
     </div>
 
     <div class="entry disclaimer">
         <div class="content">
             <h2>CLÁUSULA DE PRIVACIDAD:</h2>
+
             <p>
                 En cumplimiento de la Ley Orgánica 15/1999, de 13 de Diciembre, de
                 Protección de Datos de Carácter Personal, Bizeu Consulting, S.L.
@@ -303,6 +329,7 @@ var s = document. getElementsByTagName('script')[0]; s.parentNode.insertBefore(g
                 dirección, número de teléfono, etc).
             </p>
             <h5>Cookies</h5>
+
             <p>
                 Una cookie es un pequeño archivo de datos que se envía desde un
                 servidor web a su navegador y se almacena en su computadora. Los
@@ -311,61 +338,71 @@ var s = document. getElementsByTagName('script')[0]; s.parentNode.insertBefore(g
                 almacenar ningún tipo de información personal. Utilizamos las siguientes cookies para
                 personalizar la experiencia en nuestro sitio web:
             </p>
+
             <p>
-               Google Analytics (__utma, __utmb,  __utmc, __utmz, __utmv):  Estas cookies se usan para recopilar
+                Google Analytics (__utma, __utmb, __utmc, __utmz, __utmv): Estas cookies se usan para recopilar
                 información sobre el uso que los visitantes hacen de nuestro sitio. Dicha información nos sirve
                 para compilar informes y nos permite mejorar el sitio. Las cookies recogen información de forma anónima,
                 incluido el número de visitantes del sitio, la procedencia de los mismos y las páginas que han visitado.
             </p>
+
             <p>
-               miCoche : Esta cookie almacena la información relativa a una pegatina ubicada en algún parking. Dicha
+                miCoche : Esta cookie almacena la información relativa a una pegatina ubicada en algún parking. Dicha
                 información nos sirve para saber donde están aparcados los coches de los usuarios.
             </p>
+
             <p>
-               shareDest : Esta cookie almacena la información relativa a un enlace compartido. Dicha información nos sirve
+                shareDest : Esta cookie almacena la información relativa a un enlace compartido. Dicha información nos
+                sirve
                 para que después de que un usuario reciba un enlace compartido de la aplicación, este pueda usarlo como
                 destino de una ruta.
             </p>
-              <p>
-               prevDest : Esta cookie almacena la información relativa al último destino que ha seleecionado el usuario
-                  . Dicha información nos sirve para que el usuario siempre pueda trazar una ruta al último destino
-                  seleccionado.
+
+            <p>
+                prevDest : Esta cookie almacena la información relativa al último destino que ha seleecionado el usuario
+                . Dicha información nos sirve para que el usuario siempre pueda trazar una ruta al último destino
+                seleccionado.
             </p>
+
             <p>
                 first_shoot: Esta cookie almacena la información relativa a un identificador único asignado al usuario
-                  .Dicha información nos sirve para saber si un usuario accede por primera vez a la aplicación o no, también
+                .Dicha información nos sirve para saber si un usuario accede por primera vez a la aplicación o no,
+                también
                 puede ser utilizada para fines estadísticos.
             </p>
+
             <p>
                 csrftoken: Esta cookie almacena la información relativa a un valor generado aleatoriamente. Dicha
                 información no sirve para proteger la aplicación de ciertos ataques informáticos.
             </p>
+
             <p>
                 sessionid: Esta cookie almacena la información relativa a un valor generado aleatoriamente. Dicha
-                información nos sirve para identificar de manera única un explorador con datos de la sesión en el servidor.
+                información nos sirve para identificar de manera única un explorador con datos de la sesión en el
+                servidor.
             </p>
         </div>
     </div>
 
     <div class="button_wrapper">
         <button class="btn info open_disclaimer">
-            {% trans "Privacidad"%}
+            {% trans "Privacidad" %}
         </button>
 
         <button class="btn info prev">
-            {% trans "Anterior"%}
+            {% trans "Anterior" %}
         </button>
 
         <button class="btn info next">
-            {% trans "Siguiente"%}
+            {% trans "Siguiente" %}
         </button>
 
         <button class="btn info finish">
-            {% trans "Usar la aplicación"%}
+            {% trans "Usar la aplicación" %}
         </button>
 
         <button class="btn info close_disclaimer">
-            {% trans "Volver a la ayuda"%}
+            {% trans "Volver a la ayuda" %}
         </button>
     </div>
 </div>
@@ -373,6 +410,7 @@ var s = document. getElementsByTagName('script')[0]; s.parentNode.insertBefore(g
 
 <div id="unsupported_mobile_msg" style="display: none;">
     <h5>Labelee solo está disponible para Android, Iphone y Blackberry.</h5>
+
     <div>
         <img id="android" src="{{ STATIC_URL }}img/os_icons/android.png">
         <img id="ios" src="{{ STATIC_URL }}img/os_icons/ios.jpg">

@@ -53,8 +53,6 @@ var LocalStorageHandler = {
         }
 
 
-
-
 //        Convert a Date to a string when setting, and parse it when getting
 //        localStorage.lastRead = (new Date()).toUTCString();
 //        var lastRead = new Date(Date.parse(localStorage.lastRead));
@@ -94,15 +92,15 @@ var LocalStorageHandler = {
 
                     '<li class="destiny">' +
                         '<span class="nominiCup"></span>' +
-                        '<a href="#"'+
+                        '<a href="#"' +
                         'onclick="' + "$('#menu-right').trigger( 'close' );" +
                         "showRouteFromMenu(" + qrPoint.point.id + ', ' + point_dest_id + ');">' +
-                     '<button>'+description +
-                         '</button>' +
-                        '<span>'+ floorname+ '</span>' +
+                        '<button>' + description +
+                        '</button>' +
+                        '<span>' + floorname + '</span>' +
                         '</a></li>'
                 );
-                if (coupon){
+                if (coupon) {
                     $('ul#destList li span:first').removeClass('nominiCup');
                     $('ul#destList li span:first').text('%').addClass('miniCup');
                 }
@@ -227,7 +225,15 @@ var LocalStorageHandler = {
     setCookie: function (name, valor) {
 
         if (jQuery.cookie('cc_cookie_accept') == "cc_cookie_accept")
-            localStorage.setItem(name, valor);
+            try {
+                //Run some code here
+                localStorage.setItem(name, valor);
+            }
+            catch (err) {
+                //Handle errors here
+               // alert(err);
+            }
+
 
     },
     clearAll: function () {
@@ -259,6 +265,7 @@ var LocalStorageHandler = {
     },
 
     setFirstShoot: function () {
+
         if (!localStorage.getItem('first_shoot')) {
             var first_shoot = {
                 time: new Date().getTime(),
@@ -266,6 +273,7 @@ var LocalStorageHandler = {
             };
 
             LocalStorageHandler.setCookie('first_shoot', JSON.stringify(first_shoot));
+
         }
     }
 };
