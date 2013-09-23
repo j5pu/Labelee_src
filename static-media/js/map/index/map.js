@@ -27,20 +27,25 @@
 
 var blinkingMode = null;
 function blinker(element, dst) {
+    //var prevcolor= element.parentElement.style.background;
     if (blinkingMode != null && element != null
         && element.parentElement.innerText.trimLeft() == blinkingMode
         && dst == prev_dest) {
-        var color = element.style.background;
+        color = element.parentElement.style.background;
         if (color == "red") {
-            element.style.background = "";
+            if (element.checked)
+            element.parentElement.style.background = "darkorange";
+            else {
+            element.parentElement.style.background = "";
+            }
         } else {
-            element.style.background = "red";
+            element.parentElement.style.background = "red";
         }
         window.setTimeout(function () {
             blinker(element, dst);
         }, 1000);
     } else {
-        if (element != null) element.style.background = "";
+        if (element != null) element.parentElement.style.background = "";
     }
 }
 
@@ -172,20 +177,26 @@ function loadIcon(shape) {
 
 //Carga de plantas
 function loadFloors() {
+
+
     for (var floor_index in floors) {
+
         var img;
         var name = floors[floor_index].name;
 
         if (!Modernizr.svg) {
+
             img = floors[floor_index].imgB;
+
         }
         else {
+
             img = floors[floor_index].img || floors[floor_index].imgB;
+
         }
 
         var floorImg = new Image();
         floorImg.src = img;
-
         floorImg.onload = function (index) {
             var mapH = mapW;
             var bounds = new L.LatLngBounds(new L.LatLng(0, 0), new L.LatLng(mapH, mapW));
@@ -204,6 +215,7 @@ function loadFloors() {
             floor_loaded_index++;
 
             if (floor_loaded_index == floors.length) {
+
                 loadPOIs();
                 initMap(qrPoint);
                 LocalStorageHandler.init();
@@ -214,10 +226,12 @@ function loadFloors() {
 
                 //
                 // Habilitamos el uso de la brújula para orientar la flecha
+/*
                 Compass.init();
 
                 pedometer_navigator = new PedometerNavigator($('span#navigator'));
                 pedometer_navigator.init();
+*/
             }
         }(floor_index);
     }
@@ -244,7 +258,10 @@ function loadPOIs() {
                 nameIcon = current_poi.label.name,
                 shapeIcon = current_poi.label.category.icon,
                 id = current_poi.id,
-                floorid = current_poi.floor;
+                floorid = current_poi.floor,
+                floorname = floors_indexed[floorid].name;
+
+
             var description = current_poi.description,
                 panorama = current_poi.panorama,
                 coupon = current_poi.coupon,
@@ -266,6 +283,7 @@ function loadPOIs() {
 
             current_poi.marker.poid = id;
             current_poi.marker.floorid = floorid;
+            current_poi.marker.floorname = floorname;
             current_poi.marker.psX = sX;
             current_poi.marker.psY = sY;
             current_poi.marker.loc = loc;
@@ -394,6 +412,7 @@ function initMap(qrPoint) {
     map.setView(qrFloor.bounds.getCenter(), 0);
     bindContent(qrMarker);
     map.setMaxBounds(map.getBounds());
+    $('input[type=radio].leaflet-control-layers-selector:checked').parent().css('background-color', 'darkorange');
     qrMarker.openPopup();
     qrMarker._bringToFront();
 
@@ -405,8 +424,10 @@ function initMap(qrPoint) {
     if (map.hasLayer(destMarker)) {
         destMarker.openPopup();
         bindContent(destMarker);
+        destMarker._bringToFront();
     }
     loadedLabels = true;
+
 }
 
 
@@ -467,11 +488,11 @@ function addCategory(category_index) {
         map.removeLayer(label_categories[selected_category_index].layer);
     }
     checkboxes.prop('checked', false);
-    checkboxes.css('background', '#333');
+    checkboxes.parent().css('background', '#333');
     checkboxes.eq(category_index).prop('checked', true);
     if (!map.hasLayer(label_categories[category_index].layer))
         map.addLayer(label_categories[category_index].layer);
-    checkboxes.eq(category_index)
+    checkboxes.eq(category_index).parent()
         .css('background', label_categories[category_index].color);
 
     selected_category_index = category_index;
@@ -487,6 +508,11 @@ function removeCategory(category_index) {
 function changeFloor(e) {
 
     SocialMenu.close();
+
+    //Cambiamos color de la planta actual a naranja
+    $('input[type=radio].leaflet-control-layers-selector').parent().css('background-color', '#333');
+    $('input[type=radio].leaflet-control-layers-selector:checked').parent().css('background-color', 'darkorange');
+
 
     // Eliminamos capas de la planta anterior
     map.removeLayer(current_floor.layer);
@@ -629,6 +655,7 @@ function drawRoute(org, dst) {
                         $('div.leaflet-popup-content-wrapper').addClass('withCoupon');
                     }
                     bindContent(destMarker);
+                    destMarker._bringToFront();
                 }
 
                 if (carMarker && map.hasLayer(carMarker)) {
@@ -825,11 +852,13 @@ function initSideMenu()
     $('.mm-submenu .destiny[data-destiny-id=' + qrPoint.point.id + ']')
         .addClass('origin');
 
+/*
     // Sombreado en la parte baja del menú
     if(androidversion >= 4.0 || device.Chrome()|| device.iOS())
     {
         $('div.help').css({'box-shadow': '0px -16px 43px 0px #F2EFE4'})
     }
+*/
 }
 
 

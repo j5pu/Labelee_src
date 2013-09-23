@@ -36,6 +36,18 @@ cookieAnalyticsMessage: "Usamos cookies para asegurarnos de que te ofrecemos la 
 //});
      
  //se aceptan todas las cookies por ahora
+
+     // BUG orientation portrait/lanscape IOS //
+     if (navigator.userAgent.match(/iPhone/i) || navigator.userAgent.match(/iPad/i)) {
+         var viewportmeta = document.querySelector('meta[name="viewport"]');
+         if (viewportmeta) {
+             viewportmeta.content = 'width=device-width, minimum-scale=1.0, maximum-scale=1.0, initial-scale=1.0';
+             document.addEventListener('orientationchange', function () {
+                 viewportmeta.content = 'width=device-width, minimum-scale=0.25, maximum-scale=1';
+             }, false);
+         }
+     }
+        var mapData = {{ map_data|safe }};
  $.cookie("cc_cookie_accept", "cc_cookie_accept", {
                     expires: 365,
                     path: '/'
@@ -55,7 +67,6 @@ var s = document. getElementsByTagName('script')[0]; s.parentNode.insertBefore(g
 }
 
 
-        var mapData = {{ map_data|safe }};
 
 
     </script>
@@ -80,9 +91,18 @@ var s = document. getElementsByTagName('script')[0]; s.parentNode.insertBefore(g
 
 <div id="page" >
 
+{% comment %}
     <div id="header">
         <a href="#menu-right">
             <img src="{{ MEDIA_URL }}menuLab.png"/>
+        </a>
+    </div>
+{% endcomment %}
+    <div id="header">
+        <a href="#menu-right">
+            <span class="labeleeLogo" id="blueLab">&#160</span>
+            <span class="labeleeLogo" id="orangeLab">&#160</span>
+            <span class="labeleeLogo" id="redLab">&#160</span>
         </a>
     </div>
 
@@ -156,8 +176,13 @@ var s = document. getElementsByTagName('script')[0]; s.parentNode.insertBefore(g
     <span class="locator icon-automobile" id="myCar"></span>
 
     {% if coupons and qr_type == 'origin'%}
+{% comment %}
         <div id="cupones">
             <img id="cupon-img" src="{{ MEDIA_URL }}menuTick.png" alt="Cupones">
+        </div>
+{% endcomment %}
+        <div id="cupones">
+            <span id="cuponLogo">/</span>
         </div>
 
         <div class="device">

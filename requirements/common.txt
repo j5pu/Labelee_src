@@ -16,3 +16,4 @@ pylint
 pyflakes
 selenium
 pyvirtualdisplay
+mimeparse

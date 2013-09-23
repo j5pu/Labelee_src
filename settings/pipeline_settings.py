@@ -43,7 +43,7 @@ PIPELINE_JS = {
             'vendor/hammer.js_v1.0.3/dist/jquery.hammer.min.js',
             'vendor/leaflet/leaflet.js',
             'vendor/leaflet/plugins/L.PolylineDecorator.js',
-            'vendor/leaflet/plugins/scale.fix.js',
+            # 'vendor/leaflet/plugins/scale.fix.js',
             'vendor/leaflet/plugins/L.GeometryUtil.js',
             'vendor/leaflet/plugins/L.RotatedMarker.js',
             'vendor/leaflet/plugins/L.Symbol.js',
