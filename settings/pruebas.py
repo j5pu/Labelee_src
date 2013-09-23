@@ -2,6 +2,8 @@
 
 from common import *
 
+# Production secret                                                                                                                                                             #########################################                                                                                                                                        
+SECRET_KEY = os.environ['SECRET_KEY']
 
 
 # Production database
