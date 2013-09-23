@@ -34,7 +34,8 @@ cookieAnalyticsMessage: "Usamos cookies para asegurarnos de que te ofrecemos la 
 
 
 //});
-     
+        var mapData = {{ map_data|safe }};
+
  //se aceptan todas las cookies por ahora
 
      // BUG orientation portrait/lanscape IOS //
@@ -47,7 +48,6 @@ cookieAnalyticsMessage: "Usamos cookies para asegurarnos de que te ofrecemos la 
              }, false);
          }
      }
-        var mapData = {{ map_data|safe }};
  $.cookie("cc_cookie_accept", "cc_cookie_accept", {
                     expires: 365,
                     path: '/'

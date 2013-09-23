@@ -1913,7 +1913,7 @@ var floorChecks = [];
         floorChecks.push(t.name);
         floorChecks[t.name] = i;
         if (blinkingMode != null && blinkingMode == t.name)
-            blinker(i,prev_dest);
+        blinker(i,prev_dest)
         //toggleColor(i);
         var r = t.overlay ? this._overlaysList : this._baseLayersList;
         return r.appendChild(o), o
