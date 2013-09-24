@@ -92,6 +92,7 @@ var LocalStorageHandler = {
                         '<span>' + floorname + '</span>' +
                         '</a></li>'
                 );
+                $('li#destPrev em').text('1');
                 if (coupon) {
                     $('ul#destList li span:first').removeClass('nominiCup');
                     $('ul#destList li span:first').text('%').addClass('miniCup');
@@ -117,7 +118,9 @@ var LocalStorageHandler = {
                         '</li>'
 
                 );
+
             }
+
         }
 
     },
@@ -209,9 +212,13 @@ var LocalStorageHandler = {
                             function () {
                                 showOrigin = true;
                                 drawRoute(qrPoint.point.id, prevDest.dest.point.id);
+                                LocalStorageHandler.setSideMenu();
+
                             },		// callback function for 'YES' button
                             function () {
                                 localStorage.removeItem('prevDest');
+                                LocalStorageHandler.setSideMenu();
+
                             }		// callback function for 'NO' button
                         );
 
@@ -222,6 +229,8 @@ var LocalStorageHandler = {
                             drawRoute(qrPoint.point.id, prevDest.dest.point.id);
                             prevDest.shooted_origin = true;
                             LocalStorageHandler.setCookie('prevDest', JSON.stringify(prevDest));
+                            this.setSideMenu();
+
                         }
                     }
                     else if (prevDest.enclosureid == qrPoint.enclosure.id) {
@@ -230,9 +239,13 @@ var LocalStorageHandler = {
                             function () {
                                 showOrigin = true;
                                 drawRoute(qrPoint.point.id, prevDest.poid );
+                                LocalStorageHandler.setSideMenu();
+
                             },		// callback function for 'YES' button
                             function () {
                                 localStorage.removeItem('prevDest');
+                                LocalStorageHandler.setSideMenu();
+
                             }		// callback function for 'NO' button
                         );
 
@@ -240,9 +253,13 @@ var LocalStorageHandler = {
                 }
             }
 
-            this.setSideMenu();
-        }
+            else{
+                this.setSideMenu();
+            }
 
+//        this.setSideMenu();
+
+        }
     },
 
     setCookie: function (name, valor) {

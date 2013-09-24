@@ -224,6 +224,8 @@ function loadFloors() {
                 loadPOIs();
                 initMap(qrPoint);
                 LocalStorageHandler.init();
+
+
                 initSideMenu();
                 $('div#cupones, div#header, span.locator, div#marquee').show();
                 Coupon.init();
