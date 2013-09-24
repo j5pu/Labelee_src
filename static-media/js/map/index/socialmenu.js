@@ -131,7 +131,7 @@ var SocialMenu = {
     },
     whatsapp_click: function (point) {
         var information = SocialMenu.getShareInformation(point);
-        window.open('whatsapp://send?text=' + information[1] + encodeURIComponent(information[0]), 'sharer', 'toolbar=0,status=0,width=626,height=436');
+        window.location ='whatsapp://send?text=' + information[1] + encodeURIComponent(information[0]), 'sharer', 'toolbar=0,status=0,width=626,height=436';
 
     },
 
