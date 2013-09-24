@@ -131,7 +131,7 @@ var SocialMenu = {
     },
     whatsapp_click: function (point) {
         var information = SocialMenu.getShareInformation(point);
-        window.location ='whatsapp://send?text=' + information[1] + encodeURIComponent(information[0]), 'sharer', 'toolbar=0,status=0,width=626,height=436';
+        window.location ='whatsapp://send?text=' + information[1].replace('&','%26') + encodeURIComponent(information[0]), 'sharer', 'toolbar=0,status=0,width=626,height=436';
 
     },
 
@@ -159,7 +159,7 @@ var SocialMenu = {
         }
         var enclosure = enclosure_id;
         url = SocialMenu.urlstring + enclosure + '_' + floor + '_' + pointId;
-        urlTitle = 'Haz click en el siguiente enlace para ir a  ' + description + " ";
+        urlTitle = 'Haz click en el siguiente enlace para ir a  ' + description + ' ';
         var result = new Array();
         result[0] = url;
         result[1] = urlTitle;
