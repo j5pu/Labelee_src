@@ -24,7 +24,7 @@ var LocalStorageHandler = {
         //
         // guarda parquing
         if (qrPoint.isParking) {
-            if (confirm(gettext('Do you want to remember your parking space?'))) {
+ /*           if (confirm(gettext('Do you want to remember your parking space?'))) {
                 var miCoche = {
                     dest: qrPoint,
                     prevDate: new Date().getTime()
@@ -33,6 +33,20 @@ var LocalStorageHandler = {
             } else {
                 localStorage.removeItem('miCoche')
             }
+ */
+            $.jqDialog.confirm(gettext('Do you want to remember your parking space?'),
+                function () {
+                    var miCoche = {
+                        dest: qrPoint,
+                        prevDate: new Date().getTime()
+                    };
+                    LocalStorageHandler.setCookie('miCoche', JSON.stringify(miCoche));
+                },		// callback function for 'YES' button
+                function () {
+                    localStorage.removeItem('miCoche');
+                }		// callback function for 'NO' button
+            );
+
         }
 
         if (qr_type == 'dest') {
@@ -193,12 +207,20 @@ var LocalStorageHandler = {
                 if (prevDest) {
                     if (prevDest.dest && prevDest.dest.enclosure.id == qrPoint.enclosure.id) {
                         if (prevDest.shooted_origin)
-                            if (confirm(prevDest.mesg)) {
+                        {
+
+                        $.jqDialog.confirm(prevDest.mesg,
+                            function () {
                                 showOrigin = true;
                                 drawRoute(qrPoint.point.id, prevDest.dest.point.id);
-                            }
-                            else
+                            },		// callback function for 'YES' button
+                            function () {
                                 localStorage.removeItem('prevDest');
+                            }		// callback function for 'NO' button
+                        );
+
+                        }
+
                         else {
                             showOrigin = true;
                             drawRoute(qrPoint.point.id, prevDest.dest.point.id);
@@ -207,12 +229,26 @@ var LocalStorageHandler = {
                         }
                     }
                     else if (prevDest.enclosureid == qrPoint.enclosure.id) {
-                        if (confirm(prevDest.mesg)) {
+ /*                       if (confirm(prevDest.mesg)) {
                             showOrigin = true;
                             drawRoute(qrPoint.point.id, prevDest.poid);
                         }
                         else
                             localStorage.removeItem('prevDest');
+ */
+                        $.jqDialog.confirm(prevDest.mesg,
+                            function () {
+                                showOrigin = true;
+                                drawRoute(qrPoint.point.id, prevDest.poid );
+                            },		// callback function for 'YES' button
+                            function () {
+                                localStorage.removeItem('prevDest');
+                            }		// callback function for 'NO' button
+                        );
+
+
+
+
                     }
                 }
             }
