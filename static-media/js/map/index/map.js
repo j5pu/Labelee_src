@@ -27,11 +27,9 @@
 
     var blinkingMode = null;
     function blinker(element, dst) {
-//        alert(blinkingMode);
-//        alert(element.parentElement.childNodes[1].innerHTML.trimLeft() == blinkingMode);
 
     if (blinkingMode != null && element != null
-        && element.parentElement.childNodes[1].innerHTML.trimLeft()==blinkingMode
+        && element.parentElement.childNodes[1].innerHTML.trim()==blinkingMode
         && dst == prev_dest) {
         color = element.parentElement.style.backgroundColor;
         if (color == "red") {
