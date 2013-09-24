@@ -566,6 +566,7 @@ html{
 }
 
 .leaflet-top {
+    /*top: 20px !important;*/
     top: 1.75% !important;
 }
 
@@ -1692,8 +1693,7 @@ html.mm-opened .mm-page {
 }
 
 .mm-menu a.mm-subopen:after {
-//right: 6%;
-    right: 30%;
+    right: 29%;
     margin-top: -6px;
 }
 html.mm-left.mm-opening .mm-page,
@@ -1738,7 +1738,7 @@ a.search-cancel {
     width: auto;
     height: auto;
     position: absolute;
-    right: 31%;
+    right: 30%;
     text-decoration: none;
 
 }
@@ -1804,7 +1804,7 @@ a.search-cancel {
     font-size: 12px;
     font-style: normal;
     color: rgba(255, 255, 255, 1);
-    right: 36%;
+    right: 34%;
     top: 3px;
     width: 17px;
     text-align: center;
@@ -1818,7 +1818,9 @@ a.search-cancel {
 .mm-menu li > a{
     color: #6f6b61;
     font-size: 0.9rem;
-    margin-left: 20px;
+    width: 80%;
+    display: inline-block;
+    margin-left:0;
 }
 
 .mm-menu.mm-vertical ul ul {
@@ -1921,7 +1923,7 @@ div.help img{
     position: absolute;
     width: 23px;
     height: 23px;
-    right: 43.5%;
+    right: 42.5%;
 }
 
 .search-cancel button {
@@ -2045,4 +2047,50 @@ span#navigator{
     position: relative;
     text-align: center;
     font-size: 12px !important;
+}
+
+.mm-menu li > span.miniCup{
+    width: 12px;
+    display: inline-block;
+    padding-right: 5px;
+    background: rgb(255, 201, 103);
+    border: 2px solid crimson;
+    color: white;
+    border-radius: 4px;
+    font-size: 12px;
+    text-shadow: 1px 1px 3px black;
+    line-height: 14px;
+    margin-left: 2px;
+}
+
+.mm-menu li > span.nominiCup{
+    width: 12px;
+    display: inline-block;
+    padding-right: 5px;
+    background: none;
+    border: none;
+    border-radius: 4px;
+    font-size: 12px;
+    line-height: 14px;
+    margin-left: 6px;
+}
+
+.mm-menu li > a > span {
+
+    border-radius: 4px;
+    background: #bbb;
+    box-shadow: 0 0 2px rgba(0, 0, 0, 0.4);
+    text-shadow: 0 0 2px rgba(0, 0, 0, 0.4);
+    font-size: 12px;
+    font-style: normal;
+    color: rgba(255, 255, 255, 1);
+    position: absolute;
+    right: 30%;
+    top: 3px;
+    width: 20px;
+    text-align: center;
+    padding-right: 3px;
+    line-height: 16px;
+    height: 16px;
+    font-family: sans-serif;
 }

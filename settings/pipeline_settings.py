@@ -26,6 +26,7 @@ PIPELINE_CSS = {
             'css/map/index/mmenu.css',
             'css/map/index/multix.css',
             'css/map/index/jqdialog.css',
+            'css/map/index/cookies.css'
         ),
         'output_filename': 'map.min.css',
         'variant': 'datauri',
@@ -55,13 +56,17 @@ PIPELINE_JS = {
             'js/helpers/base.js',
             'js/helpers/ajax_helpers.js',
             'js/helpers/resource.js',
+            'js/helpers/scroller.js',
             'js/log/logger.js',
             'js/map/index/panorama.js',
             'js/map/index/socialmenu.js',
             'js/map/index/compass.js',
             'js/map/index/helpmenu.js',
             'js/map/index/main.js',
-            'js/map/index/jqdialog.min.js'
+            'js/map/index/jqdialog.min.js',
+            'js/map/index/jquery.cookie.js',
+            'js/map/index/jquery.cookiecuttr.js',
+            'js/map/index/cookiemanager.js'
         ),
         'output_filename': 'map.min.js',
         },

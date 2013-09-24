@@ -18,12 +18,17 @@
     {% csrf_token %}
 
 {#    {% include "_manager_navbar.html" with section="Coupon Manager"%}#}
+    {% include "_manager_navbar.html" with current_page="coupon_manager"%}
     {% if user.is_authenticated %}
+{% comment %}
+
         <div id="menu" class="box box-1">
             {% trans "Bienvenido" %}, {{ user.username }}
             <a href="{% url 'django.contrib.auth.views.logout' %}"> <i class="icon-signout"></i> Logout</a>
             <a href="{% url 'django.contrib.auth.views.password_change' %}"> <i class="icon-signout"></i> Cambiar contraseña</a>
         </div>
+{% endcomment %}
+{#        {% include "_help_navbar.html" with current_page="coupon_manager" %}#}
     {% endif %}
 
     <div ng-controller="MainCtrl">
