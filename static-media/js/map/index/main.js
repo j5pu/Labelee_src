@@ -123,10 +123,11 @@ function main()
 
     $('div.swiper-slide img').on('click', function (e) {
         e.preventDefault();
-        var cupPoint = parseInt($(this).prop('id')),
-            cupFloor = new PointResource().read(cupPoint).floor,
-            strL = cupFloor.length,
-            cupFloor = parseInt(cupFloor.substring(strL - 3, strL - 1));
+        var cupPoint = parseInt($(this).prop('id'));
+//PARECE QUE CUPFLOOR NO SIRVE PARA NADA: BORRAR
+//            cupFloor = new PointResource().read(cupPoint).floor;
+//            strL = cupFloor.length;
+//            cupFloor = parseInt(cupFloor.substring(strL - 3, strL - 1));
 
         drawRoute(qrPoint.point.id, cupPoint);
         $('div.device').fadeOut();
