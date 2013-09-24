@@ -3,7 +3,6 @@ var LocalStorageHandler = {
     init: function () {
         this.checkExpire();
         this.setValues();
-        this.draw();
     },
 
     checkExpire: function () {
@@ -41,30 +40,23 @@ var LocalStorageHandler = {
                         prevDate: new Date().getTime()
                     };
                     LocalStorageHandler.setCookie('miCoche', JSON.stringify(miCoche));
+                    LocalStorageHandler.draw();
+
                 },		// callback function for 'YES' button
                 function () {
                     localStorage.removeItem('miCoche');
+                    LocalStorageHandler.draw();
+
                 }		// callback function for 'NO' button
             );
 
-        }
 
-        if (qr_type == 'dest') {
-            // guarda destino compartido
-            this.setSharedDest();
+
         }
         else {
-            // guarda destino previo
-            if (localStorage.getItem('sharedDest')) {
-                var sharedDest = JSON.parse(localStorage.getItem('sharedDest'));
-                if (sharedDest) {
-                    localStorage.removeItem('sharedDest');
-                    sharedDest.mesg = gettext('Do you still want to go to the previous destination?');
-
-                    LocalStorageHandler.setCookie('prevDest', JSON.stringify(sharedDest));
-                }
-            }
+            this.draw();
         }
+
 
 
 //        Convert a Date to a string when setting, and parse it when getting
@@ -87,22 +79,8 @@ var LocalStorageHandler = {
                     coupon = prevDest.coupon,
                     description = prevDest.description_for_menu;
 
-                /*                $('#scrollMenu').prepend(
-                 '<li>'+
-                 '<span style="background:red;"'+ 'onclick="' + "$('#menu-right').trigger( 'close' );" +
-                 "showRouteFromMenu(" + qrPoint.point.id + ', ' + point_dest_id + ');">' +
-                 gettext('PREVIOUS DESTINATION') +
-                 '<i class="icon-screenshot"></i>'+' - '+
-                 description+ '</span>'+
-                 '</li>'
-                 );*/
 
                 $('ul#destList').append(
-//                    '<li>' +
-//                        '<a href="#" style="font-size:0.8rem; color:#333"' +
-//                        'onclick="' + "$('#menu-right').trigger( 'close' );" +
-//                        "showRouteFromMenu(" + qrPoint.point.id + ', ' + point_dest_id + ');">' +
-//                        description + "</a></li>"
 
                     '<li class="destiny">' +
                         '<span class="nominiCup"></span>' +
@@ -200,6 +178,24 @@ var LocalStorageHandler = {
 
 
     draw: function () {
+
+        if (qr_type == 'dest') {
+            // guarda destino compartido
+            this.setSharedDest();
+        }
+        else {
+            // guarda destino previo
+            if (localStorage.getItem('sharedDest')) {
+                var sharedDest = JSON.parse(localStorage.getItem('sharedDest'));
+                if (sharedDest) {
+                    localStorage.removeItem('sharedDest');
+                    sharedDest.mesg = gettext('Do you still want to go to the previous destination?');
+
+                    LocalStorageHandler.setCookie('prevDest', JSON.stringify(sharedDest));
+                }
+            }
+        }
+
         if (qr_type == 'origin') {
             // DESTINO PREVIO
             if (localStorage.getItem('prevDest')) {
@@ -229,13 +225,7 @@ var LocalStorageHandler = {
                         }
                     }
                     else if (prevDest.enclosureid == qrPoint.enclosure.id) {
- /*                       if (confirm(prevDest.mesg)) {
-                            showOrigin = true;
-                            drawRoute(qrPoint.point.id, prevDest.poid);
-                        }
-                        else
-                            localStorage.removeItem('prevDest');
- */
+
                         $.jqDialog.confirm(prevDest.mesg,
                             function () {
                                 showOrigin = true;
@@ -245,9 +235,6 @@ var LocalStorageHandler = {
                                 localStorage.removeItem('prevDest');
                             }		// callback function for 'NO' button
                         );
-
-
-
 
                     }
                 }
