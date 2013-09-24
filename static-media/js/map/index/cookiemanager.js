@@ -192,7 +192,7 @@ var LocalStorageHandler = {
                 var sharedDest = JSON.parse(localStorage.getItem('sharedDest'));
                 if (sharedDest) {
                     localStorage.removeItem('sharedDest');
-                    sharedDest.mesg = gettext('Do you still want to go to the previous destination?');
+                    sharedDest.mesg = gettext('Do you still want to go to') + ' '+sharedDest.dest.point.description+'?';
 
                     LocalStorageHandler.setCookie('prevDest', JSON.stringify(sharedDest));
                 }
@@ -205,6 +205,7 @@ var LocalStorageHandler = {
                 var prevDest = JSON.parse(localStorage.getItem('prevDest'));
                 if (prevDest) {
                     if (prevDest.dest && prevDest.dest.enclosure.id == qrPoint.enclosure.id) {
+
                         if (prevDest.shooted_origin)
                         {
 
