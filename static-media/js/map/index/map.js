@@ -564,6 +564,7 @@ Map.reloadPois = function () {
 
 
 function drawRoute(org, dst) {
+
     //Creación de la ruta (con subrutas correspondientes), desde el origen hasta el POI destino
         //Cambiamos color de la planta actual a naranja
     $('input[type=radio].leaflet-control-layers-selector').parent().css('background-color', '#333');

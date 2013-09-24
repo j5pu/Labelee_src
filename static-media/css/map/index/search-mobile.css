@@ -108,8 +108,11 @@ h3,h4 {
 */
 }
 
+/*
 
-/* SEARCH */
+*/
+/* SEARCH *//*
+
 .leaflet-control.leaflet-control-search {
 	z-index:2000;
 }
@@ -149,7 +152,9 @@ h3,h4 {
 	margin:3px;
 }
 .leaflet-control-search .search-tooltip {
-	max-height:142px;/*(.search-tip height * 5)*/
+	max-height:142px;*/
+/*(.search-tip height * 5)*//*
+
     right:-2px;
 }
 .leaflet-control-search .search-tip {
@@ -178,7 +183,9 @@ h3,h4 {
 	font-size:1.2em;
 } 
 
-/* ATTRIBUTION*/
+*/
+/* ATTRIBUTION*//*
+
 .leaflet-control.leaflet-control-attribution {
     display:none;
 	border:none;
@@ -186,3 +193,4 @@ h3,h4 {
 	margin:0 -4px -4px 0;
 }
 
+*/
