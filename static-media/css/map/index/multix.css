@@ -1164,7 +1164,7 @@ Instead of a list of all class selectors,
 you can use the generic selector below, but it's slower:
 [class*="icon-"] {
 */
-.icon-food, .icon-female, .icon-male,.icon-sort, .icon-signin, .icon-screenshot, .icon-twitter-sign , .icon-google-plus-sign, .icon-facebook-sign, .icon-camera, .icon-star,.icon-basket, .icon-microwave,.icon-barbell, .icon-user, .icon-user-2, .icon-user-3, .icon-tshirt, .icon-smile {
+.icon-food, .icon-female, .icon-male,.icon-sort, .icon-signin, .icon-screenshot, .icon-twitter-sign , .icon-google-plus-sign, .icon-facebook-sign, .icon-camera, .icon-star,.icon-basket, .icon-microwave,.icon-barbell, .icon-user, .icon-user-2, .icon-user-3, .icon-tshirt, .icon-smile, .icon-bed, .icon-office, .icon-stethoscope {
     font-family: 'carFont';
     speak: none;
     font-style: normal;
@@ -1244,6 +1244,16 @@ you can use the generic selector below, but it's slower:
 .icon-tshirt:before {
     content: "\e007";
 }
+.icon-bed:before {
+	content: "\e008";
+}
+.icon-office:before {
+	content: "\e009";
+}
+.icon-stethoscope:before {
+	content: "\f0f1";
+}
+
 
 @font-face {
     font-family: 'carFont';
@@ -1255,6 +1265,8 @@ you can use the generic selector below, but it's slower:
     font-weight: normal;
     font-style: normal;
 }
+
+
 
 @font-face {
     font-family: 'whatsapp';
