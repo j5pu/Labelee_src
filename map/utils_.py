@@ -42,7 +42,7 @@ def get_incompatible_map_data(poisByFloor, enclosure_id):
     """
     response = {}
     response['enclosure'] = enclosure_id
-    response['floors'] = Floor.objects.filter(floor__enclosure = enclosure_id).order_by('-floor').all()
+    response['floors'] = queryset_to_dict(Floor.objects.filter(enclosure = enclosure_id).order_by('-floor_number').all())
     for floor in response['floors']:
         floor['pois'] = poisByFloor[floor['id']]
 

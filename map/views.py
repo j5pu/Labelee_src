@@ -86,6 +86,13 @@ def your_position(request, label_id):
     return render_to_response('map/your_position.html', ctx, context_instance=RequestContext(request))
 
 
+def exclude_non_important_categories(categories):
+
+    for category in categories:
+        if category['name'] in FIXED_CATEGORIES['hidden_on_side_menu'].values():
+            categories.remove(category)
+
+
 def show_incompatible_map(request, enclosure_id):
     """
     Loads a simple map with a directory for incompatible devices.
@@ -94,11 +101,18 @@ def show_incompatible_map(request, enclosure_id):
 
         map/incompatible-devices/26
     """
+    if enclosure_id == None or not enclosure_id.isdigit():
+        raise Http404
+
     cached = cache_show_map(enclosure_id)
+
+    # Check if the enclosure exists
+    if cached == {}:
+        raise Http404
 
     ctx = {
         'enclosure_id': enclosure_id,
-        'categories': cached['ordered_categories'],
+        'categories': exclude_non_important_categories(cached['ordered_categories']),
         'map_data': simplejson.dumps(
             get_incompatible_map_data(cached['poisByFloor'], enclosure_id)
         )

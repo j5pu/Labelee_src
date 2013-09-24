@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Labelee</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=2.0"> <!--, user-scalable=no"-->
+</head>
+<body>
+
+<link rel="stylesheet" href="{{ STATIC_URL }}css/map/incompatibleDevices.css">
+
+<script>
+    var enclosure_id = {{ enclosure_id }};
+    var map_data = {{ map_data|safe }};
+</script>
+
+<script src="{{ STATIC_URL }}js/map/index/incompatible_devices.js"></script>
+
+<div id="intro">
+    Bienvenido a la versión simplificada de Labelee. Si estás viendo esto es porque tu móvil o navegador no es compatible
+    con la versión completa. Aunque no podrás disfrutar de todas las ventajas de Labelee, aún puedes localizar en el mapa las tiendas
+    que quieras utilizando los selectores de abajo.
+</div>
+
+<div id="map_and_panel">
+
+<img id="currentMap" class="map">
+
+<div id="selectors_panel">
+
+<div id="category" class="selector">
+<span>Categoría: </span><select id="categorySelector" onChange="refreshElementsFromCategory();">
+    <option value="default">Todas</option>
+</select>
+</div>
+
+<div id="element" class="selector">
+<span>Elemento: </span>
+<select id="elementsByCategorySelector" onChange="locateInMap();">
+</select>
+</div>
+
+<div id="floor" class="selector">
+Piso:
+<select id="floorSelector" onChange="changeFloor();">
+</select>
+</div>
+
+</div>
+</div>
+
+<div id="targetMarker">·</div>
+
+<div id="floors"></div>
+
+</body>
+</html>
