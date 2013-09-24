@@ -513,12 +513,9 @@ function removeCategory(category_index) {
 function changeFloor(e) {
 
     SocialMenu.close();
-
     //Cambiamos color de la planta actual a naranja
     $('input[type=radio].leaflet-control-layers-selector').parent().css('background-color', '#333');
     $('input[type=radio].leaflet-control-layers-selector:checked').parent().css('background-color', 'darkorange');
-
-
     // Eliminamos capas de la planta anterior
     map.removeLayer(current_floor.layer);
 
@@ -566,7 +563,9 @@ Map.reloadPois = function () {
 
 function drawRoute(org, dst) {
     //Creación de la ruta (con subrutas correspondientes), desde el origen hasta el POI destino
-
+        //Cambiamos color de la planta actual a naranja
+    $('input[type=radio].leaflet-control-layers-selector').parent().css('background-color', '#333');
+    $('input[type=radio].leaflet-control-layers-selector:checked').parent().css('background-color', 'darkorange');
     for (var floor_id in arrowHead) {
         floors_indexed[floor_id].layer.removeLayer(arrowHead[floor_id]);
     }
