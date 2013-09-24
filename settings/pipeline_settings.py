@@ -18,7 +18,6 @@ PIPELINE_CSS = {
             'vendor/leaflet/leaflet.css',
             'vendor/cubiq-add-to-homescreen-2.0.8/style/add2home.css',
             # 'css/map/index/leaflet.label.css',
-            'css/map/index/search-mobile.css',
             'css/map/index/social.network.menu.css',
             'css/map/index/animation.css',
             'css/map/index/idangerous.swiper.css',
