@@ -25,27 +25,32 @@
         };
 }());*/
 
-var blinkingMode = null;
-function blinker(element, dst) {
-    //var prevcolor= element.parentElement.style.background;
+    var blinkingMode = null;
+    function blinker(element, dst) {
+
     if (blinkingMode != null && element != null
-        && element.parentElement.innerText.trimLeft() == blinkingMode
+        && element.parentElement.childNodes[1].innerHTML.trim()==blinkingMode
         && dst == prev_dest) {
-        color = element.parentElement.style.background;
+        color = element.parentElement.style.backgroundColor;
         if (color == "red") {
+
             if (element.checked)
-            element.parentElement.style.background = "darkorange";
+            {
+            element.parentElement.style.backgroundColor = "darkorange";}
             else {
-            element.parentElement.style.background = "";
+
+                element.parentElement.style.backgroundColor = "";
             }
         } else {
-            element.parentElement.style.background = "red";
+
+            element.parentElement.style.backgroundColor = "red";
         }
         window.setTimeout(function () {
             blinker(element, dst);
         }, 1000);
     } else {
-        if (element != null) element.parentElement.style.background = "";
+
+        if (element != null) element.parentElement.style.backgroundColor = "";
     }
 }
 
