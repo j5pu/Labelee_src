@@ -40,30 +40,21 @@ def get_route(request, origin, destiny):
 
     route_floors_dict = route_dict['fields']['subroutes'] = []
 
-    if route_model.origin.floor == route_model.destiny.floor:
-        subroute = {
-            'floor': floor_filter(to_dict(route_model.origin.floor)),
-            'steps': []
-        }
-        route_floors_dict.append(subroute)
-        for step in route_model.steps.all():
-            route_floors_dict[0]['steps'].append(step_filter(to_dict(step)))
-    else:
-        route_floors_model = Floor.objects.filter(steps__route__id=route_model.id).annotate(total=Sum('id'))
+    route_steps = Step.objects.filter(route_id=route_model.id).order_by('step_number')
 
-        # metemos plantas
-        for floor in route_floors_model:
+    previousFloor = None
+    for step in route_steps:
+
+        # For each change of floor, new subroute
+        if step.floor_id != previousFloor:
+            previousFloor = step.floor_id
             subroute = {
-                'floor': floor_filter(to_dict(floor)),
+                'floor': {'pk': step.floor_id},
                 'steps': []
             }
             route_floors_dict.append(subroute)
 
-        # metemos steps de cada planta
-        for floor in route_floors_dict:
-            steps = Step.objects.filter(floor__id=floor['floor']['pk'], route__id=route_model.id)
-            for step in steps:
-                floor['steps'].append(step_filter(to_dict(step)))
+        route_floors_dict[-1]['steps'].append(step_filter(to_dict(step)))
 
     # Guardamos la ruta ofrecida para el dashboard
     saveDisplayedRoute(origin, destiny)
