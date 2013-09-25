@@ -165,14 +165,10 @@ function main()
     $('div.swiper-slide img').on('click', function (e) {
         e.preventDefault();
         var cupPoint = parseInt($(this).prop('id'));
-//PARECE QUE CUPFLOOR NO SIRVE PARA NADA: BORRAR
-//            cupFloor = new PointResource().read(cupPoint).floor;
-//            strL = cupFloor.length;
-//            cupFloor = parseInt(cupFloor.substring(strL - 3, strL - 1));
-
-        drawRoute(qrPoint.point.id, cupPoint);
+        showRouteFromMenu(qrPoint.point.id, cupPoint);
+//    caso especial drawRoute
         $('div.device').fadeOut();
-        LocalStorageHandler.setPrevDestByPoi(cupPoint)
+        LocalStorageHandler.setPrevDestByPoi(cupPoint);
     });
 
 }
@@ -283,21 +279,6 @@ var Coupon = {
         Coupon.opened = true;
 
     },
-
-
-    /*    calculateCouponArea: function()
-     {
-     var $img = $('img#cupon-img');
-
-     var ancho = $img.width(),
-     alto = $img.height(),
-     vert = 360 / 469 * ancho,
-     imgCoords = "0," + alto + "," + ancho + "," + alto + "," + vert + ",0,0," + alto,
-     $area = $('div#cupones area');
-
-     $area.attr({'coords': imgCoords});
-     },*/
-
 
     close: function () {
         Coupon.opened = false;

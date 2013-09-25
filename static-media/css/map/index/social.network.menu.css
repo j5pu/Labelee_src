@@ -1,7 +1,4 @@
 #socialsharing {
-
-
-
     position: relative;
     left: 0;
     top: 0;
@@ -14,26 +11,10 @@
     margin:-4px;
     padding:0;
     border:0;
-
-    
-
-
-
     overflow: visible;
-
-
-
     height: 38px;
-
-
-
     width: 100%;
-
-
-
 }
-
-
 
 #divsocialmenu{
     width:200px;

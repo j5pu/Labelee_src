@@ -350,6 +350,8 @@ html.mmenu-right .mmenu a.mmenu-subclose:before
     }
 }
 
+
+/*ESTILOS GENERICOS*/
 html, body
 {
     padding: 0;
@@ -704,154 +706,137 @@ span>span{
 .leaflet-popup-pane, .leaflet-control {
     opacity: 0.85;
 }
-/*ESTILOS DEL MENU LATERAL
-///////////////////////////*/
 
 .leaflet-bar {
     box-shadow: none;
 }
-.mmenu div.search
-{
-    background: #eee;
-    border-bottom: 2px solid #cfcfcf;
-    width: 100%;
-    padding: 7% 75px 7% 10px !important;
-    position: fixed;
-    top: 0;
-    z-index: 1;
 
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    box-sizing: border-box;
-}
-@media all and (min-width: 500px) {
-    .mmenu div.search
-    {
-        width: 500px;
-    }
-}
-html.mmenu-right .mmenu div.search
-{
-    padding: 5px 10px 5px 75px !important;
-}
-.mmenu div.search input
-{
-    /*background: #;*/
-    border: 1px solid #ddd;
-    border-radius: 20px;
-    line-height: 30px;
-    color: #999;
-    display: block;
-    width: 100%;
-    height: 30px;
-    margin: 5px 0;
-    padding: 0 0 0 10px;
+/* Estilos heredados de search-mobile.css*/
 
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    box-sizing: border-box;
-}
-.mmenu div.search ~ ul
-{
-    padding-top: 13%;
+.leaflet-control-zoom a:hover,
+.leaflet-touch .leaflet-control-zoom a:hover,
+.leaflet-bar a:hover,
+.leaflet-touch .leaflet-bar a:hover {
+    background-color: #fff;
+    color:#333;
 }
 
-.mmenu li.no-results
-{
-    border: none;
-    font-style: italic;
-    color: #666;
-    display: none;
+.leaflet-control-zoom,
+.leaflet-touch .leaflet-control-zoom {
+    border-radius:4px;
 }
 
-.mmenu li i
-{
-    border-radius: 4px;
-    background: #cfcfcf;
-/*
-    box-shadow: 0 0 2px rgba( 0, 0, 0, 0.2 );
-*/
-    font-size: 11px;
-    font-weight: bold;
-    font-style: normal;
-    color: #fff;
-    text-indent: 0;
-    text-align: center;
-    text-shadow: none;
-    line-height: 22px;
-    display: block;
-    width: 20px;
-    height: 20px;
-    position: absolute;
-    right: 120px;
-    top: 10px;
-}
-
-html.mmenu-opened .mmenu-page
-{
-/*
-box-shadow: 0 0 15px rgba( 0, 0, 0, 0.2 );
-*/
-}
-.mmenu
-{
-/*background: #f6f6f6;*/
-    }
-.mmenu *
-{
-    text-shadow: none;
-    text-align: left;
-}
-.mmenu li
-{
-    border-top-color:#F2EFE4;
-    border-bottom-color: #F2EFE4;
-    position: relative;
-    padding-left: 1em;
-    color: rgb(111, 107, 97);
-    background:white;
-}
-.mmenu li > a,
-.mmenu li > span,
-.mmenu li > a:hover
-{
-/*color: #666;*/
-    }
-.mmenu li.mmenu-selected > a,
-.mmenu li.mmenu-selected > span
-{
-    background: #fff;
-}
-.mmenu a.mmenu-subopen
-{
-    border-left: 1px solid #ddd;
-}
-.mmenu a.mmenu-subclose
-{
-    background: #eee;
-}
-
-.mmenu li.mmenu-label {
-    background: #444;
-    font-size: 1.1rem;
-    line-height: 20px;
-    height: 1.4em;
-    padding-top: 0.25em;
-    margin-bottom: -0.1em;
+.leaflet-control-zoom a,
+.leaflet-touch .leaflet-control-zoom a,
+.leaflet-bar a,
+.leaflet-touch .leaflet-bar a {
+    background-color: #bbb;
+    opacity:0.8;
+    width: 29px;
+    height: 29px;
     color: white;
+    border: 2px solid white;
 }
 
-.mmenu a.mmenu-subopen:after,
-.mmenu a.mmenu-subclose:before
+.leaflet-left.leaflet-top .leaflet-control,
+.leaflet-touch .leaflet-left .leaflet-control {
+    margin-left: 9px;
+    margin-top: 42px;
+    margin-bottom: 0;
+}
+
+.leaflet-control.leaflet-control-attribution {
+    display:none;
+}
+
+.leaflet-touch .leaflet-bar a:first-child {
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+}
+.leaflet-touch .leaflet-bar a:last-child {
+    border-bottom-left-radius: 4px;
+    border-bottom-right-radius: 4px;
+
+}
+.leaflet-popup-content {
+    text-align: center;
+}
+
+.leaflet-top{
+    z-index:6;
+}
+
+.leaflet-right .leaflet-control {
+    margin-right: 8px;
+}
+
+
+
+.leaflet-popup-content
 {
-    border-color: rgba( 0, 0, 0, 0.2 );
+
+    margin: 3px 12px 0px 12px;
+    font-size: 13px;
+    padding: 1px 8px;
+
 }
 
+.leaflet-popup-tip{
+    width: 8px;
+    height: 10px;
+}
+
+.leaflet-popup-content-wrapper {
+    height: auto;
+    width: auto;
+    box-shadow: 0 3px 5px rgba(0,0,0,0.2);
+}
+
+/* //HACK FOR IE10//
+*/
+
+input.leaflet-control-layers-selector{
+    visibility:hidden;
+}
+
+.leaflet-control-layers label {
+    background-color: rgb(51,51,51);
+    border-radius: 4px;
+    line-height: 34px;
+    text-align: center;
+}
+
+label > span {
+    position: absolute;
+    top: -2px;
+    line-height: 36px;
+    left: 9px;
+    font-size: 14px;
+    font-weight: bold;
+    text-shadow: 1px 1px 1px #bbb;
+    text-align: left;
+    margin: 0 auto;
+    width: 100%;
+    height: 100%;
+}
+
+.leaflet-control-layers-base span,.leaflet-control-layers-overlays span {
+    font-size: 17px;
+    font-family: 'Raleway','Noto Sans', SANS-SERIF;
+    width: inherit;
+    height: inherit;
+    left: -1px;
+    text-align: center;
+    top: 0px;
+    line-height: 31px;
+}
+
+
+/*MI SCROLL-MENU*/
 #scrollMenu
 {
     position: absolute;
 }
-
 
 #scrollMenu .help
 {
@@ -891,7 +876,11 @@ span>span>i
     color:white;
 }
 
+/*//////////////////////
+ELEMENTOS PROPIOS HTML
+////////////////////////*/
 
+/*ICONOS LOCATOR Y COCHE*/
 span.locator
 {
     width: 31px;
@@ -940,7 +929,7 @@ span.locator
     color: dimgrey;
 }
 
-
+/*PESTAÑA CUPONES*/
 div#cupones{
     right: 0px;
     width: 55px;
@@ -988,16 +977,7 @@ span#cuponLogo:after{
     left:-0.5em;
 }
 
-/*
-#cupones img{
-    position: relative;
-    display: block;
-    height: 90%;
-    margin: 0 auto;
-    margin-top: 2%;
-}
-*/
-
+/*CUPONERA*/
 .device {
     width: 86%;
     height: 100px;
@@ -1005,10 +985,6 @@ span#cuponLogo:after{
     border-radius: 1em;
     background: #111;
     border: 3px solid white;
-/*
-    margin: 15px auto;
-    margin-top:-15px;
-*/
     margin: 0 5px;
     top:15px;
     position: absolute;
@@ -1016,8 +992,6 @@ span#cuponLogo:after{
     z-index:7;
     display:none;
 }
-
-
 
 .device .arrow-left {
     background: url(images/arrows.png) no-repeat left top;
@@ -1084,15 +1058,11 @@ div.swiper-slide p {
     background: #fff;
 }
 
-.leaflet-popup-content {
-    text-align: center;
-}
+/*BOTONES, CUPON Y PANORAMA*/
 button{
     -webkit-appearance: none;
     border: none;
-    font-size: 1.2em;
     background-color: transparent;
-    color:#333;
 }
 
 button#close{
@@ -1102,12 +1072,10 @@ button#close{
 button.panorama{
     padding: 0px 3px;
 }
-.leaflet-top{
-    z-index:6;
-}
 
-.leaflet-right .leaflet-control {
-    margin-right: 8px;
+img[id*=pano]{
+    height:200%;
+    width: auto;
 }
 
 button#closeCoupon {
@@ -1120,6 +1088,7 @@ font-size:1.2em;
 color:rgba(255, 255, 255, 0.8);
 }
 
+/*MMENU LATERAL*/
 .mm-menu {
     background: white;
 }
@@ -1134,7 +1103,27 @@ color:rgba(255, 255, 255, 0.8);
     text-shadow: none;
 }
 
-/* Use the following CSS code if you want to use data attributes for inserting your icons */
+span#miCocheFloor{
+    border-radius: 4px;
+    background: #bbb;
+    box-shadow: 0 0 2px rgba(0, 0, 0, 0.4);
+    text-shadow: 0 0 2px rgba(0, 0, 0, 0.4);
+    font-size: 12px;
+    font-style: normal;
+    color: rgba(255, 255, 255, 1);
+    position: absolute;
+    right: 30%;
+    top: 2px;
+    width: 20px;
+    text-align: center;
+    padding-right: 3px;
+    line-height: 16px;
+    height: 16px;
+    font-family: sans-serif;
+}
+
+
+/*ICONOS*/
 [data-icon]:before {
     font-family: 'carFont';
     content: attr(data-icon);
@@ -1146,12 +1135,7 @@ color:rgba(255, 255, 255, 0.8);
     -webkit-font-smoothing: antialiased;
 }
 
-/* Use the following CSS code if you want to have a class per icon */
-/*
-Instead of a list of all class selectors,
-you can use the generic selector below, but it's slower:
-[class*="icon-"] {
-*/
+
 .icon-food, .icon-female, .icon-male,.icon-sort, .icon-signin, .icon-screenshot, .icon-twitter-sign , .icon-google-plus-sign, .icon-facebook-sign, .icon-camera, .icon-star,.icon-basket, .icon-microwave,.icon-barbell, .icon-user, .icon-user-2, .icon-user-3, .icon-tshirt, .icon-smile, .icon-bed, .icon-office, .icon-stethoscope {
     font-family: 'carFont';
     speak: none;
@@ -1308,46 +1292,12 @@ you can use the generic selector below, but it's slower:
 *:focus{
     outline:none;
 }
-
-img[id*=pano]{
-    height:200%;
-    width: auto;
-}
-
-.leaflet-popup-content
-{
-
-    margin: 3px 12px 0px 12px;
-    font-size: 13px;
-    padding: 1px 8px;
-/*
-para el botón GO!
-    margin: 3px 12px;
-    font-size: 13px;
-    padding: 5px 8px;
-*/
-
-
-}
-
+/*MENU EN BOCADILLOS*/
 .socialmenu {
     font-size: 1.6rem;
     margin-bottom: 0.4rem;
 
 }
-.leaflet-popup-tip{
-    width: 8px;
-    height: 10px;
-}
-
-.leaflet-popup-content-wrapper {
-/*    height: 85px;
-    width: 192px;*/
-    height: auto;
-    width: auto;
-    box-shadow: 0 3px 5px rgba(0,0,0,0.2);
-}
-
 .withCoupon:after {
     content: '%';
     left: 120px;
@@ -2144,112 +2094,4 @@ span#navigator{
     font-family: sans-serif;
 }
 
-/* //HACK FOR IE10//
-*/
-
-input.leaflet-control-layers-selector{
-    visibility:hidden;
-}
-
-.leaflet-control-layers label {
-    background-color: rgb(51,51,51);
-    border-radius: 4px;
-    line-height: 34px;
-    text-align: center;
-}
-
-label > span {
-    position: absolute;
-    top: -2px;
-    line-height: 36px;
-    left: 9px;
-    font-size: 14px;
-    font-weight: bold;
-    text-shadow: 1px 1px 1px #bbb;
-    text-align: left;
-    margin: 0 auto;
-    width: 100%;
-    height: 100%;
-}
-
-.leaflet-control-layers-base span,.leaflet-control-layers-overlays span {
-    font-size: 17px;
-    font-family: 'Raleway','Noto Sans', SANS-SERIF;
-    width: inherit;
-    height: inherit;
-    left: -1px;
-    text-align: center;
-    top: 0px;
-    line-height: 31px;
-}
-
-span#miCocheFloor{
-border-radius: 4px;
-background: #bbb;
-box-shadow: 0 0 2px rgba(0, 0, 0, 0.4);
-text-shadow: 0 0 2px rgba(0, 0, 0, 0.4);
-font-size: 12px;
-font-style: normal;
-color: rgba(255, 255, 255, 1);
-position: absolute;
-right: 30%;
-top: 2px;
-width: 20px;
-text-align: center;
-padding-right: 3px;
-line-height: 16px;
-height: 16px;
-font-family: sans-serif;
-    }
-
-/* de search-mobile.css*/
-
-.leaflet-control-zoom a:hover,
-.leaflet-touch .leaflet-control-zoom a:hover,
-.leaflet-bar a:hover,
-.leaflet-touch .leaflet-bar a:hover {
-    background-color: #fff;
-    color:#333;
-}
-
-.leaflet-control-zoom,
-.leaflet-touch .leaflet-control-zoom {
-    border-radius:4px;
-}
-.leaflet-control-zoom a,
-.leaflet-touch .leaflet-control-zoom a,
-.leaflet-bar a,
-.leaflet-touch .leaflet-bar a {
-    background-color: #bbb;
-    opacity:0.8;
-    width: 29px;
-    height: 29px;
-    color: white;
-    border: 2px solid white;
-}
-
-
-
-.leaflet-left.leaflet-top .leaflet-control,
-.leaflet-touch .leaflet-left .leaflet-control {
-    margin-left: 9px;
-    margin-top: 42px;
-    margin-bottom: 0;
-}
-
-
-.leaflet-control.leaflet-control-attribution {
-    display:none;
-}
-
-
-.leaflet-touch .leaflet-bar a:first-child {
-    border-top-left-radius: 4px;
-    border-top-right-radius: 4px;
-}
-.leaflet-touch .leaflet-bar a:last-child {
-    border-bottom-left-radius: 4px;
-    border-bottom-right-radius: 4px;
-
-}
 
