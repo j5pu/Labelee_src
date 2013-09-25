@@ -1,7 +1,55 @@
 var ua = navigator.userAgent;
 var androidversion = parseFloat(ua.slice(ua.indexOf("Android")+8));
+var windowsversion = parseFloat(ua.slice(ua.indexOf("Windows Phone")+14));
 
 var mySwiper;
+
+var device = {
+    Android: function() {
+        return navigator.userAgent.match(/Android/i) && androidversion > 2.1;
+    },
+    BlackBerry: function() {
+        // Only works with the latest version: BlackBerry 10
+        return navigator.userAgent.match(/BB10/i);
+    },
+    iOS: function() {
+        return navigator.userAgent.match(/iPhone|iPad|iPod/i);
+    },
+    Opera: function() {
+        return navigator.userAgent.match(/Opera Mini/i);
+    },
+    Windows: function() {
+        return navigator.userAgent.match(/Windows Phone/i) && windowsversion >= 8;
+    },
+    Chrome: function() {
+        return navigator.userAgent.match(/Chrome/i);
+    },
+    isAny: function() {
+        return (device.Android() || device.BlackBerry() || device.iOS() || device.Opera() || device.Windows());
+    },
+
+    isCompatible: function() {
+        // Sólo los compatibles con la aplicación
+        return (device.Android() || device.iOS() || device.BlackBerry() || device.Chrome() || device.Windows());
+    }
+};
+
+/*
+ Device compatibility check: it must be executed prior to anything else, and it shouldn't be run via Jquery,
+ as some of the devices have problems with it
+ */
+if(!device.isCompatible())
+{
+
+    // Redirect to incompatible devices page
+    // Get url without "Http://" and add the corresponding redirection
+    var httpParts = window.location.href.split("http://");
+    var urlParts = httpParts[httpParts.length - 1].split("/");
+    var enclosureId = urlParts[urlParts.length - 1].split("_")[0];
+    var newUrl = "http://" + urlParts[0] + "/map/incompatible-devices/" + enclosureId;
+    window.location.assign(newUrl);
+    throw "stop execution";
+}
 
 
 //PREFIX-FREE PLUG-INS
@@ -47,19 +95,11 @@ window.addEventListener("orientationchange", hideAddressBar );
 */
 
 
-
 ///	Activación y configuración del menú
 $(function() {
 
-    if(device.isCompatible())
-    {
-        main();
-    }
-    else
-    {
-        $('.splash').hide();
-        $('#unsupported_mobile_msg').show();
-    }
+    main();
+
 });
 
 function main()
@@ -297,35 +337,5 @@ var ScrollMenu = {
             .on('dragend', function(ev){
                 if(ev.gesture) self.scrollEnd(ev);
             });
-    }
-};
-
-
-var device = {
-    Android: function() {
-        return navigator.userAgent.match(/Android/i);
-    },
-    BlackBerry: function() {
-        return navigator.userAgent.match(/BlackBerry/i);
-    },
-    iOS: function() {
-        return navigator.userAgent.match(/iPhone|iPad|iPod/i);
-    },
-    Opera: function() {
-        return navigator.userAgent.match(/Opera Mini/i);
-    },
-    Windows: function() {
-        return navigator.userAgent.match(/IEMobile/i);
-    },
-    Chrome: function() {
-        return navigator.userAgent.match(/Chrome/i);
-    },
-    isAny: function() {
-        return (device.Android() || device.BlackBerry() || device.iOS() || device.Opera() || device.Windows());
-    },
-
-    isCompatible: function() {
-        // Sólo los compatibles con la aplicación
-        return (device.Android() || device.BlackBerry() || device.iOS() || device.Chrome());
     }
 };
