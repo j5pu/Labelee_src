@@ -56,8 +56,9 @@ def show_map(request, qr_type, enclosure_id, floor_id, poi_id):
         'colors': cached['colors'],
         'icons': cached['icons'],
         'map_data': simplejson.dumps(
-            get_map_data(qr_type, poi_id, cached['poisByFloor'], enclosure_id)
-        )
+            get_map_data(qr_type, poi_id, cached['poisByFloor'], enclosure_id)),
+        'logo': cached['enclosure'][0].logo
+
     }
     return render_to_response('map/index.html', ctx, context_instance=RequestContext(request))
 
