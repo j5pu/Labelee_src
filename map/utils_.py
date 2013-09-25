@@ -36,6 +36,17 @@ def get_map_data(qr_type, poi_id, poisByFloor, enclosure_id):
 
     return response
 
+def get_incompatible_map_data(poisByFloor, enclosure_id):
+    """
+    Returns dictionary with the data needed for incompatible-mode devices
+    """
+    response = {}
+    response['enclosure'] = enclosure_id
+    response['floors'] = queryset_to_dict(Floor.objects.filter(enclosure = enclosure_id).order_by('-floor_number').all())
+    for floor in response['floors']:
+        floor['pois'] = poisByFloor[floor['id']]
+
+    return response
 
 def cache_show_map(enclosure_id):
     """

@@ -56,12 +56,12 @@ def show_map(request, qr_type, enclosure_id, floor_id, poi_id):
         'colors': cached['colors'],
         'icons': cached['icons'],
         'map_data': simplejson.dumps(
-            get_map_data(qr_type, poi_id, cached['poisByFloor'], enclosure_id)),
-        'logo': cached['enclosure'][0].logo
-
+            get_map_data(qr_type, poi_id, cached['poisByFloor'], enclosure_id)
+        )
     }
     return render_to_response('map/index.html', ctx, context_instance=RequestContext(request))
 
+<<<<<<< HEAD
 
 
 
@@ -87,13 +87,6 @@ def your_position(request, label_id):
     return render_to_response('map/your_position.html', ctx, context_instance=RequestContext(request))
 
 
-def exclude_non_important_categories(categories):
-
-    for category in categories:
-        if category['name'] in FIXED_CATEGORIES['hidden_on_side_menu'].values():
-            categories.remove(category)
-
-
 def show_incompatible_map(request, enclosure_id):
     """
     Loads a simple map with a directory for incompatible devices.
@@ -102,18 +95,11 @@ def show_incompatible_map(request, enclosure_id):
 
         map/incompatible-devices/26
     """
-    if enclosure_id == None or not enclosure_id.isdigit():
-        raise Http404
-
     cached = cache_show_map(enclosure_id)
-
-    # Check if the enclosure exists
-    if cached == {}:
-        raise Http404
 
     ctx = {
         'enclosure_id': enclosure_id,
-        'categories': exclude_non_important_categories(cached['ordered_categories']),
+        'categories': cached['ordered_categories'],
         'map_data': simplejson.dumps(
             get_incompatible_map_data(cached['poisByFloor'], enclosure_id)
         )
@@ -121,6 +107,8 @@ def show_incompatible_map(request, enclosure_id):
     return render_to_response('map/index_incompatible_devices.html', ctx, context_instance=RequestContext(request))
 
 
+=======
+>>>>>>> Labelee
 def qr_code_redirect(request):
     if request.method == 'POST':
         qr = QR_Code.objects.get(point_id=request.POST['qr_code_id'])
