@@ -46,7 +46,7 @@ PIPELINE_JS = {
             'vendor/leaflet/plugins/L.GeometryUtil.js',
             'vendor/leaflet/plugins/L.RotatedMarker.js',
             'vendor/leaflet/plugins/L.Symbol.js',
-            'vendor/leaflet/plugins/leaflet.label.js',
+            # 'vendor/leaflet/plugins/leaflet.label.js',
             'vendor/leaflet/plugins/idangerous.swiper-2.0.min.js',
             'vendor/leaflet/plugins/jquery.ba-outside-events.min.js',
             'vendor/leaflet/plugins/ddpanorama.js',
