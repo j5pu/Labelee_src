@@ -1939,41 +1939,6 @@ li a button {
     margin-left: -4px;
 }
 
-
-#unsupported_mobile_msg
-{
-    background: white;
-    display: none;
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    text-align: center;
-}
-
-#unsupported_mobile_msg h5
-{
-    margin-top: 22%;
-}
-
-#unsupported_mobile_msg div
-{
-    margin-top: 9%;
-}
-
-#unsupported_mobile_msg #ios
-{
-    position: relative;
-    top: 0.6em;
-}
-
-#unsupported_mobile_msg #blackberry
-{
-    margin-top: 3%;
-    margin-left: -3%;
-}
-
-
-
 span#navigator{
     font-size: 25;
     position:absolute;
