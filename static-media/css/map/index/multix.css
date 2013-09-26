@@ -1,355 +1,4 @@
-/*
-	Menu
-		- positioning and sizing
-*/
-html.mmenu-opened,
-html.mmenu-opened body
-{
-    height: 100%;
-    width: 100%;
-    overflow: hidden;
-}
-html.mmenu-opened body
-{
-    position: relative;
-}
-.mmenu
-{
-    display: none;
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    top: 0;
-    left: 0;
-    z-index: 0;
-    overflow-x: hidden;
-    overflow-y: scroll;
-    -webkit-overflow-scrolling: touch;
-}
-.mmenu,
-.mmenu *
-{
-    -webkit-text-size-adjust: none;
-    font-family: 'Raleway', 'Noto Sans', Arial, Helvetica, Garuda, sans-serif;
-    font-size: 1rem;
-}
-.mmenu ul,
-.mmenu li,
-.mmenu li > a,
-.mmenu li > span
-{
-    display: block;
-    padding: 0;
-    margin: 0;
-}
-.mmenu > ul
-{
-    padding: 0;
-}
-html.mmenu-left .mmenu > ul > li
-{
-    padding-right: 65px;
-}
-html.mmenu-right .mmenu > ul > li
-{
-    padding-left: 65px;
-}
-html.mmenu-opened .mmenu.mmenu-opened
-{
-    display: block;
-    height: 100%;
-}
-html.mmenu-opened .mmenu-page
-{
-//box-shadow: 0 0 20px rgba( 0, 0, 0, 0.8 );
-    background-color: inherit;
-    min-height: 100%;
-    position: absolute;
-    z-index: 1;
-
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    box-sizing: border-box;
-}
-#mmenu-blocker
-{
-    display: none;
-}
-html.mmenu-opened #mmenu-blocker
-{
-//background: rgba( 255, 255, 255, 0.1 );
-    display: block;
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    top: 0;
-    z-index: 2;
-}
-html.mmenu-opened .mmenu-page,
-html.mmenu-opened #mmenu-blocker
-{
-    -webkit-transition: left 0.5s ease, right 0.5s ease, margin 0.5s ease;
-    -moz-transition: left 0.5s ease, right 0.5s ease, margin 0.5s ease;
-    transition: left 0.5s ease, right 0.5s ease, margin 0.5s ease;
-}
-html.mmenu-left.mmenu-opened .mmenu-page,
-html.mmenu-left.mmenu-opened #mmenu-blocker
-{
-    margin-left: 0px;
-    left: 0%;
-}
-html.mmenu-left.mmenu-opening .mmenu-page,
-html.mmenu-left.mmenu-opening #mmenu-blocker
-{
-/*
-    margin-left: -65px;
-*/
-    left: 100%;
-    margin-left: -27%;
-/*border: 2px solid #cfcfcf;*/
-z-index: 90;
-
-    }
-html.mmenu-right.mmenu-opened .mmenu-page,
-html.mmenu-right.mmenu-opened #mmenu-blocker
-{
-    margin-right: 0px;
-    right: 0%;
-}
-html.mmenu-right.mmenu-opening .mmenu-page,
-html.mmenu-right.mmenu-opening #mmenu-blocker
-{
-    margin-right: -65px;
-    right: 100%;
-}
-
-/*
-	Menu
-		- styling
-*/
-.mmenu
-{
-/*background: #333;*/
-    }
-.mmenu li
-{
-    border: none;
-    border-top: 1px solid #444;
-    border-bottom: 1px solid #111;
-    position: relative;
-}
-.mmenu li:first-child
-{
-    border-top-width: 0;
-}
-.mmenu li > a,
-.mmenu li > span
-{
-    text-indent: 20px;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    line-height: 40px;
-    overflow: hidden;
-    padding-right: 5px;
-}
-.mmenu li > a,
-.mmenu li > span,
-.mmenu li > a:hover
-{
-    color: #999;
-    text-decoration: none;
-}
-.mmenu li.mmenu-selected > a,
-.mmenu li.mmenu-selected > span
-{
-    background: #222;
-}
-
-
-/*
-	Submenu
-		- open link
-*/
-.mmenu a.mmenu-subopen
-{
-    border-left: 1px solid #111;
-    width: 40px;
-    height: 40px;
-    padding: 0;
-    position: absolute;
-    right: 65px;
-    top: 0;
-    z-index: 2;
-}
-html.mmenu-right .mmenu a.mmenu-subopen
-{
-    right: 0;
-}
-.mmenu ul ul a.mmenu-subopen
-{
-    right: 0;
-}
-.mmenu a.mmenu-subopen.mmenu-fullsubopen
-{
-    width: 100%;
-}
-.mmenu a.mmenu-subopen + a,
-.mmenu a.mmenu-subopen + span
-{
-    padding-right: 45px;
-}
-
-
-/*
-	Submenu
-		- close link
-*/
-.mmenu a.mmenu-subclose
-{
-    background: #222;
-    text-indent: 40px;
-    padding-top: 10px;
-    margin-top: -10px;
-}
-
-/*
-	Submenu
-		- vertical
-*/
-.mmenu.mmenu-vertical ul ul
-{
-    display: none;
-    padding: 0 10px 10px 10px;
-}
-.mmenu.mmenu-vertical li.mmenu-selected > ul,
-.mmenu.mmenu-vertical li.mmenu-opened > ul
-{
-    display: block;
-}
-.mmenu.mmenu-vertical ul ul li:last-child
-{
-    border-bottom-width: 0;
-}
-
-/*
-	Submenu
-		- horizontal
-*/
-.mmenu.mmenu-horizontal
-{
-    width: 200%;
-}
-.mmenu.mmenu-horizontal ul
-{
-    width: 50%;
-    margin-left: 0%;
-    float: left;
-
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    box-sizing: border-box;
-
-    -webkit-transition: margin-left 0.5s ease;
-    -moz-transition: margin-left 0.5s ease;
-    transition: margin-left 0.5s ease;
-}
-.mmenu.mmenu-horizontal ul.mmenu-submenu
-{
-    display: none;
-}
-.mmenu.mmenu-horizontal ul.mmenu-submenu.mmenu-opened
-{
-    display: block;
-}
-.mmenu.mmenu-horizontal ul.mmenu-subopened
-{
-    margin-left: -50%;
-    height: 100%;
-    overflow: hidden;
-}
-
-/*
-	Labels
-*/
-
-/*
-	Arrows
-*/
-.mmenu a.mmenu-subopen:after,
-.mmenu a.mmenu-subclose:before
-{
-    content: '';
-    border: 4px solid rgba( 255, 255, 255, 0.3 );
-    border-left: none;
-    border-top: none;
-    display: block;
-    width: 6px;
-    height: 6px;
-    position: absolute;
-}
-.mmenu a.mmenu-subopen:after
-{
-    right: 16px;
-    top: 16px;
-    -webkit-transform: rotate( 315deg );
-    transform: rotate( 315deg );
-}
-.mmenu a.mmenu-subclose:before
-{
-    left: 20px;
-    top: 25px;
-    -webkit-transform: rotate( 135deg );
-    transform: rotate( 135deg );
-}
-.mmenu.mmenu-vertical li.mmenu-opened > a.mmenu-subopen:after
-{
-    -webkit-transform: rotate( 45deg );
-    transform: rotate( 45deg );
-}
-html.mmenu-right .mmenu a.mmenu-subclose:before
-{
-    left: 85px;
-}
-
-
-/*
-	Menu
-		- positioning and sizing for larger screens
-*/
-@media all and (min-width: 500px) {
-    .mmenu.mmenu-vertical
-    {
-        width: 500px;
-    }
-    html.mmenu-right .mmenu.mmenu-vertical
-    {
-        left: auto;
-        right: 0;
-    }
-
-    .mmenu.mmenu-horizontal
-    {
-        width: 1000px;
-    }
-    html.mmenu-right .mmenu.mmenu-horizontal
-    {
-        left: auto;
-        right: -500px;
-    }
-
-    html.mmenu-left.mmenu-opening .mmenu-page,
-    html.mmenu-left.mmenu-opening #mmenu-blocker
-    {
-        /*left: 500px;*/
-        left: 54%;
-    }
-    html.mmenu-right.mmenu-opening .mmenu-page,
-    html.mmenu-right.mmenu-opening #mmenu-blocker
-    {
-        right: 500px;
-    }
-}
-
+/*ESTILOS GENERICOS*/
 html, body
 {
     padding: 0;
@@ -414,29 +63,7 @@ pre
     background-color: rgba(186, 186, 186, 0.23);
 }
 
-/*#header a {
-display: block;
-width: 55px;
-height: 30px;
-line-height: 30px;
-position: absolute;
-bottom: 25px;
-left: 0;
-z-index: 99;
-opacity: 1;
--webkit-box-shadow: 2px 2px 2px rgba(0,0,0,0.2);
-box-shadow: 2px 2px 2px rgba(0,0,0,0.2);
-border: 3px solid #8C8C87;
-border-left: none;
-border-radius: 0 6px 6px 0;
-    background-color: white;
 
-}
-
-#header a img {
-    width: 48%;
-    margin-top: 1px;
-}*/
 span#fake{
     bottom:0;
     position: absolute;
@@ -454,11 +81,6 @@ span#fake{
     left: auto;
     right: 10px;
 }
-#content
-{
-   // padding: 20px;
-
-}
 
 
 body {
@@ -466,20 +88,6 @@ body {
     margin: 0;
     background: #ddd;
 }
-
-/*body:before {
-    content: "";
-    position: fixed;
-    top: -10px;
-    left: -5px;
-    width: 110%;
-    height: 10px;
-
-    -webkit-box-shadow: 0 0 10px rgba(0,0,0,.8);
-    box-shadow: 0 0 10px rgba(0,0,0,.8);
-
-    z-index: 100;
-}*/
 html, body, #map {
     height: 100%;
 }
@@ -539,30 +147,16 @@ html, body, #map {
     border: 2px #cfcfcf solid;
     top: -3px;
     border-radius: 4px;
-
 }
 .leaflet-control-layers {
-/*
-    box-shadow: 0 1px 7px rgba(0,0,0,0.4);
-    -webkit-box-shadow: 0 1px 7px rgba(0,0,0,0.4);
-*/
     background: #f8f8f8;
     top: -2px;
     opacity: .85;
     max-width: 90px;
-
 }
 
 .leaflet-top {
-    /*top: 20px !important;*/
     top: 1.75% !important;
-}
-
-.leaflet-control {
-/*
-    -webkit-box-shadow: 2px 2px 8px rgba(0,0,0,0.3) !important;
-    box-shadow: 2px 2px 8px rgba(0,0,0,0.3) !important;
-*/
 }
 
 .leaflet-control-layers-expanded {
@@ -570,10 +164,7 @@ html, body, #map {
     color: #333;
     background: transparent;
     width: 36px;
-/*    -webkit-box-shadow: none !important;
-    box-shadow: none !important;*/
 }
-
 
 .leaflet-control-layers-overlays {
     top: -5.25%;
@@ -582,9 +173,6 @@ html, body, #map {
     left: -167px;
     float: left;
     height: 36px;
-/*
-    width: 185px;
-*/
     width: 165px;
     display: block;
 }
@@ -597,20 +185,15 @@ html, body, #map {
 
 .leaflet-control-layers label {
     display: block;
-    /*background:#ccc;*/
     margin-bottom:4px;
     height:31px;
     position:relative;
     color: white;
-//    text-align: center;
     display: block;
     margin-left: 4px;
     width: 31px;
     float:  left;
-
-
 }
-
 
 .leaflet-control-layers-selector {
     -webkit-appearance: none;
@@ -620,8 +203,6 @@ html, body, #map {
     width: 100%;
     height: 100%;
     position: absolute;
-//    top: -2px;
-//    left: -3px;
     border: none;
     -webkit-border-radius: 4px;
     border-radius: 4px;
@@ -649,18 +230,12 @@ html, body, #map {
 
 }
 input[type=checkbox].leaflet-control-layers-selector:active, input[type=checkbox].leaflet-control-layers-selector:checked {
-   // background:transparent;
-    -webkit-border-radius: 4px;
     border-radius: 4px;
-
-//    color:white;
-
 }
 
 input[type=checkbox].leaflet-control-layers-selector, input[type=checkbox].leaflet-control-layers-selector
 {
     background:#333;
-
 }
 
 label > span {
@@ -688,10 +263,8 @@ label > span {
 span>span{
     color: green;
     font: 20px bolder;
-    /*font-style: ;*/
     line-height:34px;
     margin-left:-7px;
-
 }
 
 .leaflet-container img.leaflet-image-layer {
@@ -704,154 +277,136 @@ span>span{
 .leaflet-popup-pane, .leaflet-control {
     opacity: 0.85;
 }
-/*ESTILOS DEL MENU LATERAL
-///////////////////////////*/
 
 .leaflet-bar {
     box-shadow: none;
 }
-.mmenu div.search
-{
-    background: #eee;
-    border-bottom: 2px solid #cfcfcf;
-    width: 100%;
-    padding: 7% 75px 7% 10px !important;
-    position: fixed;
-    top: 0;
-    z-index: 1;
 
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    box-sizing: border-box;
-}
-@media all and (min-width: 500px) {
-    .mmenu div.search
-    {
-        width: 500px;
-    }
-}
-html.mmenu-right .mmenu div.search
-{
-    padding: 5px 10px 5px 75px !important;
-}
-.mmenu div.search input
-{
-    /*background: #;*/
-    border: 1px solid #ddd;
-    border-radius: 20px;
-    line-height: 30px;
-    color: #999;
-    display: block;
-    width: 100%;
-    height: 30px;
-    margin: 5px 0;
-    padding: 0 0 0 10px;
-
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    box-sizing: border-box;
-}
-.mmenu div.search ~ ul
-{
-    padding-top: 13%;
+/* Estilos heredados de search-mobile.css*/
+.leaflet-control-zoom a:hover,
+.leaflet-touch .leaflet-control-zoom a:hover,
+.leaflet-bar a:hover,
+.leaflet-touch .leaflet-bar a:hover {
+    background-color: #fff;
+    color:#333;
 }
 
-.mmenu li.no-results
-{
-    border: none;
-    font-style: italic;
-    color: #666;
-    display: none;
+.leaflet-control-zoom,
+.leaflet-touch .leaflet-control-zoom {
+    border-radius:4px;
 }
 
-.mmenu li i
-{
-    border-radius: 4px;
-    background: #cfcfcf;
-/*
-    box-shadow: 0 0 2px rgba( 0, 0, 0, 0.2 );
-*/
-    font-size: 11px;
-    font-weight: bold;
-    font-style: normal;
-    color: #fff;
-    text-indent: 0;
-    text-align: center;
-    text-shadow: none;
-    line-height: 22px;
-    display: block;
-    width: 20px;
-    height: 20px;
-    position: absolute;
-    right: 120px;
-    top: 10px;
-}
-
-html.mmenu-opened .mmenu-page
-{
-/*
-box-shadow: 0 0 15px rgba( 0, 0, 0, 0.2 );
-*/
-}
-.mmenu
-{
-/*background: #f6f6f6;*/
-    }
-.mmenu *
-{
-    text-shadow: none;
-    text-align: left;
-}
-.mmenu li
-{
-    border-top-color:#F2EFE4;
-    border-bottom-color: #F2EFE4;
-    position: relative;
-    padding-left: 1em;
-    color: rgb(111, 107, 97);
-    background:white;
-}
-.mmenu li > a,
-.mmenu li > span,
-.mmenu li > a:hover
-{
-/*color: #666;*/
-    }
-.mmenu li.mmenu-selected > a,
-.mmenu li.mmenu-selected > span
-{
-    background: #fff;
-}
-.mmenu a.mmenu-subopen
-{
-    border-left: 1px solid #ddd;
-}
-.mmenu a.mmenu-subclose
-{
-    background: #eee;
-}
-
-.mmenu li.mmenu-label {
-    background: #444;
-    font-size: 1.1rem;
-    line-height: 20px;
-    height: 1.4em;
-    padding-top: 0.25em;
-    margin-bottom: -0.1em;
+.leaflet-control-zoom a,
+.leaflet-touch .leaflet-control-zoom a,
+.leaflet-bar a,
+.leaflet-touch .leaflet-bar a {
+    background-color: #bbb;
+    opacity:0.8;
+    width: 29px;
+    height: 29px;
     color: white;
+    border: 2px solid white;
 }
 
-.mmenu a.mmenu-subopen:after,
-.mmenu a.mmenu-subclose:before
+.leaflet-left.leaflet-top .leaflet-control,
+.leaflet-touch .leaflet-left .leaflet-control {
+    margin-left: 9px;
+    margin-top: 42px;
+    margin-bottom: 0;
+}
+
+.leaflet-control.leaflet-control-attribution {
+    display:none;
+}
+
+.leaflet-touch .leaflet-bar a:first-child {
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+}
+.leaflet-touch .leaflet-bar a:last-child {
+    border-bottom-left-radius: 4px;
+    border-bottom-right-radius: 4px;
+
+}
+.leaflet-popup-content {
+    text-align: center;
+}
+
+.leaflet-top{
+    z-index:6;
+}
+
+.leaflet-right .leaflet-control {
+    margin-right: 8px;
+}
+
+
+
+.leaflet-popup-content
 {
-    border-color: rgba( 0, 0, 0, 0.2 );
+
+    margin: 3px 12px 0px 12px;
+    font-size: 13px;
+    padding: 1px 8px;
+
 }
 
+.leaflet-popup-tip{
+    width: 8px;
+    height: 10px;
+}
+
+.leaflet-popup-content-wrapper {
+    height: auto;
+    width: auto;
+    box-shadow: 0 3px 5px rgba(0,0,0,0.2);
+}
+
+/* //HACK FOR IE10//
+*/
+
+input.leaflet-control-layers-selector{
+    visibility:hidden;
+}
+
+.leaflet-control-layers label {
+    background-color: rgb(51,51,51);
+    border-radius: 4px;
+    line-height: 34px;
+    text-align: center;
+}
+
+label > span {
+    position: absolute;
+    top: -2px;
+    line-height: 36px;
+    left: 9px;
+    font-size: 14px;
+    font-weight: bold;
+    text-shadow: 1px 1px 1px #bbb;
+    text-align: left;
+    margin: 0 auto;
+    width: 100%;
+    height: 100%;
+}
+
+.leaflet-control-layers-base span,.leaflet-control-layers-overlays span {
+    font-size: 17px;
+    font-family: 'Raleway','Noto Sans', SANS-SERIF;
+    width: inherit;
+    height: inherit;
+    left: -1px;
+    text-align: center;
+    top: 0px;
+    line-height: 31px;
+}
+
+
+/*MI SCROLL-MENU*/
 #scrollMenu
 {
     position: absolute;
 }
-
 
 #scrollMenu .help
 {
@@ -891,7 +446,11 @@ span>span>i
     color:white;
 }
 
+/*//////////////////////
+ELEMENTOS PROPIOS HTML
+////////////////////////*/
 
+/*ICONOS LOCATOR Y COCHE*/
 span.locator
 {
     width: 31px;
@@ -940,7 +499,7 @@ span.locator
     color: dimgrey;
 }
 
-
+/*PESTAÑA CUPONES*/
 div#cupones{
     right: 0px;
     width: 55px;
@@ -957,7 +516,6 @@ div#cupones{
     border-radius: 6px 0 0 6px;
     background-color: white;
 }
-
 span#cuponLogo{
     color: darkorange;
     font-size:2em;
@@ -965,8 +523,6 @@ span#cuponLogo{
     font-weight: bold;
     zoom: 1.08;
 }
-
-
 span#cuponLogo:before{
     content:'o';
     color:rgb(23, 165, 245);
@@ -977,7 +533,6 @@ span#cuponLogo:before{
     font-weight: bold;
     left: 0.5em;
 }
-
 span#cuponLogo:after{
     content:'o';
     color:rgb(221, 55, 55);
@@ -988,16 +543,7 @@ span#cuponLogo:after{
     left:-0.5em;
 }
 
-/*
-#cupones img{
-    position: relative;
-    display: block;
-    height: 90%;
-    margin: 0 auto;
-    margin-top: 2%;
-}
-*/
-
+/*CUPONERA*/
 .device {
     width: 86%;
     height: 100px;
@@ -1005,10 +551,6 @@ span#cuponLogo:after{
     border-radius: 1em;
     background: #111;
     border: 3px solid white;
-/*
-    margin: 15px auto;
-    margin-top:-15px;
-*/
     margin: 0 5px;
     top:15px;
     position: absolute;
@@ -1016,8 +558,6 @@ span#cuponLogo:after{
     z-index:7;
     display:none;
 }
-
-
 
 .device .arrow-left {
     background: url(images/arrows.png) no-repeat left top;
@@ -1083,16 +623,16 @@ div.swiper-slide p {
 .swiper-active-switch {
     background: #fff;
 }
-
-.leaflet-popup-content {
-    text-align: center;
+img.cupImg{
+    width: 200px;
+    height: 100px;
 }
+
+/*BOTONES, CERRAR CUPON Y PANORAMA*/
 button{
     -webkit-appearance: none;
     border: none;
-    font-size: 1.2em;
     background-color: transparent;
-    color:#333;
 }
 
 button#close{
@@ -1102,12 +642,10 @@ button#close{
 button.panorama{
     padding: 0px 3px;
 }
-.leaflet-top{
-    z-index:6;
-}
 
-.leaflet-right .leaflet-control {
-    margin-right: 8px;
+img[id*=pano]{
+    height:200%;
+    width: auto;
 }
 
 button#closeCoupon {
@@ -1120,6 +658,7 @@ font-size:1.2em;
 color:rgba(255, 255, 255, 0.8);
 }
 
+/*MMENU LATERAL*/
 .mm-menu {
     background: white;
 }
@@ -1134,7 +673,72 @@ color:rgba(255, 255, 255, 0.8);
     text-shadow: none;
 }
 
-/* Use the following CSS code if you want to use data attributes for inserting your icons */
+span#miCocheFloor{
+    border-radius: 4px;
+    background: #bbb;
+    box-shadow: 0 0 2px rgba(0, 0, 0, 0.4);
+    text-shadow: 0 0 2px rgba(0, 0, 0, 0.4);
+    font-size: 12px;
+    font-style: normal;
+    color: rgba(255, 255, 255, 1);
+    position: absolute;
+    right: 30%;
+    top: 2px;
+    width: 20px;
+    text-align: center;
+    padding-right: 3px;
+    line-height: 16px;
+    height: 16px;
+    font-family: sans-serif;
+}
+
+.mm-menu li > span.miniCup{
+    width: 12px;
+    display: inline-block;
+    padding-right: 5px;
+    background: rgb(255, 201, 103);
+    border: 2px solid crimson;
+    color: white;
+    border-radius: 4px;
+    font-size: 12px;
+    text-shadow: 1px 1px 3px black;
+    line-height: 14px;
+    margin-left: 2px;
+}
+
+.mm-menu li > span.nominiCup{
+    width: 12px;
+    display: inline-block;
+    padding-right: 5px;
+    background: none;
+    border: none;
+    border-radius: 4px;
+    font-size: 12px;
+    line-height: 14px;
+    margin-left: 6px;
+}
+
+.mm-menu li > a > span {
+
+    border-radius: 4px;
+    background: #bbb;
+    box-shadow: 0 0 2px rgba(0, 0, 0, 0.4);
+    text-shadow: 0 0 2px rgba(0, 0, 0, 0.4);
+    font-size: 12px;
+    font-style: normal;
+    color: rgba(255, 255, 255, 1);
+    position: absolute;
+    right: 30%;
+    top: 3px;
+    width: 20px;
+    text-align: center;
+    padding-right: 3px;
+    line-height: 16px;
+    height: 16px;
+    font-family: sans-serif;
+}
+
+/*ICONOS*/
 [data-icon]:before {
     font-family: 'carFont';
     content: attr(data-icon);
@@ -1146,12 +750,6 @@ color:rgba(255, 255, 255, 0.8);
     -webkit-font-smoothing: antialiased;
 }
 
-/* Use the following CSS code if you want to have a class per icon */
-/*
-Instead of a list of all class selectors,
-you can use the generic selector below, but it's slower:
-[class*="icon-"] {
-*/
 .icon-food, .icon-female, .icon-male,.icon-sort, .icon-signin, .icon-screenshot, .icon-twitter-sign , .icon-google-plus-sign, .icon-facebook-sign, .icon-camera, .icon-star,.icon-basket, .icon-microwave,.icon-barbell, .icon-user, .icon-user-2, .icon-user-3, .icon-tshirt, .icon-smile, .icon-bed, .icon-office, .icon-stethoscope {
     font-family: 'carFont';
     speak: none;
@@ -1305,66 +903,6 @@ you can use the generic selector below, but it's slower:
 .icon-barbell:before {
     content: "\e002";
 }
-*:focus{
-    outline:none;
-}
-
-img[id*=pano]{
-    height:200%;
-    width: auto;
-}
-
-.leaflet-popup-content
-{
-
-    margin: 3px 12px 0px 12px;
-    font-size: 13px;
-    padding: 1px 8px;
-/*
-para el botón GO!
-    margin: 3px 12px;
-    font-size: 13px;
-    padding: 5px 8px;
-*/
-
-
-}
-
-.socialmenu {
-    font-size: 1.6rem;
-    margin-bottom: 0.4rem;
-
-}
-.leaflet-popup-tip{
-    width: 8px;
-    height: 10px;
-}
-
-.leaflet-popup-content-wrapper {
-/*    height: 85px;
-    width: 192px;*/
-    height: auto;
-    width: auto;
-    box-shadow: 0 3px 5px rgba(0,0,0,0.2);
-}
-
-.withCoupon:after {
-    content: '%';
-    left: 120px;
-    top: 15px;
-    background: orange;
-    border: 3px solid crimson;
-    padding: 4px;
-    color: white;
-    font-weight: bolder;
-    border-radius: 8px;
-    position: relative;
-    text-align: center;
-    font-size: 18px !important;
-    cursor:pointer;
-    text-shadow: 1px 1px 2px black;
-}
-
 
 
 .icon-location-arrow{
@@ -1373,81 +911,11 @@ para el botón GO!
     position: relative;
 }
 
-img.cupImg{
-    width: 200px;
-    height: 100px;
-}
-
-
-.leaflet-label {
-    border:none;
-    background: none;
-    color: #8C8C87;
-    display: block;
-    font: 0.7em "Raleway", "Noto-Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
-
-    font-weight: normal;
-   position: absolute;
-    -webkit-user-select: none;
-    padding: 0;
-/*
-    margin-top:0.6rem;
-    margin-left:15px;
-*/
-/*
-    right: 50%;
-*/
-}
-
-.leaflet-label:before {
-    border:none;
-    content: "";
-    position: absolute;
-/*
-    top: 5px;
-    left: -10px;
-*/
-}
-
-.isVertical{
-    -webkit-transform: rotate(-90deg) ;
-    transform: rotate(-90deg) ;
-}
-
-
-.shadowIcon {
-      font-size: 300%;
-      color: transparent;
-      text-shadow: 0px -8px 12px #336;
-  }
-
-.awesome {
-    line-height: 0 !important;
-}
-
-.leaflet-marker-pane {
-    font-size: 13px;
-}
-
-div.cilogiMarker > span{
-    margin-left: -0.275em;
-    top: -0.4em;
-    position:relative;
-}
-
-.leaflet-popup  {
-    margin-bottom: 1.2em !important;
-}
-
-leaflet-marker-icon{
-    border-radius: 50% 50% 75% 75% !important;
-}
 .my-div-icon {
     width: 1.5em !important;
     height: 1.5em !important;
     z-index: 475;
     color:white;
-    //background-color: lightblue;
     font-family: 'carFont';
     font-size: 1.3em;
     text-align: center;
@@ -1460,11 +928,9 @@ leaflet-marker-icon{
     margin-left:-0.75em !important;
     box-shadow: 3px -2px 5px rgba(0,0,0,0.2);
 }
-
 .my-div-icon:before{
     font-size: 0.9em;
 }
-
 .my-div-icon:after {
     content: "";
     position: absolute;
@@ -1476,13 +942,9 @@ leaflet-marker-icon{
     border-right: 0.5em solid transparent;
 
 }
-
-
 .poi-icon:before{
     content:"\f041";
 }
-
-
 .car-icon{
     font-family: 'carFont';
     background: cadetblue;
@@ -1497,14 +959,12 @@ leaflet-marker-icon{
     border-top-color: cadetblue;
 }
 
-
 .locate-icon {
     font-family: 'carFont';
     background: rgb(6, 84, 150);
     line-height: 1.3em;
 
 }
-
 .locate-icon::before {
     content: "\f23a";
     font-size: 0.8em;
@@ -1512,15 +972,12 @@ leaflet-marker-icon{
 .locate-icon:after {
     border-top-color: rgb(6, 84, 150);
 }
-
-
 .podo-icon {
     font-family: 'carFont';
     background: purple;
     line-height: 1.3em;
     display:none;
 }
-
 .podo-icon::before {
     content: "\f23a";
     font-size: 0.8em;
@@ -1528,7 +985,6 @@ leaflet-marker-icon{
 .podo-icon:after {
     border-top-color: purple;
 }
-
 .dest-icon {
     font-family: 'carFont';
     background: red;
@@ -1542,81 +998,10 @@ leaflet-marker-icon{
     border-top-color: red;
 }
 
-
 .icon-smile:before {
     content: "\f182|\f183";
     font-size: 0.75em;
 }
-span#go-button{
-    position:relative;
-    background: orange;
-    border: 3px solid crimson;
-    padding: 3px;
-    color: white;
-    font-weight: bolder;
-    border-radius: 8px;
-    position: relative;
-    text-align: center;
-    font-size: 0.9rem !important;
-    cursor:pointer;
-
-}
-div.socialmenu{
-
-}
-
-div#marquee{
-    background: rgb(17, 17, 17); background:rgba(17, 17, 17, 0.4); padding:0;
-}
-/*
-
-#cupones, #header, span.locator {
-    display:none !important;
-}*/
-
-@keyframes blink {
-    0% { background-color: red; }
-    100% { background-color: transparent; }
-}
-@-webkit-keyframes blink {
-    0% {background-color: red; }
-    100% {background-color: transparent; }
-}
-.blink {
-    -webkit-animation: blink 1.5s linear infinite;
-    -moz-animation: blink 1.5s linear infinite;
-    animation: blink 1.5s linear infinite;
-}
-
-
-.txt-icon{
-    width: 1px;
-    height: 1px;
-    z-index: 475;
-    color:white;
-    background-color: transparent;
-}
-
-
-marquee
-{
-    height: 25px;
-}
-
-marquee > span
-{
-    position: relative;
-    top: 4px;
-}
-
-
-
-
-
-/*
- * 320x488
- *
- */
 
 .locate-icon {
     font-family: 'carFont';
@@ -1633,14 +1018,33 @@ marquee > span
     border: 0px;
 }
 
+/*MARQUESINA*/
+div#marquee{
+    background: rgb(17, 17, 17); background:rgba(17, 17, 17, 0.4); padding:0;
+}
+#marqueeTag
+{
+    height: 25px;
+    width:100%;
+    z-index: 10000;
+    font-size:14px;
+    line-height:16px;
+    position: absolute;
+    bottom: 0;
+    background:rgba(17, 17, 17, 0.4);
+    color: #ddd;
+}
+#marqueeTag > span
+{
+    position: relative;
+    top: 4px;
+}
 
+/*MENU LATERAL*/
 .mm-menu a.mm-subopen:after {
     border-top: none;
     border-left: none;
     margin-top: -4px;
-    /*
-        right: 80px;
-    */
 }
 
 .mm-menu a.mm-subopen:after, .mm-menu a.mm-subclose:before {
@@ -1654,9 +1058,7 @@ marquee > span
 }
 
 #page, nav {
-    /*    display: none;
-        position: relative;
-    */    height: 100%;
+    height: 100%;
 }
 
 .mm-menu div.mm-search {
@@ -1679,59 +1081,7 @@ marquee > span
     margin-right: 0;
 }
 
-#header {
-    font-size: 16px;
-    font-weight: bold;
-    color: #fff;
-    text-align: center;
-    line-height: 36px;
-    height: 36px;
-    padding: 0 50px;
-    top: 6px;
-    left: 0;
-    background-color: rgba(186, 186, 186, 0.23);
-}
-#header a {
-    display: block;
-    width: 35px;
-    height: 20px;
-    line-height: 30px;
-    position: absolute;
-    bottom: 25px;
-    left: 0;
-    z-index: 8;
-    opacity: 1;
-    -webkit-box-shadow: 2px 2px 2px rgba(0,0,0,0.2);
-    box-shadow: 2px 2px 2px rgba(0,0,0,0.2);
-    border: 3px solid #8C8C87;
-    border-left: none;
-    border-radius: 0 6px 6px 0;
-    background-color: white;
-    top: auto;
-    padding: 5px 10px 5px 12px;
-}
-
-
-
-span.labeleeLogo{
-    border-top: 4px solid rgb(221, 55, 55);
-    width:27px;
-    height: 4px;
-    display:block;
-}
-span#blueLab{
-    border-top-color: rgb(23, 165, 245);
-}
-
-span#orangeLab{
-    border-top-color: darkorange;
-}
-
-
 .mm-menu li {
-    /*
-        position: relative;
-    */
     width: 100%;
 }
 
@@ -1754,7 +1104,6 @@ html.mm-left.mm-opening #mm-blocker
     text-indent: 33px;
 }
 
-
 .mm-menu.mm-left, .mm-menu.mm-right {
     width: 100%;
 }
@@ -1772,7 +1121,6 @@ html.mm-left.mm-opening #mm-blocker
     height: 30px;
     -webkit-border-radius: 4px;
     border-radius: 4px;
-
     margin: 0 auto auto 22px;
     padding: 0 0 0 10px;
     display:inline-block;
@@ -1811,8 +1159,6 @@ a.search-cancel {
     top:50px;
 }
 
-
-
 .mm-menu ul, .mm-menu li, .mm-menu li > a, .mm-menu li > span {
     display: block;
     padding: 0;
@@ -1822,9 +1168,6 @@ a.search-cancel {
 .mm-menu li {
     border: none;
     position: relative;
-}
-
-.mm-menu li {
     border-top-color: #F2EFE4;
     border-bottom-color: #F2EFE4;
     position: relative;
@@ -1834,15 +1177,13 @@ a.search-cancel {
 
 .mm-menu li > a, .mm-menu li > span {
     line-height: 20px;
+    text-indent: 4px;
 }
 
 .mm-menu a.mm-subopen {
     height: 22px;
 }
 
-.mm-menu li > a, .mm-menu li > span {
-    text-indent: 4px;
-}
 .mm-menu em.mm-counter {
     border-radius: 3px;
     background: rgba(255, 255, 255, 0.4);
@@ -1892,8 +1233,6 @@ a.search-cancel {
 .mm-menu li.mm-label {
     font-size: 14px;
     color: inherit;
-}
-.mm-menu li.mm-label {
     text-transform: uppercase;
     text-indent: 20px;
     line-height: 25px;
@@ -1948,7 +1287,6 @@ div.help{
     width: 100%;
     height: 25px;
     position: absolute;
-    /*bottom: 0px;*/
     top: 100%;
     margin-top: -27px;
     padding: 2px 17% 0 20px;
@@ -1985,7 +1323,6 @@ li a button {
     padding: 0;
     margin: 0;
 }
-
 .selected a button {
     background: orange;
     border-radius: 0.8em;
@@ -1993,7 +1330,6 @@ li a button {
     padding: 0 4px;
     margin-left: -4px;
 }
-
 .origin a button
 {
     background: skyblue;
@@ -2003,56 +1339,66 @@ li a button {
     margin-left: -4px;
 }
 
-
-#unsupported_mobile_msg
-{
-    background: white;
-    display: none;
-    position: absolute;
-    width: 100%;
-    height: 100%;
+/*ABRIR MENU LATERAL*/
+#header {
+    font-size: 16px;
+    font-weight: bold;
+    color: #fff;
     text-align: center;
+    line-height: 36px;
+    height: 36px;
+    padding: 0 50px;
+    top: 6px;
+    left: 0;
+    background-color: rgba(186, 186, 186, 0.23);
+}
+#header a {
+    display: block;
+    width: 35px;
+    height: 20px;
+    line-height: 30px;
+    position: absolute;
+    bottom: 25px;
+    left: 0;
+    z-index: 8;
+    opacity: 1;
+    -webkit-box-shadow: 2px 2px 2px rgba(0,0,0,0.2);
+    box-shadow: 2px 2px 2px rgba(0,0,0,0.2);
+    border: 3px solid #8C8C87;
+    border-left: none;
+    border-radius: 0 6px 6px 0;
+    background-color: white;
+    top: auto;
+    padding: 5px 10px 5px 12px;
+}
+span.labeleeLogo{
+    border-top: 4px solid rgb(221, 55, 55);
+    width:27px;
+    height: 4px;
+    display:block;
+}
+span#blueLab{
+    border-top-color: rgb(23, 165, 245);
+}
+span#orangeLab{
+    border-top-color: darkorange;
 }
 
-#unsupported_mobile_msg h5
-{
-    margin-top: 22%;
-}
-
-#unsupported_mobile_msg div
-{
-    margin-top: 9%;
-}
-
-#unsupported_mobile_msg #ios
-{
-    position: relative;
-    top: 0.6em;
-}
-
-#unsupported_mobile_msg #blackberry
-{
-    margin-top: 3%;
-    margin-left: -3%;
-}
-
-
-
+/*PODOMETRO*/
 span#navigator{
-    font-size: 25;
+    font-size: 25px;
     position:absolute;
     z-index:700;
     top:50%;
     left:50%;
     display: none;
 }
-
 #pedoWrapper{
     position: absolute;
     bottom: 7%;
     display: inline-block;
-    margin-left: 33%;}
-
+    margin-left: 33%;
+}
 #pedoWrapper p {
     float: left;
     margin: 0 0 10px 0;
@@ -2065,7 +1411,6 @@ span#navigator{
     background-color: buttonface;
     color: #333;
 }
-
 .icon-pedometer {
     font-family: 'carFont';
     opacity: 1;
@@ -2076,180 +1421,49 @@ span#navigator{
     font-style: normal;
     text-shadow: 0px 0px 2px black;
 }
-
 .icon-pedometer:before {
     content: "\f183";
 }
 
-.cuponButt{
-    display: inline-block;
-    left: 75%;
-    bottom: -10px;
-    width: auto;
-    height: auto;
+/*MENU EN BOCADILLOS*/
+.socialmenu {
+    font-size: 1.6rem;
+    margin-bottom: 0.4rem;
+
+}
+.withCoupon:after {
+    content: '%';
+    left: 120px;
+    top: 15px;
     background: orange;
     border: 3px solid crimson;
-    padding: 3px;
+    padding: 4px;
     color: white;
     font-weight: bolder;
     border-radius: 8px;
     position: relative;
     text-align: center;
-    font-size: 12px !important;
+    font-size: 18px !important;
+    cursor:pointer;
+    text-shadow: 1px 1px 2px black;
 }
 
-.mm-menu li > span.miniCup{
-    width: 12px;
-    display: inline-block;
-    padding-right: 5px;
-    background: rgb(255, 201, 103);
-    border: 2px solid crimson;
-    color: white;
-    border-radius: 4px;
-    font-size: 12px;
-    text-shadow: 1px 1px 3px black;
-    line-height: 14px;
-    margin-left: 2px;
+/*GENERICO*/
+*:focus{
+    outline:none;
 }
 
-.mm-menu li > span.nominiCup{
-    width: 12px;
-    display: inline-block;
-    padding-right: 5px;
-    background: none;
-    border: none;
-    border-radius: 4px;
-    font-size: 12px;
-    line-height: 14px;
-    margin-left: 6px;
+/*PRUEBA ANIMACION
+@keyframes blink {
+    0% { background-color: red; }
+    100% { background-color: transparent; }
 }
-
-.mm-menu li > a > span {
-
-    border-radius: 4px;
-    background: #bbb;
-    box-shadow: 0 0 2px rgba(0, 0, 0, 0.4);
-    text-shadow: 0 0 2px rgba(0, 0, 0, 0.4);
-    font-size: 12px;
-    font-style: normal;
-    color: rgba(255, 255, 255, 1);
-    position: absolute;
-    right: 30%;
-    top: 3px;
-    width: 20px;
-    text-align: center;
-    padding-right: 3px;
-    line-height: 16px;
-    height: 16px;
-    font-family: sans-serif;
+@-webkit-keyframes blink {
+    0% {background-color: red; }
+    100% {background-color: transparent; }
 }
-
-/* //HACK FOR IE10//
-*/
-
-input.leaflet-control-layers-selector{
-    visibility:hidden;
-}
-
-.leaflet-control-layers label {
-    background-color: rgb(51,51,51);
-    border-radius: 4px;
-    line-height: 34px;
-    text-align: center;
-}
-
-label > span {
-    position: absolute;
-    top: -2px;
-    line-height: 36px;
-    left: 9px;
-    font-size: 14px;
-    font-weight: bold;
-    text-shadow: 1px 1px 1px #bbb;
-    text-align: left;
-    margin: 0 auto;
-    width: 100%;
-    height: 100%;
-}
-
-.leaflet-control-layers-base span,.leaflet-control-layers-overlays span {
-    font-size: 17px;
-    font-family: 'Raleway','Noto Sans', SANS-SERIF;
-    width: inherit;
-    height: inherit;
-    left: -1px;
-    text-align: center;
-    top: 0px;
-    line-height: 31px;
-}
-
-span#miCocheFloor{
-border-radius: 4px;
-background: #bbb;
-box-shadow: 0 0 2px rgba(0, 0, 0, 0.4);
-text-shadow: 0 0 2px rgba(0, 0, 0, 0.4);
-font-size: 12px;
-font-style: normal;
-color: rgba(255, 255, 255, 1);
-position: absolute;
-right: 30%;
-top: 2px;
-width: 20px;
-text-align: center;
-padding-right: 3px;
-line-height: 16px;
-height: 16px;
-font-family: sans-serif;
-    }
-
-/* de search-mobile.css*/
-
-.leaflet-control-zoom a:hover,
-.leaflet-touch .leaflet-control-zoom a:hover,
-.leaflet-bar a:hover,
-.leaflet-touch .leaflet-bar a:hover {
-    background-color: #fff;
-    color:#333;
-}
-
-.leaflet-control-zoom,
-.leaflet-touch .leaflet-control-zoom {
-    border-radius:4px;
-}
-.leaflet-control-zoom a,
-.leaflet-touch .leaflet-control-zoom a,
-.leaflet-bar a,
-.leaflet-touch .leaflet-bar a {
-    background-color: #bbb;
-    opacity:0.8;
-    width: 29px;
-    height: 29px;
-    color: white;
-    border: 2px solid white;
-}
-
-
-
-.leaflet-left.leaflet-top .leaflet-control,
-.leaflet-touch .leaflet-left .leaflet-control {
-    margin-left: 9px;
-    margin-top: 42px;
-    margin-bottom: 0;
-}
-
-
-.leaflet-control.leaflet-control-attribution {
-    display:none;
-}
-
-
-.leaflet-touch .leaflet-bar a:first-child {
-    border-top-left-radius: 4px;
-    border-top-right-radius: 4px;
-}
-.leaflet-touch .leaflet-bar a:last-child {
-    border-bottom-left-radius: 4px;
-    border-bottom-right-radius: 4px;
-
-}
-
+.blink {
+    -webkit-animation: blink 1.5s linear infinite;
+    -moz-animation: blink 1.5s linear infinite;
+    animation: blink 1.5s linear infinite;
+}*/
