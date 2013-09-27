@@ -43,23 +43,23 @@ var SocialMenu = {
         if (navigator.userAgent.match(/iPhone/i) || navigator.userAgent.match(/iPad/i) || navigator.userAgent.match(/iPod/i)) {
 
             menu = '<g:plus action="share"></g:plus>' + '<p align="center" id="socialsharing" ><button class="socialmenu" style=" left:0px; margin:0 -12px;" onclick="SocialMenu.fbs_click(' + pointId + ')" data-socialmenu="' + pointId + '">' +
-                '<i class="icon-facebook-sign"></i>' +
+                '<i class="icon-facebook"></i>' +
                 '</button>' +
                 '<button class="socialmenu" style=" left:0px; margin:0 -12px;"  onclick="SocialMenu.twt_click(' + pointId + ')" data-socialmenu="' + pointId + '">' +
-                '<i class="icon-twitter-sign"></i>' +
+                '<i class="icon-twitter"></i>' +
                 '</button>' +
                 '<button class="socialmenu" style=" left:0px; margin:0 -12px;" onclick="SocialMenu.whatsapp_click(' + pointId + ')" data-socialmenu="' + pointId + '">' +
-                '<i class="icon-phone-sign"></i>' +
+                '<i class="icon-whatsapp"></i>' +
                 '</button></p>';
         } else {
             menu = '<g:plus action="share"></g:plus>' + '<p align="center" id="socialsharing" ><button class="socialmenu" style=" left:0px; margin:0 -2px;" onclick="SocialMenu.fbs_click(' + pointId + ')" data-socialmenu="' + pointId + '">' +
-                '<i class="icon-facebook-sign"></i>' +
+                '<i class="icon-facebook"></i>' +
                 '</button>' +
                 '<button class="socialmenu" style=" left:0px; margin:0 -2px;"  onclick="SocialMenu.twt_click(' + pointId + ')" data-socialmenu="' + pointId + '">' +
-                '<i class="icon-twitter-sign"></i>' +
+                '<i class="icon-twitter"></i>' +
                 '</button>' +
                 '<button class="socialmenu" style=" left:0px; margin:0 -2px;" onclick="SocialMenu.google_click(' + pointId + ')" data-socialmenu="' + pointId + '">' +
-                '<i class="icon-google-plus-sign"></i>' +
+                '<i class="icon-google-plus"></i>' +
                 '</button></p>';
 
         }
