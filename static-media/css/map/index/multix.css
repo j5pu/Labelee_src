@@ -750,7 +750,7 @@ span#miCocheFloor{
     -webkit-font-smoothing: antialiased;
 }
 
-.icon-food, .icon-female, .icon-male, .icon-sort, .icon-signin, .icon-glass, .icon-film, .icon-screenshot, .icon-automobile, .icon-navigation, .icon-camera, .icon-microwave, .icon-barbell, .icon-basket, .icon-user, .icon-user-2, .icon-user-3, .icon-tshirt, .icon-bed, .icon-office, .icon-stethoscope, .icon-whatsapp, .icon-elevator, .icon-mecanic, .icon-mecanic2, .icon-facebook, .icon-twitter, .icon-google-plus, .icon-stairsimple, .icon-star {
+.icon-food, .icon-female, .icon-male, .icon-sort, .icon-signin, .icon-glass, .icon-film, .icon-screenshot, .icon-automobile, .icon-navigation, .icon-camera, .icon-microwave, .icon-barbell, .icon-basket, .icon-user, .icon-user-2, .icon-user-3, .icon-tshirt, .icon-bed, .icon-office, .icon-stethoscope, .icon-whatsapp, .icon-elevator, .icon-mecanic, .icon-mecanic2, .icon-facebook, .icon-twitter, .icon-google-plus, .icon-stairsimple, .icon-star, .icon-smile {
     font-family: 'carFont';
     speak: none;
     font-style: normal;
@@ -1478,8 +1478,8 @@ span#navigator{
 
 /*MENU EN BOCADILLOS*/
 .socialmenu {
-    font-size: 1.3rem;
-    /*margin-bottom: 0.4rem;*/
+    font-size: 1.6rem;
+    margin-bottom: 0.4rem;
 
 }
 .withCoupon:after {
