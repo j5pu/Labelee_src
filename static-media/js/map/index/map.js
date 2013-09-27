@@ -507,7 +507,7 @@ function addCategory(category_index) {
 
 
 function removeCategory(category_index) {
-    $('input[type=checkbox].leaflet-control-layers-selector:eq(' + category_index + ')').css('background', '#333');
+    $('input[type=checkbox].leaflet-control-layers-selector:eq(' + category_index + ')').parent().css('background', '#333');
     selected_category_index = -1;
 }
 
@@ -565,10 +565,7 @@ Map.reloadPois = function () {
 
 function drawRoute(org, dst) {
 
-    //Creación de la ruta (con subrutas correspondientes), desde el origen hasta el POI destino
-        //Cambiamos color de la planta actual a naranja
-    $('input[type=radio].leaflet-control-layers-selector').parent().css('background-color', '#333');
-    $('input[type=radio].leaflet-control-layers-selector:checked').parent().css('background-color', 'darkorange');
+
     for (var floor_id in arrowHead) {
         floors_indexed[floor_id].layer.removeLayer(arrowHead[floor_id]);
     }
