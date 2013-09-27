@@ -254,13 +254,13 @@ function loadPOIs() {
 
             var current_poi = floors[floor_index].pois[poi_index];
 
-            if (current_poi.id === poi_id) {
-                // Si es el último no hacemos nada. Si no, lo sacamos
-                if (poi_index == floors[floor_index].pois.length - 1)
-                    break;
-                else
-                    floors[floor_index].pois.splice(poi_index, 1);
-            }
+//            if (current_poi.id === poi_id) {
+//                // Si es el último no hacemos nada. Si no, lo sacamos
+//                if (poi_index == floors[floor_index].pois.length - 1)
+//                    break;
+//                else
+//                    floors[floor_index].pois.splice(poi_index, 1);
+//            }
             var colorIcon = current_poi.label.category.color,
                 nameIcon = current_poi.label.name,
                 shapeIcon = current_poi.label.category.icon,
