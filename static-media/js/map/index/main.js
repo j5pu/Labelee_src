@@ -212,6 +212,11 @@ function showRouteFromMenu(origin_id, destination_id) {
 
         }
     }
+/*
+    else{
+        Map.locatePosition
+        }
+*/
         catch(err)
         {
             console.error(err);

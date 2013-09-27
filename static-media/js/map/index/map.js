@@ -581,7 +581,8 @@ function drawRoute(org, dst) {
 
         if (!route) {
             $('#scrollMenu .destiny.selected').removeClass('selected');
-            alert(gettext('We are sorry, that route does not exist.'));
+                alert(gettext('We are sorry, that route does not exist.'));
+
         }
         else {
             // Limpia la ruta anteriormente trazada
