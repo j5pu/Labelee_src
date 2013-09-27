@@ -1,7 +1,6 @@
+# -*- coding: utf-8 -*-
 import datetime
 from django.http import HttpResponse
-from django.core import serializers
-from django.db.models import Sum
 from dashboard.models import DisplayedRoutes
 from log.logger import Logger
 
@@ -12,6 +11,74 @@ from route.models import Step
 
 from utils.helpers import to_dict
 
+from django.utils.translation import ugettext as _
+
+class StepsExplanation:
+    """
+    Generates text explanations for subroutes in a route. The result for every subroute except the last is:
+          "Ve hacia [connector] y [baja/sube] al piso [floor_number]"
+    The explanation for the last subroute is:
+          "Sigue la ruta hacia tu destino"
+    """
+
+    FIRST_SUBROUTE_INITS = (_("Ve hacia"),
+                            _(u"Dirígete a")) #TODO: PONER LA TILDE
+    initsPointer = 0 # Ensures different inits for variety
+
+    MEDIUM_CONNECTOR = _("y")
+
+    CONNECTION_DIRECTION = {'up': _("sube"),
+                            'down': _("baja")}
+
+    GOTO_FLOOR = _("al piso")
+
+    FINAL_SUBROUTE = _("Sigue la ruta hacia tu destino")
+
+    @classmethod
+    def getSubrouteDestinationText(cls, step):
+        pointName = Point.objects.filter(col=step['fields']['column'], row=step['fields']['row'])[0].description
+        destination_text = cls.FIRST_SUBROUTE_INITS[cls.initsPointer] + " " + pointName + " " + cls.MEDIUM_CONNECTOR + " "
+        cls.initsPointer = (cls.initsPointer + 1) % len(cls.FIRST_SUBROUTE_INITS)
+        return destination_text
+
+    @staticmethod
+    def getConnectionDirection(numFloor, newNumFloor):
+        # For the moment we assume that connectors always change floor (no travels in time/space!)
+        if newNumFloor > numFloor:
+            return StepsExplanation.CONNECTION_DIRECTION['up'] + " "
+        else:
+            return StepsExplanation.CONNECTION_DIRECTION['down'] + " "
+
+    @staticmethod
+    def getDestinationFloorText(numFloor):
+        return StepsExplanation.GOTO_FLOOR + " " + str(numFloor)
+
+    @staticmethod
+    def getLastSubrouteExplanation():
+        return StepsExplanation.FINAL_SUBROUTE
+
+    @staticmethod
+    def generateExplanations(subroutes):
+        #TODO: does it make sense to go to a connection in other floor? Final_subroute text has not meaning then
+
+        # Process subroutes except the last
+        for i in range(len(subroutes) - 1):
+
+            numFloor = Floor.objects.get(pk=subroutes[i]['floor']['pk']).floor_number
+            nextNumFloor = Floor.objects.get(pk=subroutes[i+1]['floor']['pk']).floor_number
+
+            subroute_destination = StepsExplanation.getSubrouteDestinationText(subroutes[i]['steps'][-1])
+            connection_direction = StepsExplanation.getConnectionDirection(numFloor, nextNumFloor)
+            destination_floor = StepsExplanation.getDestinationFloorText(nextNumFloor)
+
+            subroutes[i]['text_description'] = subroute_destination + connection_direction + destination_floor
+
+        # Last subroute
+        subroutes[-1]['text_description'] = StepsExplanation.getLastSubrouteExplanation()
+
+        return
+
+
 def step_filter(step_model):
     """ Filters unnecessary fields for the client of Step object """
     step_result = {}
@@ -20,11 +87,6 @@ def step_filter(step_model):
     step_result['fields']['row'] = step_model['fields']['row']
     return step_result
 
-def floor_filter(floor_model):
-    """ Filters unnecessary fields for the client of Floor object """
-    floor_result = {}
-    floor_result['pk'] = floor_model['pk']
-    return floor_result
 
 
 def get_route(request, origin, destiny):
@@ -38,7 +100,7 @@ def get_route(request, origin, destiny):
     route_dict['fields']['origin'] = to_dict(route_model.origin)
     route_dict['fields']['destiny'] = to_dict(route_model.destiny)
 
-    route_floors_dict = route_dict['fields']['subroutes'] = []
+    subroutes = route_dict['fields']['subroutes'] = []
 
     route_steps = Step.objects.filter(route_id=route_model.id).order_by('step_number')
 
@@ -50,11 +112,14 @@ def get_route(request, origin, destiny):
             previousFloor = step.floor_id
             subroute = {
                 'floor': {'pk': step.floor_id},
-                'steps': []
+                'steps': [],
+                'text_description': ""
             }
-            route_floors_dict.append(subroute)
+            subroutes.append(subroute)
 
-        route_floors_dict[-1]['steps'].append(step_filter(to_dict(step)))
+        subroutes[-1]['steps'].append(step_filter(to_dict(step)))
+
+    StepsExplanation.generateExplanations(subroutes)
 
     # Guardamos la ruta ofrecida para el dashboard
     saveDisplayedRoute(origin, destiny)
