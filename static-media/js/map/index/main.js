@@ -68,14 +68,13 @@ var mySwiper;
 
 
 ///	Activación y configuración del menú
-$(function() {
+$(function () {
 
     main();
 
 });
 
-function main()
-{
+function main() {
 
     ScrollMenu.init();
 
@@ -84,9 +83,6 @@ function main()
     HelpMenu.init();
 
     Map.events.bindAll();
-
-
-
 
 
     $('button#closeCoupon').on('click', function () {
@@ -141,16 +137,23 @@ function hideSplash() {
 
     var $org = $('#routeDiv').detach();
 
-    $('#routeTab > a').on('click', function(e) {
+    $('#routeTab > a').on('click', function (e) {
         e.preventDefault();
-         $('#routeDiv').remove();
-         var $clone = $org.clone().appendTo('body').mmenu({
-         position: "bottom",
-         zposition: "next"
-         });
-         setTimeout(function() {
-         $clone.trigger( 'open' );
-         }, 50);
+        $('#routeDiv').remove();
+        var $clone = $org.clone().appendTo('body').mmenu({
+            position: "bottom",
+            zposition: "next"
+        });
+        setTimeout(function () {
+            $clone.trigger('open');
+        }, 50);
+        var instructionList = document.getElementById('instructionList');
+        instructionList.innerHTML = '';
+        for (var subroute_index in route.fields.subroutes) {
+            if (instructionList) {
+                instructionList.innerHTML += '<li>' +route.fields.subroutes[subroute_index]["text_description"] + '</li>'
+            }
+        }
     });
 
 }
@@ -158,34 +161,32 @@ function hideSplash() {
 
 function showRouteFromMenu(origin_id, destination_id) {
     if (origin_id != destination_id) {
-        try
-        {
-        drawRoute(origin_id, destination_id);
-        LocalStorageHandler.setPrevDestByPoi(destination_id);
-        $('#menu-right').trigger('close');
+        try {
+            drawRoute(origin_id, destination_id);
+            LocalStorageHandler.setPrevDestByPoi(destination_id);
+            $('#menu-right').trigger('close');
 
-        // Cambia a la planta del origen si estamos en otra
-        var dest_floor = floors_indexed[route.fields.destiny.fields.floor];
-        if (current_floor.id != qrFloor.id && current_floor.id != dest_floor.id) {
-            var floor_to_show_name = floors_indexed[qrFloor.id].name;
-            $('.leaflet-control-layers-base input[type=radio]')
-                .eq(baseLayers[floor_to_show_name].position)
-                .trigger('click');
-            //Cambiamos color de la planta actual a naranja
-            $('input[type=radio].leaflet-control-layers-selector').parent().css('background-color', '#333');
-            $('input[type=radio].leaflet-control-layers-selector:checked').parent().css('background-color', 'darkorange');
+            // Cambia a la planta del origen si estamos en otra
+            var dest_floor = floors_indexed[route.fields.destiny.fields.floor];
+            if (current_floor.id != qrFloor.id && current_floor.id != dest_floor.id) {
+                var floor_to_show_name = floors_indexed[qrFloor.id].name;
+                $('.leaflet-control-layers-base input[type=radio]')
+                    .eq(baseLayers[floor_to_show_name].position)
+                    .trigger('click');
+                //Cambiamos color de la planta actual a naranja
+                $('input[type=radio].leaflet-control-layers-selector').parent().css('background-color', '#333');
+                $('input[type=radio].leaflet-control-layers-selector:checked').parent().css('background-color', 'darkorange');
 
+            }
         }
-    }
-/*
-    else{
-        Map.locatePosition
-        }
-*/
-        catch(err)
-        {
+            /*
+             else{
+             Map.locatePosition
+             }
+             */
+        catch (err) {
             console.error(err);
-}
+        }
     }
 }
 
@@ -214,16 +215,14 @@ var Coupon = {
         $('div.leaflet-popup-content-wrapper').on('click', function (e) {
 //            console.log(e.clientX +':'+ $(this).offset().left+':'+e.clientY +':'+ $(this).offset().top)
             if (e.clientX > $(this).offset().left + 120 &&
-                e.clientY > $(this).offset().top + 15)
+                e.clientY > $(this).offset().top + 15) {
+                var imgID = $(this).find('p>button').data('socialmenu'),
+                    myImg = "img[id='" + imgID + "']",
+                    myPos = $(myImg).parent()[0].index($(myImg).parent().parent());
 
-            {
-                var imgID=$(this).find('p>button').data('socialmenu'),
-                    myImg="img[id='"+imgID+"']",
-                    myPos=$(myImg).parent()[0].index($(myImg).parent().parent());
-
-           window.setTimeout(function(){
-                    mySwiper.swipeTo(myPos-1);
-                },500);
+                window.setTimeout(function () {
+                    mySwiper.swipeTo(myPos - 1);
+                }, 500);
 
                 e.stopPropagation();
                 Coupon.open();
@@ -304,15 +303,15 @@ var ScrollMenu = {
 
         self.$listMenu.parent().hammer()
             .on('drag', self.scroll)
-            .on('dragend', function(ev){
-                if(ev.gesture) self.scrollEnd(ev);
+            .on('dragend', function (ev) {
+                if (ev.gesture) self.scrollEnd(ev);
             });
     }
 };
 
 
 function showCookiesMessage() {
- 
+
     $.jqDialog.confirm("Usamos cookies para asegurarnos de que te ofrecemos la mejor experiencia posible en nuestro sitio web, para más información pulsa <a onclick='HelpMenu.showDisclaimer();'>aquí</a>. ¿Deseas activarlas? ",
         function () {
             alert("This intrusive alert says you clicked YES");
