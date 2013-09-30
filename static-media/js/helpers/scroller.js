@@ -18,27 +18,36 @@
  *
  * @constructor
  */
-function Scroller($wrapper, $content, fixed_up, fixed_down)
+function Scroller($wrapper, fixed_up, fixed_down)
 {
     this._scroll = function (ev) {
         ev.gesture.preventDefault();
+        self.$content = $(ev.currentTarget).children();
 
         self.top_new = self.top + ev.gesture['deltaY'];
         
         self.$content.css({
             'top': parseInt(self.top_new) + 'px'
         });
+
+        console.log(self.top_new);
     };
 
     this._scrollEnd = function (ev) {
         self.top_new = self.top + ev.gesture['deltaY'];
 
-        console.log(self.top_new);
-        
-        if (self.top_new > self.fixed_up || self.$content.height() < self.$wrapper.height())
+        if (self.top_new > self.fixed_up ||
+            self.$content.height() < self.$wrapper.height())
+        {
             self.top_new = self.fixed_up;
-        else if (Math.abs(self.top_new) > self.$content.height() - self.$wrapper.height() + self.fixed_down)
-            self.top_new = self.$wrapper.height() - self.$content.height() - self.fixed_down;
+        }
+        else if (Math.abs(self.top_new) >
+            (self.$content.height() - self.$wrapper.height()))
+        {
+            self.top_new = (self.$wrapper.height() - self.$content.height())
+                - self.fixed_down - parseInt(self.$content.css('margin-top'));
+        }
+        console.log(self.top_new);
 
         self.$content.css({
             'top': self.top_new + 'px'
@@ -60,7 +69,7 @@ function Scroller($wrapper, $content, fixed_up, fixed_down)
     var self = this;
 
     this.$wrapper = $wrapper;
-    this.$content = $content;
+    this.$content = $wrapper.children();
 
     this.fixed_up = fixed_up || 0;
     this.fixed_down = fixed_down || 0;
@@ -69,8 +78,8 @@ function Scroller($wrapper, $content, fixed_up, fixed_down)
         'overflow-y': 'hidden'
     });
     this.$content.css({
-        'position': 'absolute',
-        'top': 0
+        'position': 'relative',
+        'top': self.fixed_up + 'px'
     });
     this.top = this.$content.position().top;
 
