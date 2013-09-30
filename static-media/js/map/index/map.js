@@ -507,7 +507,7 @@ function removeCategory(category_index) {
 
 
 function changeFloor(e) {
-
+console.log(e);
     SocialMenu.close();
     //Cambiamos color de la planta actual a naranja
     $('input[type=radio].leaflet-control-layers-selector').parent().css('background-color', '#333');

@@ -136,6 +136,7 @@ function hideSplash() {
     }
 
     var $org = $('#routeDiv').detach();
+    $('html').removeClass('mm-no-overflowscrolling');
 
     $('#routeTab > a').on('click', function (e) {
         e.preventDefault();

@@ -1523,13 +1523,20 @@ span#navigator{
 }*/
 
 html.mm-opening .mm-menu.mm-bottom.mm-next {
-    margin: 0 0 -215px 0;
+    margin: 0 0 -255px 0;
 }
 html.mm-bottom.mm-opening .mm-page, html.mm-bottom.mm-opening #mm-blocker {
-    margin: 0 0 -215px 0;
+    margin: 0 0 -255px 0;
 }
 
-
+@media all and (orientation:landscape){
+    html.mm-opening .mm-menu.mm-bottom.mm-next {
+        margin: 0 0 -100px 0;
+    }
+    html.mm-bottom.mm-opening .mm-page, html.mm-bottom.mm-opening #mm-blocker {
+        margin: 0 0 -100px 0;
+    }
+}
 #routeTab {
 }
 
@@ -1550,7 +1557,7 @@ html.mm-bottom.mm-opening .mm-page, html.mm-bottom.mm-opening #mm-blocker {
     box-shadow: 2px 2px 2px rgba(0,0,0,0.2);
     border: 3px solid #8C8C87;
     border-bottom: white;
-    border-radius: 50% 50% 0 0;
+    border-radius: 6px 6px 0 0;
     background-color: white;
     top: auto;
     text-align: center;
