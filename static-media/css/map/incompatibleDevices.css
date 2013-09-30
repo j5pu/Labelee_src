@@ -16,16 +16,20 @@ body
 
 #intro
 {
-    width: 96%;
+    width: 90%;
     position: absolute;
     top: 0;
     left: 0;
     background: #f5f5f5;
-    font-size: 0.5em;
-    text-align: justify;
-    padding: 1%;
-    margin: 1%;
+    font-size: 0.8em;
+    text-align: center;
+    color: darkgrey;
+    margin: 5%;
+    margin-top:3%;
+    padding-top: 2%;
+    padding-bottom: 2%;
     z-index: 2;
+    border-radius: 5px;
 }
 
 #map_and_panel
@@ -33,23 +37,27 @@ body
     position: absolute;
     top: 0px;
     left: 0px;
+    height: 100%;
     width: 100%;
 }
 
 #selectors_panel
 {
-    width: 96%;
-    padding: 1%;
-    margin: 1%;
+    width: 100%;
+    position: relative;
     background: darkgray;
     font-size: 0.8em;
     z-index: 3;
+    color: #f5f5f5;
+    margin-top: -12%;
+    height: 50%;
 }
 
 .selector
 {
     display: inline-block;
-    margin: 10px;
+    position: relative;
+    margin: 2%;
 }
 
 select
@@ -67,12 +75,23 @@ select
 
 #element
 {
-    width: 38%;
+    width: 35%;
 }
 
 #floor
 {
-    width: 10%;
+    width: 15%;
+}
+
+#legend
+{
+    background: #f5f5f5;
+    width: 90%;
+    margin: 3%;
+    padding: 2%;
+    color: darkgray;
+    border-radius: 5px;
+    text-align: justify;
 }
 
 #targetMarker
@@ -83,4 +102,10 @@ select
     height: 50px;
     line-height: 50px;
     display: none;
+}
+
+@media all and (orientation:landscape){
+    #selectors_panel {
+        height: 65%;
+    }
 }
