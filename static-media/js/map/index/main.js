@@ -86,6 +86,9 @@ function main()
     Map.events.bindAll();
 
 
+
+
+
     $('button#closeCoupon').on('click', function () {
         $('div.device').fadeOut(100);
     });
@@ -118,7 +121,6 @@ function main()
         $('div.device').fadeOut();
         LocalStorageHandler.setPrevDestByPoi(cupPoint);
     });
-
 }
 
 
@@ -136,6 +138,21 @@ function hideSplash() {
     if (qr_type == 'dest') {
         $('#header, #cupones, #myCar').hide();
     }
+
+    var $org = $('#routeDiv').detach();
+
+    $('#routeTab > a').on('click', function(e) {
+        e.preventDefault();
+         $('#routeDiv').remove();
+         var $clone = $org.clone().appendTo('body').mmenu({
+         position: "bottom",
+         zposition: "next"
+         });
+         setTimeout(function() {
+         $clone.trigger( 'open' );
+         }, 50);
+    });
+
 }
 
 

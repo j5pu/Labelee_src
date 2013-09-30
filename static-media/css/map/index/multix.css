@@ -1521,3 +1521,46 @@ span#navigator{
     -moz-animation: blink 1.5s linear infinite;
     animation: blink 1.5s linear infinite;
 }*/
+
+html.mm-opening .mm-menu.mm-bottom.mm-next {
+    margin: 0 0 -215px 0;
+}
+html.mm-bottom.mm-opening .mm-page, html.mm-bottom.mm-opening #mm-blocker {
+    margin: 0 0 -215px 0;
+}
+
+
+#routeTab {
+}
+
+#routeTab > a{
+    cursor: pointer;
+    width: 60px;
+    height: 58px;
+
+    display: block;
+    line-height: 30px;
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    margin-left:-33px;
+    z-index: 12;
+    opacity: 1;
+    -webkit-box-shadow: 2px 2px 2px rgba(0,0,0,0.2);
+    box-shadow: 2px 2px 2px rgba(0,0,0,0.2);
+    border: 3px solid #8C8C87;
+    border-bottom: white;
+    border-radius: 50% 50% 0 0;
+    background-color: white;
+    top: auto;
+    text-align: center;
+    display:none;
+}
+
+nav#routeDiv {
+    background: white;
+    border-top:3px solid #8C8C87;
+    z-index:8;
+    padding:15px;
+    color: #333;
+}

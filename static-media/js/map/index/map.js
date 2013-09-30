@@ -564,6 +564,7 @@ Map.reloadPois = function () {
 
 
 function drawRoute(org, dst) {
+    $('div#routeTab a').show();
 
 
     for (var floor_id in arrowHead) {
