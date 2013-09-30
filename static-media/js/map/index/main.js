@@ -1,56 +1,4 @@
-var ua = navigator.userAgent;
-var androidversion = parseFloat(ua.slice(ua.indexOf("Android")+8));
-var windowsversion = parseFloat(ua.slice(ua.indexOf("Windows Phone")+14));
-
 var mySwiper;
-
-var device = {
-    Android: function() {
-        return navigator.userAgent.match(/Android/i) && androidversion > 2.1;
-    },
-    BlackBerry: function() {
-        // Only works with the latest version: BlackBerry 10
-        return navigator.userAgent.match(/BB10/i);
-    },
-    iOS: function() {
-        return navigator.userAgent.match(/iPhone|iPad|iPod/i);
-    },
-    Opera: function() {
-        return navigator.userAgent.match(/Opera Mini/i);
-    },
-    Windows: function() {
-        return navigator.userAgent.match(/Windows Phone/i) && windowsversion >= 8;
-    },
-    Chrome: function() {
-        return navigator.userAgent.match(/Chrome/i);
-    },
-    isAny: function() {
-        return (device.Android() || device.BlackBerry() || device.iOS() || device.Opera() || device.Windows());
-    },
-
-    isCompatible: function() {
-        // Sólo los compatibles con la aplicación
-        return (device.Android() || device.iOS() || device.BlackBerry() || device.Chrome() || device.Windows());
-    }
-};
-
-/*
- Device compatibility check: it must be executed prior to anything else, and it shouldn't be run via Jquery,
- as some of the devices have problems with it
- */
-if(!device.isCompatible())
-{
-
-    // Redirect to incompatible devices page
-    // Get url without "Http://" and add the corresponding redirection
-    var httpParts = window.location.href.split("http://");
-    var urlParts = httpParts[httpParts.length - 1].split("/");
-    var enclosureId = urlParts[urlParts.length - 1].split("_")[0];
-    var newUrl = "http://" + urlParts[0] + "/map/incompatible-devices/" + enclosureId;
-    window.location.assign(newUrl);
-    throw "stop execution";
-}
-
 
 //PREFIX-FREE PLUG-INS
 (function ($, self) {
@@ -120,14 +68,13 @@ if(!device.isCompatible())
 
 
 ///	Activación y configuración del menú
-$(function() {
+$(function () {
 
     main();
 
 });
 
-function main()
-{
+function main() {
 
     ScrollMenu.init();
 
@@ -170,7 +117,6 @@ function main()
         $('div.device').fadeOut();
         LocalStorageHandler.setPrevDestByPoi(cupPoint);
     });
-
 }
 
 
@@ -188,39 +134,59 @@ function hideSplash() {
     if (qr_type == 'dest') {
         $('#header, #cupones, #myCar').hide();
     }
+
+    var $org = $('#routeDiv').detach();
+
+    $('#routeTab > a').on('click', function (e) {
+        e.preventDefault();
+        $('#routeDiv').remove();
+        var $clone = $org.clone().appendTo('body').mmenu({
+            position: "bottom",
+            zposition: "next"
+        });
+        setTimeout(function () {
+            $clone.trigger('open');
+        }, 50);
+        var instructionList = document.getElementById('instructionList');
+        instructionList.innerHTML = '';
+        for (var subroute_index in route.fields.subroutes) {
+            if (instructionList) {
+                instructionList.innerHTML += '<li>' +route.fields.subroutes[subroute_index]["text_description"] + '</li>'
+            }
+        }
+    });
+
 }
 
 
 function showRouteFromMenu(origin_id, destination_id) {
     if (origin_id != destination_id) {
-        try
-        {
-        drawRoute(origin_id, destination_id);
-        LocalStorageHandler.setPrevDestByPoi(destination_id);
-        $('#menu-right').trigger('close');
+        try {
+            drawRoute(origin_id, destination_id);
+            LocalStorageHandler.setPrevDestByPoi(destination_id);
+            $('#menu-right').trigger('close');
 
-        // Cambia a la planta del origen si estamos en otra
-        var dest_floor = floors_indexed[route.fields.destiny.fields.floor];
-        if (current_floor.id != qrFloor.id && current_floor.id != dest_floor.id) {
-            var floor_to_show_name = floors_indexed[qrFloor.id].name;
-            $('.leaflet-control-layers-base input[type=radio]')
-                .eq(baseLayers[floor_to_show_name].position)
-                .trigger('click');
-            //Cambiamos color de la planta actual a naranja
-            $('input[type=radio].leaflet-control-layers-selector').parent().css('background-color', '#333');
-            $('input[type=radio].leaflet-control-layers-selector:checked').parent().css('background-color', 'darkorange');
+            // Cambia a la planta del origen si estamos en otra
+            var dest_floor = floors_indexed[route.fields.destiny.fields.floor];
+            if (current_floor.id != qrFloor.id && current_floor.id != dest_floor.id) {
+                var floor_to_show_name = floors_indexed[qrFloor.id].name;
+                $('.leaflet-control-layers-base input[type=radio]')
+                    .eq(baseLayers[floor_to_show_name].position)
+                    .trigger('click');
+                //Cambiamos color de la planta actual a naranja
+                $('input[type=radio].leaflet-control-layers-selector').parent().css('background-color', '#333');
+                $('input[type=radio].leaflet-control-layers-selector:checked').parent().css('background-color', 'darkorange');
 
+            }
         }
-    }
-/*
-    else{
-        Map.locatePosition
-        }
-*/
-        catch(err)
-        {
+            /*
+             else{
+             Map.locatePosition
+             }
+             */
+        catch (err) {
             console.error(err);
-}
+        }
     }
 }
 
@@ -249,16 +215,14 @@ var Coupon = {
         $('div.leaflet-popup-content-wrapper').on('click', function (e) {
 //            console.log(e.clientX +':'+ $(this).offset().left+':'+e.clientY +':'+ $(this).offset().top)
             if (e.clientX > $(this).offset().left + 120 &&
-                e.clientY > $(this).offset().top + 15)
+                e.clientY > $(this).offset().top + 15) {
+                var imgID = $(this).find('p>button').data('socialmenu'),
+                    myImg = "img[id='" + imgID + "']",
+                    myPos = $(myImg).parent()[0].index($(myImg).parent().parent());
 
-            {
-                var imgID=$(this).find('p>button').data('socialmenu'),
-                    myImg="img[id='"+imgID+"']",
-                    myPos=$(myImg).parent()[0].index($(myImg).parent().parent());
-
-           window.setTimeout(function(){
-                    mySwiper.swipeTo(myPos-1);
-                },500);
+                window.setTimeout(function () {
+                    mySwiper.swipeTo(myPos - 1);
+                }, 500);
 
                 e.stopPropagation();
                 Coupon.open();
@@ -339,15 +303,15 @@ var ScrollMenu = {
 
         self.$listMenu.parent().hammer()
             .on('drag', self.scroll)
-            .on('dragend', function(ev){
-                if(ev.gesture) self.scrollEnd(ev);
+            .on('dragend', function (ev) {
+                if (ev.gesture) self.scrollEnd(ev);
             });
     }
 };
 
 
 function showCookiesMessage() {
- 
+
     $.jqDialog.confirm("Usamos cookies para asegurarnos de que te ofrecemos la mejor experiencia posible en nuestro sitio web, para más información pulsa <a onclick='HelpMenu.showDisclaimer();'>aquí</a>. ¿Deseas activarlas? ",
         function () {
             alert("This intrusive alert says you clicked YES");

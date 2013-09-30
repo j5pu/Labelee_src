@@ -1,42 +1,42 @@
 /*(function () {
-    var lastTime = 0;
-    var vendors = ['webkit', 'moz'];
-    for (var x = 0; x < vendors.length && !window.requestAnimationFrame; ++x) {
-        window.requestAnimationFrame = window[vendors[x] + 'RequestAnimationFrame'];
-        window.cancelAnimationFrame =
-            window[vendors[x] + 'CancelAnimationFrame'] || window[vendors[x] + 'CancelRequestAnimationFrame'];
-    }
+ var lastTime = 0;
+ var vendors = ['webkit', 'moz'];
+ for (var x = 0; x < vendors.length && !window.requestAnimationFrame; ++x) {
+ window.requestAnimationFrame = window[vendors[x] + 'RequestAnimationFrame'];
+ window.cancelAnimationFrame =
+ window[vendors[x] + 'CancelAnimationFrame'] || window[vendors[x] + 'CancelRequestAnimationFrame'];
+ }
 
-    if (!window.requestAnimationFrame)
-        window.requestAnimationFrame = function (callback, element) {
-            var currTime = new Date().getTime();
-            var timeToCall = Math.max(0, 16 - (currTime - lastTime));
-            var id = window.setTimeout(function () {
-                    callback(currTime + timeToCall);
-                },
-                timeToCall);
-            lastTime = currTime + timeToCall;
-            return id;
-        };
+ if (!window.requestAnimationFrame)
+ window.requestAnimationFrame = function (callback, element) {
+ var currTime = new Date().getTime();
+ var timeToCall = Math.max(0, 16 - (currTime - lastTime));
+ var id = window.setTimeout(function () {
+ callback(currTime + timeToCall);
+ },
+ timeToCall);
+ lastTime = currTime + timeToCall;
+ return id;
+ };
 
-    if (!window.cancelAnimationFrame)
-        window.cancelAnimationFrame = function (id) {
-            clearTimeout(id);
-        };
-}());*/
+ if (!window.cancelAnimationFrame)
+ window.cancelAnimationFrame = function (id) {
+ clearTimeout(id);
+ };
+ }());*/
 
-    var blinkingMode = null;
-    function blinker(element, dst) {
+var blinkingMode = null;
+function blinker(element, dst) {
 
     if (blinkingMode != null && element != null
-        && element.parentElement.childNodes[1].innerHTML.trim()==blinkingMode
+        && element.parentElement.childNodes[1].innerHTML.trim() == blinkingMode
         && dst == prev_dest) {
         color = element.parentElement.style.backgroundColor;
         if (color == "red") {
 
-            if (element.checked)
-            {
-            element.parentElement.style.backgroundColor = "darkorange";}
+            if (element.checked) {
+                element.parentElement.style.backgroundColor = "darkorange";
+            }
             else {
 
                 element.parentElement.style.backgroundColor = "";
@@ -178,8 +178,6 @@ function loadIcon(shape) {
 }
 
 
-
-
 //Carga de plantas
 function loadFloors() {
 
@@ -233,12 +231,12 @@ function loadFloors() {
 
                 //
                 // Habilitamos el uso de la brújula para orientar la flecha
-/*
-                Compass.init();
+                /*
+                 Compass.init();
 
-                pedometer_navigator = new PedometerNavigator($('span#navigator'));
-                pedometer_navigator.init();
-*/
+                 pedometer_navigator = new PedometerNavigator($('span#navigator'));
+                 pedometer_navigator.init();
+                 */
             }
         }(floor_index);
     }
@@ -315,27 +313,24 @@ function loadPOIs() {
             if (current_poi.marker.category == "Panoramas") {
 
                 // Panorama buttons don't have popups: they show panoramas when clicked
-                  current_poi.marker.on('click tap touchstart touch', function () {
-                      if (Panorama.opened) {
-                          Panorama.close();
-                      }
-                      Panorama.show(this);
-                  });
+                current_poi.marker.on('click tap touchstart touch', function () {
+                    if (Panorama.opened) {
+                        Panorama.close();
+                    }
+                    Panorama.show(this);
+                });
 
             } else {
 
                 current_poi.marker
                     .bindPopup(popupTitle)
                     .on('click tap touchstart touch', function () {
-                        if (qr_type == 'dest')
-                        {
-                            if (this.poid == qrPoint.point.id)
-                            {
+                        if (qr_type == 'dest') {
+                            if (this.poid == qrPoint.point.id) {
                                 this.changeTitle();
                             }
                         }
-                        else
-                        {
+                        else {
                             LocalStorageHandler.setPrevDest(this);
                             if (Panorama.opened) Panorama.close();
 
@@ -388,7 +383,7 @@ function loadPOIs() {
         var msg = gettext("Please, scan a QR code to get here:") + ' ';
 
         qrMarker = L.marker(qrLoc, {
-            icon: destIcon}).bindPopup('<p style="width:16em;text-align:center;">'+msg + '<br>' + qrPoint.point.description + SocialMenu.renderIcon(qrPoint.point.id) +'<p>')
+            icon: destIcon}).bindPopup('<p style="width:16em;text-align:center;">' + msg + '<br>' + qrPoint.point.description + SocialMenu.renderIcon(qrPoint.point.id) + '<p>')
             .on('click', function () {
                 LocalStorageHandler.setPrevDest(this);
                 bindContent(this);
@@ -474,7 +469,6 @@ map.on('zoomend', function (e) {
         destMarker._bringToFront();
     }
 });
-
 
 
 function setMarkerColor(eventparameter) {
@@ -564,6 +558,7 @@ Map.reloadPois = function () {
 
 
 function drawRoute(org, dst) {
+    $('div#routeTab a').show();
 
 
     for (var floor_id in arrowHead) {
@@ -581,7 +576,7 @@ function drawRoute(org, dst) {
 
         if (!route) {
             $('#scrollMenu .destiny.selected').removeClass('selected');
-                alert(gettext('We are sorry, that route does not exist.'));
+            alert(gettext('We are sorry, that route does not exist.'));
 
         }
         else {
@@ -622,8 +617,8 @@ function drawRoute(org, dst) {
 
             floors_indexed[destMarker.floor_id].layer.addLayer(destMarker);
 
-
             if (qr_type != 'dest') {
+
                 // Añadimos el pathline (polilínea naranja)
                 for (var subroute_index in route.fields.subroutes) {
                     var floor_id = route.fields.subroutes[subroute_index].floor.pk;
@@ -641,9 +636,8 @@ function drawRoute(org, dst) {
                     floors_indexed[floor_id].layer.addLayer(arrowHead[floor_id]);
                 }
 
-                if(arrowHead[current_floor.id])
-                {
-                     arrowAnim(arrowHead[current_floor.id],current_floor.id);
+                if (arrowHead[current_floor.id]) {
+                    arrowAnim(arrowHead[current_floor.id], current_floor.id);
                 }
 
                 // Parpadeo en el botón de la planta destino
@@ -694,8 +688,7 @@ function isPoiVisibleByDefault(categ_name) {
 Map.locateCar = function () {
     var miCoche = null;
 
-    if(localStorage.getItem('miCoche'))
-    {
+    if (localStorage.getItem('miCoche')) {
         miCoche = JSON.parse(localStorage.getItem('miCoche'));
     }
 
@@ -714,8 +707,7 @@ Map.locateCar = function () {
             .trigger('click');
     }
 
-    if(!carMarker || !map.hasLayer(carMarker))
-    {
+    if (!carMarker || !map.hasLayer(carMarker)) {
         carLoc = [((miCoche.point.row) * current_floor.scaleY) + current_floor.scaleY,
             (miCoche.point.col * current_floor.scaleX) + current_floor.scaleX];
         carMarker = new L.marker(carLoc, {
@@ -835,21 +827,18 @@ var setArrow = function (flecha, idFloor) {
 };
 
 
-
-
 //MENU LATERAL
-function initSideMenu()
-{
+function initSideMenu() {
     $('nav#menu-right').mmenu({
         dragOpen: false,
         slidingSubmenus: false,
-        counters	: true,
-        searchfield   : {
-            add           : true,
-            search        : true,
-            placeholder   : "Busca tu destino...",
-            noResults     : "Lo sentimos, no hay resultados.",
-            showLinksOnly : true
+        counters: true,
+        searchfield: {
+            add: true,
+            search: true,
+            placeholder: "Busca tu destino...",
+            noResults: "Lo sentimos, no hay resultados.",
+            showLinksOnly: true
         }
     });
 
@@ -857,13 +846,13 @@ function initSideMenu()
     $('.mm-submenu .destiny[data-destiny-id=' + qrPoint.point.id + ']')
         .addClass('origin');
 
-/*
-    // Sombreado en la parte baja del menú
-    if(androidversion >= 4.0 || device.Chrome()|| device.iOS())
-    {
-        $('div.help').css({'box-shadow': '0px -16px 43px 0px #F2EFE4'})
-    }
-*/
+    /*
+     // Sombreado en la parte baja del menú
+     if(androidversion >= 4.0 || device.Chrome()|| device.iOS())
+     {
+     $('div.help').css({'box-shadow': '0px -16px 43px 0px #F2EFE4'})
+     }
+     */
 }
 
 

@@ -113,6 +113,7 @@ def show_incompatible_map(request, enclosure_id):
 
     ctx = {
         'enclosure_id': enclosure_id,
+        'enclosure_name': Enclosure.objects.get(pk=enclosure_id).name,
         'categories': exclude_non_important_categories(cached['ordered_categories']),
         'map_data': simplejson.dumps(
             get_incompatible_map_data(cached['poisByFloor'], enclosure_id)

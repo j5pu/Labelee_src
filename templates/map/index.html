@@ -203,6 +203,20 @@
         }
     </script>
 
+    <div id="routeTab">
+        {#        <a href="#routeDiv"></a>#}
+        <a href="#routeDiv"> Rutas</a>
+    </div>
+
+    <nav id="routeDiv">
+        <p>Sigue las instrucciones:</p>
+        <ul id="instructionList"  >
+
+
+        </ul>
+    </nav>
+
+
     <div id="marquee">
         <marquee id="marqueeTag" align="center" direction="left" loop="40"
                  style="width:100%; z-index: 10000; font-size:14px;line-height:16px; position: absolute;bottom: 0;background:rgba(17, 17, 17, 0.4);color: #ddd">
@@ -211,6 +225,8 @@
             {% endfor %}
         </marquee>
     </div>
+
+
 </div>
 
 

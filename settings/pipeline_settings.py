@@ -23,6 +23,7 @@ PIPELINE_CSS = {
             'css/map/index/idangerous.swiper.css',
             'css/map/index/helpmenu.css',
             'css/map/index/mmenu.css',
+            'css/map/index/mmenu-positioning.css',
             'css/map/index/multix.css',
             'css/map/index/jqdialog.css',
             'css/map/index/cookies.css'
@@ -35,6 +36,7 @@ PIPELINE_CSS = {
 PIPELINE_JS = {
     'map': {
         'source_filenames': (
+            'js/map/index/compatibility_check.js',
             # 'vendor/prefixfree.min.js',
             'js/map/index/modernizr.js',
             'vendor/jquery-2.0.3.min.js',
