@@ -34,6 +34,7 @@ PIPELINE_CSS = {
 PIPELINE_JS = {
     'map': {
         'source_filenames': (
+            'js/map/index/compatibility_check.js',
             # 'vendor/prefixfree.min.js',
             'js/map/index/modernizr.js',
             'vendor/jquery-2.0.3.min.js',
