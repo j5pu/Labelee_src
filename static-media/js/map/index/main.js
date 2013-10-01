@@ -138,16 +138,20 @@ function hideSplash() {
     var $org = $('#routeDiv').detach();
     $('html').removeClass('mm-no-overflowscrolling');
 
+
     $('#routeTab > a').on('click', function (e) {
         e.preventDefault();
         $('#routeDiv').remove();
+
         var $clone = $org.clone().appendTo('body').mmenu({
             position: "bottom",
             zposition: "next"
         });
+
         setTimeout(function () {
             $clone.trigger('open');
         }, 50);
+
         var instructionList = document.getElementById('instructionList');
         instructionList.innerHTML = '';
         for (var subroute_index in route.fields.subroutes) {
@@ -155,7 +159,9 @@ function hideSplash() {
                 instructionList.innerHTML += '<li>' +route.fields.subroutes[subroute_index]["text_description"] + '</li>'
             }
         }
+
     });
+
 
 }
 

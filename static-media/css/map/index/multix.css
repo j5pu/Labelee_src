@@ -1523,7 +1523,9 @@ span#navigator{
 }*/
 
 
-/*TAB INSTRUCCIONES PARA RUTAS */
+/*TAB INSTRUCCIONES PARA RUTAS *//*
+
+
 html.mm-opening .mm-menu.mm-bottom.mm-next {
     margin: 0 0 -255px 0;
 }
@@ -1539,8 +1541,10 @@ html.mm-bottom.mm-opening .mm-page, html.mm-bottom.mm-opening #mm-blocker {
         margin: 0 0 -100px 0;
     }
 }
+
 #routeTab {
 }
+*/
 
 #routeTab > a{
     cursor: pointer;

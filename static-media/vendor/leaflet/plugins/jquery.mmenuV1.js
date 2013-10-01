@@ -1278,7 +1278,9 @@
 
 		//	opening
 		$html.addClass( _c.opening );
-		$m.trigger( _e.opening );
+        //Hack para overflow-no
+        $('html.mm-opening .mm-menu.mm-bottom.mm-next, html.mm-bottom.mm-opening .mm-page, html.mm-bottom.mm-opening #mm-blocker').css('margin-bottom', -($(window).height())+110);
+        $m.trigger( _e.opening );
 	}
 	function closeMenu( $m, o, c )
 	{
