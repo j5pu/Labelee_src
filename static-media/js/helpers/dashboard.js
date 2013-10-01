@@ -1,10 +1,10 @@
 var DisplayedRoutes = {
 
-    baseUrl : '/dashboard/',
+    baseUrl: '/dashboard/',
     createDisplayedRoute: function (origin, destination) {
-        var data = {originpoi : origin, destinationpoi : destination };
+        var data = {originpoi: origin, destinationpoi: destination };
         $.ajax({
-            url: DisplayedRoutes.baseUrl+'Services/CreateDisplayedRoute',
+            url: DisplayedRoutes.baseUrl + 'Services/CreateDisplayedRoute',
             type: 'post',
             headers: {
                 'Content-Type': 'application/json'
@@ -12,11 +12,12 @@ var DisplayedRoutes = {
             data: JSON.stringify(data),
             dataType: 'json', // esto indica que la respuesta vendrá en formato json
             async: true,
-            success:function(response){
+            success: function (response) {
+
 
             },
-            error:function(response)
-            {
+            error: function (response) {
+
                 console.log(response)
             }
 
