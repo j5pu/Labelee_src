@@ -12,13 +12,7 @@ from utils.constants import USER_GROUPS
 @login_required(login_url=settings.LOGIN_URL)
 def index(request):
     ctx = {
-        '_enclosure': settings.STATIC_URL + 'partials/_enclosure.html',
-        'constants': {
-            '1': 'Bloqueantes',
-            '2': 'Aristas',
-            '3': 'Intermedias',
-            '4': 'Panoramas'
-        }
+        '_enclosure': settings.STATIC_URL + 'partials/_enclosure.html'
     }
 
     # Si es un dueño de una tienda se le redirigirá a su admin de cupones

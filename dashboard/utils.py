@@ -1,11 +1,14 @@
 # -*- coding: utf-8 -*-
 
 from django.utils.translation import gettext
-from map_editor.api_2.utils.label import getLabelsForDashboard
-from map_editor.api_2.utils.label_category import getLabelCategories, filterAsValidCategories
+from map_editor.api_2.utils.label_category import getLabelCategories
 from django.db.models import Count
 from map_editor.models import LabelCategory
+from map_editor.models import Label
 
+
+def getLabelsForDashboard(enclosure_id):
+    return Label.objects.filter(points__floor__enclosure_id=enclosure_id, category__is_dashboard_category=True).distinct()
 
 def getChartSkeleton(chart_title):
     return [
@@ -25,7 +28,7 @@ def getScansByCategory(enclosure_id):
     Muestra el número de escaneos de QRs para todos los recintos del dueño o para uno dado
     """
     categories = LabelCategory.objects.filter(labels__points__floor__enclosure__id=enclosure_id).distinct()
-    categories = filterAsValidCategories(categories).order_by('name')
+    categories = categories.filter(is_dashboard_category=True)
     c = categories.annotate(num_shots=Count('labels__points__qr_shots'))
 
     chart = getChartSkeleton(gettext('Total de escaneos'))
@@ -61,7 +64,7 @@ def getTopScansByPoi(enclosure_id):
 
 def getRoutesByCategory(enclosure_id):
     categories = LabelCategory.objects.filter(labels__points__floor__enclosure__id=enclosure_id).distinct()
-    categories = filterAsValidCategories(categories).order_by('name')
+    categories = categories.filter(is_dashboard_category=True)
     c = categories.annotate(displayed_destination_count=Count('labels__points__displayed_destination'))
 
     chart = getChartSkeleton(gettext('Total de rutas'))

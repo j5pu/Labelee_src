@@ -8,7 +8,6 @@ from django.http import HttpResponse
 import simplejson
 from map.utils_ import cache_show_map
 from map_editor.api_2.utils.enclosure import getEnclosureForManager
-from map_editor.api_2.utils.label_category import getLabelCategoriesForManager
 from map_editor.api_2.utils.point import filterAsPois
 from map_editor.models import Enclosure, LabelCategory, Point, QR_Code
 from django.db.models import Q

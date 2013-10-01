@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-from map_editor.api_2.utils.label_category import getLabelCategoriesForManager
 from map_editor.api_2.utils.point import filterAsPois
 from map_editor.models import Enclosure, Point
 from utils.helpers import queryset_to_dict
@@ -21,7 +20,6 @@ def getEnclosureForManager(enclosure_id):
         enclosure_dict['floors'].append(floor_dict)
 
     enclosure_dict['poi_count'] = enclosure.count_pois()
-    # enclosure_dict['label_categories'] = getLabelCategoriesForManager(enclosure.id)
 
     return enclosure_dict
 

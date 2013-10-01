@@ -80,7 +80,7 @@ def cache_show_map(enclosure_id):
             poisByFloor[point.floor.id][poiIndex]['label'] = queryset_to_dict([point.label])[0]
             poisByFloor[point.floor.id][poiIndex]['label']['category'] = queryset_to_dict([point.label.category])[0]
 
-            if point.label.category.name_en not in FIXED_CATEGORIES['hidden_on_side_menu'].values():
+            if point.label.category.is_visible_menu:
                 if point.label.category.name in categories:
                     categories[point.label.category.name].append(point)
                 else:

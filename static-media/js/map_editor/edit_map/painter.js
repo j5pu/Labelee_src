@@ -137,7 +137,7 @@ var Painter = {
 
         // Si lo que se está pintando es una arista, añadimos al bloque la descripción para el punto:
         //      xej: Parquing_Escalera_4
-        if(LabelCategory.isConnector(Painter.label_category))
+        if(Painter.label.category.is_connector)
             Painter.paintConnector(block);
 
         // Ponemos el bloque de un color según la categoría de la etiqueta..

@@ -17,17 +17,6 @@ MARKER_TOP_CORRECTION = 25;
 MARKER_LEFT_CORRECTION = 6;
 IMAGE_LOAD_TIMEOUT = 1500;
 
-//TODO: refactor with new category model
-validCategory = function(category_name) {
-
-    if ((category_name == 'Aristas') || (category_name == 'Panoramas') || (category_name == 'Parquing') ||
-        (category_name == 'Intermedias')){
-        return false;
-    }
-
-    return true;
-}
-
 window.onload = function() {
 
     // Load global variables
@@ -52,7 +41,8 @@ window.onload = function() {
 
             var label_category = floorsData[i].pois[j].label.category.name_es; // Spanish for the moment
 
-            if (validCategory(label_category)) {
+            // Show only menu categories
+            if (floorsData[i].pois[j].label.category.is_visible_menu) {
 
                 // Append description, add new category if necessary
                 if (poisByCategory[label_category]) {

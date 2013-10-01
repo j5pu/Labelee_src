@@ -86,12 +86,12 @@ def your_position(request, label_id):
 
     return render_to_response('map/your_position.html', ctx, context_instance=RequestContext(request))
 
-
-def exclude_non_important_categories(categories):
-
-    for category in categories:
-        if category['name'] in FIXED_CATEGORIES['hidden_on_side_menu'].values():
-            categories.remove(category)
+#
+# def exclude_non_important_categories(categories):
+#
+#     for category in categories:
+#         if category['name'] in FIXED_CATEGORIES['hidden_on_side_menu'].values():
+#             categories.remove(category)
 
 
 def show_incompatible_map(request, enclosure_id):
@@ -114,7 +114,7 @@ def show_incompatible_map(request, enclosure_id):
     ctx = {
         'enclosure_id': enclosure_id,
         'enclosure_name': Enclosure.objects.get(pk=enclosure_id).name,
-        'categories': exclude_non_important_categories(cached['ordered_categories']),
+        'categories': cached['ordered_categories'],
         'map_data': simplejson.dumps(
             get_incompatible_map_data(cached['poisByFloor'], enclosure_id)
         )

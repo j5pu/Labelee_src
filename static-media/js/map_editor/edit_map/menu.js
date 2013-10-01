@@ -30,17 +30,6 @@ var LabelCategory = {
             cat_name.toUpperCase() == 'BLOCKERS';
     },
 
-
-    isConnector: function(label_category)
-    {
-        // Nos indica si la categoría es arista
-        if(!label_category.name_es)
-            return false;
-
-        return label_category.name_es.toUpperCase() === 'ARISTAS';
-    },
-
-
     isGeneric: function(label_category)
     {
         return !label_category.enclosure;

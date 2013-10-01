@@ -23,7 +23,6 @@ urlpatterns = patterns('map_editor.api_2',
 
     # LABEL CATEGORY
 	url(r'^label-category/valid/(?P<enclosure_id>\d+)$', 'resources.label_category.read_only_valid_categories'),
-	url(r'^label-category/manager/(?P<enclosure_id>\d+)$', 'resources.label_category.readForManager'),
 	url(r'^label-category/all/(?P<enclosure_id>\d+)$', 'resources.label_category.readAll'),
 	url(r'^label-category/custom/(?P<enclosure_id>\d+)$', 'resources.label_category.readCustom'),
 

@@ -334,7 +334,7 @@ def threadCalculateRoute(enclosure_id):
 
             #me creo un grafo (diccionario) para las conexiones; ej 1_1_1 : 1_2_1,1_3_1
             #significa que desde el qr 1_1_1 p
-            if point.label.category.name_en.upper() in FIXED_CATEGORIES[1].upper(): # only connectors
+            if point.label.category.is_connector:
                 pmapconnections = Connection.objects.filter(init__id=point.id)
                 for pmapconnection in pmapconnections:
                     keyinit = Dijkstra.getKey(point.row, point.col, point.floor.id)

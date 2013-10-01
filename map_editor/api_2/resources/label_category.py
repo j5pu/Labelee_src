@@ -3,7 +3,7 @@ from django.core.serializers import serialize
 from django.db.models import Sum, Q
 from django.http.response import HttpResponse
 import simplejson
-from map_editor.api_2.utils.label_category import getLabelCategoriesForManager, getLabelCategories, read_only_valid_for_enclosure
+from map_editor.api_2.utils.label_category import getLabelCategories, read_only_valid_for_enclosure
 from map_editor.models import LabelCategory
 from utils.helpers import to_dict, group_by_pk, queryset_to_dict
 
@@ -18,17 +18,6 @@ def read_only_valid_categories(request, enclosure_id):
     label_categories = read_only_valid_for_enclosure(enclosure_id)
 
     return HttpResponse(serialize('json', label_categories), mimetype='application/json')
-
-
-def readForManager(request, enclosure_id):
-    """
-    Muestra la info de las categorías para el recinto dado
-
-        /api-2/label-category/manager/<enclosure_id>
-    """
-    label_categories = getLabelCategoriesForManager(enclosure_id)
-    return HttpResponse(simplejson.dumps(label_categories), mimetype='application/json')
-
 
 def readAll(request, enclosure_id):
     """
