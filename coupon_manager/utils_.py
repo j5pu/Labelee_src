@@ -1,6 +1,5 @@
 from coupon_manager.models import Coupon
 from map_editor.api.resources import CouponResource
-from map_editor.api_2.utils.label import filterForCouponManager
 from map_editor.models import Label
 from utils.helpers import queryset_to_dict
 
@@ -29,8 +28,7 @@ def get_enclosures(enclosures):
     enclosures_list = []
     for enclosure in enclosures:
         enclosure_dict = queryset_to_dict([enclosure])[0]
-        l = Label.objects.filter(category__enclosure=enclosure)
-        labels = filterForCouponManager(l)
+        labels = Label.objects.filter(category__enclosure=enclosure, category__can_have_coupon=True)
         shop_coupons = get_coupons_for_labels(labels)
         enclosure_dict['shop_coupons'] = shop_coupons
         enclosure_dict['enclosure_coupons'] = get_coupons_for_enclosure(enclosure)

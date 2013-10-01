@@ -17,15 +17,6 @@ FIXED_CATEGORIES = {
     5: 'Panoramas',
 }
 
-FIXED_CATEGORIES['hidden_on_side_menu'] = {
-    0: FIXED_CATEGORIES[0],
-    1: FIXED_CATEGORIES[1],
-    2: FIXED_CATEGORIES[2],
-    3: FIXED_CATEGORIES[3],
-    5: FIXED_CATEGORIES[5],
-}
-
-
 class CustomUser(User):
     """User with app settings."""
     logo = models.FileField(upload_to=get_user_logo_path, null=True, blank=True)
@@ -115,6 +106,12 @@ class LabelCategory(models.Model):
     color = models.CharField(max_length=50, blank=False)
     icon = models.CharField(max_length=50, blank=True, null=True)
     enclosure = models.ForeignKey(Enclosure, related_name='enclosure', blank=True, null=True)
+    has_assigned_qr = models.BooleanField(default=True)
+    is_connector = models.BooleanField(default=False)
+    is_visible_menu = models.BooleanField(default=True)
+    is_visible_by_default = models.BooleanField(default=False)
+    is_dashboard_category = models.BooleanField(default=True)
+    can_have_coupon = models.BooleanField(default=True)
 
     class Meta:
         verbose_name_plural = 'Label categories'
@@ -132,12 +129,6 @@ class LabelCategory(models.Model):
             storage.delete(path)
         else:
             super(LabelCategory, self).delete(*args, **kwargs)
-
-    def qr_can_be_assigned(self):
-        # Comprueba si la categoría no es ni bloqueante ni arista
-        return not self.name_en or (self.name_en.upper() != FIXED_CATEGORIES[0].upper() and \
-            self.name_en.upper() != FIXED_CATEGORIES[1].upper() and \
-            self.name_en.upper() != FIXED_CATEGORIES[5].upper())
 
 
 class Label(models.Model):

@@ -48,7 +48,7 @@ def create_from_list(request):
 
         # Si la categoría de la etiqueta para el punto no es bloqueante ni arista
         label_category = Label.objects.get(id=point['label']).category
-        if label_category.qr_can_be_assigned():
+        if label_category.has_assigned_qr:
             point_obj.assign_qr()
 
     return HttpResponse(simplejson.dumps('ok'))

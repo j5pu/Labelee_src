@@ -6,8 +6,7 @@ import simplejson
 from coupon_manager.utils_ import get_coupons_for_labels, get_enclosures
 from dashboard.models import Qr_shot
 from dashboard.utils import getChartSkeleton
-from map_editor.api_2.utils.label import getLabelsForDashboard, filterAsPois, filterForCouponManager
-from map_editor.api_2.utils.label_category import getLabelCategories, filterAsValidCategories
+from map_editor.api_2.utils.label_category import getLabelCategories
 from map_editor.models import LabelCategory, Point, Label, Enclosure
 from django.db.models import Count
 from utils.constants import USER_GROUPS

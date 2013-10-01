@@ -355,7 +355,7 @@ function loadPOIs() {
                 floors[floor_index].categories[category_index].push(current_poi.marker);
             }
 
-            if (isPoiVisibleByDefault(current_poi.marker.category_en))
+            if (current_poi.label.category.is_visible_by_default)
                 floors[floor_index].layer.addLayer(current_poi.marker);
         }
     }
@@ -676,18 +676,6 @@ function drawRoute(org, dst) {
             }
         }
     }
-}
-
-
-function isCategoryVisibleOnButtons(categ_name) {
-    return categ_name !== "Parking" && categ_name !== "Blockers" &&
-        categ_name !== "Connectors" && categ_name !== "Entrance" &&
-        categ_name !== "Toilet";
-}
-
-
-function isPoiVisibleByDefault(categ_name) {
-    return categ_name == "Connectors" || categ_name == "Toilet" || categ_name == "Entrance" || categ_name == "Panoramas";
 }
 
 

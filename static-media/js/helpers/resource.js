@@ -320,11 +320,6 @@ function LabelCategoryResource() {
         return ajaxGetElements(this.api2_url, 'valid/' + enclosure_id);
     };
 
-    this.getForManagerIndex = function (enclosure_id) {
-        // Nos da toda la lista de categorías a mostrar en el manager sobre ese recinto
-        return ajaxGetElements(this.api2_url, 'manager/' + enclosure_id);
-    };
-
     this.readForFloorEdit = function (enclosure_id) {
         // Lista de categorías a mostrar en la página de edición de planta
         return ajaxGetElements(this.api2_url, 'all/' + enclosure_id);
