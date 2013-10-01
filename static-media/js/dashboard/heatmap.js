@@ -39,7 +39,7 @@ function setHeatMap(element, floorName, floorCols, floorRows) {
         var filas = floorRows;
         //Calculo de puntos por celda
         var data = {
-            max: 100,
+            max: 1500,
             data: [
 
 
@@ -49,16 +49,22 @@ function setHeatMap(element, floorName, floorCols, floorRows) {
         var dataElement = null;
         var currentx = null;
         var currenty = null;
+        var maxValue = 100;
 
         for (var stepIndex in stepsByFloor[floorName]) {
 
             step = stepsByFloor[floorName][stepIndex];
             currentx = ConversionPuntoX(columnas, step.x, element.width);
             currenty = ConversionPuntoY(filas, filas - 1 - step.y, element.height);
-            dataElement = { x: currentx, y: currenty, count: stepsByFloor[floorName][stepIndex].count };
+            var countOfSteps = parseInt(stepsByFloor[floorName][stepIndex].count);
+            if(countOfSteps> maxValue)
+            {
+                maxValue = countOfSteps;
+            }
+            dataElement = { x: currentx, y: currenty, count: countOfSteps };
             data.data.push(dataElement);
         }
-
+        data.data.max = maxValue;
         heatmap.store.setDataSet(data);
     }
 };
