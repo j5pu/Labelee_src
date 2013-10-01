@@ -44,8 +44,3 @@ def get_label_path(instance, filename):
 def get_panorama_path(instance, filename):
     fileName, fileExtension = os.path.splitext(filename)
     return 'img/enclosures/%s/panoramas/%s%s' % (instance.floor.enclosure.id, instance.id, fileExtension)
-
-
-def get_coupon_path(instance, filename):
-    fileName, fileExtension = os.path.splitext(filename)
-    return 'img/enclosures/%s/coupons/labels/%s/%s%s' % (instance.floor.enclosure.id, instance.label.id, instance.id, fileExtension)

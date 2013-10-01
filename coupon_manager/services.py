@@ -3,7 +3,7 @@
 from django.http import HttpResponse
 from django.utils.translation import gettext
 import simplejson
-from coupon_manager.utils_ import get_coupons_for_labels, get_enclosures
+from coupon_manager.utils_ import get_coupons_for_sites, get_enclosures
 from dashboard.models import Qr_shot
 from dashboard.utils import getChartSkeleton
 from map_editor.api_2.utils.label_category import getLabelCategories
@@ -26,7 +26,7 @@ def manager(request, enclosure_id=None):
     if is_shop_owner:
         manager['for_shop_owner'] = True
         labels = Label.objects.filter(owner=request.user)
-        manager['coupons'] = get_coupons_for_labels(labels)
+        manager['coupons'] = get_coupons_for_sites(labels)
     elif is_enclosure_owner:
         manager['for_enclosure_owner'] = True
         enclosures = Enclosure.objects.filter(owner=request.user)

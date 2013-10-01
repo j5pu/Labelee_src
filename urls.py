@@ -22,7 +22,8 @@ v1_api.register(ConnectionResource())
 v1_api.register(RouteResource())
 v1_api.register(StepResource())
 v1_api.register(LogEntryResource())
-v1_api.register(CouponResource())
+v1_api.register(CouponForEnclosureResource())
+v1_api.register(CouponForLabelResource())
 
 
 urlpatterns = patterns('',

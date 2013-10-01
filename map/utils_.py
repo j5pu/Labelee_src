@@ -88,12 +88,12 @@ def cache_show_map(enclosure_id):
                     icons[point.label.category.name] = point.label.category.icon
                     categories[point.label.category.name] = [point]
 
-            if point.coupon.name is not None:
-                try:
-                    if point.coupon.name != "":
-                        coupons[point.id] = point.coupon.url
-                except Exception as ex:
-                    pass
+            # if point.coupon.name is not None:
+            #     try:
+            #         if point.coupon.name != "":
+            #             coupons[point.id] = point.coupon.url
+            #     except Exception as ex:
+            #         pass
 
         categories_list = []  # [{'name': 'toilets', 'items': [...]}, ...]
         for key, value in categories.iteritems():

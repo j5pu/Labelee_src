@@ -12,7 +12,7 @@ from tastypie.validation import FormValidation
 # from tastypie.authentication import Authentication
 
 from tastypie.resources import ModelResource, ALL, ALL_WITH_RELATIONS
-from coupon_manager.models import Coupon
+from coupon_manager.models import Coupon, CouponForLabel, CouponForEnclosure
 from utils.constants import USER_GROUPS
 from utils.helpers import random_string_generator, delete_file
 from django.contrib.auth.models import Group
@@ -297,17 +297,51 @@ class LogEntryResource(ModelResource):
         return 'application/json'
 
 
-class CouponResource(ModelResource):
+# class CouponResource(ModelResource):
+#     enclosure = fields.ToOneField(EnclosureResource, 'enclosure', null=True)
+#
+#     class Meta:
+#         resource_name = 'coupon'
+#         queryset = Coupon.objects.all()
+#         authorization = ResourceAuthorization('enclosure__owner')
+#         always_return_data = True
+#         filtering = {
+#             'enclosure': ALL_WITH_RELATIONS,
+#         }
+#         max_limit = 5000
+#
+#     def determine_format(self, request):
+#         return 'application/json'
+
+
+class CouponForEnclosureResource(ModelResource):
     enclosure = fields.ToOneField(EnclosureResource, 'enclosure', null=True)
 
     class Meta:
-        resource_name = 'coupon'
-        queryset = Coupon.objects.all()
+        resource_name = 'coupon-for-enclosure'
+        queryset = CouponForEnclosure.objects.all()
         authorization = ResourceAuthorization('enclosure__owner')
         always_return_data = True
         filtering = {
             'enclosure': ALL_WITH_RELATIONS,
-        }
+            }
+        max_limit = 5000
+
+    def determine_format(self, request):
+        return 'application/json'
+
+
+class CouponForLabelResource(ModelResource):
+    label = fields.ToOneField(LabelResource, 'label', null=True)
+
+    class Meta:
+        resource_name = 'coupon-for-label'
+        queryset = CouponForLabel.objects.all()
+        authorization = ResourceAuthorization('label__category__enclosure__owner')
+        always_return_data = True
+        filtering = {
+            'label': ALL_WITH_RELATIONS,
+            }
         max_limit = 5000
 
     def determine_format(self, request):

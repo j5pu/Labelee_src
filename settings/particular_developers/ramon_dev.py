@@ -9,13 +9,13 @@ ALLOWED_HOSTS = ['localhost:8000', '127.0.0.1', '192.168.1.129', '.compute.amazo
 
 #Ramon's local database
 #
-DATABASES = {
-    "default": {
-    "ENGINE": "django.db.backends.mysql",
-    "NAME": "labelee_test",
-    "USER": "root",
-    "PASSWORD": "",
-    "HOST": "",
-    "PORT": "",
-    }
-}
+# DATABASES = {
+#     "default": {
+#     "ENGINE": "django.db.backends.mysql",
+#     "NAME": "labelee_test",
+#     "USER": "root",
+#     "PASSWORD": "",
+#     "HOST": "",
+#     "PORT": "",
+#     }
+# }

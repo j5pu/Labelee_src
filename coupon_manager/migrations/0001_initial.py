@@ -8,18 +8,31 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        # Adding model 'Coupon'
-        db.create_table(u'coupon_manager_coupon', (
+        # Adding model 'CouponForEnclosure'
+        db.create_table(u'coupon_manager_couponforenclosure', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('name', self.gf('django.db.models.fields.CharField')(max_length=60, null=True, blank=True)),
             ('img', self.gf('django.db.models.fields.files.FileField')(max_length=100, null=True, blank=True)),
             ('enclosure', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='coupons', null=True, to=orm['map_editor.Enclosure'])),
         ))
-        db.send_create_signal(u'coupon_manager', ['Coupon'])
+        db.send_create_signal(u'coupon_manager', ['CouponForEnclosure'])
+
+        # Adding model 'CouponForLabel'
+        db.create_table(u'coupon_manager_couponforlabel', (
+            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('name', self.gf('django.db.models.fields.CharField')(max_length=60, null=True, blank=True)),
+            ('img', self.gf('django.db.models.fields.files.FileField')(max_length=100, null=True, blank=True)),
+            ('label', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='coupons', null=True, to=orm['map_editor.Label'])),
+        ))
+        db.send_create_signal(u'coupon_manager', ['CouponForLabel'])
 
 
     def backwards(self, orm):
-        # Deleting model 'Coupon'
-        db.delete_table(u'coupon_manager_coupon')
+        # Deleting model 'CouponForEnclosure'
+        db.delete_table(u'coupon_manager_couponforenclosure')
+
+        # Deleting model 'CouponForLabel'
+        db.delete_table(u'coupon_manager_couponforlabel')
 
 
     models = {
@@ -59,21 +72,61 @@ class Migration(SchemaMigration):
             'model': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '100'})
         },
-        u'coupon_manager.coupon': {
-            'Meta': {'object_name': 'Coupon'},
+        u'coupon_manager.couponforenclosure': {
+            'Meta': {'object_name': 'CouponForEnclosure'},
             'enclosure': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'coupons'", 'null': 'True', 'to': u"orm['map_editor.Enclosure']"}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'img': ('django.db.models.fields.files.FileField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'})
+            'img': ('django.db.models.fields.files.FileField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
+            'name': ('django.db.models.fields.CharField', [], {'max_length': '60', 'null': 'True', 'blank': 'True'})
+        },
+        u'coupon_manager.couponforlabel': {
+            'Meta': {'object_name': 'CouponForLabel'},
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'img': ('django.db.models.fields.files.FileField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
+            'label': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'coupons'", 'null': 'True', 'to': u"orm['map_editor.Label']"}),
+            'name': ('django.db.models.fields.CharField', [], {'max_length': '60', 'null': 'True', 'blank': 'True'})
+        },
+        u'map_editor.customuser': {
+            'Meta': {'object_name': 'CustomUser', '_ormbases': [u'auth.User']},
+            'logo': ('django.db.models.fields.files.FileField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
+            u'user_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': u"orm['auth.User']", 'unique': 'True', 'primary_key': 'True'})
         },
         u'map_editor.enclosure': {
             'Meta': {'object_name': 'Enclosure'},
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'logo': ('django.db.models.fields.files.FileField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '60'}),
-            'owner': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'enclosures'", 'to': u"orm['auth.User']"}),
+            'owner': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'enclosures'", 'to': u"orm['map_editor.CustomUser']"}),
             'twitter_account': ('django.db.models.fields.CharField', [], {'max_length': '60', 'null': 'True', 'blank': 'True'}),
             'url_dashboard': ('django.db.models.fields.URLField', [], {'max_length': '200', 'null': 'True', 'blank': 'True'}),
             'url_enclosure': ('django.db.models.fields.URLField', [], {'max_length': '200', 'null': 'True', 'blank': 'True'})
+        },
+        u'map_editor.label': {
+            'Meta': {'object_name': 'Label'},
+            'category': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'labels'", 'blank': 'True', 'to': u"orm['map_editor.LabelCategory']"}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'img': ('django.db.models.fields.files.FileField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
+            'name': ('django.db.models.fields.CharField', [], {'max_length': '200'}),
+            'name_en': ('django.db.models.fields.CharField', [], {'max_length': '200', 'null': 'True', 'blank': 'True'}),
+            'name_es': ('django.db.models.fields.CharField', [], {'max_length': '200', 'null': 'True', 'blank': 'True'}),
+            'owner': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'labels'", 'null': 'True', 'to': u"orm['map_editor.CustomUser']"})
+        },
+        u'map_editor.labelcategory': {
+            'Meta': {'object_name': 'LabelCategory'},
+            'can_have_coupon': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
+            'color': ('django.db.models.fields.CharField', [], {'max_length': '50'}),
+            'enclosure': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'enclosure'", 'null': 'True', 'to': u"orm['map_editor.Enclosure']"}),
+            'has_assigned_qr': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
+            'icon': ('django.db.models.fields.CharField', [], {'max_length': '50', 'null': 'True', 'blank': 'True'}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'img': ('django.db.models.fields.files.FileField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
+            'is_connector': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
+            'is_dashboard_category': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
+            'is_visible_by_default': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
+            'is_visible_menu': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
+            'name': ('django.db.models.fields.CharField', [], {'max_length': '200'}),
+            'name_en': ('django.db.models.fields.CharField', [], {'max_length': '200', 'null': 'True', 'blank': 'True'}),
+            'name_es': ('django.db.models.fields.CharField', [], {'max_length': '200', 'null': 'True', 'blank': 'True'})
         }
     }
 

@@ -47,7 +47,7 @@ class CustomUser(User):
 
 class Enclosure(models.Model):
     name = models.CharField(max_length=60, unique=True, blank=False)
-    owner = models.ForeignKey(User, related_name='enclosures', blank=False)
+    owner = models.ForeignKey(CustomUser, related_name='enclosures', blank=False)
     twitter_account = models.CharField(max_length=60, blank=True, null=True)
     logo = models.FileField(upload_to=get_enclosure_logo_path, null=True, blank=True)
     url_enclosure = models.URLField(null=True, blank=True)
@@ -164,13 +164,11 @@ class Point(models.Model):
     col = models.PositiveIntegerField(null=True, blank=True)
     label = models.ForeignKey(Label, related_name='points', on_delete=models.CASCADE)
     floor = models.ForeignKey(Floor, related_name='points', on_delete=models.CASCADE)
-    # panorama_thumbnail = models.FileField(upload_to=get_panorama_path, null=True, blank=True)
     alwaysVisible = models.NullBooleanField()
     center_x = models.PositiveIntegerField(null=True, blank=True)
     center_y = models.PositiveIntegerField(null=True, blank=True)
     isVertical = models.NullBooleanField()
     panorama = models.FileField(upload_to=get_panorama_path, null=True, blank=True)
-    coupon = models.FileField(upload_to=get_coupon_path,null=True, blank=True)
 
     def __unicode__(self):
         return self.floor.name + ' (' + str(self.row) + ', ' + str(self.col) + ')'

@@ -79,13 +79,13 @@
 {#                    ng-repeat="enclosure in manager.enclosures | orderBy:'name':reverse"#}
                     ng-repeat="enclosure in manager.enclosures | orderBy:'name':reverse | filter:search_enclosure"
                     ng-controller="EnclosureCtrl">
-                    <td>[[enclosure.name]]</td>
+                    <td>[[enclosure.data.name]]</td>
                     <td>
-                        <div class="coupon"
-                             ng-repeat="coupon in enclosure.shop_coupons | orderBy:'label.name':reverse | filter:search_coupon | filter:filter_coupon"
-                             ng-controller="CouponLabelCtrl">
-                            <div>[[coupon.label.name]]</div>
-                            <div>{% include "_coupon_manager/_coupon_for_shop.html" %}</div>
+                        <div class="site"
+                             ng-repeat="site in enclosure.sites | orderBy:'site.data.name':reverse | filter:search_site | filter:filter_site"
+                             ng-controller="SiteCtrl">
+                            <h4>[[site.data.name]]</h4>
+                            <div>{% include "_coupon_manager/_coupon_for_site.html" %}</div>
                         </div>
                     </td>
                     <td>

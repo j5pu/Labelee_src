@@ -8,8 +8,6 @@
  *
  * @param $wrapper  DOM element which has native scroll applied. (with CSS
  *                  property "overflow-y: hidden")
- * @param $content  DOM element within the $wrapper to be treated as scrolling
- *                  content.
  *
  * Optionally it takes offsets to set upper and lower limits for
  * the content position:
@@ -69,7 +67,7 @@ function Scroller($wrapper, fixed_up, fixed_down)
     var self = this;
 
     this.$wrapper = $wrapper;
-    this.$content = $wrapper.children();
+    this.$content = $wrapper.children(); // <div> element within the $wrapper
 
     this.fixed_up = fixed_up || 0;
     this.fixed_down = fixed_down || 0;
