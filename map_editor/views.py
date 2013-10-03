@@ -6,6 +6,7 @@ from django.shortcuts import render_to_response
 from django.template import RequestContext
 
 from django.conf import settings
+from map_editor.models import Enclosure
 from utils.constants import USER_GROUPS
 
 
@@ -15,10 +16,23 @@ def index(request):
         '_enclosure': settings.STATIC_URL + 'partials/_enclosure.html'
     }
 
-    # Si es un dueño de una tienda se le redirigirá a su admin de cupones
-    if request.user.is_in_group(USER_GROUPS['shop_owners']):
-        return HttpResponseRedirect('/coupon/')
+    if request.user.is_in_group(USER_GROUPS['enclosure_owners']):
+        # si es un dueño de recintos se le redirige al dashboard
+        if len(Enclosure.objects.filter(owner=request.user))>0:
+            first_enclosure_id = Enclosure.objects.filter(owner=request.user)[0].id
+            return HttpResponseRedirect('/dashboard/' + str(first_enclosure_id))
+        else:
+            return HttpResponseRedirect('/accounts/logout/')
 
+
+    # Si es un dueño de una tienda se le redirigirá a su admin de cupones
+    # por ahora envía a logout, hasta que se integre con el coupon_manager
+    if request.user.is_in_group(USER_GROUPS['shop_owners']):
+        return HttpResponseRedirect('/accounts/logout/')
+
+    # Si no es staff y no pertenece a ningún grupo
+    if not request.user.is_valid:
+        return HttpResponseRedirect('/accounts/logout/')
     # translation.activate(request.session['django_language'])
 
     return render_to_response('map_editor/v2/index.html', ctx, context_instance=RequestContext(request))
