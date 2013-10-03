@@ -33,6 +33,12 @@ class CustomUser(User):
         users_in_group = Group.objects.get(id=group_id).user_set.all()
         return self.user_ptr in users_in_group
 
+    def is_valid(self):
+        """
+        Si es staff o, en caso de no serlo, que al menos pertenezca a algún grupo
+        """
+        return self.is_staff or len(self.groups.all()) > 0
+
     def create(self, username, password):
         c = CustomUser(username=username)
         c.save()
