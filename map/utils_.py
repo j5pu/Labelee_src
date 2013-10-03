@@ -1,17 +1,10 @@
-import datetime
 from django.db.models import Q
-from django.http import HttpResponse
-import simplejson
-from dashboard.models import Qr_shot
-from log.logger import Logger
-from map_editor.api.resources import *
-from map_editor.api_2.resources.point import readOnlyPois
-from map_editor.api_2.utils.label_category import read_only_valid_for_enclosure
-
-from map_editor.models import Point
-
-from utils.helpers import queryset_to_dict, t_obj_to_dict
 from django.core.cache import cache
+
+from map_editor.api.resources import *
+from map_editor.api_2.utils.label_category import read_only_valid_for_enclosure
+from map_editor.models import Point
+from utils.helpers import queryset_to_dict, t_obj_to_dict
 
 
 def get_map_data(qr_type, poi_id, poisByFloor, enclosure_id):
@@ -135,11 +128,3 @@ def cache_show_map(enclosure_id):
     }
 
 
-def saveQrShot(poi_id):
-    try:
-        qrShot = Qr_shot()
-        qrShot.point_id = poi_id
-        qrShot.date = datetime.datetime.utcnow()
-        qrShot.save()
-    except Exception as ex:
-        Logger.error(ex.message)

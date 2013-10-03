@@ -138,10 +138,14 @@ for (var category_index in label_categories) {
     label_categories[category_index].layer.index = category_index;
     label_categories[category_index].layer.type = 1; // tipo 1 es para categorias
 
+    var catId = label_categories[category_index].id;
+    var catKey = "cat_"+ catId;
     layersControl.addOverlay(
         label_categories[category_index].layer,
-        '<i class="icon-' + label_categories[category_index].icon + ' icon-white"></i>'
+        '<i class="icon-' + label_categories[category_index].icon + ' icon-white" id="'+ catKey +'"></i>'
     );
+    AnalyticsManager.addCategoryKey(catKey);
+
 }
 
 //POIs de cada floor, separados para pintarlos por capas
@@ -227,6 +231,7 @@ function loadFloors() {
                 initSideMenu();
                 $('div#cupones, div#header, span.locator, div#marquee').show();
                 Coupon.init();
+                AnalyticsManager.init();
                 $('div.splash').fadeOut(100);
 
                 //

@@ -20,3 +20,14 @@ class DisplayedRoutes(models.Model):
     destination = models.OneToOneField('map_editor.Point', related_name='displayed_destination')
     date = models.DateTimeField(auto_now_add=True)
 
+
+class AnalyticAction(models.Model):
+    userkey = models.CharField(max_length=100)
+    date = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        abstract = True
+
+class CategoryShot(AnalyticAction):
+    category = models.ForeignKey('map_editor.LabelCategory', related_name='category_shots')
+

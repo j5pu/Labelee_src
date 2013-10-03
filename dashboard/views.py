@@ -6,7 +6,7 @@ from django.http import HttpResponse
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 import simplejson
-from dashboard.models import DisplayedRoutes
+from dashboard.models import DisplayedRoutes, CategoryShot
 from dashboard.utils import *
 from map_editor.models import Floor, Enclosure
 from route.services import getHeatMapSteps
@@ -66,5 +66,20 @@ def saveRouteRequest(request):
     dispRoute.date = datetime.datetime.utcnow()
     dispRoute.save()
     return HttpResponse(simplejson.dumps('ok'))
+
+def saveClickOnCategory(request):
+    json_data = request.body
+    data = simplejson.loads(json_data)
+    idCategory = data['idcategory']
+    user = data['user']
+    category = LabelCategory()
+    category.id = idCategory
+    categoryShoot = CategoryShot()
+    categoryShoot.category = category
+    categoryShoot.date =  datetime.datetime.utcnow()
+    categoryShoot.userkey = user
+    categoryShoot.save()
+    return HttpResponse(simplejson.dumps('ok'))
+
 
 

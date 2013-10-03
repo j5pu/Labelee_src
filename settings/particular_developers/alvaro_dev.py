@@ -10,10 +10,10 @@ DEBUG = True
 DATABASES = {
     "default": {
     "ENGINE": "django.db.backends.mysql",
-    "NAME": "alcala_ingles",
+    "NAME": "labelee_eventos",
     "USER": "mnopi",
     "PASSWORD": "1aragon1",
-    "HOST": "192.168.1.201",
+    "HOST": "192.168.1.120",
     "PORT": "",
     }
 }

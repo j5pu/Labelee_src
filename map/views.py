@@ -1,22 +1,15 @@
 # -*- coding: utf-8 -*-
-import datetime
 
-from django.core.cache import cache
 from django.template import RequestContext
 from django.shortcuts import render_to_response
 from django.http import HttpResponseRedirect, Http404
 # from touching_log import log
 
 import simplejson
-from dashboard.models import Qr_shot
-from log.logger import Logger
+from dashboard.utils import saveQrShot
 from map.twitterHelper import TwitterHelper
-from map.utils_ import get_map_data, cache_show_map, get_incompatible_map_data, saveQrShot
+from map.utils_ import get_map_data, cache_show_map, get_incompatible_map_data
 from map_editor.models import *
-from django.db.models.query import Q
-from utils.helpers import queryset_to_dict
-
-
 
 
 def show_map(request, qr_type, enclosure_id, floor_id, poi_id):

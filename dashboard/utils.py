@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
+import datetime
 
 from django.utils.translation import gettext
+from dashboard.models import Qr_shot
+from log.logger import Logger
 from map_editor.api_2.utils.label_category import getLabelCategories
 from django.db.models import Count
 from map_editor.models import LabelCategory
@@ -96,3 +99,13 @@ def getTopRoutesByPoi(enclosure_id):
         chart[0]['values'].append(lab)
 
     return chart
+
+
+def saveQrShot(poi_id):
+    try:
+        qrShot = Qr_shot()
+        qrShot.point_id = poi_id
+        qrShot.date = datetime.datetime.utcnow()
+        qrShot.save()
+    except Exception as ex:
+        Logger.error(ex.message)
