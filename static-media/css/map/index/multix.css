@@ -834,6 +834,7 @@ span#miCocheFloor{
 }
 .icon-mecanic2:before {
     content: "\e00c";
+    font-size: 1.1em !important;
 }
 .icon-facebook:before {
     content: "\f09a";
