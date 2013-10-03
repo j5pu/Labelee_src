@@ -14,7 +14,7 @@ from utils.helpers import queryset_to_dict, t_obj_to_dict
 from django.core.cache import cache
 
 
-def get_map_data(qr_type, poi_id, poisByFloor, enclosure_id):
+def get_map_data(qr_type, poi_id, poisByFloor, enclosure_id, coupons):
     """
     Devuelve un diccionario con todos los datos necesarios a usar por el JS
     """
@@ -26,13 +26,13 @@ def get_map_data(qr_type, poi_id, poisByFloor, enclosure_id):
         'enclosure': t_obj_to_dict(EnclosureResource(), qrPoint.floor.enclosure),
         'label': t_obj_to_dict(LabelResource(), qrPoint.label),
         'labelCategory': queryset_to_dict([qrPoint.label.category])[0],
-
     }
     response['qrPoint']['isParking'] = qrPoint.label.category.name_en == FIXED_CATEGORIES[3]
     response['label_categories'] = queryset_to_dict(read_only_valid_for_enclosure(qrPoint.floor.enclosure.pk))
     response['floors'] = queryset_to_dict(qrPoint.floor.enclosure.floors.all().order_by('-floor_number'))
     for floor in response['floors']:
         floor['pois'] = poisByFloor[floor['id']]
+    response['coupons'] = coupons
 
     return response
 
@@ -61,6 +61,11 @@ def cache_show_map(enclosure_id):
     cache_time = 43200
     cacheEnclosure = cache.get(cache_key)
     if not cacheEnclosure:
+        # cacheamos cupones
+        for label in Label.objects.filter(category__enclosure__id=enclosure_id):
+            site_coupons = CouponForLabel.objects.filter(label=label)
+            coupons[label.id] = queryset_to_dict(site_coupons)
+
         points = Point.objects.select_related('label', 'label__category', 'floor', 'coupon') \
             .filter(~Q(label__category__name_en=FIXED_CATEGORIES.values()[0]),
                     floor__enclosure__id=enclosure_id) \
@@ -87,13 +92,6 @@ def cache_show_map(enclosure_id):
                     colors[point.label.category.name] = point.label.category.color
                     icons[point.label.category.name] = point.label.category.icon
                     categories[point.label.category.name] = [point]
-
-            # if point.coupon.name is not None:
-            #     try:
-            #         if point.coupon.name != "":
-            #             coupons[point.id] = point.coupon.url
-            #     except Exception as ex:
-            #         pass
 
         categories_list = []  # [{'name': 'toilets', 'items': [...]}, ...]
         for key, value in categories.iteritems():

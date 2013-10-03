@@ -3,13 +3,14 @@ import datetime
 from django.http import HttpResponse
 from dashboard.models import DisplayedRoutes
 from log.logger import Logger
+from map_editor.api.resources import PointResource
 
 from route.models import *
 from map_editor.models import *
 import simplejson
 from route.models import Step
 
-from utils.helpers import to_dict
+from utils.helpers import to_dict, t_queryset_to_dict
 
 from django.utils.translation import ugettext as _
 
@@ -125,6 +126,16 @@ def get_route(request, origin, destiny):
     saveDisplayedRoute(origin, destiny)
 
     return HttpResponse(simplejson.dumps(route_dict), mimetype='application/json')
+
+
+def get_closest_point(request, origin, destiny_site_id):
+    """
+    Toma el punto de destino más cercano al punto origen, dado el site destino
+    """
+    # todo: de momento toma el primer punto del site, sin comparar rutas
+    points = Point.objects.filter(label__id=destiny_site_id)
+    point_list = t_queryset_to_dict(PointResource(), points)
+    return HttpResponse(simplejson.dumps(point_list[0]), mimetype='application/json')
 
 
 def saveDisplayedRoute(origin_id, destination_id):

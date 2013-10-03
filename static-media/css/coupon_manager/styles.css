@@ -25,6 +25,11 @@ h1
     margin: 2em auto 1em;
 }
 
+h4
+{
+    color: black;
+}
+
 .coupons
 {
     margin: 0 auto;

@@ -57,6 +57,7 @@ urlpatterns = patterns('',
     url(r'^refresh-cache/(?P<enclosure_id>\d+)', 'map_editor.api_2.resources.enclosure.refresh_cache'),
     url(r'^qrDownload/(?P<enclosure_id>\d+)', 'map_editor.api_2.resources.enclosure.qrDownload'),
     url(r'^get-route/(?P<origin>\d+)_(?P<destiny>\d+)', 'route.services.get_route'),
+    url(r'^get-closest-point/(?P<origin>\d+)_(?P<destiny_site_id>\d+)', 'route.services.get_closest_point'),
 
     # Para poder crear un superusuario en appfog
     # Allow for a superuser to be created if one does not exist.

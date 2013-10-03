@@ -606,6 +606,12 @@ function RouteResource() {
 
         return elements;
     };
+
+    this.getClosestPoint = function(origin_point_id, destination_site_id)
+    {
+        // Devuelve el punto más cercano para el sitio (label) destino
+        return ajaxGetElements('/get-closest-point/', origin_point_id + '_' + destination_site_id);
+    }
 }
 
 

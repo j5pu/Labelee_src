@@ -8,31 +8,21 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        # Adding model 'CouponForEnclosure'
-        db.create_table(u'coupon_manager_couponforenclosure', (
-            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('name', self.gf('django.db.models.fields.CharField')(max_length=60, null=True, blank=True)),
-            ('img', self.gf('django.db.models.fields.files.FileField')(max_length=100, null=True, blank=True)),
-            ('enclosure', self.gf('django.db.models.fields.related.ForeignKey')(related_name='coupons', to=orm['map_editor.Enclosure'])),
-        ))
-        db.send_create_signal(u'coupon_manager', ['CouponForEnclosure'])
 
-        # Adding model 'CouponForLabel'
-        db.create_table(u'coupon_manager_couponforlabel', (
-            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('name', self.gf('django.db.models.fields.CharField')(max_length=60, null=True, blank=True)),
-            ('img', self.gf('django.db.models.fields.files.FileField')(max_length=100, null=True, blank=True)),
-            ('label', self.gf('django.db.models.fields.related.ForeignKey')(related_name='coupons', to=orm['map_editor.Label'])),
-        ))
-        db.send_create_signal(u'coupon_manager', ['CouponForLabel'])
+        # Changing field 'Enclosure.owner'
+        db.alter_column(u'map_editor_enclosure', 'owner_id', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['map_editor.CustomUser']))
+        # Deleting field 'Point.coupon'
+        db.delete_column(u'map_editor_point', 'coupon')
 
 
     def backwards(self, orm):
-        # Deleting model 'CouponForEnclosure'
-        db.delete_table(u'coupon_manager_couponforenclosure')
 
-        # Deleting model 'CouponForLabel'
-        db.delete_table(u'coupon_manager_couponforlabel')
+        # Changing field 'Enclosure.owner'
+        db.alter_column(u'map_editor_enclosure', 'owner_id', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User']))
+        # Adding field 'Point.coupon'
+        db.add_column(u'map_editor_point', 'coupon',
+                      self.gf('django.db.models.fields.files.FileField')(max_length=100, null=True, blank=True),
+                      keep_default=False)
 
 
     models = {
@@ -72,20 +62,6 @@ class Migration(SchemaMigration):
             'model': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '100'})
         },
-        u'coupon_manager.couponforenclosure': {
-            'Meta': {'object_name': 'CouponForEnclosure'},
-            'enclosure': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'coupons'", 'to': u"orm['map_editor.Enclosure']"}),
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'img': ('django.db.models.fields.files.FileField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '60', 'null': 'True', 'blank': 'True'})
-        },
-        u'coupon_manager.couponforlabel': {
-            'Meta': {'object_name': 'CouponForLabel'},
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'img': ('django.db.models.fields.files.FileField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
-            'label': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'coupons'", 'to': u"orm['map_editor.Label']"}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '60', 'null': 'True', 'blank': 'True'})
-        },
         u'map_editor.customuser': {
             'Meta': {'object_name': 'CustomUser', '_ormbases': [u'auth.User']},
             'logo': ('django.db.models.fields.files.FileField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
@@ -100,6 +76,17 @@ class Migration(SchemaMigration):
             'twitter_account': ('django.db.models.fields.CharField', [], {'max_length': '60', 'null': 'True', 'blank': 'True'}),
             'url_dashboard': ('django.db.models.fields.URLField', [], {'max_length': '200', 'null': 'True', 'blank': 'True'}),
             'url_enclosure': ('django.db.models.fields.URLField', [], {'max_length': '200', 'null': 'True', 'blank': 'True'})
+        },
+        u'map_editor.floor': {
+            'Meta': {'object_name': 'Floor'},
+            'enclosure': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'floors'", 'blank': 'True', 'to': u"orm['map_editor.Enclosure']"}),
+            'floor_number': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'img': ('django.db.models.fields.files.FileField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
+            'imgB': ('django.db.models.fields.files.FileField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
+            'name': ('django.db.models.fields.CharField', [], {'max_length': '200'}),
+            'num_cols': ('django.db.models.fields.PositiveIntegerField', [], {'null': 'True', 'blank': 'True'}),
+            'num_rows': ('django.db.models.fields.PositiveIntegerField', [], {'null': 'True', 'blank': 'True'})
         },
         u'map_editor.label': {
             'Meta': {'object_name': 'Label'},
@@ -127,7 +114,27 @@ class Migration(SchemaMigration):
             'name': ('django.db.models.fields.CharField', [], {'max_length': '200'}),
             'name_en': ('django.db.models.fields.CharField', [], {'max_length': '200', 'null': 'True', 'blank': 'True'}),
             'name_es': ('django.db.models.fields.CharField', [], {'max_length': '200', 'null': 'True', 'blank': 'True'})
+        },
+        u'map_editor.point': {
+            'Meta': {'object_name': 'Point'},
+            'alwaysVisible': ('django.db.models.fields.NullBooleanField', [], {'null': 'True', 'blank': 'True'}),
+            'center_x': ('django.db.models.fields.PositiveIntegerField', [], {'null': 'True', 'blank': 'True'}),
+            'center_y': ('django.db.models.fields.PositiveIntegerField', [], {'null': 'True', 'blank': 'True'}),
+            'col': ('django.db.models.fields.PositiveIntegerField', [], {'null': 'True', 'blank': 'True'}),
+            'description': ('django.db.models.fields.CharField', [], {'max_length': '2000', 'null': 'True', 'blank': 'True'}),
+            'floor': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'points'", 'to': u"orm['map_editor.Floor']"}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'isVertical': ('django.db.models.fields.NullBooleanField', [], {'null': 'True', 'blank': 'True'}),
+            'label': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'points'", 'to': u"orm['map_editor.Label']"}),
+            'panorama': ('django.db.models.fields.files.FileField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
+            'row': ('django.db.models.fields.PositiveIntegerField', [], {'null': 'True', 'blank': 'True'})
+        },
+        u'map_editor.qr_code': {
+            'Meta': {'object_name': 'QR_Code'},
+            'code': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '200'}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'point': ('django.db.models.fields.related.OneToOneField', [], {'blank': 'True', 'related_name': "'qr_code'", 'unique': 'True', 'null': 'True', 'to': u"orm['map_editor.Point']"})
         }
     }
 
-    complete_apps = ['coupon_manager']
+    complete_apps = ['map_editor']

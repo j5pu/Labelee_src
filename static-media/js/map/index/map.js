@@ -269,7 +269,7 @@ function loadPOIs() {
 
             var description = current_poi.description,
                 panorama = current_poi.panorama,
-                coupon = current_poi.coupon,
+                coupons = mapData.coupons[floorid],
                 sX = floors[floor_index].scaleX,
                 sY = floors[floor_index].scaleY,
                 loc = [(current_poi.row) * sY + (sY),
@@ -297,7 +297,7 @@ function loadPOIs() {
             current_poi.marker.category_en = category_en;
             current_poi.marker.label = labelid;
             current_poi.marker.panorama = panorama;
-            current_poi.marker.coupon = coupon;
+            current_poi.marker.coupons = coupons;
             current_poi.marker.description = description;
             current_poi.marker.type = 2; // 2 significa de tipo marcador
             current_poi.marker.category_icon = shapeIcon;
@@ -418,9 +418,7 @@ function initMap(qrPoint) {
     qrMarker.openPopup();
     qrMarker._bringToFront();
 
-    if (qrPoint.point.coupon) {
-        $('div.leaflet-popup-content-wrapper').addClass('withCoupon');
-    }
+    Coupon.addIconOnMarker(qrPoint.label.id);
     bindContent(qrMarker);
 
     if (map.hasLayer(destMarker)) {
@@ -530,17 +528,15 @@ console.log(e);
 
     if (map.hasLayer(qrMarker)) {
         qrMarker.openPopup();
-        if (qrPoint.point.coupon) {
-            $('div.leaflet-popup-content-wrapper').addClass('withCoupon');
-        }
+        Coupon.addIconOnMarker(qrPoint.label.id);
         bindContent(qrMarker);
         qrMarker._bringToFront();
     }
     if (map.hasLayer(destMarker)) {
         destMarker.openPopup();
-        if (route.fields.destiny.fields.coupon) {
-            $('div.leaflet-popup-content-wrapper').addClass('withCoupon');
-        }
+        // Si hay cupones para el site (label) destino..
+        var dest_site_id = route.fields.destiny.fields.label;
+        Coupon.addIconOnMarker(dest_site_id);
         bindContent(destMarker);
         destMarker._bringToFront();
     }
@@ -615,6 +611,7 @@ function drawRoute(org, dst) {
 
             destMarker.panorama = '/media/' + route.fields.destiny.fields.panorama;
             destMarker.floor_id = route.fields.destiny.fields.floor;
+            destMarker.site_id = route.fields.destiny.fields.label;
 
             floors_indexed[destMarker.floor_id].layer.addLayer(destMarker);
 
@@ -651,9 +648,7 @@ function drawRoute(org, dst) {
 
                 if (map.hasLayer(destMarker)) {
                     destMarker.openPopup();
-                    if (route.fields.destiny.fields.coupon) {
-                        $('div.leaflet-popup-content-wrapper').addClass('withCoupon');
-                    }
+                    Coupon.addIconOnMarker(destMarker.site_id);
                     bindContent(destMarker);
                     destMarker._bringToFront();
                 }
@@ -734,9 +729,7 @@ Map.locatePosition = function () {
 
     if (map.hasLayer(qrMarker)) {
         qrMarker.openPopup();
-        if (qrPoint.point.coupon) {
-            $('div.leaflet-popup-content-wrapper').addClass('withCoupon');
-        }
+        Coupon.addIconOnMarker(qrPoint.label.id);
         bindContent(qrMarker);
     }
     if (map.hasLayer(destMarker)) {
