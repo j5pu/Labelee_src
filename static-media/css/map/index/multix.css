@@ -831,10 +831,10 @@ span#miCocheFloor{
 }
 .icon-mecanic:before {
     content: "\e00b";
+    font-size: 1.1em !important;
 }
 .icon-mecanic2:before {
     content: "\e00c";
-    font-size: 1.1em !important;
 }
 .icon-facebook:before {
     content: "\f09a";
@@ -1563,12 +1563,15 @@ html.mm-bottom.mm-opening .mm-page, html.mm-bottom.mm-opening #mm-blocker {
     -webkit-box-shadow: 2px 2px 2px rgba(0,0,0,0.2);
     box-shadow: 2px 2px 2px rgba(0,0,0,0.2);
     border: 3px solid #8C8C87;
+    color: #8C8C87;
     border-bottom: white;
     border-radius: 6px 6px 0 0;
     background-color: white;
     top: auto;
     text-align: center;
     display:none;
+    text-shadow: 1px 1px 1px rgba(0,0,0,0.25);
+    font-size: 1.3em;
 }
 
 nav#routeDiv {
