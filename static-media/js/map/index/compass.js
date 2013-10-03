@@ -35,7 +35,7 @@ var Compass = {
                 {
                     if(!Compass.previous)
                     {
-                        Compass._rotate(eventData);
+                        Compass._rotate(Compass.angle);
                         Compass.previous.timestamp = eventData.timeStamp;
                     }
                     else
@@ -44,7 +44,7 @@ var Compass = {
                         var time_diff = eventData.timeStamp - Compass.previous.timestamp;
                         if(angle_diff > 20 && time_diff > 400)
                         {
-                            Compass._rotate(eventData);
+                            Compass._rotate(Compass.angle);
                             Compass.previous.timestamp = eventData.timeStamp;
                         }
                     }
@@ -73,15 +73,14 @@ var Compass = {
 //        console.log('\tbeta: ' + Compass.dirb);
 //        console.log('\tgamma: ' + Compass.dirg);
         var rotation;
-        if (window.orientation == 0) {
+
+        // If the device is oriented horizontally the angle must be changed accordingly
+        if (window.orientation == null || window.orientation == 0){
             rotation = Compass.angle;
+        } else {
+            rotation = Compass.angle - window.orientation;
         }
-        else if (window.orientation == 90) {
-            rotation = Compass.angle-90;
-        }
-        else {
-            rotation = Compass.angle+90;
-        }
+
         Compass.$e.css({'transform': 'rotate(' + -rotation + 'deg)'});
 
         Compass.previous = {};

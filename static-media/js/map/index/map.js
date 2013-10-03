@@ -236,12 +236,11 @@ function loadFloors() {
 
                 //
                 // Habilitamos el uso de la brújula para orientar la flecha
-                /*
-                 Compass.init();
+                // y podómetro para dispositivos iOS
+                Compass.init();
 
-                 pedometer_navigator = new PedometerNavigator($('span#navigator'));
-                 pedometer_navigator.init();
-                 */
+                pedometer_navigator = new PedometerNavigator($('span#navigator'));
+                pedometer_navigator.init();
             }
         }(floor_index);
     }
