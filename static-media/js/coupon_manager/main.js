@@ -43,6 +43,11 @@ function replaceImg(wrapper, img_src)
 }
 
 
+function SiteCtrl($scope, $rootScope)
+{
+
+}
+
 function CouponLabelCtrl($scope, $rootScope, $element)
 {
     $scope.sync_coupon = function() {

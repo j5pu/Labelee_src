@@ -12,8 +12,8 @@ def get_coupons_for_sites(sites):
 
     [
         {
-            'site_data': {...},
-            'site_coupons': [
+            'data': {...},
+            'coupons': [
                 {...},
                 ...
             ]
@@ -26,7 +26,7 @@ def get_coupons_for_sites(sites):
         site_dict = {
             'data': queryset_to_dict([site])[0],
 
-            # Si la etiqueta (site) tiene por lo menos un punto.
+            # Nos dice si la etiqueta (site) tiene por lo menos un punto.
             # Esto sirve para avisar al usuario de que, aunque le añadiera un cupón,
             # nadie lo podría ver puesto que no se ha pintado aún con
             # el editor de mapas.

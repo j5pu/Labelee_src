@@ -109,14 +109,7 @@ function main() {
 
     setTimeout(hideSplash, 100);
 
-    $('div.swiper-slide img').on('click', function (e) {
-        e.preventDefault();
-        var cupPoint = parseInt($(this).prop('id'));
-        showRouteFromMenu(qrPoint.point.id, cupPoint);
-//    caso especial drawRoute
-        $('div.device').fadeOut();
-        LocalStorageHandler.setPrevDestByPoi(cupPoint);
-    });
+    Coupon.bindShowRoute();
 }
 
 
@@ -159,10 +152,14 @@ function hideSplash() {
                 instructionList.innerHTML += '<li>' +route.fields.subroutes[subroute_index]["text_description"] + '</li>'
             }
         }
-
     });
+}
 
 
+function showRouteFromCoupon(origin_id, destination_site_id)
+{
+    var closest_destination_id = routeResource.getClosestPoint(origin_id, destination_site_id).id;
+    showRouteFromMenu(origin_id, closest_destination_id);
 }
 
 
@@ -183,7 +180,6 @@ function showRouteFromMenu(origin_id, destination_id) {
                 //Cambiamos color de la planta actual a naranja
                 $('input[type=radio].leaflet-control-layers-selector').parent().css('background-color', '#333');
                 $('input[type=radio].leaflet-control-layers-selector:checked').parent().css('background-color', 'darkorange');
-
             }
         }
             /*
@@ -223,8 +219,10 @@ var Coupon = {
 //            console.log(e.clientX +':'+ $(this).offset().left+':'+e.clientY +':'+ $(this).offset().top)
             if (e.clientX > $(this).offset().left + 120 &&
                 e.clientY > $(this).offset().top + 15) {
-                var imgID = $(this).find('p>button').data('socialmenu'),
-                    myImg = "img[id='" + imgID + "']",
+                // De momento apuntamos al primer cupón del site
+                // Todo: en el swiper, poder paginar los cupones por site
+                var siteID = $(this).data('site-id'),
+                    myImg = "img[id='" + mapData.coupons[siteID][0].id + "']",
                     myPos = $(myImg).parent()[0].index($(myImg).parent().parent());
 
                 window.setTimeout(function () {
@@ -233,9 +231,7 @@ var Coupon = {
 
                 e.stopPropagation();
                 Coupon.open();
-
             }
-
         });
     },
 
@@ -253,12 +249,32 @@ var Coupon = {
         });
 
         Coupon.opened = true;
-
     },
 
     close: function () {
         Coupon.opened = false;
         $('div.device').fadeOut(100);
+    },
+
+    addIconOnMarker: function(marker_site_id)
+    {
+        // Añade el icono '%' si el site (label) del marker que contenga algún cupón
+        if (mapData.coupons[marker_site_id].length != 0) {
+            $('div.leaflet-popup-content-wrapper')
+                .addClass('withCoupon')
+                .attr('data-site-id', marker_site_id);
+        }
+    },
+
+    bindShowRoute: function()
+    {
+        // Cuando pulsamos en una imágen de la cuponera (swiper)
+        $('div.swiper-slide img').on('click', function (e) {
+            e.preventDefault();
+            var site_id = parseInt($(this).data('site-id'));
+            showRouteFromCoupon(qrPoint.point.id, site_id);
+            $('div.device').fadeOut();
+        });
     }
 };
 
@@ -327,4 +343,4 @@ function showCookiesMessage() {
             alert("This intrusive alert says you clicked NO");
         }		// callback function for 'NO' button
     );
-};
+}

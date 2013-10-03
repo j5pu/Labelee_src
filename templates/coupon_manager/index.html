@@ -85,7 +85,7 @@
                              ng-repeat="site in enclosure.sites | orderBy:'site.data.name':reverse | filter:search_site | filter:filter_site"
                              ng-controller="SiteCtrl">
                             <h4>[[site.data.name]]</h4>
-                            <div>{% include "_coupon_manager/_coupon_for_site.html" %}</div>
+                            <div>{% include "_coupon_manager/_coupons_for_site.html" %}</div>
                         </div>
                     </td>
                     <td>
@@ -110,7 +110,7 @@
 
         <div class="coupons" ng-show="manager.for_shop_owner">
             <div class="coupon" ng-repeat="coupon in manager.coupons" ng-controller="CouponLabelCtrl">
-                {% include "_coupon_manager/_coupon_for_shop.html" %}
+                {% include "_coupon_manager/_coupons_for_site.html" %}
             </div>
         </div>
 

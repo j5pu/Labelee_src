@@ -133,7 +133,7 @@
                         {% for destination in category.items %}
                             <li class="destiny"
                                 data-destiny-id="{{ destination.id }}">
-                                {% if destination.coupon %}
+                                {% if coupons|get_item:destination.label.id %}
                                     <span class="miniCup">%</span>
                                 {% else %}
                                     <span class="nominiCup"></span>
@@ -181,11 +181,13 @@
 
             <div class="swiper-container">
                 <div class="swiper-wrapper">
-                    {% for point,img in coupons.items %}
-
-                        <div class="swiper-slide">
-                            <img id="{{ point }}" class="cupImg" src="{{ img }}">
-                        </div>
+                    {% for site_id,site_coupons in coupons.items %}
+                        {% for coupon in site_coupons %}
+                            <div class="swiper-slide">
+                                <img id="{{ coupon.id }}" data-site-id="{{ site_id }}"
+                                class="cupImg" src="{{ coupon.img }}">
+                            </div>
+                        {% endfor %}
                     {% endfor %}
                 </div>
             </div>

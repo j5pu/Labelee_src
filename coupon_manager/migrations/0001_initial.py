@@ -13,7 +13,7 @@ class Migration(SchemaMigration):
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('name', self.gf('django.db.models.fields.CharField')(max_length=60, null=True, blank=True)),
             ('img', self.gf('django.db.models.fields.files.FileField')(max_length=100, null=True, blank=True)),
-            ('enclosure', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='coupons', null=True, to=orm['map_editor.Enclosure'])),
+            ('enclosure', self.gf('django.db.models.fields.related.ForeignKey')(related_name='coupons', to=orm['map_editor.Enclosure'])),
         ))
         db.send_create_signal(u'coupon_manager', ['CouponForEnclosure'])
 
@@ -22,7 +22,7 @@ class Migration(SchemaMigration):
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('name', self.gf('django.db.models.fields.CharField')(max_length=60, null=True, blank=True)),
             ('img', self.gf('django.db.models.fields.files.FileField')(max_length=100, null=True, blank=True)),
-            ('label', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='coupons', null=True, to=orm['map_editor.Label'])),
+            ('label', self.gf('django.db.models.fields.related.ForeignKey')(related_name='coupons', to=orm['map_editor.Label'])),
         ))
         db.send_create_signal(u'coupon_manager', ['CouponForLabel'])
 
@@ -74,7 +74,7 @@ class Migration(SchemaMigration):
         },
         u'coupon_manager.couponforenclosure': {
             'Meta': {'object_name': 'CouponForEnclosure'},
-            'enclosure': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'coupons'", 'null': 'True', 'to': u"orm['map_editor.Enclosure']"}),
+            'enclosure': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'coupons'", 'to': u"orm['map_editor.Enclosure']"}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'img': ('django.db.models.fields.files.FileField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '60', 'null': 'True', 'blank': 'True'})
@@ -83,7 +83,7 @@ class Migration(SchemaMigration):
             'Meta': {'object_name': 'CouponForLabel'},
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'img': ('django.db.models.fields.files.FileField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
-            'label': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'coupons'", 'null': 'True', 'to': u"orm['map_editor.Label']"}),
+            'label': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'coupons'", 'to': u"orm['map_editor.Label']"}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '60', 'null': 'True', 'blank': 'True'})
         },
         u'map_editor.customuser': {
