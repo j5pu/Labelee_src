@@ -1547,6 +1547,10 @@ html.mm-bottom.mm-opening .mm-page, html.mm-bottom.mm-opening #mm-blocker {
 }
 */
 
+#jqDialog_box {
+    background: white;
+}
+
 #routeTab > a{
     cursor: pointer;
     width: 60px;
