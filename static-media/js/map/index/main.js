@@ -175,13 +175,17 @@ function showRouteFromMenu(origin_id, destination_id) {
 
             // Cambia a la planta del origen si estamos en otra
             var dest_floor = floors_indexed[route.fields.destiny.fields.floor];
-            if (current_floor.id != qrFloor.id && current_floor.id != dest_floor.id) {
+            if (current_floor.id != dest_floor.id) {
                 var floor_to_show_name = floors_indexed[qrFloor.id].name;
+
+                if (!$('.leaflet-control-layers-base input[type=radio]').eq(baseLayers[floor_to_show_name].position).is(':checked'))
+                {
                 $('.leaflet-control-layers-base input[type=radio]')
                     .eq(baseLayers[floor_to_show_name].position)
                     .trigger('click');
                 //Cambiamos color de la planta actual a naranja
-                $('input[type=radio].leaflet-control-layers-selector').parent().css('background-color', '#333');
+                //$('input[type=radio].leaflet-control-layers-selector').parent().css('background-color', '#333');
+                }
                 $('input[type=radio].leaflet-control-layers-selector:checked').parent().css('background-color', 'darkorange');
 
             }

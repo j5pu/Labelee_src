@@ -987,7 +987,7 @@ span#miCocheFloor{
     content: "";
     position: absolute;
     top: 87%;
-    left: 0.29em;
+    left: 0.28rem;
     border-top: 0.5em solid;
     border-top-color: inherit;
     border-left: 0.5em solid transparent;
@@ -1508,7 +1508,7 @@ span#navigator{
     outline:none;
 }
 
-/*PRUEBA ANIMACION
+/*ANIMACION PLANTA DESTINO*/
 @keyframes blink {
     0% { background-color: red; }
     100% { background-color: transparent; }
@@ -1518,39 +1518,20 @@ span#navigator{
     100% {background-color: transparent; }
 }
 .blink {
-    -webkit-animation: blink 1.5s linear infinite;
-    -moz-animation: blink 1.5s linear infinite;
-    animation: blink 1.5s linear infinite;
-}*/
-
-
-/*TAB INSTRUCCIONES PARA RUTAS *//*
-
-
-html.mm-opening .mm-menu.mm-bottom.mm-next {
-    margin: 0 0 -255px 0;
-}
-html.mm-bottom.mm-opening .mm-page, html.mm-bottom.mm-opening #mm-blocker {
-    margin: 0 0 -255px 0;
+    -webkit-animation: blink 2s linear infinite;
+    -moz-animation: blink 2s linear infinite;
+    animation: blink 2s linear infinite;
 }
 
-@media all and (orientation:landscape){
-    html.mm-opening .mm-menu.mm-bottom.mm-next {
-        margin: 0 0 -100px 0;
-    }
-    html.mm-bottom.mm-opening .mm-page, html.mm-bottom.mm-opening #mm-blocker {
-        margin: 0 0 -100px 0;
-    }
-}
-
-#routeTab {
-}
-*/
 
 #jqDialog_box {
     background: white;
+    border-width: 3px;
 }
 
+#jqDialog_options button {
+    width: 40px;
+}
 #routeTab > a{
     cursor: pointer;
     width: 60px;
