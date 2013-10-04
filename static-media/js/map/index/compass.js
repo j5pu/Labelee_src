@@ -1,10 +1,16 @@
-var Compass = {
+function Compass(angle_offset)
+{
+    var self = this;
 
-    init: function()
+    // Desviación del norte real con respecto al norte en el mapa
+    this.angle_offset = angle_offset;
+
+    this.init = function()
     {
         this.$e = $('.locate-icon');
         this._setNavigator();
 
+        // El ángulo previo
         this.previous = null;
 
         if (window.DeviceOrientationEvent) {
@@ -19,33 +25,36 @@ var Compass = {
                 // los parámetros beta y gamma hacen referencia al giroscopio
 //                var hor = eventData.gamma;
 //                var ver = eventData.beta;
-                if(Compass.navigator == 1)
+                if(self.navigator == 1)
                 {
-                    Compass.angle = (360 - eventData.webkitCompassHeading); //Si el usuario navega desde iOS debe usarse esta función, restándole 360 conseguimos que la imagen rote correctamente
+                    self.angle = (360 - eventData.webkitCompassHeading); //Si el usuario navega desde iOS debe usarse esta función, restándole 360 conseguimos que la imagen rote correctamente
                 }
                 else
                 {
                     //En otro caso utilizaremos el alpha, que es soportado por los demás dispositivos.
-                    Compass.angle = eventData.alpha;
+                    self.angle = eventData.alpha;
 //                    Compass.dirb = eventData.beta;
 //                    Compass.dirg = eventData.gamma;
                 }
 
-                if(Compass.angle)
+                if(self.angle)
                 {
-                    if(!Compass.previous)
+                    // Le añadimos la desviación
+                    self.angle += self.angle_offset;
+
+                    if(!self.previous)
                     {
-                        Compass._rotate(Compass.angle);
-                        Compass.previous.timestamp = eventData.timeStamp;
+                        self._rotate(self.angle);
+                        self.previous.timestamp = eventData.timeStamp;
                     }
                     else
                     {
-                        var angle_diff = Math.abs(Compass.angle - Compass.previous.angle);
-                        var time_diff = eventData.timeStamp - Compass.previous.timestamp;
+                        var angle_diff = Math.abs(self.angle - self.previous.angle);
+                        var time_diff = eventData.timeStamp - self.previous.timestamp;
                         if(angle_diff > 20 && time_diff > 400)
                         {
-                            Compass._rotate(Compass.angle);
-                            Compass.previous.timestamp = eventData.timeStamp;
+                            self._rotate(self.angle);
+                            self.previous.timestamp = eventData.timeStamp;
                         }
                     }
                 }
@@ -54,9 +63,9 @@ var Compass = {
         $(window).trigger('deviceorientation');
 //        if(this.interval) clearInterval(this.interval);
 //        this.interval = setInterval(Compass._rotate, 500);
-    },
+    };
 
-    _setNavigator: function()
+    this._setNavigator = function()
     {
         if (navigator.userAgent.match(/iPhone/i) ||
             navigator.userAgent.match(/iPad/i) ||
@@ -65,9 +74,9 @@ var Compass = {
             this.navigator = 1;
         }
         else this.navigator = 0;
-    },
+    };
 
-    _rotate: function()
+    this._rotate = function()
     {
 //        console.log('alpha: ' + Compass.angle);
 //        console.log('\tbeta: ' + Compass.dirb);
@@ -76,17 +85,28 @@ var Compass = {
 
         // If the device is oriented horizontally the angle must be changed accordingly
         if (window.orientation == null || window.orientation == 0){
-            rotation = Compass.angle;
+            rotation = self.angle;
         } else {
-            rotation = Compass.angle - window.orientation;
+            rotation = self.angle - window.orientation;
         }
 
-        Compass.$e.css({'transform': 'rotate(' + -rotation + 'deg)'});
+        self.$e.css({'transform': 'rotate(' + -rotation + 'deg)'});
 
-        Compass.previous = {};
-        Compass.previous.angle = Compass.angle;
-    }
-};
+        self.previous = {};
+        self.previous.angle = self.angle;
+
+        console.log(self.angle);
+    };
+
+    this.respawn = function()
+    {
+        this.$e = $('.locate-icon');
+        this.previous = null;
+        $(window).trigger('deviceorientation');
+    };
+
+    self.init();
+}
 
 
 

@@ -237,7 +237,8 @@ function loadFloors() {
                 //
                 // Habilitamos el uso de la brújula para orientar la flecha
                 // y podómetro para dispositivos iOS
-                Compass.init();
+                // todo: de momento está puesto a capón para alcalá magna
+                compass = new Compass(70);
 
                 pedometer_navigator = new PedometerNavigator($('span#navigator'));
                 pedometer_navigator.init();
@@ -510,7 +511,6 @@ function removeCategory(category_index) {
 
 
 function changeFloor(e) {
-console.log(e);
     SocialMenu.close();
     //Cambiamos color de la planta actual a naranja
     $('input[type=radio].leaflet-control-layers-selector').parent().css('background-color', '#333');
@@ -535,6 +535,7 @@ console.log(e);
         Coupon.addIconOnMarker(qrPoint.label.id);
         bindContent(qrMarker);
         qrMarker._bringToFront();
+        compass.respawn();
     }
     if (map.hasLayer(destMarker)) {
         destMarker.openPopup();
