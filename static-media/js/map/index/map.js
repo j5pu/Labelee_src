@@ -25,7 +25,9 @@
  };
  }());*/
 
+
 var blinkingMode = null;
+/*
 function blinker(element, dst) {
 
     if (blinkingMode != null && element != null
@@ -53,8 +55,12 @@ function blinker(element, dst) {
         if (element != null) element.parentElement.style.backgroundColor = "";
     }
 }
+*/
 
-
+function newBlinker(ch){
+    $('div.leaflet-control-layers-base span.blink').removeClass('blink');
+        ch.parentElement.children[1].setAttribute("class", 'blink');
+}
 //
 // VARIABLES GLOBALES
 //
@@ -512,6 +518,7 @@ function removeCategory(category_index) {
 
 
 function changeFloor(e) {
+//console.log(e);
     SocialMenu.close();
     //Cambiamos color de la planta actual a naranja
     $('input[type=radio].leaflet-control-layers-selector').parent().css('background-color', '#333');
@@ -579,7 +586,8 @@ function drawRoute(org, dst) {
 
         if (!route) {
             $('#scrollMenu .destiny.selected').removeClass('selected');
-            alert(gettext('We are sorry, that route does not exist.'));
+            //alert(gettext('We are sorry, that route does not exist.'));
+            $.jqDialog.notify(gettext('We are sorry, that route does not exist.'), 3);
 
         }
         else {
@@ -648,7 +656,9 @@ function drawRoute(org, dst) {
                 var floor_name = floors_indexed[route.fields.destiny.fields.floor].name;
                 var check = floorChecks[floor_name];
                 blinkingMode = floor_name;
-                blinker(check, dst);
+
+                //blinker(check, dst);
+                newBlinker(check);
 
                 qrMarker.openPopup();
 
@@ -683,8 +693,12 @@ Map.locateCar = function () {
     }
 
     if (!miCoche || miCoche.dest.enclosure.id != enclosure_id) {
-        alert('Please, scan the QR code at your parking place to' +
+        /*alert('Please, scan the QR code at your parking place to' +
             ' locate your car.');
+        */
+        $.jqDialog.notify(gettext('Please, scan the QR code at your parking place to' +
+            ' locate your car.'), 3);
+
         return;
     }
 
