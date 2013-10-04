@@ -589,7 +589,8 @@ function drawRoute(org, dst) {
 
         if (!route) {
             $('#scrollMenu .destiny.selected').removeClass('selected');
-            alert(gettext('We are sorry, that route does not exist.'));
+            //alert(gettext('We are sorry, that route does not exist.'));
+            $.jqDialog.notify(gettext('We are sorry, that route does not exist.'), 3);
 
         }
         else {
@@ -696,8 +697,12 @@ Map.locateCar = function () {
     }
 
     if (!miCoche || miCoche.dest.enclosure.id != enclosure_id) {
-        alert('Please, scan the QR code at your parking place to' +
+        /*alert('Please, scan the QR code at your parking place to' +
             ' locate your car.');
+        */
+        $.jqDialog.notify(gettext('Please, scan the QR code at your parking place to' +
+            ' locate your car.'), 3);
+
         return;
     }
 

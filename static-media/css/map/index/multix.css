@@ -1186,7 +1186,7 @@ a.search-cancel {
     height: auto;
     position: absolute;
     /*right: 30%;*/
-    left: 53%;
+    left: 51%;
     text-decoration: none;
 
 }
@@ -1531,12 +1531,12 @@ span#navigator{
 
 #jqDialog_options button {
     width: 40px;
+    text-align: center;
 }
 #routeTab > a{
     cursor: pointer;
     width: 60px;
     height: 58px;
-
     display: block;
     line-height: 30px;
     position: absolute;
