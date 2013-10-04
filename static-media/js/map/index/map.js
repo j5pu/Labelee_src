@@ -239,7 +239,7 @@ function loadFloors() {
                 // Habilitamos el uso de la brújula para orientar la flecha
                 // y podómetro para dispositivos iOS
                 // todo: de momento está puesto a capón para alcalá magna
-                compass = new Compass(70);
+                compass = new Compass(90);
 
                 pedometer_navigator = new PedometerNavigator($('span#navigator'));
                 pedometer_navigator.init();
