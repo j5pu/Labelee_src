@@ -28,7 +28,8 @@ function deviceOrientationListener (event) {
 
     var hor = event.gamma; //El parámetro alpha hace referencia a la brujula, los parámetros beta y gamma hacen referencia al giroscopio
     var ver = event.beta;
-    var dir = event.webkitCompassHeading; //Si el usuario navega desde iOS debe usarse esta función, restándole 360 conseguimos que la imagen rote correctamente
+//    var dir = event.webkitCompassHeading; //Si el usuario navega desde iOS debe usarse esta función, restándole 360 conseguimos que la imagen rote correctamente
+    var dir = 360-event.webkitCompassHeading; //Si el usuario navega desde iOS debe usarse esta función, restándole 360 conseguimos que la imagen rote correctamente
     pedometer_navigator.turnOffIfTimeout();
     pedometer_navigator.changeOrientation(dir);
 
@@ -140,6 +141,8 @@ function PedometerNavigator () {
         } else {
             this.orientation = orientation - window.orientation;
         }
+
+        this.orientation += compass.angle_offset;
 
         this._paint();
         this.lastInteractionTime = new Date().getTime();
