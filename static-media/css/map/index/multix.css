@@ -1527,11 +1527,13 @@ span#navigator{
 #jqDialog_box {
     background: white;
     border-width: 3px;
+    font-size: 1.2em;
 }
 
 #jqDialog_options button {
     width: 40px;
     text-align: center;
+    padding: 0;
 }
 #routeTab > a{
     cursor: pointer;
