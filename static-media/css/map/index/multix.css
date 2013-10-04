@@ -1528,6 +1528,7 @@ span#navigator{
     background: white;
     border-width: 3px;
     font-size: 1.2em;
+    text-align: center;
 }
 
 #jqDialog_options button {
