@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-09-04 15:57+0200\n"
+"POT-Creation-Date: 2013-10-04 16:50+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,56 +18,50 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: static-media/js/coupon_manager/main.js:173
-#: static-media/js/coupon_manager/main.js:271
+#: static-media/js/coupon_manager/main.js:178
+#: static-media/js/coupon_manager/main.js:276
 msgid "Are you sure you want to remove this coupon?"
 msgstr "¿Estás seguro de que desea eliminar este cupón?"
 
-#: static-media/js/coupon_manager/main.js:208
+#: static-media/js/coupon_manager/main.js:213
 msgid "You must specify the coupon image"
 msgstr "Debe indicar la imagen para el cupón"
 
-#: static-media/js/helpers/resource.js:561
+#: static-media/js/helpers/resource.js:540
 msgid "Refreshing memcache for this enclosure"
 msgstr "Refrescando memcache para este recinto"
 
-#: static-media/js/map/index/map.js:196
+#: static-media/js/map/index/cookiemanager.js:36
 msgid "Do you want to remember your parking space?"
 msgstr "¿Desea recordar su plaza de parquing?"
 
-#: static-media/js/map/index/map.js:217
-msgid "Do you still want to go to the previous destination?"
-msgstr "¿Todavía quieres llegar al destino anterior?"
-
-#: static-media/js/map/index/map.js:270
-msgid "PREVIOUS DESTINATION"
-msgstr "DESTINO PREVIO"
-
-#: static-media/js/map/index/map.js:283
-msgid "HELP MENU"
-msgstr "MENÚ DE AYUDA"
-
-#: static-media/js/map/index/map.js:294 static-media/js/map/index/map.js:320
+#: static-media/js/map/index/cookiemanager.js:136
+#: static-media/js/map/index/cookiemanager.js:164
+#: static-media/js/map/index/cookiemanager.js:195
 msgid "Do you still want to go to"
 msgstr "¿Todavía quieres llegar a"
 
-#: static-media/js/map/index/map.js:494
+#: static-media/js/map/index/map.js:319
 msgid "Scan a QR code to get here:"
 msgstr "Escanea un código QR para llegar hasta aquí:"
 
-#: static-media/js/map/index/map.js:548
+#: static-media/js/map/index/map.js:381
 msgid "You are right here:"
 msgstr "Estás justo aquí:"
 
-#: static-media/js/map/index/map.js:563
+#: static-media/js/map/index/map.js:395
 msgid "Please, scan a QR code to get here:"
 msgstr "Por favor, escanee un código QR para llegar hasta aquí:"
 
-#: static-media/js/map/index/map.js:742
+#: static-media/js/map/index/map.js:590
 msgid "We are sorry, that route does not exist."
 msgstr "Lo sentimos, esa ruta no existe."
 
-#: static-media/js/map/index/map.js:877 static-media/js/map/index/map.js:881
+#: static-media/js/map/index/map.js:699
+msgid "Please, scan the QR code at your parking place to locate your car."
+msgstr "Por favor, escanee el código QR de su plaza de aparcamiento para localizar su coche."
+
+#: static-media/js/map/index/map.js:718 static-media/js/map/index/map.js:722
 msgid "My car"
 msgstr "Mi coche"
 
@@ -100,7 +94,7 @@ msgstr ""
 #: static-media/js/map_editor/edit_map/floor.js:591
 #: static-media/js/map_editor/edit_map/main.js:150
 #: static-media/js/map_editor/edit_map/main.js:213
-#: static-media/js/map_editor/edit_map/menu.js:142
+#: static-media/js/map_editor/edit_map/menu.js:131
 msgid "Redrawing grid"
 msgstr "Redibujando grid"
 
@@ -138,23 +132,23 @@ msgstr ""
 msgid "zooming disabled!"
 msgstr "Zoom deshabilitado"
 
-#: static-media/js/map_editor/edit_map/menu.js:131
+#: static-media/js/map_editor/edit_map/menu.js:120
 msgid "Delete label"
 msgstr "Eliminar etiqueta"
 
-#: static-media/js/map_editor/edit_map/menu.js:132
+#: static-media/js/map_editor/edit_map/menu.js:121
 msgid "(All their points will be deleted too)"
 msgstr "(Todos los puntos también serán borrados)"
 
-#: static-media/js/map_editor/edit_map/menu.js:371
+#: static-media/js/map_editor/edit_map/menu.js:366
 msgid "POIs that are not saved will be erased. Do you want to continue?"
 msgstr "Se perderán los puntos que no hayan sido guardados. ¿Desea continuar?"
 
-#: static-media/js/map_editor/edit_map/menu.js:377
+#: static-media/js/map_editor/edit_map/menu.js:372
 msgid "Drawing only QRs for grid"
 msgstr "Dibujando solo QRs para el grid"
 
-#: static-media/js/map_editor/edit_map/menu.js:377
+#: static-media/js/map_editor/edit_map/menu.js:372
 msgid "Drawing back labels"
 msgstr "Redibujando etiquetas"
 
@@ -172,19 +166,28 @@ msgid ""
 "Previous routes will be removed for this enclosure. Do you want to continue?"
 msgstr "Todas las rutas previas serán borradas del recinto. ¿Desea continuar?"
 
-#: static-media/js/map_editor/index/main.js:169
+#: static-media/js/map_editor/index/main.js:174
 msgid ""
 "Are you sure you want to remove this enclosure? (this will erase all their "
 "floors)"
 msgstr ""
 "¿Seguro que desea eliminar este recinto? (esto eliminará todas sus plantas)"
 
-#: static-media/js/map_editor/index/main.js:212
+#: static-media/js/map_editor/index/main.js:217
 msgid "You must specify the floor image too"
 msgstr "También debe subir la imágen del plano para la planta"
 
-#: static-media/js/map_editor/index/main.js:288
+#: static-media/js/map_editor/index/main.js:293
 msgid "Are you sure you want to remove this floor?"
 msgstr ""
 "¿Seguro que desea eliminar la planta? (también se perderá toda la "
 "información relativa a ella)"
+
+#~ msgid "Do you still want to go to the previous destination?"
+#~ msgstr "¿Todavía quieres llegar al destino anterior?"
+
+#~ msgid "PREVIOUS DESTINATION"
+#~ msgstr "DESTINO PREVIO"
+
+#~ msgid "HELP MENU"
+#~ msgstr "MENÚ DE AYUDA"

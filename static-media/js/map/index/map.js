@@ -696,8 +696,7 @@ Map.locateCar = function () {
         /*alert('Please, scan the QR code at your parking place to' +
             ' locate your car.');
         */
-        $.jqDialog.notify(gettext('Please, scan the QR code at your parking place to' +
-            ' locate your car.'), 3);
+        $.jqDialog.notify(gettext('Please, scan the QR code at your parking place to locate your car.'), 3);
 
         return;
     }
