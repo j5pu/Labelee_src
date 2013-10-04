@@ -156,14 +156,10 @@ function hideSplash() {
 }
 
 
-function showRouteFromCoupon(origin_id, destination_site_id)
+function showRouteProgrToPoint(origin_id, destination_id)
 {
-    var closest_destination_id = routeResource.getClosestPoint(origin_id, destination_site_id).id;
-    showRouteFromMenu(origin_id, closest_destination_id);
-}
-
-
-function showRouteFromMenu(origin_id, destination_id) {
+    // Muestra la ruta programáticamente. Por ejemplo, cuando se pulsa sobre algún site
+    // desde el menú lateral, botón 'mi coche', etc..
     if (origin_id != destination_id) {
         try {
             drawRoute(origin_id, destination_id);
@@ -192,6 +188,15 @@ function showRouteFromMenu(origin_id, destination_id) {
         }
     }
 }
+
+
+function showRouteProgrToSite(origin_id, destination_site_id)
+{
+    var closest_destination_id = routeResource.getClosestPoint(origin_id, destination_site_id).id;
+    showRouteProgrToPoint(origin_id, closest_destination_id);
+}
+
+
 
 var Coupon = {
     opened: false,
@@ -259,7 +264,8 @@ var Coupon = {
     addIconOnMarker: function(marker_site_id)
     {
         // Añade el icono '%' si el site (label) del marker que contenga algún cupón
-        if (mapData.coupons[marker_site_id].length != 0) {
+        if (mapData.coupons[marker_site_id] &&
+            mapData.coupons[marker_site_id].length != 0) {
             $('div.leaflet-popup-content-wrapper')
                 .addClass('withCoupon')
                 .attr('data-site-id', marker_site_id);
@@ -272,7 +278,7 @@ var Coupon = {
         $('div.swiper-slide img').on('click', function (e) {
             e.preventDefault();
             var site_id = parseInt($(this).data('site-id'));
-            showRouteFromCoupon(qrPoint.point.id, site_id);
+            showRouteProgrToSite(qrPoint.point.id, site_id);
             $('div.device').fadeOut();
         });
     }

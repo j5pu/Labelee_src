@@ -130,10 +130,17 @@ def get_route(request, origin, destiny):
 
 def get_closest_point(request, origin, destiny_site_id):
     """
-    Toma el punto de destino más cercano al punto origen, dado el site destino
+    Dado el site destino, toma su punto destino más cercano al punto origen
     """
     # todo: de momento toma el primer punto del site, sin comparar rutas
+    site = Label.objects.get(pk=destiny_site_id)
     points = Point.objects.filter(label__id=destiny_site_id)
+
+    # Si el site pertenece a una categoría genérica..
+    if not site.category.enclosure:
+        origin_point = Point.objects.get(pk=origin)
+        points = points.filter(floor__enclosure=origin_point.floor.enclosure)
+
     point_list = t_queryset_to_dict(PointResource(), points)
     return HttpResponse(simplejson.dumps(point_list[0]), mimetype='application/json')
 

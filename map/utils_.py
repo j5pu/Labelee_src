@@ -50,15 +50,21 @@ def cache_show_map(enclosure_id):
     colors = {}
     icons = {}
     coupons = {}
+    sites_floors = {}   # lista de plantas para cada site, indexado por id de site
     cache_key = 'show_map_enclosure_' + enclosure_id
     cache_time = 43200
     cacheEnclosure = cache.get(cache_key)
     if not cacheEnclosure:
-        # cacheamos cupones
+        #
+        # cache coupons
+        #
         for label in Label.objects.filter(category__enclosure__id=enclosure_id):
             site_coupons = CouponForLabel.objects.filter(label=label)
             coupons[label.id] = queryset_to_dict(site_coupons)
 
+        #
+        # cache points
+        #
         points = Point.objects.select_related('label', 'label__category', 'floor', 'coupon') \
             .filter(~Q(label__category__name_en=FIXED_CATEGORIES.values()[0]),
                     floor__enclosure__id=enclosure_id) \
@@ -78,13 +84,25 @@ def cache_show_map(enclosure_id):
             poisByFloor[point.floor.id][poiIndex]['label'] = queryset_to_dict([point.label])[0]
             poisByFloor[point.floor.id][poiIndex]['label']['category'] = queryset_to_dict([point.label.category])[0]
 
-            if point.label.category.is_visible_menu:
-                if point.label.category.name in categories:
-                    categories[point.label.category.name].append(point)
+        #
+        # cache sites
+        #
+        sites = Label.objects.select_related('points__floor__enclosure', 'category')\
+            .filter(points__floor__enclosure=enclosure_id).distinct().order_by('name')
+
+        for site in sites:
+            if site.category.is_visible_menu:
+                if site.category.name in categories:
+                    categories[site.category.name].append(site)
                 else:
-                    colors[point.label.category.name] = point.label.category.color
-                    icons[point.label.category.name] = point.label.category.icon
-                    categories[point.label.category.name] = [point]
+                    colors[site.category.name] = site.category.color
+                    icons[site.category.name] = site.category.icon
+                    categories[site.category.name] = [site]
+
+                # lista de plantas para cada site
+                floors = Floor.objects.filter(points__label=site,
+                    enclosure__id=enclosure_id).distinct().order_by('name')
+                sites_floors[site.id] = [floor.name for floor in floors]
 
         categories_list = []  # [{'name': 'toilets', 'items': [...]}, ...]
         for key, value in categories.iteritems():
@@ -105,7 +123,8 @@ def cache_show_map(enclosure_id):
             'colors': colors,
             'icons': icons,
             'coupons': coupons,
-            'enclosure':enclosure
+            'enclosure':enclosure,
+            'sites_floors': sites_floors
         }
         cache.set(cache_key,cacheEnclosure,cache_time)
     else:
@@ -115,6 +134,7 @@ def cache_show_map(enclosure_id):
         icons = cacheEnclosure['icons']
         coupons = cacheEnclosure['coupons']
         enclosure = cacheEnclosure['enclosure']
+        sites_floors = cacheEnclosure['sites_floors']
 
     return {
         'poisByFloor': poisByFloor,
@@ -123,6 +143,7 @@ def cache_show_map(enclosure_id):
         'icons': icons,
         'coupons': coupons,
         'enclosure': enclosure,
+        'sites_floors': sites_floors,
     }
 
 
