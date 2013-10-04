@@ -24,8 +24,8 @@ PIPELINE_CSS = {
             'css/map/index/helpmenu.css',
             'css/map/index/mmenu.css',
             'css/map/index/mmenu-positioning.css',
-            'css/map/index/multix.css',
             'css/map/index/jqdialog.css',
+            'css/map/index/multix.css',
             'css/map/index/cookies.css'
         ),
         'output_filename': 'map.min.css',

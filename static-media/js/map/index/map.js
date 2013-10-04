@@ -70,6 +70,7 @@ var map = L.map('map', {
     maxZoom: 3,
 //Ojo, 'trackResize' desactiva la gestión 'orientationchange' automática
 //    trackResize: false,
+    touchZoom:true,
     zoomControl: false
     /*
      tapTolerance: 30,
