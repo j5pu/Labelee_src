@@ -180,17 +180,10 @@ function showRouteFromMenu(origin_id, destination_id) {
                 $('.leaflet-control-layers-base input[type=radio]')
                     .eq(baseLayers[floor_to_show_name].position)
                     .trigger('click');
-                //Cambiamos color de la planta actual a naranja
-                //$('input[type=radio].leaflet-control-layers-selector').parent().css('background-color', '#333');
                 }
                 $('input[type=radio].leaflet-control-layers-selector:checked').parent().css('background-color', 'darkorange');
             }
         }
-            /*
-             else{
-             Map.locatePosition
-             }
-             */
         catch (err) {
             console.error(err);
         }
