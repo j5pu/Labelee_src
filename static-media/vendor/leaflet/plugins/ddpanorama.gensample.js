@@ -37,7 +37,11 @@ function addSamplePano(options)
 //    document.write("<h2>"+ optionStr + "</h2>");
     jQuery('div#page').prepend('<img id="'+panoId+'" src="'+ src + '" alt="" />');
 
+    Spinner.show(gettext('Panoramic photo is loading') + '...');
+
     jQuery('div#page').find('img[id*=pano]').on('load', function(){
+        Spinner.hide();
+
         try{
             jQuery('div#page').find('img[id*=pano]').ddpanorama(options);
         }

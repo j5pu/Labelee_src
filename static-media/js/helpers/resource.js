@@ -596,8 +596,12 @@ function RouteResource() {
             },
             dataType: 'json', // esto indica que la respuesta vendrá en formato json
             async: false,
+            beforeSend: function(){
+                Spinner.show(gettext('Labelee is calculating route') + '...');
+            },
             success: function (response) {
                 elements = response;
+                Spinner.hide();
             },
             error: function (response) {
                 var j = response;

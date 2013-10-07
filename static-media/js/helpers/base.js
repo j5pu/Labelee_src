@@ -319,4 +319,17 @@ function randString(n)
 }
 
 
+var Spinner = {
+    show: function(msg)
+    {
+        $.jqDialog.content(msg);
+    },
+
+    hide: function()
+    {
+        $('#jqDialog_box').hide();
+    }
+};
+
+
 
