@@ -263,7 +263,7 @@ var Coupon = {
     addIconOnMarker: function(marker_site_id)
     {
         // Añade el icono '%' si el site (label) del marker que contenga algún cupón
-        if (mapData.coupons[marker_site_id].length != 0) {
+        if (mapData.coupons[marker_site_id] && mapData.coupons[marker_site_id].length != 0) {
             $('div.leaflet-popup-content-wrapper')
                 .addClass('withCoupon')
                 .attr('data-site-id', marker_site_id);
