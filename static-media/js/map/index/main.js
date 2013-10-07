@@ -147,9 +147,10 @@ function hideSplash() {
 
         var instructionList = document.getElementById('instructionList');
         instructionList.innerHTML = '';
+        $('#routeDiv p').text('Para llegar a ' + route.fields.destiny.fields.description +':');
         for (var subroute_index in route.fields.subroutes) {
             if (instructionList) {
-                instructionList.innerHTML += '<li>' +route.fields.subroutes[subroute_index]["text_description"] + '</li>'
+                instructionList.innerHTML += '<li> || ' +route.fields.subroutes[subroute_index]["text_description"] + '</li>'
             }
         }
     });
