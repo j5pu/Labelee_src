@@ -822,8 +822,17 @@ var arrowsOffset = 0;
 var setArrow = function (flecha, idFloor) {
 
     flecha.setPatterns([
+/*
         {offset: arrowsOffset + '%', repeat: 0, symbol: new L.Symbol.ArrowHead({pixelSize: 15, polygon: false, pathOptions: { stroke: true}})}
     ]);
+*/
+
+            {offset: arrowsOffset + '%', repeat: 0, symbol: new L.Symbol.Marker({rotate: false, markerOptions: {
+                    icon: L.icon({
+                        iconUrl: '/media/ball.png',
+                        iconAnchor: [4, 4]
+               })
+        }})}]);
     if (++arrowsOffset > 100)
         arrowsOffset = 0;
 };
