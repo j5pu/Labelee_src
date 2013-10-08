@@ -142,19 +142,7 @@
                                 <a href="#"
                                    onclick="showRouteProgrToSite({{ poi_id }}, {{ site.id }});">
                                     <button>{{ site.name }}</button>
-
-                                    <!-- todo: mostrar LISTA DE PLANTAS PARA CADA SITE -->
-{#                                    <span>#}
-{#                                        {% with floors=sites_floors|get_item:site.id %}#}
-{#                                            {% for floor in floors %}#}
-{#                                                {% if forloop.counter == 0 %}#}
-{#                                                    {{ floor }}#}
-{#                                                {% else %}#}
-{#                                                     | {{ floor }}#}
-{#                                                {% endif %}#}
-{#                                            {% endfor %}#}
-{#                                        {% endwith %}#}
-{#                                    </span>#}
+                                    <span>{{ sites_floors|get_item:site.id  }}</span>
                                 </a>
                             </li>
                         {% endfor %}

@@ -102,7 +102,11 @@ def cache_show_map(enclosure_id):
                 # lista de plantas para cada site
                 floors = Floor.objects.filter(points__label=site,
                     enclosure__id=enclosure_id).distinct().order_by('name')
-                sites_floors[site.id] = [floor.name for floor in floors]
+                for i in range(0, len(floors)):
+                    if i == 0:
+                        sites_floors[site.id] = floors[i].name
+                    else:
+                        sites_floors[site.id] += ', ' + floors[i].name
 
         categories_list = []  # [{'name': 'toilets', 'items': [...]}, ...]
         for key, value in categories.iteritems():
