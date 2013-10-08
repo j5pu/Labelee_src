@@ -4,7 +4,6 @@ from django.contrib.auth.decorators import login_required
 from django.conf import settings
 from django.core.context_processors import csrf
 from django.http import HttpResponse, HttpResponseRedirect
-
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 import simplejson
@@ -12,6 +11,10 @@ from dashboard.models import DisplayedRoutes, CategoryShot
 from dashboard.utils import *
 from map_editor.models import Floor, Enclosure
 from route.services import getHeatMapSteps
+import xlwt
+from datetime import datetime
+from pyExcelerator import *
+from django.http import HttpResponse
 # from utils.constants import USER_GROUPS
 
 
@@ -63,6 +66,48 @@ def saveRouteRequest(request):
     dispRoute.date = datetime.datetime.utcnow()
     dispRoute.save()
     return HttpResponse(simplejson.dumps('ok'))
+
+def show_excel(request, enclosure_id):
+    enclosureName = Enclosure.objects.get(id=enclosure_id).name
+    scansByCategory = getScansByCategory(enclosure_id)
+    routesByCategory = getRoutesByCategory(enclosure_id)
+    numCategory = len(scansByCategory[0]['values'])
+
+    style0 = xlwt.easyxf('font: name Times New Roman, colour blue, bold on; alignment: horizontal center;')
+    style1 = xlwt.easyxf('alignment: horizontal left',num_format_str='DD-MMM-YY')
+    style2 = xlwt.easyxf('alignment: horizontal left')
+    wb = xlwt.Workbook(encoding="UTF-8")
+    ws = wb.add_sheet('Dashboard',cell_overwrite_ok=True)
+    ws.col(0).width = 256 * (len(enclosureName) + 10)
+    ws.col(1).width = 256 * 25
+    ws.write(0,0,'Dashboard de '+enclosureName, style0)
+    ws.write(1,0,datetime.now(), style1)
+    ws.write(2,1, 'Número de lecturas Qr',style0)
+    ws.write(4,1,'Categoría')
+    ws.write(5,1,'Número')
+    ws.write(8,1, 'Número de rutas',style0)
+    ws.write(10,1, 'Categoría')
+    ws.write(11,1, 'Número')
+
+    for i in range(numCategory):
+        ws.col(i+3).width = 256 * (len(scansByCategory[0]['values'][i]['label']) + 1)
+        ws.write(4,i+3,scansByCategory[0]['values'][i]['label'], style2)
+        ws.write(5,i+3,scansByCategory[0]['values'][i]['value'], style2)
+        ws.write(10,i+3,routesByCategory[0]['values'][i]['label'], style2)
+        ws.write(11,i+3,routesByCategory[0]['values'][i]['value'], style2)
+
+    wb.save('media/'+enclosureName+'.xls')
+    filePath ='media/'+enclosureName+'.xls'
+    return HttpResponseRedirect('/' + filePath)
+    # fileName =''
+    # fileName = filePath[filePath.rfind('/')+1:]
+    # response = HttpResponse(open('dashboard/excel/output.xls','r').read(),
+    #     mimetype='application/vnd.ms-excel')
+    # response['Content-Disposition'] = 'attachment; filepath='+
+    # response = HttpResponse(open('media/dashboard.xls','r').read(),mimetype='application/vnd.ms-excel')
+    # response['Content-Disposition'] = 'attachment; filename='+filePath
+    #
+    # return response
 
 def saveClickOnCategory(request):
     json_data = request.body
