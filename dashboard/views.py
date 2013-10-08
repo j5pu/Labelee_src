@@ -72,6 +72,8 @@ def show_excel(request, enclosure_id):
     scansByCategory = getScansByCategory(enclosure_id)
     routesByCategory = getRoutesByCategory(enclosure_id)
     numCategory = len(scansByCategory[0]['values'])
+    topScansByPoi = getTopScansByPoi(enclosure_id)
+    topRoutesByPoi = getTopRoutesByPoi(enclosure_id)
 
     style0 = xlwt.easyxf('font: name Times New Roman, colour blue, bold on; alignment: horizontal center;')
     style1 = xlwt.easyxf('alignment: horizontal left',num_format_str='DD-MMM-YY')
@@ -84,10 +86,17 @@ def show_excel(request, enclosure_id):
     ws.write(1,0,datetime.now(), style1)
     ws.write(2,1, 'Número de lecturas Qr',style0)
     ws.write(4,1,'Categoría')
-    ws.write(5,1,'Número')
+    ws.write(5,1,'Número de lecturas')
     ws.write(8,1, 'Número de rutas',style0)
     ws.write(10,1, 'Categoría')
-    ws.write(11,1, 'Número')
+    ws.write(11,1, 'Número de rutas')
+    ws.write(14,1,'Top 10 de lecturas',style0)
+    ws.write(16,1, 'POI')
+    ws.write(17,1, 'Número de lecturas')
+    ws.write(20,1,'Top 10 de rutas',style0)
+    ws.write(22,1, 'POI')
+    ws.write(23,1, 'Número de rutas')
+
 
     for i in range(numCategory):
         ws.col(i+3).width = 256 * (len(scansByCategory[0]['values'][i]['label']) + 1)
@@ -96,18 +105,21 @@ def show_excel(request, enclosure_id):
         ws.write(10,i+3,routesByCategory[0]['values'][i]['label'], style2)
         ws.write(11,i+3,routesByCategory[0]['values'][i]['value'], style2)
 
+    for i in range (10):
+        if i<len(scansByCategory[0]['values']):
+            if len(topScansByPoi[0]['values'][i]['label']) > len(scansByCategory[0]['values'][i]['label']):
+                ws.col(i+3).width = 256 * (len(topScansByPoi[0]['values'][i]['label']) + 1)
+        else:
+            ws.col(i+3).width = 256 * (len(topScansByPoi[0]['values'][i]['label']) + 1)
+        ws.write(16,i+3,topScansByPoi[0]['values'][i]['label'], style2)
+        ws.write(17,i+3,topScansByPoi[0]['values'][i]['value'], style2)
+        ws.write(22,i+3,topRoutesByPoi[0]['values'][i]['label'], style2)
+        ws.write(23,i+3,topRoutesByPoi[0]['values'][i]['value'], style2)
+
     wb.save('media/'+enclosureName+'.xls')
     filePath ='media/'+enclosureName+'.xls'
     return HttpResponseRedirect('/' + filePath)
-    # fileName =''
-    # fileName = filePath[filePath.rfind('/')+1:]
-    # response = HttpResponse(open('dashboard/excel/output.xls','r').read(),
-    #     mimetype='application/vnd.ms-excel')
-    # response['Content-Disposition'] = 'attachment; filepath='+
-    # response = HttpResponse(open('media/dashboard.xls','r').read(),mimetype='application/vnd.ms-excel')
-    # response['Content-Disposition'] = 'attachment; filename='+filePath
-    #
-    # return response
+
 
 def saveClickOnCategory(request):
     json_data = request.body
