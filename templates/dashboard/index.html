@@ -6,6 +6,7 @@
     <link rel="stylesheet" href="{{ STATIC_URL }}css/dashboard/heatmap.css">
     <link rel="stylesheet" href="{{ STATIC_URL }}css/map_editor/styles.css"/>
     <link rel="stylesheet" href="{{ STATIC_URL }}css/dashboard/dashboard.css">
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/map_editor/index/styles.css"/>
     <style>
 
         {% comment %}   * {
@@ -79,6 +80,8 @@
 
     {% include "_manager_navbar.html" with current_page="dashboard" %}
 
+
+    <a href="/dashboard/{{ enclosure_id}}/excel"><button class="btn link-2">Descargar Excel</button></a>
     <!--<div class="container">-->
 
     <div class="container">

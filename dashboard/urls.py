@@ -5,6 +5,7 @@ from dashboard.services import scans_by_category
 urlpatterns = patterns('dashboard.views',
 
     url(r'^(?P<enclosure_id>\d+)$', 'index', name='dashboard__index'),
+    url(r'^(?P<enclosure_id>\d+)/excel/', 'show_excel', name='dashboard__index'),
 
     # SERVICIOS
     url(r'^Services/CreateDisplayedRoute', 'saveRouteRequest'),

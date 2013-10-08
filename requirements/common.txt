@@ -17,3 +17,4 @@ pyflakes
 selenium
 pyvirtualdisplay
 mimeparse
+pyExcelerator==0.6.4.1
