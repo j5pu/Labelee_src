@@ -6,6 +6,7 @@ from django.db import models
 class Route(models.Model):
     origin = models.ForeignKey('map_editor.Point', related_name='+')
     destiny = models.ForeignKey('map_editor.Point', related_name='+')
+    cost = models.FloatField()
 
     def __unicode__(self):
         return 'tabla ruta'
@@ -29,8 +30,8 @@ class Step(models.Model):
 
 
 class Connection(models.Model):
-    init = models.OneToOneField('map_editor.Point', related_name='connection_init', on_delete=models.CASCADE)
-    end = models.OneToOneField('map_editor.Point', related_name='connection_end', on_delete=models.CASCADE)
+    init = models.ForeignKey('map_editor.Point', related_name='connection_init', on_delete=models.CASCADE)
+    end = models.ForeignKey('map_editor.Point', related_name='connection_end', on_delete=models.CASCADE)
 
 
 

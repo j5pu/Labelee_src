@@ -141,8 +141,25 @@ def get_closest_point(request, origin, destiny_site_id):
         origin_point = Point.objects.get(pk=origin)
         points = points.filter(floor__enclosure=origin_point.floor.enclosure)
 
-    point_list = t_queryset_to_dict(PointResource(), points)
-    return HttpResponse(simplejson.dumps(point_list[0]), mimetype='application/json')
+    shortest_route = find_shortest_route(origin, points)
+
+    point_dict = t_queryset_to_dict(PointResource(), [shortest_route.destiny])[0]
+    return HttpResponse(simplejson.dumps(point_dict), mimetype='application/json')
+
+
+def find_shortest_route(origin, points):
+    """
+    Itera sobre los puntos de un site destino para encontrar la ruta más corta
+    desde el punto origen.
+    """
+    shortest_route = None
+    for point in points:
+        current_route = Route.objects.get(origin__id=origin, destiny=point)
+        if shortest_route is None or \
+                (shortest_route is not None and current_route.cost < shortest_route.cost):
+            shortest_route = current_route
+
+    return shortest_route
 
 
 def saveDisplayedRoute(origin_id, destination_id):

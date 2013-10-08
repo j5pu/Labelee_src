@@ -88,7 +88,7 @@ def cache_show_map(enclosure_id):
         # cache sites
         #
         sites = Label.objects.select_related('points__floor__enclosure', 'category')\
-            .filter(points__floor__enclosure=enclosure_id).distinct().order_by('name')
+            .filter(points__floor__enclosure=enclosure_id).distinct().order_by('category__name', 'name_en')
 
         for site in sites:
             if site.category.is_visible_menu:

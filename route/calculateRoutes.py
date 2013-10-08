@@ -353,6 +353,8 @@ def threadCalculateRoute(enclosure_id):
                     calculatedRoute = Route()
                     calculatedRoute.origin = path[0].point
                     calculatedRoute.destiny = path[1].point
+                    calculatedRoute.cost = 0
+                    calculatedRoute.save()
 
                     step_number = 0
                     route = []
@@ -377,8 +379,8 @@ def threadCalculateRoute(enclosure_id):
                             if routeStep.floor_id != previousStep.floor_id:
                                 route_cost += 10000 #TODO: Cuando haya, habra que meterle el coste de escalera o ascensor
                             else:
-                                route_cost += math.hypot(routeStep.row - previousStep.row,
-                                                         routeStep.col - previousStep.col)
+                                route_cost += math.hypot(int(routeStep.row) - int(previousStep.row),
+                                                         int(routeStep.column) - int(previousStep.column))
                         previousStep = routeStep
 
                     calculatedRoute.cost = route_cost
