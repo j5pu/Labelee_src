@@ -36,8 +36,12 @@ class StepsExplanation:
     FINAL_SUBROUTE = _("Sigue la ruta hacia tu destino")
 
     @classmethod
-    def getSubrouteDestinationText(cls, step):
-        pointName = Point.objects.filter(col=step['fields']['column'], row=step['fields']['row'])[0].description
+    def getSubrouteDestinationText(cls, step, floorId):
+        pointName = Point.objects.filter(
+            floor__id=floorId,
+            col=step['fields']['column'],
+            row=step['fields']['row']
+        )[0].description
         destination_text = cls.FIRST_SUBROUTE_INITS[cls.initsPointer] + " " + pointName + " " + cls.MEDIUM_CONNECTOR + " "
         cls.initsPointer = (cls.initsPointer + 1) % len(cls.FIRST_SUBROUTE_INITS)
         return destination_text
@@ -65,10 +69,12 @@ class StepsExplanation:
         # Process subroutes except the last
         for i in range(len(subroutes) - 1):
 
-            numFloor = Floor.objects.get(pk=subroutes[i]['floor']['pk']).floor_number
+            floor = Floor.objects.get(pk=subroutes[i]['floor']['pk'])
+            numFloor = floor.floor_number
+            floorId = floor.id
             nextNumFloor = Floor.objects.get(pk=subroutes[i+1]['floor']['pk']).floor_number
 
-            subroute_destination = StepsExplanation.getSubrouteDestinationText(subroutes[i]['steps'][-1])
+            subroute_destination = StepsExplanation.getSubrouteDestinationText(subroutes[i]['steps'][-1], floorId)
             connection_direction = StepsExplanation.getConnectionDirection(numFloor, nextNumFloor)
             destination_floor = StepsExplanation.getDestinationFloorText(nextNumFloor)
 
@@ -130,12 +136,36 @@ def get_route(request, origin, destiny):
 
 def get_closest_point(request, origin, destiny_site_id):
     """
-    Toma el punto de destino más cercano al punto origen, dado el site destino
+    Dado el site destino, toma su punto destino más cercano al punto origen
     """
     # todo: de momento toma el primer punto del site, sin comparar rutas
+    site = Label.objects.get(pk=destiny_site_id)
     points = Point.objects.filter(label__id=destiny_site_id)
-    point_list = t_queryset_to_dict(PointResource(), points)
-    return HttpResponse(simplejson.dumps(point_list[0]), mimetype='application/json')
+
+    # Si el site pertenece a una categoría genérica..
+    if not site.category.enclosure:
+        origin_point = Point.objects.get(pk=origin)
+        points = points.filter(floor__enclosure=origin_point.floor.enclosure)
+
+    shortest_route = find_shortest_route(origin, points)
+
+    point_dict = t_queryset_to_dict(PointResource(), [shortest_route.destiny])[0]
+    return HttpResponse(simplejson.dumps(point_dict), mimetype='application/json')
+
+
+def find_shortest_route(origin, points):
+    """
+    Itera sobre los puntos de un site destino para encontrar la ruta más corta
+    desde el punto origen.
+    """
+    shortest_route = None
+    for point in points:
+        current_route = Route.objects.get(origin__id=origin, destiny=point)
+        if shortest_route is None or \
+                (shortest_route is not None and current_route.cost < shortest_route.cost):
+            shortest_route = current_route
+
+    return shortest_route
 
 
 def saveDisplayedRoute(origin_id, destination_id):

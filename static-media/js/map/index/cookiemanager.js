@@ -86,7 +86,7 @@ var LocalStorageHandler = {
                         '<span class="nominiCup"></span>' +
                         '<a href="#"' +
                         'onclick="' + "$('#menu-right').trigger( 'close' );" +
-                        "showRouteFromMenu(" + qrPoint.point.id + ', ' + point_dest_id + ');">' +
+                        "showRouteProgrToPoint(" + qrPoint.point.id + ', ' + point_dest_id + ');">' +
                         '<button>' + description +
                         '</button>' +
                         '<span>' + floorname + '</span>' +
@@ -110,7 +110,7 @@ var LocalStorageHandler = {
                 $('#scrollMenu').prepend(
                     '<li>' +
                         '<span style="background:cadetblue;"' + 'onclick="' + "$('#menu-right').trigger( 'close' );" +
-                        "showRouteFromMenu(" + qrPoint.point.id + ', ' + miCoche.dest.point.id + ');">' +
+                        "showRouteProgrToPoint(" + qrPoint.point.id + ', ' + miCoche.dest.point.id + ');">' +
                         miCoche.dest.labelCategory.name +
                         '<i class="icon-automobile"></i>' + ' - ' +
                         miCoche.dest.point.description + '<span id="miCocheFloor">' + miCoche.dest.floor.name + '</span>'

@@ -704,6 +704,7 @@ span#miCocheFloor{
     text-shadow: 1px 1px 3px black;
     line-height: 14px;
     margin-left: 2px;
+    vertical-align: middle;
 }
 
 .mm-menu li > span.nominiCup{
@@ -730,7 +731,7 @@ span#miCocheFloor{
     position: absolute;
     right: 30%;
     top: 3px;
-    width: 20px;
+    width: auto;
     text-align: center;
     padding-right: 3px;
     line-height: 16px;
@@ -1262,6 +1263,7 @@ a.search-cancel {
     width: 80%;
     display: inline-block;
     margin-left:0;
+    vertical-align: middle;
 }
 
 .mm-menu.mm-vertical ul ul {

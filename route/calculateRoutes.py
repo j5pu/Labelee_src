@@ -199,18 +199,8 @@ class BeautifyIterator:
         y = point1['y']
         block = self.getBlock(x,y)
         finalBlock = self.getBlock(point2['x'], point2['y'])
-        #print "Origin point" + str(origin_index)
-        #print "End point" + str(end_index)
-        #print "Final block" + str(finalBlock)
-        #print "WALLS" + str(self.walls)
-        #print increments['x']
-        #print increments['y']
         while block != finalBlock:
 
-            #print block
-            #print self.walls.get(floor, False)
-            #print self.walls[floor].get(block['col'], False)
-            #print self.walls[floor][block['col']].get(block['row'], False)
             # If a block passed by the line is a wall, the line is considered not possible
             if self.walls.get(floor, False) and self.walls[floor].get(block['col'], False) \
                 and self.walls[floor][block['col']].get(block['row'], False):
@@ -222,8 +212,6 @@ class BeautifyIterator:
             block = self.getBlock(x,y)
 
         # All the blocks are clear
-
-        #print "SALGO"
 
         return True
 
@@ -240,9 +228,7 @@ class BeautifyIterator:
             self.current_point += 1
 
             # Look for possible interpolations with all the following points
-            #print self.steps
             for pointToTest in range(self.current_point + 1, len(self.steps)):
-                #print "ATACANDO RECTA AL PUNTO" + str(pointToTest)
                 if self._isLinePossible(initialPoint, pointToTest):
                     self.current_point = pointToTest
 
@@ -252,15 +238,12 @@ class BeautifyIterator:
     def next(self):
         # The first step is the first point
         if self.current_point == None:
-            #print "base"
             self.current_point = 0
             return self.steps[0]
         elif self.current_point + 2 == len(self.steps):
-            #print "a punto de acabar"
             self.current_point += 1
             return self.steps[self.current_point]
         elif self.current_point + 1 == len(self.steps):
-            #print "adios"
             raise StopIteration
 
         # Interpolate line for next step
@@ -370,17 +353,19 @@ def threadCalculateRoute(enclosure_id):
                     calculatedRoute = Route()
                     calculatedRoute.origin = path[0].point
                     calculatedRoute.destiny = path[1].point
+                    calculatedRoute.cost = 0
                     calculatedRoute.save()
-                    routes.append(calculatedRoute)
 
                     step_number = 0
                     route = []
+                    route_cost = 0
 
                     # Eliminate intermediate steps
                     for step in StepIterator(path[2]):
                         route.append(step)
 
                     # Beautify routes by the means of interpolating lines
+                    previousStep = None
                     for step in BeautifyIterator(route, walls):
                         step_number += 1
                         routeStep = Step()
@@ -390,6 +375,17 @@ def threadCalculateRoute(enclosure_id):
                         routeStep.route = calculatedRoute
                         steps.append(routeStep)
 
+                        if previousStep != None:
+                            if routeStep.floor_id != previousStep.floor_id:
+                                route_cost += 10000 #TODO: Cuando haya, habra que meterle el coste de escalera o ascensor
+                            else:
+                                route_cost += math.hypot(int(routeStep.row) - int(previousStep.row),
+                                                         int(routeStep.column) - int(previousStep.column))
+                        previousStep = routeStep
+
+                    calculatedRoute.cost = route_cost
+                    calculatedRoute.save()
+                    routes.append(calculatedRoute)
 
                     # Limit the number of steps saved so they don't collapse main memory
                     if len(steps) > LIMIT_PER_BULK_SAVE:

@@ -580,7 +580,8 @@ function drawRoute(org, dst) {
 
         // Marcamos en el menú lateral el destino escogido
         $('.mm-submenu .destiny.selected').removeClass('selected');
-        $('.mm-submenu .destiny[data-destiny-id=' + dst + ']').addClass('selected');
+        var site_id = mapData.point_site[dst];
+        $('.mm-submenu .destiny[data-destiny-id=' + site_id + ']').addClass('selected');
 
         route = routeResource.getRoute(org, dst);
 
@@ -854,7 +855,7 @@ function initSideMenu() {
     });
 
     // Marcamos en el menú lateral el POI origen
-    $('.mm-submenu .destiny[data-destiny-id=' + qrPoint.point.id + ']')
+    $('.mm-submenu .destiny[data-destiny-id=' + qrPoint.label.id + ']')
         .addClass('origin');
 
     /*

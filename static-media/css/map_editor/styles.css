@@ -21,6 +21,7 @@ a {
 #loadingScreen {
     background: url(../../img/ajax-loader.gif) no-repeat 5px 8px;
     padding: 1em;
+    display: none;
 }
 
 #dialogs

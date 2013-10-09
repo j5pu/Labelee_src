@@ -131,24 +131,18 @@
                     <span style="background:{{ colors|get_item:category.name }};"><i
                             class="icon-{{ icons|get_item:category.name }}"></i>{{ category.name }}</span>
                     <ul>
-                        {% for destination in category.items %}
+                        {% for site in category.items %}
                             <li class="destiny"
-                                data-destiny-id="{{ destination.id }}">
-                                {% if coupons|get_item:destination.label.id %}
+                                data-destiny-id="{{ site.id }}">
+                                {% if coupons|get_item:site.id %}
                                     <span class="miniCup">%</span>
                                 {% else %}
                                     <span class="nominiCup"></span>
                                 {% endif %}
                                 <a href="#"
-                                   onclick="showRouteFromMenu({{ poi_id }}, {{ destination.id }});">
-                                    <button>
-                                        {% if destination.label.category.enclosure %}
-                                            {{ destination.label.name }}
-                                        {% else %}
-                                            {{ destination.description }}
-                                        {% endif %}
-                                    </button>
-                                    <span>{{ destination.floor.name }}</span>
+                                   onclick="showRouteProgrToSite({{ poi_id }}, {{ site.id }});">
+                                    <button>{{ site.name }}</button>
+                                    <span>{{ site_floors|get_item:site.id  }}</span>
                                 </a>
                             </li>
                         {% endfor %}
