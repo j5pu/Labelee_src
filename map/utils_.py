@@ -112,7 +112,7 @@ def cache_show_map(enclosure_id):
 
                 # lista de plantas para cada site
                 floors = Floor.objects.filter(points__label=site,
-                    enclosure__id=enclosure_id).distinct().order_by('name')
+                    enclosure__id=enclosure_id).distinct().order_by('floor_number')
                 for i in range(0, len(floors)):
                     if i == 0:
                         site_floors[site.id] = floors[i].name
