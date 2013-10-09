@@ -1,13 +1,15 @@
 {% load i18n %}
 
 <div ng-show="site.has_point">
-    <button class="btn" ng-click="show_create_form($event)">{% trans "Añadir cupón" %}</button>
+
+    <button class="btn" ng-click="show_create_form_label($event)">{% trans "Añadir cupón" %}</button>
+
     <div ng-show="site.coupons.length > 0">
-        <div class="coupon" ng-controller="CouponCtrl" ng-repeat="coupon in site.coupons">
+        <div class="coupon" ng-controller="CouponSiteCtrl" ng-repeat="coupon in site.coupons">
             <div class="img_wrapper">
-                <img ng-show="coupon.point.coupon" ng-src="[[coupon.point.coupon]]">
+                <img ng-show="coupon.img" ng-src="[[coupon.img]]">
             </div>
-            <button class="btn link-2" ng-click="show_update_form($event)">
+            <button class="btn link-2" ng-click="show_update_form_label($event)">
                 <i class="icon-pencil icon-white"></i>{% trans "Editar" %}
             </button>
         </div>

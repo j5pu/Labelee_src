@@ -33,7 +33,8 @@
 
     <div ng-controller="MainCtrl">
 
-{#        <h1>[[manager.title]]</h1>#}
+        {% comment %}
+        todo: caja para filtrar cupones por recinto, nombre del cupón, etc..
 
         <div id="filter_box" ng-show="!manager.for_shop_owner">
             <label class="search_box">
@@ -64,8 +65,12 @@
                 </div>
             </div>
         </div>
+        {% endcomment %}
 
 
+        <!--
+            PARA TODOS LOS QUE NO SON DUEÑOS DE TIENDAS
+        -->
         <table class="enclosures table table-bordered" ng-show="!manager.for_shop_owner">
             <thead>
                 <tr>
@@ -92,13 +97,13 @@
                         <button class="btn" ng-click="show_create_form_enclosure($event)">{% trans "Añadir cupón" %}</button>
 
                         <div class="coupon"
-                             ng-repeat="coupon in enclosure.enclosure_coupons | orderBy:'label.name':reverse | filter:search_coupon | filter:filter_coupon"
+                             ng-repeat="coupon in enclosure.coupons | orderBy:'label.name':reverse | filter:search_coupon | filter:filter_coupon"
                              ng-controller="CouponEnclosureCtrl">
                             <div>[[coupon.name]]</div>
                             <div class="img_wrapper">
                                 <img ng-src="[[coupon.img]]">
                             </div>
-                            <button class="btn link-2" ng-click="show_update_form($event)">
+                            <button class="btn link-2" ng-click="show_update_form_enclosure($event)">
                                 <i class="icon-pencil icon-white"></i>{% trans "Editar" %}
                             </button>
                         </div>
@@ -108,8 +113,13 @@
         </table>
 
 
+        <!--
+            PARA SÓLO DUEÑOS DE TIENDAS
+
+            todo: falta cambiarlo para el nuevo modelo
+        -->
         <div class="coupons" ng-show="manager.for_shop_owner">
-            <div class="coupon" ng-repeat="coupon in manager.coupons" ng-controller="CouponLabelCtrl">
+            <div class="coupon" ng-repeat="coupon in manager.coupons" ng-controller="CouponSiteCtrl">
                 {% include "_coupon_manager/_coupons_for_site.html" %}
             </div>
         </div>

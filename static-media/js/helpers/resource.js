@@ -237,32 +237,8 @@ function FloorResource() {
 
         return elements;
     };
-
-
-    this.renderGrid = function (floor_id) {
-        // Obtenemos el código html del grid renderizado de lado del servidor para
-        // el plano de la planta
-
-        var gridHtml;
-        $.ajax({
-            url: this.api2_url + 'floor/' + floor_id + '/render-grid',
-            type: 'get',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            dataType: 'json', // esto indica que la respuesta vendrá en formato json
-            async: false,
-            success: function (response) {
-                elements = response;
-            },
-            error: function (response) {
-                var j = response;
-            }
-        });
-
-        return elements;
-    };
 }
+
 
 function LabelResource() {
     Resource.call(this, 'label');
@@ -351,7 +327,7 @@ function PointResource() {
         if (points_data.length === 0)
             return;
 
-        var groups = divideInGroups(points_data, 500)
+        var groups = divideInGroups(points_data, 500);
 
         //
         // Vamos iterando sobre cada grupo y lo enviamos al web service
@@ -683,6 +659,18 @@ function CouponResource() {
 }
 
 
+function CouponForEnclosureResource()
+{
+    Resource.call(this, 'coupon-for-enclosure');
+}
+
+
+function CouponForLabelResource()
+{
+    Resource.call(this, 'coupon-for-label');
+}
+
+
 FloorResource.prototype = new Resource();
 var floorResource = new FloorResource();
 LabelResource.prototype = new Resource();
@@ -702,3 +690,5 @@ var userResource = new UserResource();
 var qrCodeResource = new QrCodeResource();
 var dashBoardResource = new DashboardResource();
 var couponResource = new CouponResource();
+var couponForEnclosureResource = new CouponForEnclosureResource();
+var couponForLabelResource = new CouponForLabelResource();

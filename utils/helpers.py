@@ -118,8 +118,9 @@ def delete_file(fileField):
     Elimina la imágen del campo para el modelo. Por ejemplo sobre Point.coupon:
 
     """
-    storage, path = fileField.storage, fileField.path
-    storage.delete(path)
+    if fileField.name:
+        storage, path = fileField.storage, fileField.path
+        storage.delete(path)
 
 
 def resize_img_width(img_path, fixed_width):

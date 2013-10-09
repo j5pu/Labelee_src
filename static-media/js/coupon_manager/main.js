@@ -2,9 +2,14 @@
 
 function MainCtrl($scope, $rootScope, $element, UserService, FormService)
 {
+    $scope.first_sync = true;
 
     $scope.sync_main = function() {
         $scope.manager = couponResource.getManager();
+        if(!$scope.first_sync)
+            $scope.$apply();
+        else
+            $scope.first_sync = false;
     };
 
     $scope.sync_main();
@@ -45,31 +50,31 @@ function replaceImg(wrapper, img_src)
 
 function SiteCtrl($scope, $rootScope)
 {
-
+    $scope.show_create_form_label = function($event) {
+        $($event.target).blur();
+        $rootScope.$broadcast('show_create_form_label', $scope.site);
+    };
 }
 
-function CouponLabelCtrl($scope, $rootScope, $element)
+function CouponSiteCtrl($scope, $rootScope, $element)
 {
     $scope.sync_coupon = function() {
 
     };
 
-    $scope.show_create_form = function($event) {
-        $($event.target).blur();
-        $rootScope.$broadcast('show_create_form_label', $scope.coupon);
-    };
-    $scope.show_update_form = function($event) {
+
+    $scope.show_update_form_label = function($event) {
         $($event.target).blur();
         $rootScope.$broadcast('show_update_form_label', $scope.coupon);
     };
 
     $scope.$on('sync_coupon_label', function(ev, coupon){
-        if($scope.coupon.label.id == coupon.label.id)
+        if($scope.coupon.label == coupon.label)
         {
             $scope.coupon = coupon;
             replaceImg(
                 $($element).find('.img_wrapper'),
-                $scope.coupon.point.coupon
+                $scope.coupon.img
             );
         }
     });
@@ -80,7 +85,7 @@ function CouponLabelCtrl($scope, $rootScope, $element)
 function CouponEnclosureCtrl($scope, $rootScope, $element)
 {
 
-    $scope.show_update_form = function($event) {
+    $scope.show_update_form_enclosure = function($event) {
         $($event.target).blur();
         $rootScope.$broadcast('show_update_form_enclosure', $scope.enclosure, $scope.coupon);
     };
@@ -101,9 +106,9 @@ function CouponEnclosureCtrl($scope, $rootScope, $element)
 
 function FormsLabelCtrl($scope, $rootScope)
 {
-    $scope.$on('show_create_form_label', function(ev, coupon){
+    $scope.$on('show_create_form_label', function(ev, site){
         // Para añadir la imágen al cupón
-        $scope.coupon = coupon;
+        $scope.site = site;
         $scope.coupon_img = '';
         modalDialog = new ModalDialog('#coupon_create_label');
         modalDialog.open();
@@ -118,16 +123,20 @@ function FormsLabelCtrl($scope, $rootScope)
     $scope.create = function() {
 
         // Si se ha puesto una nueva imágen la subimos, eliminando la anterior
-        var img = $('#coupon_create_label input[name="coupon"]');
+        var img = $('#coupon_create_label input[name="img"]');
         if(img.val())
         {
-            var img_form = $('#coupon_create_label').find('form');
+            var data = {
+                label: couponForLabelResource.api1_url + $scope.site.data.id + '/'
+            };
+            var created_coupon = couponForLabelResource.create(data);
 
+            var img_form = $('#coupon_create_label').find('form');
             $scope.waiting_response = true;
 
-            pointResource.addImg(
+            couponForLabelResource.addImg(
                 img_form,
-                $scope.coupon.point.id,
+                created_coupon.id,
                 function(server_response){
                     // Una vez se sube la imágen se limpia el formulario y se actualiza
                     // la lista de plantas para el recinto
@@ -146,7 +155,7 @@ function FormsLabelCtrl($scope, $rootScope)
 
 
     $scope.update = function() {
-        var img = $('#coupon_update_label input[name="coupon"]');
+        var img = $('#coupon_update_label input[name="img"]');
 
         // Si se ha puesto una nueva imágen la subimos, eliminando la anterior
         if(img.val())
@@ -155,16 +164,16 @@ function FormsLabelCtrl($scope, $rootScope)
 
             $scope.waiting_response = true;
 
-            pointResource.addImg(
+            couponForLabelResource.addImg(
                 img_form,
-                $scope.coupon.point.id,
+                $scope.coupon.id,
                 function(server_response){
                     // Una vez se sube la imágen se limpia el formulario y se actualiza
                     // la lista de plantas para el recinto
                     img_form.find('input[name="new_coupon_img"]').val('');
                     img_form.find('.file-input-name').remove();
                     $scope.waiting_response = false;
-                    $rootScope.$broadcast('sync_coupon_label', $scope.coupon);
+                    $scope.sync_main();
                     modalDialog.close();
                 }
             );
@@ -176,13 +185,14 @@ function FormsLabelCtrl($scope, $rootScope)
 
     $scope.del = function() {
         var confirm_msg = gettext('Are you sure you want to remove this coupon?');
-        if(confirm(confirm_msg))
-        {
-            pointResource.delImg($scope.coupon.point.id, 'coupon');
-            $scope.coupon.point.coupon = null;
-            $rootScope.$broadcast('sync_coupon_label', $scope.coupon);
-        }
-        modalDialog.close();
+        couponForLabelResource.del(
+            $scope.coupon.id,
+            confirm_msg,
+            function(){
+                $scope.sync_main();
+                modalDialog.close();
+            }
+        );
     };
 }
 
@@ -216,16 +226,16 @@ function FormsEnclosureCtrl($scope, $rootScope)
 
         var data = {
             name: $scope.coupon_name,
-            enclosure: enclosureResource.api1_url + $scope.enclosure.id + '/'
+            enclosure: couponForEnclosureResource.api1_url + $scope.enclosure.data.id + '/'
         };
-        var created_coupon = couponResource.create(data);
+        var created_coupon = couponForEnclosureResource.create(data);
 
 
         var img_form = $('#coupon_create_enclosure').find('form');
 
         $scope.waiting_response = true;
 
-        couponResource.addImg(
+        couponForEnclosureResource.addImg(
             img_form,
             created_coupon.id,
             function(server_response){
@@ -248,13 +258,13 @@ function FormsEnclosureCtrl($scope, $rootScope)
         var data = {
             name: $scope.coupon_name
         };
-        updated_coupon = couponResource.update(data, $scope.coupon.id);
+        var updated_coupon = couponForEnclosureResource.update(data, $scope.coupon.id);
 
         var img_form = $('#coupon_update_enclosure').find('form');
 
         $scope.waiting_response = true;
 
-        couponResource.addImg(
+        couponForEnclosureResource.addImg(
             img_form,
             $scope.coupon.id,
             function(server_response){
@@ -263,7 +273,7 @@ function FormsEnclosureCtrl($scope, $rootScope)
                 img_form.find('input[name="img"]').val('');
                 img_form.find('.file-input-name').remove();
                 $scope.waiting_response = false;
-                updated_coupon = couponResource.read(updated_coupon.id);
+                updated_coupon = couponForEnclosureResource.read(updated_coupon.id);
                 $rootScope.$broadcast('sync_coupon_enclosure', updated_coupon);
                 modalDialog.close();
                 $scope.$apply();
@@ -274,7 +284,7 @@ function FormsEnclosureCtrl($scope, $rootScope)
 
     $scope.del = function() {
         var confirm_msg = gettext('Are you sure you want to remove this coupon?');
-        couponResource.del(
+        couponForEnclosureResource.del(
             $scope.coupon.id,
             confirm_msg,
             function(){
