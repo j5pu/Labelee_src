@@ -12,7 +12,7 @@ from dashboard.utils import *
 from map_editor.models import Floor, Enclosure
 from route.services import getHeatMapSteps
 import xlwt
-from datetime import datetime
+
 from pyExcelerator import *
 from django.http import HttpResponse
 # from utils.constants import USER_GROUPS
