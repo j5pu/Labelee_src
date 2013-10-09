@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from django.db.models import Q
 from django.core.cache import cache
 
@@ -7,7 +9,7 @@ from map_editor.models import Point
 from utils.helpers import queryset_to_dict, t_obj_to_dict
 
 
-def get_map_data(qr_type, poi_id, poisByFloor, enclosure_id, coupons):
+def get_map_data(qr_type, poi_id, poisByFloor, enclosure_id, coupons, point_site):
     """
     Devuelve un diccionario con todos los datos necesarios a usar por el JS
     """
@@ -26,6 +28,7 @@ def get_map_data(qr_type, poi_id, poisByFloor, enclosure_id, coupons):
     for floor in response['floors']:
         floor['pois'] = poisByFloor[floor['id']]
     response['coupons'] = coupons
+    response['point_site'] = point_site
 
     return response
 
@@ -50,7 +53,15 @@ def cache_show_map(enclosure_id):
     colors = {}
     icons = {}
     coupons = {}
-    sites_floors = {}   # lista de plantas para cada site, indexado por id de site
+
+    # lista de plantas para cada site, indexado por id de site
+    site_floors = {}
+
+    # para a partir de la id de un punto obtener la id de su site, útil para la
+    # hora de marcar el site destino en el menú lateral sin tener que hacer otra
+    # llamada ajax durante el drawRoute de map.js
+    point_site = {}
+
     cache_key = 'show_map_enclosure_' + enclosure_id
     cache_time = 43200
     cacheEnclosure = cache.get(cache_key)
@@ -83,7 +94,7 @@ def cache_show_map(enclosure_id):
             poiIndex = poisByFloor[point.floor.id].index(poi)
             poisByFloor[point.floor.id][poiIndex]['label'] = queryset_to_dict([point.label])[0]
             poisByFloor[point.floor.id][poiIndex]['label']['category'] = queryset_to_dict([point.label.category])[0]
-
+            point_site[point.id] = point.label.id
         #
         # cache sites
         #
@@ -104,9 +115,9 @@ def cache_show_map(enclosure_id):
                     enclosure__id=enclosure_id).distinct().order_by('name')
                 for i in range(0, len(floors)):
                     if i == 0:
-                        sites_floors[site.id] = floors[i].name
+                        site_floors[site.id] = floors[i].name
                     else:
-                        sites_floors[site.id] += ', ' + floors[i].name
+                        site_floors[site.id] += ', ' + floors[i].name
 
         categories_list = []  # [{'name': 'toilets', 'items': [...]}, ...]
         for key, value in categories.iteritems():
@@ -128,7 +139,8 @@ def cache_show_map(enclosure_id):
             'icons': icons,
             'coupons': coupons,
             'enclosure':enclosure,
-            'sites_floors': sites_floors
+            'site_floors': site_floors,
+            'point_site': point_site
         }
         cache.set(cache_key,cacheEnclosure,cache_time)
     else:
@@ -138,7 +150,8 @@ def cache_show_map(enclosure_id):
         icons = cacheEnclosure['icons']
         coupons = cacheEnclosure['coupons']
         enclosure = cacheEnclosure['enclosure']
-        sites_floors = cacheEnclosure['sites_floors']
+        site_floors = cacheEnclosure['site_floors']
+        point_site = cacheEnclosure['point_site']
 
     return {
         'poisByFloor': poisByFloor,
@@ -147,7 +160,8 @@ def cache_show_map(enclosure_id):
         'icons': icons,
         'coupons': coupons,
         'enclosure': enclosure,
-        'sites_floors': sites_floors,
+        'site_floors': site_floors,
+        'point_site': point_site
     }
 
 

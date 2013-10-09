@@ -38,7 +38,8 @@ def show_map(request, qr_type, enclosure_id, floor_id, poi_id):
         marquee.append(tweet.text)
         break
 
-    map_data = get_map_data(qr_type, poi_id, cached['poisByFloor'], enclosure_id, cached['coupons'])
+    map_data = get_map_data(qr_type, poi_id, cached['poisByFloor'],
+                            enclosure_id, cached['coupons'], cached['point_site'])
 
     ctx = {
         'enclosure_id': enclosure_id,
@@ -52,7 +53,7 @@ def show_map(request, qr_type, enclosure_id, floor_id, poi_id):
         'icons': cached['icons'],
         'map_data': simplejson.dumps(map_data),
         'logo': cached['enclosure'][0].logo,
-        'sites_floors': cached['sites_floors']
+        'site_floors': cached['site_floors']
     }
 
     return render_to_response('map/index.html', ctx, context_instance=RequestContext(request))
