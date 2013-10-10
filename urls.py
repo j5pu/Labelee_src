@@ -4,7 +4,7 @@ from django.contrib import admin
 from django.conf import settings
 from django.contrib.auth.models import User
 
-admin.autodiscover()
+#admin.autodiscover()
 # admin.site.unregister(User)
 
 # Tastypie

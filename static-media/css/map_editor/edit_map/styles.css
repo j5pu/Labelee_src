@@ -52,11 +52,11 @@ img#fake {
 .qr_info {
     position: absolute;
     z-index: 1;
-    background: #ffffff;
+    background: rgba(255,255,255,0.5);
     display: none;
-    background: #ffffff;
-    padding: 0.4em;
-    border: 6px solid;
+    padding: 0.1em;
+    border: aliceblue;
+    font-size: 0.4em;
 }
 
 #label-forms
