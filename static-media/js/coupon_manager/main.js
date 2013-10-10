@@ -54,53 +54,34 @@ function SiteCtrl($scope, $rootScope)
         $($event.target).blur();
         $rootScope.$broadcast('show_create_form_label', $scope.site);
     };
+
+    $scope.$on('sync_site_coupon_list', function(ev, site_id, with_apply){
+        if($scope.site.data.id == site_id)
+        {
+            $scope.site.coupons = couponResource.getCouponsForSite(site_id);
+            if(with_apply)
+                $scope.$apply();
+        }
+    });
 }
 
 function CouponSiteCtrl($scope, $rootScope, $element)
 {
-    $scope.sync_coupon = function() {
-
-    };
-
-
     $scope.show_update_form_label = function($event) {
         $($event.target).blur();
         $rootScope.$broadcast('show_update_form_label', $scope.coupon);
     };
-
-    $scope.$on('sync_coupon_label', function(ev, coupon){
-        if($scope.coupon.label == coupon.label)
-        {
-            $scope.coupon = coupon;
-            replaceImg(
-                $($element).find('.img_wrapper'),
-                $scope.coupon.img
-            );
-        }
-    });
-
 }
 
 
 function CouponEnclosureCtrl($scope, $rootScope, $element)
 {
+    // Para cada cupón del enclosure
 
     $scope.show_update_form_enclosure = function($event) {
         $($event.target).blur();
         $rootScope.$broadcast('show_update_form_enclosure', $scope.enclosure, $scope.coupon);
     };
-
-    $scope.$on('sync_coupon_enclosure', function(ev, coupon){
-
-        if($scope.coupon.id == coupon.id)
-        {
-            $scope.coupon = coupon;
-            replaceImg(
-                $($element).find('.img_wrapper'),
-                $scope.coupon.img
-            );
-        }
-    });
 }
 
 
@@ -143,9 +124,8 @@ function FormsLabelCtrl($scope, $rootScope)
                     img_form.find('input[name="coupon_img"]').val('');
                     img_form.find('.file-input-name').remove();
                     $scope.waiting_response = false;
-                    $scope.sync_main();
+                    $rootScope.$broadcast('sync_site_coupon_list', created_coupon.label.id, true);
                     modalDialog.close();
-                    $scope.$apply();
                 }
             );
         }
@@ -173,7 +153,7 @@ function FormsLabelCtrl($scope, $rootScope)
                     img_form.find('input[name="new_coupon_img"]').val('');
                     img_form.find('.file-input-name').remove();
                     $scope.waiting_response = false;
-                    $scope.sync_main();
+                    $rootScope.$broadcast('sync_site_coupon_list', $scope.coupon.label, true);
                     modalDialog.close();
                 }
             );
@@ -189,7 +169,7 @@ function FormsLabelCtrl($scope, $rootScope)
             $scope.coupon.id,
             confirm_msg,
             function(){
-                $scope.sync_main();
+                $rootScope.$broadcast('sync_site_coupon_list', $scope.coupon.label);
                 modalDialog.close();
             }
         );
@@ -244,7 +224,7 @@ function FormsEnclosureCtrl($scope, $rootScope)
                 img_form.find('input[name="img"]').val('');
                 img_form.find('.file-input-name').remove();
                 $scope.waiting_response = false;
-                $scope.sync_main();
+                $rootScope.$broadcast('sync_enclosure_coupon_list', $scope.enclosure);
                 modalDialog.close();
                 $scope.$apply();
             }
@@ -274,7 +254,7 @@ function FormsEnclosureCtrl($scope, $rootScope)
                 img_form.find('.file-input-name').remove();
                 $scope.waiting_response = false;
                 updated_coupon = couponForEnclosureResource.read(updated_coupon.id);
-                $rootScope.$broadcast('sync_coupon_enclosure', updated_coupon);
+                $rootScope.$broadcast('sync_enclosure_coupon_list', $scope.enclosure);
                 modalDialog.close();
                 $scope.$apply();
             }
@@ -288,7 +268,7 @@ function FormsEnclosureCtrl($scope, $rootScope)
             $scope.coupon.id,
             confirm_msg,
             function(){
-                $scope.sync_main();
+                $rootScope.$broadcast('sync_enclosure_coupon_list', $scope.enclosure);
                 modalDialog.close();
             }
         );
@@ -298,6 +278,8 @@ function FormsEnclosureCtrl($scope, $rootScope)
 
 function EnclosureCtrl($scope, $rootScope)
 {
+    // Para cada enclosure
+
     $scope.filter_coupon = function (row) {
         var undefined1 = typeof $scope.show_only_empty == 'undefined';
         var undefined2 = typeof $scope.show_only_unempty == 'undefined';
@@ -320,5 +302,13 @@ function EnclosureCtrl($scope, $rootScope)
     $scope.show_create_form_enclosure = function($event) {
         $($event.target).blur();
         $rootScope.$broadcast('show_create_form_enclosure', $scope.enclosure);
-    }
+    };
+
+    $scope.$on('sync_enclosure_coupon_list', function(ev, enclosure){
+        // Recibe la señal de sincronizar todos los cupones de un enclosure dado
+        if($scope.enclosure.data.id == enclosure.data.id)
+        {
+            $scope.enclosure.coupons = couponResource.getCouponsForEnclosure(enclosure.data.id);
+        }
+    });
 }

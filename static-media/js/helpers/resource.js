@@ -647,14 +647,14 @@ function CouponResource() {
         return ajaxGetElements(this.coupons_url, 'manager/');
     };
 
-    this.getCoupon = function (label_id) {
-        // /coupon/manager/label/<label_id>
-        return ajaxGetElements(this.coupons_url, 'label/' + label_id);
+    this.getCouponsForSite = function (site_id) {
+        // /coupon/manager/site/<site_id>
+        return ajaxGetElements(this.coupons_url, 'site/' + site_id);
     };
 
-    this.delCoupon = function (label_id) {
-        // /coupon/manager/label/<label_id>
-        return ajaxGetElements(this.coupons_url, 'label/' + label_id);
+    this.getCouponsForEnclosure = function (enclosure_id) {
+        // /coupon/manager/enclosure/<enclosure_id>
+        return ajaxGetElements(this.coupons_url, 'enclosure/' + enclosure_id);
     };
 }
 
