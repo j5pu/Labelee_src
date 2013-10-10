@@ -245,7 +245,7 @@ function loadFloors() {
                 // Habilitamos el uso de la brújula para orientar la flecha
                 // y podómetro para dispositivos iOS
                 // todo: de momento está puesto a capón para alcalá magna
-                compass = new Compass(90);
+                compass = new Compass(70, false);
 
                 pedometer_navigator = new PedometerNavigator($('span#navigator'));
                 pedometer_navigator.init();
@@ -518,7 +518,6 @@ function removeCategory(category_index) {
 
 
 function changeFloor(e) {
-//console.log(e);
     SocialMenu.close();
     //Cambiamos color de la planta actual a naranja
     $('input[type=radio].leaflet-control-layers-selector').parent().css('background-color', '#333');

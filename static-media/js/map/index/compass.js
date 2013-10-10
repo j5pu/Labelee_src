@@ -1,9 +1,20 @@
-function Compass(angle_offset)
+/*
+ * Brújula.
+ *
+ * Params:
+ *      - angle_offset: desviación del norte real del enclosure dibujado con respecto
+ *                      al norte real del dispositivo.
+ *      - active: estando a true activa la brújula.
+ */
+function Compass(angle_offset, active)
 {
     var self = this;
 
     // Desviación del norte real con respecto al norte en el mapa
     this.angle_offset = angle_offset;
+
+    // Para activar/desactivarlo
+    this.active = active;
 
     this.init = function()
     {
@@ -100,12 +111,16 @@ function Compass(angle_offset)
 
     this.respawn = function()
     {
-        this.$e = $('.locate-icon');
-        this.previous = null;
-        $(window).trigger('deviceorientation');
+        if(self.active)
+        {
+            this.$e = $('.locate-icon');
+            this.previous = null;
+            $(window).trigger('deviceorientation');
+        }
     };
 
-    self.init();
+    if(self.active)
+        self.init();
 }
 
 
