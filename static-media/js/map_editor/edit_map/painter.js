@@ -300,7 +300,7 @@ var Painter = {
             var block = Painter.current_hovered_block || Painter.block;
             block.attr('data-qr-id', Painter.qr.id);
             block.append(
-                '<div class="qr_info">' + Painter.qr.id + '</div>'
+                '<div class="qr_info">' + Painter.qr.point.id + '</div>'
             );
 
             var qr_info = block.find('.qr_info');
