@@ -7,5 +7,6 @@ urlpatterns = patterns('coupon_manager.views',
 
     # SERVICIOS
     url(r'^manager/(?P<enclosure_id>\d*)', services.manager),
-    url(r'^label/(?P<label_id>\d*)', services.coupon),
+    url(r'^site/(?P<site_id>\d*)', services.coupons_for_site),
+    url(r'^enclosure/(?P<enclosure_id>\d*)', services.coupons_for_enclosure),
 )

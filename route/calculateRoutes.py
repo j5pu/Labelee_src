@@ -252,6 +252,9 @@ class BeautifyIterator:
 
 
 def calculate_routes(request, enclosure_id):
+    if not request.user.is_staff:
+        return HttpResponse('UNAUTHORIZED!!')
+
     try:
         t1 = threading.Thread(target=threadCalculateRoute, args=[enclosure_id])
         t1.start()
