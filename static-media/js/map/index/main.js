@@ -150,7 +150,7 @@ function hideSplash() {
         $('#routeDiv p').text('Para llegar a ' + route.fields.destiny.fields.description +':');
         for (var subroute_index in route.fields.subroutes) {
             if (instructionList) {
-                instructionList.innerHTML += '<li> || ' +route.fields.subroutes[subroute_index]["text_description"] + '</li>'
+                instructionList.innerHTML += '<li> Planta '+floors_indexed[route.fields.subroutes[subroute_index].floor.pk].name+': ' +route.fields.subroutes[subroute_index]["text_description"] + '</li>'
             }
         }
     });
