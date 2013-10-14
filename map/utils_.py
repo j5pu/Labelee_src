@@ -117,7 +117,7 @@ def cache_show_map(enclosure_id):
                     if i == 0:
                         site_floors[site.id] = floors[i].name
                     else:
-                        site_floors[site.id] += ', ' + floors[i].name
+                        site_floors[site.id] += ' | ' + floors[i].name
 
         categories_list = []  # [{'name': 'toilets', 'items': [...]}, ...]
         for key, value in categories.iteritems():
