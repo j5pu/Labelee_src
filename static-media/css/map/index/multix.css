@@ -1334,6 +1334,7 @@ a#destPrev {
 
 .mm-menu ul li {
     padding-bottom: 2px;
+    white-space: normal;
 }
 
 div.help{
@@ -1568,6 +1569,15 @@ nav#routeDiv {
     background: white;
     border-top:3px solid #8C8C87;
     z-index:8;
-    padding:15px;
+    padding:10px;
     color: #333;
 }
+
+nav#routeDiv *{
+    font-size: 0.6rem;
+}
+nav#routeDiv p{
+    padding: 0;
+    margin: 0;
+}
+
