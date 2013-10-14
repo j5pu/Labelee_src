@@ -288,7 +288,6 @@ var ScrollMenu = {
     init: function () {
         this.$listMenu = $('#scrollMenu');
         this.$wrapper = $('nav');
-//        this.$wrapper = $('nav#menu-right');
         this.$wrapper.css({
             'overflow-y': 'hidden'
         });

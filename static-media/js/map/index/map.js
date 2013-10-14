@@ -762,7 +762,6 @@ Map.resize = function () {
 
     Panorama.resize();
     HelpMenu.resize();
-    ScrollMenu.init();
     $('html.mm-opening .mm-menu.mm-bottom.mm-next, html.mm-bottom.mm-opening .mm-page, html.mm-bottom.mm-opening #mm-blocker').css('margin-bottom', -($(window).height())+110);
 };
 

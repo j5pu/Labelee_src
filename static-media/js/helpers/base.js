@@ -332,4 +332,16 @@ var Spinner = {
 };
 
 
+function resizeScreenListener(callback)
+{
+    // Detect whether device supports orientationchange event, otherwise fall back to
+    // the resize event.
+    // Executes callback param when event is fired.
+    var supportsOrientationChange = "onorientationchange" in window,
+        orientationEvent = supportsOrientationChange ? "orientationchange" : "resize";
+
+    window.addEventListener(orientationEvent, function() {
+        callback();
+    }, false);
+}
 
