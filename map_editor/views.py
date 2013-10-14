@@ -12,60 +12,50 @@ from utils.constants import USER_GROUPS
 
 @login_required(login_url=settings.LOGIN_URL)
 def index(request):
-    ctx = {
-        '_enclosure': settings.STATIC_URL + 'partials/_enclosure.html'
-    }
-
+    # Si es un dueño de recintos se le redirigirá al dashboard de su primer recinto.
+    # Si el dueño no tiene recintos no podrá acceder.
     if request.user.is_in_group(USER_GROUPS['enclosure_owners']):
-        # si es un dueño de recintos se le redirige al dashboard
         if len(Enclosure.objects.filter(owner=request.user))>0:
             first_enclosure_id = Enclosure.objects.filter(owner=request.user)[0].id
             return HttpResponseRedirect('/dashboard/' + str(first_enclosure_id))
         else:
             return HttpResponseRedirect('/accounts/logout/')
 
-
-    # Si es un dueño de una tienda se le redirigirá a su admin de cupones
-    # por ahora envía a logout, hasta que se integre con el coupon_manager
-    if request.user.is_in_group(USER_GROUPS['shop_owners']):
+    # Si no es staff y no pertenece a ningún grupo se considerará no válido.
+    # De momento los dueños de las tiendas tampoco podrán acceder a ninguna página
+    # de la administración.
+    if not request.user.is_valid or request.user.is_in_group(USER_GROUPS['shop_owners']):
         return HttpResponseRedirect('/accounts/logout/')
 
-    # Si no es staff y no pertenece a ningún grupo
-    if not request.user.is_valid:
-        return HttpResponseRedirect('/accounts/logout/')
-    # translation.activate(request.session['django_language'])
-
+    ctx = {
+        '_enclosure': settings.STATIC_URL + 'partials/_enclosure.html'
+    }
     return render_to_response('map_editor/v2/index.html', ctx, context_instance=RequestContext(request))
 
 
 @login_required(login_url=settings.LOGIN_URL)
 def edit(request, pk):
-    #import urllib2
-    #response = urllib2.urlopen('http://mnopi:1aragon1@localhost:8000/api/v1/map/' + pk)
-    #html = response.read()
-    ctx = {
-    'floor_id': pk
-    }
-    if request.user.is_in_group(USER_GROUPS['shop_owners']):
-        return HttpResponseRedirect('/coupon/')
-
-    return render_to_response('map_editor/v2/edit.html', ctx, context_instance=RequestContext(request))
+    # Sólo el staff podrá acceder a la edición de POIs
+    if request.user.is_staff:
+        return render_to_response('map_editor/v2/edit.html', {'floor_id': pk}, context_instance=RequestContext(request))
+    else:
+        return HttpResponseRedirect('/accounts/logout/')
 
 
 @login_required(login_url=settings.LOGIN_URL)
 def connections(request, enclosure_id):
-    ctx = {
-    'enclosure_id': enclosure_id
-    }
-    if request.user.is_in_group(USER_GROUPS['shop_owners']):
-        return HttpResponseRedirect('/coupon/')
-    return render_to_response('map_editor/connections.html', ctx, context_instance=RequestContext(request))
+    # Sólo el staff podrá editar conexiones entre plantas
+    if request.user.is_staff:
+        return render_to_response('map_editor/connections.html', {'enclosure_id': enclosure_id}, context_instance=RequestContext(request))
+    else:
+        return HttpResponseRedirect('/accounts/logout/')
 
 
 @login_required(login_url=settings.LOGIN_URL)
 def help_page(request, section=None):
-    if request.user.is_in_group(USER_GROUPS['shop_owners']):
-        return HttpResponseRedirect('/coupon/')
-
-    template = 'enclosure-manager' if not section else section
-    return render_to_response('map_editor/help/' + template + '.html', context_instance=RequestContext(request))
+    # De momento sólo el staff podrá acceder a la ayuda
+    if request.user.is_staff:
+        template = 'enclosure-manager' if not section else section
+        return render_to_response('map_editor/help/' + template + '.html', context_instance=RequestContext(request))
+    else:
+        return HttpResponseRedirect('/accounts/logout/')
