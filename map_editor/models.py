@@ -46,6 +46,10 @@ class CustomUser(User):
         c.save()
         return c
 
+    def assign_group(self, group_id):
+        g = Group.objects.get(id=group_id)
+        g.user_set.add(self.user_ptr)
+
     class Meta:
         verbose_name = 'CustomUser'
         verbose_name_plural = 'CustomUsers'
