@@ -14,3 +14,8 @@ class SimpleTest(TestCase):
         Tests that 1 + 1 always equals 2.
         """
         self.assertEqual(1 + 1, 2)
+
+
+    # def test_for_staff(self):
+    #     resp = HelperTest.log_staff()
+    #     self.assertEqual(resp.status_code, 200)

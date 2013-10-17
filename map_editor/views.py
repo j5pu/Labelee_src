@@ -15,7 +15,7 @@ def index(request):
     # Si es un dueño de recintos se le redirigirá al dashboard de su primer recinto.
     # Si el dueño no tiene recintos no podrá acceder.
     if request.user.is_in_group(USER_GROUPS['enclosure_owners']):
-        if len(Enclosure.objects.filter(owner=request.user))>0:
+        if len(Enclosure.objects.filter(owner=request.user)) > 0:
             first_enclosure_id = Enclosure.objects.filter(owner=request.user)[0].id
             return HttpResponseRedirect('/dashboard/' + str(first_enclosure_id))
         else:

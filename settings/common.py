@@ -134,7 +134,6 @@ INSTALLED_APPS = (
     'modeltranslation',
     'log',
     'dashboard',
-    # 'panorama',
     'analytics',
     'coupon_manager',
     'pipeline',
