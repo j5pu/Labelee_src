@@ -227,7 +227,7 @@ def addStepToDict(dic, key, step,times):
 
 #obtiene los pasos intermedios entre dos puntos (el punto destino esta  incluido)
 def getIntermediateSteps(prevStep, currentStep):
-    intermediateSteps = [];
+    intermediateSteps = []
     x_increment, y_increment = getDiffs(prevStep, currentStep)
     while abs(x_increment) != 0 or abs(y_increment) != 0:
         step = Step()

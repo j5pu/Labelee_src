@@ -26,7 +26,7 @@ class Coupon(models.Model):
         abstract = True
 
     def __unicode__(self):
-        return self.name
+        return self.name or 'no named'
 
     def save(self, *args, **kwargs):
         """
@@ -52,8 +52,6 @@ class CouponForEnclosure(Coupon):
         verbose_name = 'Coupon for enclosure'
         verbose_name_plural = 'Coupons for enclosures'
 
-    def __unicode__(self):
-        return self.name
 
 class CouponForLabel(Coupon):
     label = models.ForeignKey(Label, related_name='coupons', blank=False, null=False, on_delete=models.CASCADE)
@@ -61,6 +59,3 @@ class CouponForLabel(Coupon):
     class Meta:
         verbose_name = 'Coupon for site'
         verbose_name_plural = 'Coupons for sites'
-
-    def __unicode__(self):
-        return self.name

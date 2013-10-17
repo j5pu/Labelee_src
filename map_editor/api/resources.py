@@ -332,7 +332,7 @@ class CouponForEnclosureResource(ModelResource):
 
 
 class CouponForLabelResource(ModelResource):
-    label = fields.ToOneField(LabelResource, 'label', null=True)
+    label = fields.ToOneField(LabelResource, 'label', null=True, full=True)
 
     class Meta:
         resource_name = 'coupon-for-label'
