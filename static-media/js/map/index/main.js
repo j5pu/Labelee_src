@@ -107,7 +107,7 @@ function main() {
 
     $('#cupones, #header, span.locator, div#marquee').hide();
 
-    setTimeout(hideSplash, 100);
+    setTimeout(hideSplash, 3000);
 
     Coupon.bindShowRoute();
 }
@@ -115,8 +115,8 @@ function main() {
 
 function hideSplash() {
 
-    $('div#page').fadeIn(100);
-    $('div.splash').fadeOut(100);
+    $('div#page').fadeIn(2000);
+    $('div.splash').fadeOut(2000);
 
     if (!localStorage.getItem('first_shoot')) {
         HelpMenu.show();
