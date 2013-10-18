@@ -41,5 +41,5 @@ def initialize_db():
 
 #
 # USANDO NOSE NO ES NECESARIO INDICAR ESTO, YA QUE AUTODESCUBRE TODOS LOS TESTS (AUTODISCOVERY)
-from map_editor.tests.test_models import *
-from map_editor.tests.test_views import *
+# from tests.map_editor. import *
+# from .test_views import *

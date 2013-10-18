@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
-
 from django.test import TestCase
-from utils.tests.factories import *
+from tests.factories import *
 
 
 class ModelTest(TestCase):

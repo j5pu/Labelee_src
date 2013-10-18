@@ -14,15 +14,38 @@ DATABASES = {
     }
 }
 
-# Estas aplicaciones solo se usaran en entorno de tests..
 INSTALLED_APPS += (
     'selenium',
     'django_nose',
+    'lettuce.django',
 )
 
-# TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
-TEST_RUNNER = 'utils.tests.runner.MyTestRunner'
 
+# LETTUCE
+#########################################
+# LETTUCE_APPS = (
+#     'map_editor',
+# )
+# LETTUCE_AVOID_APPS = (
+#     'another_app',
+#     'foobar',
+# )
+LETTUCE_SERVER_PORT = 7000
+#########################################
+
+
+# NOSE
+#########################################
+# TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
+TEST_RUNNER = 'tests.runner.MyTestRunner'
+#
 # NOSE_PLUGINS = [
 #     'map_editor.tests.InitializeDBPlugin'
 # ]
+#########################################
+
+
+# DJANGO TEST RUNNER
+#########################################
+# TEST_RUNNER = 'tests'
+#########################################
