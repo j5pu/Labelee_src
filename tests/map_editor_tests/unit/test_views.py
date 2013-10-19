@@ -4,8 +4,6 @@ from django.test import Client, TestCase
 from tests.factories import *
 
 # urls
-from tests.my_test_case import MyTestCase
-
 index_url = '/map-editor/'
 login_form_post_url = '/accounts/login/?next=' + index_url
 
@@ -39,12 +37,11 @@ class LoginTest(TestCase):
     pass
 
 
-class IndexViewTest(MyTestCase):
+class IndexViewTest(TestCase):
     "Comprueba los accesos al index de map_editor"
 
     def tearDown(self):
         "Hacemos logout al final de cada test"
-
 
     def test_staff(self):
         user = StaffFactory()
@@ -62,15 +59,15 @@ class IndexViewTest(MyTestCase):
         is_dashboard = 'dashboard' in resp._headers['location'][1]
         self.assertTrue(is_dashboard)
         pass
+
     def test_site_owner(self):
         user = SiteOwnerFactory()
         response = login(user, self)
         pass
 
     def test_invalid_users(self):
-        # user = InvalidUserFactory()
-        # # Para dueño sin enclosure se hace logout
-        # resp = login(user, self)
-        # is_logged_out = '/accounts/logout/' in resp._headers['location'][1]
-        # self.assertTrue(is_logged_out)
-        pass
+        user = InvalidUserFactory()
+        # Para dueño sin enclosure se hace logout
+        resp = login(user, self)
+        is_logged_out = '/accounts/logout/' in resp._headers['location'][1]
+        self.assertTrue(is_logged_out)

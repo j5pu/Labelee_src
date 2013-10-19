@@ -36,16 +36,5 @@ LETTUCE_SERVER_PORT = 7000
 
 # NOSE
 #########################################
-# TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
 TEST_RUNNER = 'tests.runner.MyTestRunner'
-#
-# NOSE_PLUGINS = [
-#     'map_editor.tests.InitializeDBPlugin'
-# ]
-#########################################
-
-
-# DJANGO TEST RUNNER
-#########################################
-# TEST_RUNNER = 'tests'
 #########################################
