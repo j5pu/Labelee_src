@@ -24,7 +24,7 @@ INSTALLED_APPS += (
 # LETTUCE
 #########################################
 # LETTUCE_APPS = (
-#     'map_editor',
+#     'map',
 # )
 # LETTUCE_AVOID_APPS = (
 #     'another_app',

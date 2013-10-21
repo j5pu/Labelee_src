@@ -21,12 +21,12 @@ class LoginTest(SplinterTestCase):
         self.browser.fill('username', staff.username)
         self.browser.fill('password', '1234')
         self.browser.find_by_css('#login .btn').click()
-        self.assertEqual(self.browser.path, index_url)
-        self.assertTrue(login_url not in self.browser.url)
+        assert self.browser.path == index_url
+        assert login_url not in self.browser.url
 
     def test_login_unregistered(self):
         self.browser.visit(self.live_server_url + index_url)
         self.browser.fill('username', 'margarito')
         self.browser.fill('password', '1234')
         self.browser.find_by_css('#login .btn').click()
-        self.assertTrue(login_url in self.browser.url)
+        assert login_url in self.browser.url
