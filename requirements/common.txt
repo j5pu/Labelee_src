@@ -18,3 +18,4 @@ selenium
 pyvirtualdisplay
 mimeparse
 xlwt
+pyExcelerator
