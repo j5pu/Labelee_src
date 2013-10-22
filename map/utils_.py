@@ -71,7 +71,8 @@ def cache_show_map(enclosure_id):
         #
         for label in Label.objects.filter(category__enclosure__id=enclosure_id):
             site_coupons = CouponForLabel.objects.filter(label=label)
-            coupons[label.id] = queryset_to_dict(site_coupons)
+            if len(site_coupons) > 0:
+                coupons[label.id] = queryset_to_dict(site_coupons)
 
         #
         # cache points
