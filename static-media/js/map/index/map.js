@@ -345,9 +345,12 @@ function loadPOIs() {
                         else {
                             LocalStorageHandler.setPrevDest(this);
                             if (Panorama.opened) Panorama.close();
-
                             if (qrMarker) {
                                 drawRoute(qrPoint.point.id, this.poid);
+                            }
+
+                            if (this.coupons) {
+                                $('div.leaflet-popup-content-wrapper').addClass('withCoupon');
                             }
 
                             qrMarker.contentBinded = false;
