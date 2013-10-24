@@ -159,7 +159,7 @@ var SocialMenu = {
         }
         var enclosure = enclosure_id;
         url = SocialMenu.urlstring + enclosure + '_' + floor + '_' + pointId;
-        urlTitle = 'Haz click en el siguiente enlace para ir a  ' + description + ' ';
+        urlTitle = 'Localiza las mejores ofertas de ' + description + ' en ' + qrPoint.enclosure.name + ' ';
         var result = new Array();
         result[0] = url;
         result[1] = urlTitle;
