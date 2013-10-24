@@ -560,16 +560,22 @@ span#cuponLogo:after{
 }
 
 .device .arrow-left {
-    background: url(images/arrows.png) no-repeat left top;
+   /* background: url(images/arrows.png) no-repeat left top;*/
+    color: rgba(255,255,255,0.8);
+    font-size: 3rem;
+    font-weight: lighter;
     position: absolute;
-    left: 20px;
+    left: 15px;
     top: 50%;
     margin-top: -15px;
     width: 17px;
     height: 30px;
 }
 .device .arrow-right {
-    background: url(images/arrows.png) no-repeat left bottom;
+   /* background: url(images/arrows.png) no-repeat left bottom;*/
+    color: rgba(255,255,255,0.8);
+    font-weight: lighter;
+    font-size: 3rem;
     position: absolute;
     right: 20px;
     top: 50%;
