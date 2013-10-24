@@ -352,7 +352,6 @@ function loadPOIs() {
                             if (this.coupons) {
                                 $('div.leaflet-popup-content-wrapper').addClass('withCoupon');
                             }
-
                             qrMarker.contentBinded = false;
                             bindContent(qrMarker);
                         }
