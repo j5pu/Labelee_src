@@ -12,7 +12,11 @@ from tests.runner import init_database
 def initial_setup(server):
     call_command('syncdb', interactive=False, verbosity=0)
     call_command('flush', interactive=False, verbosity=0)
-    # call_command('migrate', interactive=False, verbosity=0)
+    try:
+        if 'map_editor_customuser' not in connection.introspection.table_names():
+            call_command('migrate', interactive=False, verbosity=0)
+    except:
+        pass
     # call_command('loaddata', 'all', verbosity=0)
     setup_test_environment()
     world.browser = Browser('chrome')
@@ -21,6 +25,7 @@ def initial_setup(server):
 def cleanup(server):
     connection.creation.destroy_test_db(settings.DATABASES['default']['NAME'])
     teardown_test_environment()
+    world.browser.quit()
 
 @before.each_scenario
 def reset_data(scenario):
@@ -28,7 +33,3 @@ def reset_data(scenario):
     call_command('flush', interactive=False, verbosity=0)
     init_database()
     # call_command('loaddata', 'all', verbosity=0)
-
-@after.all
-def teardown_browser(total):
-    world.browser.quit()

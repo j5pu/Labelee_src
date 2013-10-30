@@ -30,7 +30,11 @@ class Coupon(models.Model):
 
     def save(self, *args, **kwargs):
         """
-        Cada vez que guardamos el cupón comprobamos que su imágen se redimensionó
+        Guardamos la foto de esta forma:
+            /media/photos/cat_x/photo_x/
+                original
+                medium
+                small
         """
         super(Coupon, self).save(*args, **kwargs)
         if self.img:

@@ -4,9 +4,9 @@ when you run "manage.py test".
 
 Replace this with more appropriate tests for your application.
 """
-from calculateRoutes import StepIterator
-from calculateRoutes import BeautifyIterator
-from calculateRoutes import RouteInconsistencyException
+from route.calculateRoutes import StepIterator
+from route.calculateRoutes import BeautifyIterator
+from route.calculateRoutes import RouteInconsistencyException
 from map_editor.models import Point, Floor
 from route.models import Step
 
