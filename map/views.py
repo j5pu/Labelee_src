@@ -124,6 +124,9 @@ def qr_code_redirect(request):
 
     return render_to_response('map/qr_code_form.html', context_instance=RequestContext(request))
 
+def show_map_by_id(request, id):
+    qr = QR_Code.objects.get(point_id=id)
+    return HttpResponseRedirect('/map/origin/' + qr.code)
 
 def fuera(request, id, row, column):
     url = 'http://inmap.eu01.aws.af.cm/routesFrom.php?id=' + id + \
