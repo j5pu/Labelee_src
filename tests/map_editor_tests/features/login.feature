@@ -18,7 +18,7 @@ Feature: Login to map editor app
             | z@etsx2 | adminnnn |
             | z@etsx2ww | adaaaminnnn |
 
-    Scenario: Login enclosure owner with one enclosure
+    Scenario: Login enclosure owner with enclosures
         Given An enclosure owner user created with username "<username>" and password "<password>"
             And one enclosure called "<enclosure_name>" for him
         When I log on map editor

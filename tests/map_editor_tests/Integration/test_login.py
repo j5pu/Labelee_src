@@ -31,11 +31,11 @@ class TestLogin (SplinterTestCase):
 
     def test_loggin_enclosure_owner_with_enclosure(self):
         # given
-        user = EnclosureOwnerFactory(username='mnopi2', password='2345')
-        password = '2345'
+        user = EnclosureOwnerFactory(username='mnopi2', password='1234')
+        password = '1234'
         enclosures = EnclosureFactory.create_batch(2, owner=user)
         # when
-        login(self.browser, 'mnopi2', '2345')
+        login(self.browser, 'mnopi2', '1234')
         # then
         #   es redirigido al dashboard de su primer enclosure
         assert '/dashboard/' + str(enclosures[0].id) in self.browser.url
@@ -43,9 +43,10 @@ class TestLogin (SplinterTestCase):
 
     def test_loggin_enclosure_owner_without_enclosure(self):
         # given
-        user = EnclosureOwnerFactory(username='mnopi3', password='2345')
-        password = '2345'
+        user = EnclosureOwnerFactory(username='mnopi3', password='1234')
+        password = '1234'
         # when
-        login(self.browser, 'mnopi3', '2345')
+        login(self.browser, 'mnopi3', '1234')
         # then
         assert '/accounts/login/' in self.browser.url
+

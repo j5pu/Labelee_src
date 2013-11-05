@@ -1,5 +1,5 @@
 from django.contrib.auth.models import Group
-from django.test import LiveServerTestCase
+from django.test import LiveServerTestCase, TestCase
 from django_nose import NoseTestSuiteRunner
 from splinter import Browser
 
@@ -20,10 +20,13 @@ class SplinterTestCase(LiveServerTestCase):
         cls.browser.quit()
         super(SplinterTestCase, cls).tearDownClass()
 
+    def setUp(self):
+        init_database()
+
 
 # class MyTestRunner(DjangoTestSuiteRunner):
 class MyTestRunner(NoseTestSuiteRunner):
     def setup_databases(self, **kwargs):
         o = super(MyTestRunner, self).setup_databases()
-        init_database()
+        # init_database()
         return o
