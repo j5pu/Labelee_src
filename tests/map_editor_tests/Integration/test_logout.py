@@ -1,3 +1,4 @@
+from lettuce.django import django_url
 from map_editor.models import Enclosure
 from tests.factories import StaffFactory, EnclosureFactory, EnclosureOwnerFactory
 from tests.helpers import URLS
@@ -26,3 +27,16 @@ class TestLogout (SplinterTestCase):
         self.browser.find_by_css('#logout .icon-signout').click()
         # then
         assert '/accounts/login/' in self.browser.url
+
+    def test_logout_dashboard(self):
+        # given
+        user = EnclosureOwnerFactory(username='mnopi2', password='1234')
+        password = '1234'
+        enclosures = EnclosureFactory.create_batch(2, owner=user)
+        login(self.browser, 'mnopi2', '1234')
+        # when
+        self.browser.visit(django_url(URLS['map_editor']['logout']))
+        # then
+        assert '/accounts/login/' in self.browser.url
+
+
