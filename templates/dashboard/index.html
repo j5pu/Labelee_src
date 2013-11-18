@@ -86,7 +86,11 @@
 
     <div class="container">
 
-
+        <form method='get' action="/dashboard/{{ enclosure_id}}">
+            <input type="date" name="dateIni" value="{{ dateIni }}"/>
+            <input type="date" name="dateFin" value="{{ dateFin }}" />
+            <button class="btn link-2">Filtrar por fecha</button>
+        </form>
         <ul class="thumbnails">
 
             <li class="span6">

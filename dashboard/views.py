@@ -23,7 +23,16 @@ def index(request, enclosure_id):
     # Comprobamos que somos el dueño
     user_is_owner = len(request.user.enclosures.filter(id=enclosure_id)) != 0
     can_access = request.user.is_staff or (request.user.is_in_group(1) and user_is_owner)
+    if "dateIni" in request.GET and request.GET['dateIni']:
+        dateIni = request.GET["dateIni"]
+    else:
+        dateIni = None
+    if "dateFin" in request.GET and request.GET['dateFin']:
+        dateFin = request.GET["dateFin"]
+    else:
+        dateFin = None
 
+    # Qr_shot.objects.filter(date__gt= dateIni, date__lt= dateFin)
     if can_access:
         allPoints = getHeatMapSteps(enclosure_id)
         enclosure = Enclosure.objects.get(id=enclosure_id)
@@ -37,10 +46,12 @@ def index(request, enclosure_id):
             'floorsDict': floorsDict,
             'currentSteps': allPoints,
             'enclosureName' : enclosure.name,
-            'scansByCategory' : simplejson.dumps(getScansByCategory(enclosure_id)),
-            'routesByCategory' : simplejson.dumps(getRoutesByCategory(enclosure_id)),
-            'topScansByPoi' : simplejson.dumps(getTopScansByPoi(enclosure_id)),
-            'topRoutesByPoi' : simplejson.dumps(getTopRoutesByPoi(enclosure_id)),
+            'scansByCategory' : simplejson.dumps(getScansByCategory(enclosure_id, dateIni, dateFin)),
+            'routesByCategory' : simplejson.dumps(getRoutesByCategory(enclosure_id, dateIni, dateFin)),
+            'topScansByPoi' : simplejson.dumps(getTopScansByPoi(enclosure_id, dateIni, dateFin)),
+            'topRoutesByPoi' : simplejson.dumps(getTopRoutesByPoi(enclosure_id, dateIni, dateFin)),
+            'dateIni' : dateIni,
+            'dateFin' : dateFin
         }
         template = 'dashboard/index.html'
 
@@ -55,6 +66,13 @@ def index(request, enclosure_id):
     else:
         return HttpResponse('Forbidden')
 
+# def filter(request, enclosure_id,):
+#     dateIni = request.GET["dateIni"]
+#     dateFin = request.GET["dateFin"]
+#     Qr_shot.objects.filter(date__gt= dateIni, date__lt= dateFin)
+#     HttpResponseRedirect()
+#
+#     pass
 
 
 def saveRouteRequest(request):
