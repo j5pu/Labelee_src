@@ -96,16 +96,6 @@ def getRoutesByCategory(enclosure_id, dateIni, dateFin):
             """.format(category_id=category.id, enclosure_id=enclosure_id, dateIni=dateIni, dateFin=dateFin)
             cursor.execute(query)
             category.displayed_destination_count = cursor.fetchone()[0]
-            # if dateIni == dateFin:
-            #     pass
-            #     # d= dateFin.split('-')
-            #     # category.displayed_destination_count =.count()
-            # else:
-            #     category.displayed_destination_count = DisplayedRoutes.objects.filter( DisplayedRoutes.objects.filter(
-            #         destination__floor__enclosure__id=enclosure_id,
-            #         destination__label__category=category,
-            #         date=datetime.date(2013,9,23))
-            #     )
         else:
             if dateIni:
                 cursor = connection.cursor()
@@ -158,52 +148,56 @@ def getTopRoutesByPoi(enclosure_id, dateIni, dateFin):
     labels = getLabelsForDashboard(enclosure_id)   
     # for label in labels:
     chart = getChartSkeleton(gettext('Rutas más solicitadas'))
+    cursor = connection.cursor()
+    query = """
+                SELECT count(*) as c, map_editor_point.label_id FROM dashboard_displayedroutes
+                INNER JOIN map_editor_point ON (dashboard_displayedroutes.destination_id = map_editor_point.id)
+                INNER JOIN map_editor_floor ON (map_editor_point.floor_id = map_editor_floor.id)
+                    WHERE ( map_editor_floor.enclosure_id = {enclosure_id})
+                            and map_editor_point.label_id not in (select lb.id from map_editor_label lb where lb.category_id in (3,9,13))
+                            group by map_editor_point.label_id order by c desc
+        """.format(enclosure_id = enclosure_id)
     if dateIni and dateFin:
-        cursor = connection.cursor()
-#         SELECT count(*) as c, map_editor_point.label_id FROM dashboard_displayedroutes INNER JOIN map_editor_point ON (dashboard_displayedroutes.destination_id = map_editor_point.id) INNER JOIN map_editor_floor ON (map_editor_point.floor_id = map_editor_floor.id) WHERE (
-# 							map_editor_floor.enclosure_id = 26
-#                             AND DATE(date)>='2013-09-29'
-#                             AND DATE(date)<='2013-11-15') and map_editor_point.label_id not in (select lb.id from map_editor_label lb where lb.category_id in (3,9,13))
-# group by map_editor_point.label_id order by c desc
         query = """
-        SELECT count(*) as c, map_editor_point.label_id FROM dashboard_displayedroutes
-            INNER JOIN map_editor_point ON (dashboard_displayedroutes.destination_id = map_editor_point.id)
-            INNER JOIN map_editor_floor ON (map_editor_point.floor_id = map_editor_floor.id)
-            WHERE (map_editor_floor.enclosure_id = 26
-                AND DATE(date)>='2013-09-29'
-                AND DATE(date)<='2013-11-15')
-            group by map_editor_point.label_id
-            order by c desc
-        """
-        cursor.execute(query)
-        num = cursor.fetchone()[0]
-        # query = """
-        #     SELECT COUNT(*) AS count FROM dashboard_displayedroutes
-        #         INNER JOIN map_editor_point ON (dashboard_displayedroutes.destination_id = map_editor_point.id)
-        #         INNER JOIN map_editor_label ON (map_editor_point.label_id = map_editor_label.id)
-        #         INNER JOIN map_editor_floor ON (map_editor_point.floor_id = map_editor_floor.id)
-        #             WHERE (map_editor_label.id = {label_id}
-        #                 AND map_editor_floor.enclosure_id = {enclosure_id}
-        #                 AND DATE(date)>='{dateIni}'
-        #                 AND DATE(date)<='{dateFin}');")
-        # """.format(label_id=label.id, enclosure_id=enclosure_id, dateIni=dateIni, dateFin=dateFin)
-        cursor.execute(query)
-        result = cursor.fetchall()
+                SELECT count(*) as c, map_editor_point.label_id FROM dashboard_displayedroutes
+                INNER JOIN map_editor_point ON (dashboard_displayedroutes.destination_id = map_editor_point.id)
+                INNER JOIN map_editor_floor ON (map_editor_point.floor_id = map_editor_floor.id)
+                    WHERE ( map_editor_floor.enclosure_id = {enclosure_id}
+                            AND DATE(date)>='{dateIni}'
+                            AND DATE(date)<='{dateFin}') and map_editor_point.label_id not in (select lb.id from map_editor_label lb where lb.category_id in (3,9,13))
+                            group by map_editor_point.label_id order by c desc
+        """.format(enclosure_id = enclosure_id, dateIni= dateIni, dateFin= dateFin)
+    else:
+        if dateIni:
+            query = """
+                SELECT count(*) as c, map_editor_point.label_id FROM dashboard_displayedroutes
+                INNER JOIN map_editor_point ON (dashboard_displayedroutes.destination_id = map_editor_point.id)
+                INNER JOIN map_editor_floor ON (map_editor_point.floor_id = map_editor_floor.id)
+                    WHERE ( map_editor_floor.enclosure_id = {enclosure_id}
+                            AND DATE(date)>='{dateIni}')
+                            and map_editor_point.label_id not in (select lb.id from map_editor_label lb where lb.category_id in (3,9,13))
+                            group by map_editor_point.label_id order by c desc
+        """.format(enclosure_id = enclosure_id, dateIni= dateIni)
+        if dateFin:
+            query = """
+                SELECT count(*) as c, map_editor_point.label_id FROM dashboard_displayedroutes
+                INNER JOIN map_editor_point ON (dashboard_displayedroutes.destination_id = map_editor_point.id)
+                INNER JOIN map_editor_floor ON (map_editor_point.floor_id = map_editor_floor.id)
+                    WHERE ( map_editor_floor.enclosure_id = {enclosure_id}
+                            AND DATE(date)<='{dateFin}') and map_editor_point.label_id not in (select lb.id from map_editor_label lb where lb.category_id in (3,9,13))
+                            group by map_editor_point.label_id order by c desc
+        """.format(enclosure_id = enclosure_id, dateFin= dateFin)
 
-        total = 0
-        for par in result:
-            label= Label.objects.get(pk=par[1])
-            if not label.category.is_considered_poi():
-                continue
-            lab = {
-                'label': label.name,
-                'color': label.category.color,
-                'value': par[0]
-            }
-            chart[0]['values'].append(lab)
-            total +=1
-            if total == 10:
-                break
+    cursor.execute(query)
+    result = cursor.fetchall()[:10]
+    for par in result:
+        label = Label.objects.get(pk=par[1])
+        lab = {
+             'label': label.name,
+             'color': label.category.color,
+             'value': par[0]
+         }
+        chart[0]['values'].append(lab)
 
     return chart
 
