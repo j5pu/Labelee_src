@@ -1,0 +1,44 @@
+<html lang="es" ng-app="myApp" class="-webkit- ng-scope">
+<head>
+    <script src="{{ STATIC_URL }}vendor/jquery-1.9.1.min.js"></script>
+    <script src="{{ STATIC_URL }}d/main.js"></script>
+    <script src="{{ STATIC_URL }}pedometer_navigation/navigation.js"></script>
+
+
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/map/index/font-awesome.min.css">
+
+</head>
+
+<body background="{{ MEDIA_URL }}recinto_podometro2.png">
+<span id="navigator" style="font-size: 25; position:absolute; top:600; left:730"><i
+        class="icon-location-arrow icon-white"></i></span>
+
+<p id="lol"></p>
+
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+
+<script>
+    function changeStep(step_size) {
+        pedometer_navigator.stepLength = step_size;
+        document.getElementById("step").innerHTML = "Step size: " + pedometer_navigator.stepLength;
+    }
+</script>
+{% comment %}
+
+<p>
+    <button id="walk">Walk</button>
+</p>
+<p>
+    <button id="orienta">Orienta</button>
+</p>
+<p>
+    <button id="more_step">Step +1</button>
+</p>
+<p>
+    <button id="less_step">Step -1</button>
+</p>
+{% endcomment %}
+
+
+</body>
+</html>

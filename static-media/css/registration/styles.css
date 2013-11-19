@@ -1,0 +1,60 @@
+form{
+    width: auto;
+    margin: 20px auto;
+    padding: 0 5%;
+}
+
+h1 {
+    margin-top:5%;
+    color: #8C8C87;
+    font-size: 1.5rem;
+    text-shadow: 0 1px 1px rgba(255, 255, 255, 0.75);
+}
+
+hr{
+    border-top: 1px solid #8C8C87;
+    border-bottom: 1px solid whitesmoke;
+}
+
+#login
+{
+    width: 80%;
+    max-width:400px;
+    margin: 0 auto;
+    background: #E0DDD5;
+    border: 2px solid #8C8C87;
+}
+
+.form-horizontal .controls {
+    margin: auto;
+}
+
+.form-horizontal .control-label {
+    float:none;
+    width: auto;
+    display: inline-block;
+    text-shadow: 0 1px 1px rgba(255, 255, 255, 0.75);
+
+}
+
+.form-horizontal input {
+    width: auto;
+    border: 2px solid #8C8C87;
+}
+
+.form-horizontal .control-group {
+    margin-bottom:0;
+}
+button.btn{
+    background: #8C8C87;
+    color:whitesmoke;
+    margin-top: 20px;
+    border: 2px solid whitesmoke;
+    text-shadow: none;
+}
+
+button.btn:hover,button.btn:active,button.btn:focus{
+     background: white;
+     color: #8C8C87;
+     border: 2px solid #8C8C87;
+}

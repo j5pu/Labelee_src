@@ -1,0 +1,173 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block css %}
+    <link href="http://nvd3.org/css/bootstrap.css" rel="stylesheet">
+    <link href="http://nvd3.org/src/nv.d3.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/dashboard/heatmap.css">
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/map_editor/styles.css"/>
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/dashboard/dashboard.css">
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/map_editor/index/styles.css"/>
+    <style>
+
+        {% comment %}   * {
+               font-family: 'Raleway'!important;
+           }
+          {% endcomment %}
+        body {
+
+            padding-top: 40px;
+            padding-bottom: 0;
+        }
+
+        @media (max-width: 979px) {
+            .navbar-fixed-top {
+                margin-top: -40px;
+                margin-bottom: 0;
+            }
+        }
+
+        svg {
+            height: 200px;
+            width: auto;
+        }
+
+
+
+    </style>
+{% endblock %}
+{% block js %}
+    <script>
+        //AÑADIR TITULO REAL
+        var enclosure_id = {{ enclosure_id }};
+        var scansByCategory = {{ scansByCategory|safe }};
+        var routesByCategory = {{ routesByCategory|safe }};
+        var topScansByPoi = {{ topScansByPoi|safe }};
+        var topRoutesByPoi = {{ topRoutesByPoi|safe }};
+    </script>
+
+
+    <script src="{{ STATIC_URL }}vendor/NVD3.js    Live Code examples powered by CodeMirror_files/d3.v2.js"></script>
+    <!--script src="{{ STATIC_URL }}vendor/NVD3.js    Live Code examples powered by CodeMirror_files/fisheye.js"></script-->
+    <script src="{{ STATIC_URL }}vendor/NVD3.js    Live Code examples powered by CodeMirror_files/nv.d3.js"></script>
+    <script src="{{ STATIC_URL }}vendor/NVD3.js    Live Code examples powered by CodeMirror_files/jquery.min.js"></script>
+    <script src="{{ STATIC_URL }}vendor/NVD3.js    Live Code examples powered by CodeMirror_files/bootstrap.js"></script>
+    <script src="{{ STATIC_URL }}js/helpers/resource.js"></script>
+    <script src="{{ STATIC_URL }}js/dashboard/heatmap.js"></script>
+    <script src="{{ STATIC_URL }}js/dashboard/main.js"></script>
+
+
+
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <script type="text/javascript">
+        var djConfig = {
+            parseOnLoad: true
+        };
+    </script>
+
+     <script type="text/javascript">
+         var stepsByFloor = null;
+      {% if currentSteps|length > 0 %}
+       {% autoescape off %}
+            stepsByFloor = {{ currentSteps }};
+        {% endautoescape %}
+      {% endif %}
+
+    </script>
+
+{% endblock %}
+
+{% block content %}
+
+    {% include "_manager_navbar.html" with current_page="dashboard" %}
+
+
+    <a href="/dashboard/{{ enclosure_id}}/excel/{{ excelUrlArgs }}"><button class="btn link-2">Descargar Excel</button></a>
+    <!--<div class="container">-->
+
+    <div class="container">
+
+        <form method='get' action="/dashboard/{{ enclosure_id}}">
+            <input type="date" name="dateIni" value="{{ dateIni }}"/>
+            <input type="date" name="dateFin" value="{{ dateFin }}" />
+            <button class="btn link-2">Filtrar por fecha</button>
+        </form>
+        <ul class="thumbnails">
+
+            <li class="span6">
+                <h2 id="total_scans"> {% trans 'Total de Lecturas QR'   %}</h2>
+
+                <div>
+                    <svg id="chart0"></svg>
+                </div>
+            </li>
+
+            <li class="span6">
+                <h2 id="total_routes">{% trans 'Total Rutas'   %}</h2>
+
+                <div>
+                    <svg id="chart1"></svg>
+                </div>
+            </li>
+
+            <li class="span6">
+                <h2 id="scan_categories">{% trans 'Lecturas QR por Categorías'   %}</h2>
+
+                <div>
+                    <svg id="chart2"></svg>
+                </div>
+            </li>
+
+            <li class="span6">
+                <h2 id="routes_categories">{% trans 'Rutas por Categorías'   %}</h2>
+
+                <div>
+                    <svg id="chart3"></svg>
+                </div>
+            </li>
+            <li class="span6">
+                <h2 id="top_scans">{% trans 'Top 10 de Lecturas QR'   %}</h2>
+
+                <div>
+                    <svg id="chart4"></svg>
+                </div>
+            </li>
+
+            <li class="span6">
+                <h2 id="top_routes">{% trans 'Top 10 de Rutas'   %}</h2>
+
+                <div>
+                    <svg id="chart5"></svg>
+                </div>
+            </li>
+            {% for floorName,floor in floorsDict.items %}
+                <li class="span6">
+                    <h2 id="floor_{{ floorName }}">{% trans 'Planta'   %}: {{ floorName }}</h2>
+                    <div id="heatmapArea_{{ floorName }}" class="heatmapArea">
+                        <div style="border:1px;">
+                            {% if floor.imgB %}
+                                <img id="{{ floorName }}"  src="{{ floor.imgB.url }}"
+                                     onload="setHeatMap(this,{{ floorName }},{{ floor.num_cols }},{{ floor.num_rows }})">
+                            {% else %}
+                                <div>
+                                    {% trans "Esta planta no tiene imagen." %}
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </li>
+            {% endfor %}
+
+
+
+        </ul>
+
+
+    </div>
+
+    </div>
+
+
+{% endblock %}

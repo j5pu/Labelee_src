@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block css %}
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/map_editor/styles.css"/>
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/registration/styles.css"/>
+{% endblock %}
+
+{% block content %}
+    <div id="login" class="box box-1">
+        <h1>Labelee - Acceso </h1>
+        <hr>
+        <form class="form-horizontal"
+              name="LoginForm"
+              action="{% url 'django.contrib.auth.views.login' %}?next={{request.path}}"
+              method="post">
+            {% csrf_token %}
+            {% if next %}
+                <input type="hidden" name="next" value="{{ next }}" />
+            {% endif %}
+            <div class="control-group">
+                <label class="control-label" for="username">Usuario</label>
+                <div class="controls">
+                    <input type="text" id="username" name="username"  placeholder="Usuario">
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="password">Contraseña</label>
+                <div class="controls">
+                    <input type="password" name="password" id="password" placeholder="Contraseña">
+                </div>
+            </div>
+            <div class="control-group">
+                <div class="controls">
+                    <button type="submit" class="btn">Entrar</button>
+                </div>
+            </div>
+        </form>
+    </div>
+{% endblock %}

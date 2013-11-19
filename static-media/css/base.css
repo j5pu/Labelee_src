@@ -1,0 +1,63 @@
+@font-face
+{
+	font-family: 'Labelee';
+	src: url('/static/fonts/harabara-webfont.eot');
+	src: url('/static/fonts/harabara-webfont.eot?#iefix') format('embedded-opentype'),
+	     url('/static/fonts/harabara-webfont.woff') format('woff'),
+	     url('/static/fonts/harabara-webfont.ttf') format('truetype'),
+	     url('/static/fonts/harabara-webfont.svg#webfont') format('svg');
+}
+
+/*@font-face {
+    font-family: 'Raleway';
+    font-style: normal;
+    font-weight: 200;
+    src: local('Raleway ExtraLight'), local('Raleway-ExtraLight'), url(http://themes.googleusercontent.com/static/fonts/raleway/v6/8KhZd3VQBtXTAznvKjw-k73hpw3pgy2gAi-Ip7WPMi0.woff) format('woff');
+}*/
+
+body
+{
+	margin-top: 50px;
+	text-align: center;
+    background-color: #bababa;
+
+
+}
+
+a{
+    color: #8C8C87;
+    font-family: 'sans-serif';
+    text-align: center;
+}
+
+
+h1
+{
+	font-family: 'sans-serif';
+    
+	color: rgb(196, 190, 170);
+	margin-top: 67px;
+}
+
+h2, h3 {
+    color: #8C8C87;
+    font-family: 'sans-serif';
+}
+
+h4{
+    color: #FCF8E3;
+    font-family: 'sans-serif';
+}
+
+#ajax_loading
+{
+	display: none;
+}
+
+
+
+
+/*.button1
+{
+
+}*/

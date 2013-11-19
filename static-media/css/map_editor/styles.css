@@ -1,0 +1,203 @@
+body
+{
+    width: 80%;
+    margin: 50px auto;
+    text-align: center;
+    /*background: black*/
+    background-color: rgba(186, 186, 186, 0.23);
+    font-family: sans-serif;
+
+}
+
+h4 {
+    color: #FEFAF1;
+    font-family: sans-serif;
+}
+
+a {
+    color: #FEFAF1;
+}
+
+#loadingScreen {
+    background: url(../../img/ajax-loader.gif) no-repeat 5px 8px;
+    padding: 1em;
+    display: none;
+}
+
+#dialogs
+{
+    display: none;
+}
+
+.box-0
+{
+    margin: 0.4em;
+    padding: 0.7em;
+    display: inline-block;
+    vertical-align: top;
+}
+
+.box-1 {
+background: #FEFAF1;
+padding: 0.2em;
+border-radius: 0.4em;
+margin: 0.25em;
+color: #8C8C87;
+vertical-align: top;
+font-size: 1.5em;
+}
+
+
+.box-2
+{
+    display: inline-block;
+    background: rgb(196, 190, 170);
+    padding: 1em;
+    border: 1px solid grey;
+    border-radius: 0.4em;
+    box-shadow: 1px 1px 5px black;
+    vertical-align: middle;
+    margin: 0.4em;
+}
+
+.box-3
+{
+    background: none repeat scroll 0 0 #F2EFE4;
+    border: 1px none grey;
+    margin: 0.5em 0.4em;
+}
+
+.link-1 {
+    background: rgb(173, 157, 101);
+    padding: 0.3em 1em;
+    margin: 0;
+    font-weight: bold;
+    display: block;
+}
+
+.link-1:hover
+{
+    text-decoration: none;
+    background: rgb(122, 113, 81);
+    color: #FEFAF1;
+    cursor: pointer;
+}
+a:hover
+{
+    text-decoration: none;
+}
+
+li
+{
+    list-style: none;
+}
+
+.link-2
+{
+    background: rgb(196, 190, 170);
+    padding: 0.3em 1em;
+    margin: 0;
+    border-radius: 0.2em;
+    font-weight: bold;
+    display: block;
+    border: 2px solid rgb(175, 170, 155);
+}
+.link-2:hover
+{
+    background: #D9D4C7;
+    text-decoration: none;
+    color: #FEFAF1;
+}
+
+a.link-3
+{
+}
+
+.checkbox
+{
+    text-align: left;
+}
+
+.alert ul{
+    margin: 0;
+}
+
+.btn{
+    font-family: sans-serif;
+}
+
+.table thead th
+{
+    font-family: sans-serif;
+}
+
+
+form .txt
+{
+    color: rgb(122, 113, 81);
+}
+
+iframe {
+    display: none;
+}
+
+
+#choose-lang
+{
+    display: inline-block;
+    float: left;
+    margin: 0.25em 2em 0 -1em;
+}
+
+#choose-lang img
+{
+    cursor: pointer;
+}
+
+#choose-lang select
+{
+    display: none;
+}
+
+#logout
+{
+    font-size: 1.1em;
+    border-radius: 0;
+    font-family: sans-serif;
+    padding: 1px;
+    background: none;
+}
+
+#logout span
+{
+    position: relative;
+    
+    top: 6px;
+    left: 4px;
+    margin-right: 8px;
+    font-size: 1.1em;
+    color: white;
+}
+
+#logout a
+{
+    color: black;
+    display: inline-block;
+    background: #999;
+    font-size: 1.2em;
+    border-radius: 4px;
+    width: auto;
+    vertical-align: top;
+    margin: 0;
+    float:none;
+}
+
+#logout a:hover
+{
+    color: white;
+}
+
+.navbar-inverse .brand {
+    color: white;
+    cursor: default;
+}

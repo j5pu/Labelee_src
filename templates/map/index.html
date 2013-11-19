@@ -1,0 +1,392 @@
+{% load compressed %}
+{% load i18n %}
+{% load map_tags %}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>labelee_beta</title>
+    <meta charset="utf-8"/>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+
+    <link href="http://fonts.googleapis.com/css?family=Raleway" rel="stylesheet" type="text/css">
+
+    {% compressed_css 'map' %}
+
+    <script src="{% url 'django.views.i18n.javascript_catalog' %}"></script>
+
+    {% compressed_js 'map' %}
+
+    <script type="text/javascript">
+
+        //   $(document).ready(function () {
+        // Muestra el mensaje de advertencia por ahora está deshabilitado
+        {% comment %}$.cookieCuttr({
+        cookieDeclineButton: true,
+
+        cookieAnalyticsMessage: "Usamos cookies para asegurarnos de que te ofrecemos la mejor experiencia posible en nuestro sitio web, para más información pulsa <a onclick='HelpMenu.showDisclaimer();'>aquí</a>. En cumplimiento del Real Decreto-ley 13/2012, ¿Deseas activarlas? "
+
+        });{% endcomment %}
+
+
+
+        //});
+        var mapData = {{ map_data|safe }};
+
+        //se aceptan todas las cookies por ahora
+
+        // BUG orientation portrait/lanscape IOS //
+        if (navigator.userAgent.match(/iPhone/i) || navigator.userAgent.match(/iPad/i)) {
+            var viewportmeta = document.querySelector('meta[name="viewport"]');
+            if (viewportmeta) {
+                viewportmeta.content = 'width=device-width, minimum-scale=1.0, maximum-scale=1.0, initial-scale=1.0';
+                document.addEventListener('orientationchange', function () {
+                    viewportmeta.content = 'width=device-width, minimum-scale=0.25, maximum-scale=1';
+                }, false);
+            }
+        }
+        $.cookie("cc_cookie_accept", "cc_cookie_accept", {
+            expires: 365,
+            path: '/'
+        });
+        LocalStorageHandler.setFirstShoot();
+        if (jQuery.cookie('cc_cookie_accept') == "cc_cookie_accept") {
+
+            var _gaq = _gaq || [];
+            _gaq.push(['_setAccount', 'UA-30904444-4']);
+            _gaq.push(['_trackPageview']);
+
+            (function () {
+                var ga = document.createElement('script');
+                ga.type = 'text/javascript';
+                ga.async = true;
+                ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+                var s = document.getElementsByTagName('script')[0];
+                s.parentNode.insertBefore(ga, s);
+            })();
+        }
+
+
+    </script>
+</head>
+
+<body>
+
+<div class="splash">
+    <div class="container">
+        <div class="sp-container">
+            <div class="frame-5">
+                <span><img src="{{ MEDIA_URL }}{{ logo }}"></span>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% csrf_token %}
+
+<div id="page">
+
+    <div id="header">
+        <a href="#menu-right">
+            <span class="labeleeLogo" id="blueLab">&#160</span>
+            <span class="labeleeLogo" id="orangeLab">&#160</span>
+            <span class="labeleeLogo" id="redLab">&#160</span>
+        </a>
+    </div>
+
+    <div id="content">
+        <div id="map"></div>
+    </div>
+    <script>
+        var STATIC_URL = {{ STATIC_URL }};
+        var enclosure_id = {{ enclosure_id }};
+        var floor_id = {{ floor_id }};
+        var poi_id = {{ poi_id }};
+        var qr_type = "{{ qr_type }}";
+
+        var compass;
+        var pedometer_navigator;
+
+    </script>
+
+    {% compressed_js 'map2' %}
+
+    <nav id="menu-right">
+
+        <ul id="scrollMenu">
+            <li id="destPrev">
+                <span style="background:red;"><i class="icon-screenshot"></i>Destino Previo</span>
+                <ul id="destList">
+
+                </ul>
+
+            </li>
+
+            {% for category in categories %}
+                <li>
+                    <span style="background:{{ colors|get_item:category.name }};"><i
+                            class="icon-{{ icons|get_item:category.name }}"></i>{{ category.name }}</span>
+                    <ul>
+                        {% for site in category.items %}
+                            <li class="destiny"
+                                data-destiny-id="{{ site.id }}">
+                                {% if coupons|get_item:site.id %}
+                                    <span class="miniCup">%</span>
+                                {% else %}
+                                    <span class="nominiCup"></span>
+                                {% endif %}
+                                <a href="#"
+                                   onclick="showRouteProgrToSite({{ poi_id }}, {{ site.id }});">
+                                    <button>{{ site.name }}</button>
+                                    <span>{{ site_floors|get_item:site.id  }}</span>
+                                </a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </li>
+            {% endfor %}
+
+        </ul>
+
+        <div class="help" onclick="$('#menu-right').trigger( 'close' );HelpMenu.show();">
+            <img src="/static/img/help_menu/logo_nuevo.png">
+            <button>?</button>
+        </div>
+    </nav>
+    <script src="{{ STATIC_URL }}vendor/leaflet/plugins/jquery.mmenuV1.js"></script>
+
+
+    <span class="locator icon-navigation" id="location"></span>
+    <span class="locator icon-automobile" id="myCar"></span>
+
+    {% if coupons and qr_type == 'origin' %}
+
+        <div id="cupones">
+            <span id="cuponLogo">/</span>
+        </div>
+
+        <div class="device">
+            <a class="arrow-left" href="#"><</a>
+            <a class="arrow-right" href="#">></a>
+            <button id="closeCoupon">x</button>
+
+            <div class="swiper-container">
+                <div class="swiper-wrapper">
+                    {% for site_id,site_coupons in coupons.items %}
+                        {% for coupon in site_coupons %}
+                            <div class="swiper-slide">
+                                <img id="{{ coupon.id }}" data-site-id="{{ site_id }}"
+                                class="cupImg" src="{{ coupon.img }}">
+                            </div>
+                        {% endfor %}
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="pagination"></div>
+        </div>
+    {% endif %}
+
+
+    <span id="navigator"><i class="icon-navigation"></i></span>
+    <script src="{{ STATIC_URL }}js/map/index/pedometer_navigation/navigation.js"></script>
+    <script>
+        function changeStep(step_size) {
+            pedometer_navigator.stepLength = step_size;
+            document.getElementById("step").innerHTML = "Step size: " + pedometer_navigator.stepLength;
+        }
+    </script>
+
+    <div id="routeTab">
+        <a href="#routeDiv">Ruta</a>
+    </div>
+
+    <nav id="routeDiv">
+        <p>Para llegar a :</p>
+        <ul id="instructionList"  >
+
+
+        </ul>
+    </nav>
+
+
+    <div id="marquee">
+        <marquee id="marqueeTag" align="center" direction="left" loop="40"
+                 style="width:100%; z-index: 10000; font-size:14px;line-height:16px; position: absolute;bottom: 0;background:rgba(17, 17, 17, 0.4);color: #ddd">
+            {% for text in marquee %}
+                <span>{{ text }}</span>
+            {% endfor %}
+        </marquee>
+    </div>
+
+
+</div>
+
+
+<div id="help_menu">
+
+    <button class="exit">x</button>
+
+    <div class="entry first current">
+        <div class="content">
+            <img id="img0" src="{{ STATIC_URL }}img/help_menu/logo_nuevo.png" title="labelee" alt="logo de labelee">
+            <h5>
+                Sigue los sencillos pasos que indicamos a continuación para aprender a utilizar este novedoso sistema de
+                localización en interiores.
+            </h5>
+            <h5>
+                Recuerda que <b style="color:#194b7e;">labelee</b> funciona a través de tu navegador web, así que para
+                utilizarlo debes estar conectado a Internet, ya sea mediante Wi-Fi o con tu plan de datos.
+            </h5>
+        </div>
+    </div>
+
+    <div class="entry">
+        <div class="content">
+            <h2>PASO 1. ESCANEA</h2>
+
+            <p>
+                Utiliza cualquier aplicación de escaneo de códigos QR para capturar la información contenida en cada una
+                de las etiquetas
+                de localización.
+            </p>
+            <img id="img1" src="{{ STATIC_URL }}img/help_menu/foto_escaneo.jpg" title="escaneo"
+                 alt="imagen de escaneo de un qr">
+        </div>
+    </div>
+
+    <div class="entry">
+        <div class="content">
+            <h2>PASO 2. ORIÉNTATE</h2>
+
+            <p>
+                Busca la flecha (azul) de señalización que indica tu posición actual y alinéala con la flecha (blanca)
+                que aparece impresa en la pegatina, sobre el código QR que acabas de escanear.
+            </p>
+            <img id="img2" src="{{ STATIC_URL }}img/help_menu/c1.jpg" title="alineacion"
+                 alt="captura de pantalla de la alineación de las flechas">
+        </div>
+    </div>
+
+    <div class="entry">
+        <div class="content">
+            <h2>PASO 3. NAVEGA</h2>
+
+            <p>
+                Utiliza el desplegable para buscar en el directorio el destino al que deseas ir.
+                Una vez hayas seleccionado uno de los elementos de la lista, aparecerá sobre el mapa el camino más corto
+                entre el punto donde te encuentras y tu destino.
+            </p>
+            <img id="img3" src="{{ STATIC_URL }}img/help_menu/c4.jpg" title="ruta"
+                 alt="captura de pantalla de muestra de ruta">
+        </div>
+    </div>
+
+    <div class="entry">
+        <div class="content">
+            <h2>PASO 4. RECUERDA</h2>
+
+            <p>
+                Recuerda que en cualquier momento puedes escanear otro código para actualizar tu posición en el mapa
+                o elegir otro destino del menú desplegable.
+            </p>
+            <img id="img4" src="{{ STATIC_URL }}img/help_menu/c2.jpg" title="ruta"
+                 alt="captura de pantalla de reelegir ruta">
+        </div>
+    </div>
+
+    <div class="entry disclaimer">
+        <div class="content">
+            <h2>CLÁUSULA DE PRIVACIDAD:</h2>
+
+            <p>
+                En cumplimiento de la Ley Orgánica 15/1999, de 13 de Diciembre, de
+                Protección de Datos de Carácter Personal, Bizeu Consulting, S.L.
+                comunica a los usuarios de este sitio web, que no recogeremos ni
+                solicitamos ninguna información personal sobre usted (como su nombre,
+                dirección, número de teléfono, etc).
+            </p>
+            <h5>Cookies</h5>
+
+            <p>
+                Una cookie es un pequeño archivo de datos que se envía desde un
+                servidor web a su navegador y se almacena en su computadora. Los
+                sitios web generalmente usan cookies para ofrecerle la mejor
+                experiencia de usuario. En Bizeu Consulting no utilizamos cookies para
+                almacenar ningún tipo de información personal. Utilizamos las siguientes cookies para
+                personalizar la experiencia en nuestro sitio web:
+            </p>
+
+            <p>
+                Google Analytics (__utma, __utmb, __utmc, __utmz, __utmv): Estas cookies se usan para recopilar
+                información sobre el uso que los visitantes hacen de nuestro sitio. Dicha información nos sirve
+                para compilar informes y nos permite mejorar el sitio. Las cookies recogen información de forma anónima,
+                incluido el número de visitantes del sitio, la procedencia de los mismos y las páginas que han visitado.
+            </p>
+
+            <p>
+                miCoche : Esta cookie almacena la información relativa a una pegatina ubicada en algún parking. Dicha
+                información nos sirve para saber donde están aparcados los coches de los usuarios.
+            </p>
+
+            <p>
+                shareDest : Esta cookie almacena la información relativa a un enlace compartido. Dicha información nos
+                sirve
+                para que después de que un usuario reciba un enlace compartido de la aplicación, este pueda usarlo como
+                destino de una ruta.
+            </p>
+
+            <p>
+                prevDest : Esta cookie almacena la información relativa al último destino que ha seleecionado el usuario
+                . Dicha información nos sirve para que el usuario siempre pueda trazar una ruta al último destino
+                seleccionado.
+            </p>
+
+            <p>
+                first_shoot: Esta cookie almacena la información relativa a un identificador único asignado al usuario
+                .Dicha información nos sirve para saber si un usuario accede por primera vez a la aplicación o no,
+                también
+                puede ser utilizada para fines estadísticos.
+            </p>
+
+            <p>
+                csrftoken: Esta cookie almacena la información relativa a un valor generado aleatoriamente. Dicha
+                información nos sirve para proteger la aplicación de ciertos ataques informáticos.
+            </p>
+
+            <p>
+                sessionid: Esta cookie almacena la información relativa a un valor generado aleatoriamente. Dicha
+                información nos sirve para identificar de manera única un explorador con datos de la sesión en el
+                servidor.
+            </p>
+        </div>
+    </div>
+
+    <div class="button_wrapper">
+        <button class="btn info open_disclaimer">
+            {% trans "Privacidad" %}
+        </button>
+
+        <button class="btn info prev">
+            {% trans "Anterior" %}
+        </button>
+
+        <button class="btn info next">
+            {% trans "Siguiente" %}
+        </button>
+
+        <button class="btn info finish">
+            {% trans "Usar la aplicación" %}
+        </button>
+
+        <button class="btn info close_disclaimer">
+            {% trans "Volver a la ayuda" %}
+        </button>
+    </div>
+</div>
+
+</body>
+</html>
