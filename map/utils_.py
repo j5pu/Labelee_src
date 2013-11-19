@@ -71,7 +71,8 @@ def cache_show_map(enclosure_id):
         #
         for label in Label.objects.filter(category__enclosure__id=enclosure_id):
             site_coupons = CouponForLabel.objects.filter(label=label)
-            coupons[label.id] = queryset_to_dict(site_coupons)
+            if len(site_coupons) > 0:
+                coupons[label.id] = queryset_to_dict(site_coupons)
 
         #
         # cache points
@@ -117,7 +118,7 @@ def cache_show_map(enclosure_id):
                     if i == 0:
                         site_floors[site.id] = floors[i].name
                     else:
-                        site_floors[site.id] += ', ' + floors[i].name
+                        site_floors[site.id] += '  /  ' + floors[i].name
 
         categories_list = []  # [{'name': 'toilets', 'items': [...]}, ...]
         for key, value in categories.iteritems():

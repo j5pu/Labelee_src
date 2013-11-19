@@ -30,6 +30,7 @@ urlpatterns = patterns('',
     # url(r'^$', TemplateView.as_view(template_name="index.html")),
 
     url(r'^$', 'map.views.qr_code_redirect'),
+    url(r'^(\d{5})', 'map.views.show_map_by_id'),
 
     # APIS
     url(r'^api/', include(v1_api.urls)),

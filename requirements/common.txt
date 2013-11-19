@@ -17,3 +17,4 @@ pyflakes
 pyvirtualdisplay
 mimeparse
 xlwt
+pyExcelerator

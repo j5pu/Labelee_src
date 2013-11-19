@@ -107,7 +107,7 @@ function main() {
 
     $('#cupones, #header, span.locator, div#marquee').hide();
 
-    setTimeout(hideSplash, 100);
+    setTimeout(hideSplash, 3000);
 
     Coupon.bindShowRoute();
 }
@@ -115,8 +115,8 @@ function main() {
 
 function hideSplash() {
 
-    $('div#page').fadeIn(100);
-    $('div.splash').fadeOut(100);
+    $('div#page').fadeIn(2000);
+    $('div.splash').fadeOut(2000);
 
     if (!localStorage.getItem('first_shoot')) {
         HelpMenu.show();
@@ -150,7 +150,7 @@ function hideSplash() {
         $('#routeDiv p').text('Para llegar a ' + route.fields.destiny.fields.description +':');
         for (var subroute_index in route.fields.subroutes) {
             if (instructionList) {
-                instructionList.innerHTML += '<li> || ' +route.fields.subroutes[subroute_index]["text_description"] + '</li>'
+                instructionList.innerHTML += '<li> Planta '+floors_indexed[route.fields.subroutes[subroute_index].floor.pk].name+': ' +route.fields.subroutes[subroute_index]["text_description"] + '</li>'
             }
         }
     });
@@ -288,7 +288,6 @@ var ScrollMenu = {
     init: function () {
         this.$listMenu = $('#scrollMenu');
         this.$wrapper = $('nav');
-//        this.$wrapper = $('nav#menu-right');
         this.$wrapper.css({
             'overflow-y': 'hidden'
         });

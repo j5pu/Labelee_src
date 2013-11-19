@@ -5,13 +5,13 @@ body
     text-align: center;
     /*background: black*/
     background-color: rgba(186, 186, 186, 0.23);
-    font-family: 'raleway';
+    font-family: sans-serif;
 
 }
 
 h4 {
     color: #FEFAF1;
-    font-family: 'raleway';
+    font-family: sans-serif;
 }
 
 a {
@@ -123,12 +123,12 @@ a.link-3
 }
 
 .btn{
-    font-family: 'raleway';
+    font-family: sans-serif;
 }
 
 .table thead th
 {
-    font-family: 'raleway';
+    font-family: sans-serif;
 }
 
 
@@ -163,7 +163,7 @@ iframe {
 {
     font-size: 1.1em;
     border-radius: 0;
-    font-family: raleway;
+    font-family: sans-serif;
     padding: 1px;
     background: none;
 }
