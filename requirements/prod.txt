@@ -1,3 +1,0 @@
-# requirements/prod.txt
-# Requirements for production environments
--r common.txt

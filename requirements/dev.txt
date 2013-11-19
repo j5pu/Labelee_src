@@ -1,5 +1,0 @@
-# requirements/dev.txt
-# Requirements for project developers
--r common.txt
-south
-docutils
