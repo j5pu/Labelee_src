@@ -37,6 +37,10 @@ INSTALLED_APPS += (
 # NOSE
 #########################################
 TEST_RUNNER = 'tests.runner.MyTestRunner'
+NOSE_ARGS = [
+   '-s', # para activar stdout (salida a consola) durante los tests
+   '--verbosity=2',
+]
 
 import os
 os.environ['DJANGO_LIVE_TEST_SERVER_ADDRESS']= 'localhost:7000'
