@@ -17,6 +17,27 @@ from pyExcelerator import *
 from django.http import HttpResponse
 # from utils.constants import USER_GROUPS
 
+dateIni = dateFin = excel_url_args = None
+
+def set_dates(request):
+    global dateIni, dateFin, excel_url_args
+    has_dateIni = "dateIni" in request.GET and request.GET['dateIni']
+    has_dateFin = "dateFin" in request.GET and request.GET['dateFin']
+
+    if has_dateIni:
+        dateIni = request.GET["dateIni"]
+        excel_url_args = '?dateIni=%s' % (dateIni)
+    else:
+        dateIni = None
+    if has_dateFin:
+        dateFin = request.GET["dateFin"]
+        excel_url_args = '?dateFin=%s' % (dateFin)
+        if has_dateIni:
+            excel_url_args = '?dateIni=%s&dateFin=%s' % (dateIni, dateFin)
+    else:
+        dateFin = None
+
+
 
 @login_required(login_url=settings.LOGIN_URL)
 def index(request, enclosure_id):
@@ -24,7 +45,10 @@ def index(request, enclosure_id):
     user_is_owner = len(request.user.enclosures.filter(id=enclosure_id)) != 0
     can_access = request.user.is_staff or (request.user.is_in_group(1) and user_is_owner)
 
+
+    # Qr_shot.objects.filter(date__gt= dateIni, date__lt= dateFin)
     if can_access:
+        set_dates(request)
         allPoints = getHeatMapSteps(enclosure_id)
         enclosure = Enclosure.objects.get(id=enclosure_id)
         floors = Floor.objects.filter(enclosure_id=enclosure_id)
@@ -32,15 +56,19 @@ def index(request, enclosure_id):
         for floor in floors:
             floorsDict[floor.name] = floor
             # floorsDict.activate(request.session['django_language'])
+
         ctx = {
             'enclosure_id': enclosure_id,
             'floorsDict': floorsDict,
             'currentSteps': allPoints,
             'enclosureName' : enclosure.name,
-            'scansByCategory' : simplejson.dumps(getScansByCategory(enclosure_id)),
-            'routesByCategory' : simplejson.dumps(getRoutesByCategory(enclosure_id)),
-            'topScansByPoi' : simplejson.dumps(getTopScansByPoi(enclosure_id)),
-            'topRoutesByPoi' : simplejson.dumps(getTopRoutesByPoi(enclosure_id)),
+            'scansByCategory' : simplejson.dumps(getScansByCategory(enclosure_id, dateIni, dateFin)),
+            'routesByCategory' : simplejson.dumps(getRoutesByCategory(enclosure_id, dateIni, dateFin)),
+            'topScansByPoi' : simplejson.dumps(getTopScansByPoi(enclosure_id, dateIni, dateFin)),
+            'topRoutesByPoi' : simplejson.dumps(getTopRoutesByPoi(enclosure_id, dateIni, dateFin)),
+            'dateIni' : dateIni,
+            'dateFin' : dateFin,
+            'excelUrlArgs' : excel_url_args
         }
         template = 'dashboard/index.html'
 
@@ -55,6 +83,13 @@ def index(request, enclosure_id):
     else:
         return HttpResponse('Forbidden')
 
+# def filter(request, enclosure_id,):
+#     dateIni = request.GET["dateIni"]
+#     dateFin = request.GET["dateFin"]
+#     Qr_shot.objects.filter(date__gt= dateIni, date__lt= dateFin)
+#     HttpResponseRedirect()
+#
+#     pass
 
 
 def saveRouteRequest(request):
@@ -68,12 +103,13 @@ def saveRouteRequest(request):
     return HttpResponse(simplejson.dumps('ok'))
 
 def show_excel(request, enclosure_id):
+    set_dates(request)
     enclosureName = Enclosure.objects.get(id=enclosure_id).name
-    scansByCategory = getScansByCategory(enclosure_id)
-    routesByCategory = getRoutesByCategory(enclosure_id)
+    scansByCategory = getScansByCategory(enclosure_id, dateIni, dateFin)
+    routesByCategory = getRoutesByCategory(enclosure_id, dateIni, dateFin)
     numCategory = len(scansByCategory[0]['values'])
-    topScansByPoi = getTopScansByPoi(enclosure_id)
-    topRoutesByPoi = getTopRoutesByPoi(enclosure_id)
+    topScansByPoi = getTopScansByPoi(enclosure_id, dateIni, dateFin)
+    topRoutesByPoi = getTopRoutesByPoi(enclosure_id, dateIni, dateFin)
 
     style0 = xlwt.easyxf('font: name Times New Roman, colour blue, bold on; alignment: horizontal center;')
     style1 = xlwt.easyxf('alignment: horizontal left',num_format_str='DD-MMM-YY')
@@ -83,7 +119,7 @@ def show_excel(request, enclosure_id):
     ws.col(0).width = 256 * (len(enclosureName) + 10)
     ws.col(1).width = 256 * 25
     ws.write(0,0,'Dashboard de '+enclosureName, style0)
-    ws.write(1,0,datetime.now(), style1)
+    ws.write(1,0,dateIni +'   '+ dateFin, style1)
     ws.write(2,1, 'Número de lecturas Qr',style0)
     ws.write(4,1,'Categoría')
     ws.write(5,1,'Número de lecturas')

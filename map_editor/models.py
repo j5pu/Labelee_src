@@ -4,6 +4,7 @@ import os
 from django.db import models
 # from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import User, UserManager, Group
+from dashboard.models import DisplayedRoutes
 from map_editor.api_2.utils.point import filterAsPois
 from file_paths import *
 from utils.helpers import delete_file
@@ -137,6 +138,7 @@ class LabelCategory(models.Model):
             super(LabelCategory, self).delete(*args, **kwargs)
 
 
+
 class Label(models.Model):
     name = models.CharField(max_length=200, blank=False, null=False)
     img = models.FileField(upload_to=get_label_path, blank=True, null=True)
@@ -146,6 +148,14 @@ class Label(models.Model):
 
     def __unicode__(self):
         return self.name
+
+    @property
+    def displayed_destination_count(self):
+        return self.displayed_destination_count
+
+    @displayed_destination_count.setter
+    def displayed_destination_count(self, value):
+        self.displayed_destination_count = value
 
     def delete(self, *args, **kwargs):
         """
