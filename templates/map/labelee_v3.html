@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Prueba_rutas</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0" />
+	
+	<!--link rel="stylesheet" href="../../dist/leaflet.css" /-->
+	
+	<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.5.1/leaflet.css" />
+	<!--[if lte IE 8]>
+	    <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.5.1/leaflet.ie.css" />
+	<![endif]-->
+	
+	<!--link rel="stylesheet" href="../css/mobile.css" /-->
+	<link rel="stylesheet" href="css/font-awesome.min.css">
+	<link rel="stylesheet" href="css/leaflet.awesome-markers.css">
+	<link rel="stylesheet" href="css/leaflet.rrose.css">
+	<!--link rel="stylesheet" href="css/L.Control.Pan.css" />
+	<link rel="stylesheet" href="css/L.Control.Floor.css" /-->
+	<link rel="stylesheet" href="css/leaflet-search.css">
+	<link rel="stylesheet" href="css/search-mobile.css">
+
+
+<!--link rel="stylesheet" href="../css/screen.css" /-->
+
+	<!--script type="text/javascript" src="../../build/deps.js"></script>
+	<script src="../leaflet-include.js"></script-->
+
+    <script src="js/scale.fix.js"></script>
+		
+	<script type="text/javascript" src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+	<script src="http://cdn.leafletjs.com/leaflet-0.5.1/leaflet.js"></script>
+	<script type="text/javascript" src="js/bouncemarker.js"></script>
+	<script src="js/leaflet.awesome-markers.js"></script>
+	<script src="js/L.GeometryUtil.js"></script>
+	<script src="js/L.RotatedMarker.js"></script>
+
+    <script src="js/L.Symbol.js"></script>
+
+    <script src="js/L.PolylineDecorator.js"></script>
+
+    <script src="js/rrose-src.js"></script>
+    <script src="js/leaflet-search.js"></script>
+    <!--script src="js/L.Control.Pan.js" ></script>    
+    <script src="js/L.Control.Floor.js" ></script-->    
+
+
+	<style type="text/css">
+		html, body, #map {
+			margin: 0;
+			padding: 0;
+			height: 100%;
+		}
+	</style>
+</head>
+<body>
+
+	<div id="map"></div>
+
+<script type="text/javascript">
+
+	var map_img = new Image(),
+		//mapJson = "parquing_grid.json",
+		//rutaJson= "parquing_route.json";
+
+
+		mapJson = "plantaB_grid.json",
+		rutaJson= "plantaB_route.json";
+
+
+		drawMap(mapJson,rutaJson);
+
+	function drawMap (mapJson, rutaJson)  {
+
+		$.getJSON(mapJson,function(data){ 
+		map_img.src = data.map;
+
+		map_img.onload = function(){
+
+			var	mapH = $(document).height(),
+				mapW = (map_img.width/map_img.height)*mapH,
+
+				
+				rows= data.num_rows,
+				scaleX = mapW/data.num_cols,
+				scaleY = mapH/rows,
+				offsetX = scaleX/2,
+				offsetY = scaleY/2,
+
+
+				bounds = new L.LatLngBounds(new L.LatLng(0, 0), new L.LatLng(mapH, mapW));
+
+				map = L.map('map', {
+				center: bounds.getCenter(),
+				zoom: 0,
+				crs: L.CRS.Simple,
+				maxBounds: bounds,
+				zoomControl:false
+				});
+				//.setView([350, 512], 0);
+
+				var mapa = new L.imageOverlay(map_img.src, bounds).addTo(map);
+			
+				var mobileOpts = {
+				//url: jsonpurl,
+				//jsonpParam: jsonpName,
+				//filterJSON: filterJSONCall,		
+				text: 'Destino...',
+				autoType: false,
+				tipAutoSubmit: true,
+				autoCollapse: false,
+				autoCollapseTime: 6000,
+				animateLocation: true,
+				markerLocation: true,
+				delayType: 800	//with mobile device typing is more slow		
+				};
+				
+				map.addControl( new L.Control.Search(mobileOpts) );
+				map.addControl(new L.Control.Zoom());
+
+    		getRoute(rutaJson, rows, scaleX, scaleY, offsetX, offsetY);
+
+			}
+
+ 		}); 
+	}
+	
+	function getRoute(route, rs, sX, sY, oX, oY) {
+		$.getJSON (route,function(data){
+		//parquing
+			
+			
+			var originPoint = [(rs-data.origin.row)*sY-sY, data.origin.col*sX+sX],
+
+				greenMarker = L.AwesomeMarkers.icon({
+				  icon: 'home', 
+				  color: 'green'
+				}),
+
+				originMarker = L.marker(originPoint, { bounceOnAdd: true, 
+					//bounceOnAddHeight: 20,
+					icon: greenMarker})
+				.addTo(map)
+				.bindPopup("<b>¡Estás justo aquí!</b>");
+				//.openPopup();
+
+			
+			//map.setView(originPoint, 1);
+
+			var destinyPoint = [(rs-data.destiny.row)*sY-sY, data.destiny.col*sX+sX],
+			
+				redMarker = L.AwesomeMarkers.icon({
+				  icon: 'coffee', 
+				  color: 'red'
+				}),
+
+				destinyMarker= L.marker(destinyPoint, { bounceOnAdd: false,bounceOnAddHeight: 4,  icon: redMarker})
+				.addTo(map)
+				//.bindPopup("Cineteca")
+				.on('click', function () {
+				    drawRoute(originPoint, destinyPoint, data);
+				    //this.openPopup();
+					this.bounce(1000, -10);
+  					});
+
+			function drawRoute(org, dst, data) {
+			var path = [];
+			path.push(org);	
+			$.each(data.steps, function (index, value){
+				path.push([(rs-value.row)*sY-sY, value.col*sX+sX]);
+			});
+			path.push(dst);
+		
+    	// Flecha con animación para indicar el sentido de la ruta
+    	    var arrow = L.polyline(path,{color: 'orange'});
+    		var arrowHead = L.polylineDecorator(arrow);
+    		var arrowOffset = 0;
+		    var anim = window.setInterval(function() {
+        	arrowHead.setPatterns([
+            {offset: arrowOffset+'%', repeat: 0, symbol: new L.Symbol.ArrowHead({pixelSize: 13, polygon: false, pathOptions: {stroke: true, color: 'orange'}})}
+	        ])
+		        if(++arrowOffset > 100)
+		            arrowOffset = 0;
+		    }, 100);
+
+    		arrow.addTo(map);
+		    arrowHead.addTo(map);
+			
+			// aplicamos zoom y centramos el mapa con respecto a la ruta
+		
+			map.fitBounds(arrow.getBounds());
+			//map.setView(centro, zoom);
+		
+			}
+
+		}); 
+	}
+
+</script>
+
+	
+</body>
+</html>

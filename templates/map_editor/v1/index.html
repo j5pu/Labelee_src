@@ -1,0 +1,225 @@
+{% extends "base.html" %}
+
+{% load i18n %}
+
+{% block css %}
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/map_editor/styles.css"/>
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/map_editor/index/styles.css"/>
+{% endblock css %}
+
+
+{% block js %}
+    {% get_current_language as LANGUAGE_CODE %}
+    <script>
+        var lang_code = "{{ LANGUAGE_CODE }}";
+    </script>
+
+    <script src="{{ STATIC_URL }}vendor/bootstrap/bootstrap.file-input.js"></script>
+    <script src="{{ STATIC_URL }}js/map_editor/index/main.js"></script>
+{% endblock js %}
+
+
+{% block content %}
+
+    {% csrf_token %}
+
+    {% include "_lang_selector.html" %}
+
+
+    <h1>
+        {% trans "Administración de recintos" %}
+    </h1>
+    <div id="enclosures" class="box box-0" ng-controller="EnclosuresCtrl">
+
+        <!--PARA AGREGAR LUGAR -->
+        <form>
+            {#            <div ng-include src="{{ STATIC_URL }}partials/_form_alert_box.html"></div>#}
+
+            <input type="text"
+                   ng-model="enclosure_name"
+                   ng-change="validate()"
+                   placeholder="{% trans "Nombre del recinto" %}..">
+
+            <button class="btn" ng-click="createEnclosure()">{% trans "Añadir recinto" %}</button>
+        </form>
+
+        <!--CADA LUGAR-->
+        <div class="enclosure box box-1"
+             fadey="1000"
+             ng-repeat="enclosure in enclosures"
+             ng-controller="EnclosureCtrl">
+
+            <!--<include src="{{ STATIC_URL }}partials/_enclosure.html"></include>-->
+
+            <div class="editable_element">
+               <h2>[[enclosure.name]]</h2>
+               <h4 ng-show="enclosure.twitter_account">@ [[enclosure.twitter_account]]</h4>
+
+                <div class="botones-enclosure" ng-hide="editing">
+                    <div class="action_box">
+                        <span><i class="icon-edit" ng-click="update()"></i></span>
+                        <span><i class="icon-remove" ng-click="del($index)"></i></span>
+                    </div>
+
+                    <div class="btn-group">
+                        <a class="btn link-2" ng-click="calculateRoutes()">
+                            <i class="icon-road icon-white"></i> {% trans "Calcular rutas" %}
+                        </a>
+                        <a class="btn link-2" id="aristas" href='edit/connections/[[enclosure.id]]'>
+                            <i class="icon-pencil icon-white"></i> {% trans "Conexiones entre plantas" %}
+                        </a>
+                    </div>
+{#                    <a class='btn link-3' ng-click="calculateRoutes()">{% trans "Calcular rutas" %}</a>#}
+{#                    <a class="btn link-3" id='aristas' href="edit/connections/[[enclosure.id]]">{% trans "Gestión de aristas" %}</a>#}
+
+                </div>
+                <div ng-show="editing">
+                    <form>
+                        <div class="box-2 editing-place">
+                            <label class="txt">Nuevo nombre:
+                                <input type="text"
+                                       ng-init="enclosure_name=enclosure.name"
+                                       ng-model="enclosure_name"
+                                       ng-change="validate()"
+                                       placeholder="{% trans "Nuevo nombre para el recinto" %}.."
+                                       autofocus>
+                            </label>
+                            <label class="txt">
+                                Cuenta de Twitter:
+                                <input type="text"
+                                       ng-init="twitter_account=enclosure.twitter_account"
+                                       ng-model="twitter_account"
+                                       ng-change="validate()"
+                                       placeholder="{% trans "Cuenta de twitter" %}..">
+                            </label>
+                        </div>
+
+                        <button class="btn" ng-click="cancelUpdate()">{% trans "Cancelar" %}</button>
+                        <button class="btn" ng-click="update()">{% trans "Editar" %}</button>
+                    </form>
+                    <div class="action_box">
+                        <i class="icon-remove"
+                           ng-click="del()">
+                        </i>
+                    </div>
+                </div>
+            </div>
+
+
+            <!--PLANTAS PARA EL RECINTO-->
+            <div class="floors box box-2" ng-controller="FloorsCtrl">
+                <!--PARA AGREGAR PLANTA-->
+                <h4>{% trans "Nueva planta" %}:</h4>
+                <form action=""
+                      method="post"
+                      enctype="multipart/form-data"
+                      target="upload_target">
+
+                    <div class="form_content" ng-hide="sending_img">
+                        <div class="box-3">
+                            <label class="txt">{% trans "Nombre de planta" %}:
+                                <input type="text"
+                                       ng-model="floor_name"
+                                       placeholder="{% trans "Nombre de planta" %}..">
+                            </label>
+                            <label class="txt">{% trans "Número" %}:
+                                <input type="text"
+                                       ng-model="floor_number"
+                                       placeholder="{% trans "Número" %}..">
+                            </label>
+                            <input class="btn floor_img"
+                                   type="file"
+                                   name="img"
+{#                                   onchange="angular.element(this).scope().setFile(this)"#}
+                                   title="{% trans "Elegir imagen" %}">
+                        </div>
+
+                        <button class="btn" ng-click="createFloor()">{% trans "Añadir planta" %}</button>
+                    </div>
+
+                    <div class="ajax_gif" ng-show="sending_img">
+                        <img src="{{ STATIC_URL }}img/ajax-loader.gif">
+                    </div>
+                </form>
+
+                <h4 ng-show="floors">{% trans "Plantas" %}:</h4>
+
+                <!--CADA PLANTA-->
+                <div class="floor box-3"
+                     fadey="1000"
+                     ng-repeat="floor in floors"
+                     ng-controller="FloorCtrl">
+
+                    <div class="editable_element">
+                        <div ng-hide="editing">
+
+                            <div class="floor-number"><h2>[[floor.floor_number]]</h2></div>
+
+                            <h3>
+                                <a class="link-2" href="[[urls.map_editor.edit]]/[[floor.id]]">
+                                    <span>[[floor.name]]</span>
+                                </a>
+                            </h3>
+
+                            <div class="action_box">
+                                <i class="icon-edit" ng-click="update()"></i>
+                                <i class="icon-remove" ng-click="del()"></i>
+                            </div>
+                        </div>
+
+                        <div ng-show="editing">
+                            <div class="form_content" ng-hide="sending_img">
+                                <form action=""
+                                      method="post" enctype="multipart/form-data"
+                                      target="upload_target">
+
+                                    <!--<div ng-include src="_form_alert_box"></div>-->
+                                    <div class="box-2 editing-floor">
+                                        <label class="txt">{% trans "Nombre" %}:
+                                            <input type="text"
+                                                   ng-init="floor_name=floor.name"
+                                                   ng-model="floor_name"
+                                                   ng-change="validate()"
+                                                   placeholder="{% trans "Nuevo nombre para la planta" %}.."
+                                                   autofocus>
+                                        </label>
+                                        <label class="txt">{% trans "Número" %}:
+{#                                        <span class="txt">{% trans "Número" %}:</span>#}
+                                            <input type="text"
+                                                   ng-init="floor_number=floor.floor_number"
+                                                   ng-model="floor_number"
+                                                   ng-change="validate()"
+                                                   placeholder="{% trans "Número" %}..">
+                                        </label>
+                                        <input class="btn"
+                                               type="file"
+                                               name="img"
+                                                {#                                   onchange="angular.element(this).scope().setFile(this)"#}
+                                               title="{% trans "Cambiar imagen" %}">
+                                    </div>
+
+                                    <button class="btn" ng-click="cancelUpdate()">{% trans "Cancelar" %}</button>
+                                    <button class="btn" ng-click="update()">{% trans "Editar" %}</button>
+                                </form>
+                            </div>
+
+                            <div class="ajax_gif" ng-show="sending_img">
+                                <!-- Ponemos ng-src en lugar de src para que se procese la interpolación antes
+                                de cargar la imágen -->
+                                <img ng-src="[[urls.static.img]]/ajax-loader.gif">
+                            </div>
+
+                            <div class="action_box">
+                                <i class="icon-remove" ng-click="del()"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    {% include "_uploading_iframe.html" %}
+
+{% endblock content %}

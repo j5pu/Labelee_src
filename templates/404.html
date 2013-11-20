@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Error 404</title>
+</head>
+<body>
+
+<br>
+
+<div style="text-align:center;vertical-align:middle;">
+    <img src="{{ MEDIA_URL }}logosplash.png">
+</div>
+
+<br><br><br>
+
+<div style="text-align:center;vertical-align:middle;">
+    <img src="{{ STATIC_URL }}img/error_pages/qr_code_example.png" style="height:235px;">
+    <img src="{{ STATIC_URL }}img/error_pages/question-mark.jpg" style="height:235px;">
+</div>
+
+<br>
+
+<div style="text-align:center;vertical-align:middle;">
+    {% if "/map/origin/" in request_path %}
+        <p style="font-size: 30px">El punto seleccionado no existe</p>
+        <p style="font-size: 30px">¡Escanea otro QR!</p>
+    {% else %}
+        <p style="font-size: 30px">Página no encontrada</p>
+    {% endif %}
+</div>
+
+</body>
+</html>

@@ -1,0 +1,66 @@
+-----------------------------------------------
+- PRUEBAS DE ACCESO SOBRE RECURSOS PROTEGIDOS -
+-----------------------------------------------
+
+user1:
+	"/api/v1/user/1/"
+		"/api/v1/enclosure/25/"
+			"/api/v1/label-category/52/"
+
+mnopi:
+	"/api/v1/user/1/"
+		"/api/v1/enclosure/33/"
+		"/api/v1/enclosure/16/"
+			"/api/v1/label-category/56/"
+
+anónimo:
+	
+
+UNAUTHORIZED:
+	mnopi: 
+		GET, PUT, DELETE -> "/api/v1/label-category/52/" 
+
+		POST -> "/api/v1/label-category/" 
+				data: {
+					"name":"a_cat_1000", 
+					"enclosure":"/api/v1/enclosure/25/"
+				}
+
+		POST -> "/api/v1/label-category/" 
+				data: {"name":"a_cat_1001"}
+
+
+    user1:
+    	No podrá crear/editar/eliminar etiquetas de categorías creadas por otros usuarios
+
+    	PUT, DELETE -> "/api/v1/label-category/56/"
+
+    	POST -> "/api/v1/label/" 
+				data: {
+					"name":"a_lab_1000", 
+					"category":"/api/v1/label-category/56/"
+				}
+
+
+	anónimo:
+		GET -> "/api/v1/label-category/"
+		GET, PUT, DELETE -> "/api/v1/label-category/52/" 
+
+		POST -> "/api/v1/label-category/" 
+				data: {
+					"name":"a_cat_xxxx1", 
+					"enclosure":"/api/v1/enclosure/25/"
+				}
+
+AUTHORIZED:
+	user1:
+		GET -> "/api/v1/label-category/"
+		GET, PUT, DELETE -> "/api/v1/label-category/52/"
+
+		POST -> "/api/v1/label-category/" 
+				data: {
+					"name":"noseque", 
+					"enclosure":"/api/v1/enclosure/25/"
+				}
+
+

@@ -1,0 +1,99 @@
+/* Make the default zoom control align with the floor control.
+   
+   This is ugly. 
+   The parent box (class="leaflet-top leaflet-left") 
+   should make all the child boxes be center-aligned instead. 
+   Not sure if that is possible though.
+
+.leaflet-control-zoom {
+	position: relative;
+	left:26px;
+}
+*/
+/* 
+   Make the zoomSlider control 
+   (https://github.com/mattiasbengtsson/Leaflet.zoomslider) 
+   align with the floor control. 
+
+.leaflet-control-zoomslider {
+	position: relative;
+	left:26px;
+}
+*/
+
+.leaflet-control-floor  {
+	   /* 
+	     .leaflet-control-floor-right-wrap: right 
+	   + .leaflet-control-floor a: width
+	   + .leaflet-top .leaflet-control: margin-left
+	   = 52 + 19 + 10 = 81
+	   */
+	width: 81px; 
+	   /* 
+	     .leaflet-control-floor-down-wrap: top
+	   + .leaflet-control-floor a: height
+	   + .leaflet-top .leaflet-control: margin-top 
+	   = 52 + 19 + 10 = 81
+	   */
+	height: 81px;
+}
+
+.leaflet-control-floor > div {
+    -moz-border-radius: 7px;
+    -webkit-border-radius: 7px;
+    border-radius: 7px;
+}
+.leaflet-control-floor > div {
+    padding: 5px;
+    background: rgba(0, 0, 0, 0.25);
+}
+.leaflet-control-floor a {
+    background-color: rgba(255, 255, 255, 0.75);
+}
+.leaflet-control-floor a{
+    background-position: 50% 50%;
+    background-repeat: no-repeat;
+    display: block;
+}
+.leaflet-control-floor a {
+    -moz-border-radius: 4px;
+    -webkit-border-radius: 4px;
+    border-radius: 4px;
+    width: 19px;
+    height: 19px;
+}
+.leaflet-control-floor a:hover {
+    background-color: #fff;
+}
+
+.leaflet-control-floor-up-wrap {
+	position:absolute;
+	left:26px;
+}
+.leaflet-control-floor-left-wrap {
+	position:absolute;
+	top:26px;
+}
+.leaflet-control-floor-right-wrap {
+	position:absolute;
+	left:52px;	
+	top:26px;
+}
+.leaflet-control-floor-down-wrap {
+	position:absolute;
+	left:26px;
+	top:52px;
+}
+
+.leaflet-control-floor-up {
+	background-image: url(images/pan-up.png);
+}
+.leaflet-control-floor-left {
+	background-image: url(images/pan-left.png);
+}
+.leaflet-control-floor-right {
+	background-image: url(images/pan-right.png);
+}
+.leaflet-control-floor-down {
+	background-image: url(images/pan-down.png);
+}

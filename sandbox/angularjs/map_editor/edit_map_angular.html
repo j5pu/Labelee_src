@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+
+
+{% block css %}
+<link rel="stylesheet" href="{{ STATIC_URL }}css/map_editor/edit_map/styles.css"/>
+{% endblock css %}
+
+
+{% block js %}
+<script src="{{ STATIC_URL }}js/map_editor/edit_map/events.js"></script>
+<script src="{{ STATIC_URL }}js/map_editor/edit_map/floor.js"></script>
+<script src="{{ STATIC_URL }}js/map_editor/edit_map/painter.js"></script>
+<script src="{{ STATIC_URL }}js/map_editor/edit_map/paint_historial.js"></script>
+<script src="{{ STATIC_URL }}js/map_editor/edit_map/menu.js"></script>
+
+<script src="{{ STATIC_URL }}js/map_editor/edit_map/main.js"></script>
+{% endblock js %}
+
+
+{% block content %}
+
+    <div id="wrapper" ng-controller>
+        <!-- Imagen del mapa -->
+        <img id="map_img" src="{{ STATIC_URL }}img/map.jpg"/>
+
+        <!-- GRID -->
+        <div id="grid"></div>
+
+
+        <div id="menu">
+
+            <input type="text"
+                ng-model="n_rows"
+                ng-change="loadGrid()"
+                placeholder="Num filas.."/>
+
+            ([[n_blocks]] bloques)
+
+            <select ng-model="obj" ng-options="obj.name for obj in objs">
+                <option value='1'>Muro</option>
+                <option value='0'>Borrar</option>
+                <option value='x'>QR</option>
+            </select>
+
+            <button name="save">Guardar</button>
+
+            <select name="grid_selector"></select>
+
+            <button name="clear">Clear</button>
+
+            <button name="delete">Delete all</button>
+        </div>
+    </div>
+
+
+
+
+
+{% endblock content %}
+</html>
+
+
+
+<!-- <form class="ejemplo">
+        <div class="input-append">
+            <div class="btn-group dropup">
+                <a class="btn btn-info">
+                    <i class="icon-qrcode"></i> Etiqueta
+                </a>
+                <a class="btn btn-info">
+                    <i class="icon-ban-circle"></i> Pared
+                </a>
+                <a class="btn btn-info">
+                    <i class="icon-remove"></i> Borrar
+                </a>
+
+                <ul class="dropdown-menu" id="listaComunes">
+                    <li class="dropdown-submenu">
+                        <a tabindex="-1" href="#"><i class="icon-star"></i> Puntos de interés</a>
+                        <ul class="dropdown-menu" id="listaCategorias">
+                            <li><a href="JavasCript:addCat()"> Añadir categoría</a></li>
+                            <li class="divider"></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </form> -->

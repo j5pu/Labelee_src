@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block js %}
+    <script src="{{ STATIC_URL }}angularjs/directives/directives.js"></script>
+{% endblock js %}
+
+{% block content %}
+    <input ng-model="name">
+
+    <div demo-greet="name"></div>
+
+    <div class="demo-greet: name" style="background: green"></div>
+
+
+
+    <hr>
+    <hr>
+    <hr>
+
+
+
+    <div class="header">
+        <h1> I am</h1>
+        <profile email="email"></profile>
+        {# {% include "_/profile.html" %} #}
+    </div>
+
+    <hr>
+
+    <div>
+        <h1>AngularJS developers</h1>
+        <div ng-repeat="dev in devs">
+            <profile email="dev"></profile>
+        </div>
+    </div>
+
+    <pre>[[leak]]</pre>
+
+
+
+    <zippy title="[[greeting]]">
+        Hello [[name]]!
+    </zippy>
+{% endblock  %}

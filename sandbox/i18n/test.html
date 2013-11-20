@@ -1,0 +1,33 @@
+{% load i18n %}
+
+<!DOCTYPE html>
+<html>
+<head>
+
+<script src="../../../django_web_af/static-media/vendor/jquery-1.9.1.min.js"></script>
+<meta charset='UTF-8'>
+
+
+</head>
+<body>
+    <p>{% trans "Esto es un titulo" %}</p>
+
+    {% get_current_language as LANGUAGE %}
+
+    {{ LANGUAGE }}
+
+
+    <form action="/i18n/setlang/" method="post">
+        {% csrf_token %}
+        <input name="next" type="hidden" value="{{ redirect_to }}" />
+        <select name="language">
+            {% get_language_info_list for LANGUAGES as languages %}
+            {% for language in languages %}
+                <option value="{{ language.code }}">{{ language.name_local }} ({{ language.code }})</option>
+            {% endfor %}
+        </select>
+        <input type="submit" value="Go" />
+    </form>
+
+</body>
+</html>
