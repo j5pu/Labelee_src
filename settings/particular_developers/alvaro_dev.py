@@ -13,7 +13,7 @@ DATABASES = {
     "NAME": "labelee_eventos",
     "USER": "mnopi",
     "PASSWORD": "1aragon1",
-    "HOST": "192.168.1.120",
+    "HOST": "192.168.1.36",
     "PORT": "",
     }
 }
