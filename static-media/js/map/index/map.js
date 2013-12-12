@@ -238,7 +238,7 @@ function loadFloors() {
                 initSideMenu();
                 $('div#cupones, div#header, span.locator, div#marquee').show();
                 Coupon.init();
-                AnalyticsManager.init();
+              //  AnalyticsManager.init();
                 $('div.splash').fadeOut(100);
 
                 //
